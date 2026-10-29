@@ -14,6 +14,7 @@ public class DependencyRulesTests
         ["Yaapic.UI.Abstractions"] = [],
         ["Yaapic.Design.Tokens"] = [],
         ["Yaapic.ViewModels"] = ["Yaapic.Core", "Yaapic.UI.Abstractions"],
+        ["Yaapic.App.WinUI"] = ["Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
     };
 
     private static string SrcDir()

@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaapic.Design.Tokens", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaapic.Design.Tokens.Tests", "tests\Yaapic.Design.Tokens.Tests\Yaapic.Design.Tokens.Tests.csproj", "{6A21257C-6B44-493B-9151-C593F4AF100A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaapic.App.WinUI", "src\Yaapic.App.WinUI\Yaapic.App.WinUI.csproj", "{274208C6-DA83-40B7-B8BD-9A4396137227}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -115,6 +117,18 @@ Global
 		{6A21257C-6B44-493B-9151-C593F4AF100A}.Release|x64.Build.0 = Release|Any CPU
 		{6A21257C-6B44-493B-9151-C593F4AF100A}.Release|x86.ActiveCfg = Release|Any CPU
 		{6A21257C-6B44-493B-9151-C593F4AF100A}.Release|x86.Build.0 = Release|Any CPU
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Debug|Any CPU.Build.0 = Debug|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Debug|x64.ActiveCfg = Debug|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Debug|x64.Build.0 = Debug|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Debug|x86.ActiveCfg = Debug|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Debug|x86.Build.0 = Debug|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Release|Any CPU.ActiveCfg = Release|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Release|Any CPU.Build.0 = Release|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Release|x64.ActiveCfg = Release|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Release|x64.Build.0 = Release|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Release|x86.ActiveCfg = Release|x64
+		{274208C6-DA83-40B7-B8BD-9A4396137227}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -127,5 +141,6 @@ Global
 		{3B37CDD6-187C-4013-AD4F-C2D7FA06CD0C} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{BF71EE6E-9EA4-4B1E-B3C4-8A3A22701162} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 		{6A21257C-6B44-493B-9151-C593F4AF100A} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{274208C6-DA83-40B7-B8BD-9A4396137227} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal

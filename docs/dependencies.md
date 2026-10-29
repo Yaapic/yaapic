@@ -5,6 +5,8 @@ Every third-party dependency needs a written justification here before it is add
 | Package | Version | Used by | Justification |
 |---|---|---|---|
 | xunit.v3 | 4.0.2 | Yaapic.Architecture.Tests | Test framework with native Microsoft.Testing.Platform support, required by `dotnet test --solution`. Test-only, never shipped. |
+| Microsoft.WindowsAppSDK | 1.8.260921001 | Yaapic.App.WinUI | WinUI 3 runtime and XAML compiler; first-party, Native AOT supported (1.6+). |
+| Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
 
 ## Architecture tests: NetArchTest
 
