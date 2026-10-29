@@ -1,6 +1,6 @@
 # M0-01: Solution, build conventions, AOT analyzers
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -21,8 +21,8 @@ Any production code, UI projects, CI.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` succeeds with 0 warnings (an empty solution is valid).
-- [ ] `dotnet format --verify-no-changes` passes.
+- [x] `dotnet build Yaapic.sln -c Release` succeeds with 0 warnings (an empty solution is valid).
+- [x] `dotnet format --verify-no-changes` passes.
 
 ## Suggested commit message
 
