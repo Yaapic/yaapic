@@ -1,0 +1,136 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <ResourceDictionary.ThemeDictionaries>
+    <ResourceDictionary x:Key="Dark">
+      <SolidColorBrush x:Key="YaapicSurfaceAppBrush" Color="#FF131518"/>
+      <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FF1A1D21"/>
+      <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FF16181C"/>
+      <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FF21252A"/>
+      <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FF282C33"/>
+      <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FF121417"/>
+      <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FF24282E"/>
+      <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FF30353C"/>
+      <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFA3AAB4"/>
+      <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF848C97"/>
+      <SolidColorBrush x:Key="YaapicTextDisabledBrush" Color="#FF5A606A"/>
+      <SolidColorBrush x:Key="YaapicAccentFillBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="YaapicAccentFillPressedBrush" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="YaapicAccentBorderBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="YaapicAccentTextBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#1A1FC7D4"/>
+      <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="YaapicInfoBrush" Color="#FF959BFF"/>
+      <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#298088FF"/>
+      <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF3FD68A"/>
+      <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#213FD68A"/>
+      <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FFF2B84B"/>
+      <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#21F2B84B"/>
+      <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFFF6B6B"/>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#21FF6B6B"/>
+      <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF959BFF"/>
+      <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="YaapicVariableUnresolvedBrush" Color="#FFFF6B6B"/>
+      <SolidColorBrush x:Key="YaapicMethodGetBrush" Color="#FF3DD6A3"/>
+      <SolidColorBrush x:Key="YaapicMethodPostBrush" Color="#FFF5B648"/>
+      <SolidColorBrush x:Key="YaapicMethodPutBrush" Color="#FF6AA8FF"/>
+      <SolidColorBrush x:Key="YaapicMethodPatchBrush" Color="#FFB38CFF"/>
+      <SolidColorBrush x:Key="YaapicMethodDeleteBrush" Color="#FFFF7272"/>
+      <SolidColorBrush x:Key="YaapicMethodHeadBrush" Color="#FF5CC8E0"/>
+      <SolidColorBrush x:Key="YaapicMethodOptionsBrush" Color="#FFF28AC9"/>
+      <SolidColorBrush x:Key="YaapicMethodCustomBrush" Color="#FFA3AAB4"/>
+      <SolidColorBrush x:Key="YaapicStatus1xxBrush" Color="#FF959BFF"/>
+      <SolidColorBrush x:Key="YaapicStatus2xxBrush" Color="#FF3FD68A"/>
+      <SolidColorBrush x:Key="YaapicStatus3xxBrush" Color="#FF6AA8FF"/>
+      <SolidColorBrush x:Key="YaapicStatus4xxBrush" Color="#FFF2B84B"/>
+      <SolidColorBrush x:Key="YaapicStatus5xxBrush" Color="#FFFF6B6B"/>
+      <SolidColorBrush x:Key="YaapicTestPassBrush" Color="#FF3FD68A"/>
+      <SolidColorBrush x:Key="YaapicTestFailBrush" Color="#FFFF6B6B"/>
+      <SolidColorBrush x:Key="YaapicTestSkipBrush" Color="#FFA3AAB4"/>
+      <SolidColorBrush x:Key="YaapicSyntaxKeyBrush" Color="#FF8FB7FF"/>
+      <SolidColorBrush x:Key="YaapicSyntaxStringBrush" Color="#FFB5E36C"/>
+      <SolidColorBrush x:Key="YaapicSyntaxNumberBrush" Color="#FFF5B648"/>
+      <SolidColorBrush x:Key="YaapicSyntaxBooleanBrush" Color="#FFF28AC9"/>
+      <SolidColorBrush x:Key="YaapicSyntaxPunctuationBrush" Color="#FF848C97"/>
+      <SolidColorBrush x:Key="YaapicSyntaxCommentBrush" Color="#FF6B7380"/>
+      <SolidColorBrush x:Key="YaapicSyntaxKeywordBrush" Color="#FFB38CFF"/>
+      <SolidColorBrush x:Key="YaapicSyntaxFunctionBrush" Color="#FF6FD4E8"/>
+      <SolidColorBrush x:Key="YaapicSyntaxTagBrush" Color="#FFFF8F8F"/>
+      <SolidColorBrush x:Key="YaapicSyntaxAttributeBrush" Color="#FFF5B648"/>
+      <SolidColorBrush x:Key="YaapicDiffAddedBrush" Color="#213FD68A"/>
+      <SolidColorBrush x:Key="YaapicDiffRemovedBrush" Color="#21FF6B6B"/>
+    </ResourceDictionary>
+    <ResourceDictionary x:Key="Light">
+      <SolidColorBrush x:Key="YaapicSurfaceAppBrush" Color="#FFEEF0F3"/>
+      <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FFF3F4F6"/>
+      <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FFF6F7F9"/>
+      <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FFFBFBFC"/>
+      <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FFE7E9EE"/>
+      <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFD8DCE2"/>
+      <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FF4A515B"/>
+      <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="YaapicTextDisabledBrush" Color="#FFA0A7B1"/>
+      <SolidColorBrush x:Key="YaapicAccentFillBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="YaapicAccentFillPressedBrush" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="YaapicAccentBorderBrush" Color="#FF0A7C86"/>
+      <SolidColorBrush x:Key="YaapicAccentTextBrush" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#FFE0FAFC"/>
+      <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="YaapicInfoBrush" Color="#FF4A4FD0"/>
+      <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#FFECEDFF"/>
+      <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF157F4A"/>
+      <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#FFE3F4EA"/>
+      <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FF8A5A00"/>
+      <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#FFFCF1DA"/>
+      <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFC42B2B"/>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FFFCEAEA"/>
+      <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF4A4FD0"/>
+      <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="YaapicVariableUnresolvedBrush" Color="#FFC42B2B"/>
+      <SolidColorBrush x:Key="YaapicMethodGetBrush" Color="#FF0F7A5C"/>
+      <SolidColorBrush x:Key="YaapicMethodPostBrush" Color="#FF8F5B00"/>
+      <SolidColorBrush x:Key="YaapicMethodPutBrush" Color="#FF1D5FC4"/>
+      <SolidColorBrush x:Key="YaapicMethodPatchBrush" Color="#FF6B3FC9"/>
+      <SolidColorBrush x:Key="YaapicMethodDeleteBrush" Color="#FFBE2F2F"/>
+      <SolidColorBrush x:Key="YaapicMethodHeadBrush" Color="#FF0B6E86"/>
+      <SolidColorBrush x:Key="YaapicMethodOptionsBrush" Color="#FFA3317A"/>
+      <SolidColorBrush x:Key="YaapicMethodCustomBrush" Color="#FF4A515B"/>
+      <SolidColorBrush x:Key="YaapicStatus1xxBrush" Color="#FF4A4FD0"/>
+      <SolidColorBrush x:Key="YaapicStatus2xxBrush" Color="#FF157F4A"/>
+      <SolidColorBrush x:Key="YaapicStatus3xxBrush" Color="#FF1D5FC4"/>
+      <SolidColorBrush x:Key="YaapicStatus4xxBrush" Color="#FF8A5A00"/>
+      <SolidColorBrush x:Key="YaapicStatus5xxBrush" Color="#FFC42B2B"/>
+      <SolidColorBrush x:Key="YaapicTestPassBrush" Color="#FF157F4A"/>
+      <SolidColorBrush x:Key="YaapicTestFailBrush" Color="#FFC42B2B"/>
+      <SolidColorBrush x:Key="YaapicTestSkipBrush" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="YaapicSyntaxKeyBrush" Color="#FF2B4FB8"/>
+      <SolidColorBrush x:Key="YaapicSyntaxStringBrush" Color="#FF4E7A0E"/>
+      <SolidColorBrush x:Key="YaapicSyntaxNumberBrush" Color="#FF9A5B00"/>
+      <SolidColorBrush x:Key="YaapicSyntaxBooleanBrush" Color="#FFA3317A"/>
+      <SolidColorBrush x:Key="YaapicSyntaxPunctuationBrush" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="YaapicSyntaxCommentBrush" Color="#FF737B87"/>
+      <SolidColorBrush x:Key="YaapicSyntaxKeywordBrush" Color="#FF6B3FC9"/>
+      <SolidColorBrush x:Key="YaapicSyntaxFunctionBrush" Color="#FF0B6E86"/>
+      <SolidColorBrush x:Key="YaapicSyntaxTagBrush" Color="#FFB42318"/>
+      <SolidColorBrush x:Key="YaapicSyntaxAttributeBrush" Color="#FF9A5B00"/>
+      <SolidColorBrush x:Key="YaapicDiffAddedBrush" Color="#FFE3F4EA"/>
+      <SolidColorBrush x:Key="YaapicDiffRemovedBrush" Color="#FFFCEAEA"/>
+    </ResourceDictionary>
+  </ResourceDictionary.ThemeDictionaries>
+  <!-- Contraste élevé : ThemeVariant personnalisée « HighContrast » déclarée dans App.axaml -->
+  <CornerRadius x:Key="YaapicRadiusControl">6</CornerRadius>
+  <CornerRadius x:Key="YaapicRadiusOverlay">8</CornerRadius>
+  <x:Double x:Key="YaapicControlHeight">32</x:Double>
+  <x:Double x:Key="YaapicRowHeight">28</x:Double>
+  <FontFamily x:Key="YaapicMonoFont">avares://Yaapic/Assets/Fonts#JetBrains Mono</FontFamily>
+  <BoxShadows x:Key="YaapicElevation2">0 8 16 0 #5C000000</BoxShadows>
+  <BoxShadows x:Key="YaapicElevation3">0 24 48 0 #80000000</BoxShadows>
+</ResourceDictionary>
