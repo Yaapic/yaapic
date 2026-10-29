@@ -1,6 +1,6 @@
 # M1-03: Domain environment and session model
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-01
 
@@ -26,8 +26,8 @@ Secrets, initial vs current values, globals, YAML.
 
 ## Acceptance criteria
 
-- [ ] Types exist, 0 warnings.
-- [ ] Tests in `Yaapic.Domain.Tests`: `Create` trims and rejects blank names; `IsEquivalentTo` true for equal content,
+- [x] Types exist, 0 warnings.
+- [x] Tests in `Yaapic.Domain.Tests`: `Create` trims and rejects blank names; `IsEquivalentTo` true for equal content,
       false after changing the name, one variable value, or the variable order; `SessionState.Empty` values.
 
 ## Suggested commit message
