@@ -1,6 +1,6 @@
 # M1-06: Request resolution
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-01, M1-04
 
@@ -35,11 +35,11 @@ URL validation (the transport reports `InvalidUrl`), auth, form bodies.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: scheme prefix; params appended with `?`, with `&`, after a trailing `?`; params placed
+- [x] Tests in `Yaapic.Core.Tests`: scheme prefix; params appended with `?`, with `&`, after a trailing `?`; params placed
       before `#fragment`; encoding of space, `&`, `=` and non-ASCII; disabled and empty-key entries dropped; variables in
       URL, key, value and body; GET with a Raw body drops it; POST default content types for the three kinds; user
       `Content-Type` override; unresolved aggregation order.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
