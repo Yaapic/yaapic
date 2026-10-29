@@ -1,6 +1,6 @@
 # M1-09: Response body formatter (Pretty / Raw)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-02
 
@@ -39,11 +39,11 @@ HTML formatting, syntax colouring, search, images preview, JSONPath.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: JSON pretty (nested object, array, unicode, big number kept verbatim); invalid JSON
+- [x] Tests in `Yaapic.Core.Tests`: JSON pretty (nested object, array, unicode, big number kept verbatim); invalid JSON
       falls back; XML pretty; XML with a DOCTYPE falls back without resolving it; `+json` and `+xml` suffixes; sniffing
       without content type; `charset=iso-8859-1` decoding; BOM stripped; binary by media type and by NUL byte; Raw mode
       untouched; body above 2 MiB not pretty-printed.
-- [ ] 0 warnings (AOT analyzers: no reflection-based `JsonSerializer` call).
+- [x] 0 warnings (AOT analyzers: no reflection-based `JsonSerializer` call).
 
 ## Suggested commit message
 
