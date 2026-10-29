@@ -1,6 +1,6 @@
 # M1-02: Domain response and send-result model
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-01
 
@@ -27,8 +27,8 @@ Timing breakdown (M4), cookies, redirect chain, streaming bodies.
 
 ## Acceptance criteria
 
-- [ ] Types exist in `src/Yaapic.Domain/Http/`, 0 warnings.
-- [ ] Tests in `Yaapic.Domain.Tests`: `ContentType` lookup is case-insensitive, returns the first match, null when absent;
+- [x] Types exist in `src/Yaapic.Domain/Http/`, 0 warnings.
+- [x] Tests in `Yaapic.Domain.Tests`: `ContentType` lookup is case-insensitive, returns the first match, null when absent;
       `SizeBytes`; `IsSuccessStatusCode` at 199/200/299/300; `Success` and `Fail` set exactly one side and `IsSuccess`
       matches.
 
