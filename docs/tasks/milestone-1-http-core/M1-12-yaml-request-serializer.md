@@ -1,6 +1,6 @@
 # M1-12: YAML request serializer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-10, M1-11
 
@@ -33,10 +33,10 @@ File system access (M1-13), environments, migrations.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: round trip keeps equivalence (`IsEquivalentTo`) for a request with params,
+- [x] Tests in `Yaapic.Infrastructure.Tests`: round trip keeps equivalence (`IsEquivalentTo`) for a request with params,
       headers, disabled entries, multi-line JSON body, unicode and `{{variables}}`; golden file match; unknown key ignored;
       defaults for missing optional keys; version 2 and malformed YAML throw `StorageException`.
-- [ ] 0 warnings (AOT analyzers on).
+- [x] 0 warnings (AOT analyzers on).
 
 ## Suggested commit message
 

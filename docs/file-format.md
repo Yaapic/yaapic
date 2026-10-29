@@ -47,7 +47,8 @@ Keys: `version: 1`, `openRequests` (list of GUID strings), `activeRequest` (GUID
 
 - UTF-8 without BOM, `\n` line endings.
 - Keys are written in the order shown, and every key is always written (empty lists as `[]`).
-- Unknown keys are ignored on read.
+- Unknown keys are ignored on read (VYaml's generated formatters skip them, no pre-filtering needed).
+- List items are written at the same indentation as their key (`params:` then `- key: a`), which is equivalent YAML.
 - Missing optional keys take defaults (`enabled: true`, `body.type: none`).
 - A missing or different `version` is an error for request and environment files.
 - Multi-line strings are written as literal block scalars (`|`).

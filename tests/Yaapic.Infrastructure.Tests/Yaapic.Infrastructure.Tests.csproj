@@ -15,4 +15,7 @@
     <ProjectReference Include="..\..\src\Yaapic.Core\Yaapic.Core.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Storage\golden\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 </Project>
