@@ -1,6 +1,6 @@
 # M1-07: Transport port and request sender
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-02, M1-05, M1-06
 
@@ -27,11 +27,11 @@ The real transport (M1-08), retries, history, scripts.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with a fake `IHttpTransport` that captures the `ResolvedRequest`: environment
+- [x] Tests in `Yaapic.Core.Tests` with a fake `IHttpTransport` that captures the `ResolvedRequest`: environment
       variable substituted into the URL; `{{$guid}}` substituted; environment wins over a dynamic name it defines
       (`$guid` set in the environment); unresolved names surfaced; transport result passed through; transport exception
       -> `Unknown`; `OperationCanceledException` -> `Canceled`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
