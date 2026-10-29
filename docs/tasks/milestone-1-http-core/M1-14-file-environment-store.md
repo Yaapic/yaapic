@@ -1,6 +1,6 @@
 # M1-14: Environment YAML and file environment store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-13
 
@@ -25,9 +25,9 @@ Secret variables, globals, environment import/export.
 
 ## Acceptance criteria
 
-- [ ] Serializer tests: round trip, golden file, version and malformed errors.
-- [ ] Store tests mirroring the M1-13 list (save/list/overwrite/rename/collision/delete/corrupt file).
-- [ ] 0 warnings, M1-13 tests still green.
+- [x] Serializer tests: round trip, golden file, version and malformed errors.
+- [x] Store tests mirroring the M1-13 list (save/list/overwrite/rename/collision/delete/corrupt file).
+- [x] 0 warnings, M1-13 tests still green.
 
 ## Suggested commit message
 
