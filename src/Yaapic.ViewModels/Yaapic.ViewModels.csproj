@@ -3,6 +3,9 @@
     <TargetFramework>net11.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Yaapic.Core\Yaapic.Core.csproj" />
     <ProjectReference Include="..\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />
   </ItemGroup>

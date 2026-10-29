@@ -6,6 +6,7 @@ Every third-party dependency needs a written justification here before it is add
 |---|---|---|---|
 | xunit.v3 | 4.0.2 | Yaapic.Architecture.Tests | Test framework with native Microsoft.Testing.Platform support, required by `dotnet test --solution`. Test-only, never shipped. |
 | VYaml | 1.5.0 | Yaapic.Infrastructure | YAML serialisation for the workspace file format (ADR 0005). MIT, source-generated `[YamlObject]` formatters, no reflection, Native AOT. Verified in M1-10, see below. |
+| CommunityToolkit.Mvvm | 8.4.2 | Yaapic.ViewModels | `ObservableObject`, `[ObservableProperty]` and `[RelayCommand]` source generators for ViewModels. MIT, first-party .NET Foundation; generated code is reflection-free on the paths we use (`ObservableValidator` and `Messenger.RegisterAll` are forbidden). |
 | Microsoft.WindowsAppSDK | 1.8.260921001 | Yaapic.App.WinUI | WinUI 3 runtime and XAML compiler; first-party, Native AOT supported (1.6+). |
 | Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
 

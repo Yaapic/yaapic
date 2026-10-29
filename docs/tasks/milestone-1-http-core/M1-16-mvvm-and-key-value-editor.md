@@ -1,6 +1,6 @@
 # M1-16: MVVM toolkit and key/value editor ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-11
 
@@ -36,10 +36,10 @@ Bulk edit, drag reordering, descriptions, auto-completion of header names.
 
 ## Acceptance criteria
 
-- [ ] Tests: new editor has one placeholder; typing a key adds a placeholder; `RemoveRow` on placeholder is a no-op;
+- [x] Tests: new editor has one placeholder; typing a key adds a placeholder; `RemoveRow` on placeholder is a no-op;
       `Load` + `ToEntries` round trip keeps order and `Enabled`; empty rows skipped; `Changed` raised on edit, toggle and
       remove, and not on `Load`.
-- [ ] 0 warnings (AOT analyzers on), architecture tests green.
+- [x] 0 warnings (AOT analyzers on), architecture tests green.
 
 ## Suggested commit message
 
