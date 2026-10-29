@@ -1,0 +1,1565 @@
+{
+  "$description": "Yaapic design tokens v1.0 — format DTCG (Style Dictionary 4). Valeur par défaut = thème sombre ; $extensions.dev.yaapic.themes donne clair / contraste élevé.",
+  "palette": {
+    "ion": {
+      "50": {
+        "$type": "color",
+        "$value": "#E0FAFC"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#B8F2F7"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#8AE9F0"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#5FE0EA"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#1FC7D4"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#18B3BF"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#0E98A3"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#0A7C86"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#0A6B74"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#08474D"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#042A2E"
+      }
+    },
+    "iris": {
+      "50": {
+        "$type": "color",
+        "$value": "#F0F1FF"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#E1E3FF"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#C6CAFF"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#A3A9FF"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#8088FF"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#636AF2"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#4E52D6"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#3F41AD"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#34378A"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#2C2F6B"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#1A1B3D"
+      }
+    },
+    "graphite": {
+      "50": {
+        "$type": "color",
+        "$value": "#F6F7F9"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#ECEEF1"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#D8DCE2"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#BCC2CB"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#959DA8"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#737B87"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#59606B"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#434952"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#2C3138"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#1D2025"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#131518"
+      }
+    },
+    "green": {
+      "50": {
+        "$type": "color",
+        "$value": "#ECFBF3"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#D0F5E1"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#A3EBC5"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#6FDDA5"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#3FD68A"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#22B26D"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#168A52"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#157F4A"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#115838"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#0F482F"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#062A1A"
+      }
+    },
+    "amber": {
+      "50": {
+        "$type": "color",
+        "$value": "#FFF8EB"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#FDEDC8"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#FAD98C"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#F5C55E"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#F2B84B"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#E09A1E"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#B97A0F"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#8A5A00"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#6F4806"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#5C3C0A"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#352102"
+      }
+    },
+    "red": {
+      "50": {
+        "$type": "color",
+        "$value": "#FFF1F1"
+      },
+      "100": {
+        "$type": "color",
+        "$value": "#FFDEDE"
+      },
+      "200": {
+        "$type": "color",
+        "$value": "#FFC1C1"
+      },
+      "300": {
+        "$type": "color",
+        "$value": "#FF9696"
+      },
+      "400": {
+        "$type": "color",
+        "$value": "#FF6B6B"
+      },
+      "500": {
+        "$type": "color",
+        "$value": "#F24343"
+      },
+      "600": {
+        "$type": "color",
+        "$value": "#DE3838"
+      },
+      "700": {
+        "$type": "color",
+        "$value": "#C42B2B"
+      },
+      "800": {
+        "$type": "color",
+        "$value": "#941F1F"
+      },
+      "900": {
+        "$type": "color",
+        "$value": "#7A1F1F"
+      },
+      "950": {
+        "$type": "color",
+        "$value": "#430B0B"
+      }
+    }
+  },
+  "color": {
+    "surface": {
+      "app": {
+        "$type": "color",
+        "$value": "#131518",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#EEF0F3",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSurfaceAppBrush",
+            "avalonia": "YaapicSurfaceAppBrush"
+          }
+        }
+      },
+      "base": {
+        "$type": "color",
+        "$value": "#1A1D21",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#FFFFFF",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSurfaceBaseBrush",
+            "avalonia": "YaapicSurfaceBaseBrush"
+          }
+        }
+      },
+      "sidebar": {
+        "$type": "color",
+        "$value": "#16181C",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#F3F4F6",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSurfaceSidebarBrush",
+            "avalonia": "YaapicSurfaceSidebarBrush"
+          }
+        }
+      },
+      "raised": {
+        "$type": "color",
+        "$value": "#21252A",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#F6F7F9",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSurfaceRaisedBrush",
+            "avalonia": "YaapicSurfaceRaisedBrush"
+          }
+        }
+      },
+      "elevated": {
+        "$type": "color",
+        "$value": "#282C33",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#FFFFFF",
+            "highContrast": "#0A0A0A"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSurfaceElevatedBrush",
+            "avalonia": "YaapicSurfaceElevatedBrush"
+          }
+        }
+      },
+      "sunken": {
+        "$type": "color",
+        "$value": "#121417",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#FBFBFC",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSurfaceSunkenBrush",
+            "avalonia": "YaapicSurfaceSunkenBrush"
+          }
+        }
+      }
+    },
+    "border": {
+      "subtle": {
+        "$type": "color",
+        "$value": "#24282E",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#E7E9EE",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicBorderSubtleBrush",
+            "avalonia": "YaapicBorderSubtleBrush"
+          }
+        }
+      },
+      "default": {
+        "$type": "color",
+        "$value": "#30353C",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#D8DCE2",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicBorderDefaultBrush",
+            "avalonia": "YaapicBorderDefaultBrush"
+          }
+        }
+      },
+      "control": {
+        "$type": "color",
+        "$value": "#656C77",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#8A919C",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicBorderControlBrush",
+            "avalonia": "YaapicBorderControlBrush"
+          }
+        }
+      }
+    },
+    "text": {
+      "primary": {
+        "$type": "color",
+        "$value": "#ECEEF1",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#16191D",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicTextPrimaryBrush",
+            "avalonia": "YaapicTextPrimaryBrush"
+          }
+        }
+      },
+      "secondary": {
+        "$type": "color",
+        "$value": "#A3AAB4",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#4A515B",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicTextSecondaryBrush",
+            "avalonia": "YaapicTextSecondaryBrush"
+          }
+        }
+      },
+      "tertiary": {
+        "$type": "color",
+        "$value": "#848C97",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#5F6772",
+            "highContrast": "#E0E0E0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicTextTertiaryBrush",
+            "avalonia": "YaapicTextTertiaryBrush"
+          }
+        }
+      },
+      "disabled": {
+        "$type": "color",
+        "$value": "#5A606A",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#A0A7B1",
+            "highContrast": "#3FF23F"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicTextDisabledBrush",
+            "avalonia": "YaapicTextDisabledBrush"
+          }
+        }
+      }
+    },
+    "accent": {
+      "fill": {
+        "$type": "color",
+        "$value": "#1FC7D4",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#1FC7D4",
+            "highContrast": "#8AE9F0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicAccentFillBrush",
+            "avalonia": "YaapicAccentFillBrush"
+          }
+        }
+      },
+      "fillHover": {
+        "$type": "color",
+        "$value": "#5FE0EA",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#5FE0EA",
+            "highContrast": "#8AE9F0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicAccentFillHoverBrush",
+            "avalonia": "YaapicAccentFillHoverBrush"
+          }
+        }
+      },
+      "fillPressed": {
+        "$type": "color",
+        "$value": "#18B3BF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#18B3BF",
+            "highContrast": "#8AE9F0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicAccentFillPressedBrush",
+            "avalonia": "YaapicAccentFillPressedBrush"
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#1FC7D4",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#0A7C86",
+            "highContrast": "#8AE9F0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicAccentBorderBrush",
+            "avalonia": "YaapicAccentBorderBrush"
+          }
+        }
+      },
+      "text": {
+        "$type": "color",
+        "$value": "#5FE0EA",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#0A6B74",
+            "highContrast": "#8AE9F0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicAccentTextBrush",
+            "avalonia": "YaapicAccentTextBrush"
+          }
+        }
+      },
+      "on": {
+        "$type": "color",
+        "$value": "#04252A",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#04252A",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicAccentOnBrush",
+            "avalonia": "YaapicAccentOnBrush"
+          }
+        }
+      }
+    },
+    "selection": {
+      "background": {
+        "$type": "color",
+        "$value": "#1FC7D41A",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#E0FAFC",
+            "highContrast": "#1AEBFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSelectionBackgroundBrush",
+            "avalonia": "YaapicSelectionBackgroundBrush"
+          }
+        }
+      }
+    },
+    "focus": {
+      "ring": {
+        "$type": "color",
+        "$value": "#5FE0EA",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#0A6B74",
+            "highContrast": "#FFFF00"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicFocusRingBrush",
+            "avalonia": "YaapicFocusRingBrush"
+          }
+        }
+      }
+    },
+    "info": {
+      "$type": "color",
+      "$value": "#959BFF",
+      "$extensions": {
+        "dev.yaapic.themes": {
+          "light": "#4A4FD0",
+          "highContrast": "#B3B8FF"
+        },
+        "dev.yaapic.xaml": {
+          "winui": "YaapicInfoBrush",
+          "avalonia": "YaapicInfoBrush"
+        }
+      },
+      "background": {
+        "$type": "color",
+        "$value": "#8088FF29",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#ECEDFF",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicInfoBackgroundBrush",
+            "avalonia": "YaapicInfoBackgroundBrush"
+          }
+        }
+      }
+    },
+    "success": {
+      "$type": "color",
+      "$value": "#3FD68A",
+      "$extensions": {
+        "dev.yaapic.themes": {
+          "light": "#157F4A",
+          "highContrast": "#3FF23F"
+        },
+        "dev.yaapic.xaml": {
+          "winui": "YaapicSuccessBrush",
+          "avalonia": "YaapicSuccessBrush"
+        }
+      },
+      "background": {
+        "$type": "color",
+        "$value": "#3FD68A21",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#E3F4EA",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSuccessBackgroundBrush",
+            "avalonia": "YaapicSuccessBackgroundBrush"
+          }
+        }
+      }
+    },
+    "warning": {
+      "$type": "color",
+      "$value": "#F2B84B",
+      "$extensions": {
+        "dev.yaapic.themes": {
+          "light": "#8A5A00",
+          "highContrast": "#FFFF00"
+        },
+        "dev.yaapic.xaml": {
+          "winui": "YaapicWarningBrush",
+          "avalonia": "YaapicWarningBrush"
+        }
+      },
+      "background": {
+        "$type": "color",
+        "$value": "#F2B84B21",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#FCF1DA",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicWarningBackgroundBrush",
+            "avalonia": "YaapicWarningBackgroundBrush"
+          }
+        }
+      }
+    },
+    "danger": {
+      "$type": "color",
+      "$value": "#FF6B6B",
+      "$extensions": {
+        "dev.yaapic.themes": {
+          "light": "#C42B2B",
+          "highContrast": "#FF8080"
+        },
+        "dev.yaapic.xaml": {
+          "winui": "YaapicDangerBrush",
+          "avalonia": "YaapicDangerBrush"
+        }
+      },
+      "background": {
+        "$type": "color",
+        "$value": "#FF6B6B21",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#FCEAEA",
+            "highContrast": "#000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicDangerBackgroundBrush",
+            "avalonia": "YaapicDangerBackgroundBrush"
+          }
+        }
+      }
+    },
+    "variable": {
+      "resolved": {
+        "$type": "color",
+        "$value": "#959BFF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#4A4FD0",
+            "highContrast": "#B3B8FF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicVariableResolvedBrush",
+            "avalonia": "YaapicVariableResolvedBrush"
+          }
+        }
+      },
+      "secret": {
+        "$type": "color",
+        "$value": "#5FE0EA",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#0A6B74",
+            "highContrast": "#8AE9F0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicVariableSecretBrush",
+            "avalonia": "YaapicVariableSecretBrush"
+          }
+        }
+      },
+      "unresolved": {
+        "$type": "color",
+        "$value": "#FF6B6B",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#C42B2B",
+            "highContrast": "#FF8080"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicVariableUnresolvedBrush",
+            "avalonia": "YaapicVariableUnresolvedBrush"
+          }
+        }
+      }
+    },
+    "method": {
+      "get": {
+        "$type": "color",
+        "$value": "#3DD6A3",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#0F7A5C",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodGetBrush",
+            "avalonia": "YaapicMethodGetBrush"
+          }
+        }
+      },
+      "post": {
+        "$type": "color",
+        "$value": "#F5B648",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#8F5B00",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodPostBrush",
+            "avalonia": "YaapicMethodPostBrush"
+          }
+        }
+      },
+      "put": {
+        "$type": "color",
+        "$value": "#6AA8FF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#1D5FC4",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodPutBrush",
+            "avalonia": "YaapicMethodPutBrush"
+          }
+        }
+      },
+      "patch": {
+        "$type": "color",
+        "$value": "#B38CFF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#6B3FC9",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodPatchBrush",
+            "avalonia": "YaapicMethodPatchBrush"
+          }
+        }
+      },
+      "delete": {
+        "$type": "color",
+        "$value": "#FF7272",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#BE2F2F",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodDeleteBrush",
+            "avalonia": "YaapicMethodDeleteBrush"
+          }
+        }
+      },
+      "head": {
+        "$type": "color",
+        "$value": "#5CC8E0",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#0B6E86",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodHeadBrush",
+            "avalonia": "YaapicMethodHeadBrush"
+          }
+        }
+      },
+      "options": {
+        "$type": "color",
+        "$value": "#F28AC9",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#A3317A",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodOptionsBrush",
+            "avalonia": "YaapicMethodOptionsBrush"
+          }
+        }
+      },
+      "custom": {
+        "$type": "color",
+        "$value": "#A3AAB4",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#4A515B",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicMethodCustomBrush",
+            "avalonia": "YaapicMethodCustomBrush"
+          }
+        }
+      }
+    },
+    "status": {
+      "1xx": {
+        "$type": "color",
+        "$value": "#959BFF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#4A4FD0",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicStatus1xxBrush",
+            "avalonia": "YaapicStatus1xxBrush"
+          }
+        }
+      },
+      "2xx": {
+        "$type": "color",
+        "$value": "#3FD68A",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#157F4A",
+            "highContrast": "#3FF23F"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicStatus2xxBrush",
+            "avalonia": "YaapicStatus2xxBrush"
+          }
+        }
+      },
+      "3xx": {
+        "$type": "color",
+        "$value": "#6AA8FF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#1D5FC4",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicStatus3xxBrush",
+            "avalonia": "YaapicStatus3xxBrush"
+          }
+        }
+      },
+      "4xx": {
+        "$type": "color",
+        "$value": "#F2B84B",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#8A5A00",
+            "highContrast": "#FFFF00"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicStatus4xxBrush",
+            "avalonia": "YaapicStatus4xxBrush"
+          }
+        }
+      },
+      "5xx": {
+        "$type": "color",
+        "$value": "#FF6B6B",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#C42B2B",
+            "highContrast": "#FF8080"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicStatus5xxBrush",
+            "avalonia": "YaapicStatus5xxBrush"
+          }
+        }
+      }
+    },
+    "test": {
+      "pass": {
+        "$type": "color",
+        "$value": "#3FD68A",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#157F4A",
+            "highContrast": "#3FF23F"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicTestPassBrush",
+            "avalonia": "YaapicTestPassBrush"
+          }
+        }
+      },
+      "fail": {
+        "$type": "color",
+        "$value": "#FF6B6B",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#C42B2B",
+            "highContrast": "#FF8080"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicTestFailBrush",
+            "avalonia": "YaapicTestFailBrush"
+          }
+        }
+      },
+      "skip": {
+        "$type": "color",
+        "$value": "#A3AAB4",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#5F6772",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicTestSkipBrush",
+            "avalonia": "YaapicTestSkipBrush"
+          }
+        }
+      }
+    },
+    "syntax": {
+      "key": {
+        "$type": "color",
+        "$value": "#8FB7FF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#2B4FB8",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxKeyBrush",
+            "avalonia": "YaapicSyntaxKeyBrush"
+          }
+        }
+      },
+      "string": {
+        "$type": "color",
+        "$value": "#B5E36C",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#4E7A0E",
+            "highContrast": "#3FF23F"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxStringBrush",
+            "avalonia": "YaapicSyntaxStringBrush"
+          }
+        }
+      },
+      "number": {
+        "$type": "color",
+        "$value": "#F5B648",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#9A5B00",
+            "highContrast": "#FFFF00"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxNumberBrush",
+            "avalonia": "YaapicSyntaxNumberBrush"
+          }
+        }
+      },
+      "boolean": {
+        "$type": "color",
+        "$value": "#F28AC9",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#A3317A",
+            "highContrast": "#FF80FF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxBooleanBrush",
+            "avalonia": "YaapicSyntaxBooleanBrush"
+          }
+        }
+      },
+      "punctuation": {
+        "$type": "color",
+        "$value": "#848C97",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#5F6772",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxPunctuationBrush",
+            "avalonia": "YaapicSyntaxPunctuationBrush"
+          }
+        }
+      },
+      "comment": {
+        "$type": "color",
+        "$value": "#6B7380",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#737B87",
+            "highContrast": "#C0C0C0"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxCommentBrush",
+            "avalonia": "YaapicSyntaxCommentBrush"
+          }
+        }
+      },
+      "keyword": {
+        "$type": "color",
+        "$value": "#B38CFF",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#6B3FC9",
+            "highContrast": "#FF80FF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxKeywordBrush",
+            "avalonia": "YaapicSyntaxKeywordBrush"
+          }
+        }
+      },
+      "function": {
+        "$type": "color",
+        "$value": "#6FD4E8",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#0B6E86",
+            "highContrast": "#1AEBFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxFunctionBrush",
+            "avalonia": "YaapicSyntaxFunctionBrush"
+          }
+        }
+      },
+      "tag": {
+        "$type": "color",
+        "$value": "#FF8F8F",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#B42318",
+            "highContrast": "#FF8080"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxTagBrush",
+            "avalonia": "YaapicSyntaxTagBrush"
+          }
+        }
+      },
+      "attribute": {
+        "$type": "color",
+        "$value": "#F5B648",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#9A5B00",
+            "highContrast": "#FFFF00"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSyntaxAttributeBrush",
+            "avalonia": "YaapicSyntaxAttributeBrush"
+          }
+        }
+      }
+    },
+    "diff": {
+      "added": {
+        "$type": "color",
+        "$value": "#3FD68A21",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#E3F4EA",
+            "highContrast": "#003300"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicDiffAddedBrush",
+            "avalonia": "YaapicDiffAddedBrush"
+          }
+        }
+      },
+      "removed": {
+        "$type": "color",
+        "$value": "#FF6B6B21",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#FCEAEA",
+            "highContrast": "#330000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicDiffRemovedBrush",
+            "avalonia": "YaapicDiffRemovedBrush"
+          }
+        }
+      }
+    }
+  },
+  "font": {
+    "family": {
+      "ui": {
+        "$type": "fontFamily",
+        "$value": [
+          "Segoe UI Variable Text",
+          "SF Pro Text",
+          "Cantarell",
+          "Inter",
+          "sans-serif"
+        ]
+      },
+      "mono": {
+        "$type": "fontFamily",
+        "$value": [
+          "JetBrains Mono",
+          "Cascadia Code",
+          "SF Mono",
+          "Consolas",
+          "monospace"
+        ]
+      },
+      "brand": {
+        "$type": "fontFamily",
+        "$value": [
+          "Space Grotesk",
+          "sans-serif"
+        ]
+      }
+    }
+  },
+  "type": {
+    "display": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.brand}",
+        "fontSize": "40px",
+        "lineHeight": "52px",
+        "fontWeight": 600
+      }
+    },
+    "title.lg": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.ui}",
+        "fontSize": "28px",
+        "lineHeight": "36px",
+        "fontWeight": 600
+      }
+    },
+    "title": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.ui}",
+        "fontSize": "20px",
+        "lineHeight": "28px",
+        "fontWeight": 600
+      }
+    },
+    "subtitle": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.ui}",
+        "fontSize": "15px",
+        "lineHeight": "20px",
+        "fontWeight": 600
+      }
+    },
+    "body.strong": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.ui}",
+        "fontSize": "13px",
+        "lineHeight": "20px",
+        "fontWeight": 600
+      }
+    },
+    "body": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.ui}",
+        "fontSize": "13px",
+        "lineHeight": "20px",
+        "fontWeight": 400
+      }
+    },
+    "body.sm": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.ui}",
+        "fontSize": "12px",
+        "lineHeight": "16px",
+        "fontWeight": 400
+      }
+    },
+    "caption": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.ui}",
+        "fontSize": "11px",
+        "lineHeight": "16px",
+        "fontWeight": 500
+      }
+    },
+    "code": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.mono}",
+        "fontSize": "12px",
+        "lineHeight": "20px",
+        "fontWeight": 400
+      }
+    },
+    "code.sm": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.mono}",
+        "fontSize": "11px",
+        "lineHeight": "16px",
+        "fontWeight": 400
+      }
+    },
+    "code.lg": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.mono}",
+        "fontSize": "14px",
+        "lineHeight": "22px",
+        "fontWeight": 400
+      }
+    }
+  },
+  "space": {
+    "0": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "50": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "100": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "150": {
+      "$type": "dimension",
+      "$value": "6px"
+    },
+    "200": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "300": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "400": {
+      "$type": "dimension",
+      "$value": "16px"
+    },
+    "500": {
+      "$type": "dimension",
+      "$value": "20px"
+    },
+    "600": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "800": {
+      "$type": "dimension",
+      "$value": "32px"
+    },
+    "1000": {
+      "$type": "dimension",
+      "$value": "40px"
+    },
+    "1200": {
+      "$type": "dimension",
+      "$value": "48px"
+    }
+  },
+  "radius": {
+    "none": {
+      "$type": "dimension",
+      "$value": "0px"
+    },
+    "xs": {
+      "$type": "dimension",
+      "$value": "2px"
+    },
+    "sm": {
+      "$type": "dimension",
+      "$value": "4px"
+    },
+    "md": {
+      "$type": "dimension",
+      "$value": "6px"
+    },
+    "lg": {
+      "$type": "dimension",
+      "$value": "8px"
+    },
+    "xl": {
+      "$type": "dimension",
+      "$value": "12px"
+    },
+    "full": {
+      "$type": "dimension",
+      "$value": "999px"
+    },
+    "control": {
+      "$type": "dimension",
+      "$value": "6px",
+      "$extensions": {
+        "dev.yaapic.platform": {
+          "windows": "4px",
+          "macos": "6px",
+          "linux": "6px"
+        }
+      }
+    },
+    "overlay": {
+      "$type": "dimension",
+      "$value": "8px"
+    }
+  },
+  "border": {
+    "width": {
+      "default": {
+        "$type": "dimension",
+        "$value": "1px"
+      },
+      "focus": {
+        "$type": "dimension",
+        "$value": "2px"
+      }
+    }
+  },
+  "elevation": {
+    "0": {
+      "$type": "shadow",
+      "$value": []
+    },
+    "1": {
+      "$type": "shadow",
+      "$value": {
+        "offsetX": "0px",
+        "offsetY": "2px",
+        "blur": "4px",
+        "spread": "0px",
+        "color": "#00000047"
+      }
+    },
+    "2": {
+      "$type": "shadow",
+      "$value": {
+        "offsetX": "0px",
+        "offsetY": "8px",
+        "blur": "16px",
+        "spread": "0px",
+        "color": "#0000005C"
+      }
+    },
+    "3": {
+      "$type": "shadow",
+      "$value": {
+        "offsetX": "0px",
+        "offsetY": "24px",
+        "blur": "48px",
+        "spread": "0px",
+        "color": "#00000080"
+      }
+    }
+  },
+  "opacity": {
+    "disabled": {
+      "$type": "number",
+      "$value": 0.4
+    },
+    "scrim": {
+      "$type": "number",
+      "$value": 0.6
+    },
+    "hover": {
+      "$type": "number",
+      "$value": 0.05
+    }
+  },
+  "size": {
+    "control": {
+      "compact": {
+        "$type": "dimension",
+        "$value": "24px"
+      },
+      "comfortable": {
+        "$type": "dimension",
+        "$value": "32px"
+      },
+      "spacious": {
+        "$type": "dimension",
+        "$value": "36px"
+      }
+    },
+    "row": {
+      "compact": {
+        "$type": "dimension",
+        "$value": "22px"
+      },
+      "comfortable": {
+        "$type": "dimension",
+        "$value": "28px"
+      },
+      "spacious": {
+        "$type": "dimension",
+        "$value": "32px"
+      }
+    },
+    "titlebar": {
+      "windows": {
+        "$type": "dimension",
+        "$value": "40px"
+      },
+      "macos": {
+        "$type": "dimension",
+        "$value": "40px"
+      },
+      "linux": {
+        "$type": "dimension",
+        "$value": "46px"
+      }
+    },
+    "rail": {
+      "$type": "dimension",
+      "$value": "48px"
+    },
+    "sidebar": {
+      "default": {
+        "$type": "dimension",
+        "$value": "272px"
+      },
+      "min": {
+        "$type": "dimension",
+        "$value": "220px"
+      },
+      "max": {
+        "$type": "dimension",
+        "$value": "480px"
+      }
+    },
+    "statusbar": {
+      "$type": "dimension",
+      "$value": "24px"
+    },
+    "tabbar": {
+      "$type": "dimension",
+      "$value": "36px"
+    },
+    "window": {
+      "minWidth": {
+        "$type": "dimension",
+        "$value": "900px"
+      },
+      "minHeight": {
+        "$type": "dimension",
+        "$value": "600px"
+      }
+    }
+  },
+  "motion": {
+    "duration": {
+      "instant": {
+        "$type": "duration",
+        "$value": "0ms"
+      },
+      "fast": {
+        "$type": "duration",
+        "$value": "100ms"
+      },
+      "normal": {
+        "$type": "duration",
+        "$value": "150ms"
+      },
+      "slow": {
+        "$type": "duration",
+        "$value": "250ms"
+      }
+    },
+    "easing": {
+      "standard": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.2,
+          0,
+          0,
+          1
+        ]
+      },
+      "decelerate": {
+        "$type": "cubicBezier",
+        "$value": [
+          0,
+          0,
+          0,
+          1
+        ]
+      },
+      "exit": {
+        "$type": "cubicBezier",
+        "$value": [
+          0.3,
+          0,
+          1,
+          1
+        ]
+      }
+    }
+  }
+}
