@@ -1,6 +1,6 @@
 # M1-11: Storage ports and shared test doubles
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-03, M1-07
 
@@ -33,9 +33,9 @@ File implementations (M1-12 to M1-15), file watching, conflict detection.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` for the in-memory doubles (sorting, replace by id, delete no-op) so later cards can
+- [x] Tests in `Yaapic.Core.Tests` for the in-memory doubles (sorting, replace by id, delete no-op) so later cards can
       trust them.
-- [ ] 0 warnings, architecture tests green (test projects are not under `src/`).
+- [x] 0 warnings, architecture tests green (test projects are not under `src/`).
 
 ## Suggested commit message
 

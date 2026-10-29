@@ -13,5 +13,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.Core\Yaapic.Core.csproj" />
+    <ProjectReference Include="..\Yaapic.TestDoubles\Yaapic.TestDoubles.csproj" />
   </ItemGroup>
 </Project>
