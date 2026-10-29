@@ -1,6 +1,6 @@
 # M1-04: Variable resolver
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-03
 
@@ -35,10 +35,10 @@ Dynamic variables (M1-05), an escape syntax, nested `{{a{{b}}}}`, scripts, secre
 
 ## Acceptance criteria
 
-- [ ] Tests: single and multiple placeholders; trimmed names; unresolved kept as typed and reported once; a value
+- [x] Tests: single and multiple placeholders; trimmed names; unresolved kept as typed and reported once; a value
       containing `{{other}}` is not re-expanded; `{{}}`, `{{ }}` and `{{abc` untouched; last enabled entry wins; disabled
       entry ignored; null environment; composite order.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
