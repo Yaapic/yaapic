@@ -1,6 +1,6 @@
 # M1-08: HttpClient transport and Infrastructure project
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-07
 
@@ -39,12 +39,12 @@ Proxy, TLS options, client certificates, HTTP version selection (M4), streaming,
 
 ## Acceptance criteria
 
-- [ ] Tests with a stub `HttpMessageHandler` (no network): GET maps status, reason, response and content headers, body,
+- [x] Tests with a stub `HttpMessageHandler` (no network): GET maps status, reason, response and content headers, body,
       final URL; POST sends the body bytes with the expected `Content-Type`; user headers reach the request; a
       `Content-Type` override is applied; invalid URL and `ftp://` -> `InvalidUrl` with the handler never called;
       `HttpRequestException` -> `ConnectionFailed`; handler slower than a 50 ms timeout -> `Timeout`; caller cancellation
       -> `Canceled`; a 404 is `IsSuccess`.
-- [ ] 0 warnings (AOT analyzers on), architecture tests green with the new rule.
+- [x] 0 warnings (AOT analyzers on), architecture tests green with the new rule.
 
 ## Suggested commit message
 
