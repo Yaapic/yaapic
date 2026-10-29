@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
+    <RootNamespace>Yaapic.App.WinUI</RootNamespace>
+    <UseWinUI>true</UseWinUI>
+    <WindowsPackageType>None</WindowsPackageType>
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <SupportedOSPlatformVersion>10.0.19041.0</SupportedOSPlatformVersion>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <Platforms>x64;ARM64</Platforms>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\design\app-icons\windows\yaapic.ico</ApplicationIcon>
+    <DefaultLanguage>en-US</DefaultLanguage>
+    <EnableMsixTooling>true</EnableMsixTooling>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Generated resources live in design/; compile them as pages so they ship as XBF. -->
+    <Page Include="..\..\design\xaml\Yaapic.Colors.WinUI.xaml" Link="Themes\Yaapic.Colors.WinUI.xaml" />
+    <Page Include="..\..\design\xaml\Yaapic.Icons.WinUI.xaml" Link="Themes\Yaapic.Icons.WinUI.xaml" />
+  </ItemGroup>
+</Project>

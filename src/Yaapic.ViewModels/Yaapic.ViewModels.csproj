@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Yaapic.Core\Yaapic.Core.csproj" />
+    <ProjectReference Include="..\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />
+  </ItemGroup>
+</Project>
