@@ -1,6 +1,6 @@
 # M0-04: Design tokens generator and snapshot test
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M0-02
 
@@ -22,8 +22,8 @@ Control styles, fonts, icons.
 
 ## Acceptance criteria
 
-- [ ] Generated output matches the reference files in `design/xaml/` (snapshot test).
-- [ ] Changing a token changes the output and fails the snapshot test until it is updated.
+- [x] Generated output matches the reference files in `design/xaml/` (snapshot test).
+- [x] Changing a token changes the output and fails the snapshot test until it is updated.
 
 ## Suggested commit message
 

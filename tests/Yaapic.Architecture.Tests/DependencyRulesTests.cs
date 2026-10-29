@@ -12,6 +12,7 @@ public class DependencyRulesTests
         ["Yaapic.Domain"] = [],
         ["Yaapic.Core"] = ["Yaapic.Domain"],
         ["Yaapic.UI.Abstractions"] = [],
+        ["Yaapic.Design.Tokens"] = [],
         ["Yaapic.ViewModels"] = ["Yaapic.Core", "Yaapic.UI.Abstractions"],
     };
 
