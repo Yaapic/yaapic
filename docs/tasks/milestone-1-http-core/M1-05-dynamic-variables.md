@@ -1,6 +1,6 @@
 # M1-05: Dynamic variables
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-04
 
@@ -28,10 +28,10 @@ Faker-style generators, user-defined dynamic variables, scripting.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with a hand-written `TimeProvider` subclass returning a fixed `GetUtcNow()` (no extra
+- [x] Tests in `Yaapic.Core.Tests` with a hand-written `TimeProvider` subclass returning a fixed `GetUtcNow()` (no extra
       package) and a seeded `Random`: format of each variable; two `$guid` lookups differ; `$randomInt` within 0..1000;
       unknown `$name` and wrong case return false; `VariableResolver` resolves `{{$guid}}` through this source.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
