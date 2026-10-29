@@ -5,6 +5,7 @@ Every third-party dependency needs a written justification here before it is add
 | Package | Version | Used by | Justification |
 |---|---|---|---|
 | xunit.v3 | 4.0.2 | Yaapic.Architecture.Tests | Test framework with native Microsoft.Testing.Platform support, required by `dotnet test --solution`. Test-only, never shipped. |
+| VYaml | 1.5.0 | Yaapic.Infrastructure | YAML serialisation for the workspace file format (ADR 0005). MIT, source-generated `[YamlObject]` formatters, no reflection, Native AOT. Verified in M1-10, see below. |
 | Microsoft.WindowsAppSDK | 1.8.260921001 | Yaapic.App.WinUI | WinUI 3 runtime and XAML compiler; first-party, Native AOT supported (1.6+). |
 | Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
 
@@ -14,3 +15,13 @@ NetArchTest was not adopted. The dependency rules are project-level, so `Yaapic.
 `ProjectReference` items of each csproj directly (an unused reference is not emitted into the assembly, so a type-level
 check would miss it). No extra package and no reflection-based tooling are needed. NetArchTest compatibility with
 Native AOT was not evaluated; revisit if type-level rules (namespaces, naming) are needed.
+
+## VYaml: Native AOT check (M1-10)
+
+VYaml 1.5.0 (latest stable on nuget.org at the time). A scratch console project (not committed) referenced
+`Yaapic.Infrastructure` and round-tripped a `[YamlObject]` type holding a string, a nested `[YamlObject]`, a `List<T>`
+of objects and a multi-line string. `dotnet publish -c Release -r win-x64 -p:PublishAot=true` produced **0 IL2xxx/IL3xxx
+warnings**, and the published binary ran and the round trip matched.
+
+Multi-line strings are emitted as **literal block scalars** (`|`), so scripts and bodies stay readable in diffs.
+Property names are emitted in camelCase by default (`openRequests`), matching the file format.

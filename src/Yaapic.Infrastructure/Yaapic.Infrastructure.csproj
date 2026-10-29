@@ -3,6 +3,7 @@
     <TargetFramework>net11.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="VYaml" />
     <ProjectReference Include="..\Yaapic.Core\Yaapic.Core.csproj" />
     <ProjectReference Include="..\Yaapic.Domain\Yaapic.Domain.csproj" />
   </ItemGroup>

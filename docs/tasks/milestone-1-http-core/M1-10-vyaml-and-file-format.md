@@ -1,6 +1,6 @@
 # M1-10: VYaml adoption and workspace file format v1
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-08
 
@@ -68,9 +68,9 @@ Collections and folders (M2), secrets, migrations between versions, the DTOs and
 
 ## Acceptance criteria
 
-- [ ] `docs/dependencies.md` has the VYaml row and the AOT check result (0 IL2xxx/IL3xxx warnings, binary ran).
-- [ ] `docs/file-format.md` exists as specified and ADR 0005 links it.
-- [ ] Build 0 warnings; no scratch project committed.
+- [x] `docs/dependencies.md` has the VYaml row and the AOT check result (0 IL2xxx/IL3xxx warnings, binary ran).
+- [x] `docs/file-format.md` exists as specified and ADR 0005 links it.
+- [x] Build 0 warnings; no scratch project committed.
 
 ## Suggested commit message
 

@@ -27,3 +27,5 @@ still run the AOT publish and confirm 0 IL2xxx/IL3xxx warnings. Fallback if it f
 
 Option 1: YAML via VYaml, with models marked `[YamlObject]`. JSON is the rejected option for storage (it stays in use
 for import/export formats, through `System.Text.Json` source generators).
+
+Format details: [../file-format.md](../file-format.md)
