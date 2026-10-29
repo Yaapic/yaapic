@@ -1,6 +1,6 @@
 # M1-15: Session store and workspace bootstrap
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-13
 
@@ -26,9 +26,9 @@ Workspace picker, several workspaces, restoring unsaved tab content (unsaved edi
 
 ## Acceptance criteria
 
-- [ ] Tests on a temp directory: save/load round trip; missing file, garbage YAML, version 2 -> `Empty`; invalid GUID
+- [x] Tests on a temp directory: save/load round trip; missing file, garbage YAML, version 2 -> `Empty`; invalid GUID
       skipped; `EnsureCreated` creates the tree, is idempotent and never overwrites an existing `.gitignore`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
