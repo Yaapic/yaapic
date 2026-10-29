@@ -1,6 +1,6 @@
 # M0-03: ADRs 0001-0007
 
-Status: blocked
+Status: todo
 Platform: any
 Depends on: M0-01
 
@@ -12,8 +12,8 @@ shared design tokens, Git client. Each lists 2 to 3 options, AOT risks and the d
 ## Design decisions
 
 Decided: scripting = JavaScript (QuickJS-NG) and Lua behind `IScriptEngine`; no C# or Python.
-Open (the card stays `blocked` until answered): storage format (YAML or JSON), Git client (git binary or
-LibGit2Sharp), SDK version (.NET 11 RC or .NET 10 LTS).
+Decided: storage format = YAML (VYaml, source-generator based; the ADR must record its AOT compatibility check and
+JSON as the rejected option), Git client = the `git` binary, SDK = .NET 11 RC (the ADR records the pre-release risk).
 
 ## Out of scope
 
