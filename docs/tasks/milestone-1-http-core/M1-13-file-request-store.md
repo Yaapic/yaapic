@@ -1,6 +1,6 @@
 # M1-13: File request store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-12
 
@@ -32,11 +32,11 @@ File watching, external edits while the app runs, sub-folders/collections (M2), 
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` on a unique temp directory deleted after each test: save then list; save
+- [x] Tests in `Yaapic.Infrastructure.Tests` on a unique temp directory deleted after each test: save then list; save
       twice same id overwrites one file; rename moves the file; slug collision gets `-2`; delete; missing directory lists
       empty; a corrupt file is skipped and reported; duplicate id reported; no `.tmp` file left behind; file content has
       `\n` line endings and no BOM.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
