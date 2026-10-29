@@ -1,6 +1,6 @@
 # M1-01: Domain request model
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -37,11 +37,11 @@ Other HTTP methods, form/multipart/binary bodies, auth, URL validation, storage,
 
 ## Acceptance criteria
 
-- [ ] Types above exist in `src/Yaapic.Domain/Http/`, build with 0 warnings.
-- [ ] Tests: `Create` trims and rejects blank names; two `Create` calls give distinct ids; `IsEquivalentTo` is true for
+- [x] Types above exist in `src/Yaapic.Domain/Http/`, build with 0 warnings.
+- [x] Tests: `Create` trims and rejects blank names; two `Create` calls give distinct ids; `IsEquivalentTo` is true for
       equal content held in different list instances and false after changing each of: name, method, url, a param, a
       header, the body.
-- [ ] `Yaapic.Architecture.Tests` still green (Domain references nothing).
+- [x] `Yaapic.Architecture.Tests` still green (Domain references nothing).
 
 ## Suggested commit message
 

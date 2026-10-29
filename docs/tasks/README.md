@@ -27,7 +27,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
-| [M1-01](milestone-1-http-core/M1-01-domain-request-model.md) | Domain request model | any | none | todo |
+| [M1-01](milestone-1-http-core/M1-01-domain-request-model.md) | Domain request model | any | none | done |
 | [M1-02](milestone-1-http-core/M1-02-domain-response-model.md) | Domain response and send-result model | any | M1-01 | todo |
 | [M1-03](milestone-1-http-core/M1-03-domain-environment-model.md) | Domain environment and session model | any | M1-01 | todo |
 | [M1-04](milestone-1-http-core/M1-04-variable-resolver.md) | Variable resolver | any | M1-03 | todo |
