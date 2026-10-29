@@ -1,6 +1,6 @@
 # M0-02: Core project skeletons and architecture tests
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M0-01
 
@@ -23,9 +23,9 @@ Domain models, services, UI.
 
 ## Acceptance criteria
 
-- [ ] Projects build with `IsAotCompatible` and 0 warnings.
-- [ ] Architecture tests pass; a deliberately wrong reference makes them fail (checked once, not committed).
-- [ ] `dotnet test --solution Yaapic.sln -c Release` is green.
+- [x] Projects build with `IsAotCompatible` and 0 warnings.
+- [x] Architecture tests pass; a deliberately wrong reference makes them fail (checked once, not committed).
+- [x] `dotnet test --solution Yaapic.sln -c Release` is green.
 
 ## Suggested commit message
 
