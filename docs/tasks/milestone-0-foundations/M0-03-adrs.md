@@ -1,6 +1,6 @@
 # M0-03: ADRs 0001-0007
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M0-01
 
@@ -21,8 +21,8 @@ Prototypes (they come with the milestone that needs them).
 
 ## Acceptance criteria
 
-- [ ] Seven ADRs in English, each with status, options, risks and decision.
-- [ ] `docs/adr/README.md` index.
+- [x] Seven ADRs in English, each with status, options, risks and decision.
+- [x] `docs/adr/README.md` index.
 
 ## Suggested commit message
 
