@@ -11,7 +11,7 @@ Creates `tests/Yaapic.Infrastructure.Tests`.
 
 ## Design decisions
 
-- `Yaapic.Infrastructure.csproj`: `net10.0`, references `Yaapic.Core` and `Yaapic.Domain`. In `DependencyRulesTests`,
+- `Yaapic.Infrastructure.csproj`: `net11.0`, references `Yaapic.Core` and `Yaapic.Domain`. In `DependencyRulesTests`,
   add `["Yaapic.Infrastructure"] = ["Yaapic.Core", "Yaapic.Domain"]`. Add both new projects to `Yaapic.sln`; the test
   project mirrors `Yaapic.Architecture.Tests.csproj` and references `Yaapic.Infrastructure`, `Yaapic.Core`, `Yaapic.Domain`.
 - `sealed class HttpClientTransport(HttpClient client, TimeSpan timeout) : IHttpTransport` in

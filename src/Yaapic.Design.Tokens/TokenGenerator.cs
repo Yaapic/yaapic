@@ -16,6 +16,9 @@ public static class TokenGenerator
     private const string AvaloniaNs = "https://github.com/avaloniaui";
     private const string XNs = "http://schemas.microsoft.com/winfx/2006/xaml";
 
+    /// <summary>Generates the WinUI resource dictionary.</summary>
+    /// <param name="tokensJson">The DTCG token file contents.</param>
+    /// <returns>The XAML of the resource dictionary, with LF line endings.</returns>
     public static string GenerateWinUI(string tokensJson)
     {
         using var doc = JsonDocument.Parse(tokensJson);
@@ -38,6 +41,9 @@ public static class TokenGenerator
         return sb.ToString();
     }
 
+    /// <summary>Generates the Avalonia resource dictionary.</summary>
+    /// <param name="tokensJson">The DTCG token file contents.</param>
+    /// <returns>The AXAML of the resource dictionary, with LF line endings.</returns>
     public static string GenerateAvalonia(string tokensJson)
     {
         using var doc = JsonDocument.Parse(tokensJson);

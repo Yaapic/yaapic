@@ -25,7 +25,7 @@ One `ShellViewModel` that both App projects bind to, built by a shared compositi
   `tabs.SaveAsync(tab)`, return false if it fails; `Discard` -> continue; `Cancel` -> return false (the window stays
   open). Untouched new tabs are skipped. Then save the session and return true. The constructor therefore also takes
   `IDialogService dialogs`.
-- New project `src/Yaapic.Composition` (`net10.0`), references `Yaapic.ViewModels`, `Yaapic.Infrastructure`,
+- New project `src/Yaapic.Composition` (`net11.0`), references `Yaapic.ViewModels`, `Yaapic.Infrastructure`,
   `Yaapic.Core`, `Yaapic.Domain`, `Yaapic.UI.Abstractions`. One public static method:
   `ShellViewModel AppComposition.CreateShell(string workspaceRoot, IDialogService dialogs)`: `Workspace.EnsureCreated`,
   file stores, `HttpClientTransport(DefaultHttpClient.Create(), TimeSpan.FromSeconds(30))`, `RequestSender`,

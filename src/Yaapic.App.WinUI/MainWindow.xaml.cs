@@ -4,11 +4,13 @@ using Microsoft.UI.Xaml.Controls;
 
 namespace Yaapic.App.WinUI;
 
+/// <summary>The themed main window.</summary>
 public sealed partial class MainWindow : Window
 {
     private const int MinWidth = 900;
     private const int MinHeight = 600;
 
+    /// <summary>Initializes the window.</summary>
     public MainWindow()
     {
         InitializeComponent();

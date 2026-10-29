@@ -20,7 +20,7 @@ projects.
   - `interface ISessionStore { Task<SessionState> LoadAsync(CancellationToken ct); Task SaveAsync(SessionState state, CancellationToken ct); }`.
     `LoadAsync` never throws for a missing or unreadable file: it returns `SessionState.Empty`.
   - `sealed class StorageException(string message, Exception? inner = null) : Exception` for I/O and format errors.
-- New project `tests/Yaapic.TestDoubles` (class library, `net10.0`, `IsAotCompatible` false, `IsPackable` false,
+- New project `tests/Yaapic.TestDoubles` (class library, `net11.0`, `IsAotCompatible` false, `IsPackable` false,
   references `Yaapic.Core` and `Yaapic.Domain`, added to `Yaapic.sln`, not a test runner):
   `InMemoryRequestStore`, `InMemoryEnvironmentStore`, `InMemorySessionStore` (implementing the ports with the sorting
   rule above, plus a public `SaveCount` counter each) and `FakeHttpTransport` (constructor takes a

@@ -1,3 +1,11 @@
 namespace Yaapic.Domain.Http;
 
-public enum HttpMethodKind { Get, Post }
+/// <summary>HTTP methods supported by the request editor.</summary>
+public enum HttpMethodKind
+{
+    /// <summary>The GET method.</summary>
+    Get,
+
+    /// <summary>The POST method.</summary>
+    Post,
+}
