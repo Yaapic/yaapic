@@ -1,6 +1,6 @@
 # M1-22: Environments ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-20
 
@@ -36,11 +36,11 @@ Globals, secret values, import/export, duplicate environment.
 
 ## Acceptance criteria
 
-- [ ] Tests: load selects the given active id or null for an unknown id; `Current` reflects unsaved variable edits;
+- [x] Tests: load selects the given active id or null for an unknown id; `Current` reflects unsaved variable edits;
       add/save/delete with store checks; deleting the active environment clears it; `ActiveEnvironmentChanged` raised;
       `RequestEditorViewModel` sends with the variable of the active environment (one integration-style test with
       `FakeHttpTransport`).
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
