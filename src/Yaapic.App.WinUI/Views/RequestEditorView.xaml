@@ -85,7 +85,6 @@
         </Grid>
       </Grid>
     </Grid>
-    <!-- Reserved for the response viewer (M1-26). -->
-    <ContentPresenter Grid.Row="1" x:Name="ResponseHost"/>
+    <v:ResponsePanelView Grid.Row="1" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
   </Grid>
 </UserControl>

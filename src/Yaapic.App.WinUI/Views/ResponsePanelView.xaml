@@ -1,0 +1,98 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.ResponsePanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:d="using:Yaapic.Domain.Http">
+  <Grid RowSpacing="8">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <InfoBar Severity="Warning" IsOpen="True" IsClosable="False"
+             Message="{x:Bind ViewModel.UnresolvedWarning, Mode=OneWay}"
+             Visibility="{x:Bind p:VisibilityMap.WhenWarning(ViewModel.UnresolvedWarning, ViewModel.State), Mode=OneWay}"/>
+    <Grid Grid.Row="1">
+      <TextBlock Text="Send a request to see the response"
+                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenEmpty(ViewModel.State), Mode=OneWay}"/>
+      <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8"
+                  Visibility="{x:Bind p:VisibilityMap.WhenSending(ViewModel.State), Mode=OneWay}">
+        <ProgressRing IsActive="True"/>
+        <TextBlock Text="Sending..." Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+      </StackPanel>
+      <InfoBar Severity="Error" IsOpen="True" IsClosable="False" VerticalAlignment="Top"
+               Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
+               Visibility="{x:Bind p:VisibilityMap.WhenFailed(ViewModel.State), Mode=OneWay}"/>
+      <Grid RowSpacing="8" Visibility="{x:Bind p:VisibilityMap.WhenCompleted(ViewModel.State), Mode=OneWay}">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Spacing="12">
+          <Border CornerRadius="4" Padding="8,2"
+                  Background="{x:Bind p:BrushMap.StatusBackground(ViewModel.StatusCategory), Mode=OneWay}">
+            <TextBlock FontWeight="SemiBold" Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"
+                       Foreground="{x:Bind p:BrushMap.StatusForeground(ViewModel.StatusCategory), Mode=OneWay}"/>
+          </Border>
+          <TextBlock VerticalAlignment="Center" Text="{x:Bind ViewModel.DurationText, Mode=OneWay}"
+                     Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+          <TextBlock VerticalAlignment="Center" Text="{x:Bind ViewModel.SizeText, Mode=OneWay}"
+                     Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+        </StackPanel>
+        <SelectorBar Grid.Row="1" SelectionChanged="OnTabChanged">
+          <SelectorBarItem Text="Body" IsSelected="True"/>
+          <SelectorBarItem Text="Headers"/>
+        </SelectorBar>
+        <Grid Grid.Row="2">
+          <Grid x:Name="BodyPane" RowSpacing="8">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <RadioButtons x:Name="ViewModes" MaxColumns="2" SelectionChanged="OnViewModeChanged">
+              <x:String>Pretty</x:String>
+              <x:String>Raw</x:String>
+            </RadioButtons>
+            <TextBox Grid.Row="1" IsReadOnly="True" AcceptsReturn="True" TextWrapping="NoWrap"
+                     FontFamily="{StaticResource YaapicMonoFont}"
+                     FontSize="{StaticResource YaapicCodeFontSize}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Auto"
+                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                     Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.IsBinary), Mode=OneWay}"
+                     Text="{x:Bind ViewModel.BodyText, Mode=OneWay}"/>
+            <TextBox Grid.Row="1" IsReadOnly="True"
+                     FontFamily="{StaticResource YaapicMonoFont}"
+                     FontSize="{StaticResource YaapicCodeFontSize}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsBinary), Mode=OneWay}"
+                     Text="{x:Bind ViewModel.BinaryText, Mode=OneWay}"/>
+          </Grid>
+          <ListView x:Name="HeadersPane" Visibility="Collapsed" SelectionMode="None"
+                    ItemsSource="{x:Bind ViewModel.Headers, Mode=OneWay}">
+            <ListView.ItemContainerStyle>
+              <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="MinHeight" Value="{StaticResource YaapicRowHeight}"/>
+              </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+              <DataTemplate x:DataType="d:KeyValueEntry">
+                <Grid ColumnSpacing="16">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MaxWidth="260"/>
+                    <ColumnDefinition Width="2*"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock IsTextSelectionEnabled="True" FontWeight="SemiBold" TextWrapping="Wrap"
+                             FontFamily="{StaticResource YaapicMonoFont}" Text="{x:Bind Key}"/>
+                  <TextBlock Grid.Column="1" IsTextSelectionEnabled="True" TextWrapping="Wrap"
+                             FontFamily="{StaticResource YaapicMonoFont}" Text="{x:Bind Value}"/>
+                </Grid>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>
