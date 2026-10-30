@@ -83,7 +83,7 @@ compact mode (`design/mockups` 18b), tab strip and empty tab state (M1-39), Mica
 - Deviations: the logo paths are literal `Data` strings in `MainWindow.xaml` (no `YaapicLogo*Geometry` resources: a
   `Path.Data` cannot bind a string resource, and WinUI XAML has no `StreamGeometry`). Column widths and the title bar
   height use literals 48 / 272 / 40 (a `{StaticResource}` x:Double on `ColumnDefinition.Width` crashes the XAML load).
-  Icons use a `Path` in a `Viewbox` (new `YaapicStrokeIconStyle`) because `PathIcon` fills the stroke-only `Yi*`
+  Icons come from the FluentIcons.WinUI package (`FluentIcon`, Regular variant; user decision, Lucide SVG to complement it if icons are missing) because `PathIcon` fills the stroke-only `Yi*`
   geometries. The pill is a `Button` with a flyout (not a `DropDownButton`, whose style the pill style cannot base on).
   `YaapicListRowStyle` lost its 2 px selection bar: wrapping `ListViewItemPresenter` in a `Grid` crashes the XAML load,
   so the stock 16 px selection pill is enabled instead (not visible in the screenshots, only the row tint is).

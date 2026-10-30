@@ -177,15 +177,6 @@
     <Setter Property="Foreground" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
   </Style>
 
-  <!-- Stroke icon: the Yi* and glyph geometries are 24 px stroke paths (PathIcon would fill them); wrap in a Viewbox > Canvas 24. -->
-  <Style x:Key="YaapicStrokeIconStyle" TargetType="Path">
-    <Setter Property="StrokeThickness" Value="2"/>
-    <Setter Property="StrokeStartLineCap" Value="Round"/>
-    <Setter Property="StrokeEndLineCap" Value="Round"/>
-    <Setter Property="StrokeLineJoin" Value="Round"/>
-    <Setter Property="Stroke" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
-  </Style>
-
   <!-- Navigation rail button: 36 px, radius 6. -->
   <Style x:Key="YaapicRailButtonStyle" TargetType="Button" BasedOn="{StaticResource YaapicIconButtonStyle}">
     <Setter Property="Width" Value="36"/>
