@@ -2,197 +2,487 @@
   <ResourceDictionary.ThemeDictionaries>
     <ResourceDictionary x:Key="Default">
       <SolidColorBrush x:Key="YaapicSurfaceAppBrush" Color="#FF131518"/>
+      <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FF131518"/>
+      <Color x:Key="YaapicSurfaceAppColor">#FF131518</Color>
       <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FF1A1D21"/>
+      <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#FF1A1D21"/>
+      <Color x:Key="YaapicSurfaceBaseColor">#FF1A1D21</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FF16181C"/>
+      <Color x:Key="YaapicSurfaceSidebarColor">#FF16181C</Color>
       <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FF21252A"/>
+      <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FF21252A"/>
+      <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#FF21252A"/>
+      <Color x:Key="YaapicSurfaceRaisedColor">#FF21252A</Color>
       <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FF282C33"/>
+      <Color x:Key="YaapicSurfaceElevatedColor">#FF282C33</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FF121417"/>
+      <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#FF121417"/>
+      <Color x:Key="YaapicSurfaceSunkenColor">#FF121417</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FF24282E"/>
+      <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#FF24282E"/>
+      <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FF24282E"/>
+      <Color x:Key="YaapicBorderSubtleColor">#FF24282E</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FF30353C"/>
+      <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FF30353C"/>
+      <SolidColorBrush x:Key="SurfaceStrokeColorDefaultBrush" Color="#FF30353C"/>
+      <Color x:Key="YaapicBorderDefaultColor">#FF30353C</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#FF656C77"/>
+      <Color x:Key="YaapicBorderControlColor">#FF656C77</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FFECEEF1"/>
+      <Color x:Key="YaapicTextPrimaryColor">#FFECEEF1</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFA3AAB4"/>
+      <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FFA3AAB4"/>
+      <Color x:Key="YaapicTextSecondaryColor">#FFA3AAB4</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF848C97"/>
+      <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF848C97"/>
+      <Color x:Key="YaapicTextTertiaryColor">#FF848C97</Color>
       <SolidColorBrush x:Key="YaapicTextDisabledBrush" Color="#FF5A606A"/>
+      <SolidColorBrush x:Key="TextFillColorDisabledBrush" Color="#FF5A606A"/>
+      <Color x:Key="YaapicTextDisabledColor">#FF5A606A</Color>
       <SolidColorBrush x:Key="YaapicAccentFillBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#FF1FC7D4"/>
+      <Color x:Key="YaapicAccentFillColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FF5FE0EA"/>
+      <Color x:Key="YaapicAccentFillHoverColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicAccentFillPressedBrush" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#FF18B3BF"/>
+      <Color x:Key="YaapicAccentFillPressedColor">#FF18B3BF</Color>
       <SolidColorBrush x:Key="YaapicAccentBorderBrush" Color="#FF1FC7D4"/>
+      <Color x:Key="YaapicAccentBorderColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentTextBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#FF5FE0EA"/>
+      <Color x:Key="YaapicAccentTextColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="#FF04252A"/>
+      <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#1A1FC7D4"/>
+      <Color x:Key="YaapicSelectionBackgroundColor">#1A1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="#FF5FE0EA"/>
+      <Color x:Key="YaapicFocusRingColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicInfoBrush" Color="#FF959BFF"/>
+      <SolidColorBrush x:Key="SystemFillColorAttentionBrush" Color="#FF959BFF"/>
+      <Color x:Key="YaapicInfoColor">#FF959BFF</Color>
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#298088FF"/>
+      <SolidColorBrush x:Key="SystemFillColorAttentionBackgroundBrush" Color="#298088FF"/>
+      <Color x:Key="YaapicInfoBackgroundColor">#298088FF</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF3FD68A"/>
+      <SolidColorBrush x:Key="SystemFillColorSuccessBrush" Color="#FF3FD68A"/>
+      <Color x:Key="YaapicSuccessColor">#FF3FD68A</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#213FD68A"/>
+      <SolidColorBrush x:Key="SystemFillColorSuccessBackgroundBrush" Color="#213FD68A"/>
+      <Color x:Key="YaapicSuccessBackgroundColor">#213FD68A</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FFF2B84B"/>
+      <SolidColorBrush x:Key="SystemFillColorCautionBrush" Color="#FFF2B84B"/>
+      <Color x:Key="YaapicWarningColor">#FFF2B84B</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#21F2B84B"/>
+      <SolidColorBrush x:Key="SystemFillColorCautionBackgroundBrush" Color="#21F2B84B"/>
+      <Color x:Key="YaapicWarningBackgroundColor">#21F2B84B</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFFF6B6B"/>
+      <SolidColorBrush x:Key="SystemFillColorCriticalBrush" Color="#FFFF6B6B"/>
+      <Color x:Key="YaapicDangerColor">#FFFF6B6B</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#21FF6B6B"/>
+      <SolidColorBrush x:Key="SystemFillColorCriticalBackgroundBrush" Color="#21FF6B6B"/>
+      <Color x:Key="YaapicDangerBackgroundColor">#21FF6B6B</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF959BFF"/>
+      <Color x:Key="YaapicVariableResolvedColor">#FF959BFF</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF5FE0EA"/>
+      <Color x:Key="YaapicVariableSecretColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicVariableUnresolvedBrush" Color="#FFFF6B6B"/>
+      <Color x:Key="YaapicVariableUnresolvedColor">#FFFF6B6B</Color>
       <SolidColorBrush x:Key="YaapicMethodGetBrush" Color="#FF3DD6A3"/>
+      <Color x:Key="YaapicMethodGetColor">#FF3DD6A3</Color>
       <SolidColorBrush x:Key="YaapicMethodPostBrush" Color="#FFF5B648"/>
+      <Color x:Key="YaapicMethodPostColor">#FFF5B648</Color>
       <SolidColorBrush x:Key="YaapicMethodPutBrush" Color="#FF6AA8FF"/>
+      <Color x:Key="YaapicMethodPutColor">#FF6AA8FF</Color>
       <SolidColorBrush x:Key="YaapicMethodPatchBrush" Color="#FFB38CFF"/>
+      <Color x:Key="YaapicMethodPatchColor">#FFB38CFF</Color>
       <SolidColorBrush x:Key="YaapicMethodDeleteBrush" Color="#FFFF7272"/>
+      <Color x:Key="YaapicMethodDeleteColor">#FFFF7272</Color>
       <SolidColorBrush x:Key="YaapicMethodHeadBrush" Color="#FF5CC8E0"/>
+      <Color x:Key="YaapicMethodHeadColor">#FF5CC8E0</Color>
       <SolidColorBrush x:Key="YaapicMethodOptionsBrush" Color="#FFF28AC9"/>
+      <Color x:Key="YaapicMethodOptionsColor">#FFF28AC9</Color>
       <SolidColorBrush x:Key="YaapicMethodCustomBrush" Color="#FFA3AAB4"/>
+      <Color x:Key="YaapicMethodCustomColor">#FFA3AAB4</Color>
       <SolidColorBrush x:Key="YaapicStatus1xxBrush" Color="#FF959BFF"/>
+      <Color x:Key="YaapicStatus1xxColor">#FF959BFF</Color>
       <SolidColorBrush x:Key="YaapicStatus2xxBrush" Color="#FF3FD68A"/>
+      <Color x:Key="YaapicStatus2xxColor">#FF3FD68A</Color>
       <SolidColorBrush x:Key="YaapicStatus3xxBrush" Color="#FF6AA8FF"/>
+      <Color x:Key="YaapicStatus3xxColor">#FF6AA8FF</Color>
       <SolidColorBrush x:Key="YaapicStatus4xxBrush" Color="#FFF2B84B"/>
+      <Color x:Key="YaapicStatus4xxColor">#FFF2B84B</Color>
       <SolidColorBrush x:Key="YaapicStatus5xxBrush" Color="#FFFF6B6B"/>
+      <Color x:Key="YaapicStatus5xxColor">#FFFF6B6B</Color>
       <SolidColorBrush x:Key="YaapicTestPassBrush" Color="#FF3FD68A"/>
+      <Color x:Key="YaapicTestPassColor">#FF3FD68A</Color>
       <SolidColorBrush x:Key="YaapicTestFailBrush" Color="#FFFF6B6B"/>
+      <Color x:Key="YaapicTestFailColor">#FFFF6B6B</Color>
       <SolidColorBrush x:Key="YaapicTestSkipBrush" Color="#FFA3AAB4"/>
+      <Color x:Key="YaapicTestSkipColor">#FFA3AAB4</Color>
       <SolidColorBrush x:Key="YaapicSyntaxKeyBrush" Color="#FF8FB7FF"/>
+      <Color x:Key="YaapicSyntaxKeyColor">#FF8FB7FF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxStringBrush" Color="#FFB5E36C"/>
+      <Color x:Key="YaapicSyntaxStringColor">#FFB5E36C</Color>
       <SolidColorBrush x:Key="YaapicSyntaxNumberBrush" Color="#FFF5B648"/>
+      <Color x:Key="YaapicSyntaxNumberColor">#FFF5B648</Color>
       <SolidColorBrush x:Key="YaapicSyntaxBooleanBrush" Color="#FFF28AC9"/>
+      <Color x:Key="YaapicSyntaxBooleanColor">#FFF28AC9</Color>
       <SolidColorBrush x:Key="YaapicSyntaxPunctuationBrush" Color="#FF848C97"/>
+      <Color x:Key="YaapicSyntaxPunctuationColor">#FF848C97</Color>
       <SolidColorBrush x:Key="YaapicSyntaxCommentBrush" Color="#FF6B7380"/>
+      <Color x:Key="YaapicSyntaxCommentColor">#FF6B7380</Color>
       <SolidColorBrush x:Key="YaapicSyntaxKeywordBrush" Color="#FFB38CFF"/>
+      <Color x:Key="YaapicSyntaxKeywordColor">#FFB38CFF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxFunctionBrush" Color="#FF6FD4E8"/>
+      <Color x:Key="YaapicSyntaxFunctionColor">#FF6FD4E8</Color>
       <SolidColorBrush x:Key="YaapicSyntaxTagBrush" Color="#FFFF8F8F"/>
+      <Color x:Key="YaapicSyntaxTagColor">#FFFF8F8F</Color>
       <SolidColorBrush x:Key="YaapicSyntaxAttributeBrush" Color="#FFF5B648"/>
+      <Color x:Key="YaapicSyntaxAttributeColor">#FFF5B648</Color>
       <SolidColorBrush x:Key="YaapicDiffAddedBrush" Color="#213FD68A"/>
+      <Color x:Key="YaapicDiffAddedColor">#213FD68A</Color>
       <SolidColorBrush x:Key="YaapicDiffRemovedBrush" Color="#21FF6B6B"/>
+      <Color x:Key="YaapicDiffRemovedColor">#21FF6B6B</Color>
       <Color x:Key="SystemAccentColor">#FF1FC7D4</Color>
     </ResourceDictionary>
     <ResourceDictionary x:Key="Light">
       <SolidColorBrush x:Key="YaapicSurfaceAppBrush" Color="#FFEEF0F3"/>
+      <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FFEEF0F3"/>
+      <Color x:Key="YaapicSurfaceAppColor">#FFEEF0F3</Color>
       <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicSurfaceBaseColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FFF3F4F6"/>
+      <Color x:Key="YaapicSurfaceSidebarColor">#FFF3F4F6</Color>
       <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FFF6F7F9"/>
+      <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FFF6F7F9"/>
+      <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#FFF6F7F9"/>
+      <Color x:Key="YaapicSurfaceRaisedColor">#FFF6F7F9</Color>
       <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicSurfaceElevatedColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FFFBFBFC"/>
+      <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#FFFBFBFC"/>
+      <Color x:Key="YaapicSurfaceSunkenColor">#FFFBFBFC</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FFE7E9EE"/>
+      <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#FFE7E9EE"/>
+      <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FFE7E9EE"/>
+      <Color x:Key="YaapicBorderSubtleColor">#FFE7E9EE</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFD8DCE2"/>
+      <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FFD8DCE2"/>
+      <SolidColorBrush x:Key="SurfaceStrokeColorDefaultBrush" Color="#FFD8DCE2"/>
+      <Color x:Key="YaapicBorderDefaultColor">#FFD8DCE2</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#FF8A919C"/>
+      <Color x:Key="YaapicBorderControlColor">#FF8A919C</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FF16191D"/>
+      <Color x:Key="YaapicTextPrimaryColor">#FF16191D</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FF4A515B"/>
+      <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FF4A515B"/>
+      <Color x:Key="YaapicTextSecondaryColor">#FF4A515B</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF5F6772"/>
+      <Color x:Key="YaapicTextTertiaryColor">#FF5F6772</Color>
       <SolidColorBrush x:Key="YaapicTextDisabledBrush" Color="#FFA0A7B1"/>
+      <SolidColorBrush x:Key="TextFillColorDisabledBrush" Color="#FFA0A7B1"/>
+      <Color x:Key="YaapicTextDisabledColor">#FFA0A7B1</Color>
       <SolidColorBrush x:Key="YaapicAccentFillBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#FF1FC7D4"/>
+      <Color x:Key="YaapicAccentFillColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FF5FE0EA"/>
+      <Color x:Key="YaapicAccentFillHoverColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicAccentFillPressedBrush" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#FF18B3BF"/>
+      <Color x:Key="YaapicAccentFillPressedColor">#FF18B3BF</Color>
       <SolidColorBrush x:Key="YaapicAccentBorderBrush" Color="#FF0A7C86"/>
+      <Color x:Key="YaapicAccentBorderColor">#FF0A7C86</Color>
       <SolidColorBrush x:Key="YaapicAccentTextBrush" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#FF0A6B74"/>
+      <Color x:Key="YaapicAccentTextColor">#FF0A6B74</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="#FF04252A"/>
+      <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#FFE0FAFC"/>
+      <Color x:Key="YaapicSelectionBackgroundColor">#FFE0FAFC</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="#FF0A6B74"/>
+      <Color x:Key="YaapicFocusRingColor">#FF0A6B74</Color>
       <SolidColorBrush x:Key="YaapicInfoBrush" Color="#FF4A4FD0"/>
+      <SolidColorBrush x:Key="SystemFillColorAttentionBrush" Color="#FF4A4FD0"/>
+      <Color x:Key="YaapicInfoColor">#FF4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#FFECEDFF"/>
+      <SolidColorBrush x:Key="SystemFillColorAttentionBackgroundBrush" Color="#FFECEDFF"/>
+      <Color x:Key="YaapicInfoBackgroundColor">#FFECEDFF</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF157F4A"/>
+      <SolidColorBrush x:Key="SystemFillColorSuccessBrush" Color="#FF157F4A"/>
+      <Color x:Key="YaapicSuccessColor">#FF157F4A</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#FFE3F4EA"/>
+      <SolidColorBrush x:Key="SystemFillColorSuccessBackgroundBrush" Color="#FFE3F4EA"/>
+      <Color x:Key="YaapicSuccessBackgroundColor">#FFE3F4EA</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FF8A5A00"/>
+      <SolidColorBrush x:Key="SystemFillColorCautionBrush" Color="#FF8A5A00"/>
+      <Color x:Key="YaapicWarningColor">#FF8A5A00</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#FFFCF1DA"/>
+      <SolidColorBrush x:Key="SystemFillColorCautionBackgroundBrush" Color="#FFFCF1DA"/>
+      <Color x:Key="YaapicWarningBackgroundColor">#FFFCF1DA</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFC42B2B"/>
+      <SolidColorBrush x:Key="SystemFillColorCriticalBrush" Color="#FFC42B2B"/>
+      <Color x:Key="YaapicDangerColor">#FFC42B2B</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FFFCEAEA"/>
+      <SolidColorBrush x:Key="SystemFillColorCriticalBackgroundBrush" Color="#FFFCEAEA"/>
+      <Color x:Key="YaapicDangerBackgroundColor">#FFFCEAEA</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF4A4FD0"/>
+      <Color x:Key="YaapicVariableResolvedColor">#FF4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF0A6B74"/>
+      <Color x:Key="YaapicVariableSecretColor">#FF0A6B74</Color>
       <SolidColorBrush x:Key="YaapicVariableUnresolvedBrush" Color="#FFC42B2B"/>
+      <Color x:Key="YaapicVariableUnresolvedColor">#FFC42B2B</Color>
       <SolidColorBrush x:Key="YaapicMethodGetBrush" Color="#FF0F7A5C"/>
+      <Color x:Key="YaapicMethodGetColor">#FF0F7A5C</Color>
       <SolidColorBrush x:Key="YaapicMethodPostBrush" Color="#FF8F5B00"/>
+      <Color x:Key="YaapicMethodPostColor">#FF8F5B00</Color>
       <SolidColorBrush x:Key="YaapicMethodPutBrush" Color="#FF1D5FC4"/>
+      <Color x:Key="YaapicMethodPutColor">#FF1D5FC4</Color>
       <SolidColorBrush x:Key="YaapicMethodPatchBrush" Color="#FF6B3FC9"/>
+      <Color x:Key="YaapicMethodPatchColor">#FF6B3FC9</Color>
       <SolidColorBrush x:Key="YaapicMethodDeleteBrush" Color="#FFBE2F2F"/>
+      <Color x:Key="YaapicMethodDeleteColor">#FFBE2F2F</Color>
       <SolidColorBrush x:Key="YaapicMethodHeadBrush" Color="#FF0B6E86"/>
+      <Color x:Key="YaapicMethodHeadColor">#FF0B6E86</Color>
       <SolidColorBrush x:Key="YaapicMethodOptionsBrush" Color="#FFA3317A"/>
+      <Color x:Key="YaapicMethodOptionsColor">#FFA3317A</Color>
       <SolidColorBrush x:Key="YaapicMethodCustomBrush" Color="#FF4A515B"/>
+      <Color x:Key="YaapicMethodCustomColor">#FF4A515B</Color>
       <SolidColorBrush x:Key="YaapicStatus1xxBrush" Color="#FF4A4FD0"/>
+      <Color x:Key="YaapicStatus1xxColor">#FF4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicStatus2xxBrush" Color="#FF157F4A"/>
+      <Color x:Key="YaapicStatus2xxColor">#FF157F4A</Color>
       <SolidColorBrush x:Key="YaapicStatus3xxBrush" Color="#FF1D5FC4"/>
+      <Color x:Key="YaapicStatus3xxColor">#FF1D5FC4</Color>
       <SolidColorBrush x:Key="YaapicStatus4xxBrush" Color="#FF8A5A00"/>
+      <Color x:Key="YaapicStatus4xxColor">#FF8A5A00</Color>
       <SolidColorBrush x:Key="YaapicStatus5xxBrush" Color="#FFC42B2B"/>
+      <Color x:Key="YaapicStatus5xxColor">#FFC42B2B</Color>
       <SolidColorBrush x:Key="YaapicTestPassBrush" Color="#FF157F4A"/>
+      <Color x:Key="YaapicTestPassColor">#FF157F4A</Color>
       <SolidColorBrush x:Key="YaapicTestFailBrush" Color="#FFC42B2B"/>
+      <Color x:Key="YaapicTestFailColor">#FFC42B2B</Color>
       <SolidColorBrush x:Key="YaapicTestSkipBrush" Color="#FF5F6772"/>
+      <Color x:Key="YaapicTestSkipColor">#FF5F6772</Color>
       <SolidColorBrush x:Key="YaapicSyntaxKeyBrush" Color="#FF2B4FB8"/>
+      <Color x:Key="YaapicSyntaxKeyColor">#FF2B4FB8</Color>
       <SolidColorBrush x:Key="YaapicSyntaxStringBrush" Color="#FF4E7A0E"/>
+      <Color x:Key="YaapicSyntaxStringColor">#FF4E7A0E</Color>
       <SolidColorBrush x:Key="YaapicSyntaxNumberBrush" Color="#FF9A5B00"/>
+      <Color x:Key="YaapicSyntaxNumberColor">#FF9A5B00</Color>
       <SolidColorBrush x:Key="YaapicSyntaxBooleanBrush" Color="#FFA3317A"/>
+      <Color x:Key="YaapicSyntaxBooleanColor">#FFA3317A</Color>
       <SolidColorBrush x:Key="YaapicSyntaxPunctuationBrush" Color="#FF5F6772"/>
+      <Color x:Key="YaapicSyntaxPunctuationColor">#FF5F6772</Color>
       <SolidColorBrush x:Key="YaapicSyntaxCommentBrush" Color="#FF737B87"/>
+      <Color x:Key="YaapicSyntaxCommentColor">#FF737B87</Color>
       <SolidColorBrush x:Key="YaapicSyntaxKeywordBrush" Color="#FF6B3FC9"/>
+      <Color x:Key="YaapicSyntaxKeywordColor">#FF6B3FC9</Color>
       <SolidColorBrush x:Key="YaapicSyntaxFunctionBrush" Color="#FF0B6E86"/>
+      <Color x:Key="YaapicSyntaxFunctionColor">#FF0B6E86</Color>
       <SolidColorBrush x:Key="YaapicSyntaxTagBrush" Color="#FFB42318"/>
+      <Color x:Key="YaapicSyntaxTagColor">#FFB42318</Color>
       <SolidColorBrush x:Key="YaapicSyntaxAttributeBrush" Color="#FF9A5B00"/>
+      <Color x:Key="YaapicSyntaxAttributeColor">#FF9A5B00</Color>
       <SolidColorBrush x:Key="YaapicDiffAddedBrush" Color="#FFE3F4EA"/>
+      <Color x:Key="YaapicDiffAddedColor">#FFE3F4EA</Color>
       <SolidColorBrush x:Key="YaapicDiffRemovedBrush" Color="#FFFCEAEA"/>
+      <Color x:Key="YaapicDiffRemovedColor">#FFFCEAEA</Color>
       <Color x:Key="SystemAccentColor">#FF1FC7D4</Color>
     </ResourceDictionary>
     <ResourceDictionary x:Key="HighContrast">
       <SolidColorBrush x:Key="YaapicSurfaceAppBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicSurfaceAppColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicSurfaceBaseColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicSurfaceSidebarColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicSurfaceRaisedColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FF0A0A0A"/>
+      <Color x:Key="YaapicSurfaceElevatedColor">#FF0A0A0A</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicSurfaceSunkenColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicBorderSubtleColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicBorderDefaultColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicBorderControlColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicTextPrimaryColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicTextSecondaryColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FFE0E0E0"/>
+      <Color x:Key="YaapicTextTertiaryColor">#FFE0E0E0</Color>
       <SolidColorBrush x:Key="YaapicTextDisabledBrush" Color="#FF3FF23F"/>
+      <Color x:Key="YaapicTextDisabledColor">#FF3FF23F</Color>
       <SolidColorBrush x:Key="YaapicAccentFillBrush" Color="#FF8AE9F0"/>
+      <Color x:Key="YaapicAccentFillColor">#FF8AE9F0</Color>
       <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF8AE9F0"/>
+      <Color x:Key="YaapicAccentFillHoverColor">#FF8AE9F0</Color>
       <SolidColorBrush x:Key="YaapicAccentFillPressedBrush" Color="#FF8AE9F0"/>
+      <Color x:Key="YaapicAccentFillPressedColor">#FF8AE9F0</Color>
       <SolidColorBrush x:Key="YaapicAccentBorderBrush" Color="#FF8AE9F0"/>
+      <Color x:Key="YaapicAccentBorderColor">#FF8AE9F0</Color>
       <SolidColorBrush x:Key="YaapicAccentTextBrush" Color="#FF8AE9F0"/>
+      <Color x:Key="YaapicAccentTextColor">#FF8AE9F0</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicAccentOnColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#FF1AEBFF"/>
+      <Color x:Key="YaapicSelectionBackgroundColor">#FF1AEBFF</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FFFFFF00"/>
+      <Color x:Key="YaapicFocusRingColor">#FFFFFF00</Color>
       <SolidColorBrush x:Key="YaapicInfoBrush" Color="#FFB3B8FF"/>
+      <Color x:Key="YaapicInfoColor">#FFB3B8FF</Color>
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicInfoBackgroundColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF3FF23F"/>
+      <Color x:Key="YaapicSuccessColor">#FF3FF23F</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicSuccessBackgroundColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FFFFFF00"/>
+      <Color x:Key="YaapicWarningColor">#FFFFFF00</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicWarningBackgroundColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFFF8080"/>
+      <Color x:Key="YaapicDangerColor">#FFFF8080</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicDangerBackgroundColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FFB3B8FF"/>
+      <Color x:Key="YaapicVariableResolvedColor">#FFB3B8FF</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF8AE9F0"/>
+      <Color x:Key="YaapicVariableSecretColor">#FF8AE9F0</Color>
       <SolidColorBrush x:Key="YaapicVariableUnresolvedBrush" Color="#FFFF8080"/>
+      <Color x:Key="YaapicVariableUnresolvedColor">#FFFF8080</Color>
       <SolidColorBrush x:Key="YaapicMethodGetBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodGetColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicMethodPostBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodPostColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicMethodPutBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodPutColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicMethodPatchBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodPatchColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicMethodDeleteBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodDeleteColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicMethodHeadBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodHeadColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicMethodOptionsBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodOptionsColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicMethodCustomBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicMethodCustomColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicStatus1xxBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicStatus1xxColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicStatus2xxBrush" Color="#FF3FF23F"/>
+      <Color x:Key="YaapicStatus2xxColor">#FF3FF23F</Color>
       <SolidColorBrush x:Key="YaapicStatus3xxBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicStatus3xxColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicStatus4xxBrush" Color="#FFFFFF00"/>
+      <Color x:Key="YaapicStatus4xxColor">#FFFFFF00</Color>
       <SolidColorBrush x:Key="YaapicStatus5xxBrush" Color="#FFFF8080"/>
+      <Color x:Key="YaapicStatus5xxColor">#FFFF8080</Color>
       <SolidColorBrush x:Key="YaapicTestPassBrush" Color="#FF3FF23F"/>
+      <Color x:Key="YaapicTestPassColor">#FF3FF23F</Color>
       <SolidColorBrush x:Key="YaapicTestFailBrush" Color="#FFFF8080"/>
+      <Color x:Key="YaapicTestFailColor">#FFFF8080</Color>
       <SolidColorBrush x:Key="YaapicTestSkipBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicTestSkipColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxKeyBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicSyntaxKeyColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxStringBrush" Color="#FF3FF23F"/>
+      <Color x:Key="YaapicSyntaxStringColor">#FF3FF23F</Color>
       <SolidColorBrush x:Key="YaapicSyntaxNumberBrush" Color="#FFFFFF00"/>
+      <Color x:Key="YaapicSyntaxNumberColor">#FFFFFF00</Color>
       <SolidColorBrush x:Key="YaapicSyntaxBooleanBrush" Color="#FFFF80FF"/>
+      <Color x:Key="YaapicSyntaxBooleanColor">#FFFF80FF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxPunctuationBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicSyntaxPunctuationColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxCommentBrush" Color="#FFC0C0C0"/>
+      <Color x:Key="YaapicSyntaxCommentColor">#FFC0C0C0</Color>
       <SolidColorBrush x:Key="YaapicSyntaxKeywordBrush" Color="#FFFF80FF"/>
+      <Color x:Key="YaapicSyntaxKeywordColor">#FFFF80FF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxFunctionBrush" Color="#FF1AEBFF"/>
+      <Color x:Key="YaapicSyntaxFunctionColor">#FF1AEBFF</Color>
       <SolidColorBrush x:Key="YaapicSyntaxTagBrush" Color="#FFFF8080"/>
+      <Color x:Key="YaapicSyntaxTagColor">#FFFF8080</Color>
       <SolidColorBrush x:Key="YaapicSyntaxAttributeBrush" Color="#FFFFFF00"/>
+      <Color x:Key="YaapicSyntaxAttributeColor">#FFFFFF00</Color>
       <SolidColorBrush x:Key="YaapicDiffAddedBrush" Color="#FF003300"/>
+      <Color x:Key="YaapicDiffAddedColor">#FF003300</Color>
       <SolidColorBrush x:Key="YaapicDiffRemovedBrush" Color="#FF330000"/>
+      <Color x:Key="YaapicDiffRemovedColor">#FF330000</Color>
     </ResourceDictionary>
   </ResourceDictionary.ThemeDictionaries>
   <CornerRadius x:Key="ControlCornerRadius">4</CornerRadius>
   <CornerRadius x:Key="OverlayCornerRadius">8</CornerRadius>
   <x:Double x:Key="YaapicControlHeight">32</x:Double>
   <x:Double x:Key="YaapicRowHeight">28</x:Double>
+  <x:Double x:Key="YaapicControlHeightCompact">24</x:Double>
+  <x:Double x:Key="YaapicControlHeightSpacious">36</x:Double>
+  <x:Double x:Key="YaapicRowHeightCompact">22</x:Double>
+  <x:Double x:Key="YaapicRowHeightSpacious">32</x:Double>
+  <x:Double x:Key="YaapicRailWidth">48</x:Double>
+  <x:Double x:Key="YaapicSidebarWidth">272</x:Double>
+  <x:Double x:Key="YaapicSidebarMinWidth">220</x:Double>
+  <x:Double x:Key="YaapicSidebarMaxWidth">480</x:Double>
+  <x:Double x:Key="YaapicStatusBarHeight">24</x:Double>
+  <x:Double x:Key="YaapicTabBarHeight">36</x:Double>
+  <x:Double x:Key="YaapicSpace0">0</x:Double>
+  <x:Double x:Key="YaapicSpace50">2</x:Double>
+  <x:Double x:Key="YaapicSpace100">4</x:Double>
+  <x:Double x:Key="YaapicSpace150">6</x:Double>
+  <x:Double x:Key="YaapicSpace200">8</x:Double>
+  <x:Double x:Key="YaapicSpace300">12</x:Double>
+  <x:Double x:Key="YaapicSpace400">16</x:Double>
+  <x:Double x:Key="YaapicSpace500">20</x:Double>
+  <x:Double x:Key="YaapicSpace600">24</x:Double>
+  <x:Double x:Key="YaapicSpace800">32</x:Double>
+  <x:Double x:Key="YaapicSpace1000">40</x:Double>
+  <x:Double x:Key="YaapicSpace1200">48</x:Double>
+  <CornerRadius x:Key="YaapicRadiusXs">2</CornerRadius>
+  <CornerRadius x:Key="YaapicRadiusSm">4</CornerRadius>
+  <CornerRadius x:Key="YaapicRadiusMd">6</CornerRadius>
+  <CornerRadius x:Key="YaapicRadiusLg">8</CornerRadius>
+  <CornerRadius x:Key="YaapicRadiusXl">12</CornerRadius>
+  <CornerRadius x:Key="YaapicRadiusFull">999</CornerRadius>
+  <x:Double x:Key="YaapicFontSizeDisplay">40</x:Double>
+  <x:Double x:Key="YaapicLineHeightDisplay">52</x:Double>
+  <x:Double x:Key="YaapicFontSizeTitleLg">28</x:Double>
+  <x:Double x:Key="YaapicLineHeightTitleLg">36</x:Double>
+  <x:Double x:Key="YaapicFontSizeTitle">20</x:Double>
+  <x:Double x:Key="YaapicLineHeightTitle">28</x:Double>
+  <x:Double x:Key="YaapicFontSizeSubtitle">15</x:Double>
+  <x:Double x:Key="YaapicLineHeightSubtitle">20</x:Double>
+  <x:Double x:Key="YaapicFontSizeBodyStrong">13</x:Double>
+  <x:Double x:Key="YaapicLineHeightBodyStrong">20</x:Double>
+  <x:Double x:Key="YaapicFontSizeBody">13</x:Double>
+  <x:Double x:Key="YaapicLineHeightBody">20</x:Double>
+  <x:Double x:Key="YaapicFontSizeBodySm">12</x:Double>
+  <x:Double x:Key="YaapicLineHeightBodySm">16</x:Double>
+  <x:Double x:Key="YaapicFontSizeCaption">11</x:Double>
+  <x:Double x:Key="YaapicLineHeightCaption">16</x:Double>
+  <x:Double x:Key="YaapicFontSizeCode">12</x:Double>
+  <x:Double x:Key="YaapicLineHeightCode">20</x:Double>
+  <x:Double x:Key="YaapicFontSizeCodeSm">11</x:Double>
+  <x:Double x:Key="YaapicLineHeightCodeSm">16</x:Double>
+  <x:Double x:Key="YaapicFontSizeCodeLg">14</x:Double>
+  <x:Double x:Key="YaapicLineHeightCodeLg">22</x:Double>
+  <Thickness x:Key="YaapicBorderThickness">1</Thickness>
+  <Thickness x:Key="YaapicFocusBorderThickness">2</Thickness>
+  <CornerRadius x:Key="YaapicRadiusControl">4</CornerRadius>
+  <x:Double x:Key="YaapicTitleBarHeight">40</x:Double>
   <FontFamily x:Key="YaapicMonoFont">ms-appx:///Assets/Fonts/JetBrainsMono.ttf#JetBrains Mono</FontFamily>
   <x:Double x:Key="YaapicBodyFontSize">13</x:Double>
   <x:Double x:Key="YaapicCodeFontSize">12</x:Double>

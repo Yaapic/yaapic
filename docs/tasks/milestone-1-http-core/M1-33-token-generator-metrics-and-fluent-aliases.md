@@ -1,6 +1,6 @@
 # M1-33: Token generator: metrics, colour resources and Fluent aliases
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M0-04
 
@@ -77,13 +77,13 @@ translating the existing French text of `design/README.md` (only append the Engl
 
 ## Acceptance criteria
 
-- [ ] New tests in `TokenGeneratorTests`: a token with `winuiAliases` emits the alias brush in `Default` and `Light`
+- [x] New tests in `TokenGeneratorTests`: a token with `winuiAliases` emits the alias brush in `Default` and `Light`
       but not in `HighContrast`; Avalonia output has no alias; `YaapicDangerColor` exists for each theme;
       `YaapicSpace300` is `12`; `YaapicRadiusControl` is `4` on WinUI; `YaapicFontSizeTitle` is `20` and
       `YaapicLineHeightTitle` is `28`; `YaapicSidebarWidth` is `272`.
-- [ ] Reference files regenerated with `YAAPIC_UPDATE_SNAPSHOTS=1` and the snapshot tests green without it.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; `dotnet test --solution Yaapic.sln -c Release` green.
-- [ ] On Windows: WinUI AOT publish 0 IL2xxx/IL3xxx warnings and the published exe starts and exits cleanly (the
+- [x] Reference files regenerated with `YAAPIC_UPDATE_SNAPSHOTS=1` and the snapshot tests green without it.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; `dotnet test --solution Yaapic.sln -c Release` green.
+- [x] On Windows: WinUI AOT publish 0 IL2xxx/IL3xxx warnings and the published exe starts and exits cleanly (the
       dictionary is merged by the app, so a bad key would crash at startup).
 
 ## Suggested commit message

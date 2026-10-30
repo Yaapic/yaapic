@@ -290,7 +290,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceAppBrush",
-            "avalonia": "YaapicSurfaceAppBrush"
+            "avalonia": "YaapicSurfaceAppBrush",
+            "winuiAliases": ["SolidBackgroundFillColorBaseBrush"]
           }
         }
       },
@@ -304,7 +305,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceBaseBrush",
-            "avalonia": "YaapicSurfaceBaseBrush"
+            "avalonia": "YaapicSurfaceBaseBrush",
+            "winuiAliases": ["LayerFillColorDefaultBrush"]
           }
         }
       },
@@ -332,7 +334,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceRaisedBrush",
-            "avalonia": "YaapicSurfaceRaisedBrush"
+            "avalonia": "YaapicSurfaceRaisedBrush",
+            "winuiAliases": ["ControlFillColorDefaultBrush", "CardBackgroundFillColorDefaultBrush"]
           }
         }
       },
@@ -360,7 +363,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceSunkenBrush",
-            "avalonia": "YaapicSurfaceSunkenBrush"
+            "avalonia": "YaapicSurfaceSunkenBrush",
+            "winuiAliases": ["ControlFillColorInputActiveBrush"]
           }
         }
       }
@@ -376,7 +380,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderSubtleBrush",
-            "avalonia": "YaapicBorderSubtleBrush"
+            "avalonia": "YaapicBorderSubtleBrush",
+            "winuiAliases": ["DividerStrokeColorDefaultBrush", "CardStrokeColorDefaultBrush"]
           }
         }
       },
@@ -390,7 +395,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderDefaultBrush",
-            "avalonia": "YaapicBorderDefaultBrush"
+            "avalonia": "YaapicBorderDefaultBrush",
+            "winuiAliases": ["ControlStrokeColorDefaultBrush", "SurfaceStrokeColorDefaultBrush"]
           }
         }
       },
@@ -404,7 +410,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderControlBrush",
-            "avalonia": "YaapicBorderControlBrush"
+            "avalonia": "YaapicBorderControlBrush",
+            "winuiAliases": ["ControlStrongStrokeColorDefaultBrush"]
           }
         }
       }
@@ -420,7 +427,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextPrimaryBrush",
-            "avalonia": "YaapicTextPrimaryBrush"
+            "avalonia": "YaapicTextPrimaryBrush",
+            "winuiAliases": ["TextFillColorPrimaryBrush"]
           }
         }
       },
@@ -434,7 +442,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextSecondaryBrush",
-            "avalonia": "YaapicTextSecondaryBrush"
+            "avalonia": "YaapicTextSecondaryBrush",
+            "winuiAliases": ["TextFillColorSecondaryBrush"]
           }
         }
       },
@@ -448,7 +457,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextTertiaryBrush",
-            "avalonia": "YaapicTextTertiaryBrush"
+            "avalonia": "YaapicTextTertiaryBrush",
+            "winuiAliases": ["TextFillColorTertiaryBrush"]
           }
         }
       },
@@ -462,7 +472,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextDisabledBrush",
-            "avalonia": "YaapicTextDisabledBrush"
+            "avalonia": "YaapicTextDisabledBrush",
+            "winuiAliases": ["TextFillColorDisabledBrush"]
           }
         }
       }
@@ -478,7 +489,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillBrush",
-            "avalonia": "YaapicAccentFillBrush"
+            "avalonia": "YaapicAccentFillBrush",
+            "winuiAliases": ["AccentFillColorDefaultBrush"]
           }
         }
       },
@@ -492,7 +504,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillHoverBrush",
-            "avalonia": "YaapicAccentFillHoverBrush"
+            "avalonia": "YaapicAccentFillHoverBrush",
+            "winuiAliases": ["AccentFillColorSecondaryBrush"]
           }
         }
       },
@@ -506,7 +519,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillPressedBrush",
-            "avalonia": "YaapicAccentFillPressedBrush"
+            "avalonia": "YaapicAccentFillPressedBrush",
+            "winuiAliases": ["AccentFillColorTertiaryBrush"]
           }
         }
       },
@@ -534,7 +548,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentTextBrush",
-            "avalonia": "YaapicAccentTextBrush"
+            "avalonia": "YaapicAccentTextBrush",
+            "winuiAliases": ["AccentTextFillColorPrimaryBrush"]
           }
         }
       },
@@ -548,7 +563,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentOnBrush",
-            "avalonia": "YaapicAccentOnBrush"
+            "avalonia": "YaapicAccentOnBrush",
+            "winuiAliases": ["TextOnAccentFillColorPrimaryBrush"]
           }
         }
       }
@@ -580,7 +596,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicFocusRingBrush",
-            "avalonia": "YaapicFocusRingBrush"
+            "avalonia": "YaapicFocusRingBrush",
+            "winuiAliases": ["FocusStrokeColorOuterBrush"]
           }
         }
       }
@@ -595,7 +612,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicInfoBrush",
-          "avalonia": "YaapicInfoBrush"
+          "avalonia": "YaapicInfoBrush",
+          "winuiAliases": ["SystemFillColorAttentionBrush"]
         }
       },
       "background": {
@@ -608,7 +626,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicInfoBackgroundBrush",
-            "avalonia": "YaapicInfoBackgroundBrush"
+            "avalonia": "YaapicInfoBackgroundBrush",
+            "winuiAliases": ["SystemFillColorAttentionBackgroundBrush"]
           }
         }
       }
@@ -623,7 +642,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicSuccessBrush",
-          "avalonia": "YaapicSuccessBrush"
+          "avalonia": "YaapicSuccessBrush",
+          "winuiAliases": ["SystemFillColorSuccessBrush"]
         }
       },
       "background": {
@@ -636,7 +656,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSuccessBackgroundBrush",
-            "avalonia": "YaapicSuccessBackgroundBrush"
+            "avalonia": "YaapicSuccessBackgroundBrush",
+            "winuiAliases": ["SystemFillColorSuccessBackgroundBrush"]
           }
         }
       }
@@ -651,7 +672,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicWarningBrush",
-          "avalonia": "YaapicWarningBrush"
+          "avalonia": "YaapicWarningBrush",
+          "winuiAliases": ["SystemFillColorCautionBrush"]
         }
       },
       "background": {
@@ -664,7 +686,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicWarningBackgroundBrush",
-            "avalonia": "YaapicWarningBackgroundBrush"
+            "avalonia": "YaapicWarningBackgroundBrush",
+            "winuiAliases": ["SystemFillColorCautionBackgroundBrush"]
           }
         }
       }
@@ -679,7 +702,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicDangerBrush",
-          "avalonia": "YaapicDangerBrush"
+          "avalonia": "YaapicDangerBrush",
+          "winuiAliases": ["SystemFillColorCriticalBrush"]
         }
       },
       "background": {
@@ -692,7 +716,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicDangerBackgroundBrush",
-            "avalonia": "YaapicDangerBackgroundBrush"
+            "avalonia": "YaapicDangerBackgroundBrush",
+            "winuiAliases": ["SystemFillColorCriticalBackgroundBrush"]
           }
         }
       }
