@@ -4,7 +4,7 @@
                xmlns:p="using:Yaapic.App.WinUI.Presentation"
                xmlns:env="using:Yaapic.ViewModels.Environments"
                xmlns:v="using:Yaapic.App.WinUI.Views"
-               Title="Environments" CloseButtonText="Close" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}" DefaultButton="Close">
+               Title="Environments" CloseButtonText="Close" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}">
   <Grid Width="720" Height="420" ColumnSpacing="16">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="200"/>

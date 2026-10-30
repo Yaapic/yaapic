@@ -27,7 +27,7 @@ public sealed class WinUIDialogService : IDialogService
             PrimaryButtonText = "Save",
             SecondaryButtonText = "Don't save",
             CloseButtonText = "Cancel",
-            DefaultButton = ContentDialogButton.Primary,
+            DefaultButton = ContentDialogButton.None,
             PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicPrimaryButtonStyle"],
             SecondaryButtonStyle = DialogButtonStyle,
             CloseButtonStyle = DialogButtonStyle,
@@ -50,7 +50,7 @@ public sealed class WinUIDialogService : IDialogService
             PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicDangerButtonStyle"],
             CloseButtonText = "Cancel",
             CloseButtonStyle = DialogButtonStyle,
-            DefaultButton = ContentDialogButton.Close,
+            DefaultButton = ContentDialogButton.None,
         }) == ContentDialogResult.Primary;
 
     private static Style DialogButtonStyle => (Style)Application.Current.Resources["YaapicDialogButtonStyle"];
@@ -70,6 +70,7 @@ public sealed class WinUIDialogService : IDialogService
         }
 
         dialog.XamlRoot = root;
+        // DefaultButton stays None: the dialog template restyles the default button with the stock accent style (no 32 px height, no semibold).
         // A dialog is hosted in a popup layer that ignores the window content theme override.
         dialog.RequestedTheme = ((FrameworkElement)root.Content).RequestedTheme;
         return await dialog.ShowAsync();
