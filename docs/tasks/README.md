@@ -60,7 +60,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-31](milestone-1-http-core/M1-31-avalonia-environments.md) | Avalonia environment management | unix | M1-29 | todo |
 | [M1-32](milestone-1-http-core/M1-32-end-to-end-tests-and-docs.md) | End-to-end tests and milestone docs | any | M1-23 | done |
 | [M1-33](milestone-1-http-core/M1-33-token-generator-metrics-and-fluent-aliases.md) | Token generator: metrics, colour resources and Fluent aliases | any | M0-04 | done |
-| [M1-34](milestone-1-http-core/M1-34-winui-screenshot-tooling.md) | WinUI screenshot tooling | windows | M1-27 | todo |
+| [M1-34](milestone-1-http-core/M1-34-winui-screenshot-tooling.md) | WinUI screenshot tooling | windows | M1-27 | done |
 | [M1-35](milestone-1-http-core/M1-35-winui-typography-and-code-font.md) | WinUI typography and bundled code font | windows | M1-33, M1-34 | todo |
 | [M1-36](milestone-1-http-core/M1-36-winui-button-and-input-styles.md) | WinUI control styles: buttons and text inputs | windows | M1-35 | todo |
 | [M1-37](milestone-1-http-core/M1-37-winui-list-tab-chip-and-dialog-styles.md) | WinUI control styles: lists, tabs, chips, feedback and dialogs | windows | M1-36 | todo |

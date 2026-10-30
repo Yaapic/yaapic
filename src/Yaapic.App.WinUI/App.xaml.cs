@@ -18,8 +18,32 @@ public partial class App : Application
     {
         var window = new MainWindow();
         _window = window;
+        var workspace = Workspace.DefaultRoot();
+        var argv = Environment.GetCommandLineArgs();
+        for (var i = 1; i < argv.Length - 1; i++)
+        {
+            if (argv[i] == "--workspace")
+            {
+                workspace = argv[i + 1];
+            }
+            else if (argv[i] == "--theme")
+            {
+                ElementTheme? theme = argv[i + 1] switch
+                {
+                    "dark" => ElementTheme.Dark,
+                    "light" => ElementTheme.Light,
+                    "system" => ElementTheme.Default,
+                    _ => null,
+                };
+                if (theme is { } value)
+                {
+                    window.SetTheme(value);
+                }
+            }
+        }
+
         var shell = AppComposition.CreateShell(
-            Workspace.DefaultRoot(),
+            workspace,
             new WinUIDialogService(() => window.Content?.XamlRoot));
         window.ViewModel = shell;
         window.Activate();

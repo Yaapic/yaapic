@@ -1,0 +1,14 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000001
+name: List users
+method: GET
+url: "{{baseUrl}}/users?page=1"
+params: []
+headers:
+  - key: Accept
+    value: application/json
+    enabled: true
+body:
+  type: none
+  contentType: json
+  text: ""

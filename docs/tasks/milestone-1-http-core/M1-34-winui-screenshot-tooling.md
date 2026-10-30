@@ -1,6 +1,6 @@
 # M1-34: WinUI screenshot tooling
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-27
 
@@ -50,14 +50,37 @@ Any visual change to the app, UI automation beyond Ctrl+Enter, a CI job, committ
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish of `Yaapic.App.WinUI` 0 IL2xxx/IL3xxx warnings; the published exe started without arguments still
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish of `Yaapic.App.WinUI` 0 IL2xxx/IL3xxx warnings; the published exe started without arguments still
       uses `Workspace.DefaultRoot()`.
-- [ ] `Capture-WinUI.ps1 -Theme dark` and `-Theme light` each produce a non-empty 1440x900 PNG showing the fixture
+- [x] `Capture-WinUI.ps1 -Theme dark` and `-Theme light` each produce a non-empty 1440x900 PNG showing the fixture
       requests in the sidebar and the `create-user` tab; with `-Send` the response area shows the stub `201`. The PNGs
       are inspected (Read tool) and not committed.
-- [ ] No Yaapic or stub-server process is left running after the script (also after a failed run).
+- [x] No Yaapic or stub-server process is left running after the script (also after a failed run).
 
 ## Suggested commit message
 
 `chore(winui): add screenshot tooling and fixture workspace`
+
+## Notes
+
+- Deviation, `-Send`: the app already has a window-level Ctrl+Enter accelerator (the mockup shows "Send ↵"), but
+  `SendKeys` needs the window in the foreground and Windows refuses that when another app is in front (the script then
+  aborted instead of typing into the wrong window). `-Send` therefore invokes the Send button through UI Automation
+  (`UIAutomationClient`, loads in PowerShell 7), which needs no focus. `-Keys` still uses `SendKeys`, with a foreground
+  check (focus grab through `AttachThreadInput`, topmost toggle) and a hard error when focus cannot be taken.
+- Other script behaviours: the process is made DPI aware so the PNG is exactly `Width` x `Height`; the script fails if the
+  app exits before the capture, which makes `-Send` the smoke test of the response path; the stub server is not stopped
+  gracefully (`BeginStop`, the blocked `GetContext` ends with the process).
+- The fixture `session.yaml` is committed although the app creates a `.gitignore` containing `.yaapic/` in a workspace
+  it opens: the fixture has no `.gitignore`, and the script only ever runs on a temp copy.
+- `-Send` found a real defect: a successful response crashed the AOT build (stowed XAML exception). Fixed in a separate
+  commit before this one, see the M1-26 notes.
+- Observed, not fixed here (M1-41/M1-42): at 1440x900 the response panel is cut off below the request editor (the
+  editor takes the height), and the method ComboBox sometimes rendered blank in captures taken while the window was
+  not active.
+- Not verified: the published exe started without arguments was not launched (it would create and open the user's real
+  `~/Yaapic/Default`); the code path is the unchanged `Workspace.DefaultRoot()` default. `-NoTabs` and `-Request` were
+  not exercised.
+- Verified: build 0 warnings, 287 tests green, AOT publish without IL2xxx/IL3xxx, dark and light captures (1440x900)
+  with `-Send` showing the stub `201 Created`; no Yaapic process left after the runs.

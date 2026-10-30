@@ -1,0 +1,11 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000005
+name: Slow request
+method: GET
+url: "{{baseUrl}}/delay/10000"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""

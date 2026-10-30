@@ -118,5 +118,7 @@ public sealed partial class MainWindow : Window
     // High contrast follows the OS setting: ElementTheme cannot force it.
     private void OnThemeSystem(object sender, RoutedEventArgs e) => SetTheme(ElementTheme.Default);
 
-    private void SetTheme(ElementTheme theme) => Root.RequestedTheme = theme;
+    /// <summary>Applies a theme, shared by the Theme menu and the <c>--theme</c> command-line option.</summary>
+    /// <param name="theme">The element theme to apply.</param>
+    internal void SetTheme(ElementTheme theme) => Root.RequestedTheme = theme;
 }
