@@ -7,5 +7,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.Core\Yaapic.Core.csproj" />
+    <ProjectReference Include="..\..\src\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />
   </ItemGroup>
 </Project>

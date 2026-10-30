@@ -1,6 +1,6 @@
 # M1-20: Tabs ViewModel, save and dialog service
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-19
 
@@ -37,11 +37,11 @@ Tab reordering, pinning, duplicate, close-others, restoring unsaved content.
 
 ## Acceptance criteria
 
-- [ ] Tests (in-memory store + fake dialogs): new tab activated; opening an already open id activates it without
+- [x] Tests (in-memory store + fake dialogs): new tab activated; opening an already open id activates it without
       duplicating; save writes to the store, clears dirty and raises `RequestSaved`; save failure sets `LastError`;
       close clean tab without prompt; untouched new tab closes without prompt; dirty close with Save/Discard/Cancel;
       active-tab selection after close (middle, last, only); `SessionChanged` raised.
-- [ ] 0 warnings, architecture tests green.
+- [x] 0 warnings, architecture tests green.
 
 ## Suggested commit message
 
