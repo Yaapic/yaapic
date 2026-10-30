@@ -68,8 +68,8 @@
                      Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsBinary), Mode=OneWay}"
                      Text="{x:Bind ViewModel.BinaryText, Mode=OneWay}"/>
           </Grid>
-          <ListView x:Name="HeadersPane" Visibility="Collapsed" SelectionMode="None"
-                    ItemsSource="{x:Bind ViewModel.Headers, Mode=OneWay}">
+          <ListView x:Name="HeadersPane" Visibility="Collapsed" SelectionMode="None" ItemsSource="{x:Bind p:ListMap.Entries(ViewModel.Headers), Mode=OneWay}"
+                    >
             <ListView.ItemContainerStyle>
               <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>

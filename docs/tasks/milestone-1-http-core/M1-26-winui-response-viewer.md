@@ -41,3 +41,16 @@ Syntax highlighting, copy/save buttons, search, image preview, cookies, timeline
 ## Suggested commit message
 
 `feat(winui): add response viewer`
+
+## Notes
+
+- Defect found after the card was closed (while building M1-34): under Native AOT, the published exe died with a
+  stowed XAML exception (0xC000027B in `Microsoft.UI.Xaml.dll`) as soon as a successful response was displayed. The
+  smoke test of this card only started and closed the app, and the manual checks ran on the JIT build. The error path
+  (connection refused) was unaffected. Root cause: the Headers `ListView` was bound to the generic
+  `IReadOnlyList<KeyValueEntry>`; CsWinRT cannot marshal that as an `ItemsSource` once it holds items.
+- Fix: `ResponsePanelView.xaml` binds `ItemsSource` through `ListMap.Entries(...)`, which returns an
+  `ObservableCollection<KeyValueEntry>` (the shape CsWinRT marshals, as in `KeyValueEditorView`). Verified on the AOT
+  publish: the `201 Created` chip, body and Headers tab render and the exe closes with code 0.
+- Rule for later cards: never bind a generic read-only collection of a non-WinRT type to `ItemsSource`; use an
+  `ObservableCollection<T>`.
