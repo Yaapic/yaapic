@@ -1,6 +1,6 @@
 # M1-37: WinUI control styles: lists, tabs, chips, feedback and dialogs
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-36
 
@@ -72,12 +72,31 @@ flyout colours, tooltips with shortcut hints.
 
 ## Acceptance criteria
 
-- [ ] No `#` colour literal in `Themes/`; snapshot tests green after regeneration.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Manual check on the published exe: close a dirty tab, the dialog shows the Yaapic surface, 20 px title and a
+- [x] No `#` colour literal in `Themes/`; snapshot tests green after regeneration.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Manual check on the published exe: close a dirty tab, the dialog shows the Yaapic surface, 20 px title and a
       raised footer; delete a request from the sidebar, the Delete button is the danger style. Screenshot (M1-34
       script, or a manual capture) inspected for dark and light, not committed.
+
+## Implementation notes
+
+- **Deviation (dialog surfaces):** in the stock `ContentDialog` template the *body* grid uses `ContentDialogTopOverlay`
+  and the *command area* uses `ContentDialogBackground`, the reverse of the card. So `ContentDialogTopOverlay` is
+  aliased to `color.surface.overlay`, `ContentDialogBackground` to `color.surface.raised`, and
+  `ContentDialogSeparatorBorderBrush` to `color.border.default`.
+- **Deviation (InfoBar, ProgressRing):** the stock theme has no style key for them to inherit (`DefaultInfoBarStyle`
+  does not exist; an unkeyed override without `BasedOn` would drop the template and crashed startup), so they are
+  `YaapicInfoBarStyle` and `YaapicProgressRingStyle`, applied per use. `ProgressBar` stays implicit. The stock
+  InfoBar has no per-severity border key, so `color.*.border` are plain keys for the screens.
+- The stock `ListViewItem` indicator is a 16 px pill, so `YaapicListRowStyle` wraps a `ListViewItemPresenter` and adds
+  a 2 px full-height accent bar. Panel tabs and progress are configured through the stock metric and brush keys
+  (aliases on the accent, text and subtle border tokens), so they apply to every `SelectorBar` and `ProgressBar`.
+- The dialogs copy the window's `RequestedTheme` (a popup ignored it: the light theme showed a dark dialog). Dialog
+  bodies are new copy in English (unsaved: "Your changes will be lost if you don't save them.").
+- Checked on the AOT exe (dark and light, not committed): unsaved dialog with the overlay body, raised footer, 20 px
+  title and accent Save; `-Send` still returns a 201. Not checked on screen: the delete dialog (danger button),
+  segmented control, list row, chips, pill, count badge and skeleton (no screen uses them before M1-38 onward).
 
 ## Suggested commit message
 

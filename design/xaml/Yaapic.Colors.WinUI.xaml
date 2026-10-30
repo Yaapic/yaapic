@@ -17,6 +17,7 @@
       <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FF21252A"/>
       <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#FF21252A"/>
       <SolidColorBrush x:Key="ButtonBackground" Color="#FF21252A"/>
+      <SolidColorBrush x:Key="ContentDialogBackground" Color="#FF21252A"/>
       <Color x:Key="YaapicSurfaceRaisedColor">#FF21252A</Color>
       <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FF282C33"/>
       <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FF282C33"/>
@@ -27,16 +28,25 @@
       <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FF121417"/>
       <SolidColorBrush x:Key="ComboBoxBackground" Color="#FF121417"/>
       <Color x:Key="YaapicSurfaceSunkenColor">#FF121417</Color>
+      <SolidColorBrush x:Key="YaapicSurfaceOverlayBrush" Color="#FF282C33"/>
+      <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#FF282C33"/>
+      <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#FF282C33"/>
+      <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#FF282C33"/>
+      <SolidColorBrush x:Key="ToolTipBackground" Color="#FF282C33"/>
+      <SolidColorBrush x:Key="ContentDialogTopOverlay" Color="#FF282C33"/>
+      <Color x:Key="YaapicSurfaceOverlayColor">#FF282C33</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FF24282E"/>
       <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#FF24282E"/>
       <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FF24282E"/>
       <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#FF24282E"/>
+      <SolidColorBrush x:Key="ProgressBarBackground" Color="#FF24282E"/>
       <Color x:Key="YaapicBorderSubtleColor">#FF24282E</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FF30353C"/>
       <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FF30353C"/>
       <SolidColorBrush x:Key="SurfaceStrokeColorDefaultBrush" Color="#FF30353C"/>
       <SolidColorBrush x:Key="ButtonBorderBrush" Color="#FF30353C"/>
       <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#FF30353C"/>
+      <SolidColorBrush x:Key="ContentDialogSeparatorBorderBrush" Color="#FF30353C"/>
       <Color x:Key="YaapicBorderDefaultColor">#FF30353C</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF656C77"/>
       <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#FF656C77"/>
@@ -47,16 +57,27 @@
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#FF656C77"/>
       <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="#FF656C77"/>
       <Color x:Key="YaapicBorderControlColor">#FF656C77</Color>
+      <SolidColorBrush x:Key="YaapicBorderOverlayBrush" Color="#FF454B54"/>
+      <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#FF454B54"/>
+      <SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="#FF454B54"/>
+      <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#FF454B54"/>
+      <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FF454B54"/>
+      <SolidColorBrush x:Key="ContentDialogBorderBrush" Color="#FF454B54"/>
+      <Color x:Key="YaapicBorderOverlayColor">#FF454B54</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="ButtonForeground" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="TextControlForeground" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="SelectorBarItemForegroundSelected" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="SelectorBarItemForegroundPointerOver" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="SelectorBarItemForegroundPressed" Color="#FFECEEF1"/>
       <Color x:Key="YaapicTextPrimaryColor">#FFECEEF1</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFA3AAB4"/>
       <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FFA3AAB4"/>
       <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FFA3AAB4"/>
+      <SolidColorBrush x:Key="SelectorBarItemForeground" Color="#FFA3AAB4"/>
       <Color x:Key="YaapicTextSecondaryColor">#FFA3AAB4</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF848C97"/>
       <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF848C97"/>
@@ -77,6 +98,11 @@
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#FF1FC7D4"/>
       <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStroke" Color="#FF1FC7D4"/>
       <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemSelectionIndicatorBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemSelectionIndicatorPointerOverBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemSelectionIndicatorPressedBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="SelectorBarItemPillFill" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ProgressBarForeground" Color="#FF1FC7D4"/>
       <Color x:Key="YaapicAccentFillColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
       <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FF5FE0EA"/>
@@ -112,10 +138,16 @@
       <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#FF04252A"/>
       <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
       <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0FFFFFFF"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#0FFFFFFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#0FFFFFFF"/>
       <Color x:Key="YaapicOverlayHoverColor">#0FFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#08FFFFFF"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#08FFFFFF"/>
       <Color x:Key="YaapicOverlayPressedColor">#08FFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#1A1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#1A1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#1A1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPressed" Color="#1A1FC7D4"/>
       <Color x:Key="YaapicSelectionBackgroundColor">#1A1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF5FE0EA"/>
       <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="#FF5FE0EA"/>
@@ -129,18 +161,24 @@
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#298088FF"/>
       <SolidColorBrush x:Key="SystemFillColorAttentionBackgroundBrush" Color="#298088FF"/>
       <Color x:Key="YaapicInfoBackgroundColor">#298088FF</Color>
+      <SolidColorBrush x:Key="YaapicInfoBorderBrush" Color="#4D959BFF"/>
+      <Color x:Key="YaapicInfoBorderColor">#4D959BFF</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF3FD68A"/>
       <SolidColorBrush x:Key="SystemFillColorSuccessBrush" Color="#FF3FD68A"/>
       <Color x:Key="YaapicSuccessColor">#FF3FD68A</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#213FD68A"/>
       <SolidColorBrush x:Key="SystemFillColorSuccessBackgroundBrush" Color="#213FD68A"/>
       <Color x:Key="YaapicSuccessBackgroundColor">#213FD68A</Color>
+      <SolidColorBrush x:Key="YaapicSuccessBorderBrush" Color="#4D3FD68A"/>
+      <Color x:Key="YaapicSuccessBorderColor">#4D3FD68A</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FFF2B84B"/>
       <SolidColorBrush x:Key="SystemFillColorCautionBrush" Color="#FFF2B84B"/>
       <Color x:Key="YaapicWarningColor">#FFF2B84B</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#21F2B84B"/>
       <SolidColorBrush x:Key="SystemFillColorCautionBackgroundBrush" Color="#21F2B84B"/>
       <Color x:Key="YaapicWarningBackgroundColor">#21F2B84B</Color>
+      <SolidColorBrush x:Key="YaapicWarningBorderBrush" Color="#4DF2B84B"/>
+      <Color x:Key="YaapicWarningBorderColor">#4DF2B84B</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFFF6B6B"/>
       <SolidColorBrush x:Key="SystemFillColorCriticalBrush" Color="#FFFF6B6B"/>
       <Color x:Key="YaapicDangerColor">#FFFF6B6B</Color>
@@ -234,6 +272,7 @@
       <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FFF6F7F9"/>
       <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#FFF6F7F9"/>
       <SolidColorBrush x:Key="ButtonBackground" Color="#FFF6F7F9"/>
+      <SolidColorBrush x:Key="ContentDialogBackground" Color="#FFF6F7F9"/>
       <Color x:Key="YaapicSurfaceRaisedColor">#FFF6F7F9</Color>
       <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FFFFFFFF"/>
       <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FFFFFFFF"/>
@@ -244,16 +283,25 @@
       <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFFBFBFC"/>
       <SolidColorBrush x:Key="ComboBoxBackground" Color="#FFFBFBFC"/>
       <Color x:Key="YaapicSurfaceSunkenColor">#FFFBFBFC</Color>
+      <SolidColorBrush x:Key="YaapicSurfaceOverlayBrush" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="FlyoutPresenterBackground" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="MenuFlyoutPresenterBackground" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="ComboBoxDropDownBackground" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="ToolTipBackground" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="ContentDialogTopOverlay" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicSurfaceOverlayColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FFE7E9EE"/>
       <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#FFE7E9EE"/>
       <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FFE7E9EE"/>
       <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#FFE7E9EE"/>
+      <SolidColorBrush x:Key="ProgressBarBackground" Color="#FFE7E9EE"/>
       <Color x:Key="YaapicBorderSubtleColor">#FFE7E9EE</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFD8DCE2"/>
       <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FFD8DCE2"/>
       <SolidColorBrush x:Key="SurfaceStrokeColorDefaultBrush" Color="#FFD8DCE2"/>
       <SolidColorBrush x:Key="ButtonBorderBrush" Color="#FFD8DCE2"/>
       <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#FFD8DCE2"/>
+      <SolidColorBrush x:Key="ContentDialogSeparatorBorderBrush" Color="#FFD8DCE2"/>
       <Color x:Key="YaapicBorderDefaultColor">#FFD8DCE2</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF8A919C"/>
       <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#FF8A919C"/>
@@ -264,16 +312,27 @@
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#FF8A919C"/>
       <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="#FF8A919C"/>
       <Color x:Key="YaapicBorderControlColor">#FF8A919C</Color>
+      <SolidColorBrush x:Key="YaapicBorderOverlayBrush" Color="#FFB4BBC5"/>
+      <SolidColorBrush x:Key="FlyoutBorderThemeBrush" Color="#FFB4BBC5"/>
+      <SolidColorBrush x:Key="MenuFlyoutPresenterBorderBrush" Color="#FFB4BBC5"/>
+      <SolidColorBrush x:Key="ComboBoxDropDownBorderBrush" Color="#FFB4BBC5"/>
+      <SolidColorBrush x:Key="ToolTipBorderBrush" Color="#FFB4BBC5"/>
+      <SolidColorBrush x:Key="ContentDialogBorderBrush" Color="#FFB4BBC5"/>
+      <Color x:Key="YaapicBorderOverlayColor">#FFB4BBC5</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FF16191D"/>
       <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FF16191D"/>
       <SolidColorBrush x:Key="ButtonForeground" Color="#FF16191D"/>
       <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FF16191D"/>
       <SolidColorBrush x:Key="TextControlForeground" Color="#FF16191D"/>
       <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="SelectorBarItemForegroundSelected" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="SelectorBarItemForegroundPointerOver" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="SelectorBarItemForegroundPressed" Color="#FF16191D"/>
       <Color x:Key="YaapicTextPrimaryColor">#FF16191D</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FF4A515B"/>
       <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FF4A515B"/>
       <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FF4A515B"/>
+      <SolidColorBrush x:Key="SelectorBarItemForeground" Color="#FF4A515B"/>
       <Color x:Key="YaapicTextSecondaryColor">#FF4A515B</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF5F6772"/>
       <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF5F6772"/>
@@ -294,6 +353,11 @@
       <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#FF1FC7D4"/>
       <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStroke" Color="#FF1FC7D4"/>
       <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemSelectionIndicatorBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemSelectionIndicatorPointerOverBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ListViewItemSelectionIndicatorPressedBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="SelectorBarItemPillFill" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="ProgressBarForeground" Color="#FF1FC7D4"/>
       <Color x:Key="YaapicAccentFillColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
       <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FF5FE0EA"/>
@@ -329,10 +393,16 @@
       <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#FF04252A"/>
       <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
       <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0D14181E"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#0D14181E"/>
+      <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#0D14181E"/>
       <Color x:Key="YaapicOverlayHoverColor">#0D14181E</Color>
       <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#0814181E"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#0814181E"/>
       <Color x:Key="YaapicOverlayPressedColor">#0814181E</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#FFE0FAFC"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundSelected" Color="#FFE0FAFC"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPointerOver" Color="#FFE0FAFC"/>
+      <SolidColorBrush x:Key="ListViewItemBackgroundSelectedPressed" Color="#FFE0FAFC"/>
       <Color x:Key="YaapicSelectionBackgroundColor">#FFE0FAFC</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF0A6B74"/>
       <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="#FF0A6B74"/>
@@ -346,18 +416,24 @@
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#FFECEDFF"/>
       <SolidColorBrush x:Key="SystemFillColorAttentionBackgroundBrush" Color="#FFECEDFF"/>
       <Color x:Key="YaapicInfoBackgroundColor">#FFECEDFF</Color>
+      <SolidColorBrush x:Key="YaapicInfoBorderBrush" Color="#4D4A4FD0"/>
+      <Color x:Key="YaapicInfoBorderColor">#4D4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF157F4A"/>
       <SolidColorBrush x:Key="SystemFillColorSuccessBrush" Color="#FF157F4A"/>
       <Color x:Key="YaapicSuccessColor">#FF157F4A</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#FFE3F4EA"/>
       <SolidColorBrush x:Key="SystemFillColorSuccessBackgroundBrush" Color="#FFE3F4EA"/>
       <Color x:Key="YaapicSuccessBackgroundColor">#FFE3F4EA</Color>
+      <SolidColorBrush x:Key="YaapicSuccessBorderBrush" Color="#4D157F4A"/>
+      <Color x:Key="YaapicSuccessBorderColor">#4D157F4A</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FF8A5A00"/>
       <SolidColorBrush x:Key="SystemFillColorCautionBrush" Color="#FF8A5A00"/>
       <Color x:Key="YaapicWarningColor">#FF8A5A00</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#FFFCF1DA"/>
       <SolidColorBrush x:Key="SystemFillColorCautionBackgroundBrush" Color="#FFFCF1DA"/>
       <Color x:Key="YaapicWarningBackgroundColor">#FFFCF1DA</Color>
+      <SolidColorBrush x:Key="YaapicWarningBorderBrush" Color="#4D8A5A00"/>
+      <Color x:Key="YaapicWarningBorderColor">#4D8A5A00</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFC42B2B"/>
       <SolidColorBrush x:Key="SystemFillColorCriticalBrush" Color="#FFC42B2B"/>
       <Color x:Key="YaapicDangerColor">#FFC42B2B</Color>
@@ -447,12 +523,16 @@
       <Color x:Key="YaapicSurfaceElevatedColor">#FF0A0A0A</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FF000000"/>
       <Color x:Key="YaapicSurfaceSunkenColor">#FF000000</Color>
+      <SolidColorBrush x:Key="YaapicSurfaceOverlayBrush" Color="#FF0A0A0A"/>
+      <Color x:Key="YaapicSurfaceOverlayColor">#FF0A0A0A</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FFFFFFFF"/>
       <Color x:Key="YaapicBorderSubtleColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFFFFFFF"/>
       <Color x:Key="YaapicBorderDefaultColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FFFFFFFF"/>
       <Color x:Key="YaapicBorderControlColor">#FFFFFFFF</Color>
+      <SolidColorBrush x:Key="YaapicBorderOverlayBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicBorderOverlayColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FFFFFFFF"/>
       <Color x:Key="YaapicTextPrimaryColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFFFFFFF"/>
@@ -485,14 +565,20 @@
       <Color x:Key="YaapicInfoColor">#FFB3B8FF</Color>
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#FF000000"/>
       <Color x:Key="YaapicInfoBackgroundColor">#FF000000</Color>
+      <SolidColorBrush x:Key="YaapicInfoBorderBrush" Color="#FFB3B8FF"/>
+      <Color x:Key="YaapicInfoBorderColor">#FFB3B8FF</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF3FF23F"/>
       <Color x:Key="YaapicSuccessColor">#FF3FF23F</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#FF000000"/>
       <Color x:Key="YaapicSuccessBackgroundColor">#FF000000</Color>
+      <SolidColorBrush x:Key="YaapicSuccessBorderBrush" Color="#FF3FF23F"/>
+      <Color x:Key="YaapicSuccessBorderColor">#FF3FF23F</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FFFFFF00"/>
       <Color x:Key="YaapicWarningColor">#FFFFFF00</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#FF000000"/>
       <Color x:Key="YaapicWarningBackgroundColor">#FF000000</Color>
+      <SolidColorBrush x:Key="YaapicWarningBorderBrush" Color="#FFFFFF00"/>
+      <Color x:Key="YaapicWarningBorderColor">#FFFFFF00</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFFF8080"/>
       <Color x:Key="YaapicDangerColor">#FFFF8080</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FF000000"/>

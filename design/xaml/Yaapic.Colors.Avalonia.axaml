@@ -13,12 +13,16 @@
       <Color x:Key="YaapicSurfaceElevatedColor">#FF282C33</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FF121417"/>
       <Color x:Key="YaapicSurfaceSunkenColor">#FF121417</Color>
+      <SolidColorBrush x:Key="YaapicSurfaceOverlayBrush" Color="#FF282C33"/>
+      <Color x:Key="YaapicSurfaceOverlayColor">#FF282C33</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FF24282E"/>
       <Color x:Key="YaapicBorderSubtleColor">#FF24282E</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FF30353C"/>
       <Color x:Key="YaapicBorderDefaultColor">#FF30353C</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF656C77"/>
       <Color x:Key="YaapicBorderControlColor">#FF656C77</Color>
+      <SolidColorBrush x:Key="YaapicBorderOverlayBrush" Color="#FF454B54"/>
+      <Color x:Key="YaapicBorderOverlayColor">#FF454B54</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FFECEEF1"/>
       <Color x:Key="YaapicTextPrimaryColor">#FFECEEF1</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFA3AAB4"/>
@@ -51,14 +55,20 @@
       <Color x:Key="YaapicInfoColor">#FF959BFF</Color>
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#298088FF"/>
       <Color x:Key="YaapicInfoBackgroundColor">#298088FF</Color>
+      <SolidColorBrush x:Key="YaapicInfoBorderBrush" Color="#4D959BFF"/>
+      <Color x:Key="YaapicInfoBorderColor">#4D959BFF</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF3FD68A"/>
       <Color x:Key="YaapicSuccessColor">#FF3FD68A</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#213FD68A"/>
       <Color x:Key="YaapicSuccessBackgroundColor">#213FD68A</Color>
+      <SolidColorBrush x:Key="YaapicSuccessBorderBrush" Color="#4D3FD68A"/>
+      <Color x:Key="YaapicSuccessBorderColor">#4D3FD68A</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FFF2B84B"/>
       <Color x:Key="YaapicWarningColor">#FFF2B84B</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#21F2B84B"/>
       <Color x:Key="YaapicWarningBackgroundColor">#21F2B84B</Color>
+      <SolidColorBrush x:Key="YaapicWarningBorderBrush" Color="#4DF2B84B"/>
+      <Color x:Key="YaapicWarningBorderColor">#4DF2B84B</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFFF6B6B"/>
       <Color x:Key="YaapicDangerColor">#FFFF6B6B</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#21FF6B6B"/>
@@ -145,12 +155,16 @@
       <Color x:Key="YaapicSurfaceElevatedColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FFFBFBFC"/>
       <Color x:Key="YaapicSurfaceSunkenColor">#FFFBFBFC</Color>
+      <SolidColorBrush x:Key="YaapicSurfaceOverlayBrush" Color="#FFFFFFFF"/>
+      <Color x:Key="YaapicSurfaceOverlayColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FFE7E9EE"/>
       <Color x:Key="YaapicBorderSubtleColor">#FFE7E9EE</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFD8DCE2"/>
       <Color x:Key="YaapicBorderDefaultColor">#FFD8DCE2</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF8A919C"/>
       <Color x:Key="YaapicBorderControlColor">#FF8A919C</Color>
+      <SolidColorBrush x:Key="YaapicBorderOverlayBrush" Color="#FFB4BBC5"/>
+      <Color x:Key="YaapicBorderOverlayColor">#FFB4BBC5</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FF16191D"/>
       <Color x:Key="YaapicTextPrimaryColor">#FF16191D</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FF4A515B"/>
@@ -183,14 +197,20 @@
       <Color x:Key="YaapicInfoColor">#FF4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicInfoBackgroundBrush" Color="#FFECEDFF"/>
       <Color x:Key="YaapicInfoBackgroundColor">#FFECEDFF</Color>
+      <SolidColorBrush x:Key="YaapicInfoBorderBrush" Color="#4D4A4FD0"/>
+      <Color x:Key="YaapicInfoBorderColor">#4D4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicSuccessBrush" Color="#FF157F4A"/>
       <Color x:Key="YaapicSuccessColor">#FF157F4A</Color>
       <SolidColorBrush x:Key="YaapicSuccessBackgroundBrush" Color="#FFE3F4EA"/>
       <Color x:Key="YaapicSuccessBackgroundColor">#FFE3F4EA</Color>
+      <SolidColorBrush x:Key="YaapicSuccessBorderBrush" Color="#4D157F4A"/>
+      <Color x:Key="YaapicSuccessBorderColor">#4D157F4A</Color>
       <SolidColorBrush x:Key="YaapicWarningBrush" Color="#FF8A5A00"/>
       <Color x:Key="YaapicWarningColor">#FF8A5A00</Color>
       <SolidColorBrush x:Key="YaapicWarningBackgroundBrush" Color="#FFFCF1DA"/>
       <Color x:Key="YaapicWarningBackgroundColor">#FFFCF1DA</Color>
+      <SolidColorBrush x:Key="YaapicWarningBorderBrush" Color="#4D8A5A00"/>
+      <Color x:Key="YaapicWarningBorderColor">#4D8A5A00</Color>
       <SolidColorBrush x:Key="YaapicDangerBrush" Color="#FFC42B2B"/>
       <Color x:Key="YaapicDangerColor">#FFC42B2B</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FFFCEAEA"/>

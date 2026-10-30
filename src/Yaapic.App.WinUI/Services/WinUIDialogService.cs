@@ -23,10 +23,12 @@ public sealed class WinUIDialogService : IDialogService
         var result = await ShowAsync(new ContentDialog
         {
             Title = $"Save changes to '{itemName}'?",
+            Content = Body("Your changes will be lost if you don't save them."),
             PrimaryButtonText = "Save",
             SecondaryButtonText = "Don't save",
             CloseButtonText = "Cancel",
             DefaultButton = ContentDialogButton.Primary,
+            PrimaryButtonStyle = (Style)Application.Current.Resources["AccentButtonStyle"],
         });
         return result switch
         {
@@ -41,10 +43,19 @@ public sealed class WinUIDialogService : IDialogService
         await ShowAsync(new ContentDialog
         {
             Title = $"Delete '{itemName}'?",
+            Content = Body("The request file will be deleted from the workspace."),
             PrimaryButtonText = "Delete",
+            PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicDangerButtonStyle"],
             CloseButtonText = "Cancel",
             DefaultButton = ContentDialogButton.Close,
         }) == ContentDialogResult.Primary;
+
+    private static TextBlock Body(string text) => new()
+    {
+        Text = text,
+        TextWrapping = TextWrapping.Wrap,
+        Style = (Style)Application.Current.Resources["YaapicDialogBodyTextStyle"],
+    };
 
     private async Task<ContentDialogResult> ShowAsync(ContentDialog dialog)
     {
@@ -54,6 +65,8 @@ public sealed class WinUIDialogService : IDialogService
         }
 
         dialog.XamlRoot = root;
+        // A dialog is hosted in a popup layer that ignores the window content theme override.
+        dialog.RequestedTheme = ((FrameworkElement)root.Content).RequestedTheme;
         return await dialog.ShowAsync();
     }
 }

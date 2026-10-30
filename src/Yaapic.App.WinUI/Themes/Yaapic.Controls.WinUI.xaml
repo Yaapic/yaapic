@@ -179,4 +179,199 @@
     <Setter Property="MinHeight" Value="32"/>
     <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
   </Style>
+
+  <!-- Metrics read by the WinUI templates: 2 px progress track, 400 px dialogs, 2 px panel-tab underline. -->
+  <x:Double x:Key="ProgressBarMinHeight">2</x:Double>
+  <x:Double x:Key="ProgressBarTrackHeight">2</x:Double>
+  <x:Double x:Key="ContentDialogMinWidth">400</x:Double>
+  <x:Double x:Key="SelectorBarItemPillHeight">2</x:Double>
+  <CornerRadius x:Key="ProgressBarCornerRadius">0</CornerRadius>
+  <CornerRadius x:Key="ProgressBarTrackCornerRadius">0</CornerRadius>
+  <Thickness x:Key="SelectorBarItemSelectionVisualMargin">0</Thickness>
+  <SolidColorBrush x:Key="SelectorBarItemBackground" Color="Transparent"/>
+  <SolidColorBrush x:Key="SelectorBarItemBackgroundPointerOver" Color="Transparent"/>
+  <SolidColorBrush x:Key="SelectorBarItemBackgroundPressed" Color="Transparent"/>
+  <SolidColorBrush x:Key="SelectorBarItemBackgroundSelected" Color="Transparent"/>
+
+  <!-- List row: 26 px, 2 px accent bar at the left edge when selected (the stock indicator is a 16 px pill). -->
+  <Style x:Key="YaapicListRowStyle" TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+    <Setter Property="MinHeight" Value="26"/>
+    <Setter Property="Padding" Value="8,0,10,0"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ListViewItem">
+          <Grid>
+            <ListViewItemPresenter x:Name="Root" ContentTransitions="{TemplateBinding ContentTransitions}"
+                                   Control.IsTemplateFocusTarget="True"
+                                   FocusVisualMargin="{TemplateBinding FocusVisualMargin}"
+                                   FocusVisualPrimaryBrush="{TemplateBinding FocusVisualPrimaryBrush}"
+                                   FocusVisualPrimaryThickness="{TemplateBinding FocusVisualPrimaryThickness}"
+                                   FocusVisualSecondaryBrush="{TemplateBinding FocusVisualSecondaryBrush}"
+                                   FocusVisualSecondaryThickness="{TemplateBinding FocusVisualSecondaryThickness}"
+                                   SelectionCheckMarkVisualEnabled="False" SelectionIndicatorVisualEnabled="False"
+                                   PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}"
+                                   PressedBackground="{ThemeResource ListViewItemBackgroundPressed}"
+                                   SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}"
+                                   SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}"
+                                   SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}"
+                                   PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
+                                   SelectedForeground="{ThemeResource ListViewItemForegroundSelected}"
+                                   DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
+                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                   ContentMargin="{TemplateBinding Padding}" CornerRadius="0"/>
+            <Rectangle x:Name="SelectionBar" Width="2" HorizontalAlignment="Left" IsHitTestVisible="False" Opacity="0"
+                       Fill="{ThemeResource ListViewItemSelectionIndicatorBrush}"/>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="PointerOver"/>
+                <VisualState x:Name="Pressed"/>
+                <VisualState x:Name="Selected"><VisualState.Setters><Setter Target="SelectionBar.Opacity" Value="1"/></VisualState.Setters></VisualState>
+                <VisualState x:Name="PointerOverSelected"><VisualState.Setters><Setter Target="SelectionBar.Opacity" Value="1"/></VisualState.Setters></VisualState>
+                <VisualState x:Name="PressedSelected"><VisualState.Setters><Setter Target="SelectionBar.Opacity" Value="1"/></VisualState.Setters></VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Panel tab: SelectorBarItem with a 2 px accent underline (resources above, brushes aliased from tokens). -->
+  <Style x:Key="YaapicPanelTabStyle" TargetType="SelectorBarItem" BasedOn="{StaticResource DefaultSelectorBarItemStyle}">
+    <Setter Property="MinHeight" Value="32"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="Margin" Value="0,0,18,0"/>
+  </Style>
+
+  <!-- Segmented control item: raised pill with a 1 px border when selected. -->
+  <Style x:Key="YaapicSegmentedItemStyle" TargetType="ListViewItem">
+    <Setter Property="MinHeight" Value="0"/>
+    <Setter Property="MinWidth" Value="0"/>
+    <Setter Property="Padding" Value="10,2"/>
+    <Setter Property="FontSize" Value="{StaticResource YaapicFontSizeBodySm}"/>
+    <Setter Property="Foreground" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ListViewItem">
+          <Border x:Name="Pill" Background="Transparent" BorderBrush="Transparent" BorderThickness="1"
+                  CornerRadius="{StaticResource YaapicRadiusSm}" Padding="{TemplateBinding Padding}">
+            <ContentPresenter x:Name="Content" Content="{TemplateBinding Content}" ContentTemplate="{TemplateBinding ContentTemplate}"
+                              Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="PointerOver"><VisualState.Setters><Setter Target="Content.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/></VisualState.Setters></VisualState>
+                <VisualState x:Name="Pressed"/>
+                <VisualState x:Name="Selected">
+                  <VisualState.Setters>
+                    <Setter Target="Pill.Background" Value="{ThemeResource YaapicSurfaceElevatedBrush}"/>
+                    <Setter Target="Pill.BorderBrush" Value="{ThemeResource YaapicBorderDefaultBrush}"/>
+                    <Setter Target="Content.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                  </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="PointerOverSelected">
+                  <VisualState.Setters>
+                    <Setter Target="Pill.Background" Value="{ThemeResource YaapicSurfaceElevatedBrush}"/>
+                    <Setter Target="Pill.BorderBrush" Value="{ThemeResource YaapicBorderDefaultBrush}"/>
+                    <Setter Target="Content.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                  </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="PressedSelected">
+                  <VisualState.Setters>
+                    <Setter Target="Pill.Background" Value="{ThemeResource YaapicSurfaceElevatedBrush}"/>
+                    <Setter Target="Pill.BorderBrush" Value="{ThemeResource YaapicBorderDefaultBrush}"/>
+                    <Setter Target="Content.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                  </VisualState.Setters>
+                </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Segmented control (Pretty/Raw): a horizontal ListView in a sunken, bordered, rounded frame. -->
+  <Style x:Key="YaapicSegmentedStyle" TargetType="ListView">
+    <Setter Property="ItemContainerStyle" Value="{StaticResource YaapicSegmentedItemStyle}"/>
+    <Setter Property="SelectionMode" Value="Single"/>
+    <Setter Property="HorizontalAlignment" Value="Left"/>
+    <Setter Property="ItemsPanel">
+      <Setter.Value>
+        <ItemsPanelTemplate><StackPanel Orientation="Horizontal"/></ItemsPanelTemplate>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ListView">
+          <Border Background="{ThemeResource YaapicSurfaceSunkenBrush}" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                  BorderThickness="1" CornerRadius="{StaticResource YaapicRadiusMd}" Padding="2">
+            <ItemsPresenter/>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Status chip frame; its text uses YaapicChipTextStyle, the colours come from BrushMap. -->
+  <Style x:Key="YaapicChipBorderStyle" TargetType="Border">
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusSm}"/>
+    <Setter Property="Padding" Value="7,1"/>
+  </Style>
+  <Style x:Key="YaapicChipTextStyle" TargetType="TextBlock">
+    <Setter Property="FontFamily" Value="{StaticResource YaapicMonoFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource YaapicFontSizeBodySm}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+  </Style>
+
+  <!-- Environment pill: 28 px, fully rounded, outlined; content is a dot, the name and a chevron. -->
+  <Style x:Key="YaapicPillButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+    <Setter Property="Height" Value="28"/>
+    <Setter Property="MinHeight" Value="28"/>
+    <Setter Property="Padding" Value="10,0"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusFull}"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="{ThemeResource YaapicBorderDefaultBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+  </Style>
+
+  <!-- Count badge: the badge text with a tertiary colour; the active-tab variant uses the accent text colour. -->
+  <Style x:Key="YaapicCountBadgeTextStyle" TargetType="TextBlock" BasedOn="{StaticResource YaapicBadgeTextStyle}"/>
+  <Style x:Key="YaapicCountBadgeActiveTextStyle" TargetType="TextBlock" BasedOn="{StaticResource YaapicBadgeTextStyle}">
+    <Setter Property="Foreground" Value="{ThemeResource YaapicAccentTextBrush}"/>
+  </Style>
+
+  <!-- Feedback: InfoBar frame and progress (2 px line, accent fill). InfoBar and ProgressRing have no stock style key to inherit, so theirs are keyed and applied per use. -->
+  <Style x:Key="YaapicInfoBarStyle" TargetType="InfoBar">
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusMd}"/>
+    <Setter Property="Padding" Value="10,5"/>
+  </Style>
+  <Style TargetType="ProgressBar" BasedOn="{StaticResource DefaultProgressBarStyle}">
+    <Setter Property="Height" Value="2"/>
+    <Setter Property="MinHeight" Value="2"/>
+    <Setter Property="Foreground" Value="{ThemeResource YaapicAccentFillBrush}"/>
+    <Setter Property="Background" Value="{ThemeResource YaapicBorderSubtleBrush}"/>
+  </Style>
+  <Style x:Key="YaapicProgressRingStyle" TargetType="ProgressRing">
+    <Setter Property="Foreground" Value="{ThemeResource YaapicAccentFillBrush}"/>
+  </Style>
+
+  <!-- Loading placeholder bar. -->
+  <Style x:Key="YaapicSkeletonBarStyle" TargetType="Border">
+    <Setter Property="Height" Value="10"/>
+    <Setter Property="CornerRadius" Value="3"/>
+    <Setter Property="Background" Value="{ThemeResource YaapicSurfaceRaisedBrush}"/>
+  </Style>
+
+  <Style x:Key="YaapicDialogBodyTextStyle" TargetType="TextBlock" BasedOn="{StaticResource YaapicBodyTextStyle}">
+    <Setter Property="Foreground" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
+  </Style>
+  <!-- Dialog: 8 px corners; surfaces, border and separator come from the ContentDialog aliases. -->
+  <Style TargetType="ContentDialog" BasedOn="{StaticResource DefaultContentDialogStyle}">
+    <Setter Property="CornerRadius" Value="{StaticResource OverlayCornerRadius}"/>
+  </Style>
+
 </ResourceDictionary>
