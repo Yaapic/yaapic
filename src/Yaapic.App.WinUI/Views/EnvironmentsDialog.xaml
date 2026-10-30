@@ -1,0 +1,75 @@
+<ContentDialog x:Class="Yaapic.App.WinUI.Views.EnvironmentsDialog"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:p="using:Yaapic.App.WinUI.Presentation"
+               xmlns:env="using:Yaapic.ViewModels.Environments"
+               xmlns:v="using:Yaapic.App.WinUI.Views"
+               Title="Environments" CloseButtonText="Close" DefaultButton="Close">
+  <Grid Width="720" Height="420" ColumnSpacing="16">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="200"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid RowSpacing="8">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <ListView SelectionMode="Single"
+                ItemsSource="{x:Bind ViewModel.Environments, Mode=OneWay}"
+                SelectedItem="{x:Bind ViewModel.EditedEnvironment, Mode=TwoWay}">
+        <ListView.ItemTemplate>
+          <DataTemplate x:DataType="env:EnvironmentItemViewModel">
+            <Grid ColumnSpacing="6">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock Text="{x:Bind Name, Mode=OneWay}" VerticalAlignment="Center"
+                         TextTrimming="CharacterEllipsis"/>
+              <TextBlock Grid.Column="1" Text="&#x2022;" VerticalAlignment="Center"
+                         AutomationProperties.Name="Unsaved changes"
+                         Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsDirty), Mode=OneWay}"/>
+            </Grid>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+      <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="8">
+        <Button Content="Add" Command="{x:Bind ViewModel.AddCommand}"/>
+        <Button x:Name="DeleteButton" Content="Delete"
+                IsEnabled="{x:Bind p:VisibilityMap.IsNotNull(ViewModel.EditedEnvironment), Mode=OneWay}">
+          <Button.Flyout>
+            <Flyout>
+              <StackPanel Spacing="8">
+                <TextBlock x:Name="DeletePrompt"/>
+                <Button Content="Delete" Click="OnConfirmDelete"/>
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
+        </Button>
+      </StackPanel>
+    </Grid>
+    <Grid Grid.Column="1" RowSpacing="8"
+          Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.EditedEnvironment), Mode=OneWay}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <TextBox Header="Name"
+               Text="{x:Bind ViewModel.EditedEnvironment.Name, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
+      <Grid Grid.Row="1" ColumnSpacing="8" Padding="0,0,40,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="36"/>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="1" Text="Variable" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+        <TextBlock Grid.Column="2" Text="Value" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+      </Grid>
+      <v:KeyValueEditorView Grid.Row="2" x:Name="Variables"/>
+      <Button Grid.Row="3" Content="Save" HorizontalAlignment="Right" Click="OnSave"/>
+    </Grid>
+  </Grid>
+</ContentDialog>

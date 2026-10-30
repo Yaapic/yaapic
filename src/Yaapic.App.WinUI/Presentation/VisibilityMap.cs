@@ -12,6 +12,16 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenNull(object? value) => value is null ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Returns <see cref="Visibility.Visible"/> when the value is not null.</summary>
+    /// <param name="value">The value to test.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenNotNull(object? value) => value is null ? Visibility.Collapsed : Visibility.Visible;
+
+    /// <summary>Returns true when the value is not null.</summary>
+    /// <param name="value">The value to test.</param>
+    /// <returns>Whether the value is set.</returns>
+    public static bool IsNotNull(object? value) => value is not null;
+
     /// <summary>Gets whether <paramref name="text"/> holds a message.</summary>
     /// <param name="text">The text to test.</param>
     /// <returns><see langword="true"/> when the text is not empty.</returns>

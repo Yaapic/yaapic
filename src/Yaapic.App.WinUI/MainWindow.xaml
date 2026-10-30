@@ -25,6 +25,7 @@
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="140"/>
       </Grid.ColumnDefinitions>
       <TextBlock Text="Yaapic" VerticalAlignment="Center" Margin="16,0,0,0"
@@ -39,7 +40,10 @@
           </DataTemplate>
         </ComboBox.ItemTemplate>
       </ComboBox>
-      <DropDownButton Grid.Column="2" Content="Theme" VerticalAlignment="Center">
+      <Button Grid.Column="2" Content="&#xE713;" FontFamily="Segoe Fluent Icons" VerticalAlignment="Center"
+              Margin="0,0,8,0" AutomationProperties.Name="Manage environments"
+              ToolTipService.ToolTip="Manage environments" Click="OnManageEnvironments"/>
+      <DropDownButton Grid.Column="3" Content="Theme" VerticalAlignment="Center">
         <DropDownButton.Flyout>
           <MenuFlyout>
             <MenuFlyoutItem Text="Dark" Click="OnThemeDark"/>

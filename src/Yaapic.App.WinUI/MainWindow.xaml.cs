@@ -103,6 +103,14 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    private async void OnManageEnvironments(object sender, RoutedEventArgs e)
+    {
+        if (_viewModel is not null)
+        {
+            await new Views.EnvironmentsDialog(_viewModel.Environments) { XamlRoot = Root.XamlRoot }.ShowAsync();
+        }
+    }
+
     private void OnThemeDark(object sender, RoutedEventArgs e) => SetTheme(ElementTheme.Dark);
 
     private void OnThemeLight(object sender, RoutedEventArgs e) => SetTheme(ElementTheme.Light);

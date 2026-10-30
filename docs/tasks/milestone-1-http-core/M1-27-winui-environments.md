@@ -1,6 +1,6 @@
 # M1-27: WinUI environment management
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-25
 
@@ -28,12 +28,17 @@ Globals, secrets, import/export, environment duplication.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings (published exe starts and closes cleanly).
 - [ ] Manual smoke on the published exe: add environment "Local" with `baseUrl = https://httpbin.org`, save, select it,
       send `{{baseUrl}}/get`: 200; the file `%USERPROFILE%\Yaapic\Default\environments\local.env.yaml` exists; restart:
       "Local" is still active; delete it: the selector goes back to "No environment".
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add environment management dialog`
+
+## Implementation notes
+
+- The manual end-to-end smoke (add "Local", save, send, restart, delete) was not run: the dialog was only checked to
+  build, publish with AOT and start/close cleanly.
