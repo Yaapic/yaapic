@@ -1,10 +1,21 @@
+using Yaapic.Core.Http;
+using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
+using Yaapic.TestDoubles;
 using Yaapic.ViewModels.Requests;
 
 namespace Yaapic.ViewModels.Tests;
 
 public sealed class RequestEditorViewModelTests
 {
+    private sealed class StubEnvironments : IActiveEnvironmentProvider
+    {
+        public EnvironmentDefinition? Current => null;
+    }
+
+    private static RequestSender Sender() =>
+        new(new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Fail(SendFailureKind.Unknown, "unused"))));
+
     private static HttpRequestDefinition Sample() => new(
         Guid.NewGuid(),
         "Get users",
@@ -30,13 +41,13 @@ public sealed class RequestEditorViewModelTests
     {
         var definition = Sample();
 
-        Assert.True(RequestEditorViewModel.FromDefinition(definition).ToDefinition().IsEquivalentTo(definition));
+        Assert.True(RequestEditorViewModel.FromDefinition(definition, Sender(), new StubEnvironments()).ToDefinition().IsEquivalentTo(definition));
     }
 
     [Fact]
     public void LoadedRequestIsClean()
     {
-        var editor = RequestEditorViewModel.FromDefinition(Sample());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
 
         Assert.False(editor.IsDirty);
         Assert.Equal("Get users", editor.Title);
@@ -47,7 +58,7 @@ public sealed class RequestEditorViewModelTests
     public void EditMakesDirtyAndRevertMakesClean(string field, Action<RequestEditorViewModel> edit, Action<RequestEditorViewModel> revert)
     {
         Assert.NotEmpty(field);
-        var editor = RequestEditorViewModel.FromDefinition(Sample());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
         var cleanTitle = editor.Title;
         var raised = new List<string?>();
         editor.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
@@ -68,7 +79,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void MarkSavedClearsDirty()
     {
-        var editor = RequestEditorViewModel.CreateNew();
+        var editor = RequestEditorViewModel.CreateNew(Sender(), new StubEnvironments());
         editor.Url = "https://x.test";
 
         editor.MarkSaved();
@@ -80,7 +91,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void CreateNewIsNewAndDirty()
     {
-        var editor = RequestEditorViewModel.CreateNew();
+        var editor = RequestEditorViewModel.CreateNew(Sender(), new StubEnvironments());
 
         Assert.True(editor.IsNew);
         Assert.True(editor.IsDirty);
@@ -90,7 +101,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void BlankNameBecomesDefault()
     {
-        var editor = RequestEditorViewModel.FromDefinition(Sample());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
         editor.Name = "   ";
 
         Assert.Equal("New Request", editor.ToDefinition().Name);

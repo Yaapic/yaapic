@@ -1,6 +1,6 @@
 # M1-19: Send and cancel commands
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-17, M1-18
 
@@ -29,10 +29,10 @@ History, keyboard shortcuts (views), scripts, send-and-download.
 
 ## Acceptance criteria
 
-- [ ] Tests: send passes the current (unsaved) definition and the active environment to the transport; panel goes
+- [x] Tests: send passes the current (unsaved) definition and the active environment to the transport; panel goes
       `Sending` -> `Completed`; transport failure -> `Failed`; cancel while a fake transport waits on the token -> canceled
       message; `CanExecute` false with blank URL and while sending.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
