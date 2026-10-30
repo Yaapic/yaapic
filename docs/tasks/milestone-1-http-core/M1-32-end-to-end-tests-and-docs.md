@@ -1,6 +1,6 @@
 # M1-32: End-to-end tests and milestone docs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-23
 
@@ -33,9 +33,9 @@ UI automation, performance tests, external hosts.
 
 ## Acceptance criteria
 
-- [ ] The five scenarios pass on Windows and Linux runners (no Windows-only API: `HttpListener` works on both).
-- [ ] `docs/architecture.md` exists and matches the code.
-- [ ] 0 warnings, all tests green.
+- [x] The five scenarios pass on Windows and Linux runners (no Windows-only API: `HttpListener` works on both).
+- [x] `docs/architecture.md` exists and matches the code.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
