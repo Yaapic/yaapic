@@ -29,7 +29,7 @@
         <ColumnDefinition Width="140"/>
       </Grid.ColumnDefinitions>
       <TextBlock Text="Yaapic" VerticalAlignment="Center" Margin="16,0,0,0"
-                 Foreground="{ThemeResource YaapicTextPrimaryBrush}"/>
+                 Style="{StaticResource YaapicBodyStrongTextStyle}"/>
       <ComboBox Grid.Column="1" Width="200" VerticalAlignment="Center" Margin="0,0,8,0"
                 PlaceholderText="No environment"
                 ItemsSource="{x:Bind ViewModel.Environments.Environments, Mode=OneWay}"
@@ -92,11 +92,11 @@
                   </MenuFlyout>
                 </Grid.ContextFlyout>
                 <TextBlock Text="{x:Bind MethodText}" VerticalAlignment="Center"
-                           FontSize="{StaticResource YaapicCodeFontSize}"
+                           Style="{StaticResource YaapicMethodTextStyle}"
                            Foreground="{x:Bind p:BrushMap.Method(Method)}"/>
                 <TextBlock Grid.Column="1" Text="{x:Bind Name}" VerticalAlignment="Center"
                            TextTrimming="CharacterEllipsis"
-                           Foreground="{ThemeResource YaapicTextPrimaryBrush}"/>
+                           Style="{StaticResource YaapicBodyTextStyle}"/>
               </Grid>
             </DataTemplate>
           </ListView.ItemTemplate>

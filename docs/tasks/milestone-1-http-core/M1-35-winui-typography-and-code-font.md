@@ -1,6 +1,6 @@
 # M1-35: WinUI typography and bundled code font
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-33, M1-34
 
@@ -60,12 +60,24 @@ Control templates and colours (M1-36, M1-37), layout changes (M1-38 onward), Seg
 
 ## Acceptance criteria
 
-- [ ] `rg 'FontSize="[0-9]' src/Yaapic.App.WinUI` finds nothing.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] `tools/screenshots/Capture-WinUI.ps1` dark and light screenshots show the URL and body in JetBrains Mono and
+- [x] `rg 'FontSize="[0-9]' src/Yaapic.App.WinUI` finds nothing.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] `tools/screenshots/Capture-WinUI.ps1` dark and light screenshots show the URL and body in JetBrains Mono and
       13 px UI text (inspected, not committed); result noted in the card.
 
 ## Suggested commit message
 
 `feat(winui): bundle JetBrains Mono and add the Yaapic type ramp`
+
+## Notes
+
+- Variable font `JetBrainsMono[wght].ttf` shipped as `Assets/Fonts/JetBrainsMono.ttf`; the AOT build resolves the
+  `ms-appx` URI (monospace glyphs, slashed zero visible in the dark capture). Weight 600/700 rendering was not checked
+  separately; synthesised bold is acceptable for M1.
+- Token `type.label.mono` added (10/16/700); the generator exposes it as `YaapicFontSizeLabelMono` and
+  `YaapicLineHeightLabelMono`. XAML dictionaries regenerated with `YAAPIC_UPDATE_SNAPSHOTS=1`.
+- Dark capture with `-Send` (Native AOT exe): URL, key/value fields, method labels and response body are monospace,
+  UI text is 13 px; the successful response rendered without crashing. Light theme capture was taken the same way.
+- Only a few existing views received a style (method labels, hints, title); the remaining plain `TextBlock`s are
+  restyled by the layout cards that follow.

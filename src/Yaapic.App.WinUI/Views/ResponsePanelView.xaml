@@ -14,12 +14,12 @@
     <Grid Grid.Row="1">
       <TextBlock Text="Send a request to see the response"
                  HorizontalAlignment="Center" VerticalAlignment="Center"
-                 Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                 Style="{StaticResource YaapicBodySmallTextStyle}"
                  Visibility="{x:Bind p:VisibilityMap.WhenEmpty(ViewModel.State), Mode=OneWay}"/>
       <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8"
                   Visibility="{x:Bind p:VisibilityMap.WhenSending(ViewModel.State), Mode=OneWay}">
         <ProgressRing IsActive="True"/>
-        <TextBlock Text="Sending..." Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+        <TextBlock Text="Sending..." Style="{StaticResource YaapicBodySmallTextStyle}"/>
       </StackPanel>
       <InfoBar Severity="Error" IsOpen="True" IsClosable="False" VerticalAlignment="Top"
                Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"
@@ -37,9 +37,9 @@
                        Foreground="{x:Bind p:BrushMap.StatusForeground(ViewModel.StatusCategory), Mode=OneWay}"/>
           </Border>
           <TextBlock VerticalAlignment="Center" Text="{x:Bind ViewModel.DurationText, Mode=OneWay}"
-                     Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                     Style="{StaticResource YaapicBodySmallTextStyle}"/>
           <TextBlock VerticalAlignment="Center" Text="{x:Bind ViewModel.SizeText, Mode=OneWay}"
-                     Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                     Style="{StaticResource YaapicBodySmallTextStyle}"/>
         </StackPanel>
         <SelectorBar Grid.Row="1" SelectionChanged="OnTabChanged">
           <SelectorBarItem Text="Body" IsSelected="True"/>

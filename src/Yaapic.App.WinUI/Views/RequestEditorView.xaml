@@ -19,7 +19,7 @@
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
       <TextBox PlaceholderText="Request name" BorderThickness="0" Background="Transparent"
-               FontSize="20" FontWeight="SemiBold"
+               FontSize="{StaticResource YaapicFontSizeTitle}" FontWeight="SemiBold"
                Text="{x:Bind ViewModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
       <Grid Grid.Row="1" ColumnSpacing="8">
         <Grid.ColumnDefinitions>
@@ -73,7 +73,7 @@
             </ComboBox>
           </StackPanel>
           <TextBlock Grid.Row="1" Text="GET requests are sent without a body"
-                     Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                     Style="{StaticResource YaapicBodySmallTextStyle}"
                      Visibility="{x:Bind p:VisibilityMap.WhenGet(ViewModel.Method), Mode=OneWay}"/>
           <TextBox Grid.Row="2" AcceptsReturn="True" TextWrapping="NoWrap"
                    FontFamily="{StaticResource YaapicMonoFont}"

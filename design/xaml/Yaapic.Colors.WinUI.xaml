@@ -479,6 +479,8 @@
   <x:Double x:Key="YaapicLineHeightCodeSm">16</x:Double>
   <x:Double x:Key="YaapicFontSizeCodeLg">14</x:Double>
   <x:Double x:Key="YaapicLineHeightCodeLg">22</x:Double>
+  <x:Double x:Key="YaapicFontSizeLabelMono">10</x:Double>
+  <x:Double x:Key="YaapicLineHeightLabelMono">16</x:Double>
   <Thickness x:Key="YaapicBorderThickness">1</Thickness>
   <Thickness x:Key="YaapicFocusBorderThickness">2</Thickness>
   <CornerRadius x:Key="YaapicRadiusControl">4</CornerRadius>

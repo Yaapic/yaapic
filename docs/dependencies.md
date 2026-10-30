@@ -26,3 +26,9 @@ warnings**, and the published binary ran and the round trip matched.
 
 Multi-line strings are emitted as **literal block scalars** (`|`), so scripts and bodies stay readable in diffs.
 Property names are emitted in camelCase by default (`openRequests`), matching the file format.
+
+## Bundled assets
+
+| Asset | Version | Licence | Used by | Source | Justification |
+|---|---|---|---|---|---|
+| JetBrains Mono (variable) | 2.304 | SIL OFL 1.1 (`Assets/Fonts/OFL.txt`) | Yaapic.App.WinUI | <https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304> | Code font of the design system (`type.code`): URLs, headers and bodies are always monospace. |

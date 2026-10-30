@@ -33,5 +33,6 @@
     <!-- Generated resources live in design/; compile them as pages so they ship as XBF. -->
     <Page Include="..\..\design\xaml\Yaapic.Colors.WinUI.xaml" Link="Themes\Yaapic.Colors.WinUI.xaml" />
     <Page Include="..\..\design\xaml\Yaapic.Icons.WinUI.xaml" Link="Themes\Yaapic.Icons.WinUI.xaml" />
+    <Content Include="Assets\Fonts\*.ttf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

@@ -65,8 +65,8 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="1" Text="Variable" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
-        <TextBlock Grid.Column="2" Text="Value" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+        <TextBlock Grid.Column="1" Text="Variable" Style="{StaticResource YaapicBodySmallTextStyle}"/>
+        <TextBlock Grid.Column="2" Text="Value" Style="{StaticResource YaapicBodySmallTextStyle}"/>
       </Grid>
       <v:KeyValueEditorView Grid.Row="2" x:Name="Variables"/>
       <Button Grid.Row="3" Content="Save" HorizontalAlignment="Right" Click="OnSave"/>
