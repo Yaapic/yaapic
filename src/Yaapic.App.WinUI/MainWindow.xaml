@@ -44,7 +44,7 @@
       </StackPanel>
       <Button x:Name="EnvironmentPill" Grid.Column="2" Style="{StaticResource YaapicPillButtonStyle}"
               VerticalAlignment="Center" Margin="0,0,8,0"
-              AutomationProperties.Name="{x:Bind p:VisibilityMap.EnvironmentLabel(ViewModel.Environments.ActiveEnvironment.Name), Mode=OneWay}">
+              AutomationProperties.Name="Environment">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <Grid Width="8" Height="8" VerticalAlignment="Center">
             <Ellipse Fill="{ThemeResource YaapicSuccessBrush}"
@@ -52,7 +52,7 @@
             <Ellipse Fill="{ThemeResource YaapicTextTertiaryBrush}"
                      Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Environments.ActiveEnvironment), Mode=OneWay}"/>
           </Grid>
-          <TextBlock Text="{x:Bind p:VisibilityMap.EnvironmentName(ViewModel.Environments.ActiveEnvironment.Name), Mode=OneWay}"
+          <TextBlock Text="{x:Bind ViewModel.Environments.ActiveEnvironment.Name, Mode=OneWay, FallbackValue='No environment', TargetNullValue='No environment'}"
                      VerticalAlignment="Center" Style="{StaticResource YaapicBodyTextStyle}"/>
           <ic:FluentIcon Icon="ChevronDown" IconVariant="Regular" IconSize="Size12" Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
         </StackPanel>

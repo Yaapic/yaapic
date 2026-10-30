@@ -74,16 +74,6 @@ public static class VisibilityMap
     public static Visibility WhenWarning(string? warning, ResponseState state) =>
         warning is not null && state != ResponseState.Empty ? Visibility.Visible : Visibility.Collapsed;
 
-    /// <summary>Gets the environment name shown in the title-bar pill.</summary>
-    /// <param name="name">The active environment name, or <see langword="null"/>.</param>
-    /// <returns>The name, or "No environment".</returns>
-    public static string EnvironmentName(string? name) => string.IsNullOrEmpty(name) ? "No environment" : name;
-
-    /// <summary>Gets the accessible name of the environment pill.</summary>
-    /// <param name="name">The active environment name, or <see langword="null"/>.</param>
-    /// <returns>The accessible name.</returns>
-    public static string EnvironmentLabel(string? name) => $"Environment: {EnvironmentName(name)}";
-
     /// <summary>Gets <see cref="Visibility.Visible"/> when the list is empty and no filter is typed.</summary>
     /// <param name="count">The number of listed requests.</param>
     /// <param name="filter">The filter text.</param>
