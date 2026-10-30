@@ -39,6 +39,10 @@
       <Color x:Key="YaapicAccentTextColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
       <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
+      <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0FFFFFFF"/>
+      <Color x:Key="YaapicOverlayHoverColor">#0FFFFFFF</Color>
+      <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#08FFFFFF"/>
+      <Color x:Key="YaapicOverlayPressedColor">#08FFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#1A1FC7D4"/>
       <Color x:Key="YaapicSelectionBackgroundColor">#1A1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF5FE0EA"/>
@@ -59,6 +63,12 @@
       <Color x:Key="YaapicDangerColor">#FFFF6B6B</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#21FF6B6B"/>
       <Color x:Key="YaapicDangerBackgroundColor">#21FF6B6B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBorderBrush" Color="#80FF6B6B"/>
+      <Color x:Key="YaapicDangerBorderColor">#80FF6B6B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundHoverBrush" Color="#33FF6B6B"/>
+      <Color x:Key="YaapicDangerBackgroundHoverColor">#33FF6B6B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundPressedBrush" Color="#47FF6B6B"/>
+      <Color x:Key="YaapicDangerBackgroundPressedColor">#47FF6B6B</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF959BFF"/>
       <Color x:Key="YaapicVariableResolvedColor">#FF959BFF</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF5FE0EA"/>
@@ -161,6 +171,10 @@
       <Color x:Key="YaapicAccentTextColor">#FF0A6B74</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
       <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
+      <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0D14181E"/>
+      <Color x:Key="YaapicOverlayHoverColor">#0D14181E</Color>
+      <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#0814181E"/>
+      <Color x:Key="YaapicOverlayPressedColor">#0814181E</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#FFE0FAFC"/>
       <Color x:Key="YaapicSelectionBackgroundColor">#FFE0FAFC</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF0A6B74"/>
@@ -181,6 +195,12 @@
       <Color x:Key="YaapicDangerColor">#FFC42B2B</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FFFCEAEA"/>
       <Color x:Key="YaapicDangerBackgroundColor">#FFFCEAEA</Color>
+      <SolidColorBrush x:Key="YaapicDangerBorderBrush" Color="#80C42B2B"/>
+      <Color x:Key="YaapicDangerBorderColor">#80C42B2B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundHoverBrush" Color="#FFF8DADA"/>
+      <Color x:Key="YaapicDangerBackgroundHoverColor">#FFF8DADA</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundPressedBrush" Color="#FFF3C9C9"/>
+      <Color x:Key="YaapicDangerBackgroundPressedColor">#FFF3C9C9</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF4A4FD0"/>
       <Color x:Key="YaapicVariableResolvedColor">#FF4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF0A6B74"/>

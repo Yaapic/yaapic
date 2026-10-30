@@ -1,6 +1,6 @@
 # M1-36: WinUI control styles: buttons and text inputs
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-35
 
@@ -75,13 +75,28 @@ M1), loading state inside buttons.
 
 ## Acceptance criteria
 
-- [ ] `Yaapic.Controls.WinUI.xaml` contains no `#` colour literal (search `Color="#` and `="#` in `Themes/`).
-- [ ] Snapshot tests green after regeneration; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Screenshots (M1-34 script) dark and light inspected: Send button Ion `#1FC7D4` with dark text `#04252A`, text
+- [x] `Yaapic.Controls.WinUI.xaml` contains no `#` colour literal (search `Color="#` and `="#` in `Themes/`).
+- [x] Snapshot tests green after regeneration; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Screenshots (M1-34 script) dark and light inspected: Send button Ion `#1FC7D4` with dark text `#04252A`, text
       boxes on the sunken surface with a `border.control` border, 32 px controls, keyboard focus ring visible on Tab
       (check by pressing Tab before capture if needed). Note deviations in the card.
 
 ## Suggested commit message
 
 `feat(winui): add Yaapic button and text input styles`
+
+## Implementation notes
+
+- **Deviation (accent keys):** the card assumed the check box, radio and accent button fills "already follow
+  `AccentFillColor*`". They do not: the stock theme dictionary resolves `AccentButtonBackground`,
+  `CheckBoxCheckBackgroundFillChecked`, `RadioButtonOuterEllipseChecked*` and friends to the system accent when it is
+  loaded, so overriding `AccentFillColor*` later has no effect (Send stayed `#4CC2FF`). The real keys were added as
+  `winuiAliases` of `color.accent.fill`, `fillHover`, `fillPressed`, `border` and `on`. Also added
+  `ButtonBorderBrushDisabled` on `color.border.subtle`.
+- The subtle and danger templates drop the stock `AnimatedIcon.State` setters (unused by Yaapic buttons); everything
+  else is the stock template with only the brushes changed.
+- Screenshots (AOT build, `-Send`): Send `#1FC7D4` with dark text, text boxes on `#121417`, 32 px controls. Keyboard
+  focus on the light theme draws a black/white ring on the tab strip, not yet the `focus.ring` colour (tab
+  styling is M1-37/M1-39). Remaining visible gaps: environment combo box and URL bar borders still look heavier than the
+  mockup, check box and radio use stock geometry, list/tab/dialog restyle pending (M1-37 onward).

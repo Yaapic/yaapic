@@ -3,65 +3,125 @@
     <ResourceDictionary x:Key="Default">
       <SolidColorBrush x:Key="YaapicSurfaceAppBrush" Color="#FF131518"/>
       <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FF131518"/>
+      <SolidColorBrush x:Key="FocusVisualSecondaryBrush" Color="#FF131518"/>
       <Color x:Key="YaapicSurfaceAppColor">#FF131518</Color>
       <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FF1A1D21"/>
       <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#FF1A1D21"/>
+      <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FF1A1D21"/>
       <Color x:Key="YaapicSurfaceBaseColor">#FF1A1D21</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FF16181C"/>
+      <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FF16181C"/>
+      <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#FF16181C"/>
       <Color x:Key="YaapicSurfaceSidebarColor">#FF16181C</Color>
       <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FF21252A"/>
       <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FF21252A"/>
       <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#FF21252A"/>
+      <SolidColorBrush x:Key="ButtonBackground" Color="#FF21252A"/>
       <Color x:Key="YaapicSurfaceRaisedColor">#FF21252A</Color>
       <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FF282C33"/>
+      <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FF282C33"/>
       <Color x:Key="YaapicSurfaceElevatedColor">#FF282C33</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FF121417"/>
       <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#FF121417"/>
+      <SolidColorBrush x:Key="TextControlBackground" Color="#FF121417"/>
+      <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FF121417"/>
+      <SolidColorBrush x:Key="ComboBoxBackground" Color="#FF121417"/>
       <Color x:Key="YaapicSurfaceSunkenColor">#FF121417</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FF24282E"/>
       <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#FF24282E"/>
       <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FF24282E"/>
+      <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#FF24282E"/>
       <Color x:Key="YaapicBorderSubtleColor">#FF24282E</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FF30353C"/>
       <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FF30353C"/>
       <SolidColorBrush x:Key="SurfaceStrokeColorDefaultBrush" Color="#FF30353C"/>
+      <SolidColorBrush x:Key="ButtonBorderBrush" Color="#FF30353C"/>
+      <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#FF30353C"/>
       <Color x:Key="YaapicBorderDefaultColor">#FF30353C</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF656C77"/>
       <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="TextControlBorderBrush" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="TextControlElevationBorderBrush" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#FF656C77"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="#FF656C77"/>
       <Color x:Key="YaapicBorderControlColor">#FF656C77</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="ButtonForeground" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="TextControlForeground" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FFECEEF1"/>
       <Color x:Key="YaapicTextPrimaryColor">#FFECEEF1</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFA3AAB4"/>
       <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FFA3AAB4"/>
+      <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FFA3AAB4"/>
       <Color x:Key="YaapicTextSecondaryColor">#FFA3AAB4</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF848C97"/>
       <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF848C97"/>
+      <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#FF848C97"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#FF848C97"/>
+      <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#FF848C97"/>
+      <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="#FF848C97"/>
       <Color x:Key="YaapicTextTertiaryColor">#FF848C97</Color>
       <SolidColorBrush x:Key="YaapicTextDisabledBrush" Color="#FF5A606A"/>
       <SolidColorBrush x:Key="TextFillColorDisabledBrush" Color="#FF5A606A"/>
+      <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="#FF5A606A"/>
+      <SolidColorBrush x:Key="TextControlForegroundDisabled" Color="#FF5A606A"/>
       <Color x:Key="YaapicTextDisabledColor">#FF5A606A</Color>
       <SolidColorBrush x:Key="YaapicAccentFillBrush" Color="#FF1FC7D4"/>
       <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="AccentButtonBackground" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStroke" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#FF1FC7D4"/>
       <Color x:Key="YaapicAccentFillColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
       <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="#FF5FE0EA"/>
       <Color x:Key="YaapicAccentFillHoverColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicAccentFillPressedBrush" Color="#FF18B3BF"/>
       <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="#FF18B3BF"/>
       <Color x:Key="YaapicAccentFillPressedColor">#FF18B3BF</Color>
       <SolidColorBrush x:Key="YaapicAccentBorderBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="AccentButtonBorderBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="AccentButtonBorderBrushPointerOver" Color="#FF1FC7D4"/>
       <Color x:Key="YaapicAccentBorderColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentTextBrush" Color="#FF5FE0EA"/>
       <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#FF5FE0EA"/>
       <Color x:Key="YaapicAccentTextColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
       <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="AccentButtonForeground" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#FF04252A"/>
       <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
+      <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0FFFFFFF"/>
+      <Color x:Key="YaapicOverlayHoverColor">#0FFFFFFF</Color>
+      <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#08FFFFFF"/>
+      <Color x:Key="YaapicOverlayPressedColor">#08FFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#1A1FC7D4"/>
       <Color x:Key="YaapicSelectionBackgroundColor">#1A1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF5FE0EA"/>
       <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrushFocused" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="FocusVisualPrimaryBrush" Color="#FF5FE0EA"/>
       <Color x:Key="YaapicFocusRingColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicInfoBrush" Color="#FF959BFF"/>
       <SolidColorBrush x:Key="SystemFillColorAttentionBrush" Color="#FF959BFF"/>
@@ -87,6 +147,12 @@
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#21FF6B6B"/>
       <SolidColorBrush x:Key="SystemFillColorCriticalBackgroundBrush" Color="#21FF6B6B"/>
       <Color x:Key="YaapicDangerBackgroundColor">#21FF6B6B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBorderBrush" Color="#80FF6B6B"/>
+      <Color x:Key="YaapicDangerBorderColor">#80FF6B6B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundHoverBrush" Color="#33FF6B6B"/>
+      <Color x:Key="YaapicDangerBackgroundHoverColor">#33FF6B6B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundPressedBrush" Color="#47FF6B6B"/>
+      <Color x:Key="YaapicDangerBackgroundPressedColor">#47FF6B6B</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF959BFF"/>
       <Color x:Key="YaapicVariableResolvedColor">#FF959BFF</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF5FE0EA"/>
@@ -154,65 +220,125 @@
     <ResourceDictionary x:Key="Light">
       <SolidColorBrush x:Key="YaapicSurfaceAppBrush" Color="#FFEEF0F3"/>
       <SolidColorBrush x:Key="SolidBackgroundFillColorBaseBrush" Color="#FFEEF0F3"/>
+      <SolidColorBrush x:Key="FocusVisualSecondaryBrush" Color="#FFEEF0F3"/>
       <Color x:Key="YaapicSurfaceAppColor">#FFEEF0F3</Color>
       <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FFFFFFFF"/>
       <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FFFFFFFF"/>
       <Color x:Key="YaapicSurfaceBaseColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FFF3F4F6"/>
+      <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFF3F4F6"/>
+      <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#FFF3F4F6"/>
       <Color x:Key="YaapicSurfaceSidebarColor">#FFF3F4F6</Color>
       <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FFF6F7F9"/>
       <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FFF6F7F9"/>
       <SolidColorBrush x:Key="CardBackgroundFillColorDefaultBrush" Color="#FFF6F7F9"/>
+      <SolidColorBrush x:Key="ButtonBackground" Color="#FFF6F7F9"/>
       <Color x:Key="YaapicSurfaceRaisedColor">#FFF6F7F9</Color>
       <SolidColorBrush x:Key="YaapicSurfaceElevatedBrush" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FFFFFFFF"/>
       <Color x:Key="YaapicSurfaceElevatedColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSunkenBrush" Color="#FFFBFBFC"/>
       <SolidColorBrush x:Key="ControlFillColorInputActiveBrush" Color="#FFFBFBFC"/>
+      <SolidColorBrush x:Key="TextControlBackground" Color="#FFFBFBFC"/>
+      <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="#FFFBFBFC"/>
+      <SolidColorBrush x:Key="ComboBoxBackground" Color="#FFFBFBFC"/>
       <Color x:Key="YaapicSurfaceSunkenColor">#FFFBFBFC</Color>
       <SolidColorBrush x:Key="YaapicBorderSubtleBrush" Color="#FFE7E9EE"/>
       <SolidColorBrush x:Key="DividerStrokeColorDefaultBrush" Color="#FFE7E9EE"/>
       <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FFE7E9EE"/>
+      <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#FFE7E9EE"/>
       <Color x:Key="YaapicBorderSubtleColor">#FFE7E9EE</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFD8DCE2"/>
       <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FFD8DCE2"/>
       <SolidColorBrush x:Key="SurfaceStrokeColorDefaultBrush" Color="#FFD8DCE2"/>
+      <SolidColorBrush x:Key="ButtonBorderBrush" Color="#FFD8DCE2"/>
+      <SolidColorBrush x:Key="ButtonBorderBrushPressed" Color="#FFD8DCE2"/>
       <Color x:Key="YaapicBorderDefaultColor">#FFD8DCE2</Color>
       <SolidColorBrush x:Key="YaapicBorderControlBrush" Color="#FF8A919C"/>
       <SolidColorBrush x:Key="ControlStrongStrokeColorDefaultBrush" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="ButtonBorderBrushPointerOver" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="TextControlBorderBrush" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="TextControlElevationBorderBrush" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrush" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeUnchecked" Color="#FF8A919C"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseStroke" Color="#FF8A919C"/>
       <Color x:Key="YaapicBorderControlColor">#FF8A919C</Color>
       <SolidColorBrush x:Key="YaapicTextPrimaryBrush" Color="#FF16191D"/>
       <SolidColorBrush x:Key="TextFillColorPrimaryBrush" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="ButtonForeground" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="TextControlForeground" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="TextControlForegroundFocused" Color="#FF16191D"/>
       <Color x:Key="YaapicTextPrimaryColor">#FF16191D</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FF4A515B"/>
       <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FF4A515B"/>
+      <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FF4A515B"/>
       <Color x:Key="YaapicTextSecondaryColor">#FF4A515B</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF5F6772"/>
       <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrushPointerOver" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="TextControlPlaceholderForeground" Color="#FF5F6772"/>
+      <SolidColorBrush x:Key="TextControlPlaceholderForegroundFocused" Color="#FF5F6772"/>
       <Color x:Key="YaapicTextTertiaryColor">#FF5F6772</Color>
       <SolidColorBrush x:Key="YaapicTextDisabledBrush" Color="#FFA0A7B1"/>
       <SolidColorBrush x:Key="TextFillColorDisabledBrush" Color="#FFA0A7B1"/>
+      <SolidColorBrush x:Key="ButtonForegroundDisabled" Color="#FFA0A7B1"/>
+      <SolidColorBrush x:Key="TextControlForegroundDisabled" Color="#FFA0A7B1"/>
       <Color x:Key="YaapicTextDisabledColor">#FFA0A7B1</Color>
       <SolidColorBrush x:Key="YaapicAccentFillBrush" Color="#FF1FC7D4"/>
       <SolidColorBrush x:Key="AccentFillColorDefaultBrush" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="AccentButtonBackground" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeChecked" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillChecked" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStroke" Color="#FF1FC7D4"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFill" Color="#FF1FC7D4"/>
       <Color x:Key="YaapicAccentFillColor">#FF1FC7D4</Color>
       <SolidColorBrush x:Key="YaapicAccentFillHoverBrush" Color="#FF5FE0EA"/>
       <SolidColorBrush x:Key="AccentFillColorSecondaryBrush" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="AccentButtonBackgroundPointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePointerOver" Color="#FF5FE0EA"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPointerOver" Color="#FF5FE0EA"/>
       <Color x:Key="YaapicAccentFillHoverColor">#FF5FE0EA</Color>
       <SolidColorBrush x:Key="YaapicAccentFillPressedBrush" Color="#FF18B3BF"/>
       <SolidColorBrush x:Key="AccentFillColorTertiaryBrush" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="AccentButtonBackgroundPressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundStrokeCheckedPressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="CheckBoxCheckBackgroundFillCheckedPressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedStrokePressed" Color="#FF18B3BF"/>
+      <SolidColorBrush x:Key="RadioButtonOuterEllipseCheckedFillPressed" Color="#FF18B3BF"/>
       <Color x:Key="YaapicAccentFillPressedColor">#FF18B3BF</Color>
       <SolidColorBrush x:Key="YaapicAccentBorderBrush" Color="#FF0A7C86"/>
+      <SolidColorBrush x:Key="AccentButtonBorderBrush" Color="#FF0A7C86"/>
+      <SolidColorBrush x:Key="AccentButtonBorderBrushPointerOver" Color="#FF0A7C86"/>
       <Color x:Key="YaapicAccentBorderColor">#FF0A7C86</Color>
       <SolidColorBrush x:Key="YaapicAccentTextBrush" Color="#FF0A6B74"/>
       <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush" Color="#FF0A6B74"/>
       <Color x:Key="YaapicAccentTextColor">#FF0A6B74</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF04252A"/>
       <SolidColorBrush x:Key="TextOnAccentFillColorPrimaryBrush" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="AccentButtonForeground" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="AccentButtonForegroundPointerOver" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="AccentButtonForegroundPressed" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="RadioButtonCheckGlyphFill" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundChecked" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPointerOver" Color="#FF04252A"/>
+      <SolidColorBrush x:Key="CheckBoxCheckGlyphForegroundCheckedPressed" Color="#FF04252A"/>
       <Color x:Key="YaapicAccentOnColor">#FF04252A</Color>
+      <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0D14181E"/>
+      <Color x:Key="YaapicOverlayHoverColor">#0D14181E</Color>
+      <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#0814181E"/>
+      <Color x:Key="YaapicOverlayPressedColor">#0814181E</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#FFE0FAFC"/>
       <Color x:Key="YaapicSelectionBackgroundColor">#FFE0FAFC</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FF0A6B74"/>
       <SolidColorBrush x:Key="FocusStrokeColorOuterBrush" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="TextControlBorderBrushFocused" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="ComboBoxBorderBrushFocused" Color="#FF0A6B74"/>
+      <SolidColorBrush x:Key="FocusVisualPrimaryBrush" Color="#FF0A6B74"/>
       <Color x:Key="YaapicFocusRingColor">#FF0A6B74</Color>
       <SolidColorBrush x:Key="YaapicInfoBrush" Color="#FF4A4FD0"/>
       <SolidColorBrush x:Key="SystemFillColorAttentionBrush" Color="#FF4A4FD0"/>
@@ -238,6 +364,12 @@
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FFFCEAEA"/>
       <SolidColorBrush x:Key="SystemFillColorCriticalBackgroundBrush" Color="#FFFCEAEA"/>
       <Color x:Key="YaapicDangerBackgroundColor">#FFFCEAEA</Color>
+      <SolidColorBrush x:Key="YaapicDangerBorderBrush" Color="#80C42B2B"/>
+      <Color x:Key="YaapicDangerBorderColor">#80C42B2B</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundHoverBrush" Color="#FFF8DADA"/>
+      <Color x:Key="YaapicDangerBackgroundHoverColor">#FFF8DADA</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundPressedBrush" Color="#FFF3C9C9"/>
+      <Color x:Key="YaapicDangerBackgroundPressedColor">#FFF3C9C9</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FF4A4FD0"/>
       <Color x:Key="YaapicVariableResolvedColor">#FF4A4FD0</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF0A6B74"/>
@@ -341,6 +473,10 @@
       <Color x:Key="YaapicAccentTextColor">#FF8AE9F0</Color>
       <SolidColorBrush x:Key="YaapicAccentOnBrush" Color="#FF000000"/>
       <Color x:Key="YaapicAccentOnColor">#FF000000</Color>
+      <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#00000000"/>
+      <Color x:Key="YaapicOverlayHoverColor">#00000000</Color>
+      <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#00000000"/>
+      <Color x:Key="YaapicOverlayPressedColor">#00000000</Color>
       <SolidColorBrush x:Key="YaapicSelectionBackgroundBrush" Color="#FF1AEBFF"/>
       <Color x:Key="YaapicSelectionBackgroundColor">#FF1AEBFF</Color>
       <SolidColorBrush x:Key="YaapicFocusRingBrush" Color="#FFFFFF00"/>
@@ -361,6 +497,12 @@
       <Color x:Key="YaapicDangerColor">#FFFF8080</Color>
       <SolidColorBrush x:Key="YaapicDangerBackgroundBrush" Color="#FF000000"/>
       <Color x:Key="YaapicDangerBackgroundColor">#FF000000</Color>
+      <SolidColorBrush x:Key="YaapicDangerBorderBrush" Color="#FFFF8080"/>
+      <Color x:Key="YaapicDangerBorderColor">#FFFF8080</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundHoverBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicDangerBackgroundHoverColor">#FF000000</Color>
+      <SolidColorBrush x:Key="YaapicDangerBackgroundPressedBrush" Color="#FF000000"/>
+      <Color x:Key="YaapicDangerBackgroundPressedColor">#FF000000</Color>
       <SolidColorBrush x:Key="YaapicVariableResolvedBrush" Color="#FFB3B8FF"/>
       <Color x:Key="YaapicVariableResolvedColor">#FFB3B8FF</Color>
       <SolidColorBrush x:Key="YaapicVariableSecretBrush" Color="#FF8AE9F0"/>

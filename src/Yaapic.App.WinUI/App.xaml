@@ -8,6 +8,7 @@
         <ResourceDictionary Source="Themes/Yaapic.Colors.WinUI.xaml"/>
         <ResourceDictionary Source="Themes/Yaapic.Icons.WinUI.xaml"/>
         <ResourceDictionary Source="Themes/Yaapic.Typography.WinUI.xaml"/>
+        <ResourceDictionary Source="Themes/Yaapic.Controls.WinUI.xaml"/>
       </ResourceDictionary.MergedDictionaries>
     </ResourceDictionary>
   </Application.Resources>

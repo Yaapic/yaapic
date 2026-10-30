@@ -28,10 +28,11 @@
           <TextBox Grid.Column="2" PlaceholderText="Value"
                    FontFamily="{StaticResource YaapicMonoFont}"
                    Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-          <Button Grid.Column="3" Content="&#xE711;" FontFamily="Segoe Fluent Icons"
-                  Padding="4" Tag="{x:Bind}" Click="OnRemove"
+          <Button Grid.Column="3" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnRemove"
                   AutomationProperties.Name="Remove row"
-                  Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}"/>
+                  Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
+            <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="16" Height="16"/>
+          </Button>
         </Grid>
       </DataTemplate>
     </ListView.ItemTemplate>

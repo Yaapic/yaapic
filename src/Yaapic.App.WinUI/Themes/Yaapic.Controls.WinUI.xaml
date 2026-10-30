@@ -1,0 +1,182 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Styles, templates and metrics only: every colour comes from the generated Yaapic.Colors dictionary. -->
+  <Thickness x:Key="ButtonPadding">14,0,14,0</Thickness>
+  <x:Double x:Key="TextControlThemeMinHeight">32</x:Double>
+  <Thickness x:Key="TextControlBorderThemeThicknessFocused">1,1,1,2</Thickness>
+  <x:String x:Key="YaapicGlyphClose">M6 6l12 12M18 6 6 18</x:String>
+
+  <!-- Secondary: the implicit button. -->
+  <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+    <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
+  </Style>
+
+  <!-- Primary: one per view. -->
+  <Style x:Key="AccentButtonStyle" TargetType="Button" BasedOn="{StaticResource AccentButtonStyle}">
+    <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
+  </Style>
+
+  <Style x:Key="YaapicSubtleButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+    <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderBrush" Value="Transparent"/>
+    <Setter Property="Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <ContentPresenter x:Name="ContentPresenter"
+                            Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}"
+                            BackgroundSizing="{TemplateBinding BackgroundSizing}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}"
+                            CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            AutomationProperties.AccessibilityView="Raw">
+            <ContentPresenter.BackgroundTransition>
+              <BrushTransition Duration="0:0:0.083"/>
+            </ContentPresenter.BackgroundTransition>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+            <VisualState x:Name="PointerOver">
+              <Storyboard>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicOverlayHoverBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+              </Storyboard>
+            </VisualState>
+            <VisualState x:Name="Pressed">
+              <Storyboard>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicOverlayPressedBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+              </Storyboard>
+            </VisualState>
+            <VisualState x:Name="Disabled">
+              <Storyboard>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicTextDisabledBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+              </Storyboard>
+            </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </ContentPresenter>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style x:Key="YaapicDangerButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+    <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
+    <Setter Property="Background" Value="{ThemeResource YaapicDangerBackgroundBrush}"/>
+    <Setter Property="BorderBrush" Value="{ThemeResource YaapicDangerBorderBrush}"/>
+    <Setter Property="Foreground" Value="{ThemeResource YaapicDangerBrush}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <ContentPresenter x:Name="ContentPresenter"
+                            Background="{TemplateBinding Background}" Foreground="{TemplateBinding Foreground}"
+                            BackgroundSizing="{TemplateBinding BackgroundSizing}" BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}" Content="{TemplateBinding Content}"
+                            ContentTemplate="{TemplateBinding ContentTemplate}" ContentTransitions="{TemplateBinding ContentTransitions}"
+                            CornerRadius="{TemplateBinding CornerRadius}" Padding="{TemplateBinding Padding}"
+                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                            AutomationProperties.AccessibilityView="Raw">
+            <ContentPresenter.BackgroundTransition>
+              <BrushTransition Duration="0:0:0.083"/>
+            </ContentPresenter.BackgroundTransition>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+            <VisualState x:Name="PointerOver">
+              <Storyboard>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicDangerBackgroundHoverBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicDangerBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicDangerBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+              </Storyboard>
+            </VisualState>
+            <VisualState x:Name="Pressed">
+              <Storyboard>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicDangerBackgroundPressedBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicDangerBorderBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicDangerBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+              </Storyboard>
+            </VisualState>
+            <VisualState x:Name="Disabled">
+              <Storyboard>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Background">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="Transparent"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="BorderBrush">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource ButtonBorderBrushDisabled}"/>
+                </ObjectAnimationUsingKeyFrames>
+                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
+                  <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource YaapicTextDisabledBrush}"/>
+                </ObjectAnimationUsingKeyFrames>
+              </Storyboard>
+            </VisualState>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </ContentPresenter>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Icon button: content is a 16 px PathIcon whose Data is a Yi* geometry. -->
+  <Style x:Key="YaapicIconButtonStyle" TargetType="Button" BasedOn="{StaticResource YaapicSubtleButtonStyle}">
+    <Setter Property="Width" Value="28"/>
+    <Setter Property="Height" Value="28"/>
+    <Setter Property="MinHeight" Value="28"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="Foreground" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
+  </Style>
+
+  <Style TargetType="ComboBox" BasedOn="{StaticResource DefaultComboBoxStyle}">
+    <Setter Property="MinHeight" Value="32"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
+  </Style>
+</ResourceDictionary>
