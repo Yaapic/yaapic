@@ -1,0 +1,39 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.KeyValueEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:ed="using:Yaapic.ViewModels.Editing">
+  <ListView x:Name="RowList" SelectionMode="None">
+    <ListView.ItemContainerStyle>
+      <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="MinHeight" Value="{StaticResource YaapicRowHeight}"/>
+      </Style>
+    </ListView.ItemContainerStyle>
+    <ListView.ItemTemplate>
+      <DataTemplate x:DataType="ed:KeyValueRowViewModel">
+        <Grid ColumnSpacing="8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="32"/>
+          </Grid.ColumnDefinitions>
+          <CheckBox MinWidth="0" VerticalAlignment="Center"
+                    AutomationProperties.Name="Enabled"
+                    IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
+          <TextBox Grid.Column="1" PlaceholderText="Key"
+                   FontFamily="{StaticResource YaapicMonoFont}"
+                   Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Grid.Column="2" PlaceholderText="Value"
+                   FontFamily="{StaticResource YaapicMonoFont}"
+                   Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <Button Grid.Column="3" Content="&#xE711;" FontFamily="Segoe Fluent Icons"
+                  Padding="4" Tag="{x:Bind}" Click="OnRemove"
+                  AutomationProperties.Name="Remove row"
+                  Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}"/>
+        </Grid>
+      </DataTemplate>
+    </ListView.ItemTemplate>
+  </ListView>
+</UserControl>

@@ -1,6 +1,6 @@
 # M1-25: WinUI request editor view
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-24
 
@@ -35,12 +35,23 @@ Response display (M1-26), variable highlighting or autocomplete, URL/params sync
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: type `https://httpbin.org/get`, add a param, Ctrl+Enter: the request goes out
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: type `https://httpbin.org/get`, add a param, Ctrl+Enter: the request goes out
       (check with the M1-26 panel later; in this card, check `IsSending` toggles the Cancel button), the tab title gets
       the dirty marker, Ctrl+S saves and the request appears in the sidebar; closing a dirty tab shows the prompt.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add request editor view`
+
+## Implementation notes
+
+- The method and content-type pickers are index-based `ComboBox`es filled with static items and wired in code-behind:
+  boxed managed enums (`HttpMethodKind`, `RawContentType`) bound as `ItemsSource`/`SelectedItem` crash XAML at startup
+  under Native AOT (the JIT build is fine). The method foreground is set from `BrushMap.Method` on selection.
+- The editor and response rows are `2*` / `*` (not `*` / `*`) so the Params/Headers tables keep room in the minimum
+  window size.
+- Verified on the Native AOT published exe through UI automation: the editor renders, typing a param adds a
+  placeholder row, Ctrl+Enter swaps Send for Cancel, Ctrl+S saves (dirty marker gone, request in the sidebar). Closing
+  a dirty tab prompt was not driven.

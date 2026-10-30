@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:p="using:Yaapic.App.WinUI.Presentation"
         xmlns:env="using:Yaapic.ViewModels.Environments"
+        xmlns:v="using:Yaapic.App.WinUI.Views"
         xmlns:req="using:Yaapic.ViewModels.Requests"
         Title="Yaapic">
   <Window.SystemBackdrop>
@@ -98,16 +99,15 @@
         </ListView>
       </Grid>
       <Grid Grid.Column="1">
-        <TabView IsAddTabButtonVisible="True"
+        <TabView IsAddTabButtonVisible="True" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
                  TabItemsSource="{x:Bind ViewModel.Tabs.Tabs, Mode=OneWay}"
                  SelectedItem="{x:Bind ViewModel.Tabs.ActiveTab, Mode=TwoWay}"
                  AddTabButtonClick="OnAddTab"
                  TabCloseRequested="OnTabCloseRequested">
           <TabView.TabItemTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
-                <TextBlock Text="{x:Bind Url, Mode=OneWay}" Margin="16"
-                           Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+              <TabViewItem Header="{x:Bind Title, Mode=OneWay}" VerticalContentAlignment="Stretch">
+                <v:RequestEditorView ViewModel="{x:Bind}"/>
               </TabViewItem>
             </DataTemplate>
           </TabView.TabItemTemplate>
