@@ -30,6 +30,14 @@
     <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
   </Style>
 
+  <!-- Primary dialog button: a code lookup of AccentButtonStyle returns the stock style, so the dialogs use this distinct key. -->
+  <Style x:Key="YaapicPrimaryButtonStyle" TargetType="Button" BasedOn="{StaticResource AccentButtonStyle}">
+    <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
+  </Style>
+
   <Style x:Key="YaapicSubtleButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
     <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
     <Setter Property="FontWeight" Value="SemiBold"/>

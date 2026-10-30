@@ -28,7 +28,7 @@ public sealed class WinUIDialogService : IDialogService
             SecondaryButtonText = "Don't save",
             CloseButtonText = "Cancel",
             DefaultButton = ContentDialogButton.Primary,
-            PrimaryButtonStyle = (Style)Application.Current.Resources["AccentButtonStyle"],
+            PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicPrimaryButtonStyle"],
             SecondaryButtonStyle = DialogButtonStyle,
             CloseButtonStyle = DialogButtonStyle,
         });
