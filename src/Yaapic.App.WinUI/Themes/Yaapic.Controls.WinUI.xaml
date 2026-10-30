@@ -5,6 +5,8 @@
   <x:Double x:Key="TextControlThemeMinHeight">32</x:Double>
   <Thickness x:Key="TextControlBorderThemeThicknessFocused">1,1,1,2</Thickness>
   <x:String x:Key="YaapicGlyphClose">M6 6l12 12M18 6 6 18</x:String>
+  <x:String x:Key="YaapicGlyphAdd">M12 5v14M5 12h14</x:String>
+  <x:String x:Key="YaapicGlyphChevronDown">M6 9l6 6 6-6</x:String>
 
   <!-- Secondary: the implicit button. -->
   <Style TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
@@ -175,6 +177,23 @@
     <Setter Property="Foreground" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
   </Style>
 
+  <!-- Stroke icon: the Yi* and glyph geometries are 24 px stroke paths (PathIcon would fill them); wrap in a Viewbox > Canvas 24. -->
+  <Style x:Key="YaapicStrokeIconStyle" TargetType="Path">
+    <Setter Property="StrokeThickness" Value="2"/>
+    <Setter Property="StrokeStartLineCap" Value="Round"/>
+    <Setter Property="StrokeEndLineCap" Value="Round"/>
+    <Setter Property="StrokeLineJoin" Value="Round"/>
+    <Setter Property="Stroke" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
+  </Style>
+
+  <!-- Navigation rail button: 36 px, radius 6. -->
+  <Style x:Key="YaapicRailButtonStyle" TargetType="Button" BasedOn="{StaticResource YaapicIconButtonStyle}">
+    <Setter Property="Width" Value="36"/>
+    <Setter Property="Height" Value="36"/>
+    <Setter Property="MinHeight" Value="36"/>
+    <Setter Property="CornerRadius" Value="6"/>
+  </Style>
+
   <Style TargetType="ComboBox" BasedOn="{StaticResource DefaultComboBoxStyle}">
     <Setter Property="MinHeight" Value="32"/>
     <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
@@ -193,7 +212,7 @@
   <SolidColorBrush x:Key="SelectorBarItemBackgroundPressed" Color="Transparent"/>
   <SolidColorBrush x:Key="SelectorBarItemBackgroundSelected" Color="Transparent"/>
 
-  <!-- List row: 26 px, 2 px accent bar at the left edge when selected (the stock indicator is a 16 px pill). -->
+  <!-- List row: 26 px; the stock 16 px selection pill is the indicator (wrapping the presenter in a Grid to draw a full-height bar crashes XAML at load). -->
   <Style x:Key="YaapicListRowStyle" TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
     <Setter Property="MinHeight" Value="26"/>
     <Setter Property="Padding" Value="8,0,10,0"/>
@@ -201,39 +220,7 @@
     <Setter Property="Template">
       <Setter.Value>
         <ControlTemplate TargetType="ListViewItem">
-          <Grid>
-            <ListViewItemPresenter x:Name="Root" ContentTransitions="{TemplateBinding ContentTransitions}"
-                                   Control.IsTemplateFocusTarget="True"
-                                   FocusVisualMargin="{TemplateBinding FocusVisualMargin}"
-                                   FocusVisualPrimaryBrush="{TemplateBinding FocusVisualPrimaryBrush}"
-                                   FocusVisualPrimaryThickness="{TemplateBinding FocusVisualPrimaryThickness}"
-                                   FocusVisualSecondaryBrush="{TemplateBinding FocusVisualSecondaryBrush}"
-                                   FocusVisualSecondaryThickness="{TemplateBinding FocusVisualSecondaryThickness}"
-                                   SelectionCheckMarkVisualEnabled="False" SelectionIndicatorVisualEnabled="False"
-                                   PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}"
-                                   PressedBackground="{ThemeResource ListViewItemBackgroundPressed}"
-                                   SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}"
-                                   SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}"
-                                   SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}"
-                                   PointerOverForeground="{ThemeResource ListViewItemForegroundPointerOver}"
-                                   SelectedForeground="{ThemeResource ListViewItemForegroundSelected}"
-                                   DisabledOpacity="{ThemeResource ListViewItemDisabledThemeOpacity}"
-                                   HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                   VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                   ContentMargin="{TemplateBinding Padding}" CornerRadius="0"/>
-            <Rectangle x:Name="SelectionBar" Width="2" HorizontalAlignment="Left" IsHitTestVisible="False" Opacity="0"
-                       Fill="{ThemeResource ListViewItemSelectionIndicatorBrush}"/>
-            <VisualStateManager.VisualStateGroups>
-              <VisualStateGroup x:Name="CommonStates">
-                <VisualState x:Name="Normal"/>
-                <VisualState x:Name="PointerOver"/>
-                <VisualState x:Name="Pressed"/>
-                <VisualState x:Name="Selected"><VisualState.Setters><Setter Target="SelectionBar.Opacity" Value="1"/></VisualState.Setters></VisualState>
-                <VisualState x:Name="PointerOverSelected"><VisualState.Setters><Setter Target="SelectionBar.Opacity" Value="1"/></VisualState.Setters></VisualState>
-                <VisualState x:Name="PressedSelected"><VisualState.Setters><Setter Target="SelectionBar.Opacity" Value="1"/></VisualState.Setters></VisualState>
-              </VisualStateGroup>
-            </VisualStateManager.VisualStateGroups>
-          </Grid>
+          <ListViewItemPresenter x:Name="Root" ContentTransitions="{TemplateBinding ContentTransitions}" Control.IsTemplateFocusTarget="True" FocusVisualMargin="{TemplateBinding FocusVisualMargin}" FocusVisualPrimaryBrush="{TemplateBinding FocusVisualPrimaryBrush}" FocusVisualPrimaryThickness="{TemplateBinding FocusVisualPrimaryThickness}" FocusVisualSecondaryBrush="{TemplateBinding FocusVisualSecondaryBrush}" FocusVisualSecondaryThickness="{TemplateBinding FocusVisualSecondaryThickness}" PointerOverBackground="{ThemeResource ListViewItemBackgroundPointerOver}" PressedBackground="{ThemeResource ListViewItemBackgroundPressed}" SelectedBackground="{ThemeResource ListViewItemBackgroundSelected}" SelectedPointerOverBackground="{ThemeResource ListViewItemBackgroundSelectedPointerOver}" SelectedPressedBackground="{ThemeResource ListViewItemBackgroundSelectedPressed}" SelectionCheckMarkVisualEnabled="False" SelectionIndicatorVisualEnabled="True" ContentMargin="{TemplateBinding Padding}" HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"/>
         </ControlTemplate>
       </Setter.Value>
     </Setter>

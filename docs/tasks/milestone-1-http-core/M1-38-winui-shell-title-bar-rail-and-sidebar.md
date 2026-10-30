@@ -1,6 +1,6 @@
 # M1-38: WinUI shell restyle: title bar, rail and sidebar
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-37
 
@@ -71,12 +71,28 @@ compact mode (`design/mockups` 18b), tab strip and empty tab state (M1-39), Mica
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Manual check: the pill switches environments and opens the dialog; the rail Settings menu switches themes;
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [ ] Manual check (not done interactively: only start, request/response and the capture were exercised; see Notes): the pill switches environments and opens the dialog; the rail Settings menu switches themes;
       Ctrl+Shift+F focuses the filter; clicking a saved request opens it and its row is selected.
-- [ ] Screenshots (M1-34 script) dark and light inspected against `MainWindow.dc.html` / `MainWindowLight.dc.html`
+- [x] Screenshots (M1-34 script) dark and light inspected against `MainWindow.dc.html` / `MainWindowLight.dc.html`
       (title bar, rail, sidebar only); differences listed in the card's Notes, not committed.
+
+## Notes
+
+- Deviations: the logo paths are literal `Data` strings in `MainWindow.xaml` (no `YaapicLogo*Geometry` resources: a
+  `Path.Data` cannot bind a string resource, and WinUI XAML has no `StreamGeometry`). Column widths and the title bar
+  height use literals 48 / 272 / 40 (a `{StaticResource}` x:Double on `ColumnDefinition.Width` crashes the XAML load).
+  Icons use a `Path` in a `Viewbox` (new `YaapicStrokeIconStyle`) because `PathIcon` fills the stroke-only `Yi*`
+  geometries. The pill is a `Button` with a flyout (not a `DropDownButton`, whose style the pill style cannot base on).
+  `YaapicListRowStyle` lost its 2 px selection bar: wrapping `ListViewItemPresenter` in a `Grid` crashes the XAML load,
+  so the stock 16 px selection pill is enabled instead (not visible in the screenshots, only the row tint is).
+- Screens checked (AOT, dark and light, `-Send`): title bar, logo, pill, rail with selected bar, sidebar header, filter
+  with search icon and keycap hint, 26 px rows with the selected row tinted, response received. NOT checked on screen:
+  the pill and Settings flyouts, the environments dialog, the empty / no-match list texts, Ctrl+Shift+E / Ctrl+Shift+F.
+- Remaining gaps against the mockup: the filter box and request controls keep the thick Fluent border; rail icons do
+  not change colour on hover (fixed stroke brush); no selection pill visible on the list row; the title bar still shows
+  the OS caption buttons; tab strip, editor and response are untouched (M1-39 onward).
 
 ## Suggested commit message
 

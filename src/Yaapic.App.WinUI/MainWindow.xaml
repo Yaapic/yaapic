@@ -2,7 +2,6 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:p="using:Yaapic.App.WinUI.Presentation"
-        xmlns:env="using:Yaapic.ViewModels.Environments"
         xmlns:v="using:Yaapic.App.WinUI.Views"
         xmlns:req="using:Yaapic.ViewModels.Requests"
         Title="Yaapic">
@@ -14,46 +13,52 @@
       <KeyboardAccelerator Key="T" Modifiers="Control" Invoked="OnNewTab"/>
       <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="OnCloseTab"/>
       <KeyboardAccelerator Key="S" Modifiers="Control" Invoked="OnSaveTab"/>
+      <KeyboardAccelerator Key="E" Modifiers="Control,Shift" Invoked="OnEnvironmentsShortcut"/>
+      <KeyboardAccelerator Key="F" Modifiers="Control,Shift" Invoked="OnFilterShortcut"/>
     </Grid.KeyboardAccelerators>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
-    <Grid x:Name="TitleBar" Height="40" Background="Transparent">
+    <Grid x:Name="TitleBar" Height="40"
+          Background="{ThemeResource YaapicSurfaceAppBrush}"
+          BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
       <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
-        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="140"/>
       </Grid.ColumnDefinitions>
-      <TextBlock Text="Yaapic" VerticalAlignment="Center" Margin="16,0,0,0"
-                 Style="{StaticResource YaapicBodyStrongTextStyle}"/>
-      <ComboBox Grid.Column="1" Width="200" VerticalAlignment="Center" Margin="0,0,8,0"
-                PlaceholderText="No environment"
-                ItemsSource="{x:Bind ViewModel.Environments.Environments, Mode=OneWay}"
-                SelectedItem="{x:Bind ViewModel.Environments.ActiveEnvironment, Mode=TwoWay}">
-        <ComboBox.ItemTemplate>
-          <DataTemplate x:DataType="env:EnvironmentItemViewModel">
-            <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
-          </DataTemplate>
-        </ComboBox.ItemTemplate>
-      </ComboBox>
-      <Button Grid.Column="2" Style="{StaticResource YaapicIconButtonStyle}" VerticalAlignment="Center"
-              Margin="0,0,8,0" AutomationProperties.Name="Manage environments"
-              ToolTipService.ToolTip="Manage environments" Click="OnManageEnvironments">
-        <PathIcon Data="{StaticResource YiEnvironment}" Width="16" Height="16"/>
+      <StackPanel Orientation="Horizontal" Spacing="10" Margin="12,0,0,0" VerticalAlignment="Center">
+        <Viewbox Width="18" Height="18">
+          <Canvas Width="24" Height="24">
+            <Path Data="M5.5 4.5l6.3 8.2" StrokeThickness="2.6" StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round" StrokeLineJoin="Round" Stroke="{ThemeResource YaapicTextPrimaryBrush}"/>
+            <Path Data="M18.5 4.5l-7.4 12.8a2.6 2.6 0 0 1-2.3 1.3H5.2M7.6 16.1l-2.5 2.5 2.5 2.5" StrokeThickness="2.6" StrokeStartLineCap="Round"
+                  StrokeEndLineCap="Round" StrokeLineJoin="Round" Stroke="{ThemeResource YaapicAccentTextBrush}"/>
+          </Canvas>
+        </Viewbox>
+        <TextBlock Text="Yaapic" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+      </StackPanel>
+      <Button x:Name="EnvironmentPill" Grid.Column="2" Style="{StaticResource YaapicPillButtonStyle}"
+              VerticalAlignment="Center" Margin="0,0,8,0"
+              AutomationProperties.Name="{x:Bind p:VisibilityMap.EnvironmentLabel(ViewModel.Environments.ActiveEnvironment.Name), Mode=OneWay}">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Grid Width="8" Height="8" VerticalAlignment="Center">
+            <Ellipse Fill="{ThemeResource YaapicSuccessBrush}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.Environments.ActiveEnvironment), Mode=OneWay}"/>
+            <Ellipse Fill="{ThemeResource YaapicTextTertiaryBrush}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Environments.ActiveEnvironment), Mode=OneWay}"/>
+          </Grid>
+          <TextBlock Text="{x:Bind p:VisibilityMap.EnvironmentName(ViewModel.Environments.ActiveEnvironment.Name), Mode=OneWay}"
+                     VerticalAlignment="Center" Style="{StaticResource YaapicBodyTextStyle}"/>
+          <Viewbox Width="12" Height="12"><Canvas Width="24" Height="24"><Path Data="{StaticResource YaapicGlyphChevronDown}" Style="{StaticResource YaapicStrokeIconStyle}" StrokeThickness="2.6" Stroke="{ThemeResource YaapicTextTertiaryBrush}"/></Canvas></Viewbox>
+        </StackPanel>
+        <Button.Flyout>
+          <MenuFlyout x:Name="EnvironmentMenu" Opening="OnEnvironmentMenuOpening"/>
+        </Button.Flyout>
       </Button>
-      <DropDownButton Grid.Column="3" Content="Theme" VerticalAlignment="Center">
-        <DropDownButton.Flyout>
-          <MenuFlyout>
-            <MenuFlyoutItem Text="Dark" Click="OnThemeDark"/>
-            <MenuFlyoutItem Text="Light" Click="OnThemeLight"/>
-            <MenuFlyoutItem Text="System" Click="OnThemeSystem"/>
-          </MenuFlyout>
-        </DropDownButton.Flyout>
-      </DropDownButton>
     </Grid>
     <StackPanel Grid.Row="1">
       <InfoBar Severity="Error" IsClosable="False"
@@ -65,27 +70,86 @@
     </StackPanel>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="260"/>
+        <ColumnDefinition Width="48"/>
+        <ColumnDefinition Width="272"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
-      <Grid Background="{ThemeResource YaapicSurfaceSidebarBrush}" Padding="8" RowSpacing="8">
+      <Border Background="{ThemeResource YaapicSurfaceAppBrush}" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}"
+              BorderThickness="0,0,1,0" Padding="0,8">
+        <Grid>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+          <StackPanel Spacing="4">
+            <Grid>
+              <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
+                         VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"/>
+              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicSelectionBackgroundBrush}">
+                <Button Style="{StaticResource YaapicRailButtonStyle}" AutomationProperties.Name="Requests"
+                        ToolTipService.ToolTip="Requests" Foreground="{ThemeResource YaapicAccentTextBrush}">
+                  <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiCollection}" Style="{StaticResource YaapicStrokeIconStyle}" Stroke="{ThemeResource YaapicAccentTextBrush}"/></Canvas></Viewbox>
+                </Button>
+              </Border>
+            </Grid>
+            <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                    AutomationProperties.Name="Environments" ToolTipService.ToolTip="Environments (Ctrl+Shift+E)"
+                    Click="OnManageEnvironments">
+              <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiEnvironment}" Style="{StaticResource YaapicStrokeIconStyle}"/></Canvas></Viewbox>
+            </Button>
+          </StackPanel>
+          <Button Grid.Row="2" Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                  AutomationProperties.Name="Settings" ToolTipService.ToolTip="Settings">
+            <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiSettings}" Style="{StaticResource YaapicStrokeIconStyle}"/></Canvas></Viewbox>
+            <Button.Flyout>
+              <MenuFlyout>
+                <MenuFlyoutItem Text="Dark theme" Click="OnThemeDark"/>
+                <MenuFlyoutItem Text="Light theme" Click="OnThemeLight"/>
+                <MenuFlyoutItem Text="System theme" Click="OnThemeSystem"/>
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
+        </Grid>
+      </Border>
+      <Grid Grid.Column="1" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
+            BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,1,0">
         <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="40"/>
           <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Button Content="New" HorizontalAlignment="Stretch"
-                Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}"/>
-        <TextBox Grid.Row="1" PlaceholderText="Filter requests"
-                 Text="{x:Bind ViewModel.Requests.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <ListView Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None"
+        <Grid Padding="14,0,8,0">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <TextBlock Text="Requests" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+          <Button Grid.Column="1" Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="New request"
+                  ToolTipService.ToolTip="New request (Ctrl+T)"
+                  Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}">
+            <Viewbox Width="16" Height="16"><Canvas Width="24" Height="24"><Path Data="{StaticResource YaapicGlyphAdd}" Style="{StaticResource YaapicStrokeIconStyle}"/></Canvas></Viewbox>
+          </Button>
+        </Grid>
+        <Grid Grid.Row="1" Padding="10,0,10,8">
+          <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,3,84,3" PlaceholderText="Filter"
+                   AutomationProperties.Name="Filter requests"
+                   Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+                   Text="{x:Bind ViewModel.Requests.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <Viewbox Width="14" Height="14" HorizontalAlignment="Left" Margin="8,0,0,0" IsHitTestVisible="False"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiSearch}" Style="{StaticResource YaapicStrokeIconStyle}" StrokeThickness="2.2" Stroke="{ThemeResource YaapicTextTertiaryBrush}"/></Canvas></Viewbox>
+          <TextBlock Text="Ctrl+Shift+F" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,8,0"
+                     IsHitTestVisible="False" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                     Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+        </Grid>
+        <ListView x:Name="RequestList" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="Single" ItemContainerStyle="{StaticResource YaapicListRowStyle}"
+                 
                   ItemsSource="{x:Bind ViewModel.Requests.Items, Mode=OneWay}"
                   ItemClick="OnRequestClick">
           <ListView.ItemTemplate>
             <DataTemplate x:DataType="req:RequestListItem">
-              <Grid ColumnSpacing="8">
+              <Grid ColumnSpacing="6">
                 <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="44"/>
+                  <ColumnDefinition Width="34"/>
                   <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <Grid.ContextFlyout>
@@ -103,8 +167,21 @@
             </DataTemplate>
           </ListView.ItemTemplate>
         </ListView>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="16,24,16,0" Spacing="4"
+                    IsHitTestVisible="False"
+                    Visibility="{x:Bind p:VisibilityMap.WhenNoSavedRequests(ViewModel.Requests.Items.Count, ViewModel.Requests.FilterText), Mode=OneWay}">
+          <TextBlock Text="No saved requests yet." HorizontalAlignment="Center"
+                     Style="{StaticResource YaapicBodySmallTextStyle}"/>
+          <TextBlock Text="Press Ctrl+S in a tab to save it here." HorizontalAlignment="Center" TextWrapping="Wrap"
+                     Style="{StaticResource YaapicBodySmallTextStyle}"
+                     Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+        </StackPanel>
+        <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="16,24,16,0"
+                   TextWrapping="Wrap" IsHitTestVisible="False" Style="{StaticResource YaapicBodySmallTextStyle}"
+                   Text="{x:Bind p:VisibilityMap.NoMatchText(ViewModel.Requests.FilterText), Mode=OneWay}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenNoMatch(ViewModel.Requests.Items.Count, ViewModel.Requests.FilterText), Mode=OneWay}"/>
       </Grid>
-      <Grid Grid.Column="1">
+      <Grid Grid.Column="2">
         <TabView IsAddTabButtonVisible="True" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
                  TabItemsSource="{x:Bind ViewModel.Tabs.Tabs, Mode=OneWay}"
                  SelectedItem="{x:Bind ViewModel.Tabs.ActiveTab, Mode=TwoWay}"
