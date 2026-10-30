@@ -1,6 +1,6 @@
 # M1-18: Response panel ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-09, M1-16
 
@@ -29,9 +29,9 @@ Copy/save body, search, timeline, cookies tab, code editor (plain text in M1).
 
 ## Acceptance criteria
 
-- [ ] Tests: status text and category for 101/204/302/404/503; duration 5 ms / 999.6 ms / 1234 ms; size 0 B / 1023 B /
+- [x] Tests: status text and category for 101/204/302/404/503; duration 5 ms / 999.6 ms / 1234 ms; size 0 B / 1023 B /
       1536 B / 3 MB; Pretty vs Raw switch reformats JSON; binary body; failure state; unresolved warning text; `Clear`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
