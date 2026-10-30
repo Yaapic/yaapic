@@ -26,6 +26,8 @@ public sealed partial class MainWindow : Window
         // Mica is applied to the title bar only: the content grid paints an opaque surface.
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(TitleBar);
+        // Tall caption buttons (48 px) match the 48 px title bar; the standard 32 px ones look undersized.
+        AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
         AppWindow.Resize(new Windows.Graphics.SizeInt32(MinWidth, MinHeight));
         if (AppWindow.Presenter is OverlappedPresenter presenter)
         {

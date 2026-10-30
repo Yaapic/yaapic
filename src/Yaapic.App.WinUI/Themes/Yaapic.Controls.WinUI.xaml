@@ -22,6 +22,14 @@
     <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
   </Style>
 
+  <!-- Dialog buttons: centred at the control height like the accent / danger ones (the implicit style stretches them to the button row). -->
+  <Style x:Key="YaapicDialogButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
+    <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+    <Setter Property="FontWeight" Value="SemiBold"/>
+    <Setter Property="CornerRadius" Value="{StaticResource YaapicRadiusControl}"/>
+  </Style>
+
   <Style x:Key="YaapicSubtleButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
     <Setter Property="MinHeight" Value="{StaticResource YaapicControlHeight}"/>
     <Setter Property="FontWeight" Value="SemiBold"/>

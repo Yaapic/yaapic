@@ -29,6 +29,8 @@ public sealed class WinUIDialogService : IDialogService
             CloseButtonText = "Cancel",
             DefaultButton = ContentDialogButton.Primary,
             PrimaryButtonStyle = (Style)Application.Current.Resources["AccentButtonStyle"],
+            SecondaryButtonStyle = DialogButtonStyle,
+            CloseButtonStyle = DialogButtonStyle,
         });
         return result switch
         {
@@ -47,8 +49,11 @@ public sealed class WinUIDialogService : IDialogService
             PrimaryButtonText = "Delete",
             PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicDangerButtonStyle"],
             CloseButtonText = "Cancel",
+            CloseButtonStyle = DialogButtonStyle,
             DefaultButton = ContentDialogButton.Close,
         }) == ContentDialogResult.Primary;
+
+    private static Style DialogButtonStyle => (Style)Application.Current.Resources["YaapicDialogButtonStyle"];
 
     private static TextBlock Body(string text) => new()
     {

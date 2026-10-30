@@ -9,7 +9,7 @@
   <Window.SystemBackdrop>
     <MicaBackdrop/>
   </Window.SystemBackdrop>
-  <Grid x:Name="Root" Background="{ThemeResource YaapicSurfaceAppBrush}">
+  <Grid x:Name="Root" KeyboardAcceleratorPlacementMode="Hidden" Background="{ThemeResource YaapicSurfaceAppBrush}">
     <Grid.KeyboardAccelerators>
       <KeyboardAccelerator Key="T" Modifiers="Control" Invoked="OnNewTab"/>
       <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="OnCloseTab"/>
@@ -22,7 +22,7 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
-    <Grid x:Name="TitleBar" Height="40"
+    <Grid x:Name="TitleBar" Height="48"
           Background="{ThemeResource YaapicSurfaceAppBrush}"
           BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
       <Grid.ColumnDefinitions>
