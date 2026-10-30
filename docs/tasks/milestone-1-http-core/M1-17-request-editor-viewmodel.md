@@ -1,6 +1,6 @@
 # M1-17: Request editor ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-16
 
@@ -29,11 +29,11 @@ Send and response (M1-19), saving to a store (M1-20), URL/query-param two-way sy
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: `FromDefinition` then `ToDefinition` is equivalent; a loaded request is not
+- [x] Tests in `Yaapic.ViewModels.Tests`: `FromDefinition` then `ToDefinition` is equivalent; a loaded request is not
       dirty; editing name, URL, method, a header, a param, body kind or body text makes it dirty and changes `Title`;
       reverting the edit makes it clean again; `MarkSaved` clears dirty; `CreateNew` is dirty and `IsNew`; blank name
       becomes "New Request" in `ToDefinition`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
