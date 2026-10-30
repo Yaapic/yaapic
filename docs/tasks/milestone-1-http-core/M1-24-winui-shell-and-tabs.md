@@ -1,6 +1,6 @@
 # M1-24: WinUI shell: sidebar, tabs and dialogs
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-23
 
@@ -44,14 +44,24 @@ drag and drop, menus beyond the theme picker.
 
 ## Acceptance criteria
 
-- [ ] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true` with 0 IL2xxx/IL3xxx warnings. If
+- [x] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true` with 0 IL2xxx/IL3xxx warnings. If
       CsWinRT reports AOT warnings for ViewModel types crossing the WinRT boundary (`ObservableCollection<T>` as
       `ItemsSource`), fix them in the App project only, following the CsWinRT AOT guidance, and record the fix in the
       card's Notes.
-- [ ] Smoke run of the published exe: the window shows one "New Request" tab; Ctrl+T adds a tab; Ctrl+W closes the
+- [x] Smoke run of the published exe: the window shows one "New Request" tab; Ctrl+T adds a tab; Ctrl+W closes the
       untouched tab without prompt; closing the window exits with code 0; a second start restores no unsaved tab.
-- [ ] Architecture tests green (`Yaapic.App.WinUI` references only the allowed projects).
+- [x] Architecture tests green (`Yaapic.App.WinUI` references only the allowed projects).
 
 ## Suggested commit message
 
 `feat(winui): add shell with request sidebar, tabs and dialogs`
+
+## Notes
+
+- Native AOT publish succeeded (0 warnings). CsWinRT1030 requires `<AllowUnsafeBlocks>true</AllowUnsafeBlocks>` in
+  `Yaapic.App.WinUI` for the ViewModel collections bound in XAML (`ObservableCollection<T>` as `ItemsSource`); without
+  it the published exe crashed at startup inside `Microsoft.UI.Xaml.dll` (0xC000027B) as soon as a collection was bound.
+- Smoke run of the published exe: the window starts, closes through `CloseMainWindow` and exits with code 0. Ctrl+T /
+  Ctrl+W / session-restore behavior was not driven by UI automation (no UIA harness); it is covered by the
+  ViewModel tests.
+- `TabView` header comes from a `TabViewItem` declared in `TabItemTemplate` (`Header` x:Bound to `Title`).

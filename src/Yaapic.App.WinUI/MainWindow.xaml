@@ -1,27 +1,125 @@
 <Window x:Class="Yaapic.App.WinUI.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:p="using:Yaapic.App.WinUI.Presentation"
+        xmlns:env="using:Yaapic.ViewModels.Environments"
+        xmlns:req="using:Yaapic.ViewModels.Requests"
         Title="Yaapic">
   <Window.SystemBackdrop>
     <MicaBackdrop/>
   </Window.SystemBackdrop>
   <Grid x:Name="Root" Background="{ThemeResource YaapicSurfaceAppBrush}">
+    <Grid.KeyboardAccelerators>
+      <KeyboardAccelerator Key="T" Modifiers="Control" Invoked="OnNewTab"/>
+      <KeyboardAccelerator Key="W" Modifiers="Control" Invoked="OnCloseTab"/>
+      <KeyboardAccelerator Key="S" Modifiers="Control" Invoked="OnSaveTab"/>
+    </Grid.KeyboardAccelerators>
     <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
     </Grid.RowDefinitions>
     <Grid x:Name="TitleBar" Height="40" Background="Transparent">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="140"/>
+      </Grid.ColumnDefinitions>
       <TextBlock Text="Yaapic" VerticalAlignment="Center" Margin="16,0,0,0"
                  Foreground="{ThemeResource YaapicTextPrimaryBrush}"/>
+      <ComboBox Grid.Column="1" Width="200" VerticalAlignment="Center" Margin="0,0,8,0"
+                PlaceholderText="No environment"
+                ItemsSource="{x:Bind ViewModel.Environments.Environments, Mode=OneWay}"
+                SelectedItem="{x:Bind ViewModel.Environments.ActiveEnvironment, Mode=TwoWay}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="env:EnvironmentItemViewModel">
+            <TextBlock Text="{x:Bind Name, Mode=OneWay}"/>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <DropDownButton Grid.Column="2" Content="Theme" VerticalAlignment="Center">
+        <DropDownButton.Flyout>
+          <MenuFlyout>
+            <MenuFlyoutItem Text="Dark" Click="OnThemeDark"/>
+            <MenuFlyoutItem Text="Light" Click="OnThemeLight"/>
+            <MenuFlyoutItem Text="System" Click="OnThemeSystem"/>
+          </MenuFlyout>
+        </DropDownButton.Flyout>
+      </DropDownButton>
     </Grid>
-    <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
-      <TextBlock Text="Yaapic" FontSize="32" Foreground="{ThemeResource YaapicTextPrimaryBrush}"/>
-      <TextBlock Text="Empty themed window" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
-      <StackPanel Orientation="Horizontal" Spacing="8">
-        <Button Content="Dark" Click="OnThemeDark"/>
-        <Button Content="Light" Click="OnThemeLight"/>
-        <Button Content="System" Click="OnThemeSystem"/>
-      </StackPanel>
+    <StackPanel Grid.Row="1">
+      <InfoBar Severity="Error" IsClosable="False"
+               IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Tabs.LastError), Mode=OneWay}"
+               Message="{x:Bind ViewModel.Tabs.LastError, Mode=OneWay}"/>
+      <InfoBar Severity="Error" IsClosable="False"
+               IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Environments.LastError), Mode=OneWay}"
+               Message="{x:Bind ViewModel.Environments.LastError, Mode=OneWay}"/>
     </StackPanel>
+    <Grid Grid.Row="2">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="260"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid Background="{ThemeResource YaapicSurfaceSidebarBrush}" Padding="8" RowSpacing="8">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Button Content="New" HorizontalAlignment="Stretch"
+                Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}"/>
+        <TextBox Grid.Row="1" PlaceholderText="Filter requests"
+                 Text="{x:Bind ViewModel.Requests.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <ListView Grid.Row="2" IsItemClickEnabled="True" SelectionMode="None"
+                  ItemsSource="{x:Bind ViewModel.Requests.Items, Mode=OneWay}"
+                  ItemClick="OnRequestClick">
+          <ListView.ItemTemplate>
+            <DataTemplate x:DataType="req:RequestListItem">
+              <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="44"/>
+                  <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.ContextFlyout>
+                  <MenuFlyout>
+                    <MenuFlyoutItem Text="Delete" Tag="{x:Bind}" Click="OnDeleteRequest"/>
+                  </MenuFlyout>
+                </Grid.ContextFlyout>
+                <TextBlock Text="{x:Bind MethodText}" VerticalAlignment="Center"
+                           FontSize="{StaticResource YaapicCodeFontSize}"
+                           Foreground="{x:Bind p:BrushMap.Method(Method)}"/>
+                <TextBlock Grid.Column="1" Text="{x:Bind Name}" VerticalAlignment="Center"
+                           TextTrimming="CharacterEllipsis"
+                           Foreground="{ThemeResource YaapicTextPrimaryBrush}"/>
+              </Grid>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+      </Grid>
+      <Grid Grid.Column="1">
+        <TabView IsAddTabButtonVisible="True"
+                 TabItemsSource="{x:Bind ViewModel.Tabs.Tabs, Mode=OneWay}"
+                 SelectedItem="{x:Bind ViewModel.Tabs.ActiveTab, Mode=TwoWay}"
+                 AddTabButtonClick="OnAddTab"
+                 TabCloseRequested="OnTabCloseRequested">
+          <TabView.TabItemTemplate>
+            <DataTemplate x:DataType="req:RequestEditorViewModel">
+              <TabViewItem Header="{x:Bind Title, Mode=OneWay}">
+                <TextBlock Text="{x:Bind Url, Mode=OneWay}" Margin="16"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+              </TabViewItem>
+            </DataTemplate>
+          </TabView.TabItemTemplate>
+        </TabView>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+                    Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Tabs.ActiveTab), Mode=OneWay}">
+          <TextBlock Text="No request open" HorizontalAlignment="Center"
+                     Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+          <Button Content="New request" HorizontalAlignment="Center"
+                  Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}"/>
+        </StackPanel>
+      </Grid>
+    </Grid>
   </Grid>
 </Window>
