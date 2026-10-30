@@ -1,0 +1,361 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic — Fenêtre principale</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{root}}">
+  <sc-if value="{{isMac}}" hint-placeholder-val="{{false}}">
+    <div style="height:24px;flex:none;display:flex;align-items:center;gap:18px;padding:0 14px;background:var(--menubar);color:var(--t1);font-size:13px;border-bottom:1px solid var(--b1)">
+      <span style="font-weight:700">Yaapic</span><span>Fichier</span><span>Édition</span><span>Affichage</span><span>Requête</span><span>Collection</span><span>Outils</span><span>Fenêtre</span><span>Aide</span>
+      <span style="margin-left:auto;color:var(--t2)">mer. 28 oct. 10:42</span>
+    </div>
+  </sc-if>
+  <div style="flex:1;display:flex;flex-direction:column;min-height:0;border-radius:{{winRadius}};overflow:hidden;box-shadow:{{winShadow}}">
+  <div style="height:{{tbH}};flex:none;display:flex;align-items:center;gap:10px;padding-left:{{tbPadL}};background:var(--chrome);border-bottom:1px solid var(--b1)">
+    <sc-if value="{{isMac}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;gap:8px;margin-right:14px" aria-hidden="true"><span style="width:12px;height:12px;border-radius:999px;background:#FF5F57"></span><span style="width:12px;height:12px;border-radius:999px;background:#FEBC2E"></span><span style="width:12px;height:12px;border-radius:999px;background:#28C840"></span></div>
+    </sc-if>
+    <sc-if value="{{notMac}}" hint-placeholder-val="{{true}}">
+      <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 4.5l6.3 8.2" fill="none" stroke="var(--t1)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18.5 4.5l-7.4 12.8a2.6 2.6 0 0 1-2.3 1.3H5.2M7.6 16.1l-2.5 2.5 2.5 2.5" fill="none" stroke="var(--acct)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    </sc-if>
+    <button type="button" style="height:28px;border:0;border-radius:4px;background:transparent;color:var(--t1);font-family:inherit;font-size:13px;font-weight:600;display:flex;align-items:center;gap:6px;padding:0 8px">Parcelo<span style="font-weight:400;color:var(--t3)">· Équipe</span><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+    <div style="flex:1;display:flex;justify-content:center">
+      <button type="button" style="width:440px;height:28px;border-radius:6px;border:1px solid var(--b2);background:var(--s2);color:var(--t3);font-family:inherit;font-size:13px;display:flex;align-items:center;gap:8px;padding:0 10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{I.search}}"></path></svg>Rechercher ou lancer une commande<span style="margin-left:auto;font:500 11px var(--mono);border:1px solid var(--b2);border-radius:4px;padding:0 5px">{{kbd}} K</span></button>
+    </div>
+    <button type="button" style="height:28px;border-radius:999px;border:1px solid var(--b2);background:transparent;color:var(--t1);font-family:inherit;font-size:13px;display:flex;align-items:center;gap:8px;padding:0 10px 0 10px"><span style="width:8px;height:8px;border-radius:999px;background:var(--get)"></span>staging<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+    <button type="button" aria-label="Notifications" style="width:32px;height:28px;border:0;border-radius:4px;background:transparent;color:var(--t2);position:relative;display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{I.bell}}"></path></svg><span style="position:absolute;right:7px;top:5px;width:6px;height:6px;border-radius:999px;background:var(--acc)"></span></button>
+    <span style="width:26px;height:26px;border-radius:999px;background:var(--irisbg);color:var(--iris);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;margin-right:{{avatarMr}}">AG</span>
+    <sc-if value="{{isWin}}" hint-placeholder-val="{{true}}">
+      <div style="display:flex;align-self:stretch" aria-hidden="true">
+        <span style="width:46px;display:flex;align-items:center;justify-content:center;color:var(--t2)"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 5h10" stroke="currentColor"></path></svg></span>
+        <span style="width:46px;display:flex;align-items:center;justify-content:center;color:var(--t2)"><svg width="10" height="10" viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor"></rect></svg></span>
+        <span style="width:46px;display:flex;align-items:center;justify-content:center;color:var(--t2)"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 0l10 10M10 0 0 10" stroke="currentColor"></path></svg></span>
+      </div>
+    </sc-if>
+    <sc-if value="{{isLinux}}" hint-placeholder-val="{{false}}">
+      <div style="display:flex;gap:12px;margin-right:12px" aria-hidden="true">
+        <span style="width:24px;height:24px;border-radius:999px;background:var(--hov2);display:flex;align-items:center;justify-content:center;color:var(--t1)"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1 7h8" stroke="currentColor" stroke-width="1.6"></path></svg></span>
+        <span style="width:24px;height:24px;border-radius:999px;background:var(--hov2);display:flex;align-items:center;justify-content:center;color:var(--t1)"><svg width="10" height="10" viewBox="0 0 10 10"><rect x="1.5" y="1.5" width="7" height="7" fill="none" stroke="currentColor" stroke-width="1.6"></rect></svg></span>
+        <span style="width:24px;height:24px;border-radius:999px;background:var(--hov2);display:flex;align-items:center;justify-content:center;color:var(--t1)"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="currentColor" stroke-width="1.6"></path></svg></span>
+      </div>
+    </sc-if>
+  </div>
+
+  <div style="flex:1;display:flex;min-height:0">
+    <nav aria-label="Navigation principale" style="width:48px;flex:none;background:var(--chrome);border-right:1px solid var(--b1);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:4px">
+      <sc-for list="{{rail}}" as="r" hint-placeholder-count="8">
+        <button type="button" aria-label="{{r.label}}" style="width:36px;height:36px;border:0;border-radius:6px;background:{{r.bg}};color:{{r.c}};display:flex;align-items:center;justify-content:center;position:relative;margin-top:{{r.mt}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.d}}"></path></svg><span style="position:absolute;left:-6px;top:10px;width:3px;height:16px;border-radius:2px;background:{{r.ind}}"></span></button>
+      </sc-for>
+    </nav>
+
+    <aside style="width:{{sideW}};flex:none;background:var(--s0);border-right:1px solid var(--b1);display:flex;flex-direction:column;min-height:0">
+      <div style="height:40px;display:flex;align-items:center;padding:0 8px 0 14px;gap:2px">
+        <span style="font-weight:600;flex:1">Collections</span>
+        <sc-for list="{{sideBtns}}" as="sb" hint-placeholder-count="3"><button type="button" aria-label="{{sb.l}}" style="width:28px;height:28px;border:0;border-radius:4px;background:transparent;color:var(--t2);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{sb.d}}"></path></svg></button></sc-for>
+      </div>
+      <div style="padding:0 10px 8px"><div style="height:28px;border-radius:4px;border:1px solid var(--b2);background:var(--sk0);display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--t3)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{I.search}}"></path></svg>Filtrer<span style="margin-left:auto;font:500 11px var(--mono)">{{kbd}} ⇧ F</span></div></div>
+      <div style="flex:1;overflow:hidden">
+        <sc-for list="{{tree}}" as="n" hint-placeholder-count="16">
+          <div style="height:26px;display:flex;align-items:center;gap:6px;padding-left:{{n.pad}};padding-right:10px;background:{{n.bg}};box-shadow:{{n.sh}};color:{{n.fg}}">
+            <span style="width:12px;display:flex;color:var(--t3)"><sc-if value="{{n.hasChev}}" hint-placeholder-val="{{true}}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.chev}}"></path></svg></sc-if></span>
+            <sc-if value="{{n.isReq}}" hint-placeholder-val="{{true}}"><span style="font:700 10px var(--mono);color:{{n.mc}};width:34px;flex:none">{{n.m}}</span></sc-if>
+            <sc-if value="{{n.isNode}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--t2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg></sc-if>
+            <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{n.fw}}">{{n.n}}</span>
+            <span style="margin-left:auto;font-size:11px;color:var(--t3);white-space:nowrap">{{n.meta}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="border-top:1px solid var(--b1);padding:8px 14px;display:flex;align-items:center;gap:8px;color:var(--t2);font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{I.git}}"></path></svg>main · synchronisé il y a 3 min</div>
+    </aside>
+
+    <main style="flex:1;min-width:0;display:flex;flex-direction:column;background:var(--s1)">
+      <div role="tablist" aria-label="Onglets de requêtes" style="height:36px;flex:none;display:flex;background:var(--s0);border-bottom:1px solid var(--b1)">
+        <sc-for list="{{tabs}}" as="t" hint-placeholder-count="5">
+          <div role="tab" aria-selected="{{t.sel}}" style="display:flex;align-items:center;gap:7px;padding:0 10px 0 12px;border-right:1px solid var(--b1);background:{{t.bg}};box-shadow:{{t.line}};max-width:210px;min-width:0">
+            <sc-if value="{{t.pinned}}" hint-placeholder-val="{{false}}"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-label="Épinglé"><path d="{{I.pin}}"></path></svg></sc-if>
+            <span style="font:700 10px var(--mono);color:{{t.mc}}">{{t.m}}</span>
+            <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-style:{{t.it}};color:{{t.fg}}">{{t.n}}</span>
+            <span style="width:16px;text-align:center;color:{{t.endc}}">{{t.end}}</span>
+          </div>
+        </sc-for>
+        <button type="button" aria-label="Nouvel onglet" style="width:36px;border:0;background:transparent;color:var(--t2);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+        <div style="margin-left:auto;display:flex;align-items:center;gap:2px;padding:0 6px">
+          <button type="button" aria-label="Split view" style="width:28px;height:28px;border:0;border-radius:4px;background:transparent;color:var(--t2);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{I.split}}"></path></svg></button>
+          <button type="button" aria-label="Tous les onglets" style="height:24px;border:1px solid var(--b2);border-radius:4px;background:transparent;color:var(--t2);font-family:inherit;font-size:12px;padding:0 6px">+3</button>
+        </div>
+      </div>
+
+      <div style="flex:1;min-height:0;display:flex;flex-direction:{{dir}}">
+        <section aria-label="Requête" style="{{reqBox}};display:flex;flex-direction:column;min-width:0;min-height:0">
+          <div style="height:40px;flex:none;display:flex;align-items:center;gap:6px;padding:0 12px 0 16px">
+            <span style="color:var(--t3)">Parcelo API v2</span><span style="color:var(--t4)">/</span><span style="color:var(--t3)">Shipments</span><span style="color:var(--t4)">/</span><span style="font-weight:600">Create shipment</span>
+            <span style="width:6px;height:6px;border-radius:999px;background:var(--acc);margin-left:2px" aria-label="Modifié"></span>
+            <div style="margin-left:auto;display:flex;gap:4px;align-items:center">
+              <button type="button" style="height:28px;border:1px solid var(--b2);border-radius:var(--rc);background:var(--s2);color:var(--t1);font-family:inherit;font-size:13px;font-weight:600;padding:0 10px;display:flex;align-items:center;gap:6px">Enregistrer<span style="font:500 11px var(--mono);color:var(--t3)">{{kbd}} S</span></button>
+              <button type="button" aria-label="Générer le code" style="width:28px;height:28px;border:0;border-radius:4px;background:transparent;color:var(--t2);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{I.code}}"></path></svg></button>
+              <button type="button" aria-label="Plus d'actions" style="width:28px;height:28px;border:0;border-radius:4px;background:transparent;color:var(--t2);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" aria-hidden="true"><path d="M5 12h.01M12 12h.01M19 12h.01"></path></svg></button>
+            </div>
+          </div>
+          <div style="flex:none;display:flex;gap:8px;padding:0 16px 12px">
+            <div style="flex:1;min-width:0;height:34px;display:flex;align-items:center;border:1px solid var(--bctl);border-radius:var(--rc);background:var(--sk0)">
+              <button type="button" style="height:32px;border:0;border-right:1px solid var(--b2);background:transparent;color:var(--post);font:700 12px var(--mono);padding:0 10px 0 12px;display:flex;align-items:center;gap:6px">POST<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+              <div style="padding:0 10px;font:400 13px var(--mono);white-space:nowrap;overflow:hidden;display:flex;align-items:center;gap:1px"><span style="background:var(--irisbg);color:var(--iris);border-radius:3px;padding:0 4px">{{vars.base}}</span><span>/v2/shipments</span></div>
+            </div>
+            <div style="display:flex;flex:none"><button type="button" style="height:34px;border:0;border-radius:var(--rc) 0 0 var(--rc);background:var(--acc);color:var(--onacc);font-family:inherit;font-size:13px;font-weight:600;padding:0 16px;display:flex;align-items:center;gap:8px;box-shadow:inset 0 0 0 1px var(--accbd)">Send<span style="font:500 11px var(--mono);opacity:.65">{{kbd}} ↵</span></button><button type="button" aria-label="Options d'envoi" style="height:34px;width:26px;border:0;border-left:1px solid rgba(20,26,0,.25);border-radius:0 var(--rc) var(--rc) 0;background:var(--acc2);color:var(--onacc);display:flex;align-items:center;justify-content:center;box-shadow:inset 0 0 0 1px var(--accbd)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button></div>
+          </div>
+          <div role="tablist" aria-label="Sections de la requête" style="flex:none;display:flex;gap:18px;padding:0 16px;border-bottom:1px solid var(--b1)">
+            <sc-for list="{{reqTabs}}" as="p" hint-placeholder-count="7"><span role="tab" style="height:32px;display:flex;align-items:center;gap:5px;color:{{p.c}};box-shadow:{{p.sh}};white-space:nowrap">{{p.n}}<span style="font:600 10px var(--mono);color:{{p.bc}}">{{p.b}}</span></span></sc-for>
+          </div>
+          <div style="flex:none;display:flex;align-items:center;gap:14px;padding:6px 16px;font-size:12px;color:var(--t2)">
+            <sc-for list="{{bodyModes}}" as="bm" hint-placeholder-count="6"><span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:999px;box-sizing:border-box;border:{{bm.ring}}"></span><span style="color:{{bm.c}}">{{bm.n}}</span></span></sc-for>
+            <span style="border:1px solid var(--b2);border-radius:4px;padding:0 6px;color:var(--t1)">JSON ▾</span>
+            <span style="margin-left:auto;color:var(--acct)">Beautify</span>
+          </div>
+          <div style="flex:1;min-height:0;overflow:hidden;background:var(--sk0);border-top:1px solid var(--b1);padding:6px 0;font:400 12px/20px var(--mono);white-space:pre">
+            <sc-for list="{{reqLines}}" as="ln" hint-placeholder-count="14">
+              <div style="display:flex;background:{{ln.bg}}"><span style="width:44px;flex:none;text-align:right;padding-right:6px;color:var(--t4)">{{ln.n}}</span><span style="width:14px;flex:none;color:var(--t4);font-size:10px">{{ln.fold}}</span><sc-for list="{{ln.parts}}" as="p" hint-placeholder-count="4"><span style="color:{{p.c}};background:{{p.bg}};border-radius:2px">{{p.t}}</span></sc-for></div>
+            </sc-for>
+          </div>
+        </section>
+
+        <div role="separator" aria-orientation="{{sepOr}}" style="{{sepStyle}}"></div>
+
+        <section aria-label="Réponse" style="{{resBox}};display:flex;flex-direction:column;min-width:0;min-height:0;background:var(--s1)">
+          <div style="height:36px;flex:none;display:flex;align-items:center;gap:16px;padding:0 12px 0 16px;border-bottom:1px solid var(--b1)">
+            <sc-for list="{{resTabs}}" as="p" hint-placeholder-count="5"><span style="height:35px;display:flex;align-items:center;gap:5px;color:{{p.c}};box-shadow:{{p.sh}};white-space:nowrap">{{p.n}}<span style="font:600 10px var(--mono);color:{{p.bc}}">{{p.b}}</span></span></sc-for>
+            <div style="margin-left:auto;display:flex;align-items:center;gap:10px;font:500 12px var(--mono);white-space:nowrap">
+              <span style="display:inline-flex;align-items:center;gap:5px;background:var(--okbg);color:var(--ok);border-radius:4px;padding:1px 7px;font-weight:600"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>201 Created</span>
+              <span style="color:var(--t2)">184 ms</span><span style="color:var(--t2)">1,21 Ko</span>
+              <button type="button" aria-label="Enregistrer la réponse" style="width:26px;height:26px;border:0;border-radius:4px;background:transparent;color:var(--t2);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"></path></svg></button>
+            </div>
+          </div>
+          <div style="height:40px;flex:none;display:flex;align-items:center;gap:8px;padding:0 12px 0 16px">
+            <div style="display:flex;background:var(--sk0);border:1px solid var(--b2);border-radius:6px;padding:2px;font-size:12px">
+              <span style="padding:0 10px;border-radius:4px;background:var(--s3);box-shadow:0 0 0 1px var(--b2)">Pretty</span><span style="padding:0 10px;color:var(--t2)">Raw</span><span style="padding:0 10px;color:var(--t2)">Preview</span><span style="padding:0 10px;color:var(--t2)">Visualize</span>
+            </div>
+            <div style="flex:1;max-width:280px;height:26px;border:1px solid var(--b2);border-radius:4px;display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--t3);font:400 12px var(--mono)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"></path></svg>$.parcels[*].weight_g</div>
+            <div style="margin-left:auto;display:flex;gap:2px">
+              <sc-for list="{{resBtns}}" as="rb" hint-placeholder-count="4"><button type="button" aria-label="{{rb.l}}" style="width:28px;height:26px;border:0;border-radius:4px;background:transparent;color:var(--t2);display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{rb.d}}"></path></svg></button></sc-for>
+            </div>
+          </div>
+          <div style="flex:1;min-height:0;overflow:hidden;padding:2px 0;font:400 12px/20px var(--mono);white-space:pre;border-top:1px solid var(--b1);background:var(--sk0)">
+            <sc-for list="{{resLines}}" as="ln" hint-placeholder-count="20">
+              <div style="display:flex;background:{{ln.bg}}"><span style="width:44px;flex:none;text-align:right;padding-right:6px;color:var(--t4)">{{ln.n}}</span><span style="width:14px;flex:none;color:var(--t4);font-size:10px">{{ln.fold}}</span><sc-for list="{{ln.parts}}" as="p" hint-placeholder-count="4"><span style="color:{{p.c}};background:{{p.bg}};border-radius:2px">{{p.t}}</span></sc-for></div>
+            </sc-for>
+          </div>
+        </section>
+      </div>
+
+      <sc-if value="{{showConsole}}" hint-placeholder-val="{{false}}">
+        <section aria-label="Console" style="height:250px;flex:none;border-top:1px solid var(--b2);display:flex;flex-direction:column;background:var(--s0)">
+          <div style="height:34px;display:flex;align-items:center;gap:16px;padding:0 12px 0 16px;border-bottom:1px solid var(--b1)">
+            <span style="font-weight:600;box-shadow:inset 0 -2px 0 var(--acc);height:33px;display:flex;align-items:center">Console</span><span style="color:var(--t2)">Réseau</span><span style="color:var(--t2)">Scripts</span>
+            <div style="display:flex;gap:6px;margin-left:12px;font-size:12px"><span style="border:1px solid var(--b2);border-radius:999px;padding:0 8px;color:var(--t1);background:var(--s2)">Tout</span><span style="border:1px solid var(--b2);border-radius:999px;padding:0 8px;color:var(--t2)">Log</span><span style="border:1px solid var(--b2);border-radius:999px;padding:0 8px;color:var(--warn)">Warn 1</span><span style="border:1px solid var(--b2);border-radius:999px;padding:0 8px;color:var(--err)">Error 1</span></div>
+            <div style="margin-left:auto;height:24px;width:220px;border:1px solid var(--b2);border-radius:4px;display:flex;align-items:center;gap:6px;padding:0 8px;color:var(--t3);font-size:12px">Filtrer les logs</div>
+            <span style="color:var(--t2);font-size:12px">Effacer</span>
+          </div>
+          <div style="flex:1;overflow:hidden;font:400 12px/22px var(--mono)">
+            <sc-for list="{{consoleLines}}" as="c" hint-placeholder-count="8">
+              <div style="display:flex;gap:12px;padding:0 16px;border-bottom:1px solid var(--b1);background:{{c.bg}}"><span style="color:var(--t4);width:86px;flex:none">{{c.time}}</span><span style="width:16px;flex:none;color:{{c.ic}}">{{c.sym}}</span><span style="font-weight:700;width:44px;flex:none;color:{{c.mc}}">{{c.m}}</span><span style="color:{{c.c}};flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{c.t}}</span><span style="color:var(--t3);flex:none">{{c.r}}</span></div>
+            </sc-for>
+          </div>
+        </section>
+      </sc-if>
+    </main>
+  </div>
+
+  <footer style="height:24px;flex:none;display:flex;align-items:center;gap:14px;padding:0 10px;background:var(--chrome);border-top:1px solid var(--b1);font-size:12px;color:var(--t2)">
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:999px;background:var(--ok)"></span>En ligne</span>
+    <span style="display:flex;align-items:center;gap:5px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{I.git}}"></path></svg>main ↑1</span>
+    <span>Workspace : Parcelo (Git)</span>
+    <span style="margin-left:auto;color:{{consoleC}}">Console</span><span>Cookies</span><span>Runner</span><span>Proxy : système</span><span>HTTP/2</span><span>100 %</span><span style="color:var(--t3)">Yaapic 1.4.0</span>
+  </footer>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"platform":{"editor":"enum","options":["win","mac","linux"],"default":"win"},"layout":{"editor":"enum","options":["vertical","horizontal"],"default":"vertical"},"panel":{"editor":"enum","options":["none","console"],"default":"none"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.props.theme ?? 'dark';
+    const platform = this.props.platform ?? 'win';
+    const layout = this.props.layout ?? 'vertical';
+    const panel = this.props.panel ?? 'none';
+    const TH = {
+      dark: { bg:'#131518', chrome:'#17191D', menubar:'rgba(36,38,42,.96)', s0:'#16181C', s1:'#1A1D21', s2:'#21252A', s3:'#2C3138', sk0:'#121417', b1:'#24282E', b2:'#30353C', bctl:'#565D68', t1:'#ECEEF1', t2:'#A3AAB4', t3:'#848C97', t4:'#5A606A', acc:'#1FC7D4', acc2:'#18B3BF', acct:'#5FE0EA', onacc:'#04252A', accbd:'#1FC7D4', sel:'rgba(31,199,212,.10)', hov:'rgba(255,255,255,.05)', hov2:'rgba(255,255,255,.09)', iris:'#959BFF', irisbg:'rgba(128,136,255,.16)', ok:'#3FD68A', okbg:'rgba(63,214,138,.13)', warn:'#F2B84B', err:'#FF6B6B', errbg:'rgba(255,107,107,.13)', get:'#3DD6A3', post:'#F5B648', put:'#6AA8FF', patch:'#B38CFF', del:'#FF7272', head:'#5CC8E0', sk:'#8FB7FF', ss:'#B5E36C', sn:'#F5B648', sb:'#F28AC9', sp:'#848C97', hl:'rgba(31,199,212,.16)', line:'rgba(255,255,255,.03)' },
+      light:{ bg:'#E9ECF0', chrome:'#EEF0F3', menubar:'rgba(246,246,247,.96)', s0:'#F4F5F7', s1:'#FFFFFF', s2:'#F6F7F9', s3:'#FFFFFF', sk0:'#FBFBFC', b1:'#E4E7EB', b2:'#D3D8DE', bctl:'#8A919C', t1:'#16191D', t2:'#4A515B', t3:'#5F6772', t4:'#9AA1AB', acc:'#1FC7D4', acc2:'#18B3BF', acct:'#0A6B74', onacc:'#04252A', accbd:'#0A7C86', sel:'#E0FAFC', hov:'rgba(20,24,30,.05)', hov2:'rgba(20,24,30,.08)', iris:'#4A4FD0', irisbg:'#ECEDFF', ok:'#157F4A', okbg:'#E3F4EA', warn:'#8A5A00', err:'#C42B2B', errbg:'#FCEAEA', get:'#0F7A5C', post:'#8F5B00', put:'#1D5FC4', patch:'#6B3FC9', del:'#BE2F2F', head:'#0B6E86', sk:'#2B4FB8', ss:'#4E7A0E', sn:'#9A5B00', sb:'#A3317A', sp:'#5F6772', hl:'#E0FAFC', line:'rgba(20,24,30,.025)' }
+    };
+    const t = TH[theme];
+    const fonts = { win:"'Segoe UI Variable Text','Segoe UI',Inter,system-ui,sans-serif", mac:"-apple-system,BlinkMacSystemFont,'SF Pro Text',Inter,sans-serif", linux:"Cantarell,Inter,'Noto Sans',sans-serif" };
+    const rc = platform === 'win' ? '4px' : '6px';
+    const vars = Object.entries(t).map(([k, v]) => '--' + k + ':' + v).join(';') + ';--mono:\'JetBrains Mono\',\'Cascadia Code\',Consolas,monospace;--rc:' + rc;
+    const isMac = platform === 'mac', isLinux = platform === 'linux', isWin = platform === 'win';
+    const deskBg = isMac ? (theme === 'dark' ? '#2A2D33' : '#C9D1DB') : t.bg;
+    const root = 'width:1440px;height:900px;overflow:hidden;display:flex;flex-direction:column;font-family:' + fonts[platform] + ';font-size:13px;line-height:20px;color:var(--t1);background:' + (isLinux ? (theme === 'dark' ? '#0C0D0F' : '#BFC5CC') : deskBg) + ';' + vars;
+    const b = (s) => '{' + '{' + s + '}' + '}';
+    const I = {
+      search:'M10.5 4a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM15.5 15.5 20 20',
+      bell:'M6 16V11a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20.5h4',
+      git:'M6 4v12M6 20a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 8c0 5-6 4-12 8',
+      pin:'M9 4h6l-1 5 3 3v1.5H7V12l3-3zM12 13.5V20',
+      split:'M4 5h16v14H4zM12 5v14',
+      code:'M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16',
+      folder:'M3.5 7A1.5 1.5 0 0 1 5 5.5h4l2 2h8A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z',
+      coll:'M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5M3 9.5A1.5 1.5 0 0 1 4.5 8h15A1.5 1.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z',
+      star:'M12 3.8l2.5 5.2 5.7.8-4.1 4 1 5.7-5.1-2.7-5.1 2.7 1-5.7-4.1-4 5.7-.8z'
+    };
+    const railDefs = [
+      ['Collections','M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5M3 9.5A1.5 1.5 0 0 1 4.5 8h15A1.5 1.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z',true],
+      ['Environnements','M4 7h9m4 0h3M4 17h3m4 0h9M15 4.5v5M9 14.5v5'],
+      ['Historique','M3.5 12a8.5 8.5 0 1 0 2.5-6M3.5 4.5V8H7M12 7.5V12l3 2'],
+      ['APIs (OpenAPI)','M8 4H7a2 2 0 0 0-2 2v3.5L3.5 12 5 14.5V18a2 2 0 0 0 2 2h1M16 4h1a2 2 0 0 1 2 2v3.5l1.5 2.5-1.5 2.5V18a2 2 0 0 1-2 2h-1'],
+      ['Mock servers','M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v3A1.5 1.5 0 0 1 18.5 10h-13A1.5 1.5 0 0 1 4 8.5zM4 15.5A1.5 1.5 0 0 1 5.5 14h13a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM7.5 7h.01M7.5 17h.01'],
+      ['Monitors','M3 12h4l2.5-6 5 12 2.5-6H21'],
+      ['Flows','M3.5 4.5h5v5h-5zM15.5 14.5h5v5h-5zM8.5 7h3.5a2 2 0 0 1 2 2v6a2 2 0 0 0 1.5 2'],
+      ['Console','M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v13a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM8 9l3 3-3 3M13 15h3',false,'auto'],
+      ['Paramètres','M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19.4 13.5l1.6 1.2-1.8 3.1-1.9-.7a7 7 0 0 1-1.7 1l-.3 2h-3.6l-.3-2a7 7 0 0 1-1.7-1l-1.9.7-1.8-3.1 1.6-1.2a7 7 0 0 1 0-3l-1.6-1.2 1.8-3.1 1.9.7a7 7 0 0 1 1.7-1l.3-2h3.6l.3 2a7 7 0 0 1 1.7 1l1.9-.7 1.8 3.1-1.6 1.2a7 7 0 0 1 0 3z']
+    ];
+    const rail = railDefs.map(r => ({ label: r[0], d: r[1], bg: r[2] ? 'var(--sel)' : 'transparent', c: r[2] ? 'var(--acct)' : 'var(--t2)', ind: r[2] ? 'var(--acc)' : 'transparent', mt: r[3] || '0' }));
+    const MC = { GET:'var(--get)', POST:'var(--post)', PUT:'var(--put)', PATCH:'var(--patch)', DEL:'var(--del)', WS:'var(--head)', SSE:'var(--head)', gRPC:'var(--patch)' };
+    const down = 'M6 9l6 6 6-6', right = 'M9 6l6 6-6 6';
+    const N = (lvl, n, o = {}) => ({ pad: (8 + lvl * 14) + 'px', n, hasChev: !!o.c, chev: o.c === 'd' ? down : right, isReq: !!o.m, isNode: !o.m, m: o.m || '', mc: MC[o.m] || 'var(--t2)', icon: o.icon || I.folder, bg: o.sel ? 'var(--sel)' : 'transparent', sh: o.sel ? 'inset 2px 0 0 var(--acc)' : 'none', fg: o.dim ? 'var(--t3)' : 'var(--t1)', fw: o.bold ? '600' : '400', meta: o.meta || '' });
+    const tree = [
+      N(0, 'Favoris', { c:'r', icon: I.star, meta:'3' }),
+      N(0, 'Parcelo API v2', { c:'d', icon: I.coll, bold:true, meta:'24' }),
+      N(1, 'Auth', { c:'r' }),
+      N(1, 'Shipments', { c:'d' }),
+      N(2, 'List shipments', { m:'GET' }),
+      N(2, 'Create shipment', { m:'POST', sel:true }),
+      N(2, 'Get shipment', { m:'GET' }),
+      N(2, 'Update address', { m:'PATCH' }),
+      N(2, 'Cancel shipment', { m:'DEL' }),
+      N(1, 'Labels', { c:'r' }),
+      N(1, 'Rates', { c:'r' }),
+      N(1, 'Webhooks', { c:'r' }),
+      N(1, 'Tracking (live)', { m:'WS' }),
+      N(1, 'Tracking events', { m:'SSE' }),
+      N(0, 'Billing Service', { c:'r', icon: I.coll, bold:true, meta:'gRPC' }),
+      N(0, 'Parcelo Public', { c:'r', icon: I.coll, bold:true, meta:'OpenAPI' }),
+      N(0, 'Partenaires transport', { c:'r', icon: I.coll, bold:true }),
+      N(0, 'Legacy SOAP', { c:'r', icon: I.coll, bold:true, dim:true, meta:'archivée' })
+    ];
+    const tabs = [
+      { pinned:true, m:'GET', mc:MC.GET, n:'Health', it:'normal', fg:'var(--t2)', bg:'transparent', line:'none', end:'', endc:'var(--t3)', sel:'false' },
+      { pinned:false, m:'POST', mc:MC.POST, n:'Create shipment', it:'normal', fg:'var(--t1)', bg:'var(--s1)', line:'inset 0 2px 0 var(--acc)', end:'●', endc:'var(--acct)', sel:'true' },
+      { pinned:false, m:'GET', mc:MC.GET, n:'List shipments', it:'normal', fg:'var(--t2)', bg:'transparent', line:'none', end:'×', endc:'var(--t3)', sel:'false' },
+      { pinned:false, m:'PATCH', mc:MC.PATCH, n:'Update address', it:'italic', fg:'var(--t2)', bg:'transparent', line:'none', end:'', endc:'var(--t3)', sel:'false' },
+      { pinned:false, m:'WS', mc:MC.WS, n:'tracking/live', it:'normal', fg:'var(--t2)', bg:'transparent', line:'none', end:'', endc:'var(--t3)', sel:'false' }
+    ];
+    const tabsDef = (arr, active) => arr.map(([n, badge]) => ({ n, b: badge || '', c: n === active ? 'var(--t1)' : 'var(--t2)', sh: n === active ? 'inset 0 -2px 0 var(--acc)' : 'none', bc: n === active ? 'var(--acct)' : 'var(--t3)' }));
+    const tokLine = (line, i, hlSet) => {
+      const parts = []; const re = /("(?:[^"\\]|\\.)*")(\s*:)?|(-?\d+(?:\.\d+)?)|(true|false|null)|([{}\[\],:])|(\s+)/g; let x;
+      while ((x = re.exec(line))) {
+        if (x[1]) {
+          const isVar = x[1].indexOf('{' + '{') >= 0;
+          parts.push({ t: x[1], c: x[2] ? 'var(--sk)' : (isVar ? 'var(--iris)' : 'var(--ss)'), bg: isVar ? 'var(--irisbg)' : 'transparent' });
+          if (x[2]) parts.push({ t: x[2], c: 'var(--sp)', bg: 'transparent' });
+        } else if (x[3]) parts.push({ t: x[3], c: 'var(--sn)', bg: (hlSet && hlSet.has(i + 1)) ? 'var(--hl)' : 'transparent' });
+        else if (x[4]) parts.push({ t: x[4], c: 'var(--sb)', bg: 'transparent' });
+        else if (x[5]) parts.push({ t: x[5], c: 'var(--sp)', bg: 'transparent' });
+        else parts.push({ t: x[6], c: 'var(--t1)', bg: 'transparent' });
+      }
+      const tr = line.trim();
+      return { n: i + 1, parts, fold: (tr.endsWith('{') || tr.endsWith('[')) ? '▾' : '', bg: 'transparent' };
+    };
+    const reqSrc = `{
+  "carrier": "colissimo",
+  "service": "express_24h",
+  "sender": {
+    "name": "Atelier Lune",
+    "address": "14 rue des Capucins",
+    "postal_code": "69001",
+    "city": "Lyon",
+    "country": "FR"
+  },
+  "recipient": {
+    "name": "Camille Moreau",
+    "address": "8 cours de l'Intendance",
+    "postal_code": "33000",
+    "city": "Bordeaux",
+    "country": "FR",
+    "email": "${b('customerEmail')}"
+  },
+  "parcels": [{ "weight_g": 1250, "dimensions_cm": [30, 20, 12] }],
+  "metadata": { "order_ref": "CMD-2026-10482" }
+}`;
+    const resSrc = `{
+  "id": "shp_01JBX4R7M2Q9K",
+  "object": "shipment",
+  "status": "label_created",
+  "carrier": "colissimo",
+  "service": "express_24h",
+  "tracking_number": "6A23948571028",
+  "tracking_url": "https://track.parcelo.example/6A23948571028",
+  "created_at": "2026-10-28T09:41:12.384Z",
+  "estimated_delivery": "2026-10-29",
+  "recipient": { "name": "Camille Moreau", "city": "Bordeaux", "country": "FR" },
+  "parcels": [
+    { "id": "pcl_8Hd2Lq", "weight_g": 1250, "dimensions_cm": [30, 20, 12] }
+  ],
+  "price": { "amount": 8.9, "currency": "EUR", "vat_included": true },
+  "label": {
+    "format": "pdf",
+    "url": "https://cdn.parcelo.example/labels/shp_01JBX4R7M2Q9K.pdf",
+    "expires_at": "2026-11-27T09:41:12Z"
+  },
+  "insurance": null,
+  "metadata": { "order_ref": "CMD-2026-10482" },
+  "_links": { "self": "/v2/shipments/shp_01JBX4R7M2Q9K" }
+}`;
+    const reqLines = reqSrc.split('\n').map((l, i) => tokLine(l, i));
+    const resLines = resSrc.split('\n').map((l, i) => tokLine(l, i, new Set([13])));
+    const vertical = layout === 'vertical';
+    const showConsole = panel === 'console';
+    const consoleLines = [
+      ['10:41:58.102','›','var(--t3)','','', 'var(--t2)', 'pre-request · Create shipment', ''],
+      ['10:41:58.104','i','var(--iris)','','', 'var(--t1)', 'requestTs = 1793180518104', 'script:2'],
+      ['10:41:58.105','!','var(--warn)','','', 'var(--warn)', 'Variable "customerEmail" provient de la collection, masquée par l’environnement', 'resolver'],
+      ['10:41:58.289','↗','var(--t3)','POST','var(--post)', 'var(--t1)', 'https://staging.api.parcelo.example/v2/shipments   201 · 184 ms · 1,21 Ko', 'réseau'],
+      ['10:41:58.291','✓','var(--ok)','','', 'var(--t1)', 'Tests : 6 passés, 0 échoués', 'tests'],
+      ['10:42:03.517','↗','var(--t3)','GET','var(--get)', 'var(--t1)', 'https://staging.api.parcelo.example/v2/shipments/shp_01JBX4R7M2Q9K   200 · 62 ms', 'réseau'],
+      ['10:42:07.940','×','var(--err)','DEL','var(--del)', 'var(--err)', 'https://staging.api.parcelo.example/v2/shipments/shp_01JBX…   409 Conflict · already_shipped', 'réseau'],
+      ['10:42:07.941','×','var(--err)','','', 'var(--err)', 'AssertionError: expected 409 to equal 204  at Tests:4:18', 'tests']
+    ].map(a => ({ time:a[0], sym:a[1], ic:a[2], m:a[3], mc:a[4], c:a[5], t:a[6], r:a[7], bg: a[2] === 'var(--err)' ? 'var(--errbg)' : 'transparent' }));
+    return {
+      root, isMac, notMac: !isMac, isWin, isLinux, I,
+      kbd: isMac ? '⌘' : 'Ctrl',
+      tbH: isLinux ? '46px' : '40px',
+      tbPadL: isMac ? '14px' : '12px',
+      avatarMr: isWin ? '4px' : (isMac ? '12px' : '0'),
+      winRadius: isLinux ? '12px 12px 0 0' : (isMac ? '10px' : '0'),
+      winShadow: (isMac || isLinux) ? '0 0 0 1px rgba(0,0,0,.35)' : 'none',
+      sideW: '272px',
+      rail,
+      sideBtns: [{ l:'Nouvelle collection', d:'M12 5v14M5 12h14' }, { l:'Importer', d:'M12 4v11M7.5 10.5 12 15l4.5-4.5M4.5 15v4.5h15V15' }, { l:'Plus', d:'M5 12h.01M12 12h.01M19 12h.01' }],
+      tree, tabs,
+      vars: { base: b('baseUrl') },
+      reqTabs: tabsDef([['Params'],['Authorization'],['Headers','9'],['Body','●'],['Scripts','2'],['Tests','6'],['Settings']], 'Body'),
+      bodyModes: [['none'],['form-data'],['x-www-form-urlencoded'],['raw',true],['binary'],['GraphQL']].map(([n, on]) => ({ n, ring: on ? '4px solid var(--acc)' : '1px solid var(--bctl)', c: on ? 'var(--t1)' : 'var(--t2)' })),
+      resTabs: tabsDef([['Body'],['Headers','14'],['Cookies','1'],['Tests','6/6'],['Timeline']], 'Body'),
+      resBtns: [{ l:'Rechercher', d:I.search }, { l:'Retour à la ligne', d:'M4 6h16M4 12h13a3 3 0 0 1 0 6h-4M15 16l-2 2 2 2M4 18h5' }, { l:'Copier', d:'M8 8h10.5A1.5 1.5 0 0 1 20 9.5v9A1.5 1.5 0 0 1 18.5 20h-9A1.5 1.5 0 0 1 8 18.5zM16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8' }, { l:'Comparer', d:'M6 4v8M2 8h8M14 16h8M5 19 19 5' }],
+      reqLines, resLines,
+      dir: vertical ? 'column' : 'row',
+      reqBox: vertical ? (showConsole ? 'height:300px;flex:none' : 'height:392px;flex:none') : 'width:50%;flex:none',
+      resBox: 'flex:1',
+      sepOr: vertical ? 'horizontal' : 'vertical',
+      sepStyle: vertical ? 'height:5px;flex:none;background:var(--s0);border-top:1px solid var(--b1);border-bottom:1px solid var(--b1);cursor:row-resize' : 'width:5px;flex:none;background:var(--s0);border-left:1px solid var(--b1);border-right:1px solid var(--b1);cursor:col-resize',
+      showConsole, consoleLines,
+      consoleC: showConsole ? 'var(--acct)' : 'var(--t2)'
+    };
+  }
+}
+</script>
+</body>
+</html>
