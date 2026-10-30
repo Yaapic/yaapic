@@ -143,7 +143,7 @@ public sealed partial class TabsViewModel : ObservableObject
 
     partial void OnActiveTabChanged(RequestEditorViewModel? value) => SessionChanged?.Invoke(this, EventArgs.Empty);
 
-    private static bool IsUntouched(RequestEditorViewModel tab) =>
+    internal static bool IsUntouched(RequestEditorViewModel tab) =>
         tab.IsNew && tab.ToDefinition().IsEquivalentTo(
             new HttpRequestDefinition(tab.Id, DefaultName, HttpMethodKind.Get, "", [], [], RequestBody.None));
 

@@ -1,6 +1,6 @@
 # M1-23: Shell ViewModel and composition root
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-14, M1-15, M1-21, M1-22
 
@@ -42,12 +42,12 @@ Views, DI container, logging, settings, workspace picker.
 
 ## Acceptance criteria
 
-- [ ] `ShellViewModel` tests with in-memory doubles: restore order, missing ids dropped, active tab restored, empty
+- [x] `ShellViewModel` tests with in-memory doubles: restore order, missing ids dropped, active tab restored, empty
       session opens one new tab, active environment restored; session saved on tab open/close/switch and on environment
       change, never-saved tabs excluded; `RequestCloseAsync` with Cancel returns false.
-- [ ] A test in `Yaapic.Infrastructure.Tests` (add a `Yaapic.Composition` reference) calls `CreateShell` on a temp
+- [x] A test in `Yaapic.Infrastructure.Tests` (add a `Yaapic.Composition` reference) calls `CreateShell` on a temp
       directory with a `FakeDialogService`, then `InitializeAsync`, and finds one new tab.
-- [ ] 0 warnings, architecture tests green with the new rules.
+- [x] 0 warnings, architecture tests green with the new rules.
 
 ## Suggested commit message
 
