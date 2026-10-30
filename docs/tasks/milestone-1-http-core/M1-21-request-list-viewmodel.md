@@ -1,6 +1,6 @@
 # M1-21: Saved requests list ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M1-20
 
@@ -31,10 +31,10 @@ and save).
 
 ## Acceptance criteria
 
-- [ ] Tests: refresh lists store content; filter by name and by URL, case-insensitive; clearing the filter; saving a tab
+- [x] Tests: refresh lists store content; filter by name and by URL, case-insensitive; clearing the filter; saving a tab
       refreshes the list; open activates a tab; delete confirmed removes from store and closes the tab; delete refused
       changes nothing.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
