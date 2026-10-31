@@ -1,0 +1,22 @@
+{
+  "solution": {
+    "path": "Yaapic.sln",
+    "projects": [
+      "src/Yaapic.Core/Yaapic.Core.csproj",
+      "src/Yaapic.Domain/Yaapic.Domain.csproj",
+      "src/Yaapic.UI.Abstractions/Yaapic.UI.Abstractions.csproj",
+      "src/Yaapic.ViewModels/Yaapic.ViewModels.csproj",
+      "tests/Yaapic.Architecture.Tests/Yaapic.Architecture.Tests.csproj",
+      "src/Yaapic.Design.Tokens/Yaapic.Design.Tokens.csproj",
+      "tests/Yaapic.Design.Tokens.Tests/Yaapic.Design.Tokens.Tests.csproj",
+      "tests/Yaapic.Domain.Tests/Yaapic.Domain.Tests.csproj",
+      "tests/Yaapic.Core.Tests/Yaapic.Core.Tests.csproj",
+      "tests/Yaapic.Infrastructure.Tests/Yaapic.Infrastructure.Tests.csproj",
+      "src/Yaapic.Infrastructure/Yaapic.Infrastructure.csproj",
+      "tests/Yaapic.TestDoubles/Yaapic.TestDoubles.csproj",
+      "tests/Yaapic.ViewModels.Tests/Yaapic.ViewModels.Tests.csproj",
+      "src/Yaapic.Composition/Yaapic.Composition.csproj",
+      "src/Yaapic.App.Avalonia/Yaapic.App.Avalonia.csproj"
+    ]
+  }
+}
