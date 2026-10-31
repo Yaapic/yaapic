@@ -129,6 +129,8 @@ public sealed partial class MainWindow : Window
         args.Handled = true;
     }
 
+    private void OnEditorSaveRequested(object sender, RoutedEventArgs e) => _viewModel?.Tabs.SaveActiveCommand.Execute(null);
+
     private void OnAddTab(object sender, RoutedEventArgs e) => _viewModel?.Tabs.NewTab();
 
     private void OnTabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)

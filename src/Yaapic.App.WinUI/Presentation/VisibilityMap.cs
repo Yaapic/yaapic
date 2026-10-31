@@ -42,6 +42,11 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenGet(HttpMethodKind method) => method == HttpMethodKind.Get ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> when <paramref name="count"/> is above zero.</summary>
+    /// <param name="count">The count to test.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenPositive(int count) => count > 0 ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when the body is raw text.</summary>
     /// <param name="kind">The body kind.</param>
     /// <returns>The visibility.</returns>

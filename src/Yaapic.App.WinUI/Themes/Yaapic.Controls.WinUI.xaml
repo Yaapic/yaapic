@@ -240,6 +240,62 @@
     <Setter Property="Margin" Value="0,0,18,0"/>
   </Style>
 
+  <!-- Panel tab with free content (label + count badge): a ToggleButton drawing the same 2 px accent underline; SelectorBarItem only takes text. -->
+  <Style x:Key="YaapicPanelToggleTabStyle" TargetType="ToggleButton">
+    <Setter Property="MinHeight" Value="32"/>
+    <Setter Property="Height" Value="32"/>
+    <Setter Property="Padding" Value="0"/>
+    <Setter Property="Margin" Value="0,0,18,0"/>
+    <Setter Property="Background" Value="Transparent"/>
+    <Setter Property="BorderThickness" Value="0"/>
+    <Setter Property="FontSize" Value="{StaticResource YaapicFontSizeBody}"/>
+    <Setter Property="Foreground" Value="{ThemeResource YaapicTextSecondaryBrush}"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="ToggleButton">
+          <Grid Background="{TemplateBinding Background}">
+            <ContentPresenter x:Name="ContentPresenter" Foreground="{TemplateBinding Foreground}"
+                              Content="{TemplateBinding Content}" Padding="{TemplateBinding Padding}"
+                              VerticalContentAlignment="Center"/>
+            <Rectangle x:Name="Underline" Height="2" VerticalAlignment="Bottom"
+                       Fill="{ThemeResource YaapicAccentFillBrush}" Opacity="0"/>
+            <VisualStateManager.VisualStateGroups>
+              <VisualStateGroup x:Name="CommonStates">
+                <VisualState x:Name="Normal"/>
+                <VisualState x:Name="PointerOver">
+                  <VisualState.Setters>
+                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                  </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="Pressed"/>
+                <VisualState x:Name="Disabled"/>
+                <VisualState x:Name="Checked">
+                  <VisualState.Setters>
+                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                    <Setter Target="Underline.Opacity" Value="1"/>
+                  </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="CheckedPointerOver">
+                  <VisualState.Setters>
+                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                    <Setter Target="Underline.Opacity" Value="1"/>
+                  </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="CheckedPressed">
+                  <VisualState.Setters>
+                    <Setter Target="ContentPresenter.Foreground" Value="{ThemeResource YaapicTextPrimaryBrush}"/>
+                    <Setter Target="Underline.Opacity" Value="1"/>
+                  </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="CheckedDisabled"/>
+              </VisualStateGroup>
+            </VisualStateManager.VisualStateGroups>
+          </Grid>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
   <!-- Segmented control item: raised pill with a 1 px border when selected. -->
   <Style x:Key="YaapicSegmentedItemStyle" TargetType="ListViewItem">
     <Setter Property="MinHeight" Value="0"/>

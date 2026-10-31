@@ -1,6 +1,6 @@
 # M1-41: WinUI request editor restyle
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-39, M1-40
 
@@ -65,13 +65,36 @@ horizontal layout.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Manual check on the published exe: method menu switches GET/POST and colours; Ctrl+Enter sends and Esc
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Manual check on the published exe: method menu switches GET/POST and colours; Ctrl+Enter sends and Esc
       cancels `{{baseUrl}}/delay/10000` (M1-34 fixture `slow` request); Save button saves and disables; badges count
       enabled params and headers; URL bar shows the focus border.
-- [ ] Screenshots (M1-34 script) dark and light inspected against the request half of `MainWindow.dc.html` and
+- [x] Screenshots (M1-34 script) dark and light inspected against the request half of `MainWindow.dc.html` and
       `MainWindowLight.dc.html`; differences listed in the card's Notes.
+
+## Notes
+
+Implemented: `RequestEditorView.xaml` laid out as in the mockup (40 px header with name, unsaved dot and a Save button
+that raises `SaveRequested`, handled by `MainWindow` through `Tabs.SaveActiveCommand`; single URL bar with the method
+menu and a focus border; Send / Cancel with `Ctrl+Enter` and `Esc` hints, `Esc` accelerator active only while sending;
+section tabs with count badges; body mode bar; sunken body editor; 5 px separator). The method selector is now a
+`Button` with a `MenuFlyout` (GET/POST) that sets `ViewModel.Method`, which fixes the empty method `ComboBox`.
+New helpers: `TextMap.Prefixed`, `VisibilityMap.WhenPositive`.
+
+Deviations: the section tabs are `ToggleButton`s with the new `YaapicPanelToggleTabStyle` (same 2 px accent underline)
+instead of a `SelectorBar`, because `SelectorBarItem` only takes text and cannot carry a badge. The Send / Cancel / Save
+buttons carry an explicit `AutomationProperties.Name` so the screenshot tool finds the button, not its inner text.
+
+Verified: build 0 warnings, 292 tests green, AOT publish without IL2xxx/IL3xxx, published exe screenshots dark and light
+with `-Send` (GET and POST shown in the method selector, response renders, app survives). Not verified by a real input
+run: opening the method menu and picking an item, `Ctrl+Enter` / `Esc` on the `slow` request, the Save button saving and
+disabling, the URL bar focus border, and the "Clear" button of the stock `TextBox` (not seen in captures).
+
+Remaining differences from the mockup: the `none` / `raw` radio buttons keep the stock Fluent ring (20 px, mockup 12 px);
+the unsaved dot sits next to Save, not right after the name (the name box fills the row); the breadcrumb, Generate code,
+More, Send options and Beautify are out of scope; the response half is restyled by M1-42; the light GET colour is the
+token colour; the table does not mirror `?page=1` from the URL into Params (existing behaviour).
 
 ## Suggested commit message
 

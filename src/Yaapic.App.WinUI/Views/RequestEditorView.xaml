@@ -3,88 +3,230 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
              xmlns:v="using:Yaapic.App.WinUI.Views">
+  <UserControl.Resources>
+    <!-- Borderless editors: the containers (URL bar, body editor) draw the frame, so every TextBox state is flat. -->
+    <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlElevationBorderBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="Transparent"/>
+    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+    <Thickness x:Key="TextControlBorderThemeThicknessFocused">0</Thickness>
+  </UserControl.Resources>
   <UserControl.KeyboardAccelerators>
     <KeyboardAccelerator Key="Enter" Modifiers="Control" Invoked="OnSendAccelerator"/>
+    <KeyboardAccelerator Key="Escape" Invoked="OnCancelAccelerator"/>
   </UserControl.KeyboardAccelerators>
-  <Grid RowSpacing="8" Padding="16,8,16,16">
+  <Grid>
     <Grid.RowDefinitions>
-      <RowDefinition Height="2*"/>
-      <RowDefinition Height="*"/>
+      <RowDefinition Height="40"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*" MinHeight="120"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="1.2*" MinHeight="180"/>
     </Grid.RowDefinitions>
-    <Grid RowSpacing="8">
-      <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="*"/>
-      </Grid.RowDefinitions>
-      <TextBox PlaceholderText="Request name" BorderThickness="0" Background="Transparent"
-               FontSize="{StaticResource YaapicFontSizeTitle}" FontWeight="SemiBold"
+
+    <!-- Header: name, unsaved dot, Save. -->
+    <Grid Padding="16,0,12,0" ColumnSpacing="8">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBox PlaceholderText="Untitled request" VerticalAlignment="Center" Padding="0,5" MinHeight="0"
+               FontSize="{StaticResource YaapicFontSizeBodyStrong}" FontWeight="SemiBold"
+               AutomationProperties.Name="Request name"
                Text="{x:Bind ViewModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-      <Grid Grid.Row="1" ColumnSpacing="8">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="Auto"/>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <ComboBox x:Name="MethodBox" Width="100" AutomationProperties.Name="Method"
-                  SelectionChanged="OnMethodChanged">
-          <ComboBoxItem Content="GET" Foreground="{ThemeResource YaapicMethodGetBrush}"/>
-          <ComboBoxItem Content="POST" Foreground="{ThemeResource YaapicMethodPostBrush}"/>
-        </ComboBox>
-        <TextBox Grid.Column="1" PlaceholderText="Enter URL or paste text"
-                 FontFamily="{StaticResource YaapicMonoFont}"
-                 FontSize="{StaticResource YaapicCodeFontSize}"
-                 Text="{x:Bind ViewModel.Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        <Button Grid.Column="2" Content="Send" Style="{StaticResource AccentButtonStyle}"
-                Command="{x:Bind ViewModel.SendCommand, Mode=OneWay}"
-                Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.IsSending), Mode=OneWay}"/>
-        <Button Grid.Column="2" Content="Cancel"
-                Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
-                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsSending), Mode=OneWay}"/>
-      </Grid>
-      <SelectorBar Grid.Row="2" SelectionChanged="OnTabChanged">
-        <SelectorBarItem Text="Params" IsSelected="True"/>
-        <SelectorBarItem Text="Headers"/>
-        <SelectorBarItem Text="Body"/>
-      </SelectorBar>
-      <Grid Grid.Row="3">
-        <v:KeyValueEditorView x:Name="ParamsPane" ViewModel="{x:Bind ViewModel.QueryParams, Mode=OneWay}"/>
-        <v:KeyValueEditorView x:Name="HeadersPane" Visibility="Collapsed"
-                              ViewModel="{x:Bind ViewModel.Headers, Mode=OneWay}"/>
-        <Grid x:Name="BodyPane" Visibility="Collapsed" RowSpacing="8">
-          <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-          </Grid.RowDefinitions>
-          <StackPanel Orientation="Horizontal" Spacing="16">
-            <RadioButtons x:Name="BodyKinds" MaxColumns="2" SelectionChanged="OnBodyKindChanged">
-              <x:String>None</x:String>
-              <x:String>Raw</x:String>
-            </RadioButtons>
-            <ComboBox x:Name="ContentTypeBox" VerticalAlignment="Top" Width="100"
-                      AutomationProperties.Name="Content type"
-                      SelectionChanged="OnContentTypeChanged"
-                      Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}">
-              <ComboBoxItem Content="JSON"/>
-              <ComboBoxItem Content="Text"/>
-              <ComboBoxItem Content="XML"/>
-            </ComboBox>
+      <Ellipse Grid.Column="1" Width="6" Height="6" VerticalAlignment="Center"
+               Fill="{ThemeResource YaapicAccentFillBrush}" AutomationProperties.Name="Unsaved changes"
+               Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsDirty), Mode=OneWay}"/>
+      <Button Grid.Column="2" Height="28" MinHeight="28" Padding="10,0" Click="OnSaveClick" AutomationProperties.Name="Save"
+              IsEnabled="{x:Bind ViewModel.IsDirty, Mode=OneWay}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="Save" VerticalAlignment="Center"/>
+          <TextBlock Text="Ctrl+S" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                     Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+        </StackPanel>
+      </Button>
+    </Grid>
+
+    <!-- URL bar: method picker + URL in one frame, then Send / Cancel. -->
+    <Grid Grid.Row="1" Padding="16,0,16,12" ColumnSpacing="8">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <Border x:Name="UrlBar" Height="{StaticResource YaapicControlHeightSpacious}"
+              Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+              BorderBrush="{ThemeResource YaapicBorderControlBrush}" BorderThickness="1"
+              CornerRadius="{StaticResource YaapicRadiusControl}"
+              GotFocus="OnUrlBarGotFocus" LostFocus="OnUrlBarLostFocus">
+        <Grid x:Name="UrlBarContent">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Border BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" BorderThickness="0,0,1,0">
+            <Button Style="{StaticResource YaapicSubtleButtonStyle}" CornerRadius="0" Padding="12,0,10,0"
+                    MinHeight="0" VerticalAlignment="Stretch"
+                    AutomationProperties.Name="{x:Bind p:TextMap.Prefixed('Method: ', ViewModel.MethodText), Mode=OneWay}">
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Style="{StaticResource YaapicMethodTextStyle}" VerticalAlignment="Center"
+                           Text="{x:Bind ViewModel.MethodText, Mode=OneWay}"
+                           Foreground="{x:Bind p:BrushMap.Method(ViewModel.Method), Mode=OneWay}"/>
+                <Viewbox Width="12" Height="12" VerticalAlignment="Center">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="M6 9l6 6 6-6" Stroke="{ThemeResource YaapicTextTertiaryBrush}" StrokeThickness="2.4"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                  </Canvas>
+                </Viewbox>
+              </StackPanel>
+              <Button.Flyout>
+                <MenuFlyout>
+                  <MenuFlyoutItem Text="GET" Tag="Get" Click="OnMethodClick"
+                                  Foreground="{ThemeResource YaapicMethodGetBrush}"
+                                  FontFamily="{StaticResource YaapicMonoFont}" FontWeight="Bold" FontSize="12"/>
+                  <MenuFlyoutItem Text="POST" Tag="Post" Click="OnMethodClick"
+                                  Foreground="{ThemeResource YaapicMethodPostBrush}"
+                                  FontFamily="{StaticResource YaapicMonoFont}" FontWeight="Bold" FontSize="12"/>
+                </MenuFlyout>
+              </Button.Flyout>
+            </Button>
+          </Border>
+          <TextBox Grid.Column="1" PlaceholderText="Enter URL or paste text" VerticalAlignment="Center"
+                   Padding="10,7,10,5" MinHeight="0" Height="32"
+                   FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeBody}"
+                   VerticalContentAlignment="Center" AutomationProperties.Name="URL"
+                   Text="{x:Bind ViewModel.Url, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+      </Border>
+      <Button Grid.Column="1" Style="{StaticResource AccentButtonStyle}" Height="36" Padding="16,0" AutomationProperties.Name="Send"
+              Command="{x:Bind ViewModel.SendCommand, Mode=OneWay}"
+              Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.IsSending), Mode=OneWay}">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock Text="Send" VerticalAlignment="Center"/>
+          <TextBlock Text="Ctrl+Enter" VerticalAlignment="Center" Opacity="0.65"
+                     Style="{StaticResource YaapicCodeSmallTextStyle}"
+                     Foreground="{ThemeResource YaapicAccentOnBrush}"/>
+        </StackPanel>
+      </Button>
+      <Button Grid.Column="1" Style="{StaticResource YaapicDangerButtonStyle}" Height="36" Padding="16,0" AutomationProperties.Name="Cancel"
+              Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
+              Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsSending), Mode=OneWay}">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <ProgressRing Width="14" Height="14" IsActive="{x:Bind ViewModel.IsSending, Mode=OneWay}"
+                        Style="{StaticResource YaapicProgressRingStyle}"
+                        Foreground="{ThemeResource YaapicDangerBrush}"/>
+          <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+          <TextBlock Text="Esc" VerticalAlignment="Center" Opacity="0.65"
+                     Style="{StaticResource YaapicCodeSmallTextStyle}"
+                     Foreground="{ThemeResource YaapicDangerBrush}"/>
+        </StackPanel>
+      </Button>
+    </Grid>
+
+    <!-- Section tabs with count badges. -->
+    <Border Grid.Row="2" Padding="16,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+      <StackPanel Orientation="Horizontal">
+        <ToggleButton x:Name="ParamsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" IsChecked="True"
+                      Click="OnTabClick">
+          <StackPanel Orientation="Horizontal" Spacing="5">
+            <TextBlock Text="Params" VerticalAlignment="Center"/>
+            <TextBlock x:Name="ParamsBadge" VerticalAlignment="Center"
+                       Style="{StaticResource YaapicCountBadgeActiveTextStyle}"
+                       Text="{x:Bind ViewModel.QueryParams.ActiveCount, Mode=OneWay}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.QueryParams.ActiveCount), Mode=OneWay}"/>
           </StackPanel>
-          <TextBlock Grid.Row="1" Text="GET requests are sent without a body"
-                     Style="{StaticResource YaapicBodySmallTextStyle}"
+        </ToggleButton>
+        <ToggleButton x:Name="HeadersTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
+          <StackPanel Orientation="Horizontal" Spacing="5">
+            <TextBlock Text="Headers" VerticalAlignment="Center"/>
+            <TextBlock x:Name="HeadersBadge" VerticalAlignment="Center"
+                       Style="{StaticResource YaapicCountBadgeTextStyle}"
+                       Text="{x:Bind ViewModel.Headers.ActiveCount, Mode=OneWay}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Headers.ActiveCount), Mode=OneWay}"/>
+          </StackPanel>
+        </ToggleButton>
+        <ToggleButton x:Name="BodyTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
+          <StackPanel Orientation="Horizontal" Spacing="5">
+            <TextBlock Text="Body" VerticalAlignment="Center"/>
+            <TextBlock x:Name="BodyBadge" VerticalAlignment="Center" Text="●"
+                       Style="{StaticResource YaapicCountBadgeTextStyle}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"/>
+          </StackPanel>
+        </ToggleButton>
+      </StackPanel>
+    </Border>
+
+    <Grid Grid.Row="3">
+      <v:KeyValueEditorView x:Name="ParamsPane" Margin="16,12,16,12"
+                            ViewModel="{x:Bind ViewModel.QueryParams, Mode=OneWay}"/>
+      <v:KeyValueEditorView x:Name="HeadersPane" Margin="16,12,16,12" Visibility="Collapsed"
+                            ViewModel="{x:Bind ViewModel.Headers, Mode=OneWay}"/>
+      <Grid x:Name="BodyPane" Visibility="Collapsed">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Padding="16,6" ColumnSpacing="14">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <StackPanel Orientation="Horizontal" Spacing="14">
+            <RadioButton x:Name="BodyNone" Content="none" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+                         FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
+            <RadioButton x:Name="BodyRaw" Content="raw" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+                         FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
+          </StackPanel>
+          <Button Grid.Column="1" Height="24" MinHeight="24" Padding="8,0" BorderThickness="1"
+                  Background="Transparent" CornerRadius="4" FontWeight="Normal"
+                  BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                  FontSize="{StaticResource YaapicFontSizeBodySm}" AutomationProperties.Name="Content type"
+                  Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}">
+            <StackPanel Orientation="Horizontal" Spacing="5">
+              <TextBlock x:Name="ContentTypeLabel" VerticalAlignment="Center"/>
+              <Viewbox Width="10" Height="10" VerticalAlignment="Center">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="M6 9l6 6 6-6" Stroke="{ThemeResource YaapicTextTertiaryBrush}" StrokeThickness="2.4"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+                  </Canvas>
+                </Viewbox>
+            </StackPanel>
+            <Button.Flyout>
+              <MenuFlyout>
+                <MenuFlyoutItem Text="JSON" Tag="0" Click="OnContentTypeClick"/>
+                <MenuFlyoutItem Text="Text" Tag="1" Click="OnContentTypeClick"/>
+                <MenuFlyoutItem Text="XML" Tag="2" Click="OnContentTypeClick"/>
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
+          <TextBlock Grid.Column="2" Text="GET requests are sent without a body" VerticalAlignment="Center"
+                     HorizontalAlignment="Right" Style="{StaticResource YaapicBodySmallTextStyle}"
                      Visibility="{x:Bind p:VisibilityMap.WhenGet(ViewModel.Method), Mode=OneWay}"/>
-          <TextBox Grid.Row="2" AcceptsReturn="True" TextWrapping="NoWrap"
-                   FontFamily="{StaticResource YaapicMonoFont}"
-                   FontSize="{StaticResource YaapicCodeFontSize}"
+        </Grid>
+        <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+                BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
+          <TextBox AcceptsReturn="True" TextWrapping="NoWrap" Padding="16,0" MinHeight="0"
+                   FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeCode}"
+                   AutomationProperties.Name="Body"
                    ScrollViewer.HorizontalScrollBarVisibility="Auto"
                    ScrollViewer.VerticalScrollBarVisibility="Auto"
                    Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"
                    Text="{x:Bind ViewModel.BodyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-        </Grid>
+        </Border>
       </Grid>
     </Grid>
-    <v:ResponsePanelView Grid.Row="1" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
+
+    <!-- Editor / response separator (not draggable in M1). -->
+    <Border Grid.Row="4" Height="5" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
+            BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,1"/>
+
+    <v:ResponsePanelView Grid.Row="5" Margin="16,8,16,16" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
   </Grid>
 </UserControl>
