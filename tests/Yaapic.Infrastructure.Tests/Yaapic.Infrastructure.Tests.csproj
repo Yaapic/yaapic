@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <IsAotCompatible>false</IsAotCompatible>
+    <IsPackable>false</IsPackable>
+    <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="xunit.v3" />
+    <Using Include="Xunit" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Yaapic.Infrastructure\Yaapic.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\src\Yaapic.Core\Yaapic.Core.csproj" />
+    <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Yaapic.Composition\Yaapic.Composition.csproj" />
+    <ProjectReference Include="..\..\src\Yaapic.ViewModels\Yaapic.ViewModels.csproj" />
+    <ProjectReference Include="..\Yaapic.TestDoubles\Yaapic.TestDoubles.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Storage\golden\**" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

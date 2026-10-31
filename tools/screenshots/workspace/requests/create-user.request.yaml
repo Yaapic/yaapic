@@ -1,0 +1,21 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000002
+name: Create user
+method: POST
+url: "{{baseUrl}}/users"
+params: []
+headers:
+  - key: Content-Type
+    value: application/json
+    enabled: true
+body:
+  type: raw
+  contentType: json
+  text: |
+    {
+      "name": "Ada Lovelace",
+      "email": "ada@example.test",
+      "role": "admin",
+      "active": true,
+      "tags": ["math", "engines"]
+    }

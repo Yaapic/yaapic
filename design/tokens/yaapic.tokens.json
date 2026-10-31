@@ -290,7 +290,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceAppBrush",
-            "avalonia": "YaapicSurfaceAppBrush"
+            "avalonia": "YaapicSurfaceAppBrush",
+            "winuiAliases": ["SolidBackgroundFillColorBaseBrush", "FocusVisualSecondaryBrush"]
           }
         }
       },
@@ -304,7 +305,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceBaseBrush",
-            "avalonia": "YaapicSurfaceBaseBrush"
+            "avalonia": "YaapicSurfaceBaseBrush",
+            "winuiAliases": ["LayerFillColorDefaultBrush", "ButtonBackgroundPressed", "TabViewItemHeaderBackgroundSelected"]
           }
         }
       },
@@ -318,7 +320,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceSidebarBrush",
-            "avalonia": "YaapicSurfaceSidebarBrush"
+            "avalonia": "YaapicSurfaceSidebarBrush",
+            "winuiAliases": ["TextControlBackgroundPointerOver", "ComboBoxBackgroundPointerOver", "TabViewBackground", "TabViewItemHeaderBackground"]
           }
         }
       },
@@ -332,7 +335,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceRaisedBrush",
-            "avalonia": "YaapicSurfaceRaisedBrush"
+            "avalonia": "YaapicSurfaceRaisedBrush",
+            "winuiAliases": ["ControlFillColorDefaultBrush", "CardBackgroundFillColorDefaultBrush", "ButtonBackground", "ContentDialogBackground"]
           }
         }
       },
@@ -346,7 +350,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceElevatedBrush",
-            "avalonia": "YaapicSurfaceElevatedBrush"
+            "avalonia": "YaapicSurfaceElevatedBrush",
+            "winuiAliases": ["ButtonBackgroundPointerOver"]
           }
         }
       },
@@ -360,7 +365,23 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceSunkenBrush",
-            "avalonia": "YaapicSurfaceSunkenBrush"
+            "avalonia": "YaapicSurfaceSunkenBrush",
+            "winuiAliases": ["ControlFillColorInputActiveBrush", "TextControlBackground", "TextControlBackgroundFocused", "ComboBoxBackground"]
+          }
+        }
+      },
+      "overlay": {
+        "$type": "color",
+        "$value": "#282C33",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#FFFFFF",
+            "highContrast": "#0A0A0A"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSurfaceOverlayBrush",
+            "avalonia": "YaapicSurfaceOverlayBrush",
+            "winuiAliases": ["FlyoutPresenterBackground", "MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "ToolTipBackground", "ContentDialogTopOverlay"]
           }
         }
       }
@@ -376,7 +397,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderSubtleBrush",
-            "avalonia": "YaapicBorderSubtleBrush"
+            "avalonia": "YaapicBorderSubtleBrush",
+            "winuiAliases": ["DividerStrokeColorDefaultBrush", "CardStrokeColorDefaultBrush", "ButtonBorderBrushDisabled", "ProgressBarBackground", "TabViewItemSeparator", "TabViewBorderBrush"]
           }
         }
       },
@@ -390,7 +412,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderDefaultBrush",
-            "avalonia": "YaapicBorderDefaultBrush"
+            "avalonia": "YaapicBorderDefaultBrush",
+            "winuiAliases": ["ControlStrokeColorDefaultBrush", "SurfaceStrokeColorDefaultBrush", "ButtonBorderBrush", "ButtonBorderBrushPressed", "ContentDialogSeparatorBorderBrush"]
           }
         }
       },
@@ -404,7 +427,23 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderControlBrush",
-            "avalonia": "YaapicBorderControlBrush"
+            "avalonia": "YaapicBorderControlBrush",
+            "winuiAliases": ["ControlStrongStrokeColorDefaultBrush", "ButtonBorderBrushPointerOver", "TextControlBorderBrush", "TextControlElevationBorderBrush", "ComboBoxBorderBrush", "CheckBoxCheckBackgroundStrokeUnchecked", "RadioButtonOuterEllipseStroke"]
+          }
+        }
+      },
+      "overlay": {
+        "$type": "color",
+        "$value": "#454B54",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#B4BBC5",
+            "highContrast": "#FFFFFF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicBorderOverlayBrush",
+            "avalonia": "YaapicBorderOverlayBrush",
+            "winuiAliases": ["FlyoutBorderThemeBrush", "MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "ToolTipBorderBrush", "ContentDialogBorderBrush"]
           }
         }
       }
@@ -420,7 +459,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextPrimaryBrush",
-            "avalonia": "YaapicTextPrimaryBrush"
+            "avalonia": "YaapicTextPrimaryBrush",
+            "winuiAliases": ["TextFillColorPrimaryBrush", "ButtonForeground", "ButtonForegroundPointerOver", "TextControlForeground", "TextControlForegroundFocused", "SelectorBarItemForegroundSelected", "SelectorBarItemForegroundPointerOver", "SelectorBarItemForegroundPressed", "TabViewItemHeaderForegroundSelected", "TabViewItemHeaderForegroundPointerOver"]
           }
         }
       },
@@ -434,7 +474,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextSecondaryBrush",
-            "avalonia": "YaapicTextSecondaryBrush"
+            "avalonia": "YaapicTextSecondaryBrush",
+            "winuiAliases": ["TextFillColorSecondaryBrush", "ButtonForegroundPressed", "SelectorBarItemForeground", "TabViewItemHeaderForeground"]
           }
         }
       },
@@ -448,7 +489,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextTertiaryBrush",
-            "avalonia": "YaapicTextTertiaryBrush"
+            "avalonia": "YaapicTextTertiaryBrush",
+            "winuiAliases": ["TextFillColorTertiaryBrush", "TextControlBorderBrushPointerOver", "ComboBoxBorderBrushPointerOver", "TextControlPlaceholderForeground", "TextControlPlaceholderForegroundFocused"]
           }
         }
       },
@@ -462,7 +504,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicTextDisabledBrush",
-            "avalonia": "YaapicTextDisabledBrush"
+            "avalonia": "YaapicTextDisabledBrush",
+            "winuiAliases": ["TextFillColorDisabledBrush", "ButtonForegroundDisabled", "TextControlForegroundDisabled"]
           }
         }
       }
@@ -478,7 +521,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillBrush",
-            "avalonia": "YaapicAccentFillBrush"
+            "avalonia": "YaapicAccentFillBrush",
+            "winuiAliases": ["AccentFillColorDefaultBrush", "AccentButtonBackground", "CheckBoxCheckBackgroundStrokeChecked", "CheckBoxCheckBackgroundFillChecked", "RadioButtonOuterEllipseCheckedStroke", "RadioButtonOuterEllipseCheckedFill", "ListViewItemSelectionIndicatorBrush", "ListViewItemSelectionIndicatorPointerOverBrush", "ListViewItemSelectionIndicatorPressedBrush", "SelectorBarItemPillFill", "ProgressBarForeground"]
           }
         }
       },
@@ -492,7 +536,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillHoverBrush",
-            "avalonia": "YaapicAccentFillHoverBrush"
+            "avalonia": "YaapicAccentFillHoverBrush",
+            "winuiAliases": ["AccentFillColorSecondaryBrush", "AccentButtonBackgroundPointerOver", "CheckBoxCheckBackgroundStrokeCheckedPointerOver", "CheckBoxCheckBackgroundFillCheckedPointerOver", "RadioButtonOuterEllipseCheckedStrokePointerOver", "RadioButtonOuterEllipseCheckedFillPointerOver"]
           }
         }
       },
@@ -506,7 +551,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillPressedBrush",
-            "avalonia": "YaapicAccentFillPressedBrush"
+            "avalonia": "YaapicAccentFillPressedBrush",
+            "winuiAliases": ["AccentFillColorTertiaryBrush", "AccentButtonBackgroundPressed", "CheckBoxCheckBackgroundStrokeCheckedPressed", "CheckBoxCheckBackgroundFillCheckedPressed", "RadioButtonOuterEllipseCheckedStrokePressed", "RadioButtonOuterEllipseCheckedFillPressed"]
           }
         }
       },
@@ -520,7 +566,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentBorderBrush",
-            "avalonia": "YaapicAccentBorderBrush"
+            "avalonia": "YaapicAccentBorderBrush",
+            "winuiAliases": ["AccentButtonBorderBrush", "AccentButtonBorderBrushPointerOver"]
           }
         }
       },
@@ -534,7 +581,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentTextBrush",
-            "avalonia": "YaapicAccentTextBrush"
+            "avalonia": "YaapicAccentTextBrush",
+            "winuiAliases": ["AccentTextFillColorPrimaryBrush"]
           }
         }
       },
@@ -548,7 +596,40 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentOnBrush",
-            "avalonia": "YaapicAccentOnBrush"
+            "avalonia": "YaapicAccentOnBrush",
+            "winuiAliases": ["TextOnAccentFillColorPrimaryBrush", "AccentButtonForeground", "AccentButtonForegroundPointerOver", "AccentButtonForegroundPressed", "RadioButtonCheckGlyphFill", "CheckBoxCheckGlyphForegroundChecked", "CheckBoxCheckGlyphForegroundCheckedPointerOver", "CheckBoxCheckGlyphForegroundCheckedPressed"]
+          }
+        }
+      }
+    },
+    "overlay": {
+      "hover": {
+        "$type": "color",
+        "$value": "#FFFFFF0F",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#14181E0D",
+            "highContrast": "#00000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicOverlayHoverBrush",
+            "avalonia": "YaapicOverlayHoverBrush",
+            "winuiAliases": ["ListViewItemBackgroundPointerOver", "MenuFlyoutItemBackgroundPointerOver", "TabViewItemHeaderBackgroundPointerOver"]
+          }
+        }
+      },
+      "pressed": {
+        "$type": "color",
+        "$value": "#FFFFFF08",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#14181E08",
+            "highContrast": "#00000000"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicOverlayPressedBrush",
+            "avalonia": "YaapicOverlayPressedBrush",
+            "winuiAliases": ["ListViewItemBackgroundPressed"]
           }
         }
       }
@@ -564,7 +645,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSelectionBackgroundBrush",
-            "avalonia": "YaapicSelectionBackgroundBrush"
+            "avalonia": "YaapicSelectionBackgroundBrush",
+            "winuiAliases": ["ListViewItemBackgroundSelected", "ListViewItemBackgroundSelectedPointerOver", "ListViewItemBackgroundSelectedPressed"]
           }
         }
       }
@@ -580,7 +662,8 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicFocusRingBrush",
-            "avalonia": "YaapicFocusRingBrush"
+            "avalonia": "YaapicFocusRingBrush",
+            "winuiAliases": ["FocusStrokeColorOuterBrush", "TextControlBorderBrushFocused", "ComboBoxBorderBrushFocused", "FocusVisualPrimaryBrush"]
           }
         }
       }
@@ -595,7 +678,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicInfoBrush",
-          "avalonia": "YaapicInfoBrush"
+          "avalonia": "YaapicInfoBrush",
+          "winuiAliases": ["SystemFillColorAttentionBrush"]
         }
       },
       "background": {
@@ -608,7 +692,22 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicInfoBackgroundBrush",
-            "avalonia": "YaapicInfoBackgroundBrush"
+            "avalonia": "YaapicInfoBackgroundBrush",
+            "winuiAliases": ["SystemFillColorAttentionBackgroundBrush"]
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#959BFF4D",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#4A4FD04D",
+            "highContrast": "#B3B8FF"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicInfoBorderBrush",
+            "avalonia": "YaapicInfoBorderBrush"
           }
         }
       }
@@ -623,7 +722,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicSuccessBrush",
-          "avalonia": "YaapicSuccessBrush"
+          "avalonia": "YaapicSuccessBrush",
+          "winuiAliases": ["SystemFillColorSuccessBrush"]
         }
       },
       "background": {
@@ -636,7 +736,22 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicSuccessBackgroundBrush",
-            "avalonia": "YaapicSuccessBackgroundBrush"
+            "avalonia": "YaapicSuccessBackgroundBrush",
+            "winuiAliases": ["SystemFillColorSuccessBackgroundBrush"]
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#3FD68A4D",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#157F4A4D",
+            "highContrast": "#3FF23F"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicSuccessBorderBrush",
+            "avalonia": "YaapicSuccessBorderBrush"
           }
         }
       }
@@ -651,7 +766,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicWarningBrush",
-          "avalonia": "YaapicWarningBrush"
+          "avalonia": "YaapicWarningBrush",
+          "winuiAliases": ["SystemFillColorCautionBrush"]
         }
       },
       "background": {
@@ -664,7 +780,22 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicWarningBackgroundBrush",
-            "avalonia": "YaapicWarningBackgroundBrush"
+            "avalonia": "YaapicWarningBackgroundBrush",
+            "winuiAliases": ["SystemFillColorCautionBackgroundBrush"]
+          }
+        }
+      },
+      "border": {
+        "$type": "color",
+        "$value": "#F2B84B4D",
+        "$extensions": {
+          "dev.yaapic.themes": {
+            "light": "#8A5A004D",
+            "highContrast": "#FFFF00"
+          },
+          "dev.yaapic.xaml": {
+            "winui": "YaapicWarningBorderBrush",
+            "avalonia": "YaapicWarningBorderBrush"
           }
         }
       }
@@ -679,7 +810,8 @@
         },
         "dev.yaapic.xaml": {
           "winui": "YaapicDangerBrush",
-          "avalonia": "YaapicDangerBrush"
+          "avalonia": "YaapicDangerBrush",
+          "winuiAliases": ["SystemFillColorCriticalBrush"]
         }
       },
       "background": {
@@ -692,7 +824,50 @@
           },
           "dev.yaapic.xaml": {
             "winui": "YaapicDangerBackgroundBrush",
-            "avalonia": "YaapicDangerBackgroundBrush"
+            "avalonia": "YaapicDangerBackgroundBrush",
+            "winuiAliases": ["SystemFillColorCriticalBackgroundBrush"]
+          }
+        },
+        "border": {
+          "$type": "color",
+          "$value": "#FF6B6B80",
+          "$extensions": {
+            "dev.yaapic.themes": {
+              "light": "#C42B2B80",
+              "highContrast": "#FF8080"
+            },
+            "dev.yaapic.xaml": {
+              "winui": "YaapicDangerBorderBrush",
+              "avalonia": "YaapicDangerBorderBrush"
+            }
+          }
+        },
+        "backgroundHover": {
+          "$type": "color",
+          "$value": "#FF6B6B33",
+          "$extensions": {
+            "dev.yaapic.themes": {
+              "light": "#F8DADA",
+              "highContrast": "#000000"
+            },
+            "dev.yaapic.xaml": {
+              "winui": "YaapicDangerBackgroundHoverBrush",
+              "avalonia": "YaapicDangerBackgroundHoverBrush"
+            }
+          }
+        },
+        "backgroundPressed": {
+          "$type": "color",
+          "$value": "#FF6B6B47",
+          "$extensions": {
+            "dev.yaapic.themes": {
+              "light": "#F3C9C9",
+              "highContrast": "#000000"
+            },
+            "dev.yaapic.xaml": {
+              "winui": "YaapicDangerBackgroundPressedBrush",
+              "avalonia": "YaapicDangerBackgroundPressedBrush"
+            }
           }
         }
       }
@@ -1148,30 +1323,15 @@
     "family": {
       "ui": {
         "$type": "fontFamily",
-        "$value": [
-          "Segoe UI Variable Text",
-          "SF Pro Text",
-          "Cantarell",
-          "Inter",
-          "sans-serif"
-        ]
+        "$value": ["Segoe UI Variable Text", "SF Pro Text", "Cantarell", "Inter", "sans-serif"]
       },
       "mono": {
         "$type": "fontFamily",
-        "$value": [
-          "JetBrains Mono",
-          "Cascadia Code",
-          "SF Mono",
-          "Consolas",
-          "monospace"
-        ]
+        "$value": ["JetBrains Mono", "Cascadia Code", "SF Mono", "Consolas", "monospace"]
       },
       "brand": {
         "$type": "fontFamily",
-        "$value": [
-          "Space Grotesk",
-          "sans-serif"
-        ]
+        "$value": ["Space Grotesk", "sans-serif"]
       }
     }
   },
@@ -1273,6 +1433,15 @@
         "fontSize": "14px",
         "lineHeight": "22px",
         "fontWeight": 400
+      }
+    },
+    "label.mono": {
+      "$type": "typography",
+      "$value": {
+        "fontFamily": "{font.family.mono}",
+        "fontSize": "10px",
+        "lineHeight": "16px",
+        "fontWeight": 700
       }
     }
   },

@@ -16,6 +16,9 @@ public static class TokenGenerator
     private const string AvaloniaNs = "https://github.com/avaloniaui";
     private const string XNs = "http://schemas.microsoft.com/winfx/2006/xaml";
 
+    /// <summary>Generates the WinUI resource dictionary.</summary>
+    /// <param name="tokensJson">The DTCG token file contents.</param>
+    /// <returns>The XAML of the resource dictionary, with LF line endings.</returns>
     public static string GenerateWinUI(string tokensJson)
     {
         using var doc = JsonDocument.Parse(tokensJson);
@@ -31,6 +34,8 @@ public static class TokenGenerator
         sb.Append($"  <CornerRadius x:Key=\"ControlCornerRadius\">{Px(Get(root, "radius", "control"), "windows")}</CornerRadius>\n");
         sb.Append($"  <CornerRadius x:Key=\"OverlayCornerRadius\">{Px(Get(root, "radius", "overlay"))}</CornerRadius>\n");
         AppendMetrics(sb, root);
+        sb.Append($"  <CornerRadius x:Key=\"YaapicRadiusControl\">{Px(Get(root, "radius", "control"), "windows")}</CornerRadius>\n");
+        sb.Append($"  <x:Double x:Key=\"YaapicTitleBarHeight\">{Px(Get(root, "size", "titlebar", "windows"))}</x:Double>\n");
         sb.Append("  <FontFamily x:Key=\"YaapicMonoFont\">ms-appx:///Assets/Fonts/JetBrainsMono.ttf#JetBrains Mono</FontFamily>\n");
         sb.Append($"  <x:Double x:Key=\"YaapicBodyFontSize\">{Px(Get(root, "type", "body")!.Value.GetProperty("$value").GetProperty("fontSize"))}</x:Double>\n");
         sb.Append($"  <x:Double x:Key=\"YaapicCodeFontSize\">{Px(Get(root, "type", "code")!.Value.GetProperty("$value").GetProperty("fontSize"))}</x:Double>\n");
@@ -38,6 +43,9 @@ public static class TokenGenerator
         return sb.ToString();
     }
 
+    /// <summary>Generates the Avalonia resource dictionary.</summary>
+    /// <param name="tokensJson">The DTCG token file contents.</param>
+    /// <returns>The AXAML of the resource dictionary, with LF line endings.</returns>
     public static string GenerateAvalonia(string tokensJson)
     {
         using var doc = JsonDocument.Parse(tokensJson);
@@ -65,13 +73,21 @@ public static class TokenGenerator
 
     private enum Theme { Dark = 0, Light = 1, HighContrast = 2 }
 
-    private sealed record ColorToken(string Key, string[] Values);
+    private sealed record ColorToken(string Key, string[] Values, string[] Aliases);
 
     private static void AppendTheme(StringBuilder sb, string key, Theme theme, List<ColorToken> tokens, bool systemAccent = false)
     {
         sb.Append($"    <ResourceDictionary x:Key=\"{key}\">\n");
         foreach (var t in tokens)
-            sb.Append($"      <SolidColorBrush x:Key=\"{t.Key}\" Color=\"{ToXamlColor(t.Values[(int)theme])}\"/>\n");
+        {
+            var color = ToXamlColor(t.Values[(int)theme]);
+            sb.Append($"      <SolidColorBrush x:Key=\"{t.Key}\" Color=\"{color}\"/>\n");
+            // High contrast keeps the OS system colours, so Fluent aliases are not emitted there.
+            if (theme != Theme.HighContrast)
+                foreach (var alias in t.Aliases)
+                    sb.Append($"      <SolidColorBrush x:Key=\"{alias}\" Color=\"{color}\"/>\n");
+            sb.Append($"      <Color x:Key=\"{t.Key[..^"Brush".Length]}Color\">{color}</Color>\n");
+        }
         if (systemAccent)
             sb.Append($"      <Color x:Key=\"SystemAccentColor\">{ToXamlColor(tokens.Single(t => t.Key == "YaapicAccentFillBrush").Values[(int)theme])}</Color>\n");
         sb.Append("    </ResourceDictionary>\n");
@@ -81,6 +97,34 @@ public static class TokenGenerator
     {
         sb.Append($"  <x:Double x:Key=\"YaapicControlHeight\">{Px(Get(root, "size", "control", "comfortable"))}</x:Double>\n");
         sb.Append($"  <x:Double x:Key=\"YaapicRowHeight\">{Px(Get(root, "size", "row", "comfortable"))}</x:Double>\n");
+        foreach (var (key, path) in new (string, string[])[]
+        {
+            ("YaapicControlHeightCompact", ["size", "control", "compact"]),
+            ("YaapicControlHeightSpacious", ["size", "control", "spacious"]),
+            ("YaapicRowHeightCompact", ["size", "row", "compact"]),
+            ("YaapicRowHeightSpacious", ["size", "row", "spacious"]),
+            ("YaapicRailWidth", ["size", "rail"]),
+            ("YaapicSidebarWidth", ["size", "sidebar", "default"]),
+            ("YaapicSidebarMinWidth", ["size", "sidebar", "min"]),
+            ("YaapicSidebarMaxWidth", ["size", "sidebar", "max"]),
+            ("YaapicStatusBarHeight", ["size", "statusbar"]),
+            ("YaapicTabBarHeight", ["size", "tabbar"]),
+        })
+            sb.Append($"  <x:Double x:Key=\"{key}\">{Px(Get(root, path))}</x:Double>\n");
+        foreach (var space in root.GetProperty("space").EnumerateObject().Where(p => !p.Name.StartsWith('$')))
+            sb.Append($"  <x:Double x:Key=\"YaapicSpace{space.Name}\">{Px(space.Value)}</x:Double>\n");
+        foreach (var name in new[] { "xs", "sm", "md", "lg", "xl", "full" })
+            sb.Append($"  <CornerRadius x:Key=\"YaapicRadius{char.ToUpperInvariant(name[0])}{name[1..]}\">{Px(Get(root, "radius", name))}</CornerRadius>\n");
+        // Type tokens are keyed "title.lg", "body.sm"... in the file: PascalCase the dotted name.
+        foreach (var type in root.GetProperty("type").EnumerateObject().Where(p => !p.Name.StartsWith('$')))
+        {
+            var name = string.Concat(type.Name.Split('.').Select(part => char.ToUpperInvariant(part[0]) + part[1..]));
+            var value = type.Value.GetProperty("$value");
+            sb.Append($"  <x:Double x:Key=\"YaapicFontSize{name}\">{Px(value.GetProperty("fontSize"))}</x:Double>\n");
+            sb.Append($"  <x:Double x:Key=\"YaapicLineHeight{name}\">{Px(value.GetProperty("lineHeight"))}</x:Double>\n");
+        }
+        sb.Append($"  <Thickness x:Key=\"YaapicBorderThickness\">{Px(Get(root, "border", "width", "default"))}</Thickness>\n");
+        sb.Append($"  <Thickness x:Key=\"YaapicFocusBorderThickness\">{Px(Get(root, "border", "width", "focus"))}</Thickness>\n");
     }
 
     // Colour tokens are the "color" subtree in file order; a token may carry nested tokens (e.g. info.background).
@@ -96,9 +140,13 @@ public static class TokenGenerator
             {
                 var ext = node.GetProperty("$extensions");
                 var themes = ext.GetProperty(ThemesKey);
+                var xaml = ext.GetProperty(XamlKey);
                 var dark = value.GetString()!;
-                result.Add(new ColorToken(ext.GetProperty(XamlKey).GetProperty(platform).GetString()!,
-                    [dark, themes.GetProperty("light").GetString()!, themes.GetProperty("highContrast").GetString()!]));
+                string[] aliases = platform == "winui" && xaml.TryGetProperty("winuiAliases", out var list)
+                    ? [.. list.EnumerateArray().Select(a => a.GetString()!)]
+                    : [];
+                result.Add(new ColorToken(xaml.GetProperty(platform).GetString()!,
+                    [dark, themes.GetProperty("light").GetString()!, themes.GetProperty("highContrast").GetString()!], aliases));
             }
             foreach (var child in node.EnumerateObject().Where(p => !p.Name.StartsWith('$')))
                 Collect(child.Value);

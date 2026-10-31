@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Yaapic.Infrastructure.Tests" />
+    <PackageReference Include="VYaml" />
+    <ProjectReference Include="..\Yaapic.Core\Yaapic.Core.csproj" />
+    <ProjectReference Include="..\Yaapic.Domain\Yaapic.Domain.csproj" />
+  </ItemGroup>
+</Project>

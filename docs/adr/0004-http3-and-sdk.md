@@ -28,5 +28,5 @@ feature is detected, never assumed.
 
 HTTP/3: option 1. SDK: **.NET 11 RC**, chosen by the product owner. Accepted risk: a pre-release SDK can change or
 regress between RC builds and its packages may not be supported; Windows App SDK and Avalonia compatibility must be
-re-verified on each RC and at GA. Fallback: return to .NET 10 LTS. `global.json` and the target frameworks move to
-.NET 11 in a dedicated card once an RC SDK is available in CI; until then the repository still builds on 10.0.
+re-verified on each RC and at GA. Fallback: return to .NET 10 LTS. `global.json` and the target frameworks moved to
+.NET 11 RC3 together with C# 15.

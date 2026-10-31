@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic DS — Principes et fondations</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width:1600px;height:1700px;box-sizing:border-box;background:#131518;color:#ECEEF1;font-family:Inter,system-ui,sans-serif;padding:56px 64px;display:flex;flex-direction:column;gap:36px">
+  <div>
+    <div style="font:500 12px/16px 'JetBrains Mono',monospace;letter-spacing:.08em;color:#1FC7D4;text-transform:uppercase">10 · Fondations</div>
+    <h1 style="margin:8px 0 0;font:600 36px/44px 'Space Grotesk',sans-serif;letter-spacing:-.02em">Cinq principes, une grille de 4 px</h1>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:16px">
+    <sc-for list="{{principles}}" as="p" hint-placeholder-count="5">
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:8px;padding:20px;display:flex;flex-direction:column;gap:8px">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#1FC7D4">{{p.n}}</div>
+        <div style="font:600 17px/24px 'Space Grotesk',sans-serif">{{p.t}}</div>
+        <div style="font-size:13px;line-height:20px;color:#A3AAB4">{{p.d}}</div>
+        <div style="font-size:12px;line-height:18px;color:#848C97;border-top:1px solid #24282E;padding-top:8px">Ex. {{p.e}}</div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 520px;gap:24px">
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:4px">
+      <div style="display:flex;justify-content:space-between;margin-bottom:12px"><div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">ÉCHELLE TYPOGRAPHIQUE · UI</div><div style="font:500 12px/16px 'JetBrains Mono',monospace;color:#848C97">Segoe UI Variable · SF Pro · Cantarell → Inter</div></div>
+      <sc-for list="{{types}}" as="t" hint-placeholder-count="9">
+        <div style="display:grid;grid-template-columns:180px 1fr 200px;align-items:baseline;gap:16px;border-top:1px solid #24282E;padding:10px 0">
+          <span style="font:500 12px/16px 'JetBrains Mono',monospace;color:#1FC7D4">{{t.tok}}</span>
+          <span style="{{t.st}}">{{t.sample}}</span>
+          <span style="font:500 12px/16px 'JetBrains Mono',monospace;color:#848C97;text-align:right">{{t.spec}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:24px">
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">MONOSPACE · CODE</div>
+        <div style="font:400 13px/20px 'JetBrains Mono',monospace;background:#121417;border-radius:6px;padding:12px;color:#ECEEF1">JetBrains Mono 12/20 — 0O Il1 {} =&gt; !=<br><span style="color:#848C97">Repli : Cascadia Code (Win) · SF Mono (mac)</span></div>
+        <div style="font-size:12px;line-height:18px;color:#A3AAB4">code 12/20 · code.sm 11/16 · code.lg 14/22. Ligatures désactivées par défaut (lisibilité de « != » dans les JSON) ; activables dans Paramètres › Éditeur.</div>
+      </div>
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">ESPACEMENT · space.*</div>
+        <sc-for list="{{spaces}}" as="s" hint-placeholder-count="10">
+          <div style="display:grid;grid-template-columns:110px 44px 1fr;align-items:center;gap:12px">
+            <span style="font:500 12px/16px 'JetBrains Mono',monospace;color:#ECEEF1">{{s.tok}}</span>
+            <span style="font:500 12px/16px 'JetBrains Mono',monospace;color:#848C97">{{s.px}}</span>
+            <div style="height:10px;background:#1FC7D4;border-radius:2px;width:{{s.w}}"></div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">RAYONS · radius.*</div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;background:#282C33;border:1px solid #454B54;border-radius:2px"></div><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#A3AAB4">xs · 2</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;background:#282C33;border:1px solid #454B54;border-radius:4px"></div><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#A3AAB4">sm · 4</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;background:#282C33;border:1px solid #1FC7D4;border-radius:6px"></div><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#1FC7D4">md · 6</span></div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:56px;height:56px;background:#282C33;border:1px solid #454B54;border-radius:8px"></div><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#A3AAB4">lg · 8</span></div>
+      </div>
+      <div style="font-size:12px;line-height:18px;color:#A3AAB4"><b style="color:#ECEEF1">radius.control</b> est un alias par OS : 4 (Windows, = ControlCornerRadius), 6 (macOS), 6 (GNOME). <b style="color:#ECEEF1">radius.overlay</b> = 8 partout (= OverlayCornerRadius). xl 12 réservé aux dialogues d'onboarding.</div>
+    </div>
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">ÉLÉVATION · elevation.*</div>
+      <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;background:#16181C;border-radius:8px;padding:16px">
+        <div style="height:64px;background:#1A1D21;border:1px solid #30353C;border-radius:6px;display:flex;align-items:flex-end;padding:6px;font:500 11px/14px 'JetBrains Mono',monospace;color:#A3AAB4">0 · bord</div>
+        <div style="height:64px;background:#21252A;border:1px solid #30353C;border-radius:6px;box-shadow:0 2px 4px rgba(0,0,0,.28);display:flex;align-items:flex-end;padding:6px;font:500 11px/14px 'JetBrains Mono',monospace;color:#A3AAB4">1 · 2/4</div>
+        <div style="height:64px;background:#282C33;border:1px solid #30353C;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);display:flex;align-items:flex-end;padding:6px;font:500 11px/14px 'JetBrains Mono',monospace;color:#A3AAB4">2 · 8/16</div>
+        <div style="height:64px;background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 24px 48px rgba(0,0,0,.5);display:flex;align-items:flex-end;padding:6px;font:500 11px/14px 'JetBrains Mono',monospace;color:#A3AAB4">3 · 24/48</div>
+      </div>
+      <div style="font-size:12px;line-height:18px;color:#A3AAB4">WinUI : ThemeShadow + Translation Z 8 / 32 / 64. Avalonia : BoxShadow équivalent. En sombre, l'élévation se lit d'abord par la surface (plus claire) et la bordure, l'ombre est un bonus.</div>
+    </div>
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">MOUVEMENT · motion.*</div>
+      <sc-for list="{{motion}}" as="m" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:150px 70px 1fr;gap:10px;align-items:center;border-top:1px solid #24282E;padding-top:8px">
+          <span style="font:500 12px/16px 'JetBrains Mono',monospace;color:#ECEEF1">{{m.tok}}</span>
+          <span style="font:500 12px/16px 'JetBrains Mono',monospace;color:#1FC7D4">{{m.v}}</span>
+          <span style="font-size:12px;line-height:16px;color:#A3AAB4">{{m.u}}</span>
+        </div>
+      </sc-for>
+      <div style="font-size:12px;line-height:18px;color:#A3AAB4">Réduire les animations (OS ou réglage) : durées → 0, seuls les fondus ≤ 100 ms restent. Jamais d'animation sur le corps de la réponse.</div>
+    </div>
+  </div>
+
+  <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px">
+    <div style="display:flex;justify-content:space-between"><div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">DENSITÉ · tailles de contrôles</div><div style="font:500 12px/16px 'JetBrains Mono',monospace;color:#848C97">size.control · size.row · space.inset</div></div>
+    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px">
+      <sc-for list="{{densities}}" as="d" hint-placeholder-count="3">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font:600 15px/20px 'Space Grotesk',sans-serif">{{d.name}}</span><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#848C97">{{d.spec}}</span></div>
+          <div style="display:flex;gap:8px;align-items:center">
+            <div style="height:{{d.h}};flex:1;background:#121417;border:1px solid #30353C;border-radius:4px;display:flex;align-items:center;padding:0 {{d.p}};font:400 12px 'JetBrains Mono',monospace;color:#ECEEF1">https://staging.api.parcelo.example</div>
+            <div style="height:{{d.h}};background:#1FC7D4;color:#04252A;border-radius:4px;display:flex;align-items:center;padding:0 {{d.bp}};font-weight:600;font-size:13px">Send</div>
+          </div>
+          <div style="border:1px solid #24282E;border-radius:4px;overflow:hidden">
+            <sc-for list="{{d.rows}}" as="r" hint-placeholder-count="3">
+              <div style="height:{{d.rh}};display:flex;align-items:center;gap:8px;padding:0 10px;border-top:1px solid #24282E;font-size:13px"><span style="font:600 10px 'JetBrains Mono',monospace;color:{{r.c}};width:38px">{{r.m}}</span><span>{{r.n}}</span></div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const rows = [{m:'GET',c:'#3DD6A3',n:'List shipments'},{m:'POST',c:'#F5B648',n:'Create shipment'},{m:'DEL',c:'#FF7272',n:'Cancel shipment'}];
+    const ui = "'Segoe UI Variable Text','Segoe UI',Inter,sans-serif";
+    return {
+      principles: [
+        {n:'01',t:'Instantané avant tout',d:"Chaque interaction répond en moins de 100 ms ou affiche un état. Pas de spinner bloquant, jamais d'écran figé.",e:'Send passe en « Cancel » à 0 ms ; la barre de progression n’apparaît qu’après 300 ms.'},
+        {n:'02',t:'La donnée est l’interface',d:'Le JSON, les headers, le timing occupent la surface. Le chrome se fait discret, les bordures 1 px remplacent les cartes.',e:'Le panneau de réponse occupe 55 % de la hauteur par défaut.'},
+        {n:'03',t:'Le clavier est un citoyen',d:'Toute action a un raccourci et un focus visible. La souris est optionnelle, jamais la palette.',e:'Ctrl+Entrée envoie, Ctrl+K ouvre tout, Alt+↑↓ change d’onglet de requête.'},
+        {n:'04',t:'Natif, pas imité',d:'Contrôles, polices et chrome de l’OS hôte. La marque vit dans l’accent et les icônes.',e:'Traffic lights à gauche sur macOS, Mica sur Windows 11, headerbar sur GNOME.'},
+        {n:'05',t:'Jamais la couleur seule',d:'Méthode, statut, test : toujours un libellé ou une icône en plus de la teinte.',e:'« 404 Not Found » + icône triangle ; « DEL » écrit, pas seulement rouge.'}
+      ],
+      types: [
+        {tok:'type.display',st:"font:600 40px/52px 'Space Grotesk',sans-serif;letter-spacing:-.02em",sample:'Bienvenue',spec:'40/52 · 600 · marque'},
+        {tok:'type.title.lg',st:'font:600 28px/36px '+ui,sample:'Collection Runner',spec:'28/36 · 600'},
+        {tok:'type.title',st:'font:600 20px/28px '+ui,sample:'Shipments API v2',spec:'20/28 · 600'},
+        {tok:'type.subtitle',st:'font:600 15px/20px '+ui,sample:'Environnements',spec:'15/20 · 600'},
+        {tok:'type.body.strong',st:'font:600 13px/20px '+ui,sample:'Create shipment',spec:'13/20 · 600'},
+        {tok:'type.body',st:'font:400 13px/20px '+ui,sample:'Corps par défaut de l’interface, listes et formulaires.',spec:'13/20 · 400 (base)'},
+        {tok:'type.body.sm',st:'font:400 12px/16px '+ui+';color:#A3AAB4',sample:'Descriptions de champs, aides contextuelles',spec:'12/16 · 400'},
+        {tok:'type.caption',st:'font:500 11px/16px '+ui+';color:#A3AAB4;letter-spacing:.02em',sample:'EN-TÊTES DE COLONNE · BARRE D’ÉTAT',spec:'11/16 · 500'},
+        {tok:'type.code',st:"font:400 12px/20px 'JetBrains Mono',monospace;color:#B5E36C",sample:'"tracking_number": "6A23948571028"',spec:'12/20 · mono'}
+      ],
+      spaces: [['space.50','2'],['space.100','4'],['space.150','6'],['space.200','8'],['space.300','12'],['space.400','16'],['space.500','20'],['space.600','24'],['space.800','32'],['space.1200','48']].map(a=>({tok:a[0],px:a[1]+' px',w:(Number(a[1])*5)+'px'})),
+      motion: [
+        {tok:'motion.duration.fast',v:'100 ms',u:'Survol, pressé, apparition de tooltip'},
+        {tok:'motion.duration.normal',v:'150 ms',u:'Menus, popovers, changement d’onglet'},
+        {tok:'motion.duration.slow',v:'250 ms',u:'Dialogues, panneaux latéraux, InfoBar'},
+        {tok:'motion.easing.standard',v:'0.2,0,0,1',u:'Entrées et déplacements (Fluent « FastOutSlowIn »)'},
+        {tok:'motion.easing.exit',v:'0.3,0,1,1',u:'Sorties — toujours plus courtes que les entrées'}
+      ],
+      densities: [
+        {name:'Compacte',spec:'contrôle 24 · ligne 22',h:'24px',p:'8px',bp:'10px',rh:'22px',rows},
+        {name:'Confortable (défaut)',spec:'contrôle 32 · ligne 28',h:'32px',p:'10px',bp:'14px',rh:'28px',rows},
+        {name:'Spacieuse',spec:'contrôle 36 · ligne 32',h:'36px',p:'12px',bp:'16px',rh:'32px',rows}
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

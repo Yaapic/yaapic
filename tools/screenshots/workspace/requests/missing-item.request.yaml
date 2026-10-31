@@ -1,0 +1,11 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000003
+name: Missing item
+method: GET
+url: "{{baseUrl}}/status/404"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""

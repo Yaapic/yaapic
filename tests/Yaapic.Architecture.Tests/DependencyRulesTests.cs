@@ -11,10 +11,12 @@ public class DependencyRulesTests
     {
         ["Yaapic.Domain"] = [],
         ["Yaapic.Core"] = ["Yaapic.Domain"],
+        ["Yaapic.Infrastructure"] = ["Yaapic.Core", "Yaapic.Domain"],
         ["Yaapic.UI.Abstractions"] = [],
         ["Yaapic.Design.Tokens"] = [],
         ["Yaapic.ViewModels"] = ["Yaapic.Core", "Yaapic.UI.Abstractions"],
-        ["Yaapic.App.WinUI"] = ["Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
+        ["Yaapic.Composition"] = ["Yaapic.Core", "Yaapic.Domain", "Yaapic.Infrastructure", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
+        ["Yaapic.App.WinUI"] = ["Yaapic.Composition", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
     };
 
     private static string SrcDir()
@@ -52,4 +54,8 @@ public class DependencyRulesTests
         var offenders = ReadReferences().Where(p => !p.Key.StartsWith("Yaapic.App.") && p.Value.Any(r => r.StartsWith("Yaapic.App.")));
         Assert.Empty(offenders);
     }
+
+    [Fact]
+    public void ViewModels_do_not_reference_Infrastructure() =>
+        Assert.DoesNotContain("Yaapic.Infrastructure", ReadReferences()["Yaapic.ViewModels"]);
 }

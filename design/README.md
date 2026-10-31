@@ -29,3 +29,7 @@ Toutes les maquettes, le design system et le prototype sont sur le canevas Desig
 3. HTTP/3 selon la disponibilité de QUIC par OS (option grisée sinon).
 4. Dépôt de la marque « Yaapic » et des noms de domaine.
 5. Le logotype est vectorisé depuis Space Grotesk (OFL) : un ajustement typographique à la main reste recommandé avant le dépôt de marque.
+
+## Regenerating the XAML dictionaries
+
+The XAML dictionaries in `design/xaml/` are generated from `design/tokens/yaapic.tokens.json` by `Yaapic.Design.Tokens` and are never edited by hand. After changing the token file (or the generator), refresh the reference files with `YAAPIC_UPDATE_SNAPSHOTS=1 dotnet test --solution Yaapic.sln -c Release` (the two snapshot tests then rewrite the files instead of asserting), review the diff, and run the tests again without the variable.

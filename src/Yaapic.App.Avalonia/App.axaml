@@ -1,0 +1,16 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Yaapic.App.Avalonia.App"
+             RequestedThemeVariant="Default">
+  <Application.Styles>
+    <FluentTheme />
+  </Application.Styles>
+  <Application.Resources>
+    <ResourceDictionary>
+      <ResourceDictionary.MergedDictionaries>
+        <ResourceInclude Source="avares://Yaapic.App.Avalonia/Themes/Yaapic.Colors.Avalonia.axaml" />
+        <ResourceInclude Source="avares://Yaapic.App.Avalonia/Themes/Yaapic.Icons.Avalonia.axaml" />
+      </ResourceDictionary.MergedDictionaries>
+    </ResourceDictionary>
+  </Application.Resources>
+</Application>

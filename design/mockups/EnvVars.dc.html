@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic — Environnements et variables</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{root}}">
+  <div style="height:40px;flex:none;display:flex;align-items:center;gap:10px;padding-left:12px;background:var(--chrome);border-bottom:1px solid var(--b1)">
+    <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M5.5 4.5l6.3 8.2" fill="none" stroke="var(--t1)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path><path d="M18.5 4.5l-7.4 12.8a2.6 2.6 0 0 1-2.3 1.3H5.2M7.6 16.1l-2.5 2.5 2.5 2.5" fill="none" stroke="var(--acct)" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+    <span style="font-weight:600">Parcelo<span style="font-weight:400;color:var(--t3)"> · Équipe</span></span>
+    <div style="flex:1;display:flex;justify-content:center"><div style="width:440px;height:28px;border-radius:6px;border:1px solid var(--b2);background:var(--s2);color:var(--t3);display:flex;align-items:center;gap:8px;padding:0 10px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M10.5 4a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13zM15.5 15.5 20 20"></path></svg>Rechercher ou lancer une commande<span style="margin-left:auto;font:500 11px var(--mono);border:1px solid var(--b2);border-radius:4px;padding:0 5px">Ctrl K</span></div></div>
+    <span style="height:28px;border-radius:999px;border:1px solid var(--b2);display:flex;align-items:center;gap:8px;padding:0 10px"><span style="width:8px;height:8px;border-radius:999px;background:var(--get)"></span>staging</span>
+    <div style="display:flex;align-self:stretch" aria-hidden="true"><span style="width:46px;display:flex;align-items:center;justify-content:center;color:var(--t2)"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 5h10" stroke="currentColor"></path></svg></span><span style="width:46px;display:flex;align-items:center;justify-content:center;color:var(--t2)"><svg width="10" height="10" viewBox="0 0 10 10"><rect x=".5" y=".5" width="9" height="9" rx="1.5" fill="none" stroke="currentColor"></rect></svg></span><span style="width:46px;display:flex;align-items:center;justify-content:center;color:var(--t2)"><svg width="10" height="10" viewBox="0 0 10 10"><path d="M0 0l10 10M10 0 0 10" stroke="currentColor"></path></svg></span></div>
+  </div>
+  <div style="flex:1;display:flex;min-height:0">
+    <nav aria-label="Navigation principale" style="width:48px;flex:none;background:var(--chrome);border-right:1px solid var(--b1);display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:4px">
+      <sc-for list="{{rail}}" as="r" hint-placeholder-count="8"><span style="width:36px;height:36px;border-radius:6px;background:{{r.bg}};color:{{r.c}};display:flex;align-items:center;justify-content:center;margin-top:{{r.mt}}"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-label="{{r.l}}"><path d="{{r.d}}"></path></svg></span></sc-for>
+    </nav>
+    <aside style="width:260px;flex:none;background:var(--s0);border-right:1px solid var(--b1);display:flex;flex-direction:column">
+      <div style="height:40px;display:flex;align-items:center;padding:0 10px 0 14px"><span style="font-weight:600;flex:1">Environnements</span><span style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;color:var(--t2)"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-label="Nouvel environnement"><path d="M12 5v14M5 12h14"></path></svg></span></div>
+      <sc-for list="{{envs}}" as="e" hint-placeholder-count="6">
+        <div style="height:32px;display:flex;align-items:center;gap:10px;padding:0 14px;background:{{e.bg}};box-shadow:{{e.sh}}">
+          <span style="width:8px;height:8px;border-radius:{{e.shape}};background:{{e.dot}};flex:none"></span>
+          <span style="font-weight:{{e.fw}}">{{e.n}}</span>
+          <span style="margin-left:auto;font-size:11px;color:var(--t3)">{{e.meta}}</span>
+        </div>
+      </sc-for>
+      <div style="margin-top:auto;border-top:1px solid var(--b1);padding:12px 14px;display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--t2)">
+        <div style="font-weight:600;color:var(--t1)">Ordre de résolution</div>
+        <div style="font:400 12px/20px var(--mono)">local › data › <span style="color:var(--acct)">environnement</span> › collection › global</div>
+      </div>
+    </aside>
+    <main style="flex:1;min-width:0;display:flex;flex-direction:column;background:var(--s1)">
+      <div style="height:56px;flex:none;display:flex;align-items:center;gap:12px;padding:0 20px;border-bottom:1px solid var(--b1)">
+        <span style="width:10px;height:10px;border-radius:999px;background:var(--get)"></span>
+        <span style="font-size:20px;line-height:28px;font-weight:600">staging</span>
+        <span style="font-size:12px;color:var(--t3)">14 variables · 3 secrètes · fichier environments/staging.yaapic.env</span>
+        <div style="margin-left:auto;display:flex;gap:8px">
+          <button type="button" style="height:30px;border:1px solid var(--b2);border-radius:4px;background:var(--s2);color:var(--t1);font-family:inherit;font-size:13px;font-weight:600;padding:0 12px">Dupliquer</button>
+          <button type="button" style="height:30px;border:1px solid var(--b2);border-radius:4px;background:var(--s2);color:var(--t1);font-family:inherit;font-size:13px;font-weight:600;padding:0 12px">Exporter</button>
+          <button type="button" style="height:30px;border:0;border-radius:4px;background:var(--acc);color:var(--onacc);font-family:inherit;font-size:13px;font-weight:600;padding:0 14px;box-shadow:inset 0 0 0 1px var(--accbd)">Enregistrer</button>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin:12px 20px 0;background:var(--irisbg);border-radius:6px;padding:7px 12px;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--iris)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM12 11v5M12 8h.01"></path></svg><span>Les <b>valeurs initiales</b> sont versionnées dans Git. Les <b>valeurs courantes</b> et les secrets restent sur cette machine.</span></div>
+      <div style="display:flex;gap:16px;flex:1;min-height:0;padding:12px 20px 16px">
+        <div style="flex:1;min-width:0;border:1px solid var(--b2);border-radius:6px;overflow:hidden;align-self:flex-start">
+          <div style="display:grid;grid-template-columns:32px 190px 90px 1fr 1fr 32px;background:var(--s0);font-size:11px;font-weight:600;letter-spacing:.03em;color:var(--t3);height:30px;align-items:center"><span></span><span style="padding:0 10px">VARIABLE</span><span style="padding:0 10px">TYPE</span><span style="padding:0 10px">VALEUR INITIALE (partagée)</span><span style="padding:0 10px">VALEUR COURANTE (locale)</span><span></span></div>
+          <sc-for list="{{vars}}" as="v" hint-placeholder-count="12">
+            <div style="display:grid;grid-template-columns:32px 190px 90px 1fr 1fr 32px;height:32px;align-items:center;border-top:1px solid var(--b1);background:{{v.bg}};box-shadow:{{v.sh}}">
+              <span style="display:flex;justify-content:center"><span style="width:13px;height:13px;border-radius:3px;background:{{v.cb}};border:1px solid {{v.cbd}};box-sizing:border-box"></span></span>
+              <span style="padding:0 10px;font:400 12px var(--mono)">{{v.k}}</span>
+              <span style="padding:0 10px;font-size:12px;color:{{v.tc}};display:flex;align-items:center;gap:4px">{{v.type}}</span>
+              <span style="padding:0 10px;font:400 12px var(--mono);color:{{v.ic}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:1px solid var(--b1);height:32px;display:flex;align-items:center">{{v.init}}</span>
+              <span style="padding:0 10px;font:400 12px var(--mono);color:{{v.cc}};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-left:1px solid var(--b1);height:32px;display:flex;align-items:center;gap:6px">{{v.cur}}</span>
+              <span style="color:var(--t3);display:flex;justify-content:center"><sc-if value="{{v.secret}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-label="Révéler"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12zM12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"></path></svg></sc-if></span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="width:330px;flex:none;display:flex;flex-direction:column;gap:12px">
+          <div style="border:1px solid var(--b2);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:10px;background:var(--s0)">
+            <div style="font-weight:600">Aperçu de résolution</div>
+            <div style="font:400 12px var(--mono);background:var(--sk0);border:1px solid var(--b1);border-radius:4px;padding:6px 8px"><span style="background:var(--irisbg);color:var(--iris);border-radius:3px;padding:0 3px;box-shadow:0 0 0 1px var(--iris)">{{v.base}}</span>/v2/shipments?limit=<span style="background:var(--irisbg);color:var(--iris);border-radius:3px;padding:0 3px">{{v.page}}</span></div>
+            <div style="background:var(--s3);border:1px solid var(--b3);border-radius:8px;box-shadow:var(--sh);padding:10px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;font-size:12px"><span style="font:600 12px var(--mono)">baseUrl</span><span style="color:var(--ok)">résolue</span></div>
+              <div style="font:400 12px var(--mono);color:var(--ss)">https://staging.api.parcelo.example</div>
+              <sc-for list="{{layers}}" as="l" hint-placeholder-count="4"><div style="display:grid;grid-template-columns:90px 1fr;font-size:11px;line-height:18px;color:{{l.c}};text-decoration:{{l.td}}"><span>{{l.s}}</span><span style="font-family:var(--mono);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{l.v}}</span></div></sc-for>
+            </div>
+          </div>
+          <div style="border:1px solid var(--b2);border-radius:8px;padding:14px;display:flex;flex-direction:column;gap:8px;background:var(--s0)">
+            <div style="display:flex;align-items:center;gap:8px;font-weight:600"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--acct)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M5.5 11h13a1 1 0 0 1 1 1v7.5a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1V12a1 1 0 0 1 1-1z"></path></svg>Coffre des secrets</div>
+            <div style="font-size:12px;line-height:18px;color:var(--t2)">3 secrets chiffrés dans <b style="color:var(--t1)">{{vault}}</b>. Jamais écrits dans Git, masqués dans la console et les exports.</div>
+            <div style="display:flex;gap:8px;font-size:12px"><span style="color:var(--acct)">Verrouiller maintenant</span><span style="color:var(--t3)">·</span><span style="color:var(--acct)">Auto-verrouillage : 15 min</span></div>
+          </div>
+          <div style="border:1px solid var(--warnbd);background:var(--warnbg);border-radius:8px;padding:12px 14px;display:flex;gap:10px;font-size:12px;line-height:18px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--warn)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin-top:1px"><path d="M12 4 21 19.5H3zM12 10v4M12 17h.01"></path></svg><span><b>tenantId</b> est utilisée dans 4 requêtes mais n'existe pas dans « staging ». <span style="color:var(--acct);font-weight:600">Créer la variable</span></span></div>
+        </div>
+      </div>
+    </main>
+  </div>
+  <footer style="height:24px;flex:none;display:flex;align-items:center;gap:14px;padding:0 10px;background:var(--chrome);border-top:1px solid var(--b1);font-size:12px;color:var(--t2)"><span style="display:flex;align-items:center;gap:6px"><span style="width:7px;height:7px;border-radius:999px;background:var(--ok)"></span>En ligne</span><span>main ↑1</span><span style="margin-left:auto">Console</span><span>Cookies</span><span>Runner</span><span style="color:var(--t3)">Yaapic 1.4.0</span></footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.props.theme ?? 'dark';
+    const TH = {
+      dark: { chrome:'#17191D', s0:'#16181C', s1:'#1A1D21', s2:'#21252A', s3:'#282C33', sk0:'#121417', b1:'#24282E', b2:'#30353C', b3:'#454B54', bctl:'#565D68', t1:'#ECEEF1', t2:'#A3AAB4', t3:'#848C97', t4:'#5A606A', acc:'#1FC7D4', acct:'#5FE0EA', onacc:'#04252A', accbd:'#1FC7D4', sel:'rgba(31,199,212,.10)', iris:'#959BFF', irisbg:'rgba(128,136,255,.14)', ok:'#3FD68A', warn:'#F2B84B', warnbg:'rgba(242,184,75,.10)', warnbd:'rgba(242,184,75,.35)', err:'#FF6B6B', get:'#3DD6A3', ss:'#B5E36C', sh:'0 8px 16px rgba(0,0,0,.4)' },
+      light:{ chrome:'#EEF0F3', s0:'#F4F5F7', s1:'#FFFFFF', s2:'#F6F7F9', s3:'#FFFFFF', sk0:'#FBFBFC', b1:'#E4E7EB', b2:'#D3D8DE', b3:'#B4BBC5', bctl:'#8A919C', t1:'#16191D', t2:'#4A515B', t3:'#5F6772', t4:'#9AA1AB', acc:'#1FC7D4', acct:'#0A6B74', onacc:'#04252A', accbd:'#0A7C86', sel:'#E0FAFC', iris:'#4A4FD0', irisbg:'#ECEDFF', ok:'#157F4A', warn:'#8A5A00', warnbg:'#FCF1DA', warnbd:'#F0D9A6', err:'#C42B2B', get:'#0F7A5C', ss:'#4E7A0E', sh:'0 8px 16px rgba(20,24,30,.14)' }
+    };
+    const t = TH[theme];
+    const vars = Object.entries(t).map(([k, v]) => '--' + k + ':' + v).join(';') + ";--mono:'JetBrains Mono',Consolas,monospace";
+    const b = (s) => '{' + '{' + s + '}' + '}';
+    const R = [
+      ['Collections','M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5M3 9.5A1.5 1.5 0 0 1 4.5 8h15A1.5 1.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z'],
+      ['Environnements','M4 7h9m4 0h3M4 17h3m4 0h9M15 4.5v5M9 14.5v5',true],
+      ['Historique','M3.5 12a8.5 8.5 0 1 0 2.5-6M3.5 4.5V8H7M12 7.5V12l3 2'],
+      ['APIs','M8 4H7a2 2 0 0 0-2 2v3.5L3.5 12 5 14.5V18a2 2 0 0 0 2 2h1M16 4h1a2 2 0 0 1 2 2v3.5l1.5 2.5-1.5 2.5V18a2 2 0 0 1-2 2h-1'],
+      ['Mock servers','M4 5.5A1.5 1.5 0 0 1 5.5 4h13A1.5 1.5 0 0 1 20 5.5v3A1.5 1.5 0 0 1 18.5 10h-13A1.5 1.5 0 0 1 4 8.5zM4 15.5A1.5 1.5 0 0 1 5.5 14h13a1.5 1.5 0 0 1 1.5 1.5v3a1.5 1.5 0 0 1-1.5 1.5h-13A1.5 1.5 0 0 1 4 18.5zM7.5 7h.01M7.5 17h.01'],
+      ['Monitors','M3 12h4l2.5-6 5 12 2.5-6H21'],
+      ['Flows','M3.5 4.5h5v5h-5zM15.5 14.5h5v5h-5zM8.5 7h3.5a2 2 0 0 1 2 2v6a2 2 0 0 0 1.5 2'],
+      ['Paramètres','M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM19.4 13.5l1.6 1.2-1.8 3.1-1.9-.7a7 7 0 0 1-1.7 1l-.3 2h-3.6l-.3-2a7 7 0 0 1-1.7-1l-1.9.7-1.8-3.1 1.6-1.2a7 7 0 0 1 0-3l-1.6-1.2 1.8-3.1 1.9.7a7 7 0 0 1 1.7-1l.3-2h3.6l.3 2a7 7 0 0 1 1.7 1l1.9-.7 1.8 3.1-1.6 1.2a7 7 0 0 1 0 3z',false,'auto']
+    ].map(r => ({ l:r[0], d:r[1], bg: r[2] ? 'var(--sel)' : 'transparent', c: r[2] ? 'var(--acct)' : 'var(--t2)', mt: r[3] || '0' }));
+    const E = (n, dot, o = {}) => ({ n, dot, shape: o.sq ? '2px' : '999px', bg: o.sel ? 'var(--sel)' : 'transparent', sh: o.sel ? 'inset 2px 0 0 var(--acc)' : 'none', fw: o.sel ? '600' : '400', meta: o.meta || '' });
+    const V = (k, type, init, cur, o = {}) => ({ k, type, init, cur, secret: !!o.secret, tc: o.secret ? 'var(--acct)' : 'var(--t2)', ic: o.ic || 'var(--t1)', cc: o.cc || 'var(--t1)', cb: o.off ? 'transparent' : 'var(--acc)', cbd: o.off ? 'var(--bctl)' : 'var(--acc)', bg: o.sel ? 'var(--sel)' : 'transparent', sh: o.sel ? 'inset 2px 0 0 var(--acc)' : 'none' });
+    const dots = '•••••••••••••••';
+    return {
+      root: 'width:1440px;height:900px;overflow:hidden;display:flex;flex-direction:column;font-family:\'Segoe UI Variable Text\',\'Segoe UI\',Inter,sans-serif;font-size:13px;line-height:20px;color:var(--t1);background:var(--s1);' + vars,
+      rail: R,
+      vault: 'Gestionnaire d’identification Windows (DPAPI)',
+      envs: [E('Globals','var(--t3)',{ meta:'6' }), E('local','var(--t3)',{ meta:'11' }), E('staging','var(--get)',{ sel:true, meta:'actif' }), E('preview-pr-482','var(--iris)',{ meta:'14' }), E('production','var(--err)',{ sq:true, meta:'verrouillé' }), E('sandbox-colissimo','var(--t3)',{ meta:'8' })],
+      v: { base: b('baseUrl'), page: b('pageSize') },
+      vars: [
+        V('baseUrl','default','https://staging.api.parcelo.example','https://staging.api.parcelo.example',{ sel:true, cc:'var(--ss)' }),
+        V('authUrl','default','https://auth.staging.parcelo.example','—',{ cc:'var(--t3)' }),
+        V('clientId','default','yaapic-staging-8a1f','yaapic-staging-8a1f'),
+        V('clientSecret','secret',dots,dots,{ secret:true, ic:'var(--t3)', cc:'var(--t3)' }),
+        V('apiKey','secret',dots,dots,{ secret:true, ic:'var(--t3)', cc:'var(--t3)' }),
+        V('accessToken','secret','—','eyJhbGciOiJSUzI1NiIs…',{ secret:true, ic:'var(--t3)', cc:'var(--t2)' }),
+        V('pageSize','default','25','100',{ cc:'var(--warn)' }),
+        V('shipperAccount','default','ACC-77810-FR','ACC-77810-FR'),
+        V('customerEmail','default','camille.moreau@example.com','camille.moreau@example.com'),
+        V('webhookSecret','default','whsec_test_3f…','whsec_test_3f…',{ off:true, ic:'var(--t3)', cc:'var(--t3)' }),
+        V('labelFormat','default','pdf_a6','pdf_a6'),
+        V('defaultCarrier','default','colissimo','chronopost',{ cc:'var(--warn)' })
+      ],
+      layers: [
+        { s:'local', v:'—', c:'var(--t3)', td:'none' },
+        { s:'environnement', v:'https://staging.api.parcelo.example', c:'var(--t1)', td:'none' },
+        { s:'collection', v:'https://api.parcelo.example', c:'var(--t3)', td:'line-through' },
+        { s:'global', v:'http://localhost:8080', c:'var(--t3)', td:'line-through' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

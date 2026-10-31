@@ -1,0 +1,219 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.ResponsePanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:d="using:Yaapic.Domain.Http"
+             xmlns:v="using:Yaapic.App.WinUI.Views">
+  <Grid Background="{ThemeResource YaapicSurfaceBaseBrush}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <InfoBar Severity="Warning" IsOpen="True" IsClosable="False" Margin="16,8,16,0"
+             Style="{StaticResource YaapicInfoBarStyle}"
+             Message="{x:Bind ViewModel.UnresolvedWarning, Mode=OneWay}"
+             Visibility="{x:Bind p:VisibilityMap.WhenWarning(ViewModel.UnresolvedWarning, ViewModel.State), Mode=OneWay}"/>
+    <Grid Grid.Row="1">
+      <!-- Empty -->
+      <Grid Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+            Visibility="{x:Bind p:VisibilityMap.WhenEmpty(ViewModel.State), Mode=OneWay}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+          <Viewbox Width="64" Height="40" HorizontalAlignment="Center">
+            <Canvas Width="64" Height="40">
+              <Path Data="M4 30h8M16 30h14M34 30h6M44 30h16M4 20h22M30 20h10M4 10h12"
+                    Stroke="{ThemeResource YaapicBorderOverlayBrush}" StrokeThickness="3"
+                    StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+            </Canvas>
+          </Viewbox>
+          <TextBlock Text="The response will appear here." Style="{StaticResource YaapicBodyTextStyle}"
+                     Foreground="{ThemeResource YaapicTextSecondaryBrush}" HorizontalAlignment="Center"/>
+          <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
+            <Border Style="{StaticResource YaapicKeycapBorderStyle}" VerticalAlignment="Center">
+              <TextBlock Text="Ctrl" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                         Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+            </Border>
+            <Border Style="{StaticResource YaapicKeycapBorderStyle}" VerticalAlignment="Center">
+              <TextBlock Text="Enter" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                         Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+            </Border>
+            <TextBlock Text="to send" VerticalAlignment="Center" Style="{StaticResource YaapicBodySmallTextStyle}"
+                       Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+          </StackPanel>
+        </StackPanel>
+      </Grid>
+
+      <!-- Sending -->
+      <Grid VerticalAlignment="Top" Visibility="{x:Bind p:VisibilityMap.WhenSending(ViewModel.State), Mode=OneWay}">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="36"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Border Padding="16,0,12,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+          <TextBlock Text="Sending" Style="{StaticResource YaapicBodyStrongTextStyle}" VerticalAlignment="Center"/>
+        </Border>
+        <ProgressBar Grid.Row="1" IsIndeterminate="True" VerticalAlignment="Top"/>
+        <StackPanel Grid.Row="2" Padding="16" Spacing="12">
+          <Grid>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="55*"/><ColumnDefinition Width="45*"/></Grid.ColumnDefinitions>
+            <Border Style="{StaticResource YaapicSkeletonBarStyle}"/>
+          </Grid>
+          <Grid>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="80*"/><ColumnDefinition Width="20*"/></Grid.ColumnDefinitions>
+            <Border Style="{StaticResource YaapicSkeletonBarStyle}"/>
+          </Grid>
+          <Grid>
+            <Grid.ColumnDefinitions><ColumnDefinition Width="35*"/><ColumnDefinition Width="65*"/></Grid.ColumnDefinitions>
+            <Border Style="{StaticResource YaapicSkeletonBarStyle}"/>
+          </Grid>
+        </StackPanel>
+      </Grid>
+
+      <!-- Failed -->
+      <StackPanel Padding="16" Spacing="10" VerticalAlignment="Top"
+                  Visibility="{x:Bind p:VisibilityMap.WhenFailed(ViewModel.State), Mode=OneWay}">
+        <StackPanel Orientation="Horizontal" Spacing="10">
+          <Border Width="32" Height="32" CornerRadius="16" Background="{ThemeResource YaapicDangerBackgroundBrush}">
+            <Viewbox Width="18" Height="18">
+              <Canvas Width="24" Height="24">
+                <Path Data="{StaticResource YaapicGlyphFailed}" Stroke="{ThemeResource YaapicDangerBrush}" StrokeThickness="2"
+                      StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
+              </Canvas>
+            </Viewbox>
+          </Border>
+          <TextBlock Text="No response" Style="{StaticResource YaapicSubtitleTextStyle}" VerticalAlignment="Center"/>
+        </StackPanel>
+        <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}" IsTextSelectionEnabled="True" TextWrapping="Wrap"
+                   Style="{StaticResource YaapicBodyTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+      </StackPanel>
+
+      <!-- Completed -->
+      <Grid Visibility="{x:Bind p:VisibilityMap.WhenCompleted(ViewModel.State), Mode=OneWay}">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="36"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Padding="16,0,12,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+          <StackPanel Orientation="Horizontal">
+            <ToggleButton x:Name="BodyTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
+                          IsChecked="True" Click="OnTabClick" Content="Body"/>
+            <ToggleButton x:Name="HeadersTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
+                          Click="OnTabClick">
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="Headers" VerticalAlignment="Center"/>
+                <TextBlock x:Name="HeadersBadge" VerticalAlignment="Center"
+                           Style="{StaticResource YaapicCountBadgeTextStyle}"
+                           Text="{x:Bind ViewModel.Headers.Count, Mode=OneWay}"
+                           Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Headers.Count), Mode=OneWay}"/>
+              </StackPanel>
+            </ToggleButton>
+          </StackPanel>
+          <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Border Style="{StaticResource YaapicChipBorderStyle}" VerticalAlignment="Center"
+                    AutomationProperties.Name="{x:Bind ViewModel.StatusText, Mode=OneWay}"
+                    AutomationProperties.LiveSetting="Polite"
+                    Background="{x:Bind p:BrushMap.StatusBackground(ViewModel.StatusCategory), Mode=OneWay}">
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <Viewbox Width="12" Height="12" VerticalAlignment="Center"
+                         Visibility="{x:Bind p:VisibilityMap.WhenSuccessStatus(ViewModel.StatusCategory), Mode=OneWay}">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YaapicGlyphStatusSuccess}" StrokeThickness="3"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                          Stroke="{x:Bind p:BrushMap.StatusForeground(ViewModel.StatusCategory), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+                <Viewbox Width="12" Height="12" VerticalAlignment="Center"
+                         Visibility="{x:Bind p:VisibilityMap.WhenClientErrorStatus(ViewModel.StatusCategory), Mode=OneWay}">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YaapicGlyphStatusClientError}" StrokeThickness="3"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                          Stroke="{x:Bind p:BrushMap.StatusForeground(ViewModel.StatusCategory), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+                <Viewbox Width="12" Height="12" VerticalAlignment="Center"
+                         Visibility="{x:Bind p:VisibilityMap.WhenServerErrorStatus(ViewModel.StatusCategory), Mode=OneWay}">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YaapicGlyphStatusServerError}" StrokeThickness="3"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                          Stroke="{x:Bind p:BrushMap.StatusForeground(ViewModel.StatusCategory), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+                <Viewbox Width="12" Height="12" VerticalAlignment="Center"
+                         Visibility="{x:Bind p:VisibilityMap.WhenInfoStatus(ViewModel.StatusCategory), Mode=OneWay}">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YaapicGlyphStatusInfo}" StrokeThickness="3"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"
+                          Stroke="{x:Bind p:BrushMap.StatusForeground(ViewModel.StatusCategory), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+                <TextBlock Style="{StaticResource YaapicChipTextStyle}" Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"
+                           Foreground="{x:Bind p:BrushMap.StatusForeground(ViewModel.StatusCategory), Mode=OneWay}"/>
+              </StackPanel>
+            </Border>
+            <TextBlock VerticalAlignment="Center" Text="{x:Bind ViewModel.DurationText, Mode=OneWay}"
+                       Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+            <TextBlock VerticalAlignment="Center" Text="{x:Bind ViewModel.SizeText, Mode=OneWay}"
+                       Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+          </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+          <Grid x:Name="BodyPane">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="40"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <ListView x:Name="ViewModes" Style="{StaticResource YaapicSegmentedStyle}" Margin="16,0,12,0"
+                      VerticalAlignment="Center" SelectionChanged="OnViewModeChanged">
+              <x:String>Pretty</x:String>
+              <x:String>Raw</x:String>
+            </ListView>
+            <Border Grid.Row="1" Padding="0,2" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+                    BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
+              <Grid>
+                <v:CodeEditorView IsReadOnly="True"
+                                  Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.IsBinary), Mode=OneWay}"
+                                  EditorLanguage="{x:Bind ViewModel.BodyLanguage, Mode=OneWay}"
+                                  Text="{x:Bind ViewModel.BodyText, Mode=OneWay}"/>
+                <TextBox IsReadOnly="True" Padding="16,0" MinHeight="0" BorderThickness="0" Background="Transparent"
+                         FontFamily="{StaticResource YaapicMonoFont}"
+                         FontSize="{StaticResource YaapicCodeFontSize}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsBinary), Mode=OneWay}"
+                         Text="{x:Bind ViewModel.BinaryText, Mode=OneWay}"/>
+              </Grid>
+            </Border>
+          </Grid>
+          <ListView x:Name="HeadersPane" Visibility="Collapsed" SelectionMode="None"
+                    ItemsSource="{x:Bind p:ListMap.Entries(ViewModel.Headers), Mode=OneWay}">
+            <ListView.ItemContainerStyle>
+              <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <Setter Property="MinHeight" Value="0"/>
+                <Setter Property="Padding" Value="0"/>
+              </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+              <DataTemplate x:DataType="d:KeyValueEntry">
+                <Border Padding="14,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+                  <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="170"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" Text="{x:Bind Key}"
+                               Style="{StaticResource YaapicCodeSmallTextStyle}" LineHeight="24"
+                               Foreground="{ThemeResource YaapicSyntaxKeyBrush}"/>
+                    <TextBlock Grid.Column="1" IsTextSelectionEnabled="True" TextTrimming="CharacterEllipsis" Text="{x:Bind Value}"
+                               Style="{StaticResource YaapicCodeSmallTextStyle}" LineHeight="24"
+                               Foreground="{ThemeResource YaapicTextPrimaryBrush}"
+                               ToolTipService.ToolTip="{x:Bind Value}"/>
+                  </Grid>
+                </Border>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>

@@ -16,7 +16,10 @@ write in the repository (code, docs, commit message) is in **English**.
 
 1. Run `git status --porcelain`. If anything is modified or untracked, **stop**: the commit must contain this card
    only. Ask the user to commit or stash first.
-2. Run `git branch --show-current`. If it is `main`, a branch is created in step 2 once the card is known. If it is
+2. **Branch rule:** work goes on the long-lived branch named after the phase (e.g. `docs/m1-task-cards` for
+   milestone 1), checked out in the main checkout. Never create a branch or worktree per card; if you were started in
+   a worktree, commit there only to hand over and fast-forward the phase branch, then push it.
+3. Run `git branch --show-current`. If it is `main`, a branch is created in step 2 once the card is known. If it is
    another branch, keep it.
 
 ## 2. Pick the card

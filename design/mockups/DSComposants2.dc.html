@@ -1,0 +1,256 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic DS — Navigation et feedback</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width:1600px;height:1700px;box-sizing:border-box;background:#131518;color:#ECEEF1;font-family:'Segoe UI Variable Text','Segoe UI',Inter,sans-serif;font-size:13px;line-height:20px;padding:56px 64px;display:flex;flex-direction:column;gap:24px">
+  <div>
+    <div style="font:500 12px/16px 'JetBrains Mono',monospace;letter-spacing:.08em;color:#1FC7D4;text-transform:uppercase">14 · Composants — navigation & feedback</div>
+    <h1 style="margin:8px 0 0;font:600 36px/44px 'Space Grotesk',sans-serif;letter-spacing:-.02em">Onglets, arbre, overlays, statuts, chargement</h1>
+  </div>
+
+  <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:14px">
+    <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">ONGLETS DE REQUÊTES · épinglé · modifié · aperçu (italique) · actif · débordement</div>
+    <div style="display:flex;align-items:stretch;height:36px;background:#16181C;border:1px solid #24282E;border-radius:6px;overflow:hidden">
+      <sc-for list="{{tabs}}" as="t" hint-placeholder-count="6">
+        <div style="display:flex;align-items:center;gap:8px;padding:0 12px;border-right:1px solid #24282E;background:{{t.bg}};box-shadow:{{t.line}};min-width:0;max-width:220px">
+          <span style="font:700 10px 'JetBrains Mono',monospace;color:{{t.c}}">{{t.m}}</span>
+          <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-style:{{t.it}};color:{{t.fg}}">{{t.n}}</span>
+          <span style="width:16px;display:flex;justify-content:center;color:#848C97">{{t.end}}</span>
+        </div>
+      </sc-for>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:4px;padding:0 8px;color:#A3AAB4"><span style="border:1px solid #30353C;border-radius:4px;padding:0 6px;font-size:12px">+4</span><span style="width:28px;text-align:center">+</span></div>
+    </div>
+    <div style="display:flex;gap:40px;align-items:center">
+      <div style="display:flex;gap:20px;border-bottom:1px solid #30353C">
+        <sc-for list="{{ptabs}}" as="p" hint-placeholder-count="7"><span style="padding:6px 0;color:{{p.c}};box-shadow:{{p.sh}};display:flex;gap:6px;align-items:center">{{p.n}}<span style="font:600 10px/14px 'JetBrains Mono',monospace;color:{{p.bc}}">{{p.b}}</span></span></sc-for>
+      </div>
+      <div style="display:flex;background:#121417;border:1px solid #30353C;border-radius:6px;padding:2px">
+        <span style="padding:2px 12px;border-radius:4px;background:#282C33">Pretty</span><span style="padding:2px 12px;color:#A3AAB4">Raw</span><span style="padding:2px 12px;color:#A3AAB4">Preview</span><span style="padding:2px 12px;color:#A3AAB4">Visualize</span>
+      </div>
+      <span style="font-size:12px;color:#848C97">Onglets de panneau (Pivot / TabStrip) · Segmented control</span>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:380px 1fr 1fr;gap:20px">
+    <div style="background:#16181C;border:1px solid #24282E;border-radius:12px;padding:12px 0;position:relative;height:440px;box-sizing:border-box">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97;padding:0 16px 8px">ARBRE DE COLLECTIONS</div>
+      <sc-for list="{{tree}}" as="n" hint-placeholder-count="12">
+        <div style="height:26px;display:flex;align-items:center;gap:6px;padding-left:{{n.pad}};padding-right:12px;background:{{n.bg}};box-shadow:{{n.sh}};color:{{n.fg}}">
+          <span style="width:12px;color:#848C97;font-size:10px">{{n.chev}}</span>
+          <sc-if value="{{n.isReq}}" hint-placeholder-val="{{true}}"><span style="font:700 10px 'JetBrains Mono',monospace;color:{{n.mc}};width:38px">{{n.m}}</span></sc-if>
+          <sc-if value="{{n.isFolder}}" hint-placeholder-val="{{false}}"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A3AAB4" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.icon}}"></path></svg></sc-if>
+          <span style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:{{n.fw}}">{{n.n}}</span>
+          <span style="margin-left:auto;font-size:11px;color:#848C97">{{n.meta}}</span>
+        </div>
+      </sc-for>
+      <div style="position:absolute;left:58px;right:12px;top:254px;height:2px;background:#5FE0EA;border-radius:1px"></div>
+      <div style="position:absolute;left:52px;top:250px;width:10px;height:10px;border:2px solid #5FE0EA;border-radius:999px;box-sizing:border-box;background:#16181C"></div>
+      <div style="position:absolute;left:200px;top:160px;width:220px;background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);padding:4px;z-index:2">
+        <sc-for list="{{ctx}}" as="c" hint-placeholder-count="9">
+          <div style="display:flex;justify-content:space-between;padding:3px 10px;border-radius:4px;background:{{c.bg}};color:{{c.fg}};border-top:{{c.sep}}"><span>{{c.l}}</span><span style="color:#848C97;font-size:12px">{{c.k}}</span></div>
+        </sc-for>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:14px;position:relative;height:210px;box-sizing:border-box">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">TOOLTIP · POPOVER DE VARIABLE</div>
+        <div style="display:flex;gap:28px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px"><span style="background:#282C33;border:1px solid #454B54;border-radius:4px;padding:3px 8px;font-size:12px;white-space:nowrap">Dupliquer l'onglet <span style="color:#848C97">Ctrl+Maj+D</span></span><span style="width:28px;height:28px;border-radius:4px;background:rgba(255,255,255,.06);display:flex;align-items:center;justify-content:center"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#ECEEF1" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 8h10.5A1.5 1.5 0 0 1 20 9.5v9A1.5 1.5 0 0 1 18.5 20h-9A1.5 1.5 0 0 1 8 18.5zM16 8V5.5A1.5 1.5 0 0 0 14.5 4h-9A1.5 1.5 0 0 0 4 5.5v9A1.5 1.5 0 0 0 5.5 16H8"></path></svg></span></div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font:400 12px 'JetBrains Mono',monospace"><span style="background:rgba(128,136,255,.16);color:#959BFF;border-radius:3px;padding:0 4px;box-shadow:0 0 0 1px #959BFF">{{v.base}}</span>/v2/shipments</span>
+            <div style="width:300px;background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);padding:10px 12px;display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between"><span style="font:600 12px 'JetBrains Mono',monospace">baseUrl</span><span style="font-size:11px;color:#3DD6A3;border:1px solid #30353C;border-radius:999px;padding:0 8px">● staging</span></div>
+              <div style="font:400 12px 'JetBrains Mono',monospace;color:#B5E36C;background:#121417;border-radius:4px;padding:4px 6px">https://staging.api.parcelo.example</div>
+              <div style="font-size:11px;line-height:16px;color:#848C97">Masque : global « https://api.parcelo.example » · <span style="color:#5FE0EA">Modifier</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;height:210px;box-sizing:border-box">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">BADGES & CHIPS</div>
+        <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center">
+          <span style="background:rgba(63,214,138,.13);color:#3FD68A;border-radius:4px;padding:1px 8px;font:600 12px 'JetBrains Mono',monospace">201 Created</span>
+          <span style="background:rgba(242,184,75,.13);color:#F2B84B;border-radius:4px;padding:1px 8px;font:600 12px 'JetBrains Mono',monospace">422 Unprocessable</span>
+          <span style="background:rgba(255,107,107,.13);color:#FF6B6B;border-radius:4px;padding:1px 8px;font:600 12px 'JetBrains Mono',monospace">503 Unavailable</span>
+          <span style="border:1px solid #30353C;border-radius:999px;padding:0 10px;display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:999px;background:#3DD6A3"></span>staging</span>
+          <span style="border:1px solid #FF6B6B;border-radius:999px;padding:0 10px;display:inline-flex;align-items:center;gap:6px;color:#FF8F8F"><span style="width:8px;height:8px;border-radius:2px;background:#FF6B6B"></span>production</span>
+          <span style="background:#282C33;border-radius:999px;padding:0 8px;font-size:11px;color:#A3AAB4">v2</span>
+          <span style="background:#282C33;border-radius:999px;padding:0 8px;font-size:11px;color:#A3AAB4">#billing</span>
+          <span style="background:#1FC7D4;color:#04252A;border-radius:999px;padding:0 7px;font:700 11px/16px inherit">3</span>
+          <span style="border:1px solid #30353C;border-radius:4px;padding:0 6px;font:500 11px 'JetBrains Mono',monospace;color:#A3AAB4">Ctrl K</span>
+        </div>
+        <div style="font-size:12px;line-height:16px;color:#848C97">L'environnement « production » porte toujours une bordure rouge + carré (forme différente du rond) pour prévenir les envois accidentels.</div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px;height:210px;box-sizing:border-box">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">INFOBAR (4 sévérités)</div>
+        <sc-for list="{{infobars}}" as="i" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:10px;background:{{i.bg}};border:1px solid {{i.bd}};border-radius:6px;padding:5px 10px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="{{i.c}}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{i.icon}}"></path></svg>
+            <span style="font-weight:600">{{i.t}}</span><span style="color:#A3AAB4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{i.d}}</span><span style="margin-left:auto;color:#5FE0EA;white-space:nowrap">{{i.a}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:12px;height:210px;box-sizing:border-box">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">PROGRESSION · SKELETON</div>
+        <div style="display:flex;align-items:center;gap:16px">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="#30353C" stroke-width="2.4"></circle><path d="M12 3a9 9 0 0 1 9 9" stroke="#1FC7D4" stroke-width="2.4" stroke-linecap="round"></path></svg>
+          <div style="flex:1;height:4px;background:#30353C;border-radius:2px"><div style="width:62%;height:4px;background:#1FC7D4;border-radius:2px"></div></div>
+          <span style="font:500 12px 'JetBrains Mono',monospace;color:#A3AAB4">31 / 50</span>
+        </div>
+        <div style="height:2px;background:#30353C;position:relative;overflow:hidden"><div style="position:absolute;left:30%;width:25%;height:2px;background:#1FC7D4"></div></div>
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="height:10px;width:60%;background:#21252A;border-radius:3px"></div>
+          <div style="height:10px;width:85%;background:#21252A;border-radius:3px"></div>
+          <div style="height:10px;width:40%;background:#21252A;border-radius:3px"></div>
+        </div>
+        <div style="font-size:11px;line-height:16px;color:#848C97">Indéterminé après 300 ms seulement. Skeleton sans shimmer si « réduire les animations ».</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+    <div style="background:#0E1012;border:1px solid #24282E;border-radius:12px;height:330px;position:relative;display:flex;align-items:center;justify-content:center">
+      <span style="position:absolute;left:16px;top:12px;font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">DIALOGUE (ContentDialog)</span>
+      <div style="width:400px;background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 24px 48px rgba(0,0,0,.5);overflow:hidden">
+        <div style="padding:20px 24px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:20px;line-height:28px;font-weight:600">Supprimer « Cancel shipment » ?</div>
+          <div style="color:#A3AAB4">La requête et ses 2 exemples enregistrés seront supprimés. Vous pourrez la restaurer depuis l'historique Git.</div>
+        </div>
+        <div style="background:#21252A;border-top:1px solid #30353C;padding:16px 24px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+          <button type="button" style="height:32px;border-radius:4px;border:1px solid rgba(255,107,107,.5);background:rgba(255,107,107,.13);color:#FF8F8F;font-family:inherit;font-weight:600">Supprimer</button>
+          <button type="button" style="height:32px;border-radius:4px;border:1px solid #30353C;background:#2C3138;color:#ECEEF1;font-family:inherit;font-weight:600">Annuler</button>
+        </div>
+      </div>
+    </div>
+    <div style="background:#16181C;border:1px solid #24282E;border-radius:12px;height:330px;position:relative">
+      <span style="position:absolute;left:16px;top:12px;font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">TOASTS (coin bas-droit, 5 s, pausables au survol)</span>
+      <div style="position:absolute;right:16px;bottom:16px;width:340px;display:flex;flex-direction:column;gap:8px">
+        <div style="background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);padding:10px 12px;display:flex;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3FD68A" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg><div style="flex:1"><div style="font-weight:600">Enregistré dans « Shipments »</div><div style="color:#A3AAB4;font-size:12px">Parcelo API v2 › Shipments</div></div><span style="color:#5FE0EA">Ouvrir</span></div>
+        <div style="background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);padding:10px 12px;display:flex;gap:10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#959BFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 0 0-14.5-4M4 4.5V8h3.5M4 13a8 8 0 0 0 14.5 4M20 19.5V16h-3.5"></path></svg><div style="flex:1"><div style="font-weight:600">Synchronisé avec origin/main</div><div style="color:#A3AAB4;font-size:12px">3 fichiers · il y a 2 s</div></div></div>
+      </div>
+    </div>
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;height:330px;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center">
+      <span style="position:absolute;left:16px;top:12px;font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">ÉTAT VIDE ILLUSTRÉ</span>
+      <svg width="120" height="84" viewBox="0 0 120 84" aria-hidden="true"><path d="M20 70h80" stroke="#30353C" stroke-width="2" stroke-linecap="round"></path><g transform="translate(34 6) scale(2.2)"><path fill="none" stroke="#454B54" stroke-width="1" stroke-dasharray="2 1.5" stroke-linecap="round" d="M5.5 4.5l6.3 8.2"></path><path fill="none" stroke="#454B54" stroke-width="1" stroke-dasharray="2 1.5" stroke-linecap="round" d="M18.5 4.5l-7.4 12.8a2.6 2.6 0 0 1-2.3 1.3H5.2M7.6 16.1l-2.5 2.5 2.5 2.5"></path></g><path d="M92 18h10M96 12l4-4M98 24h8" stroke="#1FC7D4" stroke-width="2" stroke-linecap="round"></path></svg>
+      <div style="font-size:15px;font-weight:600">Aucune collection. Pour l'instant.</div>
+      <div style="color:#A3AAB4;max-width:300px">Créez-en une, ou importez depuis Postman, Insomnia, Bruno, OpenAPI.</div>
+      <div style="display:flex;gap:8px"><button type="button" style="height:32px;border-radius:4px;border:0;background:#1FC7D4;color:#04252A;font-family:inherit;font-weight:600;padding:0 14px">Nouvelle collection</button><button type="button" style="height:32px;border-radius:4px;border:1px solid #30353C;background:#21252A;color:#ECEEF1;font-family:inherit;font-weight:600;padding:0 14px">Importer…</button></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;flex:1">
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">GRAPHIQUE DE TIMING (waterfall)</div>
+      <sc-for list="{{timing}}" as="t" hint-placeholder-count="7">
+        <div style="display:grid;grid-template-columns:140px 1fr 70px;gap:12px;align-items:center">
+          <span style="color:#A3AAB4">{{t.n}}</span>
+          <div style="height:12px;position:relative"><div style="position:absolute;left:{{t.l}};width:{{t.w}};height:12px;border-radius:2px;background:{{t.c}}"></div></div>
+          <span style="font:500 12px 'JetBrains Mono',monospace;text-align:right">{{t.v}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background:#0E1012;border:1px solid #24282E;border-radius:12px;padding:20px;position:relative;overflow:hidden">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">NŒUDS DE FLOW · ports · lien · minimap</div>
+      <div style="position:absolute;left:40px;top:70px;width:220px;background:#21252A;border:1px solid #30353C;border-radius:8px">
+        <div style="padding:6px 10px;border-bottom:1px solid #30353C;display:flex;gap:6px;align-items:center"><span style="font:700 10px 'JetBrains Mono',monospace;color:#F5B648">POST</span><span style="font-weight:600">Create shipment</span></div>
+        <div style="padding:6px 10px;display:flex;justify-content:space-between;font-size:12px;color:#A3AAB4"><span>body</span><span>response ●</span></div>
+        <span style="position:absolute;left:-6px;top:40px;width:10px;height:10px;border-radius:999px;background:#131518;border:2px solid #848C97"></span>
+        <span style="position:absolute;right:-6px;top:40px;width:10px;height:10px;border-radius:999px;background:#1FC7D4;border:2px solid #131518"></span>
+      </div>
+      <svg width="200" height="100" style="position:absolute;left:262px;top:80px" aria-hidden="true"><path d="M2 34 C 90 34, 90 82, 196 82" fill="none" stroke="#1FC7D4" stroke-width="2"></path></svg>
+      <div style="position:absolute;left:460px;top:130px;width:200px;background:#21252A;border:2px solid #5FE0EA;border-radius:8px">
+        <div style="padding:6px 10px;border-bottom:1px solid #30353C;font-weight:600">Evaluate · JSONPath</div>
+        <div style="padding:6px 10px;font:400 12px 'JetBrains Mono',monospace;color:#B5E36C">$.tracking_number</div>
+        <span style="position:absolute;left:-7px;top:24px;width:10px;height:10px;border-radius:999px;background:#1FC7D4;border:2px solid #131518"></span>
+      </div>
+      <div style="position:absolute;right:16px;bottom:16px;width:120px;height:72px;border:1px solid #30353C;border-radius:4px;background:#16181C"><div style="position:absolute;left:14px;top:22px;width:22px;height:8px;background:#454B54;border-radius:1px"></div><div style="position:absolute;left:62px;top:36px;width:22px;height:8px;background:#454B54;border-radius:1px"></div><div style="position:absolute;left:8px;top:12px;width:84px;height:44px;border:1px solid #5FE0EA;border-radius:2px"></div></div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const b = (s) => '{' + '{' + s + '}' + '}';
+    const MC = { GET:'#3DD6A3', POST:'#F5B648', PUT:'#6AA8FF', PATCH:'#B38CFF', DEL:'#FF7272', WS:'#5CC8E0', gRPC:'#B38CFF' };
+    const folder = 'M3.5 7A1.5 1.5 0 0 1 5 5.5h4l2 2h8A1.5 1.5 0 0 1 20.5 9v8.5A1.5 1.5 0 0 1 19 19H5a1.5 1.5 0 0 1-1.5-1.5z';
+    const coll = 'M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5M3 9.5A1.5 1.5 0 0 1 4.5 8h15A1.5 1.5 0 0 1 21 9.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 17.5z';
+    const T = (lvl, n, o = {}) => ({ pad: (12 + lvl * 16) + 'px', n, chev: o.chev || '', isReq: !!o.m, isFolder: !o.m, m: o.m || '', mc: MC[o.m] || '#A3AAB4', icon: o.icon || folder, bg: o.sel ? 'rgba(31,199,212,.10)' : (o.hov ? 'rgba(255,255,255,.05)' : 'transparent'), sh: o.sel ? 'inset 2px 0 0 #1FC7D4' : 'none', fg: o.dim ? '#848C97' : '#ECEEF1', fw: o.bold ? '600' : '400', meta: o.meta || '' });
+    return {
+      v: { base: b('baseUrl') },
+      tabs: [
+        { m:'GET', c:MC.GET, n:'Health', it:'normal', fg:'#A3AAB4', bg:'transparent', line:'none', end:'' },
+        { m:'POST', c:MC.POST, n:'Create shipment', it:'normal', fg:'#ECEEF1', bg:'#1A1D21', line:'inset 0 2px 0 #1FC7D4', end:'●' },
+        { m:'GET', c:MC.GET, n:'List shipments', it:'normal', fg:'#A3AAB4', bg:'transparent', line:'none', end:'×' },
+        { m:'PATCH', c:MC.PATCH, n:'Update address', it:'italic', fg:'#A3AAB4', bg:'transparent', line:'none', end:'×' },
+        { m:'WS', c:MC.WS, n:'tracking/live', it:'normal', fg:'#A3AAB4', bg:'transparent', line:'none', end:'●' },
+        { m:'DEL', c:MC.DEL, n:'Cancel shipment', it:'normal', fg:'#A3AAB4', bg:'transparent', line:'none', end:'×' }
+      ],
+      ptabs: [
+        { n:'Params', b:'2', c:'#A3AAB4', bc:'#848C97', sh:'none' },
+        { n:'Authorization', b:'', c:'#A3AAB4', bc:'#848C97', sh:'none' },
+        { n:'Headers', b:'9', c:'#A3AAB4', bc:'#848C97', sh:'none' },
+        { n:'Body', b:'●', c:'#ECEEF1', bc:'#1FC7D4', sh:'inset 0 -2px 0 #1FC7D4' },
+        { n:'Scripts', b:'', c:'#A3AAB4', bc:'#848C97', sh:'none' },
+        { n:'Tests', b:'6', c:'#A3AAB4', bc:'#848C97', sh:'none' },
+        { n:'Settings', b:'', c:'#A3AAB4', bc:'#848C97', sh:'none' }
+      ],
+      tree: [
+        T(0, 'Parcelo API v2', { chev:'▾', icon: coll, bold:true, meta:'14' }),
+        T(1, 'Auth', { chev:'▸' }),
+        T(1, 'Shipments', { chev:'▾' }),
+        T(2, 'List shipments', { m:'GET' }),
+        T(2, 'Create shipment', { m:'POST', sel:true }),
+        T(2, 'Get shipment', { m:'GET' }),
+        T(2, 'Update address', { m:'PATCH' }),
+        T(2, 'Cancel shipment', { m:'DEL', hov:true }),
+        T(1, 'Labels', { chev:'▸' }),
+        T(1, 'Webhooks', { chev:'▸' }),
+        T(1, 'Tracking (live)', { m:'WS' }),
+        T(0, 'Billing Service', { chev:'▸', icon: coll, bold:true, meta:'gRPC' }),
+        T(0, 'Legacy SOAP', { chev:'▸', icon: coll, bold:true, dim:true })
+      ],
+      ctx: [
+        { l:'Ouvrir dans un nouvel onglet', k:'Ctrl+Clic', bg:'transparent', fg:'#ECEEF1', sep:'0' },
+        { l:'Ouvrir en split view', k:'Ctrl+\\', bg:'transparent', fg:'#ECEEF1', sep:'0' },
+        { l:'Renommer', k:'F2', bg:'rgba(255,255,255,.06)', fg:'#ECEEF1', sep:'0' },
+        { l:'Dupliquer', k:'Ctrl+D', bg:'transparent', fg:'#ECEEF1', sep:'0' },
+        { l:'Ajouter aux favoris', k:'', bg:'transparent', fg:'#ECEEF1', sep:'0' },
+        { l:'Générer le code…', k:'Ctrl+Alt+C', bg:'transparent', fg:'#ECEEF1', sep:'1px solid #30353C' },
+        { l:'Copier en cURL', k:'', bg:'transparent', fg:'#ECEEF1', sep:'0' },
+        { l:'Supprimer', k:'Suppr', bg:'transparent', fg:'#FF8F8F', sep:'1px solid #30353C' }
+      ],
+      infobars: [
+        { t:'Info', d:'Collection importée depuis Postman v2.1.', a:'Voir le rapport', c:'#959BFF', bg:'rgba(128,136,255,.10)', bd:'rgba(128,136,255,.3)', icon:'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM12 11v5M12 8h.01' },
+        { t:'Succès', d:'Token OAuth obtenu, expire dans 59 min.', a:'', c:'#3FD68A', bg:'rgba(63,214,138,.10)', bd:'rgba(63,214,138,.3)', icon:'M5 12.5l4.5 4.5L19 7.5' },
+        { t:'Attention', d:'Environnement production actif.', a:'Changer', c:'#F2B84B', bg:'rgba(242,184,75,.10)', bd:'rgba(242,184,75,.3)', icon:'M12 4 21 19.5H3zM12 10v4M12 17h.01' },
+        { t:'Erreur', d:'Le script de pré-requête a levé une exception.', a:'Console', c:'#FF6B6B', bg:'rgba(255,107,107,.10)', bd:'rgba(255,107,107,.3)', icon:'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM9 9l6 6M15 9l-6 6' }
+      ],
+      timing: [
+        { n:'Socket (pool)', l:'0%', w:'1%', c:'#5A606A', v:'0,4 ms' },
+        { n:'DNS', l:'1%', w:'7%', c:'#5CC8E0', v:'12 ms' },
+        { n:'Connexion TCP', l:'8%', w:'11%', c:'#6AA8FF', v:'19 ms' },
+        { n:'Handshake TLS 1.3', l:'19%', w:'16%', c:'#B38CFF', v:'28 ms' },
+        { n:'Envoi requête', l:'35%', w:'1%', c:'#848C97', v:'0,9 ms' },
+        { n:'Attente (TTFB)', l:'36%', w:'54%', c:'#1FC7D4', v:'97 ms' },
+        { n:'Téléchargement', l:'90%', w:'10%', c:'#3FD68A', v:'18 ms' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

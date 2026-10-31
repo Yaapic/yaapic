@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic DS — Composants de saisie et d'action</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width:1600px;height:1700px;box-sizing:border-box;background:#131518;color:#ECEEF1;font-family:'Segoe UI Variable Text','Segoe UI',Inter,sans-serif;font-size:13px;line-height:20px;padding:56px 64px;display:flex;flex-direction:column;gap:28px">
+  <div>
+    <div style="font:500 12px/16px 'JetBrains Mono',monospace;letter-spacing:.08em;color:#1FC7D4;text-transform:uppercase">13 · Composants — actions & saisie</div>
+    <h1 style="margin:8px 0 0;font:600 36px/44px 'Space Grotesk',sans-serif;letter-spacing:-.02em">Boutons, champs, barre d'URL, tableau clé/valeur</h1>
+  </div>
+
+  <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px">
+    <div style="display:grid;grid-template-columns:140px repeat(7,minmax(0,1fr));gap:12px;align-items:center">
+      <span></span>
+      <sc-for list="{{stateNames}}" as="s" hint-placeholder-count="7"><span style="font:600 11px/16px 'JetBrains Mono',monospace;color:#848C97">{{s}}</span></sc-for>
+      <sc-for list="{{buttons}}" as="b" hint-placeholder-count="5">
+        <span style="font:600 12px/16px 'JetBrains Mono',monospace;color:#A3AAB4">{{b.name}}</span>
+        <sc-for list="{{b.states}}" as="st" hint-placeholder-count="7">
+          <div><button type="button" style="{{st.style}}"><sc-if value="{{st.loading}}" hint-placeholder-val="{{false}}"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5"></path></svg></sc-if>{{st.label}}</button></div>
+        </sc-for>
+      </sc-for>
+    </div>
+    <div style="font-size:12px;line-height:16px;color:#848C97;margin-top:16px">Hauteur 32 (confortable) · padding 0 14 · radius.control · focus : anneau 2 px color.focus.ring à 2 px de décalage (FocusVisualPrimary/Secondary en WinUI, :focus-visible adorner en Avalonia). Le Primaire est réservé à une action par vue.</div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px;position:relative;height:300px;box-sizing:border-box">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">SPLIT BUTTON « SEND »</div>
+      <div style="display:flex;gap:16px;align-items:center">
+        <div style="display:flex"><button type="button" style="height:32px;border:0;border-radius:4px 0 0 4px;background:#1FC7D4;color:#04252A;font-family:inherit;font-size:13px;font-weight:600;line-height:20px;padding:0 16px;display:flex;align-items:center;gap:8px">Send<span style="font:500 11px 'JetBrains Mono',monospace;opacity:.7">Ctrl ↵</span></button><button type="button" aria-label="Plus d'options d'envoi" style="height:32px;width:28px;border:0;border-left:1px solid rgba(20,26,0,.25);border-radius:0 4px 4px 0;background:#18B3BF;color:#04252A;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button></div>
+        <button type="button" style="height:32px;border:1px solid #FF6B6B;border-radius:4px;background:rgba(255,107,107,.13);color:#FF8F8F;font-family:inherit;font-size:13px;font-weight:600;line-height:20px;padding:0 16px;display:flex;align-items:center;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5"></path></svg>Cancel<span style="font:500 11px 'JetBrains Mono',monospace;opacity:.7">Échap</span></button>
+      </div>
+      <div style="position:absolute;left:24px;top:116px;width:260px;background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);padding:4px">
+        <div style="display:flex;justify-content:space-between;padding:5px 10px;border-radius:4px;background:rgba(255,255,255,.06)"><span>Send</span><span style="color:#848C97;font-size:12px">Ctrl+Entrée</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 10px"><span>Send and Download</span><span style="color:#848C97;font-size:12px">Ctrl+Alt+Entrée</span></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 10px"><span>Send with delay…</span></div>
+        <div style="height:1px;background:#30353C;margin:4px 0"></div>
+        <div style="display:flex;justify-content:space-between;padding:5px 10px"><span>Copy as cURL</span><span style="color:#848C97;font-size:12px">Ctrl+Maj+C</span></div>
+      </div>
+    </div>
+
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px;height:300px;box-sizing:border-box">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">TOGGLE · CASE · RADIO · SLIDER</div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px">
+        <label style="display:flex;align-items:center;gap:10px"><span style="width:40px;height:20px;border-radius:999px;background:#1FC7D4;position:relative;display:inline-block"><span style="position:absolute;right:3px;top:3px;width:14px;height:14px;border-radius:999px;background:#04252A"></span></span>Suivre les redirections</label>
+        <label style="display:flex;align-items:center;gap:10px"><span style="width:40px;height:20px;border-radius:999px;border:1px solid #656C77;box-sizing:border-box;position:relative;display:inline-block"><span style="position:absolute;left:4px;top:4px;width:10px;height:10px;border-radius:999px;background:#A3AAB4"></span></span>Vérifier SSL</label>
+        <label style="display:flex;align-items:center;gap:10px"><span style="width:18px;height:18px;border-radius:4px;background:#1FC7D4;display:flex;align-items:center;justify-content:center"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#04252A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg></span>Activé</label>
+        <label style="display:flex;align-items:center;gap:10px"><span style="width:18px;height:18px;border-radius:4px;background:#1FC7D4;display:flex;align-items:center;justify-content:center"><span style="width:9px;height:2px;background:#04252A"></span></span>Partiel</label>
+        <label style="display:flex;align-items:center;gap:10px"><span style="width:18px;height:18px;border-radius:4px;border:1px solid #656C77;box-sizing:border-box"></span>Désactivé</label>
+        <label style="display:flex;align-items:center;gap:10px;color:#5A606A"><span style="width:18px;height:18px;border-radius:4px;border:1px solid #30353C;box-sizing:border-box"></span>Indisponible</label>
+        <label style="display:flex;align-items:center;gap:10px"><span style="width:18px;height:18px;border-radius:999px;border:5px solid #1FC7D4;box-sizing:border-box"></span>HTTP/2</label>
+        <label style="display:flex;align-items:center;gap:10px"><span style="width:18px;height:18px;border-radius:999px;border:1px solid #656C77;box-sizing:border-box"></span>HTTP/1.1</label>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px"><span style="color:#A3AAB4;width:110px">Délai itérations</span><div style="flex:1;height:4px;border-radius:2px;background:#30353C;position:relative"><div style="width:38%;height:4px;border-radius:2px;background:#1FC7D4"></div><span style="position:absolute;left:38%;top:-8px;margin-left:-10px;width:20px;height:20px;border-radius:999px;background:#ECEEF1;border:5px solid #282C33;box-sizing:border-box;box-shadow:0 0 0 1px #454B54"></span></div><span style="font:500 12px 'JetBrains Mono',monospace">250 ms</span></div>
+    </div>
+
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px;height:300px;box-sizing:border-box">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">CHAMPS DE TEXTE · états</div>
+      <sc-for list="{{fields}}" as="f" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:70px 1fr;gap:10px;align-items:center">
+          <span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#848C97">{{f.s}}</span>
+          <div style="height:32px;box-sizing:border-box;border-radius:4px;background:{{f.bg}};border:1px solid {{f.bd}};box-shadow:{{f.sh}};display:flex;align-items:center;padding:0 10px;color:{{f.c}}">{{f.v}}</div>
+        </div>
+      </sc-for>
+      <div style="font-size:12px;color:#FF6B6B;padding-left:80px;margin-top:-6px">Doit être un entier entre 1 et 300 000.</div>
+    </div>
+  </div>
+
+  <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:16px;position:relative;height:300px;box-sizing:border-box">
+    <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">BARRE D'URL · sélecteur de méthode + chips de variables + autocomplétion</div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="flex:1;height:36px;display:flex;align-items:center;border:1px solid #5FE0EA;box-shadow:0 0 0 1px #5FE0EA;border-radius:6px;background:#121417;overflow:hidden">
+        <button type="button" style="height:36px;border:0;border-right:1px solid #30353C;background:transparent;color:#F5B648;font:700 12px 'JetBrains Mono',monospace;padding:0 12px;display:flex;align-items:center;gap:6px">POST<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#848C97" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button>
+        <div style="padding:0 12px;font:400 13px 'JetBrains Mono',monospace;display:flex;align-items:center;gap:2px"><span style="background:rgba(128,136,255,.16);color:#959BFF;border-radius:3px;padding:0 4px">{{v.base}}</span><span>/v2/shipments/</span><span style="color:#ECEEF1">{{v.partial}}</span><span style="width:1px;height:16px;background:#ECEEF1"></span></div>
+      </div>
+      <div style="display:flex"><button type="button" style="height:36px;border:0;border-radius:6px 0 0 6px;background:#1FC7D4;color:#04252A;font-family:inherit;font-size:13px;font-weight:600;padding:0 18px">Send</button><button type="button" aria-label="Options d'envoi" style="height:36px;width:28px;border:0;border-left:1px solid rgba(20,26,0,.25);border-radius:0 6px 6px 0;background:#18B3BF;display:flex;align-items:center;justify-content:center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#04252A" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></button></div>
+    </div>
+    <div style="position:absolute;left:24px;top:110px;width:140px;background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);padding:4px;font:700 12px/26px 'JetBrains Mono',monospace">
+      <div style="padding:0 10px;color:#3DD6A3">GET</div><div style="padding:0 10px;color:#F5B648;background:rgba(31,199,212,.10);border-radius:4px">POST</div><div style="padding:0 10px;color:#6AA8FF">PUT</div><div style="padding:0 10px;color:#B38CFF">PATCH</div><div style="padding:0 10px;color:#FF7272">DELETE</div><div style="padding:0 10px;color:#5CC8E0">HEAD</div><div style="font-weight:500;padding:0 10px;color:#A3AAB4;border-top:1px solid #30353C">Personnalisée…</div>
+    </div>
+    <div style="position:absolute;left:330px;top:110px;width:420px;background:#282C33;border:1px solid #454B54;border-radius:8px;box-shadow:0 8px 16px rgba(0,0,0,.36);padding:4px">
+      <sc-for list="{{suggest}}" as="s" hint-placeholder-count="4">
+        <div style="display:grid;grid-template-columns:20px 140px 1fr 70px;gap:8px;align-items:center;padding:4px 8px;border-radius:4px;background:{{s.bg}}">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#959BFF" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5C5 4.5 5 6 5 8s-1.5 4-1.5 4S5 14 5 16s0 3.5 2 3.5M17 4.5c2 0 2 1.5 2 3.5s1.5 4 1.5 4S19 14 19 16s0 3.5-2 3.5"></path></svg>
+          <span style="font:500 12px 'JetBrains Mono',monospace;color:#ECEEF1">{{s.k}}</span><span style="font:400 12px 'JetBrains Mono',monospace;color:#A3AAB4;overflow:hidden;white-space:nowrap;text-overflow:ellipsis">{{s.v}}</span><span style="font-size:11px;color:#848C97;text-align:right">{{s.scope}}</span>
+        </div>
+      </sc-for>
+      <div style="border-top:1px solid #30353C;margin-top:4px;padding:6px 8px 2px;font-size:11px;color:#848C97">↑↓ naviguer · Tab insérer · Échap fermer</div>
+    </div>
+  </div>
+
+  <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:12px;flex:1">
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">TABLEAU CLÉ / VALEUR ÉDITABLE · Headers</div>
+      <div style="display:flex;gap:8px"><span style="font-size:12px;color:#A3AAB4;border:1px solid #30353C;border-radius:4px;padding:2px 10px">Bulk edit</span><span style="font-size:12px;color:#A3AAB4;border:1px solid #30353C;border-radius:4px;padding:2px 10px">Presets ▾</span><span style="font-size:12px;color:#A3AAB4">8 auto-générés masqués · <span style="color:#5FE0EA">Afficher</span></span></div>
+    </div>
+    <div style="border:1px solid #30353C;border-radius:6px;overflow:hidden">
+      <div style="display:grid;grid-template-columns:36px 280px 1fr 300px 36px;background:#16181C;font-size:11px;font-weight:600;line-height:28px;color:#848C97;letter-spacing:.03em"><span></span><span style="padding:0 10px">CLÉ</span><span style="padding:0 10px;border-left:1px solid #30353C">VALEUR</span><span style="padding:0 10px;border-left:1px solid #30353C">DESCRIPTION</span><span></span></div>
+      <sc-for list="{{kv}}" as="r" hint-placeholder-count="5">
+        <div style="display:grid;grid-template-columns:36px 280px 1fr 300px 36px;border-top:1px solid #24282E;background:{{r.bg}};align-items:center;height:30px;opacity:{{r.op}}">
+          <span style="display:flex;justify-content:center"><span style="width:14px;height:14px;border-radius:3px;background:{{r.cb}};border:1px solid {{r.cbd}};box-sizing:border-box"></span></span>
+          <span style="padding:0 10px;font:400 12px 'JetBrains Mono',monospace;color:#ECEEF1">{{r.k}}</span>
+          <span style="padding:0 10px;font:400 12px 'JetBrains Mono',monospace;color:{{r.vc}};border-left:1px solid #24282E;height:30px;display:flex;align-items:center;box-shadow:{{r.focus}}">{{r.v}}</span>
+          <span style="padding:0 10px;color:#848C97;border-left:1px solid #24282E;height:30px;display:flex;align-items:center">{{r.d}}</span>
+          <span style="display:flex;justify-content:center;color:#848C97">{{r.x}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="font-size:12px;line-height:16px;color:#848C97">Ligne fantôme en bas pour ajouter · glisser la poignée pour réordonner · Ctrl+D dupliquer · Suppr effacer · Tab passe de cellule en cellule. WinUI : ItemsRepeater + TextBox sans bordure ; Avalonia : DataGrid templated (même rendu).</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const b = (s) => '{' + '{' + s + '}' + '}';
+    const base = 'height:32px;border-radius:4px;font-family:inherit;font-size:13px;font-weight:600;line-height:20px;padding:0 14px;display:inline-flex;align-items:center;gap:6px;white-space:nowrap;';
+    const V = {
+      Primaire:  { d:'background:#1FC7D4;color:#04252A;border:1px solid #1FC7D4;', h:'background:#5FE0EA;color:#04252A;border:1px solid #5FE0EA;', p:'background:#18B3BF;color:#04252A;border:1px solid #18B3BF;', x:'background:#2C3138;color:#5A606A;border:1px solid #2C3138;', label:'Send' },
+      Secondaire:{ d:'background:#21252A;color:#ECEEF1;border:1px solid #30353C;', h:'background:#282C33;color:#ECEEF1;border:1px solid #454B54;', p:'background:#1D2025;color:#A3AAB4;border:1px solid #30353C;', x:'background:transparent;color:#5A606A;border:1px solid #24282E;', label:'Save' },
+      Discret:   { d:'background:transparent;color:#ECEEF1;border:1px solid transparent;', h:'background:rgba(255,255,255,.06);color:#ECEEF1;border:1px solid transparent;', p:'background:rgba(255,255,255,.03);color:#A3AAB4;border:1px solid transparent;', x:'background:transparent;color:#5A606A;border:1px solid transparent;', label:'Cookies' },
+      Danger:    { d:'background:rgba(255,107,107,.13);color:#FF8F8F;border:1px solid rgba(255,107,107,.5);', h:'background:rgba(255,107,107,.2);color:#FF9696;border:1px solid #FF6B6B;', p:'background:rgba(255,107,107,.28);color:#FF9696;border:1px solid #FF6B6B;', x:'background:transparent;color:#5A606A;border:1px solid #24282E;', label:'Delete' },
+      Icône:     { d:'background:transparent;color:#A3AAB4;border:1px solid transparent;width:32px;justify-content:center;padding:0;', h:'background:rgba(255,255,255,.06);color:#ECEEF1;border:1px solid transparent;width:32px;justify-content:center;padding:0;', p:'background:rgba(255,255,255,.03);color:#ECEEF1;border:1px solid transparent;width:32px;justify-content:center;padding:0;', x:'background:transparent;color:#5A606A;border:1px solid transparent;width:32px;justify-content:center;padding:0;', label:'⋯' }
+    };
+    const focus = 'box-shadow:0 0 0 2px #131518,0 0 0 4px #5FE0EA;';
+    const buttons = Object.keys(V).map(name => {
+      const v = V[name];
+      return { name, states: [
+        { style: base + v.d, label: v.label },
+        { style: base + v.h, label: v.label },
+        { style: base + v.p, label: v.label },
+        { style: base + v.d + focus, label: v.label },
+        { style: base + v.x, label: v.label },
+        { style: base + v.d + 'opacity:.85;', label: name === 'Icône' ? '' : v.label + '…', loading: true },
+        { style: base + (name === 'Primaire' ? v.d : v.h) + 'box-shadow:inset 0 -2px 0 #1FC7D4;', label: v.label }
+      ]};
+    });
+    return {
+      v: { base: b('baseUrl'), partial: b('ship') },
+      stateNames: ['Défaut','Survol','Pressé','Focus','Désactivé','Chargement','Sélectionné'],
+      buttons,
+      fields: [
+        { s:'Défaut', v:'30000', bg:'#121417', bd:'#656C77', sh:'none', c:'#ECEEF1' },
+        { s:'Survol', v:'30000', bg:'#16181C', bd:'#848C97', sh:'none', c:'#ECEEF1' },
+        { s:'Focus', v:'30000', bg:'#121417', bd:'#5FE0EA', sh:'inset 0 -2px 0 #5FE0EA', c:'#ECEEF1' },
+        { s:'Erreur', v:'30s', bg:'#121417', bd:'#FF6B6B', sh:'inset 0 -2px 0 #FF6B6B', c:'#ECEEF1' },
+        { s:'Désactivé', v:'Hérité de la collection', bg:'transparent', bd:'#30353C', sh:'none', c:'#5A606A' }
+      ],
+      suggest: [
+        { k: b('shipmentId'), v:'shp_01JBX4R7M2Q9K', scope:'collection', bg:'rgba(31,199,212,.10)' },
+        { k: b('shipmentLabelId'), v:'lbl_7Q2M0XPZ', scope:'staging', bg:'transparent' },
+        { k: b('shipperAccount'), v:'ACC-77810-FR', scope:'global', bg:'transparent' },
+        { k: b('$randomUUID'), v:'dynamique', scope:'intégrée', bg:'transparent' }
+      ],
+      kv: [
+        { k:'Content-Type', v:'application/json', d:'', cb:'#1FC7D4', cbd:'#1FC7D4', vc:'#ECEEF1', bg:'transparent', op:'1', focus:'none', x:'×' },
+        { k:'Authorization', v:'Bearer ' + b('accessToken'), d:'Hérité de Auth (OAuth 2.0)', cb:'#1FC7D4', cbd:'#1FC7D4', vc:'#959BFF', bg:'transparent', op:'1', focus:'none', x:'' },
+        { k:'Idempotency-Key', v:b('$randomUUID'), d:'Évite les doublons sur retry', cb:'#1FC7D4', cbd:'#1FC7D4', vc:'#959BFF', bg:'rgba(31,199,212,.06)', op:'1', focus:'inset 0 0 0 2px #5FE0EA', x:'×' },
+        { k:'X-Request-Id', v:'yaapic-7f3a91', d:'Corrélation des logs', cb:'transparent', cbd:'#656C77', vc:'#ECEEF1', bg:'transparent', op:'.55', focus:'none', x:'×' },
+        { k:'Clé', v:'Valeur', d:'Description', cb:'transparent', cbd:'#30353C', vc:'#5A606A', bg:'transparent', op:'.6', focus:'none', x:'' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

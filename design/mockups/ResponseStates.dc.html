@@ -1,0 +1,302 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic — Éditeur de requête et états de réponse</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="{{root}}">
+  <div style="display:flex;justify-content:space-between;align-items:flex-end">
+    <div>
+      <div style="font:500 12px/16px var(--mono);letter-spacing:.08em;color:var(--acct);text-transform:uppercase">Écrans 03 & 04 · panneaux réels à l'échelle 1:1</div>
+      <h1 style="margin:6px 0 0;font:600 30px/38px 'Space Grotesk',sans-serif;letter-spacing:-.02em">Éditeur de requête & états de réponse</h1>
+    </div>
+    <div style="font-size:12px;color:var(--t3);max-width:560px;text-align:right">Composants : TabStrip, KeyValueGrid, CodeEditor, SegmentedControl, StatusBadge, InfoBar, TimingChart, DiffView. Différence WinUI/Avalonia : éditeur de code = AvaloniaEdit (Avalonia) / WinUIEdit-Monaco natif via Win2D (WinUI) — même thème de tokens.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;flex:1">
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:34px;display:flex;align-items:center;gap:16px;padding:0 14px;border-bottom:1px solid var(--b1)"><sc-for list="{{tabsParams}}" as="p" hint-placeholder-count="5"><span style="height:33px;display:flex;align-items:center;gap:4px;color:{{p.c}};box-shadow:{{p.sh}}">{{p.n}}<span style="font:600 10px var(--mono);color:{{p.bc}}">{{p.b}}</span></span></sc-for></div>
+      <div style="padding:10px 14px;font-size:12px;color:var(--t3)">Query Params — synchronisés avec l'URL</div>
+      <div style="margin:0 14px;border:1px solid var(--b2);border-radius:6px;overflow:hidden">
+        <sc-for list="{{params}}" as="r" hint-placeholder-count="5">
+          <div style="display:grid;grid-template-columns:28px 120px 1fr;height:28px;align-items:center;border-top:1px solid var(--b1);opacity:{{r.op}}">
+            <span style="display:flex;justify-content:center"><span style="width:13px;height:13px;border-radius:3px;background:{{r.cb}};border:1px solid {{r.cbd}};box-sizing:border-box"></span></span>
+            <span style="padding:0 8px;font:400 12px var(--mono)">{{r.k}}</span><span style="padding:0 8px;font:400 12px var(--mono);color:{{r.vc}};border-left:1px solid var(--b1);height:28px;display:flex;align-items:center">{{r.v}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="padding:12px 14px 0;font-size:12px;color:var(--t3)">Path Variables</div>
+      <div style="margin:6px 14px 14px;border:1px solid var(--b2);border-radius:6px;display:grid;grid-template-columns:148px 1fr;height:28px;align-items:center"><span style="padding:0 8px;font:400 12px var(--mono)">:shipmentId</span><span style="padding:0 8px;font:400 12px var(--mono);color:var(--iris);border-left:1px solid var(--b1);height:28px;display:flex;align-items:center">{{v.ship}}</span></div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:34px;display:flex;align-items:center;gap:16px;padding:0 14px;border-bottom:1px solid var(--b1)"><sc-for list="{{tabsAuth}}" as="p" hint-placeholder-count="5"><span style="height:33px;display:flex;align-items:center;gap:4px;color:{{p.c}};box-shadow:{{p.sh}}">{{p.n}}</span></sc-for></div>
+      <div style="display:grid;grid-template-columns:200px 1fr;flex:1">
+        <div style="border-right:1px solid var(--b1);padding:12px 14px;display:flex;flex-direction:column;gap:10px">
+          <label style="font-size:12px;color:var(--t2)">Type</label>
+          <div style="height:30px;border:1px solid var(--bctl);border-radius:var(--rc);display:flex;align-items:center;justify-content:space-between;padding:0 8px">Bearer Token<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg></div>
+          <div style="font-size:12px;line-height:18px;color:var(--t3)">Ajouté comme header <span style="font-family:var(--mono);color:var(--t2)">Authorization</span>. Hérité par les requêtes enfants sauf surcharge.</div>
+          <div style="font-size:11px;line-height:16px;color:var(--t3);border-top:1px solid var(--b1);padding-top:8px">Aussi : API Key, JWT, Basic, Digest, OAuth 1.0/2.0, Hawk, AWS SigV4, NTLM, Akamai EdgeGrid, mTLS</div>
+        </div>
+        <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+          <label style="font-size:12px;color:var(--t2)">Token</label>
+          <div style="height:30px;border:1px solid var(--focus);box-shadow:inset 0 -2px 0 var(--focus);border-radius:var(--rc);display:flex;align-items:center;gap:6px;padding:0 8px;font:400 12px var(--mono)"><span style="background:var(--accsel);color:var(--acct);border-radius:3px;padding:0 4px;display:inline-flex;align-items:center;gap:4px"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M5.5 11h13a1 1 0 0 1 1 1v7.5a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1V12a1 1 0 0 1 1-1z"></path></svg>{{v.token}}</span></div>
+          <div style="background:var(--s3);border:1px solid var(--b3);border-radius:8px;padding:10px;box-shadow:var(--sh);display:flex;flex-direction:column;gap:6px;margin-top:4px">
+            <div style="display:flex;justify-content:space-between;font-size:12px"><span style="font-weight:600">accessToken · secret</span><span style="color:var(--t3)">staging</span></div>
+            <div style="font:400 12px var(--mono);color:var(--t2)">eyJhbGciOiJSUzI1NiIs••••••••••••••</div>
+            <div style="display:flex;gap:10px;font-size:12px"><span style="color:var(--acct)">Révéler 10 s</span><span style="color:var(--acct)">Copier</span><span style="color:var(--t3);margin-left:auto">expire dans 41 min</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:34px;display:flex;align-items:center;gap:12px;padding:0 14px;border-bottom:1px solid var(--b1);font-size:12px"><span style="font-weight:600;font-size:13px">Body</span><span style="color:var(--t2)">none</span><span style="color:var(--t1);display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:999px;border:3px solid var(--acc);box-sizing:border-box"></span>form-data</span><span style="color:var(--t2)">urlencoded</span><span style="color:var(--t2)">raw</span><span style="color:var(--t2)">binary</span><span style="color:var(--t2)">GraphQL</span></div>
+      <div style="margin:12px 14px;border:1px solid var(--b2);border-radius:6px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:28px 120px 60px 1fr;background:var(--s0);font-size:11px;font-weight:600;color:var(--t3);height:26px;align-items:center"><span></span><span style="padding:0 8px">CLÉ</span><span style="padding:0 8px">TYPE</span><span style="padding:0 8px">VALEUR</span></div>
+        <sc-for list="{{form}}" as="r" hint-placeholder-count="4">
+          <div style="display:grid;grid-template-columns:28px 120px 60px 1fr;height:30px;align-items:center;border-top:1px solid var(--b1)">
+            <span style="display:flex;justify-content:center"><span style="width:13px;height:13px;border-radius:3px;background:var(--acc)"></span></span>
+            <span style="padding:0 8px;font:400 12px var(--mono)">{{r.k}}</span><span style="padding:0 8px;font-size:11px;color:var(--t3)">{{r.t}}</span>
+            <span style="padding:0 8px;font:400 12px var(--mono);color:{{r.vc}};display:flex;align-items:center;gap:6px;white-space:nowrap;overflow:hidden">{{r.v}}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="margin:0 14px 14px;border:1px solid var(--b2);border-radius:6px;padding:10px;display:flex;flex-direction:column;gap:6px">
+        <div style="font-size:12px;color:var(--t3);display:flex;justify-content:space-between"><span>GraphQL · Query</span><span style="color:var(--ok)">Schéma chargé (introspection, 214 types)</span></div>
+        <div style="font:400 12px/19px var(--mono);white-space:pre"><span style="color:var(--kw)">query</span> <span style="color:var(--fn)">Shipment</span>(<span style="color:var(--sn)">$id</span>: <span style="color:var(--sk)">ID!</span>) {
+  shipment(id: <span style="color:var(--sn)">$id</span>) { status <span style="background:var(--errbg);text-decoration:underline wavy var(--err)">trackingNo</span> }
+}</div>
+        <div style="font-size:12px;color:var(--err)">Champ inconnu « trackingNo » sur Shipment. Vouliez-vous dire « trackingNumber » ?</div>
+      </div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:34px;display:flex;align-items:center;gap:16px;padding:0 14px;border-bottom:1px solid var(--b1)"><span style="color:var(--t2)">Pre-request</span><span style="box-shadow:inset 0 -2px 0 var(--acc);height:33px;display:flex;align-items:center">Post-response</span><span style="margin-left:auto;font-size:12px;color:var(--acct)">Snippets ▾</span></div>
+      <div style="flex:1;background:var(--sk0);font:400 12px/20px var(--mono);white-space:pre;padding:6px 0;position:relative">
+        <sc-for list="{{script}}" as="ln" hint-placeholder-count="9"><div style="display:flex"><span style="width:36px;text-align:right;padding-right:12px;color:var(--t4)">{{ln.n}}</span><sc-for list="{{ln.p}}" as="t" hint-placeholder-count="4"><span style="color:{{t.c}}">{{t.t}}</span></sc-for></div></sc-for>
+        <div style="position:absolute;left:196px;top:150px;width:300px;background:var(--s3);border:1px solid var(--b3);border-radius:6px;box-shadow:var(--sh);padding:3px;font-size:12px">
+          <div style="display:flex;gap:8px;padding:3px 8px;border-radius:4px;background:var(--accsel)"><span style="color:var(--fn);font-family:var(--mono)">ƒ</span><span style="font-family:var(--mono)">to.have.status(code)</span><span style="margin-left:auto;color:var(--t3)">pm.expect</span></div>
+          <div style="display:flex;gap:8px;padding:3px 8px"><span style="color:var(--fn);font-family:var(--mono)">ƒ</span><span style="font-family:var(--mono)">to.have.jsonBody(path)</span></div>
+          <div style="display:flex;gap:8px;padding:3px 8px"><span style="color:var(--fn);font-family:var(--mono)">ƒ</span><span style="font-family:var(--mono)">to.have.header(name)</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:34px;display:flex;align-items:center;padding:0 14px;border-bottom:1px solid var(--b1);font-weight:600">Settings</div>
+      <div style="padding:6px 14px;display:flex;flex-direction:column">
+        <sc-for list="{{settings}}" as="s" hint-placeholder-count="7">
+          <div style="display:flex;align-items:center;gap:12px;padding:7px 0;border-bottom:1px solid var(--b1)">
+            <div style="flex:1;display:flex;flex-direction:column"><span>{{s.t}}</span><span style="font-size:11px;line-height:16px;color:var(--t3)">{{s.d}}</span></div>
+            <sc-if value="{{s.isToggle}}" hint-placeholder-val="{{true}}"><span style="width:36px;height:18px;border-radius:999px;background:{{s.tb}};border:{{s.tbd}};box-sizing:border-box;position:relative;flex:none"><span style="position:absolute;top:3px;left:{{s.kl}};width:10px;height:10px;border-radius:999px;background:{{s.kc}}"></span></span></sc-if>
+            <sc-if value="{{s.isValue}}" hint-placeholder-val="{{false}}"><span style="border:1px solid var(--bctl);border-radius:var(--rc);padding:1px 8px;font:400 12px var(--mono);color:{{s.vc}}">{{s.v}}</span></sc-if>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:38px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid var(--b1)"><span style="font-weight:600">Envoi en cours</span><span style="margin-left:auto;font:500 12px var(--mono);color:var(--t2)">1,82 s</span><button type="button" style="height:28px;border:1px solid rgba(255,107,107,.5);border-radius:var(--rc);background:var(--errbg);color:var(--err);font-family:inherit;font-weight:600;font-size:13px;padding:0 12px;display:flex;align-items:center;gap:6px"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 8.5 8.5"></path></svg>Cancel<span style="font:500 11px var(--mono);opacity:.75">Échap</span></button></div>
+      <div style="height:2px;background:var(--b1);position:relative;overflow:hidden"><div style="position:absolute;left:35%;width:30%;height:2px;background:var(--acc)"></div></div>
+      <div style="padding:16px 14px;display:flex;flex-direction:column;gap:10px">
+        <sc-for list="{{progress}}" as="p" hint-placeholder-count="5"><div style="display:flex;align-items:center;gap:10px;font-size:12px"><span style="width:16px;color:{{p.c}}">{{p.s}}</span><span style="flex:1;color:{{p.tc}}">{{p.n}}</span><span style="font-family:var(--mono);color:var(--t3)">{{p.v}}</span></div></sc-for>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:8px"><div style="height:10px;width:55%;background:var(--s2);border-radius:3px"></div><div style="height:10px;width:80%;background:var(--s2);border-radius:3px"></div><div style="height:10px;width:35%;background:var(--s2);border-radius:3px"></div></div>
+        <div style="border-top:1px solid var(--b1);padding-top:10px;display:flex;align-items:center;gap:10px;font-size:12px;color:var(--t2)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--t3)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>État annulé : <span style="color:var(--t1)">« Requête annulée après 4,2 s. Aucune donnée reçue. »</span> <span style="color:var(--acct);margin-left:auto">Renvoyer</span></div>
+      </div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:38px;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--b1)"><span style="font-weight:600">Body</span><span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:var(--warnbg);color:var(--warn);border-radius:4px;padding:1px 7px;font:600 12px var(--mono)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4 21 19.5H3zM12 10v4M12 17h.01"></path></svg>422 Unprocessable Entity</span><span style="font:500 12px var(--mono);color:var(--t2)">71 ms · 412 o</span></div>
+      <div style="flex:1;background:var(--sk0);font:400 12px/20px var(--mono);white-space:pre;padding:6px 0">
+        <sc-for list="{{err422}}" as="ln" hint-placeholder-count="12"><div style="display:flex"><span style="width:36px;text-align:right;padding-right:12px;color:var(--t4)">{{ln.n}}</span><sc-for list="{{ln.parts}}" as="t" hint-placeholder-count="4"><span style="color:{{t.c}}">{{t.t}}</span></sc-for></div></sc-for>
+      </div>
+      <div style="padding:8px 14px;border-top:1px solid var(--b1);font-size:12px;color:var(--t2);display:flex;gap:8px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--iris)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:none;margin-top:3px"><path d="M12 4l1.6 4.4L18 10l-4.4 1.6L12 16l-1.6-4.4L6 10l4.4-1.6z"></path></svg>Assistant : le code postal du destinataire doit faire 5 chiffres. <span style="color:var(--acct)">Corriger le body</span></div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:38px;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--b1)"><span style="font-weight:600">Headers</span><span style="font:600 10px var(--mono);color:var(--t3)">14</span><span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:var(--errbg);color:var(--err);border-radius:4px;padding:1px 7px;font:600 12px var(--mono)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.5 3.5h7l5 5v7l-5 5h-7l-5-5v-7zM9.5 9.5l5 5M14.5 9.5l-5 5"></path></svg>503 Service Unavailable</span></div>
+      <div style="display:flex;align-items:center;gap:10px;margin:10px 14px 4px;background:var(--errbg);border:1px solid rgba(255,107,107,.35);border-radius:6px;padding:6px 10px;font-size:12px"><span style="font-weight:600">Le serveur demande d'attendre 30 s</span><span style="color:var(--t2)">(Retry-After)</span><span style="margin-left:auto;color:var(--acct)">Réessayer à 10:43:12</span></div>
+      <div style="padding:4px 14px 10px">
+        <sc-for list="{{headers}}" as="h" hint-placeholder-count="9"><div style="display:grid;grid-template-columns:170px 1fr;font:400 12px/24px var(--mono);border-bottom:1px solid var(--b1);background:{{h.bg}}"><span style="color:var(--sk)">{{h.k}}</span><span style="color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{h.v}}</span></div></sc-for>
+      </div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:38px;display:flex;align-items:center;gap:16px;padding:0 14px;border-bottom:1px solid var(--b1)"><span style="color:var(--t2)">Cookies <span style="font:600 10px var(--mono)">2</span></span><span style="box-shadow:inset 0 -2px 0 var(--acc);height:37px;display:flex;align-items:center;gap:6px">Tests <span style="font:600 10px var(--mono);color:var(--err)">5/6</span></span><span style="margin-left:auto;font-size:12px;color:var(--t3)">Filtrer : <span style="color:var(--t1)">Tous</span> · Passés · Échoués</span></div>
+      <div style="padding:8px 14px;display:flex;flex-direction:column;gap:2px">
+        <sc-for list="{{tests}}" as="t" hint-placeholder-count="6"><div style="display:flex;align-items:flex-start;gap:10px;padding:5px 8px;border-radius:4px;background:{{t.bg}}"><span style="font:700 11px/20px var(--mono);color:{{t.c}};width:36px;flex:none">{{t.s}}</span><div style="display:flex;flex-direction:column"><span>{{t.n}}</span><span style="font:400 11px/16px var(--mono);color:var(--err)">{{t.e}}</span></div><span style="margin-left:auto;font:400 11px/20px var(--mono);color:var(--t3)">{{t.ms}}</span></div></sc-for>
+      </div>
+      <div style="margin:auto 14px 12px;border-top:1px solid var(--b1);padding-top:8px;font-size:12px;color:var(--t2)">Cookies : <span style="font-family:var(--mono);color:var(--t1)">__cf_bm</span> (HttpOnly, Secure, 30 min) · <span style="font-family:var(--mono);color:var(--t1)">pcl_session</span> (SameSite=Lax)</div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:38px;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--b1)"><span style="font-weight:600">Timeline</span><span style="margin-left:auto;font:500 12px var(--mono);color:var(--t2)">Total 184 ms · HTTP/2 · TLS 1.3</span></div>
+      <div style="padding:12px 14px;display:flex;flex-direction:column;gap:8px">
+        <sc-for list="{{timing}}" as="t" hint-placeholder-count="7"><div style="display:grid;grid-template-columns:120px 1fr 56px;gap:10px;align-items:center;font-size:12px"><span style="color:var(--t2)">{{t.n}}</span><div style="height:10px;position:relative;background:var(--line)"><div style="position:absolute;left:{{t.l}};width:{{t.w}};height:10px;border-radius:2px;background:{{t.c}}"></div></div><span style="font-family:var(--mono);text-align:right">{{t.v}}</span></div></sc-for>
+      </div>
+      <div style="margin:0 14px 12px;background:var(--sk0);border:1px solid var(--b1);border-radius:6px;padding:8px 10px;font:400 11px/18px var(--mono);white-space:pre;color:var(--t2)"><span style="color:var(--t3)">* Connected to staging.api.parcelo.example (203.0.113.42) port 443</span>
+<span style="color:var(--t3)">* ALPN: server accepted h2 · cert CN=*.parcelo.example (R11)</span>
+<span style="color:var(--post)">&gt; POST</span> /v2/shipments HTTP/2
+<span style="color:var(--ok)">&lt; HTTP/2 201</span>  content-type: application/json</div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column">
+      <div style="height:38px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid var(--b1);font-size:12px"><span style="font-weight:600;font-size:13px">Comparer</span><span style="border:1px solid var(--b2);border-radius:4px;padding:0 6px;font-family:var(--mono)">#1042 · 09:12</span><span style="color:var(--t3)">↔</span><span style="border:1px solid var(--b2);border-radius:4px;padding:0 6px;font-family:var(--mono)">#1057 · 14:02</span><span style="margin-left:auto;color:var(--ok)">+3</span><span style="color:var(--err)">−2</span></div>
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));flex:1;font:400 11px/20px var(--mono);white-space:pre;background:var(--sk0)">
+        <div style="border-right:1px solid var(--b1);padding:6px 0"><sc-for list="{{diffL}}" as="d" hint-placeholder-count="9"><div style="display:flex;background:{{d.bg}}"><span style="width:26px;text-align:right;padding-right:8px;color:var(--t4)">{{d.n}}</span><span style="color:{{d.c}}">{{d.t}}</span></div></sc-for></div>
+        <div style="padding:6px 0"><sc-for list="{{diffR}}" as="d" hint-placeholder-count="9"><div style="display:flex;background:{{d.bg}}"><span style="width:26px;text-align:right;padding-right:8px;color:var(--t4)">{{d.n}}</span><span style="color:{{d.c}}">{{d.t}}</span></div></sc-for></div>
+      </div>
+    </section>
+
+    <section style="background:var(--s1);border:1px solid var(--b2);border-radius:8px;overflow:hidden;display:flex;flex-direction:column;position:relative">
+      <div style="height:38px;display:flex;align-items:center;gap:10px;padding:0 14px;border-bottom:1px solid var(--b1)"><span style="font-weight:600">Réponse volumineuse</span><span style="margin-left:auto;display:inline-flex;align-items:center;gap:5px;background:var(--okbg);color:var(--ok);border-radius:4px;padding:1px 7px;font:600 12px var(--mono)">200 OK</span><span style="font:500 12px var(--mono);color:var(--t2)">2,4 s · 48,6 Mo</span></div>
+      <div style="display:flex;align-items:center;gap:8px;margin:8px 14px 0;background:var(--irisbg);border-radius:6px;padding:6px 10px;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--iris)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM12 11v5M12 8h.01"></path></svg>Affichage virtualisé · coloration limitée aux lignes visibles · 1 284 117 lignes<span style="margin-left:auto;color:var(--acct)">Enregistrer…</span></div>
+      <div style="display:flex;align-items:center;gap:6px;margin:8px 14px;height:28px;border:1px solid var(--focus);border-radius:var(--rc);padding:0 8px;font:400 12px var(--mono)">shp_01JC<span style="margin-left:auto;font-family:inherit;color:var(--t3);font-size:11px">3 / 812</span><span style="color:var(--t2)">↑ ↓</span></div>
+      <div style="flex:1;display:flex;background:var(--sk0);border-top:1px solid var(--b1)">
+        <div style="flex:1;font:400 12px/20px var(--mono);white-space:pre;padding:4px 0">
+          <sc-for list="{{bigLines}}" as="ln" hint-placeholder-count="8"><div style="display:flex;background:{{ln.bg}}"><span style="width:76px;text-align:right;padding-right:12px;color:var(--t4)">{{ln.n}}</span><span style="color:var(--sk)">{{ln.k}}</span><span style="color:var(--sp)">: </span><span style="color:var(--ss)">{{ln.v}}</span></div></sc-for>
+        </div>
+        <div style="width:10px;border-left:1px solid var(--b1);position:relative"><div style="position:absolute;top:38%;left:1px;width:7px;height:14px;border-radius:3px;background:var(--b3)"></div><div style="position:absolute;top:22%;left:2px;width:5px;height:2px;background:var(--acc)"></div><div style="position:absolute;top:41%;left:2px;width:5px;height:2px;background:var(--acc)"></div><div style="position:absolute;top:77%;left:2px;width:5px;height:2px;background:var(--acc)"></div></div>
+      </div>
+    </section>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"theme":{"editor":"enum","options":["dark","light"],"default":"dark"},"$preview":{"width":1600,"height":1760}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const theme = this.props.theme ?? 'dark';
+    const TH = {
+      dark: { bg:'#131518', s0:'#16181C', s1:'#1A1D21', s2:'#21252A', s3:'#282C33', sk0:'#121417', b1:'#24282E', b2:'#30353C', b3:'#454B54', bctl:'#565D68', t1:'#ECEEF1', t2:'#A3AAB4', t3:'#848C97', t4:'#5A606A', acc:'#1FC7D4', acct:'#5FE0EA', accsel:'rgba(31,199,212,.12)', focus:'#5FE0EA', iris:'#959BFF', irisbg:'rgba(128,136,255,.12)', ok:'#3FD68A', okbg:'rgba(63,214,138,.13)', warn:'#F2B84B', warnbg:'rgba(242,184,75,.13)', err:'#FF6B6B', errbg:'rgba(255,107,107,.13)', post:'#F5B648', sk:'#8FB7FF', ss:'#B5E36C', sn:'#F5B648', sb:'#F28AC9', sp:'#848C97', kw:'#B38CFF', fn:'#6FD4E8', sc:'#6B7380', addbg:'rgba(63,214,138,.13)', delbg:'rgba(255,107,107,.13)', line:'rgba(255,255,255,.03)', sh:'0 8px 16px rgba(0,0,0,.4)', hl:'rgba(31,199,212,.18)' },
+      light:{ bg:'#EEF0F3', s0:'#F4F5F7', s1:'#FFFFFF', s2:'#EEF0F3', s3:'#FFFFFF', sk0:'#FBFBFC', b1:'#E4E7EB', b2:'#D3D8DE', b3:'#B4BBC5', bctl:'#8A919C', t1:'#16191D', t2:'#4A515B', t3:'#5F6772', t4:'#9AA1AB', acc:'#1FC7D4', acct:'#0A6B74', accsel:'#E0FAFC', focus:'#0A6B74', iris:'#4A4FD0', irisbg:'#ECEDFF', ok:'#157F4A', okbg:'#E3F4EA', warn:'#8A5A00', warnbg:'#FCF1DA', err:'#C42B2B', errbg:'#FCEAEA', post:'#8F5B00', sk:'#2B4FB8', ss:'#4E7A0E', sn:'#9A5B00', sb:'#A3317A', sp:'#5F6772', kw:'#6B3FC9', fn:'#0B6E86', sc:'#737B87', addbg:'#E3F4EA', delbg:'#FCEAEA', line:'rgba(20,24,30,.03)', sh:'0 8px 16px rgba(20,24,30,.14)', hl:'#C9F3F7' }
+    };
+    const t = TH[theme];
+    const vars = Object.entries(t).map(([k, v]) => '--' + k + ':' + v).join(';') + ";--mono:'JetBrains Mono',Consolas,monospace;--rc:4px";
+    const b = (s) => '{' + '{' + s + '}' + '}';
+    const tabs = (arr, active) => arr.map(([n, badge]) => ({ n, b: badge || '', c: n === active ? 'var(--t1)' : 'var(--t2)', sh: n === active ? 'inset 0 -2px 0 var(--acc)' : 'none', bc: n === active ? 'var(--acct)' : 'var(--t3)' }));
+    const tok = (src) => src.split('\n').map((line, i) => {
+      const parts = []; const re = /("(?:[^"\\]|\\.)*")(\s*:)?|(-?\d+(?:\.\d+)?)|(true|false|null)|([{}\[\],:])|(\s+)/g; let x;
+      while ((x = re.exec(line))) {
+        if (x[1]) { parts.push({ t: x[1], c: x[2] ? 'var(--sk)' : 'var(--ss)' }); if (x[2]) parts.push({ t: x[2], c: 'var(--sp)' }); }
+        else if (x[3]) parts.push({ t: x[3], c: 'var(--sn)' }); else if (x[4]) parts.push({ t: x[4], c: 'var(--sb)' });
+        else if (x[5]) parts.push({ t: x[5], c: 'var(--sp)' }); else parts.push({ t: x[6], c: 'var(--t1)' });
+      }
+      return { n: i + 1, parts };
+    });
+    const js = [
+      [['pm','fn'],['.','sp'],['test','fn'],['(','sp'],['"Status code is 201"','ss'],[', () => {','sp']],
+      [['  pm','fn'],['.response.','sp'],['to','t1'],['.have.','sp'],['status','fn'],['(','sp'],['201','sn'],[');','sp']],
+      [['});','sp']],
+      [['const ','kw'],['body','t1'],[' = pm.response.','sp'],['json','fn'],['();','sp']],
+      [['pm','fn'],['.collectionVariables.','sp'],['set','fn'],['(','sp'],['"shipmentId"','ss'],[', body.id);','sp']],
+      [['pm','fn'],['.test','fn'],['(','sp'],['"Label is a PDF"','ss'],[', () => {','sp']],
+      [['  pm','fn'],['.expect(body.label.format).','sp'],['to','t1'],['.','sp'],['eql','fn'],['(','sp'],['"pdf"','ss'],[');','sp']],
+      [['  pm','fn'],['.response.to.have.','sp'],['to','t1'],['|','acct']],
+      [['});','sp']]
+    ].map((l, i) => ({ n: i + 1, p: l.map(([tx, k]) => ({ t: tx, c: 'var(--' + k + ')' })) }));
+    const tg = (c, s, n, e, ms) => ({ c, s, n, e, ms, bg: c === 'var(--err)' ? 'var(--errbg)' : 'transparent' });
+    const dl = (n, tx, k) => ({ n, t: tx, c: k === 'del' ? 'var(--err)' : (k === 'add' ? 'var(--ok)' : 'var(--t2)'), bg: k === 'del' ? 'var(--delbg)' : (k === 'add' ? 'var(--addbg)' : 'transparent') });
+    return {
+      root: 'width:1600px;height:1760px;box-sizing:border-box;padding:40px 48px;display:flex;flex-direction:column;gap:24px;overflow:hidden;font-family:\'Segoe UI Variable Text\',\'Segoe UI\',Inter,sans-serif;font-size:13px;line-height:20px;color:var(--t1);background:var(--bg);' + vars,
+      v: { ship: b('shipmentId'), token: b('accessToken') },
+      tabsParams: tabs([['Params','3'],['Authorization'],['Headers','9'],['Body'],['Scripts']], 'Params'),
+      tabsAuth: tabs([['Params'],['Authorization'],['Headers'],['Body'],['Settings']], 'Authorization'),
+      params: [
+        { k:'status', v:'in_transit', vc:'var(--t1)', cb:'var(--acc)', cbd:'var(--acc)', op:'1' },
+        { k:'carrier', v:'colissimo,chronopost', vc:'var(--t1)', cb:'var(--acc)', cbd:'var(--acc)', op:'1' },
+        { k:'limit', v:b('pageSize'), vc:'var(--iris)', cb:'var(--acc)', cbd:'var(--acc)', op:'1' },
+        { k:'cursor', v:'eyJpZCI6InNocF8wMUpC…', vc:'var(--t1)', cb:'transparent', cbd:'var(--bctl)', op:'.5' },
+        { k:'Clé', v:'Valeur', vc:'var(--t4)', cb:'transparent', cbd:'var(--b2)', op:'.6' }
+      ],
+      form: [
+        { k:'shipment_id', t:'Text', v:b('shipmentId'), vc:'var(--iris)' },
+        { k:'format', t:'Text', v:'pdf_a6', vc:'var(--t1)' },
+        { k:'customs_invoice', t:'File', v:'facture-CMD-2026-10482.pdf · 84 Ko', vc:'var(--t1)' },
+        { k:'logo', t:'File', v:'atelier-lune.png · 12 Ko', vc:'var(--t1)' }
+      ],
+      script: js,
+      settings: [
+        { t:'Délai d’expiration', d:'Hérité de la collection : 30 000 ms', isToggle:false, isValue:true, v:'30000 ms', vc:'var(--t1)' },
+        { t:'Suivre les redirections', d:'Max 10, conserver la méthode', isToggle:true, isValue:false, tb:'var(--acc)', tbd:'0', kl:'21px', kc:'#04252A' },
+        { t:'Vérifier le certificat SSL', d:'Désactivé pour *.parcelo.local uniquement', isToggle:true, isValue:false, tb:'var(--acc)', tbd:'0', kl:'21px', kc:'#04252A' },
+        { t:'Version HTTP', d:'HTTP/3 indisponible sur cette plateforme', isToggle:false, isValue:true, v:'HTTP/2', vc:'var(--t1)' },
+        { t:'Proxy', d:'Utiliser le proxy système', isToggle:true, isValue:false, tb:'transparent', tbd:'1px solid var(--bctl)', kl:'3px', kc:'var(--t2)' },
+        { t:'Encoder l’URL automatiquement', d:'', isToggle:true, isValue:false, tb:'var(--acc)', tbd:'0', kl:'21px', kc:'#04252A' },
+        { t:'Certificat client (mTLS)', d:'parcelo-staging-client.pfx', isToggle:false, isValue:true, v:'Configuré', vc:'var(--ok)' }
+      ],
+      progress: [
+        { s:'✓', c:'var(--ok)', n:'Résolution DNS', v:'12 ms', tc:'var(--t1)' },
+        { s:'✓', c:'var(--ok)', n:'Connexion TCP + TLS 1.3', v:'47 ms', tc:'var(--t1)' },
+        { s:'✓', c:'var(--ok)', n:'Requête envoyée (1,4 Ko)', v:'1 ms', tc:'var(--t1)' },
+        { s:'●', c:'var(--acc)', n:'En attente du premier octet…', v:'1,76 s', tc:'var(--t1)' },
+        { s:'○', c:'var(--t4)', n:'Téléchargement', v:'—', tc:'var(--t3)' }
+      ],
+      err422: tok(`{
+  "type": "https://docs.parcelo.example/errors/validation",
+  "title": "Validation failed",
+  "status": 422,
+  "detail": "1 field is invalid",
+  "errors": [
+    {
+      "field": "recipient.postal_code",
+      "code": "invalid_format",
+      "message": "Expected 5 digits, got \\"3300\\""
+    }
+  ],
+  "request_id": "req_7f3a91c2"
+}`),
+      headers: [
+        { k:'retry-after', v:'30', bg:'var(--hl)' },
+        { k:'content-type', v:'application/problem+json', bg:'transparent' },
+        { k:'date', v:'Wed, 28 Oct 2026 09:42:42 GMT', bg:'transparent' },
+        { k:'server', v:'envoy', bg:'transparent' },
+        { k:'x-request-id', v:'req_b81e04d6', bg:'transparent' },
+        { k:'x-ratelimit-limit', v:'5000', bg:'transparent' },
+        { k:'x-ratelimit-remaining', v:'4986', bg:'transparent' },
+        { k:'strict-transport-security', v:'max-age=31536000; includeSubDomains', bg:'transparent' },
+        { k:'cache-control', v:'no-store', bg:'transparent' }
+      ],
+      tests: [
+        tg('var(--ok)','PASS','Status code is 201','','2 ms'),
+        tg('var(--ok)','PASS','Response matches JSON schema (shipment.v2)','','9 ms'),
+        tg('var(--ok)','PASS','Label is a PDF','','0 ms'),
+        tg('var(--err)','FAIL','Response time below 150 ms','AssertionError: expected 184 to be below 150','0 ms'),
+        tg('var(--ok)','PASS','tracking_number is 13 chars','','0 ms'),
+        tg('var(--ok)','PASS','Sets {shipmentId} for next requests','','1 ms')
+      ],
+      timing: [
+        { n:'Socket', l:'0%', w:'1%', c:'var(--t4)', v:'0,4 ms' },
+        { n:'DNS', l:'1%', w:'7%', c:'#5CC8E0', v:'12 ms' },
+        { n:'TCP', l:'8%', w:'11%', c:'#6AA8FF', v:'19 ms' },
+        { n:'TLS', l:'19%', w:'16%', c:'#B38CFF', v:'28 ms' },
+        { n:'Envoi', l:'35%', w:'1%', c:'var(--t3)', v:'0,9 ms' },
+        { n:'TTFB', l:'36%', w:'54%', c:'var(--acc)', v:'97 ms' },
+        { n:'Download', l:'90%', w:'10%', c:'var(--ok)', v:'18 ms' }
+      ],
+      diffL: [dl(1,'{'), dl(2,'  "id": "shp_01JBX4R7M2Q9K",'), dl(3,'  "status": "in_transit",','del'), dl(4,'  "last_event": "hub_bordeaux",','del'), dl(5,'  "carrier": "colissimo",'), dl(6,''), dl(7,''), dl(8,'  "eta": "2026-10-29"'), dl(9,'}')],
+      diffR: [dl(1,'{'), dl(2,'  "id": "shp_01JBX4R7M2Q9K",'), dl(3,'  "status": "delivered",','add'), dl(4,'  "delivered_at": "2026-10-29T14:02Z",','add'), dl(5,'  "carrier": "colissimo",'), dl(6,'  "signed_by": "C. MOREAU",','add'), dl(7,''), dl(8,'  "eta": "2026-10-29"'), dl(9,'}')],
+      bigLines: [
+        { n:'401 288', k:'      "id"', v:'"shp_01JC0A7Z3M8D"', bg:'transparent' },
+        { n:'401 289', k:'      "status"', v:'"delivered"', bg:'transparent' },
+        { n:'401 290', k:'      "carrier"', v:'"dhl_express"', bg:'transparent' },
+        { n:'401 301', k:'      "id"', v:'"shp_01JC0A8B11QF"', bg:'var(--hl)' },
+        { n:'401 302', k:'      "status"', v:'"in_transit"', bg:'transparent' },
+        { n:'401 303', k:'      "carrier"', v:'"colissimo"', bg:'transparent' },
+        { n:'401 314', k:'      "id"', v:'"shp_01JC0A9F4K2T"', bg:'transparent' },
+        { n:'401 315', k:'      "status"', v:'"label_created"', bg:'transparent' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

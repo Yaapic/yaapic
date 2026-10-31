@@ -28,6 +28,6 @@ Real screens, MSIX packaging.
 
 ## Notes
 
-Windows App SDK 1.8 (Native AOT supported since 1.6), unpackaged and self-contained, net10.0-windows10.0.19041.0.
+Windows App SDK 1.8 (Native AOT supported since 1.6), unpackaged and self-contained, net11.0-windows10.0.19041.0.
 Publishing needs `vswhere.exe` on PATH (`C:\Program Files (x86)\Microsoft Visual Studio\Installer`). The publish
 produced 0 IL2xxx/IL3xxx warnings; the exe started, showed the window and closed with exit code 0.

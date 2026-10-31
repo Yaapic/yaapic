@@ -1,0 +1,24 @@
+version: 1
+id: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8
+name: Get users – café ☕
+method: POST
+url: "{{baseUrl}}/users"
+params:
+- key: page
+  value: "1"
+  enabled: true
+- key: debug
+  value: "{{flag}}"
+  enabled: false
+headers:
+- key: Accept
+  value: application/json
+  enabled: true
+body:
+  type: raw
+  contentType: json
+  text: |-
+    {
+      "name": "Zoë",
+      "id": "{{id}}"
+    }

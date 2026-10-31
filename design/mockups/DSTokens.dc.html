@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic DS — Tokens et mapping XAML</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width:1600px;height:1500px;box-sizing:border-box;background:#131518;color:#ECEEF1;font-family:Inter,sans-serif;font-size:13px;line-height:20px;padding:56px 64px;display:flex;flex-direction:column;gap:24px">
+  <div>
+    <div style="font:500 12px/16px 'JetBrains Mono',monospace;letter-spacing:.08em;color:#1FC7D4;text-transform:uppercase">15 · Tokens & implémentation</div>
+    <h1 style="margin:8px 0 0;font:600 36px/44px 'Space Grotesk',sans-serif;letter-spacing:-.02em">Un JSON, deux ResourceDictionary</h1>
+  </div>
+
+  <div style="display:grid;grid-template-columns:1fr 560px;gap:20px">
+    <div style="display:flex;flex-direction:column;gap:20px">
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+        <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">CONVENTION DE NOMMAGE</div>
+        <div style="font:500 15px/24px 'JetBrains Mono',monospace"><span style="color:#959BFF">catégorie</span>.<span style="color:#F5B648">rôle</span>.<span style="color:#3DD6A3">variante</span>.<span style="color:#F28AC9">état</span></div>
+        <div style="color:#A3AAB4">3 couches : <b style="color:#ECEEF1">primitives</b> (palette.ion.400, space.200) → <b style="color:#ECEEF1">sémantiques</b> (color.surface.base, color.accent.fill) → <b style="color:#ECEEF1">composants</b> (button.primary.background.hover). Seules les couches 2 et 3 sont référencées dans les styles XAML. Les thèmes ne redéfinissent que la couche 2.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;font:500 12px 'JetBrains Mono',monospace">
+          <span style="background:#21252A;border-radius:4px;padding:2px 8px">color.text.secondary</span><span style="background:#21252A;border-radius:4px;padding:2px 8px">space.300</span><span style="background:#21252A;border-radius:4px;padding:2px 8px">radius.control</span><span style="background:#21252A;border-radius:4px;padding:2px 8px">size.control.md</span><span style="background:#21252A;border-radius:4px;padding:2px 8px">motion.duration.fast</span><span style="background:#21252A;border-radius:4px;padding:2px 8px">color.method.patch</span><span style="background:#21252A;border-radius:4px;padding:2px 8px">tab.request.indicator.modified</span>
+        </div>
+      </div>
+      <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:240px 1fr 1fr;background:#16181C;font:600 11px/16px 'JetBrains Mono',monospace;color:#848C97"><div style="padding:10px 14px">TOKEN</div><div style="padding:10px 14px">WinUI 3 · ResourceDictionary</div><div style="padding:10px 14px">Avalonia · Styles / ControlTheme</div></div>
+        <sc-for list="{{map}}" as="m" hint-placeholder-count="14">
+          <div style="display:grid;grid-template-columns:240px 1fr 1fr;border-top:1px solid #24282E;font:400 12px/18px 'JetBrains Mono',monospace">
+            <div style="padding:6px 14px;color:#ECEEF1">{{m.t}}</div><div style="padding:6px 14px;color:#A3AAB4">{{m.w}}</div><div style="padding:6px 14px;color:#A3AAB4">{{m.a}}</div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+    <div style="background:#121417;border:1px solid #24282E;border-radius:12px;padding:16px 0;display:flex;flex-direction:column">
+      <div style="padding:0 16px 10px;display:flex;justify-content:space-between;font:600 11px/16px 'JetBrains Mono',monospace;color:#848C97"><span>tokens/yaapic.tokens.json · Style Dictionary (DTCG)</span><span>extrait</span></div>
+      <div style="font:400 12px/19px 'JetBrains Mono',monospace;white-space:pre;padding:0 16px;color:#ECEEF1">
+        <sc-for list="{{json}}" as="ln" hint-placeholder-count="30"><div><sc-for list="{{ln.p}}" as="t" hint-placeholder-count="3"><span style="color:{{t.c}}">{{t.t}}</span></sc-for></div></sc-for>
+      </div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">FENÊTRE · COMPORTEMENT RESPONSIVE</div>
+      <sc-for list="{{bp}}" as="b" hint-placeholder-count="4">
+        <div style="display:grid;grid-template-columns:110px 1fr;gap:10px;border-top:1px solid #24282E;padding-top:8px"><span style="font:600 12px 'JetBrains Mono',monospace;color:#1FC7D4">{{b.w}}</span><span style="color:#A3AAB4">{{b.d}}</span></div>
+      </sc-for>
+    </div>
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">ACCESSIBILITÉ · exigences</div>
+      <sc-for list="{{a11y}}" as="a" hint-placeholder-count="7"><div style="display:flex;gap:8px"><span style="color:#3FD68A">✓</span><span style="color:#A3AAB4">{{a}}</span></div></sc-for>
+    </div>
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:8px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">À FAIRE / À ÉVITER</div>
+      <sc-for list="{{dodont}}" as="d" hint-placeholder-count="8"><div style="display:flex;gap:8px"><span style="color:{{d.c}};font-weight:700;width:14px">{{d.s}}</span><span style="color:#A3AAB4">{{d.t}}</span></div></sc-for>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1500}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const src = `{
+  "color": {
+    "surface": {
+      "base": { "$type": "color", "$value": "#1A1D21",
+        "$extensions": { "yaapic.themes": {
+          "light": "#FFFFFF", "highContrast": "SystemColorWindowColor" },
+          "winui": "YaapicSurfaceBaseBrush",
+          "avalonia": "YaapicSurfaceBaseBrush" } }
+    },
+    "accent": {
+      "fill": { "$type": "color", "$value": "{palette.ion.400}" },
+      "on":   { "$type": "color", "$value": "#04252A" }
+    },
+    "method": {
+      "get":  { "$type": "color", "$value": "#3DD6A3" },
+      "post": { "$type": "color", "$value": "#F5B648" }
+    }
+  },
+  "space": { "200": { "$type": "dimension", "$value": "8px" } },
+  "radius": {
+    "control": { "$type": "dimension", "$value": "6px",
+      "$extensions": { "yaapic.platform": { "windows": "4px" } } }
+  },
+  "motion": {
+    "duration": { "fast": { "$type": "duration", "$value": "100ms" } },
+    "easing": { "standard": { "$type": "cubicBezier",
+      "$value": [0.2, 0, 0, 1] } }
+  }
+}`;
+    const tok = (line) => {
+      const out = []; const re = /("(?:[^"\\]|\\.)*")(\s*:)?|(-?\d+(?:\.\d+)?)|([{}\[\],:])|(\s+)|([^\s"{}\[\],:]+)/g; let x;
+      while ((x = re.exec(line))) {
+        if (x[1]) { out.push({ t: x[1], c: x[2] ? '#8FB7FF' : '#B5E36C' }); if (x[2]) out.push({ t: x[2], c: '#848C97' }); }
+        else if (x[3]) out.push({ t: x[3], c: '#F5B648' });
+        else if (x[4]) out.push({ t: x[4], c: '#848C97' });
+        else out.push({ t: x[0], c: '#ECEEF1' });
+      }
+      return { p: out };
+    };
+    return {
+      json: src.split('\n').map(tok),
+      map: [
+        { t:'color.surface.base', w:'YaapicSurfaceBaseBrush (ThemeDictionaries Default/Light/HighContrast)', a:'YaapicSurfaceBaseBrush (ThemeVariant Dark/Light)' },
+        { t:'color.accent.fill', w:'AccentFillColorDefaultBrush ← surchargé', a:'SystemAccentColor ← surchargé' },
+        { t:'color.text.primary', w:'TextFillColorPrimaryBrush', a:'YaapicTextPrimaryBrush' },
+        { t:'color.text.secondary', w:'TextFillColorSecondaryBrush', a:'YaapicTextSecondaryBrush' },
+        { t:'color.border.control', w:'ControlStrokeColorDefaultBrush', a:'YaapicBorderControlBrush' },
+        { t:'color.focus.ring', w:'FocusStrokeColorOuterBrush', a:'FocusAdornerBrush (Style :focus-visible)' },
+        { t:'radius.control', w:'ControlCornerRadius = 4', a:'YaapicRadiusControl = 6' },
+        { t:'radius.overlay', w:'OverlayCornerRadius = 8', a:'YaapicRadiusOverlay = 8' },
+        { t:'space.300', w:'x:Double YaapicSpace300 = 12', a:'x:Double YaapicSpace300 = 12' },
+        { t:'size.control.md', w:'YaapicControlHeight = 32 (density)', a:'YaapicControlHeight = 32' },
+        { t:'type.body', w:'BodyTextBlockStyle (13/20 surchargé)', a:'YaapicBodyText ControlTheme' },
+        { t:'type.code', w:'FontFamily ms-appx:///Fonts/JetBrainsMono.ttf#JetBrains Mono', a:'avares://Yaapic/Assets/Fonts#JetBrains Mono' },
+        { t:'elevation.2', w:'ThemeShadow + Translation 0,0,32', a:'BoxShadow 0 8 16 0 #5C000000' },
+        { t:'motion.duration.normal', w:'x:TimeSpan 0:0:0.150 (Storyboard / Implicit)', a:'Transitions Duration 0:0:0.150' }
+      ],
+      bp: [
+        { w:'≥ 1280 px', d:'Rail + panneau latéral 280 px + éditeur ; réponse en bas (vertical) ou à droite (horizontal) au choix.' },
+        { w:'1024–1279', d:'Panneau latéral 240 px, réductible ; disposition horizontale bascule automatiquement en verticale.' },
+        { w:'900–1023', d:'Mode compact : panneau latéral en overlay (flyout), onglets de panneau en icônes + infobulle, barre d’état réduite.' },
+        { w:'Min 900×600', d:'Taille minimale imposée (AppWindow.SetPresenter / MinWidth). Hauteur 600 : réponse min 180 px, splitter mémorisé.' }
+      ],
+      a11y: [
+        'Ordre de tabulation : titre → rail → panneau → onglets → URL → Send → onglets éditeur → réponse → barre d’état (F6 cycle entre zones).',
+        'Focus visible 2 px partout, jamais supprimé ; contraste ≥ 3:1 sur toutes les surfaces.',
+        'UI Automation : AutomationProperties.Name / HelpText sur chaque contrôle icône ; LiveRegion polie pour statut de réponse.',
+        'Texte AA minimum, AAA pour le texte principal (14,6:1 sombre, 17,6:1 clair).',
+        'Zoom 50–200 % (Ctrl +/−) et mise à l’échelle Windows 100–200 % ; layouts en unités effectives.',
+        'Thème Contraste élevé : bascule sur les SystemColor* de l’OS, Ion désactivé.',
+        'RTL : FlowDirection inversée sauf éditeurs de code, URL et JSON (toujours LTR).'
+      ],
+      dodont: [
+        { s:'✓', c:'#3FD68A', t:'Un seul bouton Ion par vue (Send ou action principale du dialogue).' },
+        { s:'✓', c:'#3FD68A', t:'Séparer les zones par une bordure 1 px border.subtle, pas par des ombres.' },
+        { s:'✓', c:'#3FD68A', t:'Libellé de méthode toujours visible, même en mode compact.' },
+        { s:'✓', c:'#3FD68A', t:'Valeurs techniques (URL, headers, JSON) toujours en monospace.' },
+        { s:'✕', c:'#FF6B6B', t:'Ion en texte sur fond clair (contraste 2,1:1) — utiliser accent.text.' },
+        { s:'✕', c:'#FF6B6B', t:'Acrylic/flou derrière du texte de code : Mica uniquement sur la barre de titre et le rail.' },
+        { s:'✕', c:'#FF6B6B', t:'Animer l’apparition du corps de réponse ou la ligne de progression > 250 ms.' },
+        { s:'✕', c:'#FF6B6B', t:'Couleur seule pour statut, méthode ou test.' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

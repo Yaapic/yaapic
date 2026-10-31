@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net11.0</TargetFramework>
+    <RootNamespace>Yaapic.App.Avalonia</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>..\..\design\app-icons\windows\yaapic.ico</ApplicationIcon>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <!-- .NET 11 publishes AOT without a full build, so the documentation file is never produced. -->
+    <UseOptimizedPublish>false</UseOptimizedPublish>
+    <BuiltInComInteropSupport>false</BuiltInComInteropSupport>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Avalonia" />
+    <PackageReference Include="Avalonia.Desktop" />
+    <PackageReference Include="Avalonia.Themes.Fluent" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Generated resources live in design/; link them so Avalonia compiles them into the assembly. -->
+    <AvaloniaResource Include="..\..\design\xaml\Yaapic.Colors.Avalonia.axaml" Link="Themes\Yaapic.Colors.Avalonia.axaml" />
+    <AvaloniaResource Include="..\..\design\xaml\Yaapic.Icons.Avalonia.axaml" Link="Themes\Yaapic.Icons.Avalonia.axaml" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Yaapic DS — Couleurs</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap">
+<style>body{margin:0}</style>
+</helmet>
+<div style="width:1600px;height:1900px;box-sizing:border-box;background:#131518;color:#ECEEF1;font-family:Inter,system-ui,sans-serif;padding:56px 64px;display:flex;flex-direction:column;gap:32px">
+  <div>
+    <div style="font:500 12px/16px 'JetBrains Mono',monospace;letter-spacing:.08em;color:#1FC7D4;text-transform:uppercase">11 · Couleurs</div>
+    <h1 style="margin:8px 0 0;font:600 36px/44px 'Space Grotesk',sans-serif;letter-spacing:-.02em">Palettes 50–950, tokens sémantiques, couleurs API</h1>
+  </div>
+
+  <div style="display:flex;flex-direction:column;gap:10px">
+    <sc-for list="{{scales}}" as="s" hint-placeholder-count="6">
+      <div style="display:grid;grid-template-columns:120px repeat(11,minmax(0,1fr));gap:6px;align-items:stretch">
+        <div style="display:flex;flex-direction:column;justify-content:center"><span style="font:600 15px/20px 'Space Grotesk',sans-serif">{{s.name}}</span><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#848C97">{{s.role}}</span></div>
+        <sc-for list="{{s.steps}}" as="c" hint-placeholder-count="11">
+          <div style="height:64px;border-radius:6px;background:{{c.hex}};color:{{c.fg}};padding:6px 8px;display:flex;flex-direction:column;justify-content:space-between;box-sizing:border-box;outline:{{c.ring}};outline-offset:2px">
+            <span style="font:600 11px/14px 'JetBrains Mono',monospace">{{c.k}}</span>
+            <span style="font:500 10px/14px 'JetBrains Mono',monospace">{{c.hex}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-for>
+    <div style="font-size:12px;line-height:16px;color:#848C97">Contour = pas de référence utilisé par les thèmes. Échelles perceptuellement régulières (OKLCH), teinte graphite à 250° / chroma 0,01.</div>
+  </div>
+
+  <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;overflow:hidden">
+    <div style="display:grid;grid-template-columns:260px repeat(3,minmax(0,1fr));background:#16181C;border-bottom:1px solid #30353C;font:600 11px/16px 'JetBrains Mono',monospace;color:#848C97;letter-spacing:.04em">
+      <div style="padding:10px 16px">TOKEN SÉMANTIQUE</div><div style="padding:10px 16px">SOMBRE (référence)</div><div style="padding:10px 16px">CLAIR</div><div style="padding:10px 16px">CONTRASTE ÉLEVÉ</div>
+    </div>
+    <sc-for list="{{sem}}" as="r" hint-placeholder-count="18">
+      <div style="display:grid;grid-template-columns:260px repeat(3,minmax(0,1fr));border-top:1px solid #24282E">
+        <div style="padding:7px 16px;font:500 12px/18px 'JetBrains Mono',monospace;color:#ECEEF1">{{r.tok}}</div>
+        <div style="padding:7px 16px;display:flex;align-items:center;gap:10px"><span style="width:28px;height:18px;border-radius:4px;background:{{r.d}};border:1px solid rgba(255,255,255,.12)"></span><span style="font:500 12px/18px 'JetBrains Mono',monospace;color:#A3AAB4">{{r.d}}</span><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#3FD68A">{{r.dc}}</span></div>
+        <div style="padding:7px 16px;display:flex;align-items:center;gap:10px"><span style="width:28px;height:18px;border-radius:4px;background:{{r.l}};border:1px solid rgba(255,255,255,.12)"></span><span style="font:500 12px/18px 'JetBrains Mono',monospace;color:#A3AAB4">{{r.l}}</span><span style="font:500 11px/16px 'JetBrains Mono',monospace;color:#3FD68A">{{r.lc}}</span></div>
+        <div style="padding:7px 16px;display:flex;align-items:center;gap:10px"><span style="width:28px;height:18px;border-radius:4px;background:{{r.h}};border:1px solid rgba(255,255,255,.12)"></span><span style="font:500 12px/18px 'JetBrains Mono',monospace;color:#A3AAB4">{{r.h}}</span></div>
+      </div>
+    </sc-for>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">MÉTHODES HTTP · color.method.*</div>
+      <sc-for list="{{methods}}" as="m" hint-placeholder-count="8">
+        <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+          <div style="background:#1A1D21;border:1px solid #30353C;border-radius:4px;padding:5px 10px;display:flex;justify-content:space-between;align-items:center"><span style="font:700 12px/16px 'JetBrains Mono',monospace;color:{{m.d}}">{{m.m}}</span><span style="font:500 10px/14px 'JetBrains Mono',monospace;color:#848C97">{{m.d}} · {{m.dc}}</span></div>
+          <div style="background:#FFFFFF;border-radius:4px;padding:5px 10px;display:flex;justify-content:space-between;align-items:center"><span style="font:700 12px/16px 'JetBrains Mono',monospace;color:{{m.l}}">{{m.m}}</span><span style="font:500 10px/14px 'JetBrains Mono',monospace;color:#5F6772">{{m.l}} · {{m.lc}}</span></div>
+        </div>
+      </sc-for>
+      <div style="font-size:12px;line-height:16px;color:#A3AAB4">Toujours le libellé texte en mono gras. Abréviations dans l'arbre : DEL, OPT, HEAD (largeur fixe 40 px).</div>
+    </div>
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">CODES DE STATUT · color.status.*</div>
+      <sc-for list="{{statuses}}" as="s" hint-placeholder-count="5">
+        <div style="display:flex;align-items:center;gap:10px;border:1px solid #30353C;border-radius:6px;padding:8px 10px">
+          <span style="display:inline-flex;align-items:center;gap:6px;background:{{s.bg}};color:{{s.c}};border-radius:4px;padding:2px 8px;font:600 12px/16px 'JetBrains Mono',monospace"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{s.icon}}"></path></svg>{{s.code}}</span>
+          <span style="font-size:13px;color:#ECEEF1">{{s.label}}</span><span style="margin-left:auto;font:500 11px/16px 'JetBrains Mono',monospace;color:#848C97">{{s.tok}}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="background:#1A1D21;border:1px solid #24282E;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:10px">
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97">TESTS · color.test.*</div>
+      <div style="display:flex;align-items:center;gap:10px;border:1px solid #30353C;border-radius:6px;padding:8px 10px"><span style="display:inline-flex;align-items:center;gap:6px;color:#3FD68A;font:600 12px/16px 'JetBrains Mono',monospace"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>PASS</span><span style="font-size:13px">Status code is 201</span></div>
+      <div style="display:flex;align-items:center;gap:10px;border:1px solid #30353C;border-radius:6px;padding:8px 10px"><span style="display:inline-flex;align-items:center;gap:6px;color:#FF6B6B;font:600 12px/16px 'JetBrains Mono',monospace"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg>FAIL</span><span style="font-size:13px">Response time below 150 ms</span></div>
+      <div style="display:flex;align-items:center;gap:10px;border:1px solid #30353C;border-radius:6px;padding:8px 10px"><span style="display:inline-flex;align-items:center;gap:6px;color:#A3AAB4;font:600 12px/16px 'JetBrains Mono',monospace"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12h12"></path></svg>SKIP</span><span style="font-size:13px">Label PDF is reachable</span></div>
+      <div style="font:600 12px/16px 'JetBrains Mono',monospace;color:#848C97;margin-top:10px">VARIABLES · color.variable.*</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;font:500 12px/16px 'JetBrains Mono',monospace">
+        <span style="background:rgba(128,136,255,.16);color:#959BFF;border-radius:4px;padding:2px 6px">{{v.base}}</span>
+        <span style="background:rgba(31,199,212,.12);color:#5FE0EA;border-radius:4px;padding:2px 6px;display:inline-flex;align-items:center;gap:4px"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 11V8a5 5 0 0 1 10 0v3M5.5 11h13a1 1 0 0 1 1 1v7.5a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1V12a1 1 0 0 1 1-1z"></path></svg>{{v.secret}}</span>
+        <span style="background:rgba(255,107,107,.13);color:#FF6B6B;border-radius:4px;padding:2px 6px;text-decoration:underline wavy">{{v.unres}}</span>
+      </div>
+      <div style="font-size:12px;line-height:16px;color:#A3AAB4">Résolue = Iris · secrète = Ion + cadenas · non résolue = rouge + soulignement ondulé + tooltip.</div>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1600,"height":1900}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const K = ['50','100','200','300','400','500','600','700','800','900','950'];
+    const mk = (name, role, hexes, ref) => ({ name, role, steps: hexes.map((h, i) => ({ k: K[i], hex: h, fg: i < 5 ? '#131518' : '#ECEEF1', ring: ref.includes(K[i]) ? '2px solid #ECEEF1' : 'none' })) });
+    const b = (s) => '{' + '{' + s + '}' + '}';
+    return {
+      v: { base: b('baseUrl'), secret: b('apiKey'), unres: b('tenantId') },
+      scales: [
+        mk('Ion', 'signature', ['#E0FAFC','#B8F2F7','#8AE9F0','#5FE0EA','#1FC7D4','#18B3BF','#0E98A3','#0A7C86','#0A6B74','#08474D','#042A2E'], ['400','800']),
+        mk('Iris', 'accent', ['#F0F1FF','#E1E3FF','#C6CAFF','#A3A9FF','#8088FF','#636AF2','#4E52D6','#3F41AD','#34378A','#2C2F6B','#1A1B3D'], ['400','600']),
+        mk('Graphite', 'neutres', ['#F6F7F9','#ECEEF1','#D8DCE2','#BCC2CB','#959DA8','#737B87','#59606B','#434952','#2C3138','#1D2025','#131518'], ['50','950']),
+        mk('Green', 'succès · 2xx', ['#ECFBF3','#D0F5E1','#A3EBC5','#6FDDA5','#3FD68A','#22B26D','#168A52','#157F4A','#115838','#0F482F','#062A1A'], ['400','700']),
+        mk('Amber', 'avert. · 4xx', ['#FFF8EB','#FDEDC8','#FAD98C','#F5C55E','#F2B84B','#E09A1E','#B97A0F','#8A5A00','#6F4806','#5C3C0A','#352102'], ['400','700']),
+        mk('Red', 'danger · 5xx', ['#FFF1F1','#FFDEDE','#FFC1C1','#FF9696','#FF6B6B','#F24343','#DE3838','#C42B2B','#941F1F','#7A1F1F','#430B0B'], ['400','700'])
+      ],
+      sem: [
+        ['color.surface.app','#131518','','#EEF0F3','','#000000'],
+        ['color.surface.base','#1A1D21','','#FFFFFF','','#000000'],
+        ['color.surface.sidebar','#16181C','','#F3F4F6','','#000000'],
+        ['color.surface.raised','#21252A','','#F6F7F9','','#000000'],
+        ['color.surface.elevated','#282C33','','#FFFFFF','','#0A0A0A'],
+        ['color.surface.sunken (éditeur)','#121417','','#FBFBFC','','#000000'],
+        ['color.border.subtle','#24282E','','#E7E9EE','','#FFFFFF'],
+        ['color.border.default','#30353C','','#D8DCE2','','#FFFFFF'],
+        ['color.border.control (≥3:1)','#656C77','3.2:1','#8A919C','3.2:1','#FFFFFF'],
+        ['color.text.primary','#ECEEF1','14.6:1','#16191D','17.6:1','#FFFFFF'],
+        ['color.text.secondary','#A3AAB4','7.2:1','#4A515B','8.0:1','#FFFFFF'],
+        ['color.text.tertiary','#848C97','5.0:1','#5F6772','5.7:1','#E0E0E0'],
+        ['color.text.disabled','#5A606A','—','#A0A7B1','—','#3FF23F'],
+        ['color.accent.fill','#1FC7D4','8.2:1','#1FC7D4','+ bord #0A7C86','#8AE9F0'],
+        ['color.accent.text / link','#5FE0EA','10.7:1','#0A6B74','6.2:1','#8AE9F0'],
+        ['color.accent.on','#04252A','7.8:1','#04252A','7.8:1','#000000'],
+        ['color.selection','#1FC7D4 @10 %','','#E0FAFC','','#1AEBFF'],
+        ['color.focus.ring (2 px)','#5FE0EA','','#0A6B74','','#FFFF00'],
+        ['color.info','#959BFF','6.8:1','#4A4FD0','6.3:1','#B3B8FF'],
+        ['color.success','#3FD68A','9.0:1','#157F4A','5.0:1','#3FF23F'],
+        ['color.warning','#F2B84B','9.4:1','#8A5A00','5.9:1','#FFFF00'],
+        ['color.danger','#FF6B6B','6.1:1','#C42B2B','5.6:1','#FF8080']
+      ].map(a => ({ tok: a[0], d: a[1], dc: a[2], l: a[3], lc: a[4], h: a[5] })),
+      methods: [
+        ['GET','#3DD6A3','9.1','#0F7A5C','5.3'],['POST','#F5B648','9.4','#8F5B00','5.7'],['PUT','#6AA8FF','7.0','#1D5FC4','6.0'],['PATCH','#B38CFF','6.5','#6B3FC9','6.6'],
+        ['DELETE','#FF7272','6.4','#BE2F2F','5.8'],['HEAD','#5CC8E0','8.7','#0B6E86','5.9'],['OPTIONS','#F28AC9','7.5','#A3317A','6.4'],['CUSTOM','#A3AAB4','7.2','#4A515B','8.0']
+      ].map(a => ({ m: a[0], d: a[1], dc: a[2] + ':1', l: a[3], lc: a[4] + ':1' })),
+      statuses: [
+        { code: '101', label: 'Switching Protocols', c: '#959BFF', bg: 'rgba(128,136,255,.16)', tok: 'status.1xx', icon: 'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM12 11v5M12 8h.01' },
+        { code: '201', label: 'Created', c: '#3FD68A', bg: 'rgba(63,214,138,.13)', tok: 'status.2xx', icon: 'M5 12.5l4.5 4.5L19 7.5' },
+        { code: '304', label: 'Not Modified', c: '#6AA8FF', bg: 'rgba(106,168,255,.14)', tok: 'status.3xx', icon: 'M4 12h14M13 6l6 6-6 6' },
+        { code: '422', label: 'Unprocessable Entity', c: '#F2B84B', bg: 'rgba(242,184,75,.13)', tok: 'status.4xx', icon: 'M12 4 21 19.5H3zM12 10v4M12 17h.01' },
+        { code: '503', label: 'Service Unavailable', c: '#FF6B6B', bg: 'rgba(255,107,107,.13)', tok: 'status.5xx', icon: 'M8.5 3.5h7l5 5v7l-5 5h-7l-5-5v-7zM9.5 9.5l5 5M14.5 9.5l-5 5' }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

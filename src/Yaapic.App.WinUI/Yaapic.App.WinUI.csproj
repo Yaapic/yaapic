@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net10.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net11.0-windows10.0.19041.0</TargetFramework>
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <RootNamespace>Yaapic.App.WinUI</RootNamespace>
     <UseWinUI>true</UseWinUI>
@@ -15,14 +15,25 @@
     <ApplicationIcon>..\..\design\app-icons\windows\yaapic.ico</ApplicationIcon>
     <DefaultLanguage>en-US</DefaultLanguage>
     <EnableMsixTooling>true</EnableMsixTooling>
+    <!-- .NET 11 publishes AOT without a full build: the XAML compiler then finds no WinUI metadata (WMC1007 / WMC9999). -->
+    <UseOptimizedPublish>false</UseOptimizedPublish>
+    <!-- CsWinRT generates unsafe marshalling code for the ViewModel collections bound in XAML (CsWinRT1030). -->
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" />
+    <PackageReference Include="FluentIcons.WinUI" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Yaapic.Composition\Yaapic.Composition.csproj" />
+    <ProjectReference Include="..\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />
+    <ProjectReference Include="..\Yaapic.ViewModels\Yaapic.ViewModels.csproj" />
   </ItemGroup>
   <ItemGroup>
     <!-- Generated resources live in design/; compile them as pages so they ship as XBF. -->
     <Page Include="..\..\design\xaml\Yaapic.Colors.WinUI.xaml" Link="Themes\Yaapic.Colors.WinUI.xaml" />
     <Page Include="..\..\design\xaml\Yaapic.Icons.WinUI.xaml" Link="Themes\Yaapic.Icons.WinUI.xaml" />
+    <Content Include="Assets\Fonts\*.ttf" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
