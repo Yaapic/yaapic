@@ -24,10 +24,23 @@ public sealed partial class EnvironmentsDialog : ContentDialog
             }
         };
         Variables.ViewModel = ViewModel.EditedEnvironment?.Variables;
+        Loaded += (_, _) =>
+        {
+            Fit();
+            XamlRoot.Changed += (_, _) => Fit();
+        };
     }
 
     /// <summary>Gets the managed environments.</summary>
     public EnvironmentsViewModel ViewModel { get; }
+
+    // Keeps the dialog clear of the title bar (the system caption buttons draw above any popup) when the window is small.
+    private void Fit()
+    {
+        var size = XamlRoot.Size;
+        Body.Width = Math.Clamp(size.Width - 64, 480, 960);
+        Body.Height = Math.Clamp(size.Height - 2 * 56 - 52, 240, 560);
+    }
 
     private void OnSave(object sender, RoutedEventArgs e)
     {

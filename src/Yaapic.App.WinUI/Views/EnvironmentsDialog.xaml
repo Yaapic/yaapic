@@ -16,7 +16,7 @@
       <Setter Property="Padding" Value="14,0"/>
     </Style>
   </ContentDialog.Resources>
-  <Grid Width="960" Height="560">
+  <Grid x:Name="Body" Width="960" Height="560">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="240"/>
       <ColumnDefinition Width="1"/>
@@ -76,14 +76,14 @@
         <Grid Padding="20,0" ColumnSpacing="12" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
           <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*" MinWidth="60" MaxWidth="260"/>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
           <Ellipse Width="10" Height="10" VerticalAlignment="Center"
                    Fill="{x:Bind p:EnvironmentMap.Dot(ViewModel.EditedEnvironment.IsActive), Mode=OneWay}"/>
-          <TextBox Grid.Column="1" Width="180" MinHeight="36" Padding="0,4" VerticalAlignment="Center"
+          <TextBox Grid.Column="1" MinHeight="36" Padding="0,4" VerticalAlignment="Center"
                    FontSize="20" FontWeight="SemiBold" PlaceholderText="Environment name"
                    AutomationProperties.Name="Environment name"
                    Text="{x:Bind ViewModel.EditedEnvironment.Name, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}">
