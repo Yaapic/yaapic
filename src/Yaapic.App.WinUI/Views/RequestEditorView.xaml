@@ -212,13 +212,10 @@
         </Grid>
         <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
                 BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
-          <TextBox AcceptsReturn="True" TextWrapping="NoWrap" Padding="16,0" MinHeight="0"
-                   FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeCode}"
-                   AutomationProperties.Name="Body"
-                   ScrollViewer.HorizontalScrollBarVisibility="Auto"
-                   ScrollViewer.VerticalScrollBarVisibility="Auto"
-                   Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"
-                   Text="{x:Bind ViewModel.BodyText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <v:CodeEditorView AutomationProperties.Name="Body"
+                            Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"
+                            EditorLanguage="{x:Bind p:TextMap.Language(ViewModel.BodyContentType), Mode=OneWay}"
+                            Text="{x:Bind ViewModel.BodyText, Mode=TwoWay}"/>
         </Border>
       </Grid>
     </Grid>

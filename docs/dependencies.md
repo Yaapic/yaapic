@@ -32,3 +32,18 @@ Property names are emitted in camelCase by default (`openRequests`), matching th
 | Asset | Version | Licence | Used by | Source | Justification |
 |---|---|---|---|---|---|
 | JetBrains Mono (variable) | 2.304 | SIL OFL 1.1 (`Assets/Fonts/OFL.txt`) | Yaapic.App.WinUI | <https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304> | Code font of the design system (`type.code`): URLs, headers and bodies are always monospace. |
+
+## Rejected: LoomEditor.WinUI (M1-44)
+
+`LoomEditor.WinUI` `0.2.0-alpha.5` (MIT, WinUI 3 code editor ported from Monaco, TextMate grammars, line numbers,
+folding, `Theme` from a VS Code theme JSON, `IsReadOnly`, `ResetText`, `Model.ContentChanged`) was evaluated and
+**rejected for now**: it does not resolve for `net11.0-windows10.0.19041.0` with the current Windows App SDK.
+
+- The package ships its assemblies only under `lib/net11.0-windows10.0.26100`; at the project's `...19041.0`
+  target NuGet restores it with no compile reference (`The type or namespace name 'LoomEditor' could not be found`).
+- At target `...26100.0` the restore fails with `NU1605`: the package depends on `Microsoft.WindowsAppSDK >= 2.5.1`,
+  the project uses 1.8.260921001.
+
+Adopting it therefore means moving the whole WinUI app to Windows App SDK 2.x and a 26100 target, which is a platform
+decision outside the card. The AOT and runtime checks were not run for that reason. The views use `CodeEditorView`
+(ADR 0002) over a borderless `TextBox`, so switching later only changes that one control.

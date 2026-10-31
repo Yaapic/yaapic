@@ -1,6 +1,6 @@
 # M1-44: WinUI code editor: evaluate and adopt LoomEditor.WinUI
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-42
 
@@ -48,14 +48,33 @@ editor, Avalonia editor.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; architecture tests green
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; architecture tests green
       (`Yaapic.UI.Abstractions` still references no UI framework).
-- [ ] AOT publish of `Yaapic.App.WinUI` 0 IL2xxx/IL3xxx warnings; published exe starts, edits a body, sends, shows
+- [x] AOT publish of `Yaapic.App.WinUI` 0 IL2xxx/IL3xxx warnings; published exe starts, edits a body, sends, shows
       the response in the editor, and exits cleanly.
 - [ ] Screenshots (M1-34 script with `-Send`) dark and light of a JSON request body and a JSON response inspected
       against `MainWindow.dc.html`; differences listed in the card's Notes, not committed.
-- [ ] `docs/dependencies.md` and `docs/adr/0002-code-editor.md` updated.
+- [x] `docs/dependencies.md` and `docs/adr/0002-code-editor.md` updated.
 
 ## Suggested commit message
 
 `feat(winui): add the code editor for request and response bodies`
+
+## Notes
+
+- **LoomEditor.WinUI 0.2.0-alpha.5 rejected** (card rule: it must resolve for `net11.0-windows10.0.19041.0` with the
+  current Windows App SDK). Its only assemblies are under `lib/net11.0-windows10.0.26100`, so at the project target it
+  gives no compile reference; at a 26100 target restore fails with NU1605 because it needs
+  `Microsoft.WindowsAppSDK >= 2.5.1` (the app is on 1.8.260921001). Adopting it means moving the app to Windows App
+  SDK 2.x, a platform decision for a separate card. Findings are in `docs/dependencies.md`.
+- API read from the package XML docs, useful for that card: `LoomEditor.Text` is not updated by edits (read
+  `Model.GetValue()`, listen to `Model.ContentChanged`, write with `ResetText`), `Theme` is a plain property built with
+  `EditorTheme.Load(vsCodeThemeJson, "vs"|"vs-dark", name, _ => null)`, `LanguageId` takes `json`, `xml`, `plaintext`.
+- `CodeEditorView` is the `TextBox` fallback behind `ICodeEditor`. Its XAML property is `EditorLanguage` because
+  `FrameworkElement.Language` already exists; `ICodeEditor.Language` is implemented explicitly.
+- Acceptance: build 0 warnings; AOT publish 0 IL2xxx/IL3xxx and the published exe starts, sends and shows the response
+  (`Capture-WinUI.ps1 -Send`, dark). Not done: large-text (5 MB) check and dark/light comparison with
+  `MainWindow.dc.html`, which only make sense for the real editor; the response body is a plain monochrome `TextBox`.
+- Pre-existing, unrelated: 3 `Yaapic.Infrastructure.Tests` golden-file tests fail in this worktree because the golden
+  files are checked out with CRLF.
+

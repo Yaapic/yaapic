@@ -1,6 +1,6 @@
 # ADR 0002: Code editor control
 
-Status: Proposed (confirmed by the first card that needs an editor, in M1)
+Status: Accepted
 
 ## Context
 
@@ -24,3 +24,13 @@ carries no AOT risk.
 
 Option 1 as the working direction: the editor sits behind an interface in `Yaapic.UI.Abstractions`, with the
 implementation in each App project. The final choice and its AOT verification belong to the card that introduces it.
+
+## WinUI decision (M1-44)
+
+The `Yaapic.UI.Abstractions.Editing.ICodeEditor` interface (`Text`, `IsReadOnly`, `Language`, `TextChanged`) is in
+place and `Yaapic.App.WinUI` implements it with `CodeEditorView`, used by the request body and the response body.
+`LoomEditor.WinUI` was evaluated and rejected for now (it needs Windows App SDK 2.5.1 or later and a
+`net11.0-windows10.0.26100` target, see `docs/dependencies.md`), so `CodeEditorView` wraps a borderless `TextBox`
+without line numbers or colours. Revisit when the app moves to Windows App SDK 2.x: only `CodeEditorView` changes.
+
+Avalonia still uses AvaloniaEdit (with its AOT check) when its card is written; that card does not exist yet.

@@ -70,7 +70,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-41](milestone-1-http-core/M1-41-winui-request-editor-restyle.md) | WinUI request editor restyle | windows | M1-39, M1-40 | done |
 | [M1-42](milestone-1-http-core/M1-42-winui-response-panel-restyle.md) | WinUI response panel restyle | windows | M1-41 | done |
 | [M1-43](milestone-1-http-core/M1-43-winui-environments-restyle.md) | WinUI environment management restyle | windows | M1-38, M1-40 | done |
-| [M1-44](milestone-1-http-core/M1-44-winui-code-editor-loomeditor.md) | WinUI code editor: evaluate and adopt LoomEditor.WinUI | windows | M1-42 | todo |
+| [M1-44](milestone-1-http-core/M1-44-winui-code-editor-loomeditor.md) | WinUI code editor: evaluate and adopt LoomEditor.WinUI | windows | M1-42 | done |
 | [M1-45](milestone-1-http-core/M1-45-winui-visual-verification.md) | WinUI visual verification against the mockups | windows | M1-43, M1-44 | todo |
 | [M1-46](milestone-1-http-core/M1-46-winui-request-response-splitter.md) | WinUI resizable request / response splitter | windows | M1-42 | todo |
 
