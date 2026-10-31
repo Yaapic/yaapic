@@ -14,6 +14,7 @@ public sealed partial class EnvironmentsDialog : ContentDialog
         ArgumentNullException.ThrowIfNull(viewModel);
         ViewModel = viewModel;
         InitializeComponent();
+        Services.DialogButtons.Normalize(this);
         DeleteButton.Flyout.Opening += (_, _) => DeletePrompt.Text = $"Delete '{ViewModel.EditedEnvironment?.Name}'?";
         ViewModel.PropertyChanged += (_, e) =>
         {
