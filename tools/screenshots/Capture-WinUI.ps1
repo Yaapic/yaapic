@@ -15,6 +15,8 @@ param(
     [switch]$Send,
     [int]$WaitMs = 1500,
     [string]$Keys = '',
+    [string]$Select = '',
+    [string]$FocusElement = '',
     [string]$Request = 'create-user',
     [switch]$NoTabs,
     [switch]$NoStub
@@ -90,6 +92,24 @@ try {
     $h = $proc.MainWindowHandle
     [void][Win32]::SetWindowPos($h, [IntPtr]::Zero, 0, 0, $Width, $Height, 0x0044) # SWP_NOZORDER | SWP_SHOWWINDOW
     Start-Sleep -Milliseconds $WaitMs
+    if ($Select -or $FocusElement) {
+        # UI Automation by element name: Select invokes a button by AutomationId (e.g. BodyTab), FocusElement focuses a field by name.
+        $root = [Windows.Automation.AutomationElement]::FromHandle($h)
+        $find = { param($prop, $n) $root.FindFirst([Windows.Automation.TreeScope]::Descendants,
+            (New-Object Windows.Automation.PropertyCondition($prop, $n))) }
+        if ($Select) {
+            $el = & $find ([Windows.Automation.AutomationElement]::AutomationIdProperty) $Select; if (-not $el) { throw "Element '$Select' not found." }
+            $pat = $null
+            if ($el.TryGetCurrentPattern([Windows.Automation.InvokePattern]::Pattern, [ref]$pat)) { $pat.Invoke() }
+            elseif ($el.TryGetCurrentPattern([Windows.Automation.TogglePattern]::Pattern, [ref]$pat)) { $pat.Toggle() }
+            else { throw "Element '$Select' cannot be invoked." }
+            Start-Sleep -Milliseconds 500
+        }
+        if ($FocusElement) {
+            $el = & $find ([Windows.Automation.AutomationElement]::NameProperty) $FocusElement; if (-not $el) { throw "Element '$FocusElement' not found." }
+            $el.SetFocus(); Start-Sleep -Milliseconds 300
+        }
+    }
     if ($Keys) {
         # Keys are never sent unless our window really has focus (they would land in another application).
         $focused = $false

@@ -12,7 +12,7 @@ pwsh tools/screenshots/Capture-WinUI.ps1 -Theme light -Send -Out docs/screenshot
 
 Parameters: `-Exe`, `-Theme dark|light`, `-Out`, `-Width 1440 -Height 900`, `-Send` (invokes the Send button through UI Automation, then waits),
 `-WaitMs 1500`, `-Keys` (`SendKeys` syntax, sent before `-Send`), `-Request <slug>` (open and active request,
-default `create-user`), `-NoTabs` (no open request), `-NoStub` (no stub server, to capture a connection failure).
+default `create-user`), `-Select <AutomationId>` (invoke a button before the keys, e.g. `BodyTab`), `-FocusElement <name>` (focus a field by its automation name), `-NoTabs` (no open request), `-NoStub` (no stub server, to capture a connection failure).
 
 The app itself accepts `--workspace <dir>` and `--theme dark|light|system`. The script always cleans up the app, the
 stub server and the temp folder, even on failure. The window must be on an unlocked interactive desktop.
@@ -20,3 +20,5 @@ stub server and the temp folder, even on failure. The window must be on an unloc
 `-Send` doubles as the AOT smoke test of the response path: the script fails if the app dies before the capture (a
 successful response once crashed the AOT build, see the M1-26 notes). Use `-Send` on the published exe after any change
 to the response panel.
+
+Run one capture per `pwsh` process: in a loop inside a single process the earlier stub server keeps the port and responses never arrive.

@@ -1,6 +1,6 @@
 # M1-45: WinUI visual verification against the mockups
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-43, M1-44
 
@@ -49,11 +49,11 @@ New features, Avalonia (its visual cards are not written yet), pixel-perfect com
 
 ## Acceptance criteria
 
-- [ ] 20 screenshots committed under `docs/screenshots/m1/`, each a 1440 x 900 capture of the AOT build.
-- [ ] `docs/screenshots/m1/README.md` lists every screen with its deviations and classification, plus the
+- [x] 20 screenshots committed under `docs/screenshots/m1/`, each a 1440 x 900 capture of the AOT build.
+- [x] `docs/screenshots/m1/README.md` lists every screen with its deviations and classification, plus the
       follow-up proposals.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] No Yaapic or stub-server process left running.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] No Yaapic or stub-server process left running.
 
 ## Suggested commit message
 
