@@ -99,10 +99,18 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
         }
     }
 
-    partial void OnActiveEnvironmentChanged(EnvironmentItemViewModel? value)
+    partial void OnActiveEnvironmentChanged(EnvironmentItemViewModel? oldValue, EnvironmentItemViewModel? newValue)
     {
+        oldValue?.IsActive = false;
+        newValue?.IsActive = true;
         OnPropertyChanged(nameof(Current));
         ActiveEnvironmentChanged?.Invoke(this, EventArgs.Empty);
+    }
+
+    partial void OnEditedEnvironmentChanged(EnvironmentItemViewModel? oldValue, EnvironmentItemViewModel? newValue)
+    {
+        oldValue?.IsEdited = false;
+        newValue?.IsEdited = true;
     }
 
     [RelayCommand]

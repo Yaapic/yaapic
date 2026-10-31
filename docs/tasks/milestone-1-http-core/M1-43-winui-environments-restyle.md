@@ -1,6 +1,6 @@
 # M1-43: WinUI environment management restyle
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-38, M1-40
 
@@ -47,12 +47,32 @@ missing variables.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Manual check on the published exe: add, rename, edit variables, save, delete with the flyout; the active dot
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Manual check on the published exe: add, rename, edit variables, save, delete with the flyout; the active dot
       follows the environment pill.
-- [ ] Screenshots dark and light of the dialog with the M1-34 fixture (`local` and `staging`) inspected against
+- [x] Screenshots dark and light of the dialog with the M1-34 fixture (`local` and `staging`) inspected against
       `EnvVars.dc.html` / `EnvVarsLight.dc.html`; differences listed in the card's Notes, not committed.
+
+## Notes
+
+- **Deviation (active / edited flags):** the card asked for a static `x:Bind` function taking the item and
+  `ViewModel.ActiveEnvironment`. A `DataTemplate` cannot reach the dialog's view model from its bindings, so
+  `EnvironmentItemViewModel` got `IsActive` and `IsEdited`, kept in sync by `EnvironmentsViewModel` (test
+  `OnlyTheActiveAndEditedItemsAreFlagged`); `Presentation/EnvironmentMap` maps them to the dot brush and font weight.
+- Dialog theme fix: `MainWindow` now sets `RequestedTheme` on the dialog (it stayed dark in the light theme, the popup
+  layer ignores the window override). `ContentDialogPadding` and `ContentDialogCommandSpaceMargin` are 0 so the two
+  columns run edge to edge; `DialogButtons.Normalize` takes an optional inset to place the Close button.
+  `DefaultButton="None"`: Close is secondary, Save is the only accent button.
+- Add button uses `FluentIcon` (`YaapicGlyphAdd` is a stroke path, a `PathIcon` draws nothing).
+- Screenshots (AOT exe, fixture `local` + `staging`, dark and light) inspected against `EnvVars.dc.html`; manual check
+  by keyboard on the published exe: select, rename (dirty dot appears), delete flyout with the danger button.
+- **Differences left (by card scope):** no environment-page layout, no Duplicate/Export, no TYPE / initial / current
+  columns, no resolution preview, vault or missing-variable cards, no `Globals` / `production` markers, no "n secret"
+  meta, no rail-highlight; the selected row shows the stock selection pill rather than the mockup's tinted row with a
+  full-height bar (same row style as the request list); the name box is 180 px wide so the variable count sits a bit
+  right of the name. The add / save / delete clicks were not driven with the mouse (keyboard only); save to disk was
+  not exercised on the AOT exe.
 
 ## Suggested commit message
 

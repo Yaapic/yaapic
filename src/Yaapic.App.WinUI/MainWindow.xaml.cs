@@ -229,7 +229,7 @@ public sealed partial class MainWindow : Window
             _dialogOpen = true;
             try
             {
-                await new Views.EnvironmentsDialog(_viewModel.Environments) { XamlRoot = Root.XamlRoot }.ShowAsync();
+                await new Views.EnvironmentsDialog(_viewModel.Environments) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
             }
             finally
             {

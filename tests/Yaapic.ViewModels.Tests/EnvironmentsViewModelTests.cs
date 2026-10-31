@@ -34,6 +34,28 @@ public sealed class EnvironmentsViewModelTests
         Assert.Equal(b.Id, _vm.ActiveEnvironment!.Id);
     }
 
+    [Fact]
+    public async Task OnlyTheActiveAndEditedItemsAreFlagged()
+    {
+        var a = await SeedAsync("a");
+        var b = await SeedAsync("b");
+        await _vm.LoadAsync(a.Id);
+        var (itemA, itemB) = (_vm.Environments[0], _vm.Environments[1]);
+        Assert.True(itemA.IsActive);
+        Assert.False(itemB.IsActive);
+
+        _vm.ActiveEnvironment = itemB;
+        _vm.EditedEnvironment = itemA;
+        _vm.EditedEnvironment = itemB;
+
+        Assert.False(itemA.IsActive);
+        Assert.True(itemB.IsActive);
+        Assert.False(itemA.IsEdited);
+        Assert.True(itemB.IsEdited);
+        _vm.ActiveEnvironment = null;
+        Assert.False(itemB.IsActive);
+    }
+
     [Theory]
     [InlineData(false)]
     [InlineData(true)]

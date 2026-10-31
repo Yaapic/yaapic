@@ -13,6 +13,12 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(IsDirty))]
     private string _name;
 
+    [ObservableProperty]
+    private bool _isActive;
+
+    [ObservableProperty]
+    private bool _isEdited;
+
     private EnvironmentItemViewModel(EnvironmentDefinition definition, bool isSaved)
     {
         Id = definition.Id;
@@ -24,6 +30,8 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
 
     /// <summary>Gets the stable identifier.</summary>
     public Guid Id { get; }
+
+    // IsActive: the environment used to resolve requests. IsEdited: the one shown in the editor. Both are set by the list.
 
     /// <summary>Gets the variables editor.</summary>
     public KeyValueEditorViewModel Variables { get; } = new();

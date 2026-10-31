@@ -16,9 +16,13 @@ internal static class DialogButtons
     /// The dialog template swaps the default button to the stock accent style until focus moves, which drops the style
     /// setters; local values survive that swap.
     /// </remarks>
-    public static void Normalize(ContentDialog dialog) => dialog.Loaded += (_, _) => Apply(dialog);
+    /// <param name="inset">
+    /// For a dialog whose padding is zero: the margin around the buttons, which then also shrink to their content
+    /// and align right instead of filling their column.
+    /// </param>
+    public static void Normalize(ContentDialog dialog, Thickness? inset = null) => dialog.Loaded += (_, _) => Apply(dialog, inset);
 
-    private static void Apply(DependencyObject parent)
+    private static void Apply(DependencyObject parent, Thickness? inset)
     {
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
@@ -29,10 +33,16 @@ internal static class DialogButtons
                 button.VerticalAlignment = VerticalAlignment.Center;
                 button.FontWeight = FontWeights.SemiBold;
                 button.CornerRadius = (CornerRadius)Application.Current.Resources["YaapicRadiusControl"];
+                if (inset is { } margin)
+                {
+                    button.Margin = margin;
+                    button.HorizontalAlignment = HorizontalAlignment.Right;
+                    button.MinWidth = 96;
+                }
             }
             else
             {
-                Apply(child);
+                Apply(child, inset);
             }
         }
     }
