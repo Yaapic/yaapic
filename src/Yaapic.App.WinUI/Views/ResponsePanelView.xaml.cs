@@ -41,16 +41,13 @@ public sealed partial class ResponsePanelView : UserControl
         }
     }
 
-    private void OnTabChanged(SelectorBar sender, SelectorBarSelectionChangedEventArgs args)
+    private void OnTabClick(object sender, RoutedEventArgs e)
     {
-        // Fires during InitializeComponent, before the panes below the selector are created.
-        if (HeadersPane is null)
-        {
-            return;
-        }
-
-        var headers = sender.Items.IndexOf(sender.SelectedItem) == 1;
+        var headers = ReferenceEquals(sender, HeadersTab);
+        BodyTab.IsChecked = !headers;
+        HeadersTab.IsChecked = headers;
         BodyPane.Visibility = headers ? Visibility.Collapsed : Visibility.Visible;
         HeadersPane.Visibility = headers ? Visibility.Visible : Visibility.Collapsed;
+        HeadersBadge.Style = (Style)Application.Current.Resources[headers ? "YaapicCountBadgeActiveTextStyle" : "YaapicCountBadgeTextStyle"];
     }
 }

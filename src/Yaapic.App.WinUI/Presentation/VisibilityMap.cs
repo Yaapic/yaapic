@@ -79,6 +79,27 @@ public static class VisibilityMap
     public static Visibility WhenWarning(string? warning, ResponseState state) =>
         warning is not null && state != ResponseState.Empty ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> for the success icon of the status chip.</summary>
+    /// <param name="category">The class of the status code.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenSuccessStatus(StatusCategory category) => category == StatusCategory.Success ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for the client-error icon of the status chip.</summary>
+    /// <param name="category">The class of the status code.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenClientErrorStatus(StatusCategory category) => category == StatusCategory.ClientError ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for the server-error icon of the status chip.</summary>
+    /// <param name="category">The class of the status code.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenServerErrorStatus(StatusCategory category) => category == StatusCategory.ServerError ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for the information icon of the status chip (1xx and 3xx).</summary>
+    /// <param name="category">The class of the status code.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenInfoStatus(StatusCategory category) =>
+        category is StatusCategory.Informational or StatusCategory.Redirect ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when the list is empty and no filter is typed.</summary>
     /// <param name="count">The number of listed requests.</param>
     /// <param name="filter">The filter text.</param>

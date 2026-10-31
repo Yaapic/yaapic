@@ -1,6 +1,6 @@
 # M1-42: WinUI response panel restyle
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-41
 
@@ -54,12 +54,26 @@ retry button, cancelled-state variant, elapsed timer, 300 ms progress delay, lar
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Screenshots (M1-34 script with `-Send`) dark and light of: the empty state, a 201 (`create-user`), a 404
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Screenshots (M1-34 script with `-Send`) dark and light of: the empty state, a 201 (`create-user`), a 404
       (`missing-item`), a 503 (`server-error`), a failure (stop the stub or use `http://127.0.0.1:1`), inspected
       against `MainWindow.dc.html`, `ResponseStates.dc.html` and `States.dc.html`; differences listed in the card's
       Notes, not committed.
+
+## Notes
+
+- Screenshots (dark and light, AOT build, `-Send`): empty, 201, 404, 503, sending (`-NoStub`, early capture) and failed
+  (`-NoStub -WaitMs 8000`) were inspected against `MainWindow.dc.html`, `ResponseStates.dc.html` and `States.dc.html`.
+  The status chip (icon + text, four variants), header, Pretty/Raw control, sunken body, skeleton and empty state match.
+- Deviations: the panel tabs are `YaapicPanelToggleTabStyle` toggle buttons instead of a `SelectorBar` (a
+  `SelectorBarItem` only takes text, so it cannot hold the Headers count badge). The warning `InfoBar` has no title
+  because the view-model message already starts with "Unresolved variables:". The response panel lost its
+  `16,8,16,16` margin so it runs edge to edge like the mockup.
+- Remaining visible differences: no line-number gutter or folding in the body (M1-44, code editor); the failure message
+  is the OS text (localised, e.g. French on this machine), not designed copy; the 5 px editor/response separator is
+  still the M1 static one (M1-46); the focus ring on the "Params" tab in `-Send` captures comes from UI Automation focus.
+- The capture script stays alive after saving on this machine; the screenshots were taken with a 90 s timeout around it.
 
 ## Suggested commit message
 

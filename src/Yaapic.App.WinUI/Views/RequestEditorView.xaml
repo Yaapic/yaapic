@@ -227,6 +227,6 @@
     <Border Grid.Row="4" Height="5" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
             BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,1"/>
 
-    <v:ResponsePanelView Grid.Row="5" Margin="16,8,16,16" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
+    <v:ResponsePanelView Grid.Row="5" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
   </Grid>
 </UserControl>
