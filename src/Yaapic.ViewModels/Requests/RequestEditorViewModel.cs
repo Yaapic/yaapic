@@ -39,6 +39,10 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isNew;
 
+    /// <summary>Gets or sets a value indicating whether this is the active tab; maintained by the tab list.</summary>
+    [ObservableProperty]
+    private bool _isActive;
+
     private RequestEditorViewModel(Guid id, RequestSender sender, IActiveEnvironmentProvider environments)
     {
         Id = id;

@@ -183,14 +183,25 @@
                    Visibility="{x:Bind p:VisibilityMap.WhenNoMatch(ViewModel.Requests.Items.Count, ViewModel.Requests.FilterText), Mode=OneWay}"/>
       </Grid>
       <Grid Grid.Column="2">
-        <TabView IsAddTabButtonVisible="True" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
+        <TabView IsAddTabButtonVisible="False" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
                  TabItemsSource="{x:Bind ViewModel.Tabs.Tabs, Mode=OneWay}"
                  SelectedItem="{x:Bind ViewModel.Tabs.ActiveTab, Mode=TwoWay}"
-                 AddTabButtonClick="OnAddTab"
                  TabCloseRequested="OnTabCloseRequested">
+          <TabView.TabStripFooter>
+            <Button Style="{StaticResource YaapicIconButtonStyle}" Width="36" Height="36" MinHeight="36" CornerRadius="0"
+                    HorizontalAlignment="Left" AutomationProperties.Name="New tab"
+                    ToolTipService.ToolTip="New tab (Ctrl+T)" Click="OnAddTab">
+              <Viewbox Width="16" Height="16">
+                <Canvas Width="24" Height="24">
+                  <Path Data="M12 5v14M5 12h14" Stroke="{ThemeResource YaapicTextSecondaryBrush}" StrokeThickness="2"
+                        StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+                </Canvas>
+              </Viewbox>
+            </Button>
+          </TabView.TabStripFooter>
           <TabView.TabItemTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <TabViewItem VerticalContentAlignment="Center"
+              <TabViewItem Style="{StaticResource YaapicTabViewItemStyle}" VerticalContentAlignment="Center"
                            AutomationProperties.Name="{x:Bind Title, Mode=OneWay}">
                 <TabViewItem.Header>
                   <StackPanel Orientation="Horizontal" Spacing="8">
@@ -209,7 +220,7 @@
           </TabView.TabItemTemplate>
         </TabView>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10"
-                    Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Tabs.ActiveTab), Mode=OneWay}">
+                    Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Tabs.IsEmpty), Mode=OneWay}">
           <Viewbox Width="110" Height="76" HorizontalAlignment="Center">
             <Canvas Width="120" Height="84">
               <Path Data="M20 72h80" Stroke="{ThemeResource YaapicBorderOverlayBrush}" StrokeThickness="2"

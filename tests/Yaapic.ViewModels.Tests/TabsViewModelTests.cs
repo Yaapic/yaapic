@@ -256,4 +256,40 @@ public sealed class TabsViewModelTests
         Assert.True(afterSwitch > afterOpen);
         Assert.True(count > afterSwitch);
     }
+
+    [Fact]
+    public async Task IsEmptyTracksTabsAndIsNotified()
+    {
+        var tabs = Create();
+        var raised = new List<string?>();
+        tabs.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
+        Assert.True(tabs.IsEmpty);
+
+        tabs.NewTab();
+        Assert.False(tabs.IsEmpty);
+        Assert.True(await tabs.CloseAsync(tabs.ActiveTab!));
+
+        Assert.True(tabs.IsEmpty);
+        Assert.Equal(2, raised.Count(n => n == nameof(TabsViewModel.IsEmpty)));
+    }
+
+    [Fact]
+    public void OnlyTheActiveTabIsActive()
+    {
+        var tabs = Create();
+        tabs.NewTab();
+        var first = tabs.ActiveTab!;
+        tabs.NewTab();
+        var second = tabs.ActiveTab!;
+        Assert.False(first.IsActive);
+        Assert.True(second.IsActive);
+
+        tabs.ActiveTab = first;
+
+        Assert.True(first.IsActive);
+        Assert.False(second.IsActive);
+
+        tabs.ActiveTab = null;
+        Assert.False(first.IsActive);
+    }
 }

@@ -64,22 +64,29 @@ Pinned and preview (italic) tabs, overflow "+N" button, split view button, tab d
 
 ## Notes
 
-Implemented: `DisplayName` and `MethodText` on `RequestEditorViewModel` (tests added), the `TabView*` colour aliases in the
-token file (regenerated), the tab strip metrics (36 px, max width 210, padding `12,0,10,0`), the tab header (method
-label, name, dirty dot), the empty state (dashed logo, texts, "New request", keycap) and `YaapicKeycapBorderStyle`.
+Implemented: `DisplayName`, `MethodText` and `IsActive` on `RequestEditorViewModel` and `IsEmpty` on `TabsViewModel`
+(tests added), the `TabView*` colour aliases in the token file (regenerated), the tab strip metrics (36 px, no header
+padding, max width 210, padding `12,0,10,0`), the tab header (method label, name, dirty dot), square tabs with a 2 px
+Ion line on the selected one, the add-tab button, the empty state (dashed logo, texts, "New request", keycap) and
+`YaapicKeycapBorderStyle`.
 
-Deviations from the design decisions (found on screen, Native AOT build):
+How it was made to work (all verified on the Native AOT exe, dark and light):
 
-- **Active tab accent line: not done.** Copying the stock `TabViewItem` template into `YaapicTabViewItemStyle` crashes
-  the app at load (native XAML fail-fast, 0xC000027B), and overriding `TabViewSelectedItemBorderBrush` / `Thickness`
-  does the same. The selected tab is distinguished by the base surface and the primary foreground only.
-- **Add-tab button:** the stock look is kept; overriding `TabViewButtonStyle` crashed too, so there is no
-  `YaapicGlyphAdd` and no "New tab (Ctrl+T)" tooltip.
-- Tab corners are still the stock 8 px (the arcs of the stock template cannot be removed without the template copy).
-- Primary button of the empty state uses `AccentButtonStyle` (as the Send button does).
-- The empty state could not be seen on screen: after closing the last tab (Ctrl+W, "Don't save") the capture shows
-  an empty content area, and the unmodified HEAD build behaves the same, so the existing visibility binding
-  (`WhenNull(ViewModel.Tabs.ActiveTab)`) looks broken after the last tab closes. To investigate in a follow-up.
+- The native fail-fast (0xC000027B) of the first attempt was a missing resource: the stock `TabViewCloseButtonStyle`
+  is not reachable by key from the app, so the copied `TabViewItem` template could not resolve it (error text read from a
+  non-AOT build through `Application.UnhandledException`: "Cannot find a Resource with the Name/Key
+  TabViewCloseButtonStyle"). `Yaapic.Controls.WinUI.xaml` now holds copies of both styles (`YaapicTabViewCloseButtonStyle`,
+  `YaapicTabViewItemStyle`, from WindowsAppSDK 1.8 `generic.xaml`). The item copy drops the rounded-tab arcs and the
+  selected-tab path (square corners, no 8 px arcs), replaces the converter-based `CornerRadius` and adds the accent line.
+- The add-tab button cannot be restyled by overriding `TabViewButtonStyle` (the stock template resolves its own copy
+  first), so the stock button is hidden and a 36 px `YaapicIconButtonStyle` button with the "+" path and the tooltip
+  "New tab (Ctrl+T)" sits in `TabStripFooter`.
+- The empty state was invisible on HEAD too: x:Bind does not re-evaluate a function binding when its argument becomes
+  null (the generated code only calls it when `ActiveTab` is not null). It now binds to `TabsViewModel.IsEmpty`.
+
+Remaining differences from the mockup: the close cross is shown on every tab (the mockup shows the dirty dot or the
+cross only on hover/active tabs), the 1 px separator between tabs is barely visible, no pinned / preview (italic) tabs, "+N" overflow
+button or split-view button (out of scope), and the primary button of the empty state uses `AccentButtonStyle`.
 
 ## Suggested commit message
 

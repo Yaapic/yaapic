@@ -38,7 +38,11 @@ public sealed partial class TabsViewModel : ObservableObject
         _store = store;
         _dialogs = dialogs;
         _createEditor = createEditor;
-        Tabs.CollectionChanged += (_, _) => SessionChanged?.Invoke(this, EventArgs.Empty);
+        Tabs.CollectionChanged += (_, _) =>
+        {
+            OnPropertyChanged(nameof(IsEmpty));
+            SessionChanged?.Invoke(this, EventArgs.Empty);
+        };
     }
 
     /// <summary>Raised after a request has been written to the store.</summary>
@@ -49,6 +53,9 @@ public sealed partial class TabsViewModel : ObservableObject
 
     /// <summary>Gets the open tabs, in display order.</summary>
     public ObservableCollection<RequestEditorViewModel> Tabs { get; } = [];
+
+    /// <summary>Gets a value indicating whether no tab is open; the view binds to this because an x:Bind function over a null <see cref="ActiveTab"/> is not re-evaluated.</summary>
+    public bool IsEmpty => Tabs.Count == 0;
 
     /// <summary>Opens a new, empty request tab and activates it.</summary>
     public void NewTab()
@@ -141,7 +148,23 @@ public sealed partial class TabsViewModel : ObservableObject
     [RelayCommand]
     private Task CloseActiveAsync() => ActiveTab is { } tab ? CloseAsync(tab) : Task.CompletedTask;
 
-    partial void OnActiveTabChanged(RequestEditorViewModel? value) => SessionChanged?.Invoke(this, EventArgs.Empty);
+    partial void OnActiveTabChanging(RequestEditorViewModel? value)
+    {
+        if (_activeTab is { } previous)
+        {
+            previous.IsActive = false;
+        }
+    }
+
+    partial void OnActiveTabChanged(RequestEditorViewModel? value)
+    {
+        if (value is not null)
+        {
+            value.IsActive = true;
+        }
+
+        SessionChanged?.Invoke(this, EventArgs.Empty);
+    }
 
     internal static bool IsUntouched(RequestEditorViewModel tab) =>
         tab.IsNew && tab.ToDefinition().IsEquivalentTo(

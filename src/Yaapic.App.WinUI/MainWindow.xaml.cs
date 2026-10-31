@@ -111,7 +111,7 @@ public sealed partial class MainWindow : Window
         args.Handled = true;
     }
 
-    private void OnAddTab(TabView sender, object args) => _viewModel?.Tabs.NewTab();
+    private void OnAddTab(object sender, RoutedEventArgs e) => _viewModel?.Tabs.NewTab();
 
     private void OnTabCloseRequested(TabView sender, TabViewTabCloseRequestedEventArgs args)
     {
