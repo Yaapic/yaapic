@@ -1,6 +1,6 @@
 # M1-39: WinUI request tabs and empty state restyle
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-38
 
@@ -56,11 +56,30 @@ Pinned and preview (italic) tabs, overflow "+N" button, split view button, tab d
 
 ## Acceptance criteria
 
-- [ ] New ViewModel tests green; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; snapshot tests
+- [x] New ViewModel tests green; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; snapshot tests
       green after regeneration.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Screenshots (M1-34 script) dark and light inspected: method colours in tabs, active tab line, dirty dot after
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Screenshots (M1-34 script) dark and light inspected: method colours in tabs, active tab line, dirty dot after
       editing, empty state after closing all tabs. Differences from the mockups listed in the card's Notes.
+
+## Notes
+
+Implemented: `DisplayName` and `MethodText` on `RequestEditorViewModel` (tests added), the `TabView*` colour aliases in the
+token file (regenerated), the tab strip metrics (36 px, max width 210, padding `12,0,10,0`), the tab header (method
+label, name, dirty dot), the empty state (dashed logo, texts, "New request", keycap) and `YaapicKeycapBorderStyle`.
+
+Deviations from the design decisions (found on screen, Native AOT build):
+
+- **Active tab accent line: not done.** Copying the stock `TabViewItem` template into `YaapicTabViewItemStyle` crashes
+  the app at load (native XAML fail-fast, 0xC000027B), and overriding `TabViewSelectedItemBorderBrush` / `Thickness`
+  does the same. The selected tab is distinguished by the base surface and the primary foreground only.
+- **Add-tab button:** the stock look is kept; overriding `TabViewButtonStyle` crashed too, so there is no
+  `YaapicGlyphAdd` and no "New tab (Ctrl+T)" tooltip.
+- Tab corners are still the stock 8 px (the arcs of the stock template cannot be removed without the template copy).
+- Primary button of the empty state uses `AccentButtonStyle` (as the Send button does).
+- The empty state could not be seen on screen: after closing the last tab (Ctrl+W, "Don't save") the capture shows
+  an empty content area, and the unmodified HEAD build behaves the same, so the existing visibility binding
+  (`WhenNull(ViewModel.Tabs.ActiveTab)`) looks broken after the last tab closes. To investigate in a follow-up.
 
 ## Suggested commit message
 

@@ -368,4 +368,36 @@
     <Setter Property="CornerRadius" Value="{StaticResource OverlayCornerRadius}"/>
   </Style>
 
+  <!-- Request tab strip: 36 px, square tabs, tight padding; colours come from the generated TabView* aliases. -->
+  <x:Double x:Key="YaapicTabBarHeight">36</x:Double>
+  <x:Double x:Key="TabViewItemMinHeight">36</x:Double>
+  <x:Double x:Key="TabViewItemMaxWidth">210</x:Double>
+  <x:Double x:Key="TabViewItemMinWidth">80</x:Double>
+  <Thickness x:Key="TabViewItemHeaderPadding">12,0,10,0</Thickness>
+  <Thickness x:Key="TabViewItemHeaderPaddingWithCloseButton">12,0,6,0</Thickness>
+  <Thickness x:Key="TabViewItemHeaderPaddingWithoutCloseButton">12,0,10,0</Thickness>
+  <Thickness x:Key="TabViewItemHeaderCloseMargin">6,0,0,0</Thickness>
+  <x:Double x:Key="TabViewItemHeaderCloseButtonWidth">20</x:Double>
+  <x:Double x:Key="TabViewItemHeaderCloseButtonHeight">20</x:Double>
+  <Thickness x:Key="TabViewItemSeparatorMargin">0</Thickness>
+
+
+
+  <!-- Keycap hint ("Ctrl+T"): 1 px border, 2 px bottom edge, radius 4. -->
+  <Style x:Key="YaapicKeycapBorderStyle" TargetType="Border">
+    <Setter Property="BorderBrush" Value="{ThemeResource YaapicBorderDefaultBrush}"/>
+    <Setter Property="BorderThickness" Value="1,1,1,2"/>
+    <Setter Property="CornerRadius" Value="4"/>
+    <Setter Property="Padding" Value="6,1"/>
+  </Style>
+
+  <!-- Tab name: body metrics without a Foreground, so the tab states (secondary, primary when selected) colour it. -->
+  <Style x:Key="YaapicTabNameTextStyle" TargetType="TextBlock">
+    <Setter Property="FontSize" Value="{StaticResource YaapicFontSizeBody}"/>
+    <Setter Property="LineHeight" Value="{StaticResource YaapicLineHeightBody}"/>
+    <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
+    <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
+    <Setter Property="VerticalAlignment" Value="Center"/>
+  </Style>
+
 </ResourceDictionary>

@@ -107,4 +107,25 @@ public sealed class RequestEditorViewModelTests
         Assert.Equal("New Request", editor.ToDefinition().Name);
         Assert.StartsWith("New Request", editor.Title);
     }
+
+    [Fact]
+    public void DisplayNameIsDefaultForNewRequestWithoutDirtyMarker()
+    {
+        var editor = RequestEditorViewModel.CreateNew(Sender(), new StubEnvironments());
+
+        Assert.Equal("New Request", editor.DisplayName);
+    }
+
+    [Fact]
+    public void DisplayNameIsTrimmedNameAndChangeIsNotified()
+    {
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
+        var raised = new List<string?>();
+        editor.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
+
+        editor.Name = "  Renamed  ";
+
+        Assert.Equal("Renamed", editor.DisplayName);
+        Assert.Contains(nameof(RequestEditorViewModel.DisplayName), raised);
+    }
 }

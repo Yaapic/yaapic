@@ -306,7 +306,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceBaseBrush",
             "avalonia": "YaapicSurfaceBaseBrush",
-            "winuiAliases": ["LayerFillColorDefaultBrush", "ButtonBackgroundPressed"]
+            "winuiAliases": ["LayerFillColorDefaultBrush", "ButtonBackgroundPressed", "TabViewItemHeaderBackgroundSelected"]
           }
         }
       },
@@ -321,7 +321,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceSidebarBrush",
             "avalonia": "YaapicSurfaceSidebarBrush",
-            "winuiAliases": ["TextControlBackgroundPointerOver", "ComboBoxBackgroundPointerOver"]
+            "winuiAliases": ["TextControlBackgroundPointerOver", "ComboBoxBackgroundPointerOver", "TabViewBackground", "TabViewItemHeaderBackground"]
           }
         }
       },
@@ -398,7 +398,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderSubtleBrush",
             "avalonia": "YaapicBorderSubtleBrush",
-            "winuiAliases": ["DividerStrokeColorDefaultBrush", "CardStrokeColorDefaultBrush", "ButtonBorderBrushDisabled", "ProgressBarBackground"]
+            "winuiAliases": ["DividerStrokeColorDefaultBrush", "CardStrokeColorDefaultBrush", "ButtonBorderBrushDisabled", "ProgressBarBackground", "TabViewItemSeparator", "TabViewBorderBrush"]
           }
         }
       },
@@ -460,7 +460,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicTextPrimaryBrush",
             "avalonia": "YaapicTextPrimaryBrush",
-            "winuiAliases": ["TextFillColorPrimaryBrush", "ButtonForeground", "ButtonForegroundPointerOver", "TextControlForeground", "TextControlForegroundFocused", "SelectorBarItemForegroundSelected", "SelectorBarItemForegroundPointerOver", "SelectorBarItemForegroundPressed"]
+            "winuiAliases": ["TextFillColorPrimaryBrush", "ButtonForeground", "ButtonForegroundPointerOver", "TextControlForeground", "TextControlForegroundFocused", "SelectorBarItemForegroundSelected", "SelectorBarItemForegroundPointerOver", "SelectorBarItemForegroundPressed", "TabViewItemHeaderForegroundSelected", "TabViewItemHeaderForegroundPointerOver"]
           }
         }
       },
@@ -475,7 +475,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicTextSecondaryBrush",
             "avalonia": "YaapicTextSecondaryBrush",
-            "winuiAliases": ["TextFillColorSecondaryBrush", "ButtonForegroundPressed", "SelectorBarItemForeground"]
+            "winuiAliases": ["TextFillColorSecondaryBrush", "ButtonForegroundPressed", "SelectorBarItemForeground", "TabViewItemHeaderForeground"]
           }
         }
       },
@@ -614,7 +614,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicOverlayHoverBrush",
             "avalonia": "YaapicOverlayHoverBrush",
-            "winuiAliases": ["ListViewItemBackgroundPointerOver", "MenuFlyoutItemBackgroundPointerOver"]
+            "winuiAliases": ["ListViewItemBackgroundPointerOver", "MenuFlyoutItemBackgroundPointerOver", "TabViewItemHeaderBackgroundPointerOver"]
           }
         }
       },

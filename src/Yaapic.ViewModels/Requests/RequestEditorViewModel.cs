@@ -86,7 +86,13 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     public bool IsDirty => IsNew || _baseline is null || !ToDefinition().IsEquivalentTo(_baseline);
 
     /// <summary>Gets the tab title: the name (or "New Request"), followed by a bullet when dirty.</summary>
-    public string Title => (Name.Trim().Length == 0 ? DefaultName : Name.Trim()) + (IsDirty ? " •" : "");
+    public string Title => DisplayName + (IsDirty ? " •" : "");
+
+    /// <summary>Gets the upper-case method label shown in the tab header.</summary>
+    public string MethodText => Method == HttpMethodKind.Post ? "POST" : "GET";
+
+    /// <summary>Gets the tab name without the dirty marker: the trimmed name, or "New Request" when it is empty.</summary>
+    public string DisplayName => Name.Trim().Length == 0 ? DefaultName : Name.Trim();
 
     /// <summary>Creates an editor showing <paramref name="definition"/>, with it as the saved baseline.</summary>
     /// <param name="definition">The request to edit.</param>
@@ -173,5 +179,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(IsDirty));
         OnPropertyChanged(nameof(Title));
+        OnPropertyChanged(nameof(DisplayName));
+        OnPropertyChanged(nameof(MethodText));
     }
 }

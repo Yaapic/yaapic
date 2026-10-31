@@ -65,7 +65,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-36](milestone-1-http-core/M1-36-winui-button-and-input-styles.md) | WinUI control styles: buttons and text inputs | windows | M1-35 | done |
 | [M1-37](milestone-1-http-core/M1-37-winui-list-tab-chip-and-dialog-styles.md) | WinUI control styles: lists, tabs, chips, feedback and dialogs | windows | M1-36 | done |
 | [M1-38](milestone-1-http-core/M1-38-winui-shell-title-bar-rail-and-sidebar.md) | WinUI shell restyle: title bar, rail and sidebar | windows | M1-37 | done |
-| [M1-39](milestone-1-http-core/M1-39-winui-request-tabs-and-empty-state.md) | WinUI request tabs and empty state restyle | windows | M1-38 | todo |
+| [M1-39](milestone-1-http-core/M1-39-winui-request-tabs-and-empty-state.md) | WinUI request tabs and empty state restyle | windows | M1-38 | done |
 | [M1-40](milestone-1-http-core/M1-40-winui-key-value-table.md) | WinUI key/value table restyle | windows | M1-37 | todo |
 | [M1-41](milestone-1-http-core/M1-41-winui-request-editor-restyle.md) | WinUI request editor restyle | windows | M1-39, M1-40 | todo |
 | [M1-42](milestone-1-http-core/M1-42-winui-response-panel-restyle.md) | WinUI response panel restyle | windows | M1-41 | todo |

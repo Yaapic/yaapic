@@ -8,10 +8,13 @@
       <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FF1A1D21"/>
       <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#FF1A1D21"/>
       <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FF1A1D21"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="#FF1A1D21"/>
       <Color x:Key="YaapicSurfaceBaseColor">#FF1A1D21</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FF16181C"/>
       <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FF16181C"/>
       <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#FF16181C"/>
+      <SolidColorBrush x:Key="TabViewBackground" Color="#FF16181C"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderBackground" Color="#FF16181C"/>
       <Color x:Key="YaapicSurfaceSidebarColor">#FF16181C</Color>
       <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FF21252A"/>
       <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FF21252A"/>
@@ -40,6 +43,8 @@
       <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FF24282E"/>
       <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#FF24282E"/>
       <SolidColorBrush x:Key="ProgressBarBackground" Color="#FF24282E"/>
+      <SolidColorBrush x:Key="TabViewItemSeparator" Color="#FF24282E"/>
+      <SolidColorBrush x:Key="TabViewBorderBrush" Color="#FF24282E"/>
       <Color x:Key="YaapicBorderSubtleColor">#FF24282E</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FF30353C"/>
       <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FF30353C"/>
@@ -73,11 +78,14 @@
       <SolidColorBrush x:Key="SelectorBarItemForegroundSelected" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="SelectorBarItemForegroundPointerOver" Color="#FFECEEF1"/>
       <SolidColorBrush x:Key="SelectorBarItemForegroundPressed" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderForegroundSelected" Color="#FFECEEF1"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderForegroundPointerOver" Color="#FFECEEF1"/>
       <Color x:Key="YaapicTextPrimaryColor">#FFECEEF1</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FFA3AAB4"/>
       <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FFA3AAB4"/>
       <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FFA3AAB4"/>
       <SolidColorBrush x:Key="SelectorBarItemForeground" Color="#FFA3AAB4"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderForeground" Color="#FFA3AAB4"/>
       <Color x:Key="YaapicTextSecondaryColor">#FFA3AAB4</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF848C97"/>
       <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF848C97"/>
@@ -140,6 +148,7 @@
       <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0FFFFFFF"/>
       <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#0FFFFFFF"/>
       <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#0FFFFFFF"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderBackgroundPointerOver" Color="#0FFFFFFF"/>
       <Color x:Key="YaapicOverlayHoverColor">#0FFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#08FFFFFF"/>
       <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#08FFFFFF"/>
@@ -263,10 +272,13 @@
       <SolidColorBrush x:Key="YaapicSurfaceBaseBrush" Color="#FFFFFFFF"/>
       <SolidColorBrush x:Key="LayerFillColorDefaultBrush" Color="#FFFFFFFF"/>
       <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FFFFFFFF"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderBackgroundSelected" Color="#FFFFFFFF"/>
       <Color x:Key="YaapicSurfaceBaseColor">#FFFFFFFF</Color>
       <SolidColorBrush x:Key="YaapicSurfaceSidebarBrush" Color="#FFF3F4F6"/>
       <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#FFF3F4F6"/>
       <SolidColorBrush x:Key="ComboBoxBackgroundPointerOver" Color="#FFF3F4F6"/>
+      <SolidColorBrush x:Key="TabViewBackground" Color="#FFF3F4F6"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderBackground" Color="#FFF3F4F6"/>
       <Color x:Key="YaapicSurfaceSidebarColor">#FFF3F4F6</Color>
       <SolidColorBrush x:Key="YaapicSurfaceRaisedBrush" Color="#FFF6F7F9"/>
       <SolidColorBrush x:Key="ControlFillColorDefaultBrush" Color="#FFF6F7F9"/>
@@ -295,6 +307,8 @@
       <SolidColorBrush x:Key="CardStrokeColorDefaultBrush" Color="#FFE7E9EE"/>
       <SolidColorBrush x:Key="ButtonBorderBrushDisabled" Color="#FFE7E9EE"/>
       <SolidColorBrush x:Key="ProgressBarBackground" Color="#FFE7E9EE"/>
+      <SolidColorBrush x:Key="TabViewItemSeparator" Color="#FFE7E9EE"/>
+      <SolidColorBrush x:Key="TabViewBorderBrush" Color="#FFE7E9EE"/>
       <Color x:Key="YaapicBorderSubtleColor">#FFE7E9EE</Color>
       <SolidColorBrush x:Key="YaapicBorderDefaultBrush" Color="#FFD8DCE2"/>
       <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FFD8DCE2"/>
@@ -328,11 +342,14 @@
       <SolidColorBrush x:Key="SelectorBarItemForegroundSelected" Color="#FF16191D"/>
       <SolidColorBrush x:Key="SelectorBarItemForegroundPointerOver" Color="#FF16191D"/>
       <SolidColorBrush x:Key="SelectorBarItemForegroundPressed" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderForegroundSelected" Color="#FF16191D"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderForegroundPointerOver" Color="#FF16191D"/>
       <Color x:Key="YaapicTextPrimaryColor">#FF16191D</Color>
       <SolidColorBrush x:Key="YaapicTextSecondaryBrush" Color="#FF4A515B"/>
       <SolidColorBrush x:Key="TextFillColorSecondaryBrush" Color="#FF4A515B"/>
       <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FF4A515B"/>
       <SolidColorBrush x:Key="SelectorBarItemForeground" Color="#FF4A515B"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderForeground" Color="#FF4A515B"/>
       <Color x:Key="YaapicTextSecondaryColor">#FF4A515B</Color>
       <SolidColorBrush x:Key="YaapicTextTertiaryBrush" Color="#FF5F6772"/>
       <SolidColorBrush x:Key="TextFillColorTertiaryBrush" Color="#FF5F6772"/>
@@ -395,6 +412,7 @@
       <SolidColorBrush x:Key="YaapicOverlayHoverBrush" Color="#0D14181E"/>
       <SolidColorBrush x:Key="ListViewItemBackgroundPointerOver" Color="#0D14181E"/>
       <SolidColorBrush x:Key="MenuFlyoutItemBackgroundPointerOver" Color="#0D14181E"/>
+      <SolidColorBrush x:Key="TabViewItemHeaderBackgroundPointerOver" Color="#0D14181E"/>
       <Color x:Key="YaapicOverlayHoverColor">#0D14181E</Color>
       <SolidColorBrush x:Key="YaapicOverlayPressedBrush" Color="#0814181E"/>
       <SolidColorBrush x:Key="ListViewItemBackgroundPressed" Color="#0814181E"/>

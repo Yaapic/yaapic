@@ -190,18 +190,51 @@
                  TabCloseRequested="OnTabCloseRequested">
           <TabView.TabItemTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <TabViewItem Header="{x:Bind Title, Mode=OneWay}" VerticalContentAlignment="Stretch">
+              <TabViewItem VerticalContentAlignment="Center"
+                           AutomationProperties.Name="{x:Bind Title, Mode=OneWay}">
+                <TabViewItem.Header>
+                  <StackPanel Orientation="Horizontal" Spacing="8">
+                    <TextBlock Style="{StaticResource YaapicMethodTextStyle}" VerticalAlignment="Center"
+                               Text="{x:Bind MethodText, Mode=OneWay}"
+                               Foreground="{x:Bind p:BrushMap.Method(Method), Mode=OneWay}"/>
+                    <TextBlock Style="{StaticResource YaapicTabNameTextStyle}" Text="{x:Bind DisplayName, Mode=OneWay}"/>
+                    <Ellipse Width="6" Height="6" VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentTextBrush}"
+                             AutomationProperties.Name="Unsaved changes"
+                             Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsDirty), Mode=OneWay}"/>
+                  </StackPanel>
+                </TabViewItem.Header>
                 <v:RequestEditorView ViewModel="{x:Bind}"/>
               </TabViewItem>
             </DataTemplate>
           </TabView.TabItemTemplate>
         </TabView>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10"
                     Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Tabs.ActiveTab), Mode=OneWay}">
-          <TextBlock Text="No request open" HorizontalAlignment="Center"
-                     Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
-          <Button Content="New request" HorizontalAlignment="Center"
-                  Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}"/>
+          <Viewbox Width="110" Height="76" HorizontalAlignment="Center">
+            <Canvas Width="120" Height="84">
+              <Path Data="M20 72h80" Stroke="{ThemeResource YaapicBorderOverlayBrush}" StrokeThickness="2"
+                    StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+              <Path Data="M46.1 15.9l13.86 18.04" Stroke="{ThemeResource YaapicBorderOverlayBrush}" StrokeThickness="2.2"
+                    StrokeDashArray="2 1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+              <Path Data="M74.7 15.9l-16.28 28.16a5.72 5.72 0 0 1-5.06 2.86H45.44M50.72 41.42l-5.5 5.5 5.5 5.5"
+                    Stroke="{ThemeResource YaapicBorderOverlayBrush}" StrokeThickness="2.2"
+                    StrokeDashArray="2 1.5" StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+              <Path Data="M92 18h10M96 12l4-4M98 24h8" Stroke="{ThemeResource YaapicAccentBorderBrush}" StrokeThickness="2"
+                    StrokeStartLineCap="Round" StrokeEndLineCap="Round"/>
+            </Canvas>
+          </Viewbox>
+          <TextBlock Text="No request open." Style="{StaticResource YaapicSubtitleTextStyle}" HorizontalAlignment="Center"/>
+          <TextBlock Text="Create a request, or open a saved one from the list." Style="{StaticResource YaapicBodyTextStyle}"
+                     Foreground="{ThemeResource YaapicTextSecondaryBrush}" MaxWidth="320" TextWrapping="Wrap"
+                     TextAlignment="Center" HorizontalAlignment="Center"/>
+          <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+            <Button Content="New request" Style="{StaticResource AccentButtonStyle}"
+                    Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}"/>
+            <Border Style="{StaticResource YaapicKeycapBorderStyle}" VerticalAlignment="Center">
+              <TextBlock Text="Ctrl+T" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                         Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+            </Border>
+          </StackPanel>
         </StackPanel>
       </Grid>
     </Grid>
