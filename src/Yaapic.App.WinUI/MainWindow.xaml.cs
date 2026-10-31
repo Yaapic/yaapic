@@ -18,6 +18,8 @@ public sealed partial class MainWindow : Window
 
     private ShellViewModel? _viewModel;
     private bool _closeConfirmed;
+    private bool _closePending;
+    private bool _dialogOpen;
 
     /// <summary>Initializes the window.</summary>
     public MainWindow()
@@ -69,10 +71,25 @@ public sealed partial class MainWindow : Window
         }
 
         args.Cancel = true;
-        if (await _viewModel.RequestCloseAsync())
+        // A second click on the caption close button while the save prompt is open must not open a second dialog
+        // (WinUI allows one ContentDialog at a time and throws otherwise).
+        if (_closePending)
         {
-            _closeConfirmed = true;
-            Close();
+            return;
+        }
+
+        _closePending = true;
+        try
+        {
+            if (await _viewModel.RequestCloseAsync())
+            {
+                _closeConfirmed = true;
+                Close();
+            }
+        }
+        finally
+        {
+            _closePending = false;
         }
     }
 
@@ -186,9 +203,18 @@ public sealed partial class MainWindow : Window
 
     private async void OnManageEnvironments(object sender, RoutedEventArgs e)
     {
-        if (_viewModel is not null)
+        // One ContentDialog at a time: ignore the shortcut / rail click while a dialog is already open.
+        if (_viewModel is not null && !_dialogOpen)
         {
-            await new Views.EnvironmentsDialog(_viewModel.Environments) { XamlRoot = Root.XamlRoot }.ShowAsync();
+            _dialogOpen = true;
+            try
+            {
+                await new Views.EnvironmentsDialog(_viewModel.Environments) { XamlRoot = Root.XamlRoot }.ShowAsync();
+            }
+            finally
+            {
+                _dialogOpen = false;
+            }
         }
     }
 
