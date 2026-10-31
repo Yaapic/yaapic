@@ -20,6 +20,9 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
     /// <summary>Gets the rows; the last one is always the empty placeholder.</summary>
     public ObservableCollection<KeyValueRowViewModel> Rows { get; } = [];
 
+    /// <summary>Gets the number of rows that are enabled and not the empty placeholder.</summary>
+    public int ActiveCount => Rows.Count(r => r.Enabled && !r.IsEmpty);
+
     /// <summary>Replaces all rows with <paramref name="entries"/> followed by a placeholder, without raising <see cref="Changed"/>.</summary>
     /// <param name="entries">The entries to show, in order.</param>
     public void Load(IEnumerable<KeyValueEntry> entries)
@@ -44,6 +47,7 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
         finally
         {
             _loading = false;
+            OnPropertyChanged(nameof(ActiveCount));
         }
     }
 
@@ -63,6 +67,7 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
         }
 
         row.PropertyChanged -= OnRowPropertyChanged;
+        OnPropertyChanged(nameof(ActiveCount));
         Changed?.Invoke(this, EventArgs.Empty);
     }
 
@@ -92,6 +97,7 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
             AddRow();
         }
 
+        OnPropertyChanged(nameof(ActiveCount));
         Changed?.Invoke(this, EventArgs.Empty);
     }
 }

@@ -82,4 +82,31 @@ public sealed class KeyValueEditorViewModelTests
         removed.Key = "x";
         Assert.Equal(3, changed);
     }
+
+    [Fact]
+    public void ActiveCountTracksTypingTogglingAndRemoving()
+    {
+        var editor = new KeyValueEditorViewModel();
+        var raised = 0;
+        editor.PropertyChanged += (_, e) => raised += e.PropertyName == nameof(KeyValueEditorViewModel.ActiveCount) ? 1 : 0;
+        Assert.Equal(0, editor.ActiveCount);
+
+        editor.Rows[0].Key = "a";
+        Assert.Equal(1, editor.ActiveCount);
+        Assert.True(raised > 0);
+
+        editor.Rows[0].Key = "";
+        editor.Rows[0].Key = "b";
+        editor.Rows[1].Key = "c";
+        Assert.Equal(2, editor.ActiveCount);
+
+        editor.Rows[0].Enabled = false;
+        Assert.Equal(1, editor.ActiveCount);
+
+        editor.RemoveRowCommand.Execute(editor.Rows[1]);
+        Assert.Equal(0, editor.ActiveCount);
+
+        editor.Load([new("a", "1"), new("b", "2", false)]);
+        Assert.Equal(1, editor.ActiveCount);
+    }
 }

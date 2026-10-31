@@ -3,38 +3,74 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
              xmlns:ed="using:Yaapic.ViewModels.Editing">
-  <ListView x:Name="RowList" SelectionMode="None">
-    <ListView.ItemContainerStyle>
-      <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
-        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        <Setter Property="MinHeight" Value="{StaticResource YaapicRowHeight}"/>
-      </Style>
-    </ListView.ItemContainerStyle>
-    <ListView.ItemTemplate>
-      <DataTemplate x:DataType="ed:KeyValueRowViewModel">
-        <Grid ColumnSpacing="8">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="32"/>
-          </Grid.ColumnDefinitions>
-          <CheckBox MinWidth="0" VerticalAlignment="Center"
-                    AutomationProperties.Name="Enabled"
-                    IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
-          <TextBox Grid.Column="1" PlaceholderText="Key"
-                   FontFamily="{StaticResource YaapicMonoFont}"
-                   Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-          <TextBox Grid.Column="2" PlaceholderText="Value"
-                   FontFamily="{StaticResource YaapicMonoFont}"
-                   Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-          <Button Grid.Column="3" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnRemove"
-                  AutomationProperties.Name="Remove row"
-                  Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
-            <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="16" Height="16"/>
-          </Button>
-        </Grid>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-  </ListView>
+  <UserControl.Resources>
+    <!-- Borderless cell editors: every state is transparent, only the focused state draws the 2 px inset ring. -->
+    <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlElevationBorderBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="Transparent"/>
+    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+    <Thickness x:Key="TextControlBorderThemeThicknessFocused">2</Thickness>
+  </UserControl.Resources>
+  <Border VerticalAlignment="Top"
+          BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" BorderThickness="1"
+          CornerRadius="{StaticResource YaapicRadiusMd}">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="28"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Grid Background="{ThemeResource YaapicSurfaceSidebarBrush}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="36"/>
+          <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
+          <ColumnDefinition Width="2*"/>
+          <ColumnDefinition Width="36"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="1" Padding="10,0" VerticalAlignment="Center" CharacterSpacing="30"
+                   Style="{StaticResource YaapicCaptionTextStyle}"
+                   Text="{x:Bind p:TextMap.Upper(KeyHeader), Mode=OneWay}"/>
+        <Border Grid.Column="2" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" BorderThickness="1,0,0,0">
+          <TextBlock Padding="10,0" VerticalAlignment="Center" CharacterSpacing="30"
+                     Style="{StaticResource YaapicCaptionTextStyle}"
+                     Text="{x:Bind p:TextMap.Upper(ValueHeader), Mode=OneWay}"/>
+        </Border>
+      </Grid>
+      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ItemsRepeater x:Name="RowList">
+          <ItemsRepeater.ItemTemplate>
+            <DataTemplate x:DataType="ed:KeyValueRowViewModel">
+              <Grid Height="30" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0"
+                    Opacity="{x:Bind p:OpacityMap.KeyValueRow(IsEmpty, Enabled), Mode=OneWay}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="36"/>
+                  <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
+                  <ColumnDefinition Width="2*"/>
+                  <ColumnDefinition Width="36"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox MinWidth="0" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          AutomationProperties.Name="Enabled"
+                          IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
+                <TextBox Grid.Column="1" PlaceholderText="Key" Style="{StaticResource YaapicCellTextBoxStyle}"
+                         Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <Border Grid.Column="2" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="1,0,0,0">
+                  <TextBox PlaceholderText="Value" Style="{StaticResource YaapicCellTextBoxStyle}"
+                           Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </Border>
+                <Button Grid.Column="3" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnRemove"
+                        HorizontalAlignment="Center" AutomationProperties.Name="Remove row"
+                        Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
+                  <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="14" Height="14"/>
+                </Button>
+              </Grid>
+            </DataTemplate>
+          </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
+      </ScrollViewer>
+    </Grid>
+  </Border>
 </UserControl>

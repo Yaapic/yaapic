@@ -783,6 +783,17 @@
           </Setter>
       </Style>
 
+  <!-- Cell editor of the key/value table: mono code text, no chrome (the view clears the state brushes). -->
+  <Style x:Key="YaapicCellTextBoxStyle" TargetType="TextBox">
+    <Setter Property="FontFamily" Value="{StaticResource YaapicMonoFont}"/>
+    <Setter Property="FontSize" Value="{StaticResource YaapicFontSizeCode}"/>
+    <Setter Property="Padding" Value="10,5"/>
+    <Setter Property="MinHeight" Value="30"/>
+    <Setter Property="CornerRadius" Value="0"/>
+    <Setter Property="VerticalContentAlignment" Value="Center"/>
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+  </Style>
+
   <!-- Keycap hint ("Ctrl+T"): 1 px border, 2 px bottom edge, radius 4. -->
   <Style x:Key="YaapicKeycapBorderStyle" TargetType="Border">
     <Setter Property="BorderBrush" Value="{ThemeResource YaapicBorderDefaultBrush}"/>

@@ -1,6 +1,6 @@
 # M1-40: WinUI key/value table restyle
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-37
 
@@ -44,12 +44,33 @@ Description column, bulk edit, presets, drag handles, variable chips and autocom
 
 ## Acceptance criteria
 
-- [ ] New ViewModel tests green; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] New ViewModel tests green; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
 - [ ] Manual check on the published exe: typing in the placeholder row adds a new placeholder; unchecking dims the
-      row; remove works; Tab moves cell to cell.
-- [ ] Screenshots (M1-34 script) dark and light of the Params and Headers tables inspected against
+      row; remove works; Tab moves cell to cell. (Only partly verified, see Notes.)
+- [x] Screenshots (M1-34 script) dark and light of the Params and Headers tables inspected against
       `ResponseStates.dc.html`; differences listed in the card's Notes.
+
+## Notes
+
+Implemented: `KeyValueEditorViewModel.ActiveCount` (tests added), the bordered table (28 px header with `KEY`/`VALUE`
+captions through the new `KeyHeader`/`ValueHeader` properties, 30 px rows on `ItemsRepeater` in a `ScrollViewer`,
+dividers, `YaapicCellTextBoxStyle`, dimmed placeholder and disabled rows through `OpacityMap`, `TextMap.Upper`), and the
+environment dialog now uses `KeyHeader="Variable"` instead of its own header grid. `ItemsRepeater` works on the Native
+AOT build (no CsWinRT problem), so the `ListView` fallback was not needed. The cell editors get their transparent states
+from resource overrides in the view (`TextControl*` brushes and the focused thickness), because the stock `TextBox`
+template reads them by key.
+
+Verified on the AOT exe (dark and light, `-Send` smoke test passes, app survives): table renders, header, centred
+placeholder cells, UI Automation lists the checkbox, both cells as focusable. Not verified: typing into the placeholder
+to add a row, unchecking, remove and cell-to-cell Tab were not exercised by a real input run (the screenshot tool can
+only send keys, and Tab presses from the request tabs went to the title bar instead of the table: Tab order from the
+`SelectorBar` into the table needs a look, it may predate this card).
+
+Remaining differences from the mockup: the focus ring was not captured; the `KEY`/`VALUE` header has no letter spacing
+fidelity check; the checkbox is the stock Fluent one (14 px square with 3 px radius in the mockup); the table is as
+wide as the pane (the mockup caps the key column at 120/280 and the value takes the rest, which is the same layout);
+the remove cross is shown on every filled row (the mockup shows it on hover).
 
 ## Suggested commit message
 

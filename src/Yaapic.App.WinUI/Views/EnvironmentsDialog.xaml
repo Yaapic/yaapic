@@ -53,23 +53,13 @@
           Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.EditedEnvironment), Mode=OneWay}">
       <Grid.RowDefinitions>
         <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
       <TextBox Header="Name"
                Text="{x:Bind ViewModel.EditedEnvironment.Name, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
-      <Grid Grid.Row="1" ColumnSpacing="8" Padding="0,0,40,0">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="36"/>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="1" Text="Variable" Style="{StaticResource YaapicBodySmallTextStyle}"/>
-        <TextBlock Grid.Column="2" Text="Value" Style="{StaticResource YaapicBodySmallTextStyle}"/>
-      </Grid>
-      <v:KeyValueEditorView Grid.Row="2" x:Name="Variables"/>
-      <Button Grid.Row="3" Content="Save" HorizontalAlignment="Right" Click="OnSave"/>
+      <v:KeyValueEditorView Grid.Row="1" x:Name="Variables" KeyHeader="Variable"/>
+      <Button Grid.Row="2" Content="Save" HorizontalAlignment="Right" Click="OnSave"/>
     </Grid>
   </Grid>
 </ContentDialog>
