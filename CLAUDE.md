@@ -12,3 +12,6 @@
 
 - Task cards live in `docs/tasks/`; the `/next-task` skill implements one card per session.
 - Commits are GPG-signed with the key of adrien.granger@outlook.com, carry no trailer, and every commit is pushed.
+- SonarCloud analyses the project (organization `yaapic`, key `Yaapic_yaapic`): check the issues of the files you
+  change (public API: `https://sonarcloud.io/api/issues/search?componentKeys=Yaapic_yaapic&resolved=false`) and fix
+  them before committing.
