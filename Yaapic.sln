@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaapic.ViewModels.Tests", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaapic.Composition", "src\Yaapic.Composition\Yaapic.Composition.csproj", "{BD734839-2AC2-49ED-A704-D57FAF7CECB3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Yaapic.App.Avalonia", "src\Yaapic.App.Avalonia\Yaapic.App.Avalonia.csproj", "{6319464E-9B42-4B53-892E-917927D59CC7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -227,6 +229,18 @@ Global
 		{BD734839-2AC2-49ED-A704-D57FAF7CECB3}.Release|x64.Build.0 = Release|Any CPU
 		{BD734839-2AC2-49ED-A704-D57FAF7CECB3}.Release|x86.ActiveCfg = Release|Any CPU
 		{BD734839-2AC2-49ED-A704-D57FAF7CECB3}.Release|x86.Build.0 = Release|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Debug|x64.Build.0 = Debug|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Release|x64.ActiveCfg = Release|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Release|x64.Build.0 = Release|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{6319464E-9B42-4B53-892E-917927D59CC7}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -246,5 +260,6 @@ Global
 		{FBBD0AEC-6324-482E-A9C7-35BAB97E04EE} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{A1DE0E16-6698-45E4-B3FF-1021FFCF3B33} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
 		{7C3E1B52-4A90-4D1E-9B6F-2D5A8E4C1F07} = {0AB3BF05-4346-4AA6-1389-037BE0695223}
+		{6319464E-9B42-4B53-892E-917927D59CC7} = {827E0CD3-B72D-47B6-A68D-7590B98EB39B}
 	EndGlobalSection
 EndGlobal
