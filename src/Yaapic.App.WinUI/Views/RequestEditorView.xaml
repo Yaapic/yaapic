@@ -25,9 +25,9 @@
       <RowDefinition Height="40"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="*" MinHeight="120"/>
+      <RowDefinition x:Name="RequestRow" Height="3*" MinHeight="160"/>
       <RowDefinition Height="Auto"/>
-      <RowDefinition Height="1.2*" MinHeight="180"/>
+      <RowDefinition x:Name="ResponseRow" Height="2*" MinHeight="120"/>
     </Grid.RowDefinitions>
 
     <!-- Header: name, unsaved dot, Save. -->
@@ -220,9 +220,25 @@
       </Grid>
     </Grid>
 
-    <!-- Editor / response separator (not draggable in M1). -->
-    <Border Grid.Row="4" Height="5" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
-            BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,1"/>
+    <!-- Editor / response splitter: 5 px hit area, 1 px visible line (2 px accent while hovered or dragged). -->
+    <Grid Grid.Row="4" Height="5">
+      <Rectangle x:Name="SplitterLine" Height="1" VerticalAlignment="Center" IsHitTestVisible="False"
+                 Fill="{ThemeResource YaapicBorderSubtleBrush}"/>
+      <v:SplitterHandle x:Name="Splitter" Background="Transparent" IsTabStop="True" UseSystemFocusVisuals="True"
+                       AutomationProperties.Name="Resize request and response panels"
+                       PointerPressed="OnSplitterPointerPressed" PointerMoved="OnSplitterPointerMoved"
+                       PointerReleased="OnSplitterPointerReleased" PointerCanceled="OnSplitterPointerReleased"
+                       PointerCaptureLost="OnSplitterPointerReleased" DoubleTapped="OnSplitterDoubleTapped"
+                       KeyDown="OnSplitterKeyDown" PointerEntered="OnSplitterPointerEntered"
+                       PointerExited="OnSplitterPointerExited" GotFocus="OnSplitterFocusChanged"
+                       LostFocus="OnSplitterFocusChanged">
+        <v:SplitterHandle.Template>
+          <ControlTemplate TargetType="Control">
+            <Border Background="Transparent"/>
+          </ControlTemplate>
+        </v:SplitterHandle.Template>
+      </v:SplitterHandle>
+    </Grid>
 
     <v:ResponsePanelView Grid.Row="5" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
   </Grid>

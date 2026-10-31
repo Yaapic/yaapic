@@ -119,6 +119,82 @@ public sealed partial class RequestEditorView : UserControl
         BodyBadge.Style = BadgeStyle(BodyTab);
     }
 
+    private const double SplitterStep = 16;
+    private bool _splitterDragging;
+
+    private double _splitterLastY;
+
+    private void OnSplitterPointerPressed(object sender, PointerRoutedEventArgs e)
+    {
+        if (Splitter.CapturePointer(e.Pointer))
+        {
+            _splitterDragging = true;
+            _splitterLastY = e.GetCurrentPoint(this).Position.Y;
+            Splitter.Focus(FocusState.Pointer);
+            UpdateSplitterLine();
+        }
+    }
+
+    private void OnSplitterPointerMoved(object sender, PointerRoutedEventArgs e)
+    {
+        if (_splitterDragging)
+        {
+            var y = e.GetCurrentPoint(this).Position.Y;
+            MoveSplitter(y - _splitterLastY);
+            _splitterLastY = y;
+        }
+    }
+
+    private void OnSplitterPointerReleased(object sender, PointerRoutedEventArgs e)
+    {
+        _splitterDragging = false;
+        Splitter.ReleasePointerCaptures();
+        UpdateSplitterLine();
+    }
+
+    private void OnSplitterDoubleTapped(object sender, DoubleTappedRoutedEventArgs e) => ResetSplitter();
+
+    private void OnSplitterKeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        switch (e.Key)
+        {
+            case Windows.System.VirtualKey.Up: MoveSplitter(-SplitterStep); break;
+            case Windows.System.VirtualKey.Down: MoveSplitter(SplitterStep); break;
+            case Windows.System.VirtualKey.Home: ResetSplitter(); break;
+            default: return;
+        }
+
+        e.Handled = true;
+    }
+
+    private void OnSplitterPointerEntered(object sender, PointerRoutedEventArgs e) => UpdateSplitterLine(hovered: true);
+
+    private void OnSplitterPointerExited(object sender, PointerRoutedEventArgs e) => UpdateSplitterLine();
+
+    private void OnSplitterFocusChanged(object sender, RoutedEventArgs e) => UpdateSplitterLine();
+
+    private void UpdateSplitterLine(bool hovered = false)
+    {
+        var active = hovered || _splitterDragging || Splitter.FocusState != FocusState.Unfocused;
+        SplitterLine.Height = _splitterDragging ? 2 : 1;
+        SplitterLine.Fill = (Brush)Application.Current.Resources[active ? "YaapicAccentBrush" : "YaapicBorderSubtleBrush"];
+    }
+
+    private void MoveSplitter(double delta)
+    {
+        // The request row switches from a star to a pixel height; the response row keeps the rest.
+        var total = RequestRow.ActualHeight + ResponseRow.ActualHeight;
+        var height = Math.Clamp(RequestRow.ActualHeight + delta, RequestRow.MinHeight, Math.Max(RequestRow.MinHeight, total - ResponseRow.MinHeight));
+        RequestRow.Height = new GridLength(height);
+        ResponseRow.Height = new GridLength(1, GridUnitType.Star);
+    }
+
+    private void ResetSplitter()
+    {
+        RequestRow.Height = new GridLength(3, GridUnitType.Star);
+        ResponseRow.Height = new GridLength(2, GridUnitType.Star);
+    }
+
     private static Style BadgeStyle(ToggleButton tab) =>
         (Style)Application.Current.Resources[tab.IsChecked == true ? "YaapicCountBadgeActiveTextStyle" : "YaapicCountBadgeTextStyle"];
 

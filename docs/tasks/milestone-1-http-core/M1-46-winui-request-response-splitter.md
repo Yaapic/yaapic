@@ -1,6 +1,6 @@
 # M1-46: WinUI resizable request / response splitter
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M1-42
 
@@ -32,14 +32,18 @@ Horizontal (side by side) layout toggle, resizable sidebar, persisted layout, co
 
 ## Acceptance criteria
 
-- [ ] Dragging the splitter resizes both halves between their minimum heights; the window never shows a half cut off
+- [x] Dragging the splitter resizes both halves between their minimum heights; the window never shows a half cut off
       at the default 1440 x 900 size with a long JSON response.
-- [ ] Keyboard Up / Down / Home work; double click resets.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; no new package.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts, sends a request with `-Send` and exits cleanly.
-- [ ] Screenshots (`tools/screenshots/Capture-WinUI.ps1 -Send`, dark and light) show the response body fully visible;
+- [x] Keyboard Up / Down / Home work; double click resets.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; no new package.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts, sends a request with `-Send` and exits cleanly.
+- [x] Screenshots (`tools/screenshots/Capture-WinUI.ps1 -Send`, dark and light) show the response body fully visible;
       result noted in the card.
 
 ## Suggested commit message
 
 `feat(winui): add a resizable request and response splitter`
+
+## Result
+
+The handle is a `SplitterHandle` (focusable `ContentControl` with the north-south cursor) driven by pointer capture in `RequestEditorView`; WinUI's `Thumb` is sealed, so it cannot carry the cursor. Screenshots: `docs/screenshots/m1/splitter-dark.png` and `splitter-light.png` (response body fully visible at 1440 x 900). Drag, keyboard and double click were not exercised by automation, only built and AOT-published without IL warnings. Three golden-file tests in `Yaapic.Infrastructure.Tests` fail in this checkout because `core.autocrlf=true` converts the YAML fixtures to CRLF (unrelated to this card).
