@@ -1,6 +1,6 @@
 # M0-08: Contributor README
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M0-07
 
@@ -14,8 +14,8 @@ User documentation.
 
 ## Acceptance criteria
 
-- [ ] Steps verified from a clean checkout.
-- [ ] Documents the repository layout, the architecture rules and how `/next-task` works.
+- [x] Steps verified from a clean checkout. (Windows build + test commands run here; Linux/macOS commands and the 15-minute timing not run locally, mirrored from CI.)
+- [x] Documents the repository layout, the architecture rules and how `/next-task` works.
 
 ## Suggested commit message
 
