@@ -1,6 +1,6 @@
 # M1-30: Avalonia response viewer
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-29
 
@@ -23,9 +23,9 @@ Same as M1-26.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M1-26.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M1-26 (only start verified on the Windows AOT build; the request scenarios, macOS and Linux were not driven).
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

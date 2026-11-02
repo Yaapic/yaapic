@@ -5,7 +5,7 @@
              xmlns:v="using:Yaapic.App.Avalonia.Views"
              x:Class="Yaapic.App.Avalonia.Views.RequestEditorView"
              x:DataType="req:RequestEditorViewModel">
-  <Grid RowDefinitions="Auto,Auto,*" Margin="16,8" RowSpacing="8">
+  <Grid RowDefinitions="Auto,Auto,*,Auto,2*" Margin="16,8" RowSpacing="8">
     <TextBox Grid.Row="0" PlaceholderText="Untitled request" FontWeight="SemiBold"
              Text="{Binding Name, Mode=TwoWay}" />
 
@@ -56,5 +56,8 @@
         </Grid>
       </TabItem>
     </TabControl>
+
+    <GridSplitter Grid.Row="3" Height="4" HorizontalAlignment="Stretch" />
+    <v:ResponsePanelView Grid.Row="4" DataContext="{Binding Response}" />
   </Grid>
 </UserControl>

@@ -1,0 +1,117 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:rsp="using:Yaapic.ViewModels.Responses"
+             xmlns:d="using:Yaapic.Domain.Http"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             x:Class="Yaapic.App.Avalonia.Views.ResponsePanelView"
+             x:DataType="rsp:ResponsePanelViewModel">
+  <Grid RowDefinitions="Auto,*" Background="{DynamicResource YaapicSurfaceBaseBrush}">
+    <Border Grid.Row="0" Margin="16,8,16,0" Padding="12,6" CornerRadius="4"
+            Background="{DynamicResource YaapicWarningBackgroundBrush}"
+            IsVisible="{Binding UnresolvedWarning, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding UnresolvedWarning}" TextWrapping="Wrap"
+                 Foreground="{DynamicResource YaapicWarningBrush}" />
+    </Border>
+
+    <Grid Grid.Row="1">
+      <!-- Empty -->
+      <Grid Background="{DynamicResource YaapicSurfaceSunkenBrush}"
+            IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsEmpty}}">
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+          <TextBlock Text="The response will appear here." HorizontalAlignment="Center"
+                     Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <TextBlock Text="Ctrl+Enter to send" HorizontalAlignment="Center"
+                     Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+        </StackPanel>
+      </Grid>
+
+      <!-- Sending -->
+      <StackPanel VerticalAlignment="Top" Spacing="8"
+                  IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsSending}}">
+        <Border Height="36" Padding="16,0,12,0" BorderThickness="0,0,0,1"
+                BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+          <TextBlock Text="Sending" FontWeight="SemiBold" VerticalAlignment="Center" />
+        </Border>
+        <ProgressBar IsIndeterminate="True" />
+      </StackPanel>
+
+      <!-- Failed -->
+      <StackPanel Margin="16" Spacing="10" VerticalAlignment="Top"
+                  IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsFailed}}">
+        <Border Padding="12,6" CornerRadius="4" Background="{DynamicResource YaapicDangerBackgroundBrush}">
+          <TextBlock Text="No response" FontWeight="SemiBold" Foreground="{DynamicResource YaapicDangerBrush}" />
+        </Border>
+        <SelectableTextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+      </StackPanel>
+
+      <!-- Completed -->
+      <Grid RowDefinitions="Auto,*" IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsCompleted}}">
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="10" Margin="16,6">
+          <Border Padding="8,2" CornerRadius="4" VerticalAlignment="Center"
+                  Background="{Binding StatusCategory, Converter={x:Static p:ResponseMap.StatusBackground}}"
+                  AutomationProperties.Name="{Binding StatusText}">
+            <TextBlock Text="{Binding StatusText}" FontWeight="SemiBold"
+                       Foreground="{Binding StatusCategory, Converter={x:Static p:ResponseMap.StatusForeground}}" />
+          </Border>
+          <TextBlock Text="{Binding DurationText}" VerticalAlignment="Center"
+                     FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+                     Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <TextBlock Text="{Binding SizeText}" VerticalAlignment="Center"
+                     FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+                     Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+        </StackPanel>
+
+        <TabControl Grid.Row="1">
+          <TabItem Header="Body">
+            <Grid RowDefinitions="Auto,*" RowSpacing="6">
+              <StackPanel Orientation="Horizontal" Spacing="14" Margin="4,0">
+                <RadioButton GroupName="ViewMode" Content="Pretty" Click="OnPretty"
+                             IsChecked="{Binding ViewMode, Converter={x:Static p:ResponseMap.IsPretty}, Mode=OneWay}" />
+                <RadioButton GroupName="ViewMode" Content="Raw" Click="OnRaw"
+                             IsChecked="{Binding ViewMode, Converter={x:Static p:ResponseMap.IsRaw}, Mode=OneWay}" />
+              </StackPanel>
+              <Panel Grid.Row="1" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
+                <TextBox IsReadOnly="True" TextWrapping="NoWrap" AcceptsReturn="True" BorderThickness="0"
+                         Background="Transparent" FontFamily="{DynamicResource YaapicMonoFont}"
+                         FontSize="{DynamicResource YaapicFontSizeCode}"
+                         IsVisible="{Binding !IsBinary}" Text="{Binding BodyText, Mode=OneWay}" />
+                <TextBox IsReadOnly="True" BorderThickness="0" Background="Transparent"
+                         FontFamily="{DynamicResource YaapicMonoFont}"
+                         FontSize="{DynamicResource YaapicFontSizeCode}"
+                         IsVisible="{Binding IsBinary}" Text="{Binding BinaryText, Mode=OneWay}" />
+              </Panel>
+            </Grid>
+          </TabItem>
+          <TabItem>
+            <TabItem.Header>
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="Headers" />
+                <TextBlock Text="{Binding Headers.Count}" Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+              </StackPanel>
+            </TabItem.Header>
+            <ScrollViewer>
+              <ItemsControl ItemsSource="{Binding Headers}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="d:KeyValueEntry">
+                    <Grid ColumnDefinitions="170,*" ColumnSpacing="16" Margin="14,0">
+                      <SelectableTextBlock Grid.Column="0" Text="{Binding Key}" TextTrimming="CharacterEllipsis"
+                                           FontFamily="{DynamicResource YaapicMonoFont}"
+                                           FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+                                           Foreground="{DynamicResource YaapicSyntaxKeyBrush}" />
+                      <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextTrimming="CharacterEllipsis"
+                                           FontFamily="{DynamicResource YaapicMonoFont}"
+                                           FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+                                           Foreground="{DynamicResource YaapicTextPrimaryBrush}"
+                                           ToolTip.Tip="{Binding Value}" />
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </ScrollViewer>
+          </TabItem>
+        </TabControl>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>

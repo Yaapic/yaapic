@@ -18,7 +18,7 @@ public static class BrushMap
     public static IBrush? Method(HttpMethodKind method) =>
         Get(method == HttpMethodKind.Post ? "YaapicMethodPostBrush" : "YaapicMethodGetBrush");
 
-    private static IBrush? Get(string key) =>
+    internal static IBrush? Get(string key) =>
         Application.Current is { } app && app.TryFindResource(key, app.ActualThemeVariant, out var brush) ? brush as IBrush : null;
 }
 
