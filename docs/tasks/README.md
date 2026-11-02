@@ -92,7 +92,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 |---|---|---|---|---|
 | [M2-01](milestone-2-editor-collections/M2-01-adr-workspace-layout-and-format.md) | ADR 0008 and file format extensions | any | none | done |
 | [M2-02](milestone-2-editor-collections/M2-02-domain-methods-and-content-types.md) | Domain: HTTP methods and raw content types | any | M2-01 | done |
-| [M2-03](milestone-2-editor-collections/M2-03-domain-body-kinds-and-form-fields.md) | Domain: body kinds and form fields | any | M2-02 | todo |
+| [M2-03](milestone-2-editor-collections/M2-03-domain-body-kinds-and-form-fields.md) | Domain: body kinds and form fields | any | M2-02 | done |
 | [M2-04](milestone-2-editor-collections/M2-04-domain-auth-and-settings.md) | Domain: request authentication and settings | any | M2-03 | todo |
 | [M2-05](milestone-2-editor-collections/M2-05-resolver-methods-bodies-settings.md) | Request resolution: methods, bodies and settings | any | M2-04 | todo |
 | [M2-06](milestone-2-editor-collections/M2-06-resolver-authentication.md) | Request resolution: authentication | any | M2-05 | todo |

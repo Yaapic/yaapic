@@ -1,6 +1,6 @@
 # M2-03: Domain: body kinds and form fields
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-02
 
@@ -29,10 +29,10 @@ Resolution, transport, YAML, ViewModels.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: two bodies with equal but distinct field lists are equal and have the same hash
+- [x] Tests in `Yaapic.Domain.Tests`: two bodies with equal but distinct field lists are equal and have the same hash
       code; a differing field, kind, path or text makes them unequal; `IsEquivalentTo` on a request with form fields;
       factory helpers set the right kind; the three-argument constructor yields empty `Fields` and `FilePath`.
-- [ ] Whole solution still builds with 0 warnings; existing tests green.
+- [x] Whole solution still builds with 0 warnings; existing tests green.
 
 ## Suggested commit message
 
