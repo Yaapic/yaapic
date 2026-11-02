@@ -1,0 +1,32 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ed="using:Yaapic.ViewModels.Editing"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             x:Class="Yaapic.App.Avalonia.Views.FormDataEditorView"
+             x:DataType="ed:FormDataEditorViewModel">
+  <ScrollViewer>
+    <ItemsControl ItemsSource="{Binding Rows}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="ed:FormDataRowViewModel">
+          <Grid ColumnDefinitions="Auto,*,80,*,Auto,Auto" Margin="0,0,0,4">
+            <CheckBox Grid.Column="0" Margin="0,0,8,0" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+            <TextBox Grid.Column="1" Margin="0,0,8,0" PlaceholderText="Key" Text="{Binding Key, Mode=TwoWay}" />
+            <ComboBox Grid.Column="2" Margin="0,0,8,0" Tag="{Binding}"
+                      SelectedIndex="{Binding Kind, Converter={x:Static p:EditorMap.FieldKindIndex}, Mode=OneWay}"
+                      SelectionChanged="OnKindChanged">
+              <ComboBoxItem Content="Text" />
+              <ComboBoxItem Content="File" />
+            </ComboBox>
+            <TextBox Grid.Column="3" Margin="0,0,8,0" PlaceholderText="Value" IsReadOnly="{Binding IsFile}"
+                     Text="{Binding Value, Mode=TwoWay}" />
+            <Button Grid.Column="4" Margin="0,0,8,0" Content="Browse" IsVisible="{Binding IsFile}"
+                    Command="{Binding PickFileCommand}" />
+            <Button Grid.Column="5" Content="✕" Background="Transparent" IsVisible="{Binding !IsEmpty}"
+                    Command="{Binding $parent[ItemsControl].((ed:FormDataEditorViewModel)DataContext).RemoveRowCommand}"
+                    CommandParameter="{Binding}" />
+          </Grid>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </ScrollViewer>
+</UserControl>

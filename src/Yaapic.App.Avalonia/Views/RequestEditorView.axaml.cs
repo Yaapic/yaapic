@@ -1,3 +1,4 @@
+using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -47,28 +48,16 @@ public sealed partial class RequestEditorView : UserControl
     {
         if (Editor is { } editor && ContentTypeBox.SelectedIndex >= 0)
         {
-            editor.BodyContentType = ContentTypeBox.SelectedIndex switch
-            {
-                0 => RawContentType.Json,
-                1 => RawContentType.Text,
-                _ => RawContentType.Xml,
-            };
+            editor.BodyContentType = RequestEditorViewModel.ContentTypes[ContentTypeBox.SelectedIndex];
         }
     }
 
-    private void OnBodyNone(object? sender, RoutedEventArgs e)
+    private void OnBodyKindClick(object? sender, RoutedEventArgs e)
     {
-        if (Editor is { } editor)
+        // Index based: the Tag holds the position in RequestEditorViewModel.BodyKinds.
+        if (Editor is { } editor && sender is RadioButton { Tag: string index })
         {
-            editor.BodyKind = BodyKind.None;
-        }
-    }
-
-    private void OnBodyRaw(object? sender, RoutedEventArgs e)
-    {
-        if (Editor is { } editor)
-        {
-            editor.BodyKind = BodyKind.Raw;
+            editor.BodyKind = RequestEditorViewModel.BodyKinds[int.Parse(index, CultureInfo.InvariantCulture)];
         }
     }
 }

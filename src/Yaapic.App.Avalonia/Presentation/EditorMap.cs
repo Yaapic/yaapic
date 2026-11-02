@@ -9,12 +9,14 @@ public static class EditorMap
     /// <summary>Converts an HTTP method to its index in the method picker (the order of <c>RequestEditorViewModel.Methods</c>).</summary>
     public static FuncValueConverter<HttpMethodKind, int> MethodIndex { get; } = new(m => (int)m);
 
-    /// <summary>Converts a raw content type to its index in the picker (JSON, Text, XML).</summary>
+    /// <summary>Converts a raw content type to its index in the picker (JSON, Text, XML, HTML, JavaScript).</summary>
     public static FuncValueConverter<RawContentType, int> ContentTypeIndex { get; } = new(c => c switch
     {
         RawContentType.Json => 0,
         RawContentType.Text => 1,
-        _ => 2,
+        RawContentType.Xml => 2,
+        RawContentType.Html => 3,
+        _ => 4,
     });
 
     /// <summary>Converts a body kind to <see langword="true"/> when no body is sent.</summary>
@@ -22,4 +24,16 @@ public static class EditorMap
 
     /// <summary>Converts a body kind to <see langword="true"/> when the body is raw.</summary>
     public static FuncValueConverter<BodyKind, bool> IsRaw { get; } = new(k => k == BodyKind.Raw);
+
+    /// <summary>Converts a body kind to <see langword="true"/> when the body is url-encoded.</summary>
+    public static FuncValueConverter<BodyKind, bool> IsUrlEncoded { get; } = new(k => k == BodyKind.UrlEncoded);
+
+    /// <summary>Converts a body kind to <see langword="true"/> when the body is multipart form-data.</summary>
+    public static FuncValueConverter<BodyKind, bool> IsFormData { get; } = new(k => k == BodyKind.FormData);
+
+    /// <summary>Converts a body kind to <see langword="true"/> when the body is a file.</summary>
+    public static FuncValueConverter<BodyKind, bool> IsBinary { get; } = new(k => k == BodyKind.Binary);
+
+    /// <summary>Converts a form field kind to its index in the Text/File picker.</summary>
+    public static FuncValueConverter<FormFieldKind, int> FieldKindIndex { get; } = new(k => k == FormFieldKind.File ? 1 : 0);
 }

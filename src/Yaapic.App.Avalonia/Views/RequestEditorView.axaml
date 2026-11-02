@@ -34,26 +34,44 @@
       </TabItem>
       <TabItem Header="Body">
         <Grid RowDefinitions="Auto,*" RowSpacing="8">
-          <StackPanel Orientation="Horizontal" Spacing="14">
-            <RadioButton GroupName="BodyKind" Content="none" Click="OnBodyNone"
-                         IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsNone}, Mode=OneWay}" />
-            <RadioButton GroupName="BodyKind" Content="raw" Click="OnBodyRaw"
-                         IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}, Mode=OneWay}" />
-            <ComboBox x:Name="ContentTypeBox" IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
-                      SelectedIndex="{Binding BodyContentType, Converter={x:Static p:EditorMap.ContentTypeIndex}, Mode=OneWay}"
-                      SelectionChanged="OnContentTypeChanged">
-              <ComboBoxItem Content="JSON" />
-              <ComboBoxItem Content="Text" />
-              <ComboBoxItem Content="XML" />
-            </ComboBox>
-            <TextBlock Text="{Binding MethodText, StringFormat='{}{0} requests are sent without a body'}" VerticalAlignment="Center"
-                       Foreground="{DynamicResource YaapicTextTertiaryBrush}"
-                       IsVisible="{Binding !AllowsBody}" />
-          </StackPanel>
-          <TextBox Grid.Row="1" AcceptsReturn="True" TextWrapping="NoWrap"
-                   FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCode}"
-                   IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
-                   Text="{Binding BodyText, Mode=TwoWay}" />
+          <TextBlock Text="{Binding MethodText, StringFormat='{}{0} requests are sent without a body'}"
+                     Foreground="{DynamicResource YaapicTextTertiaryBrush}" IsVisible="{Binding !AllowsBody}" />
+          <Grid Grid.Row="1" RowDefinitions="Auto,*" RowSpacing="8" IsVisible="{Binding AllowsBody}">
+            <StackPanel Orientation="Horizontal" Spacing="14">
+              <RadioButton GroupName="BodyKind" Content="none" Tag="0" Click="OnBodyKindClick"
+                           IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsNone}, Mode=OneWay}" />
+              <RadioButton GroupName="BodyKind" Content="raw" Tag="1" Click="OnBodyKindClick"
+                           IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}, Mode=OneWay}" />
+              <RadioButton GroupName="BodyKind" Content="x-www-form-urlencoded" Tag="2" Click="OnBodyKindClick"
+                           IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsUrlEncoded}, Mode=OneWay}" />
+              <RadioButton GroupName="BodyKind" Content="form-data" Tag="3" Click="OnBodyKindClick"
+                           IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsFormData}, Mode=OneWay}" />
+              <RadioButton GroupName="BodyKind" Content="binary" Tag="4" Click="OnBodyKindClick"
+                           IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsBinary}, Mode=OneWay}" />
+              <ComboBox x:Name="ContentTypeBox" IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
+                        SelectedIndex="{Binding BodyContentType, Converter={x:Static p:EditorMap.ContentTypeIndex}, Mode=OneWay}"
+                        SelectionChanged="OnContentTypeChanged">
+                <ComboBoxItem Content="JSON" />
+                <ComboBoxItem Content="Text" />
+                <ComboBoxItem Content="XML" />
+                <ComboBoxItem Content="HTML" />
+                <ComboBoxItem Content="JavaScript" />
+              </ComboBox>
+            </StackPanel>
+            <TextBox Grid.Row="1" AcceptsReturn="True" TextWrapping="NoWrap"
+                     FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCode}"
+                     IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
+                     Text="{Binding BodyText, Mode=TwoWay}" />
+            <v:KeyValueEditorView Grid.Row="1" DataContext="{Binding UrlEncodedFields}"
+                                  IsVisible="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).BodyKind, Converter={x:Static p:EditorMap.IsUrlEncoded}}" />
+            <v:FormDataEditorView Grid.Row="1" DataContext="{Binding FormData}"
+                                  IsVisible="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).BodyKind, Converter={x:Static p:EditorMap.IsFormData}}" />
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8" VerticalAlignment="Top"
+                  IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsBinary}}">
+              <TextBox IsReadOnly="True" PlaceholderText="No file selected" Text="{Binding BinaryFilePath, Mode=OneWay}" />
+              <Button Grid.Column="1" Content="Select file" Command="{Binding PickBinaryFileCommand}" />
+            </Grid>
+          </Grid>
         </Grid>
       </TabItem>
     </TabControl>
