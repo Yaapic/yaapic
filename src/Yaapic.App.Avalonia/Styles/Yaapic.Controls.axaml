@@ -226,4 +226,54 @@
     <Setter Property="Background" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
   </Style>
+
+  <!-- Request editor (M1-54): URL bar, borderless method picker, bare name box, sunken body editor. -->
+  <Style Selector="Border.urlbar">
+    <Setter Property="Height" Value="36" />
+    <Setter Property="Background" Value="{DynamicResource YaapicSurfaceSunkenBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderControlBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource YaapicRadiusControl}" />
+  </Style>
+  <Style Selector="Border.urlbar:focus-within">
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicFocusRingBrush}" />
+  </Style>
+  <Style Selector="TextBox.bare">
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="TextBox.bare /template/ Border#PART_BorderElement, TextBox.bare:pointerover /template/ Border#PART_BorderElement, TextBox.bare:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="TextBox.editor">
+    <Setter Property="Padding" Value="12,8" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeCode}" />
+  </Style>
+  <Style Selector="TextBox.editor /template/ Border#PART_BorderElement, TextBox.editor:pointerover /template/ Border#PART_BorderElement, TextBox.editor:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="{DynamicResource YaapicSurfaceSunkenBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
+    <Setter Property="BorderThickness" Value="0,1,0,0" />
+  </Style>
+  <Style Selector="ComboBox.methodpicker">
+    <Setter Property="Width" Value="88" />
+    <Setter Property="MinHeight" Value="0" />
+    <Setter Property="Padding" Value="10,0,0,0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
+    <Setter Property="BorderThickness" Value="0,0,1,0" />
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
+    <Setter Property="FontWeight" Value="Bold" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+  </Style>
+  <Style Selector="ComboBox.methodpicker:pointerover /template/ Border#Background">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
+  </Style>
 </Styles>

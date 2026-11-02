@@ -1,4 +1,3 @@
-using System.Globalization;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
@@ -21,6 +20,9 @@ public sealed partial class RequestEditorView : UserControl
         }
     }
 
+    /// <summary>Raised when the user clicks Save; the shell saves the active tab.</summary>
+    public event EventHandler? SaveRequested;
+
     private RequestEditorViewModel? Editor => DataContext as RequestEditorViewModel;
 
     /// <inheritdoc />
@@ -41,6 +43,7 @@ public sealed partial class RequestEditorView : UserControl
         if (Editor is { } editor && MethodBox.SelectedIndex >= 0)
         {
             editor.Method = RequestEditorViewModel.Methods[MethodBox.SelectedIndex];
+            MethodBox.Foreground = BrushMap.Method(editor.Method);
         }
     }
 
@@ -52,12 +55,14 @@ public sealed partial class RequestEditorView : UserControl
         }
     }
 
-    private void OnBodyKindClick(object? sender, RoutedEventArgs e)
+    private void OnBodyKindChanged(object? sender, SelectionChangedEventArgs e)
     {
-        // Index based: the Tag holds the position in RequestEditorViewModel.BodyKinds.
-        if (Editor is { } editor && sender is RadioButton { Tag: string index })
+        // Index based: the position is the one in RequestEditorViewModel.BodyKinds.
+        if (Editor is { } editor && BodyKindBox.SelectedIndex >= 0)
         {
-            editor.BodyKind = RequestEditorViewModel.BodyKinds[int.Parse(index, CultureInfo.InvariantCulture)];
+            editor.BodyKind = RequestEditorViewModel.BodyKinds[BodyKindBox.SelectedIndex];
         }
     }
+
+    private void OnSaveClick(object? sender, RoutedEventArgs e) => SaveRequested?.Invoke(this, EventArgs.Empty);
 }

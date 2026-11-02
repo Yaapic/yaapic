@@ -152,6 +152,8 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    private void OnSaveRequested(object? sender, EventArgs e) => Shell?.Tabs.SaveActiveCommand.Execute(null);
+
     private void OnRequestTapped(object? sender, TappedEventArgs e)
     {
         if ((sender as Control)?.DataContext is RequestListItem item)
@@ -194,7 +196,12 @@ public sealed partial class MainWindow : Window
         {
             foreach (var item in tabs.Items.OfType<TabItem>())
             {
-                var text = item.Header is TextBlock block ? block.Text : item.Header as string;
+                var text = item.Header switch
+                {
+                    StackPanel { Children: [TextBlock label, ..] } => label.Text,
+                    TextBlock block => block.Text,
+                    _ => item.Header as string,
+                };
                 if (text is not null && text.StartsWith(header, StringComparison.OrdinalIgnoreCase))
                 {
                     tabs.SelectedItem = item;

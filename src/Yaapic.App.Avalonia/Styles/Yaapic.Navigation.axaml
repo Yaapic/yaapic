@@ -292,4 +292,19 @@
     <Setter Property="HorizontalContentAlignment" Value="Center" />
     <Setter Property="Margin" Value="4,0,0,0" />
   </Style>
+
+  <!-- Editor / response splitter (M1-54): a 5 px bar between two subtle lines. -->
+  <Style Selector="GridSplitter.rows">
+    <Setter Property="Height" Value="5" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="ResizeDirection" Value="Rows" />
+    <Setter Property="Cursor" Value="SizeNorthSouth" />
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="Background" Value="{DynamicResource YaapicSurfaceSidebarBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
+    <Setter Property="BorderThickness" Value="0,1" />
+  </Style>
+  <Style Selector="GridSplitter.rows:pointerover">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
+  </Style>
 </Styles>

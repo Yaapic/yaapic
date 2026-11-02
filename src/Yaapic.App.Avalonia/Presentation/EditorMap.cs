@@ -22,6 +22,22 @@ public static class EditorMap
     /// <summary>Converts a body kind to <see langword="true"/> when no body is sent.</summary>
     public static FuncValueConverter<BodyKind, bool> IsNone { get; } = new(k => k == BodyKind.None);
 
+    /// <summary>Converts a body kind to <see langword="true"/> when a body is sent.</summary>
+    public static FuncValueConverter<BodyKind, bool> IsNotNone { get; } = new(k => k != BodyKind.None);
+
+    /// <summary>Converts a body kind to its index in the body mode bar (none, raw, form-urlencoded, form-data, binary).</summary>
+    public static FuncValueConverter<BodyKind, int> BodyKindIndex { get; } = new(k => k switch
+    {
+        BodyKind.None => 0,
+        BodyKind.Raw => 1,
+        BodyKind.UrlEncoded => 2,
+        BodyKind.FormData => 3,
+        _ => 4,
+    });
+
+    /// <summary>Converts a count to <see langword="true"/> when it is above zero (tab badges).</summary>
+    public static FuncValueConverter<int, bool> IsPositive { get; } = new(n => n > 0);
+
     /// <summary>Converts a body kind to <see langword="true"/> when the body is raw.</summary>
     public static FuncValueConverter<BodyKind, bool> IsRaw { get; } = new(k => k == BodyKind.Raw);
 

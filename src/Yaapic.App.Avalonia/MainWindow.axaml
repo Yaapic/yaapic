@@ -198,7 +198,7 @@
           </TabControl.ItemTemplate>
           <TabControl.ContentTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <views:RequestEditorView />
+              <views:RequestEditorView SaveRequested="OnSaveRequested" />
             </DataTemplate>
           </TabControl.ContentTemplate>
         </TabControl>

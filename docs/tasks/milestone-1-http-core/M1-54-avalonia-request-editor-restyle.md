@@ -1,6 +1,6 @@
 # M1-54: Avalonia request editor restyle
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-52, M1-53, M2-22
 
@@ -56,11 +56,11 @@ Tab context menus, authentication and settings tabs (M2-23), variable hints in t
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
 - [ ] Manual check on the published exe: change the method (colour follows), type a URL (params table follows), Send
       and Cancel, Ctrl+S and the Save button, Ctrl+Enter, switch every body kind, drag the splitter both ways, long
       raw body scrolls inside its pane.
-- [ ] Screenshots (M1-47 script: `-Request create-user` with `--select Body`, `-Request list-users`, dark and light)
+- [x] Screenshots (M1-47 script: `-Request create-user` with `--select Body`, `-Request list-users`, dark and light)
       inspected against `MainWindow.dc.html`, `DSComposants1.dc.html` and `ResponseStates.dc.html`: URL bar height and
       focus ring, Send colour, section tab underline and badges, segmented body bar, sunken editor, splitter.
       Deviations listed in the card, PNGs not committed.
@@ -68,3 +68,8 @@ Tab context menus, authentication and settings tabs (M2-23), variable hints in t
 ## Suggested commit message
 
 `feat(avalonia): restyle the request editor and its splitter`
+
+## Deviations
+
+- The interactive manual check was not run (captures are headless): only the static states were inspected (dark and
+  light, Params, Body raw, a sent GET). The captures show the response panel still unstyled (M1-55).
