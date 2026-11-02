@@ -1,6 +1,6 @@
 # M2-13: Request editor ViewModel: URL and query params two-way sync
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-09, M2-11
 
@@ -35,13 +35,13 @@ Path variables (`:id`), variable autocomplete, URL validation messages.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: typing `https://x.test/a?b=1&c=2` fills two rows; removing `&c=2` removes the
+- [x] Tests in `Yaapic.ViewModels.Tests`: typing `https://x.test/a?b=1&c=2` fills two rows; removing `&c=2` removes the
       second row; editing a row value updates the URL; unchecking a row removes it from the URL but keeps the row;
       re-checking restores it; typing keeps disabled rows in place; fragment is kept; `{{baseUrl}}/a?id={{id}}` keeps
       the variables unescaped; a legacy stored URL with an inline query loads clean with the entries first in the table;
       `ToDefinition().Url` has no query; sending a request with params and an inline-typed query produces each pair
       exactly once (assert on the `FakeHttpTransport` request).
-- [ ] M1 editor tests still green; 0 warnings.
+- [x] M1 editor tests still green; 0 warnings.
 
 ## Suggested commit message
 

@@ -30,7 +30,7 @@ public sealed class RequestEditorViewModelTests
     public static TheoryData<string, Action<RequestEditorViewModel>, Action<RequestEditorViewModel>> Edits => new()
     {
         { "name", e => e.Name = "Other", e => e.Name = "Get users" },
-        { "url", e => e.Url = "https://y.test", e => e.Url = "https://x.test/users" },
+        { "url", e => e.Url = "https://y.test", e => e.Url = "https://x.test/users?page=1" },
         { "method", e => e.Method = HttpMethodKind.Get, e => e.Method = HttpMethodKind.Post },
         { "header", e => e.Headers.Rows[0].Value = "text/plain", e => e.Headers.Rows[0].Value = "*/*" },
         { "param", e => e.QueryParams.Rows[0].Key = "p", e => e.QueryParams.Rows[0].Key = "page" },

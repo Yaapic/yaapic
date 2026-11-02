@@ -18,6 +18,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private readonly IActiveEnvironmentProvider _environments;
     private readonly IDialogService? _dialogs;
     private HttpRequestDefinition? _baseline;
+    private bool _syncingUrl;
 
     [ObservableProperty]
     private string _name = "";
@@ -69,7 +70,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
                 OnPropertyChanged(nameof(IsSending));
             }
         };
-        QueryParams.Changed += (_, _) => Refresh();
+        QueryParams.Changed += (_, _) => ComposeUrlFromParams();
         Headers.Changed += (_, _) => Refresh();
         Auth.Changed += (_, _) => Refresh();
         UrlEncodedFields.Changed += (_, _) => Refresh();
@@ -156,7 +157,6 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         {
             Name = definition.Name,
             Method = definition.Method,
-            Url = definition.Url,
             BodyKind = definition.Body.Kind,
             BodyContentType = definition.Body.ContentType,
             BodyText = definition.Body.Text,
@@ -165,7 +165,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             TimeoutSeconds = definition.Settings.TimeoutSeconds,
         };
         editor.Auth.Load(definition.Auth);
-        editor.QueryParams.Load(definition.QueryParams);
+        editor.LoadUrlAndParams(definition);
         editor.Headers.Load(definition.Headers);
         if (definition.Body.Kind == BodyKind.UrlEncoded)
         {
@@ -195,7 +195,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         Id,
         Name.Trim().Length == 0 ? DefaultName : Name.Trim(),
         Method,
-        Url,
+        QueryStringSync.Compose(UrlPartsOfCurrent() with { Params = [] }),
         QueryParams.ToEntries(),
         Headers.ToEntries(),
         new RequestBody(BodyKind, BodyContentType, BodyText, BodyFields(), BodyKind == BodyKind.Binary ? BinaryFilePath : ""),
@@ -239,7 +239,15 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     partial void OnMethodChanged(HttpMethodKind value) => Refresh();
 
-    partial void OnUrlChanged(string value) => Refresh();
+    partial void OnUrlChanged(string value)
+    {
+        if (!_syncingUrl)
+        {
+            ParseUrlIntoParams(value);
+        }
+
+        Refresh();
+    }
 
     partial void OnBodyKindChanged(BodyKind value) => Refresh();
 
@@ -263,6 +271,65 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     }
 
     partial void OnIsNewChanged(bool value) => Refresh();
+
+    private UrlParts UrlPartsOfCurrent() => QueryStringSync.Parse(Url);
+
+    // Legacy stored URLs may hold an inline query: its entries go first in the table.
+    private void LoadUrlAndParams(HttpRequestDefinition definition)
+    {
+        var parts = QueryStringSync.Parse(definition.Url);
+        QueryParams.Load([.. parts.Params, .. definition.QueryParams]);
+        _syncingUrl = true;
+        try
+        {
+            Url = ComposeFullUrl(parts.Prefix, parts.Fragment);
+        }
+        finally
+        {
+            _syncingUrl = false;
+        }
+    }
+
+    private string ComposeFullUrl(string prefix, string fragment) =>
+        QueryStringSync.Compose(prefix, [.. QueryParams.ToEntries().Where(e => e.Enabled)], fragment);
+
+    private void ComposeUrlFromParams()
+    {
+        var parts = UrlPartsOfCurrent();
+        _syncingUrl = true;
+        try
+        {
+            Url = ComposeFullUrl(parts.Prefix, parts.Fragment);
+        }
+        finally
+        {
+            _syncingUrl = false;
+        }
+
+        Refresh();
+    }
+
+    // The i-th enabled row with a key takes the i-th parsed entry; extra rows go, extra entries are appended.
+    private void ParseUrlIntoParams(string url)
+    {
+        var parsed = QueryStringSync.Parse(url).Params;
+        List<KeyValueEntry> merged = [];
+        var next = 0;
+        foreach (var row in QueryParams.ToEntries())
+        {
+            if (!row.Enabled || row.Key.Length == 0)
+            {
+                merged.Add(row);
+            }
+            else if (next < parsed.Count)
+            {
+                merged.Add(parsed[next++]);
+            }
+        }
+
+        merged.AddRange(parsed.Skip(next));
+        QueryParams.Load(merged);
+    }
 
     private IReadOnlyList<FormField> BodyFields() => BodyKind switch
     {
