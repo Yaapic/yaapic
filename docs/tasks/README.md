@@ -73,9 +73,26 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-44](milestone-1-http-core/M1-44-winui-code-editor-loomeditor.md) | WinUI code editor: evaluate and adopt LoomEditor.WinUI | windows | M1-42 | done |
 | [M1-45](milestone-1-http-core/M1-45-winui-visual-verification.md) | WinUI visual verification against the mockups | windows | M1-43, M1-44 | done |
 | [M1-46](milestone-1-http-core/M1-46-winui-request-response-splitter.md) | WinUI resizable request / response splitter | windows | M1-42 | done |
+| [M1-47](milestone-1-http-core/M1-47-avalonia-screenshot-tooling.md) | Avalonia screenshot tooling | unix | M1-31, M2-22 | todo |
+| [M1-48](milestone-1-http-core/M1-48-avalonia-typography-and-resources.md) | Avalonia typography, fonts and Fluent resource aliases | unix | M1-33, M1-47 | todo |
+| [M1-49](milestone-1-http-core/M1-49-avalonia-button-and-input-styles.md) | Avalonia control styles: buttons and inputs | unix | M1-48 | todo |
+| [M1-50](milestone-1-http-core/M1-50-avalonia-list-tab-chip-and-dialog-styles.md) | Avalonia control styles: lists, tabs, chips, feedback and dialogs | unix | M1-49 | todo |
+| [M1-51](milestone-1-http-core/M1-51-avalonia-shell-title-bar-rail-and-sidebar.md) | Avalonia shell restyle: title bar, rail and sidebar | unix | M1-50 | todo |
+| [M1-52](milestone-1-http-core/M1-52-avalonia-request-tabs-and-empty-state.md) | Avalonia request tabs and empty state restyle | unix | M1-51 | todo |
+| [M1-53](milestone-1-http-core/M1-53-avalonia-key-value-table.md) | Avalonia key/value table restyle | unix | M1-50 | todo |
+| [M1-54](milestone-1-http-core/M1-54-avalonia-request-editor-restyle.md) | Avalonia request editor restyle | unix | M1-52, M1-53, M2-22 | todo |
+| [M1-55](milestone-1-http-core/M1-55-avalonia-response-panel-restyle.md) | Avalonia response panel restyle | unix | M1-54 | todo |
+| [M1-56](milestone-1-http-core/M1-56-avalonia-environments-restyle.md) | Avalonia environment management and prompt restyle | unix | M1-51, M1-53 | todo |
+| [M1-57](milestone-1-http-core/M1-57-avalonia-visual-verification.md) | Avalonia visual verification against the mockups | unix | M1-55, M1-56 | todo |
 
-M1-33 to M1-46 bring the WinUI app in line with the design mockups (`design/mockups/`, see its README). The
-equivalent Avalonia visual cards are out of scope for now and will be written after M1-28 to M1-31.
+M1-33 to M1-46 bring the WinUI app in line with the design mockups (`design/mockups/`, see its README).
+
+M1-47 to M1-57 are the Avalonia counterpart (the same pass as M1-34 to M1-45, written after M2-22 because the user found
+the Avalonia app much less faithful than the WinUI one). They are numbered as a Milestone 1 addendum but run inside
+Milestone 2: M1-47 depends on M2-22, and they sit before the remaining Avalonia UI cards of M2 so that fidelity is fixed
+before more Avalonia UI is added. M2-23, M2-24, M2-38, M2-50, M2-52 and M2-59 depend on M1-57 for that reason (the other
+Avalonia cards follow them). The WinUI-only M1-44 (code editor) and M1-46 (splitter) have no separate Avalonia card: the
+splitter is part of M1-54, and an AvaloniaEdit-based editor is a candidate follow-up listed by M1-57.
 
 ## Milestone 2: Full request editor, collections, environments, history, command palette
 
@@ -83,7 +100,7 @@ Scope: all HTTP methods and body kinds, authentication and per-request settings,
 collections as folders on disk, globals and collection variables, request history, command palette. Storage decisions are
 in [ADR 0008](../adr/0008-collections-globals-history-storage.md) (written by M2-01, read it first). Each slice runs
 Domain, Core, Infrastructure and ViewModels (`any`) first, then WinUI (`windows`), then Avalonia (`unix`) cards. M2-67 is
-the WinUI visual check; the Avalonia visual cards are still to be written.
+the WinUI visual check; the Avalonia visual pass is M1-47 to M1-57 (see the Milestone 1 block above).
 
 Deferred beyond M2 (listed in ADR 0008): manual ordering and drag and drop, cookie jar, proxy and TLS settings, workspace
 picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`: every product choice is fixed in M2-01.
@@ -112,8 +129,8 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-20](milestone-2-editor-collections/M2-20-avalonia-dialog-service-members.md) | Avalonia dialog service: prompt, file pickers and clipboard | unix | M2-10 | done |
 | [M2-21](milestone-2-editor-collections/M2-21-avalonia-method-picker-and-url-bar.md) | Avalonia method picker and URL bar for all methods | unix | M2-11, M2-13 | done |
 | [M2-22](milestone-2-editor-collections/M2-22-avalonia-body-pane.md) | Avalonia body pane: all body kinds | unix | M2-12, M2-20, M2-21 | done |
-| [M2-23](milestone-2-editor-collections/M2-23-avalonia-auth-and-settings-tabs.md) | Avalonia Auth and Settings tabs | unix | M2-11, M2-21 | todo |
-| [M2-24](milestone-2-editor-collections/M2-24-avalonia-response-copy-and-save.md) | Avalonia response copy and save buttons | unix | M2-14, M2-20 | todo |
+| [M2-23](milestone-2-editor-collections/M2-23-avalonia-auth-and-settings-tabs.md) | Avalonia Auth and Settings tabs | unix | M2-11, M2-21, M1-57 | todo |
+| [M2-24](milestone-2-editor-collections/M2-24-avalonia-response-copy-and-save.md) | Avalonia response copy and save buttons | unix | M2-14, M2-20, M1-57 | todo |
 | [M2-25](milestone-2-editor-collections/M2-25-domain-folders-and-collection-nodes.md) | Domain: folders and collection nodes | any | M2-01 | todo |
 | [M2-26](milestone-2-editor-collections/M2-26-collection-store-port-and-double.md) | Core: collection store port and in-memory double | any | M2-25 | todo |
 | [M2-27](milestone-2-editor-collections/M2-27-yaml-folder-serializer.md) | YAML folder serializer | any | M2-25 | todo |
@@ -127,7 +144,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-35](milestone-2-editor-collections/M2-35-shell-and-composition-collections.md) | Shell and composition: collections | any | M2-31, M2-34 | todo |
 | [M2-36](milestone-2-editor-collections/M2-36-winui-collections-tree.md) | WinUI collections tree | windows | M2-35, M2-16 | todo |
 | [M2-37](milestone-2-editor-collections/M2-37-winui-tree-menus-and-prompts.md) | WinUI tree context menus and prompts | windows | M2-36, M2-15 | todo |
-| [M2-38](milestone-2-editor-collections/M2-38-avalonia-collections-tree.md) | Avalonia collections tree | unix | M2-35, M2-21 | todo |
+| [M2-38](milestone-2-editor-collections/M2-38-avalonia-collections-tree.md) | Avalonia collections tree | unix | M2-35, M2-21, M1-57 | todo |
 | [M2-39](milestone-2-editor-collections/M2-39-avalonia-tree-menus-and-prompts.md) | Avalonia tree context menus and prompts | unix | M2-38, M2-20 | todo |
 | [M2-40](milestone-2-editor-collections/M2-40-core-variable-scopes-and-globals-port.md) | Core: variable scopes, sender and globals port | any | M2-01 | todo |
 | [M2-41](milestone-2-editor-collections/M2-41-file-globals-store.md) | Globals YAML serializer and file store | any | M2-40 | todo |
@@ -139,16 +156,16 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-47](milestone-2-editor-collections/M2-47-winui-environments-globals-and-duplicate.md) | WinUI environments dialog: globals and duplicate | windows | M2-42, M2-45 | todo |
 | [M2-48](milestone-2-editor-collections/M2-48-winui-folder-settings-dialog.md) | WinUI folder and collection settings dialog | windows | M2-43, M2-37 | todo |
 | [M2-49](milestone-2-editor-collections/M2-49-winui-url-variable-hints.md) | WinUI URL variable hints | windows | M2-46, M2-16 | todo |
-| [M2-50](milestone-2-editor-collections/M2-50-avalonia-environments-globals-and-duplicate.md) | Avalonia environments window: globals and duplicate | unix | M2-42, M2-45 | todo |
+| [M2-50](milestone-2-editor-collections/M2-50-avalonia-environments-globals-and-duplicate.md) | Avalonia environments window: globals and duplicate | unix | M2-42, M2-45, M1-57 | todo |
 | [M2-51](milestone-2-editor-collections/M2-51-avalonia-folder-settings-window.md) | Avalonia folder and collection settings window | unix | M2-43, M2-39 | todo |
-| [M2-52](milestone-2-editor-collections/M2-52-avalonia-url-variable-hints.md) | Avalonia URL variable hints | unix | M2-46, M2-21 | todo |
+| [M2-52](milestone-2-editor-collections/M2-52-avalonia-url-variable-hints.md) | Avalonia URL variable hints | unix | M2-46, M2-21, M1-57 | todo |
 | [M2-53](milestone-2-editor-collections/M2-53-domain-history-entry.md) | Domain: history entry | any | M2-01 | todo |
 | [M2-54](milestone-2-editor-collections/M2-54-history-store-port-and-double.md) | Core: history store port and in-memory double | any | M2-53 | todo |
 | [M2-55](milestone-2-editor-collections/M2-55-file-history-store.md) | File history store (JSON Lines) | any | M2-54, M2-08 | todo |
 | [M2-56](milestone-2-editor-collections/M2-56-history-viewmodel-and-recording.md) | History ViewModel and recording | any | M2-54, M2-11 | todo |
 | [M2-57](milestone-2-editor-collections/M2-57-history-commands-sidebar-mode-and-wiring.md) | History commands, sidebar mode and shell wiring | any | M2-56, M2-55, M2-35 | todo |
 | [M2-58](milestone-2-editor-collections/M2-58-winui-sidebar-history.md) | WinUI sidebar mode switch and history list | windows | M2-57, M2-36 | todo |
-| [M2-59](milestone-2-editor-collections/M2-59-avalonia-sidebar-history.md) | Avalonia sidebar mode switch and history list | unix | M2-57, M2-38 | todo |
+| [M2-59](milestone-2-editor-collections/M2-59-avalonia-sidebar-history.md) | Avalonia sidebar mode switch and history list | unix | M2-57, M2-38, M1-57 | todo |
 | [M2-60](milestone-2-editor-collections/M2-60-core-fuzzy-matcher.md) | Core: fuzzy matcher | any | M2-01 | todo |
 | [M2-61](milestone-2-editor-collections/M2-61-command-palette-viewmodel.md) | Command palette ViewModel | any | M2-60 | todo |
 | [M2-62](milestone-2-editor-collections/M2-62-tab-navigation-and-command-source.md) | Tab navigation and the commands palette source | any | M2-61, M2-57, M2-33 | todo |
