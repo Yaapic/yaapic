@@ -17,7 +17,7 @@ public sealed class App : Application
     public override void OnFrameworkInitializationCompleted()
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-            {
+        {
             var window = new MainWindow();
             var shell = AppComposition.CreateShell(Workspace.DefaultRoot(), new AvaloniaDialogService(() => window));
             window.DataContext = shell;
