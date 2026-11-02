@@ -62,6 +62,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         _sender = sender;
         _environments = environments;
         _dialogs = dialogs;
+        Response = new ResponsePanelViewModel(dialogs);
         FormData = new FormDataEditorViewModel(dialogs);
         SendCommand.PropertyChanged += (_, e) =>
         {
@@ -116,7 +117,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     public bool AllowsBody => Method.AllowsBody();
 
     /// <summary>Gets the response panel; it keeps the last response of this tab.</summary>
-    public ResponsePanelViewModel Response { get; } = new();
+    public ResponsePanelViewModel Response { get; }
 
     /// <summary>Gets a value indicating whether a send is in flight.</summary>
     public bool IsSending => SendCommand.IsRunning;
