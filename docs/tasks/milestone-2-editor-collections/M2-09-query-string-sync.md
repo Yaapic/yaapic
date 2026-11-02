@@ -1,6 +1,6 @@
 # M2-09: Core: query string parsing and composition
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-01
 
@@ -31,11 +31,11 @@ The ViewModel sync logic (M2-13); the resolver keeps its own query appending (un
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: parse with no query, with query and fragment, `?` inside a fragment, empty
+- [x] Tests in `Yaapic.Core.Tests`: parse with no query, with query and fragment, `?` inside a fragment, empty
       segments, key without `=`, percent-decoding, `+` kept; compose with zero/one/many params, with fragment,
       escaping of space `&` `=` unicode, `{{var}}` kept unescaped in key and value; `Compose(Parse(x))` equals `x` for
       canonical URLs such as `{{baseUrl}}/a?b=1&c=%20d#top`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
