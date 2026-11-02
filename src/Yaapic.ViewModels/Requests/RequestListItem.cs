@@ -10,5 +10,5 @@ namespace Yaapic.ViewModels.Requests;
 public sealed record RequestListItem(Guid Id, string Name, HttpMethodKind Method, string Url)
 {
     /// <summary>Gets the upper-case method name, such as <c>GET</c>.</summary>
-    public string MethodText => Method == HttpMethodKind.Post ? "POST" : "GET";
+    public string MethodText => Method.ToText();
 }

@@ -21,7 +21,24 @@ public sealed partial class RequestEditorView : UserControl
     public event RoutedEventHandler? SaveRequested;
 
     /// <summary>Initializes the view.</summary>
-    public RequestEditorView() => InitializeComponent();
+    public RequestEditorView()
+    {
+        InitializeComponent();
+        foreach (var method in RequestEditorViewModel.Methods)
+        {
+            var item = new MenuFlyoutItem
+            {
+                Text = method.ToText(),
+                Tag = method.ToText(),
+                Foreground = BrushMap.Method(method),
+                FontFamily = (FontFamily)Application.Current.Resources["YaapicMonoFont"],
+                FontWeight = Microsoft.UI.Text.FontWeights.Bold,
+                FontSize = 12,
+            };
+            item.Click += OnMethodClick;
+            MethodFlyout.Items.Add(item);
+        }
+    }
 
     private static readonly string[] ContentTypeNames = ["JSON", "Text", "XML"];
 
@@ -74,7 +91,8 @@ public sealed partial class RequestEditorView : UserControl
     {
         if (ViewModel is not null)
         {
-            ViewModel.Method = ((MenuFlyoutItem)sender).Tag is "Post" ? HttpMethodKind.Post : HttpMethodKind.Get;
+            // The flyout is built from Methods in order, so the item index is the method index.
+            ViewModel.Method = RequestEditorViewModel.Methods[MethodFlyout.Items.IndexOf((MenuFlyoutItem)sender)];
         }
     }
 

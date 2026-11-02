@@ -11,8 +11,17 @@ public static class BrushMap
     /// <summary>Gets the brush that colors an HTTP method label.</summary>
     /// <param name="method">The HTTP method.</param>
     /// <returns>The method brush from the application resources.</returns>
-    public static Brush Method(HttpMethodKind method) =>
-        Get(method == HttpMethodKind.Post ? "YaapicMethodPostBrush" : "YaapicMethodGetBrush");
+    public static Brush Method(HttpMethodKind method) => Get(method switch
+    {
+        HttpMethodKind.Get => "YaapicMethodGetBrush",
+        HttpMethodKind.Post => "YaapicMethodPostBrush",
+        HttpMethodKind.Put => "YaapicMethodPutBrush",
+        HttpMethodKind.Patch => "YaapicMethodPatchBrush",
+        HttpMethodKind.Delete => "YaapicMethodDeleteBrush",
+        HttpMethodKind.Head => "YaapicMethodHeadBrush",
+        HttpMethodKind.Options => "YaapicMethodOptionsBrush",
+        _ => "YaapicMethodCustomBrush",
+    });
 
     /// <summary>Gets the text brush of the status chip.</summary>
     /// <param name="category">The class of the status code.</param>

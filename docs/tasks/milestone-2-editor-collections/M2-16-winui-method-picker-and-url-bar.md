@@ -1,6 +1,6 @@
 # M2-16: WinUI method picker and URL bar for all methods
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-11, M2-13
 
@@ -31,10 +31,10 @@ Body pane (M2-17), Auth and Settings tabs (M2-18).
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: choose each method, the label colour changes; typing `?a=1&b=2` in the URL fills
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: choose each method, the label colour changes; typing `?a=1&b=2` in the URL fills
       two Params rows; unchecking one removes it from the URL; the hint shows for GET, HEAD and OPTIONS only.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

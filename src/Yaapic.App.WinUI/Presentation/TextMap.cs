@@ -16,6 +16,11 @@ public static class TextMap
     /// <returns>The joined text.</returns>
     public static string Prefixed(string prefix, string value) => prefix + value;
 
+    /// <summary>Gets the hint shown for a method whose requests carry no body.</summary>
+    /// <param name="methodText">The upper-case method name.</param>
+    /// <returns>The hint.</returns>
+    public static string NoBodyHint(string methodText) => $"{methodText} requests are sent without a body";
+
     /// <summary>Gets the code editor language of a raw body content type.</summary>
     /// <param name="contentType">The content type.</param>
     /// <returns><c>json</c>, <c>xml</c> or <c>text</c>.</returns>

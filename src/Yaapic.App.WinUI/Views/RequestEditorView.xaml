@@ -86,14 +86,7 @@
                 </Viewbox>
               </StackPanel>
               <Button.Flyout>
-                <MenuFlyout>
-                  <MenuFlyoutItem Text="GET" Tag="Get" Click="OnMethodClick"
-                                  Foreground="{ThemeResource YaapicMethodGetBrush}"
-                                  FontFamily="{StaticResource YaapicMonoFont}" FontWeight="Bold" FontSize="12"/>
-                  <MenuFlyoutItem Text="POST" Tag="Post" Click="OnMethodClick"
-                                  Foreground="{ThemeResource YaapicMethodPostBrush}"
-                                  FontFamily="{StaticResource YaapicMonoFont}" FontWeight="Bold" FontSize="12"/>
-                </MenuFlyout>
+                <MenuFlyout x:Name="MethodFlyout"/>
               </Button.Flyout>
             </Button>
           </Border>
@@ -206,9 +199,9 @@
               </MenuFlyout>
             </Button.Flyout>
           </Button>
-          <TextBlock Grid.Column="2" Text="GET requests are sent without a body" VerticalAlignment="Center"
+          <TextBlock Grid.Column="2" Text="{x:Bind p:TextMap.NoBodyHint(ViewModel.MethodText), Mode=OneWay}" VerticalAlignment="Center"
                      HorizontalAlignment="Right" Style="{StaticResource YaapicBodySmallTextStyle}"
-                     Visibility="{x:Bind p:VisibilityMap.WhenGet(ViewModel.Method), Mode=OneWay}"/>
+                     Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.AllowsBody), Mode=OneWay}"/>
         </Grid>
         <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
                 BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">

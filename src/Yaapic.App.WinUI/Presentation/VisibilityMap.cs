@@ -37,11 +37,6 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenFalse(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
-    /// <summary>Gets <see cref="Visibility.Visible"/> when the method is GET, which is sent without a body.</summary>
-    /// <param name="method">The HTTP method.</param>
-    /// <returns>The visibility.</returns>
-    public static Visibility WhenGet(HttpMethodKind method) => method == HttpMethodKind.Get ? Visibility.Visible : Visibility.Collapsed;
-
     /// <summary>Gets <see cref="Visibility.Visible"/> when <paramref name="count"/> is above zero.</summary>
     /// <param name="count">The count to test.</param>
     /// <returns>The visibility.</returns>
