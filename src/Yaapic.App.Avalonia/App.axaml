@@ -4,6 +4,7 @@
              RequestedThemeVariant="Default">
   <Application.Styles>
     <FluentTheme />
+    <StyleInclude Source="avares://Yaapic.App.Avalonia/Styles/Yaapic.Typography.axaml" />
   </Application.Styles>
   <Application.Resources>
     <ResourceDictionary>
@@ -11,6 +12,10 @@
         <ResourceInclude Source="avares://Yaapic.App.Avalonia/Themes/Yaapic.Colors.Avalonia.axaml" />
         <ResourceInclude Source="avares://Yaapic.App.Avalonia/Themes/Yaapic.Icons.Avalonia.axaml" />
       </ResourceDictionary.MergedDictionaries>
+      <FontFamily x:Key="YaapicUiFont">Segoe UI Variable Text, Inter, Segoe UI, SF Pro Text, system-ui</FontFamily>
+      <!-- Fluent controls read these two keys for their own text. -->
+      <FontFamily x:Key="ContentControlThemeFontFamily">Segoe UI Variable Text, Inter, Segoe UI, SF Pro Text, system-ui</FontFamily>
+      <StaticResource x:Key="ControlContentThemeFontSize" ResourceKey="YaapicFontSizeBody" />
       <!-- Overrides the generated key, whose avares:// authority is not this assembly. -->
       <FontFamily x:Key="YaapicMonoFont">avares://Yaapic.App.Avalonia/Assets/Fonts#JetBrains Mono</FontFamily>
     </ResourceDictionary>

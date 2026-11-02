@@ -1,6 +1,6 @@
 # M1-48: Avalonia typography, fonts and Fluent resource aliases
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-33, M1-47
 
@@ -49,12 +49,28 @@ Control templates and colours beyond what the aliases change (M1-49, M1-50), lay
 
 ## Acceptance criteria
 
-- [ ] `rg 'FontSize="[0-9]|FontFamily="monospace"' src/Yaapic.App.Avalonia` finds nothing.
-- [ ] Snapshot tests green after regeneration; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Screenshots (M1-47 script) dark and light inspected: 13 px UI text, URL, header and body text in JetBrains Mono,
+- [x] `rg 'FontSize="[0-9]|FontFamily="monospace"' src/Yaapic.App.Avalonia` finds nothing.
+- [x] Snapshot tests green after regeneration; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Screenshots (M1-47 script) dark and light inspected: 13 px UI text, URL, header and body text in JetBrains Mono,
       accent `#1FC7D4` (not the system accent) wherever the accent is used. Not committed; result noted in the card.
 
 ## Suggested commit message
 
 `feat(avalonia): add the Yaapic type ramp, fonts and Fluent colour aliases`
+
+## Notes
+
+- `avaloniaAliases` added to 23 colour tokens; the generator also emits `SystemAccentColor` and `SystemAccentColorLight1..3` /
+  `Dark1..3` (hover colour for the lighter shades, pressed colour for the darker ones: the palette has no more).
+  Key names are Fluent's own (same family as WinUI); `TabItemHeader*Unselected/Selected` and `ListBoxItem*` follow the
+  Avalonia templates. `ControlContentThemeFontSize` (13) and `ContentControlThemeFontFamily` are overridden in `App.axaml`.
+- Typography classes use `:is(TextBlock)`, so `SelectableTextBlock` gets them too. TextBoxes keep their explicit
+  `YaapicMonoFont` / `YaapicFontSizeCode*` attributes (classes only target text blocks); the request-name TextBox keeps
+  `FontWeight="SemiBold"`, to be replaced when M1-49 styles inputs.
+- AOT capture (win-x64, dark and light, `-Send`): 13 px UI text, URL, key/value placeholders, body and headers in JetBrains Mono
+  (slashed zero visible), method labels 10 px bold mono, accent `#1FC7D4` on the checkbox and tab underline, status chip.
+  Remaining Fluent blue: the tab close button outline in light theme (templates, M1-49/M1-50). Weight 600/700 of the variable
+  font was not checked separately. No "before" capture was taken (the previous state was not rebuilt).
+- Published exe starts, renders and exits cleanly; ILC prints only third-party `Avalonia.Win32` `UnmanagedCallersOnly` notes, no IL2xxx/IL3xxx.
+

@@ -80,6 +80,17 @@ public class TokenGeneratorTests
         Assert.DoesNotContain("winuiAliases", TokenGenerator.GenerateAvalonia(Tokens()));
     }
 
+    [Fact]
+    public void Avalonia_aliases_and_accent_colours_are_emitted_per_theme()
+    {
+        var output = TokenGenerator.GenerateAvalonia(Tokens());
+
+        Assert.Contains("x:Key=\"TextControlForeground\" Color=\"#FFECEEF1\"", output);
+        Assert.Contains("x:Key=\"TextControlForeground\" Color=\"#FF16191D\"", output);
+        Assert.Contains("<Color x:Key=\"SystemAccentColor\">#FF1FC7D4</Color>", output);
+        Assert.Contains("<Color x:Key=\"SystemAccentColorDark3\">#FF18B3BF</Color>", output);
+    }
+
     [Theory]
     [InlineData("Default", "#FFFF6B6B")]
     [InlineData("Light", "#FFC42B2B")]

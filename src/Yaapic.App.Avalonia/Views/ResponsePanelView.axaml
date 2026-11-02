@@ -30,7 +30,7 @@
                   IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsSending}}">
         <Border Height="36" Padding="16,0,12,0" BorderThickness="0,0,0,1"
                 BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-          <TextBlock Text="Sending" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <TextBlock Text="Sending" Classes="bodyStrong" VerticalAlignment="Center" />
         </Border>
         <ProgressBar IsIndeterminate="True" />
       </StackPanel>
@@ -39,7 +39,7 @@
       <StackPanel Margin="16" Spacing="10" VerticalAlignment="Top"
                   IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsFailed}}">
         <Border Padding="12,6" CornerRadius="4" Background="{DynamicResource YaapicDangerBackgroundBrush}">
-          <TextBlock Text="No response" FontWeight="SemiBold" Foreground="{DynamicResource YaapicDangerBrush}" />
+          <TextBlock Text="No response" Classes="bodyStrong" Foreground="{DynamicResource YaapicDangerBrush}" />
         </Border>
         <SelectableTextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap"
                              Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
@@ -51,14 +51,12 @@
           <Border Padding="8,2" CornerRadius="4" VerticalAlignment="Center"
                   Background="{Binding StatusCategory, Converter={x:Static p:ResponseMap.StatusBackground}}"
                   AutomationProperties.Name="{Binding StatusText}">
-            <TextBlock Text="{Binding StatusText}" FontWeight="SemiBold"
+            <TextBlock Text="{Binding StatusText}" Classes="bodyStrong"
                        Foreground="{Binding StatusCategory, Converter={x:Static p:ResponseMap.StatusForeground}}" />
           </Border>
-          <TextBlock Text="{Binding DurationText}" VerticalAlignment="Center"
-                     FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+          <TextBlock Text="{Binding DurationText}" VerticalAlignment="Center" Classes="codeSmall"
                      Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
-          <TextBlock Text="{Binding SizeText}" VerticalAlignment="Center"
-                     FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+          <TextBlock Text="{Binding SizeText}" VerticalAlignment="Center" Classes="codeSmall"
                      Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
         </StackPanel>
 
@@ -95,13 +93,9 @@
                 <ItemsControl.ItemTemplate>
                   <DataTemplate x:DataType="d:KeyValueEntry">
                     <Grid ColumnDefinitions="170,*" ColumnSpacing="16" Margin="14,0">
-                      <SelectableTextBlock Grid.Column="0" Text="{Binding Key}" TextTrimming="CharacterEllipsis"
-                                           FontFamily="{DynamicResource YaapicMonoFont}"
-                                           FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+                      <SelectableTextBlock Grid.Column="0" Text="{Binding Key}" TextTrimming="CharacterEllipsis" Classes="codeSmall"
                                            Foreground="{DynamicResource YaapicSyntaxKeyBrush}" />
-                      <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextTrimming="CharacterEllipsis"
-                                           FontFamily="{DynamicResource YaapicMonoFont}"
-                                           FontSize="{DynamicResource YaapicFontSizeCodeSm}"
+                      <SelectableTextBlock Grid.Column="1" Text="{Binding Value}" TextTrimming="CharacterEllipsis" Classes="codeSmall"
                                            Foreground="{DynamicResource YaapicTextPrimaryBrush}"
                                            ToolTip.Tip="{Binding Value}" />
                     </Grid>

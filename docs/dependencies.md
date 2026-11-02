@@ -31,7 +31,7 @@ Property names are emitted in camelCase by default (`openRequests`), matching th
 
 | Asset | Version | Licence | Used by | Source | Justification |
 |---|---|---|---|---|---|
-| JetBrains Mono (variable) | 2.304 | SIL OFL 1.1 (`Assets/Fonts/OFL.txt`) | Yaapic.App.WinUI | <https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304> | Code font of the design system (`type.code`): URLs, headers and bodies are always monospace. |
+| JetBrains Mono (variable) | 2.304 | SIL OFL 1.1 (`Assets/Fonts/OFL.txt`) | Yaapic.App.WinUI, Yaapic.App.Avalonia | <https://github.com/JetBrains/JetBrainsMono/releases/tag/v2.304> | Code font of the design system (`type.code`): URLs, headers and bodies are always monospace. |
 
 ## Rejected: LoomEditor.WinUI (M1-44)
 

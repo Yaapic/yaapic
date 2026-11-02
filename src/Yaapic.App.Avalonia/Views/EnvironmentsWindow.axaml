@@ -13,7 +13,7 @@
             BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
       <Grid RowDefinitions="Auto,*" Margin="12" RowSpacing="8">
         <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-          <TextBlock Text="Environments" FontWeight="SemiBold" VerticalAlignment="Center" />
+          <TextBlock Text="Environments" Classes="bodyStrong" VerticalAlignment="Center" />
           <Button Grid.Column="1" Content="Add" Command="{Binding AddCommand}" />
         </Grid>
         <ListBox Grid.Row="1" Background="Transparent" ItemsSource="{Binding Environments}"
@@ -25,7 +25,7 @@
                 <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
                   <Ellipse Width="6" Height="6" Fill="{DynamicResource YaapicAccentFillBrush}"
                            IsVisible="{Binding IsDirty}" ToolTip.Tip="Unsaved changes" />
-                  <TextBlock Text="active" FontSize="12" Foreground="{DynamicResource YaapicTextTertiaryBrush}"
+                  <TextBlock Text="active" Classes="bodySmall" Foreground="{DynamicResource YaapicTextTertiaryBrush}"
                              IsVisible="{Binding IsActive}" />
                 </StackPanel>
               </Grid>

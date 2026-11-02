@@ -59,7 +59,7 @@
                       <MenuItem Header="Delete" Click="OnDeleteRequest" />
                     </ContextMenu>
                   </Grid.ContextMenu>
-                  <TextBlock Grid.Column="0" Text="{Binding MethodText}" FontFamily="monospace" FontSize="12"
+                  <TextBlock Grid.Column="0" Text="{Binding MethodText}" Classes="method"
                              VerticalAlignment="Center"
                              Foreground="{Binding Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
                   <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
