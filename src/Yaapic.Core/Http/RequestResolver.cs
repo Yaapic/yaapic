@@ -1,3 +1,4 @@
+using System.Text;
 using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
 
@@ -83,6 +84,8 @@ public static class RequestResolver
                 break;
         }
 
+        ApplyAuth(request.Auth, Sub, headers, query);
+
         if (query.Count > 0)
         {
             url = AppendQuery(url, query);
@@ -104,6 +107,56 @@ public static class RequestResolver
 
         return new(request.Method, url, headers, bodyText, contentType, unresolved, parts, filePath,
             request.Settings.FollowRedirects, request.Settings.TimeoutSeconds);
+    }
+
+    static void ApplyAuth(RequestAuth auth, Func<string?, string> sub, List<KeyValueEntry> headers, List<KeyValueEntry> query)
+    {
+        void AddHeader(string name, string value)
+        {
+            if (!headers.Exists(h => h.Key.Equals(name, StringComparison.OrdinalIgnoreCase)))
+            {
+                headers.Add(new(name, value));
+            }
+        }
+
+        switch (auth.Kind)
+        {
+            case AuthKind.Basic:
+                var user = sub(auth.Username);
+                var pass = sub(auth.Password);
+                if (user.Length > 0 || pass.Length > 0)
+                {
+                    AddHeader("Authorization", "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{user}:{pass}")));
+                }
+
+                break;
+            case AuthKind.Bearer:
+                var token = sub(auth.Token).Trim();
+                if (token.Length > 0)
+                {
+                    AddHeader("Authorization", "Bearer " + token);
+                }
+
+                break;
+            case AuthKind.ApiKey:
+                var key = sub(auth.Key);
+                var value = sub(auth.Value);
+                if (key.Length == 0)
+                {
+                    break;
+                }
+
+                if (auth.Location == ApiKeyLocation.Header)
+                {
+                    AddHeader(key, value);
+                }
+                else
+                {
+                    query.Add(new(key, value));
+                }
+
+                break;
+        }
     }
 
     static List<(string Key, string Value, bool IsFile)> ResolveFields(IReadOnlyList<FormField> fields, Func<string?, string> sub) =>

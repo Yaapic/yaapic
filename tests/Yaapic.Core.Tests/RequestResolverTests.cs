@@ -191,4 +191,73 @@ public class RequestResolverTests
         var r = R(Req("{{a}}{{b}}", HttpMethodKind.Post, [new("{{c}}", "{{a}}")], [new("h", "{{d}}")], RequestBody.Raw(RawContentType.Text, "{{e}}{{b}}")));
         Assert.Equal(["a", "b", "c", "d", "e"], r.Unresolved);
     }
+
+    static RequestAuth Auth(AuthKind kind, string user = "", string pass = "", string token = "", string key = "", string value = "",
+        ApiKeyLocation loc = ApiKeyLocation.Header) => new(kind, user, pass, token, key, value, loc);
+
+    static ResolvedRequest A(RequestAuth auth, KeyValueEntry[]? headers = null, string url = "http://a", params (string K, string V)[] vars) =>
+        R(Req(url, headers: headers) with { Auth = auth }, vars);
+
+    [Fact]
+    public void Basic_auth_adds_header_after_user_headers()
+    {
+        var r = A(Auth(AuthKind.Basic, "Aladdin", "open sesame"), [new("X", "1")]);
+        Assert.Equal([new("X", "1"), new("Authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==")], r.Headers);
+    }
+
+    [Fact]
+    public void Basic_auth_skipped_when_both_empty() =>
+        Assert.Empty(A(Auth(AuthKind.Basic)).Headers);
+
+    [Fact]
+    public void Bearer_auth_trims_and_skips_empty()
+    {
+        Assert.Equal([new("Authorization", "Bearer t")], A(Auth(AuthKind.Bearer, token: " t ")).Headers);
+        Assert.Empty(A(Auth(AuthKind.Bearer, token: "  ")).Headers);
+    }
+
+    [Fact]
+    public void Auth_fields_use_variables_and_report_unresolved()
+    {
+        var r = A(Auth(AuthKind.Bearer, token: "{{t}}{{missing}}"), vars: ("t", "abc"));
+        Assert.Equal("Bearer abc{{missing}}", r.Headers[0].Value);
+        Assert.Equal(["missing"], r.Unresolved);
+    }
+
+    [Fact]
+    public void User_authorization_header_wins()
+    {
+        var r = A(Auth(AuthKind.Bearer, token: "t"), [new("authorization", "mine")]);
+        Assert.Equal([new("authorization", "mine")], r.Headers);
+    }
+
+    [Fact]
+    public void Disabled_user_header_does_not_win()
+    {
+        var r = A(Auth(AuthKind.Bearer, token: "t"), [new("Authorization", "mine", false)]);
+        Assert.Equal([new("Authorization", "Bearer t")], r.Headers);
+    }
+
+    [Fact]
+    public void Api_key_in_header_and_skipped_without_key()
+    {
+        Assert.Equal([new("X-Key", "v")], A(Auth(AuthKind.ApiKey, key: "X-Key", value: "v")).Headers);
+        Assert.Empty(A(Auth(AuthKind.ApiKey, value: "v")).Headers);
+    }
+
+    [Fact]
+    public void Api_key_in_query_goes_after_params_before_fragment()
+    {
+        var r = R(Req("http://a#f", query: [new("p", "1")]) with { Auth = Auth(AuthKind.ApiKey, key: "k y", value: "v&", loc: ApiKeyLocation.Query) });
+        Assert.Equal("http://a?p=1&k%20y=v%26#f", r.Url);
+        Assert.Empty(r.Headers);
+    }
+
+    [Fact]
+    public void None_changes_nothing()
+    {
+        var r = A(RequestAuth.None);
+        Assert.Empty(r.Headers);
+        Assert.Equal("http://a", r.Url);
+    }
 }
