@@ -177,7 +177,7 @@ public sealed partial class RequestEditorView : UserControl
     {
         var active = hovered || _splitterDragging || Splitter.FocusState != FocusState.Unfocused;
         SplitterLine.Height = _splitterDragging ? 2 : 1;
-        SplitterLine.Fill = (Brush)Application.Current.Resources[active ? "YaapicAccentBrush" : "YaapicBorderSubtleBrush"];
+        SplitterLine.Fill = (Brush)Application.Current.Resources[active ? "YaapicAccentFillBrush" : "YaapicBorderSubtleBrush"];
     }
 
     private void MoveSplitter(double delta)
