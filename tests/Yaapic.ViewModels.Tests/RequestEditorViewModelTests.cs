@@ -23,7 +23,9 @@ public sealed class RequestEditorViewModelTests
         "https://x.test/users",
         [new KeyValueEntry("page", "1")],
         [new KeyValueEntry("Accept", "*/*", false)],
-        RequestBody.Raw(RawContentType.Json, "{}"));
+        RequestBody.Raw(RawContentType.Json, "{}"),
+        RequestAuth.None,
+        RequestSettings.Default);
 
     public static TheoryData<string, Action<RequestEditorViewModel>, Action<RequestEditorViewModel>> Edits => new()
     {

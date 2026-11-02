@@ -1,6 +1,6 @@
 # M2-04: Domain: request authentication and settings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-03
 
@@ -28,9 +28,9 @@ Applying auth when sending (M2-06), persistence (M2-08), editor state (M2-11).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: `Create` has the defaults; `IsEquivalentTo` is false when only the auth or only
+- [x] Tests in `Yaapic.Domain.Tests`: `Create` has the defaults; `IsEquivalentTo` is false when only the auth or only
       the settings differ; a negative timeout throws.
-- [ ] Whole solution builds with 0 warnings; every existing test still green.
+- [x] Whole solution builds with 0 warnings; every existing test still green.
 
 ## Suggested commit message
 

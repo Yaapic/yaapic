@@ -88,7 +88,9 @@ public static class RequestYamlSerializer
             dto.Url ?? "",
             [.. (dto.Params ?? []).Select(FromDto)],
             [.. (dto.Headers ?? []).Select(FromDto)],
-            ReadBody(dto.Body));
+            ReadBody(dto.Body),
+            RequestAuth.None,
+            RequestSettings.Default);
     }
 
     private static KeyValueDto ToDto(KeyValueEntry entry) =>

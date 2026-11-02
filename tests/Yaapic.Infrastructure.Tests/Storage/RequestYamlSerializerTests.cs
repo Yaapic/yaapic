@@ -16,7 +16,9 @@ public sealed class RequestYamlSerializerTests
         "{{baseUrl}}/users",
         [new("page", "1"), new("debug", "{{flag}}", false)],
         [new("Accept", "application/json")],
-        RequestBody.Raw(RawContentType.Json, "{\n  \"name\": \"Zoë\",\n  \"id\": \"{{id}}\"\n}"));
+        RequestBody.Raw(RawContentType.Json, "{\n  \"name\": \"Zoë\",\n  \"id\": \"{{id}}\"\n}"),
+        RequestAuth.None,
+        RequestSettings.Default);
 
     private static string Golden() =>
         File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Storage", "golden", "request-v1.request.yaml"));

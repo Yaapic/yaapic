@@ -168,7 +168,7 @@ public sealed partial class TabsViewModel : ObservableObject
 
     internal static bool IsUntouched(RequestEditorViewModel tab) =>
         tab.IsNew && tab.ToDefinition().IsEquivalentTo(
-            new HttpRequestDefinition(tab.Id, DefaultName, HttpMethodKind.Get, "", [], [], RequestBody.None));
+            new HttpRequestDefinition(tab.Id, DefaultName, HttpMethodKind.Get, "", [], [], RequestBody.None, RequestAuth.None, RequestSettings.Default));
 
     private void Remove(RequestEditorViewModel tab)
     {

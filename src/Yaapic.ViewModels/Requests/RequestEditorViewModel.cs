@@ -145,7 +145,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         Url,
         QueryParams.ToEntries(),
         Headers.ToEntries(),
-        new RequestBody(BodyKind, BodyContentType, BodyText));
+        new RequestBody(BodyKind, BodyContentType, BodyText),
+        RequestAuth.None,
+        RequestSettings.Default);
 
     /// <summary>Records the current state as saved: the request is no longer new nor dirty.</summary>
     public void MarkSaved()
