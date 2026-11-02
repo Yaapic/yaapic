@@ -133,7 +133,7 @@
             <ContentPresenter x:Name="PART_ContentPresenter" Content="{TemplateBinding Header}"
                               ContentTemplate="{TemplateBinding HeaderTemplate}" Padding="{TemplateBinding Padding}"
                               VerticalContentAlignment="Center" />
-            <Border x:Name="TopLine" Height="2" VerticalAlignment="Top" IsVisible="False"
+            <Border x:Name="TopLine" Height="2" VerticalAlignment="Top" Margin="0,2,0,0"
                     Background="{DynamicResource YaapicAccentFillBrush}" />
           </Grid>
         </Border>
@@ -148,6 +148,9 @@
   </Style>
   <Style Selector="TabControl.requests > TabItem:selected /template/ Border#PART_Root">
     <Setter Property="Background" Value="{DynamicResource YaapicSurfaceBaseBrush}" />
+  </Style>
+  <Style Selector="TabControl.requests > TabItem /template/ Border#TopLine">
+    <Setter Property="IsVisible" Value="False" />
   </Style>
   <Style Selector="TabControl.requests > TabItem:selected /template/ Border#TopLine">
     <Setter Property="IsVisible" Value="True" />

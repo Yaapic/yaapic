@@ -220,6 +220,9 @@ public sealed partial class MainWindow : Window
                 tab.Name += "x";
                 _ = Shell.Tabs.CloseAsync(tab);
                 break;
+            case "empty" when Shell?.Tabs.ActiveTab is { } open:
+                _ = Shell.Tabs.CloseAsync(open);
+                break;
             default:
                 throw new InvalidOperationException($"Cannot open '{name}'.");
         }

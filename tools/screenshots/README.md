@@ -37,7 +37,7 @@ pwsh tools/screenshots/Capture-Avalonia.ps1 -Open environments -Out docs/screens
 ```
 
 Parameters: `-Exe` (default: the AOT publish output for the host), `-Theme dark|light`, `-Out`, `-Width 1440 -Height 900`,
-`-Send`, `-WaitMs 1500`, `-Request <slug>`, `-Select <section header>`, `-Open environments|unsaved`, `-NoTabs`, `-NoStub`.
+`-Send`, `-WaitMs 1500`, `-Request <slug>`, `-Select <section header>`, `-Open environments|unsaved|empty`, `-NoTabs`, `-NoStub`.
 They map to the app options `--workspace`, `--theme dark|light|system`, `--size <w>x<h>`, `--send`, `--select`,
 `--open`, `--screenshot <png>` and `--wait-ms`; all are inert unless given. The script always cleans up the app, the stub
 server and the temp folder. On Linux it needs a display (`xvfb-run pwsh ...` on a headless box). Run one capture per

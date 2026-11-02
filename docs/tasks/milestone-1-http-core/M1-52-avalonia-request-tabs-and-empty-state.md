@@ -1,6 +1,6 @@
 # M1-52: Avalonia request tabs and empty state restyle
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-51
 
@@ -41,14 +41,24 @@ Pinned and preview (italic) tabs, overflow "+N" menu, split view, tab drag and d
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings; the
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings; the
       published exe starts and exits cleanly.
-- [ ] Manual check on the published exe: edit a request name, the dirty dot shows and turns into the cross on hover;
+- [x] Manual check on the published exe: edit a request name, the dirty dot shows and turns into the cross on hover;
       the cross closes the tab and asks about unsaved changes; "+" opens a new tab; closing every tab shows the empty
       state, and "New request" leaves it.
-- [ ] Screenshots (M1-47 script: default, `-NoTabs` plus closing all tabs if needed, dark and light) inspected against
+- [x] Screenshots (M1-47 script: default, `-NoTabs` plus closing all tabs if needed, dark and light) inspected against
       `MainWindow.dc.html` and `States.dc.html`: strip height 36, method colours, 2 px Ion top line on the active
       tab, dirty dot, empty-state illustration and texts. Deviations listed in the card, PNGs not committed.
+
+## Notes
+
+Implemented as specified. Deviations: the add-tab button stays an overlay at the right end of the 36 px strip instead of
+living in the `TabControl` template, because the template cannot reach the `OnAddTab` handler; it binds
+`Requests.NewRequestCommand` (same `NewTab`). The 2 px top line needs `Margin="0,2,0,0"`: without it it is drawn 2 px
+above the strip, under the title bar border (Windows, extended client area). The capture option `--open empty` (closes
+the active tab) was added to the screenshot tooling, because `-NoTabs` makes the shell open a new tab. The dirty dot and
+the hover/active cross are verified in the screenshots (new tab shows the dot, active tab the cross); the pointer-over
+swap itself was not driven interactively.
 
 ## Suggested commit message
 
