@@ -1,6 +1,6 @@
 # M1-49: Avalonia control styles: buttons and inputs
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-48
 
@@ -50,11 +50,11 @@ Lists, tabs, chips, progress, dialogs (M1-50), screen layouts (M1-51 onward), lo
 
 ## Acceptance criteria
 
-- [ ] No `#` colour literal in `src/Yaapic.App.Avalonia/Styles/` (`rg '="#|Color="#'`); snapshot tests green if the
+- [x] No `#` colour literal in `src/Yaapic.App.Avalonia/Styles/` (`rg '="#|Color="#'`); snapshot tests green if the
       aliases changed.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings;
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings;
       published exe starts and exits cleanly.
-- [ ] Screenshots (M1-47 script, dark and light) inspected: Send in Ion `#1FC7D4` with dark text `#04252A`, text boxes
+- [x] Screenshots (M1-47 script, dark and light) inspected: Send in Ion `#1FC7D4` with dark text `#04252A`, text boxes
       on the sunken surface with a `border.control` border, 32 px controls, radio dots as in the mockup, the method
       combo drop-down on the overlay surface (capture it with `--open` or a manual run), keyboard focus ring visible
       after Tab. Deviations noted in the card, PNGs not committed.
@@ -62,3 +62,18 @@ Lists, tabs, chips, progress, dialogs (M1-50), screen layouts (M1-51 onward), lo
 ## Suggested commit message
 
 `feat(avalonia): add Yaapic button, input and selection control styles`
+
+## Notes
+
+- `Yaapic.Controls.axaml` added (buttons and variants, text inputs, check box, radio, toggle switch, combo box item,
+  menu item and tooltip styles, single focus ring). The text box focus border and the `ControlCornerRadius` /
+  `OverlayCornerRadius` keys are set in `App.axaml`. No generator change was needed: hover, selected and disabled
+  states use the existing `Yaapic*` brushes through `/template/` selectors.
+- The `Yi*` and `YaapicGlyph*` geometries are 24 x 24 strokes, so `Button.icon PathIcon` gets a template that strokes
+  them (2 px, round caps) instead of filling them. Glyph resources are `StreamGeometry`.
+- Replaced the "Environments", "Theme" text buttons and the glyph buttons (tab close, new tab, remove row) with
+  `Button.icon`; Send is `Button.accent`. Added a `YaapicGlyphTheme` half-circle geometry for the theme button.
+- Deviations: check box 14 px / radius 3 and radio 18 px with a 5 px accent ring (mockup values for the radio, card
+  values for the check box). Combo drop-down popup and Tab focus ring were not captured: `Capture-Avalonia.ps1` has no
+  key or focus options on Avalonia yet. Dark and light captures with Send checked (Ion `#1FC7D4` Send, sunken inputs
+  with control border, 32 px controls, accent radio and check box).

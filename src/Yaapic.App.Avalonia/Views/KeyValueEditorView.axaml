@@ -11,9 +11,11 @@
             <CheckBox Grid.Column="0" Margin="0,0,8,0" IsChecked="{Binding Enabled, Mode=TwoWay}" />
             <TextBox Grid.Column="1" Margin="0,0,8,0" PlaceholderText="Key" Text="{Binding Key, Mode=TwoWay}" />
             <TextBox Grid.Column="2" Margin="0,0,8,0" PlaceholderText="Value" Text="{Binding Value, Mode=TwoWay}" />
-            <Button Grid.Column="3" Content="✕" Background="Transparent" IsVisible="{Binding !IsEmpty}"
+            <Button Grid.Column="3" Classes="icon" AutomationProperties.Name="Remove row" ToolTip.Tip="Remove row" IsVisible="{Binding !IsEmpty}"
                     Command="{Binding $parent[ItemsControl].((ed:KeyValueEditorViewModel)DataContext).RemoveRowCommand}"
-                    CommandParameter="{Binding}" />
+                    CommandParameter="{Binding}">
+              <PathIcon Data="{StaticResource YaapicGlyphClose}" />
+            </Button>
           </Grid>
         </DataTemplate>
       </ItemsControl.ItemTemplate>

@@ -5,6 +5,7 @@
   <Application.Styles>
     <FluentTheme />
     <StyleInclude Source="avares://Yaapic.App.Avalonia/Styles/Yaapic.Typography.axaml" />
+    <StyleInclude Source="avares://Yaapic.App.Avalonia/Styles/Yaapic.Controls.axaml" />
   </Application.Styles>
   <Application.Resources>
     <ResourceDictionary>
@@ -18,6 +19,11 @@
       <StaticResource x:Key="ControlContentThemeFontSize" ResourceKey="YaapicFontSizeBody" />
       <!-- Overrides the generated key, whose avares:// authority is not this assembly. -->
       <FontFamily x:Key="YaapicMonoFont">avares://Yaapic.App.Avalonia/Assets/Fonts#JetBrains Mono</FontFamily>
+      <!-- Fluent reads these for text box borders and rounded corners; focus = 1 px ring colour plus a 2 px bottom border. -->
+      <Thickness x:Key="TextControlBorderThemeThickness">1</Thickness>
+      <Thickness x:Key="TextControlBorderThemeThicknessFocused">1,1,1,2</Thickness>
+      <StaticResource x:Key="ControlCornerRadius" ResourceKey="YaapicRadiusControl" />
+      <StaticResource x:Key="OverlayCornerRadius" ResourceKey="YaapicRadiusOverlay" />
     </ResourceDictionary>
   </Application.Resources>
 </Application>

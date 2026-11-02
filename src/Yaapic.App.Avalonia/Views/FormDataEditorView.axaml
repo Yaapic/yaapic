@@ -21,9 +21,11 @@
                      Text="{Binding Value, Mode=TwoWay}" />
             <Button Grid.Column="4" Margin="0,0,8,0" Content="Browse" IsVisible="{Binding IsFile}"
                     Command="{Binding PickFileCommand}" />
-            <Button Grid.Column="5" Content="✕" Background="Transparent" IsVisible="{Binding !IsEmpty}"
+            <Button Grid.Column="5" Classes="icon" AutomationProperties.Name="Remove row" ToolTip.Tip="Remove row" IsVisible="{Binding !IsEmpty}"
                     Command="{Binding $parent[ItemsControl].((ed:FormDataEditorViewModel)DataContext).RemoveRowCommand}"
-                    CommandParameter="{Binding}" />
+                    CommandParameter="{Binding}">
+              <PathIcon Data="{StaticResource YaapicGlyphClose}" />
+            </Button>
           </Grid>
         </DataTemplate>
       </ItemsControl.ItemTemplate>

@@ -1,0 +1,193 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Control styles of M1-49 (design/mockups/DSComposants1.dc.html). Metrics and templates only: colours come from the
+       generated keys and the Fluent aliases of M1-48. -->
+  <Styles.Resources>
+    <StreamGeometry x:Key="YaapicGlyphClose">M6 6l12 12M18 6 6 18</StreamGeometry>
+    <StreamGeometry x:Key="YaapicGlyphAdd">M12 5v14M5 12h14</StreamGeometry>
+    <StreamGeometry x:Key="YaapicGlyphTheme">M12 3a9 9 0 1 0 0 18V3z</StreamGeometry>
+  </Styles.Resources>
+
+  <!-- One keyboard focus ring instead of Fluent's double ring. -->
+  <Style Selector=":is(Button), CheckBox, RadioButton, ToggleSwitch, TabItem, ListBoxItem, ComboBox">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border BorderThickness="1" BorderBrush="{DynamicResource YaapicFocusRingBrush}"
+                CornerRadius="{DynamicResource YaapicRadiusControl}" Margin="-2" />
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+
+  <!-- Buttons: secondary is the default look. -->
+  <Style Selector="Button">
+    <Setter Property="MinHeight" Value="{DynamicResource YaapicControlHeight}" />
+    <Setter Property="Padding" Value="14,0" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="CornerRadius" Value="{DynamicResource YaapicRadiusControl}" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+  </Style>
+  <Style Selector="Button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicTextDisabledBrush}" />
+  </Style>
+
+  <Style Selector="Button.accent /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicAccentFillBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicAccentOnBrush}" />
+  </Style>
+  <Style Selector="Button.accent:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicAccentFillHoverBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicAccentOnBrush}" />
+  </Style>
+  <Style Selector="Button.accent:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicAccentFillPressedBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicAccentOnBrush}" />
+  </Style>
+
+  <Style Selector="Button.subtle /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.subtle:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.subtle:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayPressedBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.subtle:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicTextDisabledBrush}" />
+  </Style>
+
+  <Style Selector="Button.danger /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicDangerBackgroundBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicDangerBorderBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicDangerBrush}" />
+  </Style>
+  <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicDangerBackgroundHoverBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicDangerBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicDangerBrush}" />
+  </Style>
+  <Style Selector="Button.danger:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicDangerBackgroundPressedBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicDangerBrush}" />
+  </Style>
+  <Style Selector="Button.danger:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicTextDisabledBrush}" />
+  </Style>
+
+  <Style Selector="Button.icon">
+    <Setter Property="Width" Value="28" />
+    <Setter Property="Height" Value="28" />
+    <Setter Property="MinHeight" Value="28" />
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="HorizontalContentAlignment" Value="Center" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
+  </Style>
+  <Style Selector="Button.icon /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
+  </Style>
+  <Style Selector="Button.icon:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicTextPrimaryBrush}" />
+  </Style>
+  <Style Selector="Button.icon:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayPressedBrush}" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+  </Style>
+  <Style Selector="Button.icon:disabled /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicTextDisabledBrush}" />
+  </Style>
+  <!-- The Yi* and glyph geometries are 24 x 24 strokes, not fills: draw them as 2 px round-capped lines. -->
+  <Style Selector="Button.icon PathIcon">
+    <Setter Property="Width" Value="16" />
+    <Setter Property="Height" Value="16" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Viewbox Stretch="Uniform">
+          <Canvas Width="24" Height="24">
+            <Path Data="{TemplateBinding Data}" Stroke="{TemplateBinding Foreground}" StrokeThickness="2"
+                  StrokeLineCap="Round" StrokeJoin="Round" />
+          </Canvas>
+        </Viewbox>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <!-- Text inputs: sunken surface, 1 px control border; focus adds the ring colour and a 2 px bottom border (see the
+       TextControlBorderThemeThickness* resources in App.axaml). -->
+  <Style Selector="TextBox, ComboBox, NumericUpDown">
+    <Setter Property="MinHeight" Value="{DynamicResource YaapicControlHeight}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource YaapicRadiusControl}" />
+  </Style>
+
+  <!-- Selection controls. -->
+  <Style Selector="CheckBox /template/ Border#NormalRectangle">
+    <Setter Property="Width" Value="14" />
+    <Setter Property="Height" Value="14" />
+    <Setter Property="CornerRadius" Value="3" />
+  </Style>
+  <Style Selector="CheckBox /template/ Viewbox">
+    <Setter Property="Width" Value="12" />
+    <Setter Property="Height" Value="12" />
+  </Style>
+
+  <Style Selector="RadioButton /template/ Ellipse#OuterEllipse">
+    <Setter Property="Width" Value="18" />
+    <Setter Property="Height" Value="18" />
+  </Style>
+  <Style Selector="RadioButton /template/ Ellipse#CheckOuterEllipse">
+    <Setter Property="Width" Value="18" />
+    <Setter Property="Height" Value="18" />
+  </Style>
+  <!-- Checked: accent ring, the sunken surface shows through the centre. -->
+  <Style Selector="RadioButton /template/ Ellipse#CheckGlyph">
+    <Setter Property="Width" Value="8" />
+    <Setter Property="Height" Value="8" />
+    <Setter Property="Fill" Value="{DynamicResource YaapicSurfaceSunkenBrush}" />
+  </Style>
+  <Style Selector="RadioButton:checked /template/ Ellipse#CheckOuterEllipse">
+    <Setter Property="Fill" Value="{DynamicResource YaapicAccentFillBrush}" />
+    <Setter Property="Stroke" Value="{DynamicResource YaapicAccentFillBrush}" />
+  </Style>
+
+  <Style Selector="ToggleSwitch:checked /template/ Border#SwitchKnobBounds">
+    <Setter Property="Background" Value="{DynamicResource YaapicAccentFillBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicAccentFillBrush}" />
+  </Style>
+  <Style Selector="ToggleSwitch:checked /template/ Ellipse#SwitchKnob">
+    <Setter Property="Fill" Value="{DynamicResource YaapicAccentOnBrush}" />
+  </Style>
+
+  <!-- Overlay surfaces: combo box drop-down, menus and tooltips. -->
+  <Style Selector="ComboBoxItem, MenuItem">
+    <Setter Property="MinHeight" Value="28" />
+  </Style>
+  <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
+  </Style>
+  <Style Selector="MenuItem:pointerover /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
+  </Style>
+  <Style Selector="ComboBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource YaapicSelectionBackgroundBrush}" />
+  </Style>
+  <Style Selector="ToolTip">
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeBodySm}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource YaapicRadiusMd}" />
+  </Style>
+</Styles>

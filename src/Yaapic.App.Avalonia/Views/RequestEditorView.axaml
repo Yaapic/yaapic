@@ -16,7 +16,7 @@
       </ComboBox>
       <TextBox Grid.Column="1" PlaceholderText="Enter URL or paste text"
                FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding Url, Mode=TwoWay}" />
-      <Button Grid.Column="2" Content="Send" Command="{Binding SendCommand}"
+      <Button Grid.Column="2" Content="Send" Classes="accent" Command="{Binding SendCommand}"
               IsVisible="{Binding !IsSending}" />
       <Button Grid.Column="2" Content="Cancel" Command="{Binding CancelCommand}"
               IsVisible="{Binding IsSending}" />

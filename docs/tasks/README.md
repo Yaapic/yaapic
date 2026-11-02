@@ -75,7 +75,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-46](milestone-1-http-core/M1-46-winui-request-response-splitter.md) | WinUI resizable request / response splitter | windows | M1-42 | done |
 | [M1-47](milestone-1-http-core/M1-47-avalonia-screenshot-tooling.md) | Avalonia screenshot tooling | unix | M1-31, M2-22 | done |
 | [M1-48](milestone-1-http-core/M1-48-avalonia-typography-and-resources.md) | Avalonia typography, fonts and Fluent resource aliases | unix | M1-33, M1-47 | done |
-| [M1-49](milestone-1-http-core/M1-49-avalonia-button-and-input-styles.md) | Avalonia control styles: buttons and inputs | unix | M1-48 | todo |
+| [M1-49](milestone-1-http-core/M1-49-avalonia-button-and-input-styles.md) | Avalonia control styles: buttons and inputs | unix | M1-48 | done |
 | [M1-50](milestone-1-http-core/M1-50-avalonia-list-tab-chip-and-dialog-styles.md) | Avalonia control styles: lists, tabs, chips, feedback and dialogs | unix | M1-49 | todo |
 | [M1-51](milestone-1-http-core/M1-51-avalonia-shell-title-bar-rail-and-sidebar.md) | Avalonia shell restyle: title bar, rail and sidebar | unix | M1-50 | todo |
 | [M1-52](milestone-1-http-core/M1-52-avalonia-request-tabs-and-empty-state.md) | Avalonia request tabs and empty state restyle | unix | M1-51 | todo |
