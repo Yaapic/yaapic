@@ -11,6 +11,8 @@
         <ResourceInclude Source="avares://Yaapic.App.Avalonia/Themes/Yaapic.Colors.Avalonia.axaml" />
         <ResourceInclude Source="avares://Yaapic.App.Avalonia/Themes/Yaapic.Icons.Avalonia.axaml" />
       </ResourceDictionary.MergedDictionaries>
+      <!-- Overrides the generated key, whose avares:// authority is not this assembly. -->
+      <FontFamily x:Key="YaapicMonoFont">avares://Yaapic.App.Avalonia/Assets/Fonts#JetBrains Mono</FontFamily>
     </ResourceDictionary>
   </Application.Resources>
 </Application>

@@ -4,6 +4,7 @@
         xmlns:req="using:Yaapic.ViewModels.Requests"
         xmlns:env="using:Yaapic.ViewModels.Environments"
         xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+        xmlns:views="using:Yaapic.App.Avalonia.Views"
         x:Class="Yaapic.App.Avalonia.MainWindow"
         x:DataType="vm:ShellViewModel"
         Title="Yaapic"
@@ -81,7 +82,7 @@
           </TabControl.ItemTemplate>
           <TabControl.ContentTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <TextBlock Text="{Binding Url}" Margin="16" />
+              <views:RequestEditorView />
             </DataTemplate>
           </TabControl.ContentTemplate>
         </TabControl>

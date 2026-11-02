@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:req="using:Yaapic.ViewModels.Requests"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             xmlns:v="using:Yaapic.App.Avalonia.Views"
+             x:Class="Yaapic.App.Avalonia.Views.RequestEditorView"
+             x:DataType="req:RequestEditorViewModel">
+  <Grid RowDefinitions="Auto,Auto,*" Margin="16,8" RowSpacing="8">
+    <TextBox Grid.Row="0" PlaceholderText="Untitled request" FontWeight="SemiBold"
+             Text="{Binding Name, Mode=TwoWay}" />
+
+    <Grid Grid.Row="1" ColumnDefinitions="100,*,Auto" ColumnSpacing="8">
+      <ComboBox x:Name="MethodBox" Grid.Column="0" HorizontalAlignment="Stretch"
+                SelectedIndex="{Binding Method, Converter={x:Static p:EditorMap.MethodIndex}, Mode=OneWay}"
+                SelectionChanged="OnMethodChanged">
+        <ComboBoxItem Content="GET" Foreground="{DynamicResource YaapicMethodGetBrush}" />
+        <ComboBoxItem Content="POST" Foreground="{DynamicResource YaapicMethodPostBrush}" />
+      </ComboBox>
+      <TextBox Grid.Column="1" PlaceholderText="Enter URL or paste text"
+               FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding Url, Mode=TwoWay}" />
+      <Button Grid.Column="2" Content="Send" Command="{Binding SendCommand}"
+              IsVisible="{Binding !IsSending}" />
+      <Button Grid.Column="2" Content="Cancel" Command="{Binding CancelCommand}"
+              IsVisible="{Binding IsSending}" />
+    </Grid>
+
+    <TabControl Grid.Row="2">
+      <TabItem Header="Params">
+        <v:KeyValueEditorView DataContext="{Binding QueryParams}" />
+      </TabItem>
+      <TabItem Header="Headers">
+        <v:KeyValueEditorView DataContext="{Binding Headers}" />
+      </TabItem>
+      <TabItem Header="Body">
+        <Grid RowDefinitions="Auto,*" RowSpacing="8">
+          <StackPanel Orientation="Horizontal" Spacing="14">
+            <RadioButton GroupName="BodyKind" Content="none" Click="OnBodyNone"
+                         IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsNone}, Mode=OneWay}" />
+            <RadioButton GroupName="BodyKind" Content="raw" Click="OnBodyRaw"
+                         IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}, Mode=OneWay}" />
+            <ComboBox x:Name="ContentTypeBox" IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
+                      SelectedIndex="{Binding BodyContentType, Converter={x:Static p:EditorMap.ContentTypeIndex}, Mode=OneWay}"
+                      SelectionChanged="OnContentTypeChanged">
+              <ComboBoxItem Content="JSON" />
+              <ComboBoxItem Content="Text" />
+              <ComboBoxItem Content="XML" />
+            </ComboBox>
+            <TextBlock Text="GET requests are sent without a body" VerticalAlignment="Center"
+                       Foreground="{DynamicResource YaapicTextTertiaryBrush}"
+                       IsVisible="{Binding Method, Converter={x:Static p:EditorMap.IsGet}}" />
+          </StackPanel>
+          <TextBox Grid.Row="1" AcceptsReturn="True" TextWrapping="NoWrap"
+                   FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCode}"
+                   IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
+                   Text="{Binding BodyText, Mode=TwoWay}" />
+        </Grid>
+      </TabItem>
+    </TabControl>
+  </Grid>
+</UserControl>
