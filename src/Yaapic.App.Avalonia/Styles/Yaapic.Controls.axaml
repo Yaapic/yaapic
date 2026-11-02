@@ -190,4 +190,40 @@
     <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeBodySm}" />
     <Setter Property="CornerRadius" Value="{DynamicResource YaapicRadiusMd}" />
   </Style>
+
+  <!-- Borderless cells of the key/value and form-data tables; focus draws a 2 px inner ring (mockup "inset 0 0 0 2px"). -->
+  <Style Selector="TextBox.cell">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="Padding" Value="10,0" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeCode}" />
+  </Style>
+  <Style Selector="TextBox.cell /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="TextBox.cell:pointerover /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="TextBox.cell:focus /template/ Border#PART_BorderElement">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicFocusRingBrush}" />
+    <Setter Property="BorderThickness" Value="2" />
+  </Style>
+  <Style Selector="ComboBox.cell">
+    <Setter Property="MinHeight" Value="30" />
+    <Setter Property="CornerRadius" Value="0" />
+    <Setter Property="Padding" Value="10,0,0,0" />
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
+  <Style Selector="ComboBox.cell:pointerover /template/ Border#Background">
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="BorderThickness" Value="0" />
+  </Style>
 </Styles>

@@ -1,24 +1,63 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ed="using:Yaapic.ViewModels.Editing"
+             x:Name="Root"
              x:Class="Yaapic.App.Avalonia.Views.KeyValueEditorView"
              x:DataType="ed:KeyValueEditorViewModel">
-  <ScrollViewer>
-    <ItemsControl ItemsSource="{Binding Rows}">
-      <ItemsControl.ItemTemplate>
-        <DataTemplate x:DataType="ed:KeyValueRowViewModel">
-          <Grid ColumnDefinitions="Auto,*,*,Auto" Margin="0,0,0,4">
-            <CheckBox Grid.Column="0" Margin="0,0,8,0" IsChecked="{Binding Enabled, Mode=TwoWay}" />
-            <TextBox Grid.Column="1" Margin="0,0,8,0" PlaceholderText="Key" Text="{Binding Key, Mode=TwoWay}" />
-            <TextBox Grid.Column="2" Margin="0,0,8,0" PlaceholderText="Value" Text="{Binding Value, Mode=TwoWay}" />
-            <Button Grid.Column="3" Classes="icon" AutomationProperties.Name="Remove row" ToolTip.Tip="Remove row" IsVisible="{Binding !IsEmpty}"
-                    Command="{Binding $parent[ItemsControl].((ed:KeyValueEditorViewModel)DataContext).RemoveRowCommand}"
-                    CommandParameter="{Binding}">
-              <PathIcon Data="{StaticResource YaapicGlyphClose}" />
-            </Button>
-          </Grid>
-        </DataTemplate>
-      </ItemsControl.ItemTemplate>
-    </ItemsControl>
-  </ScrollViewer>
+  <UserControl.Styles>
+    <Style Selector="Border.row.placeholder">
+      <Setter Property="Opacity" Value="0.6" />
+    </Style>
+    <Style Selector="Border.row.disabled">
+      <Setter Property="Opacity" Value="0.55" />
+    </Style>
+    <Style Selector="Border.row Button.remove">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="Border.row:pointerover Button.remove">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Border.row Button.remove:focus">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+  </UserControl.Styles>
+  <Border BorderThickness="1" BorderBrush="{DynamicResource YaapicBorderDefaultBrush}"
+          CornerRadius="{DynamicResource YaapicRadiusMd}" ClipToBounds="True">
+    <DockPanel>
+      <Grid DockPanel.Dock="Top" Height="28" ColumnDefinitions="36,*,2*,36"
+            Background="{DynamicResource YaapicSurfaceSidebarBrush}">
+        <TextBlock Grid.Column="1" Classes="caption" VerticalAlignment="Center" Margin="10,0"
+                   Text="{Binding KeyHeader, ElementName=Root}" />
+        <Border Grid.Column="2" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource YaapicBorderDefaultBrush}">
+          <TextBlock Classes="caption" VerticalAlignment="Center" Margin="10,0"
+                     Text="{Binding ValueHeader, ElementName=Root}" />
+        </Border>
+      </Grid>
+      <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Rows}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="ed:KeyValueRowViewModel">
+              <Border Classes="row" Classes.placeholder="{Binding IsEmpty}" Classes.disabled="{Binding !Enabled}"
+                      Height="30" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+                <Grid ColumnDefinitions="36,*,2*,36">
+                  <CheckBox Grid.Column="0" HorizontalAlignment="Center" MinWidth="0" Padding="0"
+                            AutomationProperties.Name="Enabled" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+                  <TextBox Grid.Column="1" Classes="cell" PlaceholderText="Key" Text="{Binding Key, Mode=TwoWay}" />
+                  <Border Grid.Column="2" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+                    <TextBox Classes="cell" PlaceholderText="Value" Text="{Binding Value, Mode=TwoWay}" />
+                  </Border>
+                  <Button Grid.Column="3" Classes="icon remove" HorizontalAlignment="Center"
+                          AutomationProperties.Name="Remove row" ToolTip.Tip="Remove row" IsVisible="{Binding !IsEmpty}"
+                          Command="{Binding $parent[ItemsControl].((ed:KeyValueEditorViewModel)DataContext).RemoveRowCommand}"
+                          CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource YaapicGlyphClose}" />
+                  </Button>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </DockPanel>
+  </Border>
 </UserControl>

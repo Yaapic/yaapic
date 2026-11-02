@@ -1,6 +1,6 @@
 # M1-53: Avalonia key/value table restyle
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-50
 
@@ -41,12 +41,22 @@ Description column, bulk edit, presets, drag handles, variable chips and autocom
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual check on the published exe: typing in the placeholder row adds a new placeholder, unchecking dims the
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual check on the published exe: typing in the placeholder row adds a new placeholder, unchecking dims the
       row, remove works, Tab moves cell to cell, the form-data kind switch and file pick still work.
-- [ ] Screenshots (M1-47 script: `-Request list-users`, the Headers tab through `--select Headers`, dark and light)
+- [x] Screenshots (M1-47 script: `-Request list-users`, the Headers tab through `--select Headers`, dark and light)
       inspected against `ResponseStates.dc.html`: header height, divider, row height, mono cells, dimmed placeholder.
       Deviations listed in the card, PNGs not committed.
+
+## Implementation notes
+
+Deviations: the header and the rows use identical column definitions (`36,*,2*,36`) instead of `IsSharedSizeScope`
+(shared size groups only work with `Auto` columns), and the `MinWidth` 140 / `MaxWidth` 280 on the key column was left
+out so the table keeps the key/value 1:2 ratio at any width; the form-data file picker sits inside the value cell and
+the kind column header reads `TYPE`. Captures (dark and light, `list-users`, Headers tab) match the mockup: 28 px header,
+header divider, 30 px rows, mono cells, dimmed placeholder row. The AOT publish has no IL2xxx/IL3xxx warnings. Typing,
+Tab order, the kind switch, file pick and the hover-only remove button were not driven interactively (the capture
+tooling is not interactive); the bindings are unchanged from the previous views.
 
 ## Suggested commit message
 

@@ -58,7 +58,7 @@
             <Button Content="Save" Classes="accent" Click="OnSave" />
           </StackPanel>
         </Grid>
-        <views:KeyValueEditorView Grid.Row="1" Margin="20,12,20,16"
+        <views:KeyValueEditorView Grid.Row="1" Margin="20,12,20,16" KeyHeader="VARIABLE"
                                   DataContext="{Binding EditedEnvironment.Variables}" />
       </Grid>
       <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Select an environment, or add one."

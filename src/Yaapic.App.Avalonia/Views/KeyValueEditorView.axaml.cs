@@ -1,3 +1,4 @@
+using Avalonia;
 using Avalonia.Controls;
 
 namespace Yaapic.App.Avalonia.Views;
@@ -5,6 +6,28 @@ namespace Yaapic.App.Avalonia.Views;
 /// <summary>Key/value table bound to a <see cref="Yaapic.ViewModels.Editing.KeyValueEditorViewModel"/>.</summary>
 public sealed partial class KeyValueEditorView : UserControl
 {
+    /// <summary>Identifies <see cref="KeyHeader"/>.</summary>
+    public static readonly StyledProperty<string> KeyHeaderProperty =
+        AvaloniaProperty.Register<KeyValueEditorView, string>(nameof(KeyHeader), "KEY");
+
+    /// <summary>Identifies <see cref="ValueHeader"/>.</summary>
+    public static readonly StyledProperty<string> ValueHeaderProperty =
+        AvaloniaProperty.Register<KeyValueEditorView, string>(nameof(ValueHeader), "VALUE");
+
     /// <summary>Creates the view.</summary>
     public KeyValueEditorView() => InitializeComponent();
+
+    /// <summary>Gets or sets the caption of the key column.</summary>
+    public string KeyHeader
+    {
+        get => GetValue(KeyHeaderProperty);
+        set => SetValue(KeyHeaderProperty, value);
+    }
+
+    /// <summary>Gets or sets the caption of the value column.</summary>
+    public string ValueHeader
+    {
+        get => GetValue(ValueHeaderProperty);
+        set => SetValue(ValueHeaderProperty, value);
+    }
 }
