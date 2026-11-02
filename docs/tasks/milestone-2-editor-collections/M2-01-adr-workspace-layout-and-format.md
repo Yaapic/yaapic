@@ -1,6 +1,6 @@
 # M2-01: ADR 0008 and file format extensions
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -54,10 +54,10 @@ Any code. Later cards implement and test each rule.
 
 ## Acceptance criteria
 
-- [ ] ADR 0008 exists with the sections above; `docs/adr/README.md` lists it as Accepted.
-- [ ] `docs/file-format.md` shows the full v1 request, folder and globals files, the history line, the ordering rule,
+- [x] ADR 0008 exists with the sections above; `docs/adr/README.md` lists it as Accepted.
+- [x] `docs/file-format.md` shows the full v1 request, folder and globals files, the history line, the ordering rule,
       the query string rule and the precedence rule, with the same level of detail as today.
-- [ ] No code change; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
+- [x] No code change; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
 
 ## Suggested commit message
 
