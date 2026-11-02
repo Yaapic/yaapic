@@ -62,6 +62,26 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenBinary(BodyKind kind) => kind == BodyKind.Binary ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> when no authentication is selected.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenNoAuth(AuthKind kind) => kind == AuthKind.None ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for Basic authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenBasicAuth(AuthKind kind) => kind == AuthKind.Basic ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for Bearer authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenBearerAuth(AuthKind kind) => kind == AuthKind.Bearer ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for API key authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenApiKeyAuth(AuthKind kind) => kind == AuthKind.ApiKey ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when the panel shows a response.</summary>
     /// <param name="state">The panel state.</param>
     /// <returns>The visibility.</returns>

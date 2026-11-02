@@ -152,6 +152,17 @@
                        Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"/>
           </StackPanel>
         </ToggleButton>
+        <ToggleButton x:Name="AuthTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
+          <StackPanel Orientation="Horizontal" Spacing="5">
+            <TextBlock Text="Auth" VerticalAlignment="Center"/>
+            <TextBlock x:Name="AuthBadge" VerticalAlignment="Center" Text="●"
+                       Style="{StaticResource YaapicCountBadgeTextStyle}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Auth.IsActive), Mode=OneWay}"/>
+          </StackPanel>
+        </ToggleButton>
+        <ToggleButton x:Name="SettingsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
+          <TextBlock Text="Settings" VerticalAlignment="Center"/>
+        </ToggleButton>
       </StackPanel>
     </Border>
 
@@ -160,6 +171,14 @@
                             ViewModel="{x:Bind ViewModel.QueryParams, Mode=OneWay}"/>
       <v:KeyValueEditorView x:Name="HeadersPane" Margin="16,12,16,12" Visibility="Collapsed"
                             ViewModel="{x:Bind ViewModel.Headers, Mode=OneWay}"/>
+      <v:AuthEditorView x:Name="AuthPane" Margin="16,12,16,12" Visibility="Collapsed"
+                        ViewModel="{x:Bind ViewModel.Auth, Mode=OneWay}"/>
+      <StackPanel x:Name="SettingsPane" Margin="16,12,16,12" Spacing="16" Visibility="Collapsed">
+        <ToggleSwitch Header="Follow redirects" IsOn="{x:Bind ViewModel.FollowRedirects, Mode=TwoWay}"/>
+        <NumberBox x:Name="TimeoutBox" Header="Timeout (seconds, 0 = default)" Minimum="0" Width="260"
+                   HorizontalAlignment="Left" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="10"
+                   ValueChanged="OnTimeoutChanged"/>
+      </StackPanel>
       <Grid x:Name="BodyPane" Visibility="Collapsed">
         <TextBlock Text="{x:Bind p:TextMap.NoBodyHint(ViewModel.MethodText), Mode=OneWay}" Margin="16,12"
                    Style="{StaticResource YaapicBodySmallTextStyle}"

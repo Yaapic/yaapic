@@ -1,6 +1,6 @@
 # M2-18: WinUI Auth and Settings tabs
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-11, M2-16
 
@@ -30,11 +30,11 @@ OAuth 2.0 and other auth types (M4), a global proxy or TLS setting.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
 - [ ] Manual smoke on the published exe: Basic auth with `user` / `pass` against `https://httpbin.org/basic-auth/user/pass`
       returns 200; a wrong password returns 401; Bearer shows in `https://httpbin.org/bearer`; with Follow redirects off,
       `https://httpbin.org/redirect/1` returns 302.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

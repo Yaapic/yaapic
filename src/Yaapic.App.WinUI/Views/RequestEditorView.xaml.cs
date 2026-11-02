@@ -64,6 +64,16 @@ public sealed partial class RequestEditorView : UserControl
         BodyFormData.IsChecked = vm.BodyKind == BodyKind.FormData;
         BodyBinary.IsChecked = vm.BodyKind == BodyKind.Binary;
         ContentTypeLabel.Text = ContentTypeNames[IndexOf(RequestEditorViewModel.ContentTypes, vm.BodyContentType)];
+        TimeoutBox.Value = vm.TimeoutSeconds;
+    }
+
+    private void OnTimeoutChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    {
+        if (ViewModel is not null)
+        {
+            // An emptied box reports NaN; it means "use the default".
+            ViewModel.TimeoutSeconds = double.IsNaN(args.NewValue) ? 0 : (int)args.NewValue;
+        }
     }
 
     private void OnSaveClick(object sender, RoutedEventArgs e) => SaveRequested?.Invoke(this, e);
@@ -136,6 +146,11 @@ public sealed partial class RequestEditorView : UserControl
         ParamsTab.IsChecked = ReferenceEquals(sender, ParamsTab);
         HeadersTab.IsChecked = ReferenceEquals(sender, HeadersTab);
         BodyTab.IsChecked = ReferenceEquals(sender, BodyTab);
+        AuthTab.IsChecked = ReferenceEquals(sender, AuthTab);
+        SettingsTab.IsChecked = ReferenceEquals(sender, SettingsTab);
+        AuthPane.Visibility = AuthTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        SettingsPane.Visibility = SettingsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        AuthBadge.Style = BadgeStyle(AuthTab);
         ParamsPane.Visibility = ParamsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         HeadersPane.Visibility = HeadersTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         BodyPane.Visibility = BodyTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;

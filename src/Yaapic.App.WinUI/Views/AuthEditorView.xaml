@@ -1,0 +1,42 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.AuthEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.WinUI.Presentation">
+  <StackPanel Spacing="12" MaxWidth="480" HorizontalAlignment="Left">
+    <ComboBox x:Name="KindBox" Header="Type" MinWidth="200" AutomationProperties.Name="Authentication type"
+              SelectionChanged="OnKindChanged">
+      <ComboBoxItem Content="None"/>
+      <ComboBoxItem Content="Basic Auth"/>
+      <ComboBoxItem Content="Bearer Token"/>
+      <ComboBoxItem Content="API Key"/>
+    </ComboBox>
+
+    <TextBlock Text="This request does not use any authentication." Style="{StaticResource YaapicBodySmallTextStyle}"
+               Visibility="{x:Bind p:VisibilityMap.WhenNoAuth(ViewModel.Kind), Mode=OneWay}"/>
+
+    <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenBasicAuth(ViewModel.Kind), Mode=OneWay}">
+      <TextBox Header="Username" PlaceholderText="{}Use {{variable}} to keep secrets out of the file"
+               BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+               Text="{x:Bind ViewModel.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <PasswordBox Header="Password" PlaceholderText="{}Use {{variable}} to keep secrets out of the file"
+                   Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
+    </StackPanel>
+
+    <PasswordBox Header="Token" PlaceholderText="{}Use {{variable}} to keep secrets out of the file"
+                 Password="{x:Bind ViewModel.Token, Mode=TwoWay}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenBearerAuth(ViewModel.Kind), Mode=OneWay}"/>
+
+    <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenApiKeyAuth(ViewModel.Kind), Mode=OneWay}">
+      <TextBox Header="Key" PlaceholderText="{}Use {{variable}} to keep secrets out of the file"
+               BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+               Text="{x:Bind ViewModel.Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <TextBox Header="Value" PlaceholderText="{}Use {{variable}} to keep secrets out of the file"
+               BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+               Text="{x:Bind ViewModel.Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <ComboBox x:Name="LocationBox" Header="Add to" MinWidth="200" SelectionChanged="OnLocationChanged">
+        <ComboBoxItem Content="Header"/>
+        <ComboBoxItem Content="Query Params"/>
+      </ComboBox>
+    </StackPanel>
+  </StackPanel>
+</UserControl>
