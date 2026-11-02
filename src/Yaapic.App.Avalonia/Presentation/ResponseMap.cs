@@ -45,4 +45,19 @@ public static class ResponseMap
         StatusCategory.ServerError => BrushMap.Get("YaapicDangerBackgroundBrush"),
         _ => Brushes.Transparent,
     });
+
+    /// <summary>Converts a body view mode to the index of its option in the Pretty / Raw control.</summary>
+    public static FuncValueConverter<BodyViewMode, int> ViewModeIndex { get; } = new(m => m == BodyViewMode.Raw ? 1 : 0);
+
+    /// <summary>Converts a status category to <see langword="true"/> for the success icon (2xx).</summary>
+    public static FuncValueConverter<StatusCategory, bool> IsSuccess { get; } = new(c => c == StatusCategory.Success);
+
+    /// <summary>Converts a status category to <see langword="true"/> for the client error icon (4xx).</summary>
+    public static FuncValueConverter<StatusCategory, bool> IsClientError { get; } = new(c => c == StatusCategory.ClientError);
+
+    /// <summary>Converts a status category to <see langword="true"/> for the server error icon (5xx).</summary>
+    public static FuncValueConverter<StatusCategory, bool> IsServerError { get; } = new(c => c == StatusCategory.ServerError);
+
+    /// <summary>Converts a status category to <see langword="true"/> for the info icon (1xx, 3xx and unknown codes).</summary>
+    public static FuncValueConverter<StatusCategory, bool> IsInfo { get; } = new(c => c is StatusCategory.Informational or StatusCategory.Redirect);
 }

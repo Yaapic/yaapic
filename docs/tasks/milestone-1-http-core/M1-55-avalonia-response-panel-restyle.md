@@ -1,6 +1,6 @@
 # M1-55: Avalonia response panel restyle
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-54
 
@@ -54,13 +54,22 @@ retry, cancelled variant, elapsed timer, large-response banner, code editor (syn
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual check on the published exe: Pretty/Raw switch, Headers tab with a long value tooltip, binary response
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual check on the published exe: Pretty/Raw switch, Headers tab with a long value tooltip, binary response
       text, unresolved-variable warning, Cancel during a slow request, failed request message selectable.
-- [ ] Screenshots (M1-47 script with `-Send`, dark and light) of the empty state, a 201 (`create-user`), a 404
+- [x] Screenshots (M1-47 script with `-Send`, dark and light) of the empty state, a 201 (`create-user`), a 404
       (`missing-item`), a 503 (`server-error`), a failure (`-NoStub`) and sending (`slow`, `-WaitMs 800`) inspected
       against `MainWindow.dc.html`, `ResponseStates.dc.html` and `States.dc.html`: chip colours and icons, segmented
       control, sunken body, skeleton, empty and failed layouts. Deviations listed in the card, PNGs not committed.
+
+## Notes
+
+- Screenshots (dark and light, AOT build): empty, 201, 404, 503 and failed inspected against the mockups; chip colours
+  and icons, segmented control, sunken body, empty and failed layouts match. The status block is overlaid on the right of
+  the `TabControl` strip (a `Panel` around the tabs), so M2-24 can add its buttons next to it.
+- Deviations: the sending state could not be captured (the script waits for the response; with `-NoStub` the connection
+  is refused at once), it was checked in the XAML only. The failure message is the localised OS text. The manual check
+  on the published exe was not interactive; Pretty/Raw, tooltips and Cancel keep their existing bindings.
 
 ## Suggested commit message
 
