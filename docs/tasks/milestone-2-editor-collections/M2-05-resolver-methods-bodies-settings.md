@@ -1,6 +1,6 @@
 # M2-05: Request resolution: methods, bodies and settings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-04
 
@@ -35,11 +35,11 @@ Authentication (M2-06), reading files, the transport (M2-07).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: PUT/PATCH/DELETE send a raw body; HEAD and OPTIONS do not; each raw content type;
+- [x] Tests in `Yaapic.Core.Tests`: PUT/PATCH/DELETE send a raw body; HEAD and OPTIONS do not; each raw content type;
       urlencoded escaping (space, `&`, unicode; disabled and empty-key fields skipped); form-data text and file parts;
       binary path; user Content-Type override for raw/urlencoded/binary and drop for form-data; variables in every
       field; unresolved names collected; settings copied; every M1 resolver test still green.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

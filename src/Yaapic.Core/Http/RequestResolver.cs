@@ -43,33 +43,73 @@ public static class RequestResolver
 
         var query = Entries(request.QueryParams);
         var headers = Entries(request.Headers);
-        var body = request.Method == HttpMethodKind.Post && request.Body.Kind == BodyKind.Raw ? request.Body : null;
-        var bodyText = body is null ? null : Sub(body.Text);
+        var body = request.Method.AllowsBody() && request.Body.Kind != BodyKind.None ? request.Body : null;
+
+        string? bodyText = null;
+        string? contentType = null;
+        string? filePath = null;
+        List<ResolvedPart>? parts = null;
+        switch (body?.Kind)
+        {
+            case BodyKind.Raw:
+                bodyText = Sub(body.Text);
+                contentType = body.ContentType switch
+                {
+                    RawContentType.Json => "application/json",
+                    RawContentType.Xml => "application/xml",
+                    RawContentType.Html => "text/html; charset=utf-8",
+                    RawContentType.JavaScript => "application/javascript",
+                    _ => "text/plain; charset=utf-8",
+                };
+                break;
+            case BodyKind.UrlEncoded:
+                bodyText = string.Join('&', ResolveFields(body.Fields, Sub)
+                    .Select(f => $"{Uri.EscapeDataString(f.Key)}={Uri.EscapeDataString(f.Value)}"));
+                contentType = "application/x-www-form-urlencoded";
+                break;
+            case BodyKind.FormData:
+                parts = [.. ResolveFields(body.Fields, Sub).Select(f => f.IsFile
+                    ? new ResolvedPart(f.Key, null, f.Value)
+                    : new ResolvedPart(f.Key, f.Value, null))];
+                break;
+            case BodyKind.Binary:
+                var path = Sub(body.FilePath);
+                if (path.Length > 0)
+                {
+                    filePath = path;
+                }
+
+                contentType = "application/octet-stream";
+                break;
+        }
 
         if (query.Count > 0)
         {
             url = AppendQuery(url, query);
         }
 
-        string? contentType = null;
         if (body is not null)
         {
-            contentType = body.ContentType switch
-            {
-                RawContentType.Json => "application/json",
-                RawContentType.Xml => "application/xml",
-                _ => "text/plain; charset=utf-8",
-            };
             var user = headers.Find(h => h.Key.Equals("Content-Type", StringComparison.OrdinalIgnoreCase));
             if (user is not null)
             {
-                contentType = user.Value;
+                if (parts is null)
+                {
+                    contentType = user.Value;
+                }
+
                 headers.RemoveAll(h => h.Key.Equals("Content-Type", StringComparison.OrdinalIgnoreCase));
             }
         }
 
-        return new(request.Method, url, headers, bodyText, contentType, unresolved);
+        return new(request.Method, url, headers, bodyText, contentType, unresolved, parts, filePath,
+            request.Settings.FollowRedirects, request.Settings.TimeoutSeconds);
     }
+
+    static List<(string Key, string Value, bool IsFile)> ResolveFields(IReadOnlyList<FormField> fields, Func<string?, string> sub) =>
+        [.. fields.Where(f => f.Enabled)
+            .Select(f => (Key: sub(f.Key), Value: sub(f.Value), IsFile: f.Kind == FormFieldKind.File))
+            .Where(f => f.Key.Length > 0)];
 
     static string AppendQuery(string url, List<KeyValueEntry> query)
     {

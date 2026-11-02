@@ -97,6 +97,94 @@ public class RequestResolverTests
         Assert.Null(r.BodyContentType);
     }
 
+    [Theory]
+    [InlineData(HttpMethodKind.Put)]
+    [InlineData(HttpMethodKind.Patch)]
+    [InlineData(HttpMethodKind.Delete)]
+    public void Put_patch_delete_send_raw_body(HttpMethodKind method)
+    {
+        var r = R(Req("http://a", method, body: RequestBody.Raw(RawContentType.Json, "{}")));
+        Assert.Equal("{}", r.BodyText);
+        Assert.Equal("application/json", r.BodyContentType);
+    }
+
+    [Theory]
+    [InlineData(HttpMethodKind.Head)]
+    [InlineData(HttpMethodKind.Options)]
+    public void Head_and_options_send_no_body(HttpMethodKind method)
+    {
+        var r = R(Req("http://a", method, body: RequestBody.Raw(RawContentType.Json, "{}")));
+        Assert.Null(r.BodyText);
+        Assert.Null(r.BodyContentType);
+        Assert.Null(R(Req("http://a", method, body: RequestBody.Binary("f"))).BodyFilePath);
+        Assert.Null(R(Req("http://a", method, body: RequestBody.FormData([new("k", "v")]))).Parts);
+    }
+
+    [Theory]
+    [InlineData(RawContentType.Html, "text/html; charset=utf-8")]
+    [InlineData(RawContentType.JavaScript, "application/javascript")]
+    public void Raw_html_and_javascript_content_types(RawContentType type, string expected) =>
+        Assert.Equal(expected, R(Req("http://a", HttpMethodKind.Post, body: RequestBody.Raw(type, "x"))).BodyContentType);
+
+    [Fact]
+    public void UrlEncoded_escapes_and_skips_disabled_and_empty_keys()
+    {
+        var r = R(Req("http://a", HttpMethodKind.Post, body: RequestBody.UrlEncoded(
+            [new("a b", "c&d"), new("é", "ü"), new("off", "1", false), new("{{e}}", "2"), new("k", "{{v}}")])), ("e", ""), ("v", "x y"));
+        Assert.Equal("a%20b=c%26d&%C3%A9=%C3%BC&k=x%20y", r.BodyText);
+        Assert.Equal("application/x-www-form-urlencoded", r.BodyContentType);
+    }
+
+    [Fact]
+    public void FormData_builds_text_and_file_parts()
+    {
+        var r = R(Req("http://a", HttpMethodKind.Post, headers: [new("Content-Type", "x/y"), new("A", "1")], body: RequestBody.FormData(
+            [new("{{k}}", "{{v}}"), new("f", "{{p}}", true, FormFieldKind.File), new("off", "1", false), new("", "2")])),
+            ("k", "key"), ("v", "val"), ("p", "C:\\a.txt"));
+        Assert.Equal([new ResolvedPart("key", "val", null), new ResolvedPart("f", null, "C:\\a.txt")], r.Parts);
+        Assert.Null(r.BodyText);
+        Assert.Null(r.BodyContentType);
+        Assert.Equal([new KeyValueEntry("A", "1")], r.Headers);
+    }
+
+    [Fact]
+    public void Binary_uses_substituted_path_and_content_type()
+    {
+        var r = R(Req("http://a", HttpMethodKind.Put, body: RequestBody.Binary("{{p}}")), ("p", "C:\\f.bin"));
+        Assert.Equal("C:\\f.bin", r.BodyFilePath);
+        Assert.Equal("application/octet-stream", r.BodyContentType);
+        Assert.Null(R(Req("http://a", HttpMethodKind.Put, body: RequestBody.Binary(""))).BodyFilePath);
+    }
+
+    [Fact]
+    public void User_content_type_overrides_urlencoded_and_binary()
+    {
+        var h = new[] { new KeyValueEntry("Content-Type", "x/y") };
+        var u = R(Req("http://a", HttpMethodKind.Post, headers: h, body: RequestBody.UrlEncoded([new("a", "b")])));
+        var b = R(Req("http://a", HttpMethodKind.Post, headers: h, body: RequestBody.Binary("f")));
+        Assert.Equal("x/y", u.BodyContentType);
+        Assert.Equal("x/y", b.BodyContentType);
+        Assert.Empty(u.Headers);
+        Assert.Empty(b.Headers);
+    }
+
+    [Fact]
+    public void Unresolved_collected_from_form_and_binary_bodies()
+    {
+        Assert.Equal(["a", "b", "c"], R(Req("http://a", HttpMethodKind.Post,
+            body: RequestBody.FormData([new("{{a}}", "{{b}}", true, FormFieldKind.Text), new("f", "{{c}}", true, FormFieldKind.File)]))).Unresolved);
+        Assert.Equal(["p"], R(Req("http://a", HttpMethodKind.Post, body: RequestBody.Binary("{{p}}"))).Unresolved);
+    }
+
+    [Fact]
+    public void Settings_are_copied()
+    {
+        var r = R(Req("http://a") with { Settings = new RequestSettings(false, 30) });
+        Assert.False(r.FollowRedirects);
+        Assert.Equal(30, r.TimeoutSeconds);
+        Assert.True(R(Req("http://a")).FollowRedirects);
+    }
+
     [Fact]
     public void Unresolved_aggregated_in_order()
     {
