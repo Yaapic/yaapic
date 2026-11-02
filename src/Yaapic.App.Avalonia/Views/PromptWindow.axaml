@@ -1,17 +1,17 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Yaapic.App.Avalonia.Views.PromptWindow"
-        Width="420" SizeToContent="Height" CanResize="False" ShowInTaskbar="False"
-        WindowStartupLocation="CenterOwner"
-        Background="{DynamicResource YaapicSurfaceElevatedBrush}">
-  <StackPanel Margin="24" Spacing="16">
-    <StackPanel Spacing="4">
-      <TextBlock x:Name="LabelText" />
+        Classes="dialog">
+  <StackPanel>
+    <StackPanel Margin="24,24,24,20" Spacing="8">
+      <TextBlock x:Name="LabelText" Classes="dialogBody" />
       <TextBox x:Name="Input" />
     </StackPanel>
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-      <Button x:Name="OkButton" Content="OK" IsDefault="True" Click="OnOk" />
-      <Button Content="Cancel" IsCancel="True" Click="OnCancel" />
-    </StackPanel>
+    <Border Classes="dialogCommands">
+      <UniformGrid Rows="1">
+        <Button x:Name="OkButton" Classes="accent" Content="OK" IsDefault="True" Click="OnOk" />
+        <Button Content="Cancel" IsCancel="True" Click="OnCancel" />
+      </UniformGrid>
+    </Border>
   </StackPanel>
 </Window>

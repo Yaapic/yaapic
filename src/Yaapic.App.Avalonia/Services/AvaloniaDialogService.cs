@@ -1,6 +1,8 @@
 using Avalonia.Controls;
 using Avalonia.Input.Platform;
-using Avalonia.Layout;
+using Avalonia;
+using Avalonia.Controls.Primitives;
+using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Yaapic.App.Avalonia.Views;
@@ -26,14 +28,14 @@ public sealed class AvaloniaDialogService : IDialogService
         $"Save changes to '{itemName}'?",
         "Your changes will be lost if you don't save them.",
         UnsavedChoice.Cancel,
-        ("Save", UnsavedChoice.Save), ("Don't save", UnsavedChoice.Discard), ("Cancel", UnsavedChoice.Cancel));
+        ("Save", UnsavedChoice.Save, "accent"), ("Don't save", UnsavedChoice.Discard, null), ("Cancel", UnsavedChoice.Cancel, null));
 
     /// <inheritdoc />
     public async Task<bool> ConfirmDeleteAsync(string itemName) => await ShowAsync(
         $"Delete '{itemName}'?",
         "The request file will be deleted from the workspace.",
         false,
-        ("Delete", true), ("Cancel", false));
+        ("Delete", true, "danger"), ("Cancel", false, null));
 
     /// <inheritdoc />
     public async Task<string?> PromptTextAsync(string title, string label, string initialText)
@@ -92,40 +94,40 @@ public sealed class AvaloniaDialogService : IDialogService
         }
     }
 
-    private async Task<T> ShowAsync<T>(string title, string body, T dismissed, params (string Text, T Result)[] buttons)
+    private async Task<T> ShowAsync<T>(string title, string body, T dismissed, params (string Text, T Result, string? Class)[] buttons)
     {
         if (_owner() is not { } owner)
         {
             return dismissed;
         }
 
-        var dialog = new Window
+        var dialog = new Window { Title = title, Classes = { "dialog" } };
+        var row = new UniformGrid { Rows = 1 };
+        foreach (var (text, result, cls) in buttons)
         {
-            Title = title,
-            Width = 420,
-            SizeToContent = SizeToContent.Height,
-            CanResize = false,
-            ShowInTaskbar = false,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner,
-        };
-        dialog.Bind(Window.BackgroundProperty, dialog.GetResourceObservable("YaapicSurfaceElevatedBrush"));
-        var row = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = HorizontalAlignment.Right, Spacing = 8 };
-        foreach (var (text, result) in buttons)
-        {
-            var button = new Button { Content = text };
+            var isDismiss = EqualityComparer<T>.Default.Equals(result, dismissed);
+            var button = new Button { Content = text, IsDefault = isDismiss, IsCancel = isDismiss };
+            if (cls is not null)
+            {
+                button.Classes.Add(cls);
+            }
+
             button.Click += (_, _) => dialog.Close(result);
             row.Children.Add(button);
         }
 
+        var titleText = new TextBlock { Text = title, TextWrapping = TextWrapping.Wrap };
+        titleText.Classes.Add("title");
+        var bodyText = new TextBlock { Text = body };
+        bodyText.Classes.Add("dialogBody");
+        var commands = new Border { Child = row };
+        commands.Classes.Add("dialogCommands");
         dialog.Content = new StackPanel
         {
-            Margin = new global::Avalonia.Thickness(24),
-            Spacing = 16,
             Children =
             {
-                new TextBlock { Text = title, FontSize = 16, FontWeight = global::Avalonia.Media.FontWeight.SemiBold, TextWrapping = global::Avalonia.Media.TextWrapping.Wrap },
-                new TextBlock { Text = body, TextWrapping = global::Avalonia.Media.TextWrapping.Wrap },
-                row,
+                new StackPanel { Margin = new Thickness(24, 24, 24, 20), Spacing = 8, Children = { titleText, bodyText } },
+                commands,
             },
         };
         return await Dispatcher.UIThread.InvokeAsync(() => dialog.ShowDialog<T>(owner)) ?? dismissed;

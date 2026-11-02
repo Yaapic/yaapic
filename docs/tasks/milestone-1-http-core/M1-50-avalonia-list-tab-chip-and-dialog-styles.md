@@ -1,6 +1,6 @@
 # M1-50: Avalonia control styles: lists, tabs, chips, feedback and dialogs
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-49
 
@@ -58,9 +58,9 @@ Applying the styles to the screens (M1-51 onward), toasts, notifications, toolti
 
 ## Acceptance criteria
 
-- [ ] No `#` colour literal in `Styles/`; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
-- [ ] Manual check on the published exe: close a dirty tab, the unsaved dialog shows the overlay surface, 20 px title
+- [x] No `#` colour literal in `Styles/`; `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings; published exe starts and exits cleanly.
+- [x] Manual check on the published exe: close a dirty tab, the unsaved dialog shows the overlay surface, 20 px title
       and a raised footer with the accent Save; delete a request from the sidebar, Delete is the danger button.
       Screenshot (`--open unsaved`, dark and light) inspected against `DSComposants2.dc.html` ("ContentDialog"),
       deviations noted in the card, PNGs not committed. The other classes have no screen yet: they are checked by
@@ -69,3 +69,8 @@ Applying the styles to the screens (M1-51 onward), toasts, notifications, toolti
 ## Suggested commit message
 
 `feat(avalonia): add list, tab, chip, feedback and dialog styles`
+
+## Notes
+
+Manual check on the AOT exe (`--open unsaved`, dark and light): overlay surface, 20 px title, secondary body text, raised
+footer with a top border and equal-width buttons, accent Save. No deviation from the "ContentDialog" mockup noticed.
