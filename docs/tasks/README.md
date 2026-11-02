@@ -54,7 +54,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-25](milestone-1-http-core/M1-25-winui-request-editor.md) | WinUI request editor view | windows | M1-24 | done |
 | [M1-26](milestone-1-http-core/M1-26-winui-response-viewer.md) | WinUI response viewer | windows | M1-25 | done |
 | [M1-27](milestone-1-http-core/M1-27-winui-environments.md) | WinUI environment management | windows | M1-25 | done |
-| [M1-28](milestone-1-http-core/M1-28-avalonia-shell-and-tabs.md) | Avalonia shell: sidebar, tabs and dialogs | unix | M0-05, M1-23 | todo |
+| [M1-28](milestone-1-http-core/M1-28-avalonia-shell-and-tabs.md) | Avalonia shell: sidebar, tabs and dialogs | unix | M0-05, M1-23 | done |
 | [M1-29](milestone-1-http-core/M1-29-avalonia-request-editor.md) | Avalonia request editor view | unix | M1-28 | todo |
 | [M1-30](milestone-1-http-core/M1-30-avalonia-response-viewer.md) | Avalonia response viewer | unix | M1-29 | todo |
 | [M1-31](milestone-1-http-core/M1-31-avalonia-environments.md) | Avalonia environment management | unix | M1-29 | todo |
@@ -90,3 +90,4 @@ equivalent Avalonia visual cards are out of scope for now and will be written af
 | M8 | Collaboration (Git, versions, comments, OpenAPI editor and docs) | planned |
 | M9 | Flows, plugins, optional AI assistant | planned |
 | M10 | Polish (accessibility, localization, onboarding, updates, packaging, hardening) | planned |
+

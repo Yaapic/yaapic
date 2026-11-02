@@ -1,7 +1,98 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Yaapic.ViewModels.Shell"
+        xmlns:req="using:Yaapic.ViewModels.Requests"
+        xmlns:env="using:Yaapic.ViewModels.Environments"
+        xmlns:p="using:Yaapic.App.Avalonia.Presentation"
         x:Class="Yaapic.App.Avalonia.MainWindow"
+        x:DataType="vm:ShellViewModel"
         Title="Yaapic"
         Width="1280" Height="800"
         MinWidth="900" MinHeight="600"
-        Background="{DynamicResource YaapicSurfaceAppBrush}" />
+        Background="{DynamicResource YaapicSurfaceAppBrush}">
+  <Grid RowDefinitions="Auto,Auto,*">
+    <Border Grid.Row="0" Height="48" Padding="12,0" BorderThickness="0,0,0,1"
+            BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="8">
+        <ComboBox Width="200" PlaceholderText="No environment"
+                  ItemsSource="{Binding Environments.Environments}"
+                  SelectedItem="{Binding Environments.ActiveEnvironment, Mode=TwoWay}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="env:EnvironmentItemViewModel">
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <Button Content="Theme">
+          <Button.Flyout>
+            <MenuFlyout>
+              <MenuItem Header="Dark" Click="OnThemeDark" />
+              <MenuItem Header="Light" Click="OnThemeLight" />
+              <MenuItem Header="System" Click="OnThemeSystem" />
+            </MenuFlyout>
+          </Button.Flyout>
+        </Button>
+      </StackPanel>
+    </Border>
+
+    <Border Grid.Row="1" Padding="12,6" Background="{DynamicResource YaapicDangerBackgroundBrush}"
+            IsVisible="{Binding Tabs.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding Tabs.LastError}" Foreground="{DynamicResource YaapicDangerBrush}" />
+    </Border>
+
+    <Grid Grid.Row="2" ColumnDefinitions="260,*">
+      <Border Grid.Column="0" Background="{DynamicResource YaapicSurfaceSidebarBrush}"
+              BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+        <Grid RowDefinitions="Auto,Auto,*" Margin="12" RowSpacing="8">
+          <Button Grid.Row="0" Content="New" HorizontalAlignment="Stretch"
+                  Command="{Binding Requests.NewRequestCommand}" />
+          <TextBox x:Name="FilterBox" Grid.Row="1" PlaceholderText="Filter requests"
+                   Text="{Binding Requests.FilterText, Mode=TwoWay}" />
+          <ListBox Grid.Row="2" Background="Transparent" ItemsSource="{Binding Requests.Items}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="req:RequestListItem">
+                <Grid ColumnDefinitions="44,*" Background="Transparent" Tapped="OnRequestTapped">
+                  <Grid.ContextMenu>
+                    <ContextMenu>
+                      <MenuItem Header="Delete" Click="OnDeleteRequest" />
+                    </ContextMenu>
+                  </Grid.ContextMenu>
+                  <TextBlock Grid.Column="0" Text="{Binding MethodText}" FontFamily="monospace" FontSize="12"
+                             VerticalAlignment="Center"
+                             Foreground="{Binding Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
+                  <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+        </Grid>
+      </Border>
+
+      <Grid Grid.Column="1">
+        <TabControl ItemsSource="{Binding Tabs.Tabs}" SelectedItem="{Binding Tabs.ActiveTab, Mode=TwoWay}"
+                    IsVisible="{Binding !Tabs.IsEmpty}" Margin="0,0,40,0">
+          <TabControl.ItemTemplate>
+            <DataTemplate x:DataType="req:RequestEditorViewModel">
+              <StackPanel Orientation="Horizontal" Spacing="8">
+                <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
+                <Button Content="✕" Padding="4,0" Background="Transparent" Click="OnCloseTab" />
+              </StackPanel>
+            </DataTemplate>
+          </TabControl.ItemTemplate>
+          <TabControl.ContentTemplate>
+            <DataTemplate x:DataType="req:RequestEditorViewModel">
+              <TextBlock Text="{Binding Url}" Margin="16" />
+            </DataTemplate>
+          </TabControl.ContentTemplate>
+        </TabControl>
+        <Button Content="+" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,4,8,0"
+                IsVisible="{Binding !Tabs.IsEmpty}" Click="OnAddTab" />
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+                    IsVisible="{Binding Tabs.IsEmpty}">
+          <TextBlock Text="No request open" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <Button Content="New request" HorizontalAlignment="Center" Click="OnAddTab" />
+        </StackPanel>
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>

@@ -1,6 +1,6 @@
 # M1-28: Avalonia shell: sidebar, tabs and dialogs
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M0-05, M1-23
 
@@ -33,10 +33,16 @@ Same as M1-24.
 
 ## Acceptance criteria
 
-- [ ] `dotnet publish src/Yaapic.App.Avalonia -c Release -r <host rid> -p:PublishAot=true` with 0 IL2xxx/IL3xxx warnings.
-- [ ] Smoke run on the published binary: same checks as M1-24.
-- [ ] Architecture tests green with the new rule.
+- [x] `dotnet publish src/Yaapic.App.Avalonia -c Release -r <host rid> -p:PublishAot=true` with 0 IL2xxx/IL3xxx warnings.
+- [x] Smoke run on the published binary: same checks as M1-24.
+- [x] Architecture tests green with the new rule.
 
 ## Suggested commit message
 
 `feat(avalonia): add shell with request sidebar, tabs and dialogs`
+
+
+## Notes
+
+- Verified on Windows (win-x64): AOT publish with 0 warnings, published exe starts and exits with code 0 on CloseMainWindow. Not verified: macOS and Linux runs, the macOS Meta-key shortcuts, and UI-driven Ctrl+T / Ctrl+W (covered by ViewModel tests).
+- Tab selection in the sidebar is not mirrored and requests open on tap; there is no `--workspace` / `--theme` option yet.
