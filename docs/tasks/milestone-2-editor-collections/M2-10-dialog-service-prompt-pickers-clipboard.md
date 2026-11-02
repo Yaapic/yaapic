@@ -1,6 +1,6 @@
 # M2-10: Dialog service: text prompt, file pickers and clipboard
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-01
 
@@ -31,10 +31,10 @@ The platform implementations (M2-15, M2-20) and every caller (later ViewModel ca
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` (or a new small test file next to the doubles' users): the fake returns scripted
+- [x] Tests in `Yaapic.ViewModels.Tests` (or a new small test file next to the doubles' users): the fake returns scripted
       answers in order and records its calls; an `IDialogService` implementation that overrides nothing returns the
       defaults.
-- [ ] Whole solution builds with 0 warnings (App projects untouched).
+- [x] Whole solution builds with 0 warnings (App projects untouched).
 
 ## Suggested commit message
 
