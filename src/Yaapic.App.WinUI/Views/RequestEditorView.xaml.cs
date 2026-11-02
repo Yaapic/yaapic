@@ -40,7 +40,7 @@ public sealed partial class RequestEditorView : UserControl
         }
     }
 
-    private static readonly string[] ContentTypeNames = ["JSON", "Text", "XML"];
+    private static readonly string[] ContentTypeNames = ["JSON", "Text", "XML", "HTML", "JavaScript"];
 
     /// <summary>Gets or sets the edited request.</summary>
     public RequestEditorViewModel? ViewModel
@@ -58,8 +58,11 @@ public sealed partial class RequestEditorView : UserControl
         }
 
         // The pickers are index based: boxed managed enums cannot cross into XAML under Native AOT.
-        BodyNone.IsChecked = vm.BodyKind != BodyKind.Raw;
+        BodyNone.IsChecked = vm.BodyKind == BodyKind.None;
         BodyRaw.IsChecked = vm.BodyKind == BodyKind.Raw;
+        BodyUrlEncoded.IsChecked = vm.BodyKind == BodyKind.UrlEncoded;
+        BodyFormData.IsChecked = vm.BodyKind == BodyKind.FormData;
+        BodyBinary.IsChecked = vm.BodyKind == BodyKind.Binary;
         ContentTypeLabel.Text = ContentTypeNames[IndexOf(RequestEditorViewModel.ContentTypes, vm.BodyContentType)];
     }
 
@@ -110,7 +113,11 @@ public sealed partial class RequestEditorView : UserControl
     {
         if (ViewModel is not null)
         {
-            ViewModel.BodyKind = ReferenceEquals(sender, BodyRaw) ? BodyKind.Raw : BodyKind.None;
+            ViewModel.BodyKind = ReferenceEquals(sender, BodyRaw) ? BodyKind.Raw
+                : ReferenceEquals(sender, BodyUrlEncoded) ? BodyKind.UrlEncoded
+                : ReferenceEquals(sender, BodyFormData) ? BodyKind.FormData
+                : ReferenceEquals(sender, BodyBinary) ? BodyKind.Binary
+                : BodyKind.None;
         }
     }
 

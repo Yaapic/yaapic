@@ -28,6 +28,13 @@ public static class TextMap
     {
         RawContentType.Json => "json",
         RawContentType.Xml => "xml",
+        RawContentType.Html => "html",
+        RawContentType.JavaScript => "javascript",
         _ => "text",
     };
+
+    /// <summary>Gets the index of a form field kind in the Text/File picker.</summary>
+    /// <param name="kind">The field kind.</param>
+    /// <returns>0 for text, 1 for file.</returns>
+    public static int KindIndex(FormFieldKind kind) => kind == FormFieldKind.File ? 1 : 0;
 }

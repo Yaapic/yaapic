@@ -47,6 +47,21 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenRaw(BodyKind kind) => kind == BodyKind.Raw ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the body is url-encoded.</summary>
+    /// <param name="kind">The body kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenUrlEncoded(BodyKind kind) => kind == BodyKind.UrlEncoded ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the body is multipart form-data.</summary>
+    /// <param name="kind">The body kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenFormData(BodyKind kind) => kind == BodyKind.FormData ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the body is a binary file.</summary>
+    /// <param name="kind">The body kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenBinary(BodyKind kind) => kind == BodyKind.Binary ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when the panel shows a response.</summary>
     /// <param name="state">The panel state.</param>
     /// <returns>The visibility.</returns>

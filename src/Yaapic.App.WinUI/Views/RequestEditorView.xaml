@@ -161,55 +161,80 @@
       <v:KeyValueEditorView x:Name="HeadersPane" Margin="16,12,16,12" Visibility="Collapsed"
                             ViewModel="{x:Bind ViewModel.Headers, Mode=OneWay}"/>
       <Grid x:Name="BodyPane" Visibility="Collapsed">
-        <Grid.RowDefinitions>
-          <RowDefinition Height="Auto"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Grid Padding="16,6" ColumnSpacing="14">
-          <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-          </Grid.ColumnDefinitions>
-          <StackPanel Orientation="Horizontal" Spacing="14">
-            <RadioButton x:Name="BodyNone" Content="none" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
-                         FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
-            <RadioButton x:Name="BodyRaw" Content="raw" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
-                         FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
-          </StackPanel>
-          <Button Grid.Column="1" Height="24" MinHeight="24" Padding="8,0" BorderThickness="1"
-                  Background="Transparent" CornerRadius="4" FontWeight="Normal"
-                  BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
-                  FontSize="{StaticResource YaapicFontSizeBodySm}" AutomationProperties.Name="Content type"
-                  Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}">
-            <StackPanel Orientation="Horizontal" Spacing="5">
-              <TextBlock x:Name="ContentTypeLabel" VerticalAlignment="Center"/>
-              <Viewbox Width="10" Height="10" VerticalAlignment="Center">
+        <TextBlock Text="{x:Bind p:TextMap.NoBodyHint(ViewModel.MethodText), Mode=OneWay}" Margin="16,12"
+                   Style="{StaticResource YaapicBodySmallTextStyle}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.AllowsBody), Mode=OneWay}"/>
+        <Grid Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.AllowsBody), Mode=OneWay}">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+          </Grid.RowDefinitions>
+          <Grid Padding="16,6" ColumnSpacing="14">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Spacing="14">
+              <RadioButton x:Name="BodyNone" Content="None" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+                           FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
+              <RadioButton x:Name="BodyRaw" Content="Raw" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+                           FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
+              <RadioButton x:Name="BodyUrlEncoded" Content="x-www-form-urlencoded" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+                           FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
+              <RadioButton x:Name="BodyFormData" Content="form-data" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+                           FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
+              <RadioButton x:Name="BodyBinary" Content="Binary" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+                           FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
+            </StackPanel>
+            <Button Grid.Column="1" Height="24" MinHeight="24" Padding="8,0" BorderThickness="1"
+                    Background="Transparent" CornerRadius="4" FontWeight="Normal"
+                    BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                    FontSize="{StaticResource YaapicFontSizeBodySm}" AutomationProperties.Name="Content type"
+                    Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}">
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock x:Name="ContentTypeLabel" VerticalAlignment="Center"/>
+                <Viewbox Width="10" Height="10" VerticalAlignment="Center">
                   <Canvas Width="24" Height="24">
                     <Path Data="M6 9l6 6 6-6" Stroke="{ThemeResource YaapicTextTertiaryBrush}" StrokeThickness="2.4"
                           StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
                   </Canvas>
                 </Viewbox>
-            </StackPanel>
-            <Button.Flyout>
-              <MenuFlyout>
-                <MenuFlyoutItem Text="JSON" Tag="0" Click="OnContentTypeClick"/>
-                <MenuFlyoutItem Text="Text" Tag="1" Click="OnContentTypeClick"/>
-                <MenuFlyoutItem Text="XML" Tag="2" Click="OnContentTypeClick"/>
-              </MenuFlyout>
-            </Button.Flyout>
-          </Button>
-          <TextBlock Grid.Column="2" Text="{x:Bind p:TextMap.NoBodyHint(ViewModel.MethodText), Mode=OneWay}" VerticalAlignment="Center"
-                     HorizontalAlignment="Right" Style="{StaticResource YaapicBodySmallTextStyle}"
-                     Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.AllowsBody), Mode=OneWay}"/>
+              </StackPanel>
+              <Button.Flyout>
+                <MenuFlyout>
+                  <MenuFlyoutItem Text="JSON" Tag="0" Click="OnContentTypeClick"/>
+                  <MenuFlyoutItem Text="Text" Tag="1" Click="OnContentTypeClick"/>
+                  <MenuFlyoutItem Text="XML" Tag="2" Click="OnContentTypeClick"/>
+                  <MenuFlyoutItem Text="HTML" Tag="3" Click="OnContentTypeClick"/>
+                  <MenuFlyoutItem Text="JavaScript" Tag="4" Click="OnContentTypeClick"/>
+                </MenuFlyout>
+              </Button.Flyout>
+            </Button>
+          </Grid>
+          <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+                  BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
+            <Grid>
+              <v:CodeEditorView AutomationProperties.Name="Body"
+                                Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"
+                                EditorLanguage="{x:Bind p:TextMap.Language(ViewModel.BodyContentType), Mode=OneWay}"
+                                Text="{x:Bind ViewModel.BodyText, Mode=TwoWay}"/>
+              <v:KeyValueEditorView Margin="16,6" VerticalAlignment="Top"
+                                    Visibility="{x:Bind p:VisibilityMap.WhenUrlEncoded(ViewModel.BodyKind), Mode=OneWay}"
+                                    ViewModel="{x:Bind ViewModel.UrlEncodedFields, Mode=OneWay}"/>
+              <v:FormDataEditorView Margin="16,6" VerticalAlignment="Top"
+                                    Visibility="{x:Bind p:VisibilityMap.WhenFormData(ViewModel.BodyKind), Mode=OneWay}"
+                                    ViewModel="{x:Bind ViewModel.FormData, Mode=OneWay}"/>
+              <StackPanel Orientation="Horizontal" Spacing="8" Margin="16,6" VerticalAlignment="Top"
+                          Visibility="{x:Bind p:VisibilityMap.WhenBinary(ViewModel.BodyKind), Mode=OneWay}">
+                <TextBox IsReadOnly="True" Width="420" PlaceholderText="No file selected"
+                         BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                         FontFamily="{StaticResource YaapicMonoFont}" AutomationProperties.Name="Binary file path"
+                         Text="{x:Bind ViewModel.BinaryFilePath, Mode=OneWay}"/>
+                <Button Content="Select file" Command="{x:Bind ViewModel.PickBinaryFileCommand}"/>
+              </StackPanel>
+            </Grid>
+          </Border>
         </Grid>
-        <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
-                BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
-          <v:CodeEditorView AutomationProperties.Name="Body"
-                            Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"
-                            EditorLanguage="{x:Bind p:TextMap.Language(ViewModel.BodyContentType), Mode=OneWay}"
-                            Text="{x:Bind ViewModel.BodyText, Mode=TwoWay}"/>
-        </Border>
       </Grid>
     </Grid>
 

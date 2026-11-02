@@ -1,6 +1,6 @@
 # M2-17: WinUI body pane: all body kinds
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-12, M2-15, M2-16
 
@@ -31,10 +31,10 @@ Drag and drop of files, body size warnings, JSON validation.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
 - [ ] Manual smoke on the published exe: POST `https://httpbin.org/post` with url-encoded `a=1`, then with form-data
       `a=1` plus a file field, then with a binary file: the response echoes each (httpbin shows `form`, `files`, `data`).
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
