@@ -1,6 +1,6 @@
 # M2-07: HttpClient transport: all methods, bodies, redirects and timeout
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-06
 
@@ -31,13 +31,13 @@ Cookies, proxy, TLS options, upload progress, the response side.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` against the loopback server (extend the helper only if it does not already
+- [x] Tests in `Yaapic.Infrastructure.Tests` against the loopback server (extend the helper only if it does not already
       echo method, headers and body bytes): each method arrives with the right verb; HEAD returns no body; urlencoded
       body; multipart with a text and a file part (boundary header present, file bytes intact); binary file bytes intact;
       unreadable file -> `FileUnreadable` with no request received; a 302 is followed by default and returned untouched
       when `FollowRedirects` is false; a per-request timeout of 1 s against a `/delay/3000` endpoint times out; the M1
       transport tests still pass.
-- [ ] 0 warnings; AOT analyzers clean.
+- [x] 0 warnings; AOT analyzers clean.
 
 ## Suggested commit message
 

@@ -35,7 +35,7 @@ public class HttpClientTransportTests
         });
 
     private static HttpClientTransport Create(StubHandler h, TimeSpan? timeout = null) =>
-        new(new HttpClient(h), timeout ?? TimeSpan.FromSeconds(5));
+        new(new HttpClient(h), new HttpClient(h), timeout ?? TimeSpan.FromSeconds(5));
 
     private static ResolvedRequest Req(string url, HttpMethodKind m = HttpMethodKind.Get, KeyValueEntry[]? headers = null,
         string? body = null, string? contentType = null) =>

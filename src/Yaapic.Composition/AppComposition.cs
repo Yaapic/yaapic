@@ -26,7 +26,7 @@ public static class AppComposition
         var requestStore = new FileRequestStore(workspaceRoot);
         var environmentStore = new FileEnvironmentStore(workspaceRoot);
         var sessionStore = new FileSessionStore(workspaceRoot);
-        var sender = new RequestSender(new HttpClientTransport(DefaultHttpClient.Create(), TimeSpan.FromSeconds(30)));
+        var sender = new RequestSender(new HttpClientTransport(DefaultHttpClient.Create(), DefaultHttpClient.CreateNonRedirecting(), TimeSpan.FromSeconds(30)));
         var environments = new EnvironmentsViewModel(environmentStore, dialogs);
         var tabs = new TabsViewModel(
             requestStore,
