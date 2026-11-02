@@ -21,6 +21,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private string _name = "";
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(AllowsBody))]
     private HttpMethodKind _method;
 
     [ObservableProperty]
@@ -35,6 +36,12 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     [ObservableProperty]
     private string _bodyText = "";
+
+    [ObservableProperty]
+    private bool _followRedirects = true;
+
+    [ObservableProperty]
+    private int _timeoutSeconds;
 
     [ObservableProperty]
     private bool _isNew;
@@ -57,16 +64,25 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         };
         QueryParams.Changed += (_, _) => Refresh();
         Headers.Changed += (_, _) => Refresh();
+        Auth.Changed += (_, _) => Refresh();
     }
 
     /// <summary>Gets the HTTP methods offered by the editor.</summary>
-    public static IReadOnlyList<HttpMethodKind> Methods { get; } = [HttpMethodKind.Get, HttpMethodKind.Post];
+    public static IReadOnlyList<HttpMethodKind> Methods { get; } = [
+        HttpMethodKind.Get,
+        HttpMethodKind.Post,
+        HttpMethodKind.Put,
+        HttpMethodKind.Patch,
+        HttpMethodKind.Delete,
+        HttpMethodKind.Head,
+        HttpMethodKind.Options,
+    ];
 
     /// <summary>Gets the body kinds offered by the editor.</summary>
     public static IReadOnlyList<BodyKind> BodyKinds { get; } = [BodyKind.None, BodyKind.Raw];
 
     /// <summary>Gets the raw content types offered by the editor.</summary>
-    public static IReadOnlyList<RawContentType> ContentTypes { get; } = [RawContentType.Json, RawContentType.Text, RawContentType.Xml];
+    public static IReadOnlyList<RawContentType> ContentTypes { get; } = [RawContentType.Json, RawContentType.Text, RawContentType.Xml, RawContentType.Html, RawContentType.JavaScript];
 
     /// <summary>Gets the request identifier.</summary>
     public Guid Id { get; }
@@ -76,6 +92,12 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     /// <summary>Gets the header editor.</summary>
     public KeyValueEditorViewModel Headers { get; } = new();
+
+    /// <summary>Gets the authentication editor.</summary>
+    public AuthEditorViewModel Auth { get; } = new();
+
+    /// <summary>Gets a value indicating whether the current method carries a body.</summary>
+    public bool AllowsBody => Method.AllowsBody();
 
     /// <summary>Gets the response panel; it keeps the last response of this tab.</summary>
     public ResponsePanelViewModel Response { get; } = new();
@@ -93,7 +115,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     public string Title => DisplayName + (IsDirty ? " •" : "");
 
     /// <summary>Gets the upper-case method label shown in the tab header.</summary>
-    public string MethodText => Method == HttpMethodKind.Post ? "POST" : "GET";
+    public string MethodText => Method.ToText();
 
     /// <summary>Gets the tab name without the dirty marker: the trimmed name, or "New Request" when it is empty.</summary>
     public string DisplayName => Name.Trim().Length == 0 ? DefaultName : Name.Trim();
@@ -121,7 +143,10 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             BodyKind = definition.Body.Kind,
             BodyContentType = definition.Body.ContentType,
             BodyText = definition.Body.Text,
+            FollowRedirects = definition.Settings.FollowRedirects,
+            TimeoutSeconds = definition.Settings.TimeoutSeconds,
         };
+        editor.Auth.Load(definition.Auth);
         editor.QueryParams.Load(definition.QueryParams);
         editor.Headers.Load(definition.Headers);
         editor._baseline = editor.ToDefinition();
@@ -146,8 +171,8 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         QueryParams.ToEntries(),
         Headers.ToEntries(),
         new RequestBody(BodyKind, BodyContentType, BodyText),
-        RequestAuth.None,
-        RequestSettings.Default);
+        Auth.ToAuth(),
+        new RequestSettings(FollowRedirects, TimeoutSeconds));
 
     /// <summary>Records the current state as saved: the request is no longer new nor dirty.</summary>
     public void MarkSaved()
@@ -178,6 +203,19 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     partial void OnBodyContentTypeChanged(RawContentType value) => Refresh();
 
     partial void OnBodyTextChanged(string value) => Refresh();
+
+    partial void OnFollowRedirectsChanged(bool value) => Refresh();
+
+    partial void OnTimeoutSecondsChanged(int value)
+    {
+        if (value < 0)
+        {
+            TimeoutSeconds = 0;
+            return;
+        }
+
+        Refresh();
+    }
 
     partial void OnIsNewChanged(bool value) => Refresh();
 

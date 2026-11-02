@@ -35,8 +35,102 @@ public sealed class RequestEditorViewModelTests
         { "header", e => e.Headers.Rows[0].Value = "text/plain", e => e.Headers.Rows[0].Value = "*/*" },
         { "param", e => e.QueryParams.Rows[0].Key = "p", e => e.QueryParams.Rows[0].Key = "page" },
         { "body kind", e => e.BodyKind = BodyKind.None, e => e.BodyKind = BodyKind.Raw },
+        { "auth kind", e => e.Auth.Kind = AuthKind.Bearer, e => e.Auth.Kind = AuthKind.None },
+        { "auth username", e => e.Auth.Username = "u", e => e.Auth.Username = "" },
+        { "auth password", e => e.Auth.Password = "p", e => e.Auth.Password = "" },
+        { "auth token", e => e.Auth.Token = "t", e => e.Auth.Token = "" },
+        { "auth key", e => e.Auth.Key = "k", e => e.Auth.Key = "" },
+        { "auth value", e => e.Auth.Value = "v", e => e.Auth.Value = "" },
+        { "auth location", e => e.Auth.Location = ApiKeyLocation.Query, e => e.Auth.Location = ApiKeyLocation.Header },
+        { "follow redirects", e => e.FollowRedirects = false, e => e.FollowRedirects = true },
+        { "timeout", e => e.TimeoutSeconds = 30, e => e.TimeoutSeconds = 0 },
         { "body text", e => e.BodyText = "[]", e => e.BodyText = "{}" },
     };
+
+    public static TheoryData<HttpMethodKind> AllMethods => new(RequestEditorViewModel.Methods);
+
+    public static TheoryData<RequestAuth> Auths => new()
+    {
+        RequestAuth.None,
+        new RequestAuth(AuthKind.Basic, "user", "pass", "", "", "", ApiKeyLocation.Header),
+        new RequestAuth(AuthKind.Bearer, "", "", "tok", "", "", ApiKeyLocation.Header),
+        new RequestAuth(AuthKind.ApiKey, "", "", "", "X-Key", "secret", ApiKeyLocation.Query),
+    };
+
+    [Fact]
+    public void OffersAllMethodsAndContentTypes()
+    {
+        Assert.Equal(7, RequestEditorViewModel.Methods.Count);
+        Assert.Equal(
+            [RawContentType.Json, RawContentType.Text, RawContentType.Xml, RawContentType.Html, RawContentType.JavaScript],
+            RequestEditorViewModel.ContentTypes);
+    }
+
+    [Theory]
+    [MemberData(nameof(AllMethods))]
+    public void MethodRoundTripsAndAllowsBodyFollowsIt(HttpMethodKind method)
+    {
+        var editor = RequestEditorViewModel.FromDefinition(Sample() with { Method = method }, Sender(), new StubEnvironments());
+        var raised = new List<string?>();
+        editor.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
+
+        Assert.Equal(method, editor.ToDefinition().Method);
+        Assert.Equal(method.ToText(), editor.MethodText);
+        Assert.Equal(method.AllowsBody(), editor.AllowsBody);
+
+        editor.Method = method == HttpMethodKind.Get ? HttpMethodKind.Post : HttpMethodKind.Get;
+
+        Assert.Contains(nameof(RequestEditorViewModel.AllowsBody), raised);
+    }
+
+    [Theory]
+    [MemberData(nameof(Auths))]
+    public void AuthRoundTripsAndLoadIsClean(RequestAuth auth)
+    {
+        var definition = Sample() with { Auth = auth };
+        var editor = RequestEditorViewModel.FromDefinition(definition, Sender(), new StubEnvironments());
+
+        Assert.False(editor.IsDirty);
+        Assert.Equal(auth, editor.Auth.ToAuth());
+        Assert.Equal(auth.Kind != AuthKind.None, editor.Auth.IsActive);
+        Assert.True(editor.ToDefinition().IsEquivalentTo(definition));
+    }
+
+    [Fact]
+    public void SettingsRoundTrip()
+    {
+        var definition = Sample() with { Settings = new RequestSettings(false, 15) };
+        var editor = RequestEditorViewModel.FromDefinition(definition, Sender(), new StubEnvironments());
+
+        Assert.False(editor.FollowRedirects);
+        Assert.Equal(15, editor.TimeoutSeconds);
+        Assert.True(editor.ToDefinition().IsEquivalentTo(definition));
+    }
+
+    [Fact]
+    public void NegativeTimeoutBecomesZero()
+    {
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
+
+        editor.TimeoutSeconds = -5;
+
+        Assert.Equal(0, editor.TimeoutSeconds);
+        Assert.Equal(0, editor.ToDefinition().Settings.TimeoutSeconds);
+    }
+
+    [Fact]
+    public void AuthEditorLoadDoesNotRaiseChanged()
+    {
+        var auth = new AuthEditorViewModel();
+        var count = 0;
+        auth.Changed += (_, _) => count++;
+
+        auth.Load(new RequestAuth(AuthKind.Basic, "u", "p", "", "", "", ApiKeyLocation.Header));
+        Assert.Equal(0, count);
+
+        auth.Username = "x";
+        Assert.True(count > 0);
+    }
 
     [Fact]
     public void RoundTripIsEquivalent()
