@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using Yaapic.App.Avalonia.Presentation;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
 
@@ -10,7 +11,14 @@ namespace Yaapic.App.Avalonia.Views;
 public sealed partial class RequestEditorView : UserControl
 {
     /// <summary>Creates the view.</summary>
-    public RequestEditorView() => InitializeComponent();
+    public RequestEditorView()
+    {
+        InitializeComponent();
+        foreach (var method in RequestEditorViewModel.Methods)
+        {
+            MethodBox.Items.Add(new ComboBoxItem { Content = method.ToText(), Foreground = BrushMap.Method(method) });
+        }
+    }
 
     private RequestEditorViewModel? Editor => DataContext as RequestEditorViewModel;
 
@@ -31,7 +39,7 @@ public sealed partial class RequestEditorView : UserControl
     {
         if (Editor is { } editor && MethodBox.SelectedIndex >= 0)
         {
-            editor.Method = MethodBox.SelectedIndex == 1 ? HttpMethodKind.Post : HttpMethodKind.Get;
+            editor.Method = RequestEditorViewModel.Methods[MethodBox.SelectedIndex];
         }
     }
 

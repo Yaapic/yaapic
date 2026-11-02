@@ -13,8 +13,6 @@
       <ComboBox x:Name="MethodBox" Grid.Column="0" HorizontalAlignment="Stretch"
                 SelectedIndex="{Binding Method, Converter={x:Static p:EditorMap.MethodIndex}, Mode=OneWay}"
                 SelectionChanged="OnMethodChanged">
-        <ComboBoxItem Content="GET" Foreground="{DynamicResource YaapicMethodGetBrush}" />
-        <ComboBoxItem Content="POST" Foreground="{DynamicResource YaapicMethodPostBrush}" />
       </ComboBox>
       <TextBox Grid.Column="1" PlaceholderText="Enter URL or paste text"
                FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding Url, Mode=TwoWay}" />
@@ -25,7 +23,10 @@
     </Grid>
 
     <TabControl Grid.Row="2">
-      <TabItem Header="Params">
+      <TabItem>
+        <TabItem.Header>
+          <TextBlock Text="{Binding QueryParams.ActiveCount, StringFormat='Params ({0})'}" />
+        </TabItem.Header>
         <v:KeyValueEditorView DataContext="{Binding QueryParams}" />
       </TabItem>
       <TabItem Header="Headers">
@@ -45,9 +46,9 @@
               <ComboBoxItem Content="Text" />
               <ComboBoxItem Content="XML" />
             </ComboBox>
-            <TextBlock Text="GET requests are sent without a body" VerticalAlignment="Center"
+            <TextBlock Text="{Binding MethodText, StringFormat='{}{0} requests are sent without a body'}" VerticalAlignment="Center"
                        Foreground="{DynamicResource YaapicTextTertiaryBrush}"
-                       IsVisible="{Binding Method, Converter={x:Static p:EditorMap.IsGet}}" />
+                       IsVisible="{Binding !AllowsBody}" />
           </StackPanel>
           <TextBox Grid.Row="1" AcceptsReturn="True" TextWrapping="NoWrap"
                    FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCode}"

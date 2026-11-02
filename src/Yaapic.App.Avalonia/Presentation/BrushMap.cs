@@ -16,7 +16,16 @@ public static class BrushMap
     /// <param name="method">The HTTP method.</param>
     /// <returns>The method brush from the application resources, or <see langword="null"/> when missing.</returns>
     public static IBrush? Method(HttpMethodKind method) =>
-        Get(method == HttpMethodKind.Post ? "YaapicMethodPostBrush" : "YaapicMethodGetBrush");
+        Get(method switch
+        {
+            HttpMethodKind.Post => "YaapicMethodPostBrush",
+            HttpMethodKind.Put => "YaapicMethodPutBrush",
+            HttpMethodKind.Patch => "YaapicMethodPatchBrush",
+            HttpMethodKind.Delete => "YaapicMethodDeleteBrush",
+            HttpMethodKind.Head => "YaapicMethodHeadBrush",
+            HttpMethodKind.Options => "YaapicMethodOptionsBrush",
+            _ => "YaapicMethodGetBrush",
+        });
 
     internal static IBrush? Get(string key) =>
         Application.Current is { } app && app.TryFindResource(key, app.ActualThemeVariant, out var brush) ? brush as IBrush : null;
