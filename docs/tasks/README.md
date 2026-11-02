@@ -104,7 +104,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-12](milestone-2-editor-collections/M2-12-request-editor-body-editors.md) | Request editor ViewModel: body editors | any | M2-03, M2-10, M2-11 | done |
 | [M2-13](milestone-2-editor-collections/M2-13-request-editor-url-params-sync.md) | Request editor ViewModel: URL and query params two-way sync | any | M2-09, M2-11 | done |
 | [M2-14](milestone-2-editor-collections/M2-14-response-copy-and-save.md) | Response panel ViewModel: copy and save body | any | M2-10, M2-12 | done |
-| [M2-15](milestone-2-editor-collections/M2-15-winui-dialog-service-members.md) | WinUI dialog service: prompt, file pickers and clipboard | windows | M2-10 | todo |
+| [M2-15](milestone-2-editor-collections/M2-15-winui-dialog-service-members.md) | WinUI dialog service: prompt, file pickers and clipboard | windows | M2-10 | done |
 | [M2-16](milestone-2-editor-collections/M2-16-winui-method-picker-and-url-bar.md) | WinUI method picker and URL bar for all methods | windows | M2-11, M2-13 | todo |
 | [M2-17](milestone-2-editor-collections/M2-17-winui-body-pane.md) | WinUI body pane: all body kinds | windows | M2-12, M2-15, M2-16 | todo |
 | [M2-18](milestone-2-editor-collections/M2-18-winui-auth-and-settings-tabs.md) | WinUI Auth and Settings tabs | windows | M2-11, M2-16 | todo |

@@ -44,7 +44,7 @@ public partial class App : Application
 
         var shell = AppComposition.CreateShell(
             workspace,
-            new WinUIDialogService(() => window.Content?.XamlRoot));
+            new WinUIDialogService(window, () => window.Content?.XamlRoot));
         window.ViewModel = shell;
         window.Activate();
         await shell.InitializeAsync();
