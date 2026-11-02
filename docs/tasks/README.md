@@ -101,7 +101,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-09](milestone-2-editor-collections/M2-09-query-string-sync.md) | Core: query string parsing and composition | any | M2-01 | done |
 | [M2-10](milestone-2-editor-collections/M2-10-dialog-service-prompt-pickers-clipboard.md) | Dialog service: text prompt, file pickers and clipboard | any | M2-01 | done |
 | [M2-11](milestone-2-editor-collections/M2-11-request-editor-methods-auth-settings-state.md) | Request editor ViewModel: methods, authentication and settings | any | M2-04 | done |
-| [M2-12](milestone-2-editor-collections/M2-12-request-editor-body-editors.md) | Request editor ViewModel: body editors | any | M2-03, M2-10, M2-11 | todo |
+| [M2-12](milestone-2-editor-collections/M2-12-request-editor-body-editors.md) | Request editor ViewModel: body editors | any | M2-03, M2-10, M2-11 | done |
 | [M2-13](milestone-2-editor-collections/M2-13-request-editor-url-params-sync.md) | Request editor ViewModel: URL and query params two-way sync | any | M2-09, M2-11 | todo |
 | [M2-14](milestone-2-editor-collections/M2-14-response-copy-and-save.md) | Response panel ViewModel: copy and save body | any | M2-10, M2-12 | todo |
 | [M2-15](milestone-2-editor-collections/M2-15-winui-dialog-service-members.md) | WinUI dialog service: prompt, file pickers and clipboard | windows | M2-10 | todo |

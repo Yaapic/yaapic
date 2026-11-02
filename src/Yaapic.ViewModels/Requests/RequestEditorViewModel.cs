@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
 using Yaapic.Domain.Http;
+using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Responses;
 
@@ -15,6 +16,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     private readonly RequestSender _sender;
     private readonly IActiveEnvironmentProvider _environments;
+    private readonly IDialogService? _dialogs;
     private HttpRequestDefinition? _baseline;
 
     [ObservableProperty]
@@ -38,6 +40,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private string _bodyText = "";
 
     [ObservableProperty]
+    private string _binaryFilePath = "";
+
+    [ObservableProperty]
     private bool _followRedirects = true;
 
     [ObservableProperty]
@@ -50,11 +55,13 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isActive;
 
-    private RequestEditorViewModel(Guid id, RequestSender sender, IActiveEnvironmentProvider environments)
+    private RequestEditorViewModel(Guid id, RequestSender sender, IActiveEnvironmentProvider environments, IDialogService? dialogs)
     {
         Id = id;
         _sender = sender;
         _environments = environments;
+        _dialogs = dialogs;
+        FormData = new FormDataEditorViewModel(dialogs);
         SendCommand.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(IAsyncRelayCommand.IsRunning))
@@ -65,6 +72,8 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         QueryParams.Changed += (_, _) => Refresh();
         Headers.Changed += (_, _) => Refresh();
         Auth.Changed += (_, _) => Refresh();
+        UrlEncodedFields.Changed += (_, _) => Refresh();
+        FormData.Changed += (_, _) => Refresh();
     }
 
     /// <summary>Gets the HTTP methods offered by the editor.</summary>
@@ -79,7 +88,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     ];
 
     /// <summary>Gets the body kinds offered by the editor.</summary>
-    public static IReadOnlyList<BodyKind> BodyKinds { get; } = [BodyKind.None, BodyKind.Raw];
+    public static IReadOnlyList<BodyKind> BodyKinds { get; } = [BodyKind.None, BodyKind.Raw, BodyKind.UrlEncoded, BodyKind.FormData, BodyKind.Binary];
 
     /// <summary>Gets the raw content types offered by the editor.</summary>
     public static IReadOnlyList<RawContentType> ContentTypes { get; } = [RawContentType.Json, RawContentType.Text, RawContentType.Xml, RawContentType.Html, RawContentType.JavaScript];
@@ -92,6 +101,12 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     /// <summary>Gets the header editor.</summary>
     public KeyValueEditorViewModel Headers { get; } = new();
+
+    /// <summary>Gets the url-encoded body field editor.</summary>
+    public KeyValueEditorViewModel UrlEncodedFields { get; } = new();
+
+    /// <summary>Gets the multipart body field editor.</summary>
+    public FormDataEditorViewModel FormData { get; }
 
     /// <summary>Gets the authentication editor.</summary>
     public AuthEditorViewModel Auth { get; } = new();
@@ -125,17 +140,19 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="sender">The use case that sends the request.</param>
     /// <param name="environments">Provides the active environment at send time.</param>
     /// <param name="isNew">Whether the request has never been saved.</param>
+    /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel FromDefinition(
         HttpRequestDefinition definition,
         RequestSender sender,
         IActiveEnvironmentProvider environments,
-        bool isNew = false)
+        bool isNew = false,
+        IDialogService? dialogs = null)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(sender);
         ArgumentNullException.ThrowIfNull(environments);
-        var editor = new RequestEditorViewModel(definition.Id, sender, environments)
+        var editor = new RequestEditorViewModel(definition.Id, sender, environments, dialogs)
         {
             Name = definition.Name,
             Method = definition.Method,
@@ -143,12 +160,22 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             BodyKind = definition.Body.Kind,
             BodyContentType = definition.Body.ContentType,
             BodyText = definition.Body.Text,
+            BinaryFilePath = definition.Body.FilePath,
             FollowRedirects = definition.Settings.FollowRedirects,
             TimeoutSeconds = definition.Settings.TimeoutSeconds,
         };
         editor.Auth.Load(definition.Auth);
         editor.QueryParams.Load(definition.QueryParams);
         editor.Headers.Load(definition.Headers);
+        if (definition.Body.Kind == BodyKind.UrlEncoded)
+        {
+            editor.UrlEncodedFields.Load(definition.Body.Fields.Select(f => new KeyValueEntry(f.Key, f.Value, f.Enabled)));
+        }
+        else if (definition.Body.Kind == BodyKind.FormData)
+        {
+            editor.FormData.Load(definition.Body.Fields);
+        }
+
         editor._baseline = editor.ToDefinition();
         editor.IsNew = isNew;
         return editor;
@@ -157,9 +184,10 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <summary>Creates an editor for a new, unsaved request.</summary>
     /// <param name="sender">The use case that sends the request.</param>
     /// <param name="environments">Provides the active environment at send time.</param>
+    /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
     /// <returns>The editor.</returns>
-    public static RequestEditorViewModel CreateNew(RequestSender sender, IActiveEnvironmentProvider environments) =>
-        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, environments, isNew: true);
+    public static RequestEditorViewModel CreateNew(RequestSender sender, IActiveEnvironmentProvider environments, IDialogService? dialogs = null) =>
+        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, environments, isNew: true, dialogs);
 
     /// <summary>Builds the domain request from the current state.</summary>
     /// <returns>The request; a blank name becomes "New Request".</returns>
@@ -170,7 +198,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         Url,
         QueryParams.ToEntries(),
         Headers.ToEntries(),
-        new RequestBody(BodyKind, BodyContentType, BodyText),
+        new RequestBody(BodyKind, BodyContentType, BodyText, BodyFields(), BodyKind == BodyKind.Binary ? BinaryFilePath : ""),
         Auth.ToAuth(),
         new RequestSettings(FollowRedirects, TimeoutSeconds));
 
@@ -180,6 +208,21 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         _baseline = ToDefinition();
         IsNew = false;
         Refresh();
+    }
+
+    [RelayCommand]
+    private async Task PickBinaryFileAsync()
+    {
+        if (_dialogs is null)
+        {
+            return;
+        }
+
+        var path = await _dialogs.PickFileAsync("Select a file");
+        if (path is not null)
+        {
+            BinaryFilePath = path;
+        }
     }
 
     [RelayCommand(CanExecute = nameof(CanSend), IncludeCancelCommand = true)]
@@ -204,6 +247,8 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     partial void OnBodyTextChanged(string value) => Refresh();
 
+    partial void OnBinaryFilePathChanged(string value) => Refresh();
+
     partial void OnFollowRedirectsChanged(bool value) => Refresh();
 
     partial void OnTimeoutSecondsChanged(int value)
@@ -218,6 +263,13 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     }
 
     partial void OnIsNewChanged(bool value) => Refresh();
+
+    private IReadOnlyList<FormField> BodyFields() => BodyKind switch
+    {
+        BodyKind.UrlEncoded => [.. UrlEncodedFields.ToEntries().Select(e => new FormField(e.Key, e.Value, e.Enabled))],
+        BodyKind.FormData => FormData.ToFields(),
+        _ => [],
+    };
 
     private void Refresh()
     {

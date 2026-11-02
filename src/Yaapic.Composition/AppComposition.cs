@@ -31,7 +31,7 @@ public static class AppComposition
         var tabs = new TabsViewModel(
             requestStore,
             dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, environments, isNew));
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, environments, isNew, dialogs));
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
         return new ShellViewModel(tabs, requests, environments, sessionStore, dialogs);
     }
