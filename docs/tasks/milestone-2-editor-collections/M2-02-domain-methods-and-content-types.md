@@ -1,6 +1,6 @@
 # M2-02: Domain: HTTP methods and raw content types
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-01
 
@@ -27,9 +27,9 @@ Resolver, transport, serializer, ViewModel and view changes.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: `ToText` and `TryParse` round trip for all seven methods; `TryParse` rejects
+- [x] Tests in `Yaapic.Domain.Tests`: `ToText` and `TryParse` round trip for all seven methods; `TryParse` rejects
       `"get"`, `""`, `null` and `"TRACE"`; `AllowsBody` truth table.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
