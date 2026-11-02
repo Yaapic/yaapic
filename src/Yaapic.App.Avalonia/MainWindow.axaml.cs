@@ -5,6 +5,7 @@ using Avalonia.Styling;
 using Avalonia.VisualTree;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
+using Yaapic.ViewModels.Tabs;
 
 namespace Yaapic.App.Avalonia;
 
@@ -18,11 +19,15 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        // The system caption buttons overlay the right of the bar on Windows; macOS puts the traffic lights on the left.
+        TitleBar.Padding = new Thickness(OperatingSystem.IsMacOS() ? 80 : 12, 0, OperatingSystem.IsWindows() ? 140 : 12, 0);
+        DataContextChanged += (_, _) => WireShell();
         var modifier = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.T, modifier), Command = new Relay(() => Shell?.Tabs.NewTab()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => Shell?.Tabs.CloseActiveCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => Shell?.Tabs.SaveActiveCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.E, modifier | KeyModifiers.Shift), Command = new Relay(() => _ = ManageEnvironmentsAsync()) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.F, modifier | KeyModifiers.Shift), Command = new Relay(() => FilterBox.Focus()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.K, modifier), Command = new Relay(() => FilterBox.Focus()) });
     }
 
@@ -34,6 +39,75 @@ public sealed partial class MainWindow : Window
         {
             await new Views.EnvironmentsWindow { DataContext = shell.Environments }.ShowDialog(this);
         }
+    }
+
+    private void WireShell()
+    {
+        if (Shell is not { } shell)
+        {
+            return;
+        }
+
+        shell.Requests.Items.CollectionChanged += (_, _) => SyncList();
+        shell.Requests.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(RequestListViewModel.FilterText))
+            {
+                SyncList();
+            }
+        };
+        shell.Tabs.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(TabsViewModel.ActiveTab))
+            {
+                SyncList();
+            }
+        };
+        SyncList();
+    }
+
+    // Selection follows the active tab; a selection made here never opens a request (only Tapped does).
+    private void SyncList()
+    {
+        if (Shell is not { } shell)
+        {
+            return;
+        }
+
+        var activeId = shell.Tabs.ActiveTab?.Id;
+        RequestList.SelectedItem = activeId is { } id ? shell.Requests.Items.FirstOrDefault(i => i.Id == id) : null;
+
+        var filter = shell.Requests.FilterText.Trim();
+        EmptyList.IsVisible = shell.Requests.Items.Count == 0;
+        EmptyTitle.Text = filter.Length > 0 ? $"No request matches '{filter}'." : "No saved requests yet.";
+        EmptyHint.Text = "Press Ctrl+S in a tab to save it here.";
+        EmptyHint.IsVisible = filter.Length == 0;
+    }
+
+    private void OnEnvironmentMenuOpening(object? sender, EventArgs e)
+    {
+        if (sender is not MenuFlyout flyout || Shell is not { } shell)
+        {
+            return;
+        }
+
+        var environments = shell.Environments;
+        flyout.Items.Clear();
+        foreach (var item in environments.Environments)
+        {
+            var captured = item;
+            var entry = new MenuItem { Header = item.Name, ToggleType = MenuItemToggleType.Radio, GroupName = "env", IsChecked = item == environments.ActiveEnvironment };
+            entry.Click += (_, _) => environments.ActiveEnvironment = captured;
+            flyout.Items.Add(entry);
+        }
+
+        var none = new MenuItem { Header = "No environment", ToggleType = MenuItemToggleType.Radio, GroupName = "env", IsChecked = environments.ActiveEnvironment is null };
+        none.Click += (_, _) => environments.ActiveEnvironment = null;
+        flyout.Items.Add(none);
+        flyout.Items.Add(new Separator());
+        var manage = new MenuItem { Header = "Manage environments..." };
+        manage.Click += (_, _) => _ = ManageEnvironmentsAsync();
+        flyout.Items.Add(manage);
     }
 
     private ShellViewModel? Shell => DataContext as ShellViewModel;

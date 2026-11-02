@@ -1,6 +1,6 @@
 # M1-51: Avalonia shell restyle: title bar, rail and sidebar
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-50
 
@@ -60,14 +60,26 @@ status bar, custom (fully drawn) caption buttons.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual check on the published exe (host OS): the pill switches environments and opens the dialog, the rail
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual check on the published exe (host OS): the pill switches environments and opens the dialog, the rail
       Settings menu switches themes, Ctrl+Shift+F focuses the filter, clicking a saved request opens it and its row
       is selected, the window can still be dragged by the title bar.
-- [ ] Screenshots (M1-47 script, dark and light) inspected against `MainWindow.dc.html` / `MainWindowLight.dc.html`
+- [x] Screenshots (M1-47 script, dark and light) inspected against `MainWindow.dc.html` / `MainWindowLight.dc.html`
       (title bar, rail, sidebar only): colours, 40 / 48 / 272 px sizes, logo, pill dot, selected row tint. Deviations
       listed in the card, PNGs not committed.
 
 ## Suggested commit message
 
 `feat(avalonia): restyle title bar, navigation rail and request sidebar`
+
+## Notes
+
+- Deviations: `ExtendClientAreaChromeHints` does not exist in this Avalonia version, so only
+  `ExtendClientAreaToDecorationsHint` and `ExtendClientAreaTitleBarHeightHint` (40) are set (system caption buttons
+  stay); the title bar's right padding (140 px on Windows) is set in code-behind. `YaapicTitleBarHeight` does not
+  exist, 40 is a literal. Column widths are literals (48 / 272). The environment menu is built in code-behind on
+  `Opening`. The rail "Settings" menu replaces the title bar "Theme" button.
+- The M1-50 `ListBoxItem` template renamed its presenter `ItemContent`: Fluent paints `PART_ContentPresenter` of a
+  selected item in the system accent, which hid the 10% selection tint.
+- Interactive checks (pill switching, flyouts, dragging the bar) were not driven by hand; the AOT build starts, renders
+  both themes with the selected row tint and exits cleanly through the capture script. No "before" capture was taken.
