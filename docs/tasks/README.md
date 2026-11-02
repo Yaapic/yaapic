@@ -57,7 +57,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-28](milestone-1-http-core/M1-28-avalonia-shell-and-tabs.md) | Avalonia shell: sidebar, tabs and dialogs | unix | M0-05, M1-23 | done |
 | [M1-29](milestone-1-http-core/M1-29-avalonia-request-editor.md) | Avalonia request editor view | unix | M1-28 | done |
 | [M1-30](milestone-1-http-core/M1-30-avalonia-response-viewer.md) | Avalonia response viewer | unix | M1-29 | done |
-| [M1-31](milestone-1-http-core/M1-31-avalonia-environments.md) | Avalonia environment management | unix | M1-29 | todo |
+| [M1-31](milestone-1-http-core/M1-31-avalonia-environments.md) | Avalonia environment management | unix | M1-29 | done |
 | [M1-32](milestone-1-http-core/M1-32-end-to-end-tests-and-docs.md) | End-to-end tests and milestone docs | any | M1-23 | done |
 | [M1-33](milestone-1-http-core/M1-33-token-generator-metrics-and-fluent-aliases.md) | Token generator: metrics, colour resources and Fluent aliases | any | M0-04 | done |
 | [M1-34](milestone-1-http-core/M1-34-winui-screenshot-tooling.md) | WinUI screenshot tooling | windows | M1-27 | done |

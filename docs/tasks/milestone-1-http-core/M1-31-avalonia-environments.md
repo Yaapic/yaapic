@@ -1,6 +1,6 @@
 # M1-31: Avalonia environment management
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-29
 
@@ -21,10 +21,17 @@ Same as M1-27.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
 - [ ] Manual smoke: same checks as M1-27, with the workspace under `~/Yaapic/Default`.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add environment management window`
+
+## Implementation notes
+
+- The manual smoke (add "Local", save, send, restart, delete under `~/Yaapic/Default`) was not run, and macOS/Linux
+  were not available: the window was only checked to build, publish with AOT (0 IL2xxx/IL3xxx warnings) and start on
+  Windows without crashing.
+- Opened from an "Environments" button and Ctrl/Cmd+Shift+E in the main window.

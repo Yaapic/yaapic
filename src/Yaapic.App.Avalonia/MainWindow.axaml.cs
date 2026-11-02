@@ -21,7 +21,18 @@ public sealed partial class MainWindow : Window
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.T, modifier), Command = new Relay(() => Shell?.Tabs.NewTab()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => Shell?.Tabs.CloseActiveCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => Shell?.Tabs.SaveActiveCommand.Execute(null)) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.E, modifier | KeyModifiers.Shift), Command = new Relay(() => _ = ManageEnvironmentsAsync()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.K, modifier), Command = new Relay(() => FilterBox.Focus()) });
+    }
+
+    private async void OnManageEnvironments(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => await ManageEnvironmentsAsync();
+
+    private async Task ManageEnvironmentsAsync()
+    {
+        if (Shell is { } shell)
+        {
+            await new Views.EnvironmentsWindow { DataContext = shell.Environments }.ShowDialog(this);
+        }
     }
 
     private ShellViewModel? Shell => DataContext as ShellViewModel;

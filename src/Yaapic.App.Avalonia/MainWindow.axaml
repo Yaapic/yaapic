@@ -24,6 +24,7 @@
             </DataTemplate>
           </ComboBox.ItemTemplate>
         </ComboBox>
+        <Button Content="Environments" Click="OnManageEnvironments" ToolTip.Tip="Manage environments (Ctrl+Shift+E)" />
         <Button Content="Theme">
           <Button.Flyout>
             <MenuFlyout>
