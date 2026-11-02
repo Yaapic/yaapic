@@ -16,8 +16,15 @@
     <PackageReference Include="Avalonia.Themes.Fluent" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Yaapic.Composition\Yaapic.Composition.csproj" />
+    <ProjectReference Include="..\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />
+    <ProjectReference Include="..\Yaapic.ViewModels\Yaapic.ViewModels.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <!-- Generated resources live in design/; link them so Avalonia compiles them into the assembly. -->
     <AvaloniaResource Include="..\..\design\xaml\Yaapic.Colors.Avalonia.axaml" Link="Themes\Yaapic.Colors.Avalonia.axaml" />
     <AvaloniaResource Include="..\..\design\xaml\Yaapic.Icons.Avalonia.axaml" Link="Themes\Yaapic.Icons.Avalonia.axaml" />
+    <AvaloniaResource Include="..\Yaapic.App.WinUI\Assets\Fonts\JetBrainsMono.ttf" Link="Assets\Fonts\JetBrainsMono.ttf" />
   </ItemGroup>
 </Project>
+

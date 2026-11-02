@@ -17,6 +17,7 @@ public class DependencyRulesTests
         ["Yaapic.ViewModels"] = ["Yaapic.Core", "Yaapic.UI.Abstractions"],
         ["Yaapic.Composition"] = ["Yaapic.Core", "Yaapic.Domain", "Yaapic.Infrastructure", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
         ["Yaapic.App.WinUI"] = ["Yaapic.Composition", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
+        ["Yaapic.App.Avalonia"] = ["Yaapic.Composition", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
     };
 
     private static string SrcDir()
@@ -59,3 +60,4 @@ public class DependencyRulesTests
     public void ViewModels_do_not_reference_Infrastructure() =>
         Assert.DoesNotContain("Yaapic.Infrastructure", ReadReferences()["Yaapic.ViewModels"]);
 }
+

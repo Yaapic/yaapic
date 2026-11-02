@@ -1,0 +1,19 @@
+version: 2
+updates:
+  - package-ecosystem: nuget
+    directory: /
+    schedule:
+      interval: weekly
+    groups:
+      avalonia:
+        patterns:
+          - "Avalonia*"
+      windows:
+        patterns:
+          - "Microsoft.WindowsAppSDK"
+          - "Microsoft.Windows.SDK.BuildTools"
+          - "FluentIcons.WinUI"
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
