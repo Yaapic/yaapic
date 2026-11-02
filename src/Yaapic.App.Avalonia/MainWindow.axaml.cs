@@ -2,6 +2,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
+using Avalonia.VisualTree;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 
@@ -100,6 +101,55 @@ public sealed partial class MainWindow : Window
     private void OnThemeSystem(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => SetTheme(ThemeVariant.Default);
 
     private static void SetTheme(ThemeVariant variant) => Application.Current!.RequestedThemeVariant = variant;
+
+    /// <summary>Applies a theme by name (<c>dark</c>, <c>light</c>, anything else follows the system); shared with the launch options.</summary>
+    /// <param name="name">The theme name.</param>
+    internal static void ApplyTheme(string name) => SetTheme(name.ToLowerInvariant() switch
+    {
+        "dark" => ThemeVariant.Dark,
+        "light" => ThemeVariant.Light,
+        _ => ThemeVariant.Default,
+    });
+
+    /// <summary>Selects the request section tab whose header starts with <paramref name="header"/>.</summary>
+    /// <param name="header">The header text, for example <c>Body</c>.</param>
+    /// <exception cref="InvalidOperationException">No such tab exists.</exception>
+    internal void SelectSection(string header)
+    {
+        foreach (var tabs in this.GetVisualDescendants().OfType<TabControl>())
+        {
+            foreach (var item in tabs.Items.OfType<TabItem>())
+            {
+                var text = item.Header is TextBlock block ? block.Text : item.Header as string;
+                if (text is not null && text.StartsWith(header, StringComparison.OrdinalIgnoreCase))
+                {
+                    tabs.SelectedItem = item;
+                    return;
+                }
+            }
+        }
+
+        throw new InvalidOperationException($"Section tab '{header}' not found.");
+    }
+
+    /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
+    /// <param name="name"><c>environments</c> or <c>unsaved</c>.</param>
+    /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
+    internal void OpenNamed(string name)
+    {
+        switch (name.ToLowerInvariant())
+        {
+            case "environments":
+                _ = ManageEnvironmentsAsync();
+                break;
+            case "unsaved" when Shell?.Tabs.ActiveTab is { } tab:
+                tab.Name += "x";
+                _ = Shell.Tabs.CloseAsync(tab);
+                break;
+            default:
+                throw new InvalidOperationException($"Cannot open '{name}'.");
+        }
+    }
 
     private sealed class Relay(Action action) : System.Windows.Input.ICommand
     {

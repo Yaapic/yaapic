@@ -1,6 +1,6 @@
 # M1-47: Avalonia screenshot tooling
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-31, M2-22
 
@@ -56,15 +56,15 @@ Any visual change to the app, a CI job, committing screenshots (M1-57), keyboard
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; the option parser has a unit test (put the
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; the option parser has a unit test (put the
       parser where the existing tests can reach it: `internal` class plus `InternalsVisibleTo`, or move it to a small
       testable type; pick the way the repository already uses).
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID has 0 IL2xxx/IL3xxx warnings; started without arguments it
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID has 0 IL2xxx/IL3xxx warnings; started without arguments it
       still uses `Workspace.DefaultRoot()`.
-- [ ] `Capture-Avalonia.ps1 -Theme dark` and `-Theme light` each produce a non-empty 1440x900 PNG showing the fixture
+- [x] `Capture-Avalonia.ps1 -Theme dark` and `-Theme light` each produce a non-empty 1440x900 PNG showing the fixture
       requests in the sidebar and the `create-user` tab; with `-Send` the response area shows the stub `201`;
       `-Open environments` shows the environments window. The PNGs are inspected and not committed.
-- [ ] No Yaapic or stub-server process is left running after the script, also after a failed run.
+- [x] No Yaapic or stub-server process is left running after the script, also after a failed run.
 
 ## Suggested commit message
 
