@@ -1,6 +1,9 @@
 using Avalonia.Controls;
+using Avalonia.Input.Platform;
 using Avalonia.Layout;
+using Avalonia.Platform.Storage;
 using Avalonia.Threading;
+using Yaapic.App.Avalonia.Views;
 using Yaapic.UI.Abstractions;
 
 namespace Yaapic.App.Avalonia.Services;
@@ -31,6 +34,63 @@ public sealed class AvaloniaDialogService : IDialogService
         "The request file will be deleted from the workspace.",
         false,
         ("Delete", true), ("Cancel", false));
+
+    /// <inheritdoc />
+    public async Task<string?> PromptTextAsync(string title, string label, string initialText)
+    {
+        if (_owner() is not { } owner)
+        {
+            return null;
+        }
+
+        return await Dispatcher.UIThread.InvokeAsync(() => new PromptWindow(title, label, initialText).ShowDialog<string?>(owner));
+    }
+
+    /// <inheritdoc />
+    public async Task<string?> PickFileAsync(string title)
+    {
+        if (_owner() is not { } owner)
+        {
+            return null;
+        }
+
+        var files = await owner.StorageProvider.OpenFilePickerAsync(new FilePickerOpenOptions { Title = title, AllowMultiple = false });
+        return files.Count > 0 ? files[0].TryGetLocalPath() : null;
+    }
+
+    /// <inheritdoc />
+    public async Task<bool> SaveFileAsync(string suggestedName, byte[] content)
+    {
+        if (_owner() is not { } owner)
+        {
+            return false;
+        }
+
+        var file = await owner.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions { SuggestedFileName = suggestedName });
+        if (file?.TryGetLocalPath() is not { } path)
+        {
+            return false;
+        }
+
+        try
+        {
+            await File.WriteAllBytesAsync(path, content);
+            return true;
+        }
+        catch (Exception e) when (e is IOException or UnauthorizedAccessException)
+        {
+            return false;
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task SetClipboardTextAsync(string text)
+    {
+        if (_owner()?.Clipboard is { } clipboard)
+        {
+            await clipboard.SetTextAsync(text);
+        }
+    }
 
     private async Task<T> ShowAsync<T>(string title, string body, T dismissed, params (string Text, T Result)[] buttons)
     {
