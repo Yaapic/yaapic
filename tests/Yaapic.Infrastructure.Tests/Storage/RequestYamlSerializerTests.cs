@@ -12,16 +12,74 @@ public sealed class RequestYamlSerializerTests
     private static HttpRequestDefinition Sample() => new(
         Id,
         "Get users – café ☕",
-        HttpMethodKind.Post,
+        HttpMethodKind.Put,
         "{{baseUrl}}/users",
         [new("page", "1"), new("debug", "{{flag}}", false)],
         [new("Accept", "application/json")],
-        RequestBody.Raw(RawContentType.Json, "{\n  \"name\": \"Zoë\",\n  \"id\": \"{{id}}\"\n}"),
-        RequestAuth.None,
-        RequestSettings.Default);
+        RequestBody.Raw(RawContentType.Json, "{\n  \"name\": \"Zoë\",\n  \"id\": \"{{id}}\"\n}") with
+        {
+            Fields = [new("a", "{{v}}", false), new("avatar", "img.png", true, FormFieldKind.File)],
+            FilePath = "blob.bin",
+        },
+        new(AuthKind.ApiKey, "u", "p", "t", "X-Key", "{{secret}}", ApiKeyLocation.Query),
+        new RequestSettings(false, 15));
 
-    private static string Golden() =>
-        File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Storage", "golden", "request-v1.request.yaml"));
+    private static HttpRequestDefinition With(RequestBody body, RequestAuth? auth = null) =>
+        Sample() with { Body = body, Auth = auth ?? RequestAuth.None };
+
+    private static string Golden(string name = "request-v1.request.yaml") =>
+        File.ReadAllText(Path.Combine(AppContext.BaseDirectory, "Storage", "golden", name));
+
+    public static TheoryData<RequestBody> Bodies() => new()
+    {
+        RequestBody.UrlEncoded([new("a", "1"), new("b", "{{v}}", false)]),
+        RequestBody.FormData([new("t", "x"), new("avatar", @"C:\img\é.png", true, FormFieldKind.File)]),
+        RequestBody.Binary(@"C:\datalob.bin"),
+        RequestBody.Raw(RawContentType.Html, "<p>é</p>"),
+        RequestBody.Raw(RawContentType.JavaScript, "x()"),
+    };
+
+    public static TheoryData<RequestAuth> Auths() => new()
+    {
+        RequestAuth.None,
+        new RequestAuth(AuthKind.Basic, "u", "p", "", "", "", ApiKeyLocation.Header),
+        new RequestAuth(AuthKind.Bearer, "", "", "{{token}}", "", "", ApiKeyLocation.Header),
+        new RequestAuth(AuthKind.ApiKey, "", "", "", "k", "v", ApiKeyLocation.Query),
+    };
+
+    [Theory]
+    [MemberData(nameof(Bodies))]
+    public void RoundTripKeepsBodyKinds(RequestBody body)
+    {
+        var request = With(body);
+        Assert.True(request.IsEquivalentTo(RequestYamlSerializer.Deserialize(RequestYamlSerializer.Serialize(request))));
+    }
+
+    [Theory]
+    [MemberData(nameof(Auths))]
+    public void RoundTripKeepsAuth(RequestAuth auth)
+    {
+        var request = With(RequestBody.None, auth);
+        Assert.True(request.IsEquivalentTo(RequestYamlSerializer.Deserialize(RequestYamlSerializer.Serialize(request))));
+    }
+
+    [Fact]
+    public void LegacyM1FileReadsWithDefaults()
+    {
+        var request = RequestYamlSerializer.Deserialize(Golden("request-m1-legacy.request.yaml"));
+        Assert.Equal(HttpMethodKind.Post, request.Method);
+        Assert.Equal(RequestAuth.None, request.Auth);
+        Assert.Equal(RequestSettings.Default, request.Settings);
+        Assert.Empty(request.Body.Fields);
+        Assert.Equal("", request.Body.FilePath);
+    }
+
+    [Fact]
+    public void MissingFieldEnabledAndKindTakeDefaults()
+    {
+        var yaml = $"version: 1\nid: {IdText}\nmethod: GET\nbody:\n  type: urlencoded\n  fields:\n    - key: a\n";
+        Assert.Equal(new FormField("a", ""), Assert.Single(RequestYamlSerializer.Deserialize(yaml).Body.Fields));
+    }
 
     [Fact]
     public void RoundTripKeepsEquivalence()
@@ -78,7 +136,11 @@ public sealed class RequestYamlSerializerTests
     [InlineData("name: [unclosed\n")]
     [InlineData("version: 1\nmethod: GET\n")]
     [InlineData("version: 1\nid: nope\nmethod: GET\n")]
-    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: PUT\n")]
+    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: TRACE\n")]
+    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nauth:\n  type: digest\n")]
+    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nauth:\n  type: apikey\n  in: cookie\n")]
+    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nbody:\n  type: urlencoded\n  fields:\n    - key: a\n      kind: blob\n")]
+    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nsettings:\n  timeoutSeconds: -1\n")]
     [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nbody:\n  type: form\n")]
     [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nbody:\n  type: raw\n  contentType: yaml\n")]
     public void InvalidFilesThrowStorageException(string yaml) =>

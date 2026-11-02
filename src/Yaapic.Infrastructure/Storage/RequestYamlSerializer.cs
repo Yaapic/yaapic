@@ -22,20 +22,38 @@ public static class RequestYamlSerializer
             Version = CurrentVersion,
             Id = request.Id.ToString("D"),
             Name = request.Name,
-            Method = request.Method == HttpMethodKind.Post ? "POST" : "GET",
+            Method = request.Method.ToText(),
             Url = request.Url,
             Params = [.. request.QueryParams.Select(ToDto)],
             Headers = [.. request.Headers.Select(ToDto)],
             Body = new BodyDto
             {
-                Type = request.Body.Kind == BodyKind.Raw ? "raw" : "none",
-                ContentType = request.Body.ContentType switch
-                {
-                    RawContentType.Json => "json",
-                    RawContentType.Xml => "xml",
-                    _ => "text",
-                },
+                Type = BodyTypeText(request.Body.Kind),
+                ContentType = ContentTypeText(request.Body.ContentType),
                 Text = request.Body.Text,
+                Fields = [.. request.Body.Fields.Select(f => new FormFieldDto
+                {
+                    Key = f.Key,
+                    Value = f.Value,
+                    Enabled = f.Enabled,
+                    Kind = f.Kind == FormFieldKind.File ? "file" : "text",
+                })],
+                File = request.Body.FilePath,
+            },
+            Auth = new AuthDto
+            {
+                Type = AuthTypeText(request.Auth.Kind),
+                Username = request.Auth.Username,
+                Password = request.Auth.Password,
+                Token = request.Auth.Token,
+                Key = request.Auth.Key,
+                Value = request.Auth.Value,
+                Location = request.Auth.Location == ApiKeyLocation.Query ? "query" : "header",
+            },
+            Settings = new SettingsDto
+            {
+                FollowRedirects = request.Settings.FollowRedirects,
+                TimeoutSeconds = request.Settings.TimeoutSeconds,
             },
         };
         var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n");
@@ -74,12 +92,10 @@ public static class RequestYamlSerializer
             throw new StorageException($"Invalid request id: '{dto.Id}'");
         }
 
-        var method = dto.Method switch
+        if (!HttpMethodKindExtensions.TryParse(dto.Method, out var method))
         {
-            "GET" => HttpMethodKind.Get,
-            "POST" => HttpMethodKind.Post,
-            _ => throw new StorageException($"Unknown method: '{dto.Method}'"),
-        };
+            throw new StorageException($"Unknown method: '{dto.Method}'");
+        }
 
         return new HttpRequestDefinition(
             id,
@@ -89,9 +105,35 @@ public static class RequestYamlSerializer
             [.. (dto.Params ?? []).Select(FromDto)],
             [.. (dto.Headers ?? []).Select(FromDto)],
             ReadBody(dto.Body),
-            RequestAuth.None,
-            RequestSettings.Default);
+            ReadAuth(dto.Auth),
+            ReadSettings(dto.Settings));
     }
+
+    private static string BodyTypeText(BodyKind kind) => kind switch
+    {
+        BodyKind.Raw => "raw",
+        BodyKind.UrlEncoded => "urlencoded",
+        BodyKind.FormData => "form-data",
+        BodyKind.Binary => "binary",
+        _ => "none",
+    };
+
+    private static string ContentTypeText(RawContentType type) => type switch
+    {
+        RawContentType.Json => "json",
+        RawContentType.Xml => "xml",
+        RawContentType.Html => "html",
+        RawContentType.JavaScript => "javascript",
+        _ => "text",
+    };
+
+    private static string AuthTypeText(AuthKind kind) => kind switch
+    {
+        AuthKind.Basic => "basic",
+        AuthKind.Bearer => "bearer",
+        AuthKind.ApiKey => "apikey",
+        _ => "none",
+    };
 
     private static KeyValueDto ToDto(KeyValueEntry entry) =>
         new() { Key = entry.Key, Value = entry.Value, Enabled = entry.Enabled };
@@ -109,6 +151,9 @@ public static class RequestYamlSerializer
         {
             null or "none" => BodyKind.None,
             "raw" => BodyKind.Raw,
+            "urlencoded" => BodyKind.UrlEncoded,
+            "form-data" => BodyKind.FormData,
+            "binary" => BodyKind.Binary,
             _ => throw new StorageException($"Unknown body type: '{dto.Type}'"),
         };
         var contentType = dto.ContentType switch
@@ -116,8 +161,56 @@ public static class RequestYamlSerializer
             null or "text" => RawContentType.Text,
             "json" => RawContentType.Json,
             "xml" => RawContentType.Xml,
+            "html" => RawContentType.Html,
+            "javascript" => RawContentType.JavaScript,
             _ => throw new StorageException($"Unknown body content type: '{dto.ContentType}'"),
         };
-        return new RequestBody(kind, contentType, dto.Text ?? "");
+        var fields = (dto.Fields ?? []).Select(f => new FormField(
+            f.Key ?? "",
+            f.Value ?? "",
+            f.Enabled ?? true,
+            f.Kind switch
+            {
+                null or "text" => FormFieldKind.Text,
+                "file" => FormFieldKind.File,
+                _ => throw new StorageException($"Unknown field kind: '{f.Kind}'"),
+            }));
+        return new RequestBody(kind, contentType, dto.Text ?? "", [.. fields], dto.File ?? "");
+    }
+
+    private static RequestAuth ReadAuth(AuthDto? dto)
+    {
+        if (dto is null)
+        {
+            return RequestAuth.None;
+        }
+
+        var kind = dto.Type switch
+        {
+            null or "none" => AuthKind.None,
+            "basic" => AuthKind.Basic,
+            "bearer" => AuthKind.Bearer,
+            "apikey" => AuthKind.ApiKey,
+            _ => throw new StorageException($"Unknown auth type: '{dto.Type}'"),
+        };
+        var location = dto.Location switch
+        {
+            null or "header" => ApiKeyLocation.Header,
+            "query" => ApiKeyLocation.Query,
+            _ => throw new StorageException($"Unknown auth location: '{dto.Location}'"),
+        };
+        return new RequestAuth(
+            kind, dto.Username ?? "", dto.Password ?? "", dto.Token ?? "", dto.Key ?? "", dto.Value ?? "", location);
+    }
+
+    private static RequestSettings ReadSettings(SettingsDto? dto)
+    {
+        var timeout = dto?.TimeoutSeconds ?? 0;
+        if (timeout < 0)
+        {
+            throw new StorageException($"Invalid timeoutSeconds: {timeout}");
+        }
+
+        return new RequestSettings(dto?.FollowRedirects ?? true, timeout);
     }
 }
