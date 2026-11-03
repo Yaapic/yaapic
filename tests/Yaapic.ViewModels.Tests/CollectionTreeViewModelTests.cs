@@ -202,4 +202,140 @@ public sealed class CollectionTreeViewModelTests
         Assert.Equal("boom", failing.LastError);
         Assert.Single(_tree.Roots);
     }
+
+    private sealed class FailingWriteStore : ICollectionStore
+    {
+        public Task<IReadOnlyList<CollectionNode>> LoadTreeAsync(CancellationToken ct) => Task.FromResult<IReadOnlyList<CollectionNode>>([]);
+
+        public Task SaveFolderAsync(FolderDefinition folder, Guid? parentId, CancellationToken ct) => throw new StorageException("nope");
+
+        public Task DeleteFolderAsync(Guid id, CancellationToken ct) => throw new StorageException("nope");
+
+        public Task MoveAsync(Guid id, Guid? newParentId, CancellationToken ct) => throw new NotSupportedException();
+    }
+
+    [Fact]
+    public async Task NewCollectionAndNestedFolderAppearWithTheEnteredName()
+    {
+        _dialogs.PromptAnswers.Enqueue("  API ");
+        await _tree.NewCollectionCommand.ExecuteAsync(null);
+        Assert.Equal(["API"], _tree.Roots.Select(n => n.Name));
+        Assert.Equal(("New collection", "Name", "New Collection"), _dialogs.Prompts[0]);
+
+        _dialogs.PromptAnswers.Enqueue("Users");
+        await _tree.NewFolderCommand.ExecuteAsync(_tree.Roots[0]);
+
+        var root = _tree.Roots[0];
+        Assert.Equal(["Users"], root.Children.Select(n => n.Name));
+        Assert.True(root.IsExpanded);
+        Assert.Equal("New folder", _dialogs.Prompts[1].Title);
+    }
+
+    [Fact]
+    public async Task CancelOrBlankAnswerCreatesNothing()
+    {
+        await _tree.NewCollectionCommand.ExecuteAsync(null);
+        _dialogs.PromptAnswers.Enqueue("   ");
+        await _tree.NewCollectionCommand.ExecuteAsync(null);
+
+        Assert.Empty(_tree.Roots);
+    }
+
+    [Fact]
+    public async Task NewFolderIsIgnoredForARequest()
+    {
+        await RequestAsync("r");
+        await _tree.RefreshAsync();
+
+        await _tree.NewFolderCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Empty(_dialogs.Prompts);
+    }
+
+    [Fact]
+    public async Task RenameUpdatesTheNameAndKeepsTheChildren()
+    {
+        var f = await FolderAsync("Old");
+        await RequestAsync("r", parent: f.Id);
+        await _tree.RefreshAsync();
+
+        _dialogs.PromptAnswers.Enqueue("New");
+        await _tree.RenameFolderCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal("New", _tree.Roots[0].Name);
+        Assert.Equal(["r"], _tree.Roots[0].Children.Select(n => n.Name));
+        Assert.Equal("Old", _dialogs.Prompts[0].Initial);
+    }
+
+    [Fact]
+    public async Task RenameToTheSameNameOrCancelChangesNothing()
+    {
+        await FolderAsync("Same");
+        await _tree.RefreshAsync();
+        var before = _tree.Roots[0];
+
+        _dialogs.PromptAnswers.Enqueue("Same");
+        await _tree.RenameFolderCommand.ExecuteAsync(before);
+        await _tree.RenameFolderCommand.ExecuteAsync(before);
+
+        Assert.Same(before, _tree.Roots[0]);
+    }
+
+    [Fact]
+    public async Task ConfirmedDeleteRemovesTheFolderAndClosesItsTabs()
+    {
+        var f = await FolderAsync("F");
+        var sub = await FolderAsync("Sub", f.Id);
+        var a = await RequestAsync("a", parent: f.Id);
+        var b = await RequestAsync("b", parent: sub.Id);
+        var other = await RequestAsync("other");
+        await _tree.RefreshAsync();
+        _tabs.Open(a);
+        _tabs.Open(b);
+        _tabs.Open(other);
+        _dialogs.DeleteAnswer = true;
+
+        await _tree.DeleteFolderCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal(["F and its 2 requests"], _dialogs.DeletePrompts);
+        Assert.Equal(["other"], _tree.Roots.Select(n => n.Name));
+        Assert.Equal([other.Id], _tabs.Tabs.Select(t => t.Id));
+    }
+
+    [Fact]
+    public async Task DeleteOfAnEmptyFolderUsesTheNameAsLabel()
+    {
+        await FolderAsync("Empty");
+        await _tree.RefreshAsync();
+        _dialogs.DeleteAnswer = true;
+
+        await _tree.DeleteFolderCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal(["Empty"], _dialogs.DeletePrompts);
+        Assert.Empty(_tree.Roots);
+    }
+
+    [Fact]
+    public async Task RefusedDeleteChangesNothing()
+    {
+        var f = await FolderAsync("F");
+        var a = await RequestAsync("a", parent: f.Id);
+        await _tree.RefreshAsync();
+        _tabs.Open(a);
+
+        await _tree.DeleteFolderCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Single(_tree.Roots);
+        Assert.Single(_tabs.Tabs);
+    }
+
+    [Fact]
+    public async Task StorageFailureSetsLastErrorAndLeavesTheTree()
+    {
+        var tree = new CollectionTreeViewModel(new FailingWriteStore(), _requests, _tabs, _dialogs);
+        _dialogs.PromptAnswers.Enqueue("X");
+        await tree.NewCollectionCommand.ExecuteAsync(null);
+        Assert.Equal("nope", tree.LastError);
+        Assert.Empty(tree.Roots);
+    }
 }

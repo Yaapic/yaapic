@@ -83,6 +83,63 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
             _tabs.Open(node.Node.Request!);
     }
 
+    [RelayCommand]
+    private async Task NewCollectionAsync()
+    {
+        if (await PromptNameAsync("New collection", "New Collection") is not { } name) return;
+        await RunAsync(() => _collections.SaveFolderAsync(FolderDefinition.Create(name), null, CancellationToken.None));
+    }
+
+    [RelayCommand]
+    private async Task NewFolderAsync(CollectionNodeViewModel parent)
+    {
+        ArgumentNullException.ThrowIfNull(parent);
+        if (!parent.IsFolder || await PromptNameAsync("New folder", "New Folder") is not { } name) return;
+        await RunAsync(() => _collections.SaveFolderAsync(FolderDefinition.Create(name), parent.Id, CancellationToken.None),
+            () => _expanded.Add(parent.Id));
+    }
+
+    [RelayCommand]
+    private async Task RenameFolderAsync(CollectionNodeViewModel folder)
+    {
+        ArgumentNullException.ThrowIfNull(folder);
+        if (!folder.IsFolder || await PromptNameAsync("Rename", folder.Name) is not { } name || name == folder.Name) return;
+        await RunAsync(() => _collections.SaveFolderAsync(folder.Node.Folder! with { Name = name }, null, CancellationToken.None));
+    }
+
+    [RelayCommand]
+    private async Task DeleteFolderAsync(CollectionNodeViewModel folder)
+    {
+        ArgumentNullException.ThrowIfNull(folder);
+        if (!folder.IsFolder) return;
+        var requests = folder.Node.Descendants().Where(static n => n.Kind == CollectionNodeKind.Request).Select(static n => n.Id).ToList();
+        var label = requests.Count == 0 ? folder.Name : $"{folder.Name} and its {requests.Count} requests";
+        if (!await Dialogs.ConfirmDeleteAsync(label)) return;
+        foreach (var id in requests)
+            _tabs.CloseWithoutPrompt(id);
+        await RunAsync(() => _collections.DeleteFolderAsync(folder.Id, CancellationToken.None));
+    }
+
+    // A blank answer counts as a cancel.
+    private async Task<string?> PromptNameAsync(string title, string initial) =>
+        (await Dialogs.PromptTextAsync(title, "Name", initial))?.Trim() is { Length: > 0 } name ? name : null;
+
+    private async Task RunAsync(Func<Task> action, Action? onSuccess = null)
+    {
+        try
+        {
+            await action();
+        }
+        catch (StorageException ex)
+        {
+            LastError = ex.Message;
+            return;
+        }
+
+        onSuccess?.Invoke();
+        await RefreshAsync();
+    }
+
     private void ApplyFilter()
     {
         var filter = FilterText.Trim();

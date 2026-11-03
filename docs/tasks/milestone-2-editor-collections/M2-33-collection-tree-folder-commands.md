@@ -1,6 +1,6 @@
 # M2-33: Collection tree: folder commands
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-32, M2-10
 
@@ -28,11 +28,11 @@ Request commands (M2-34), moving, folder settings (M2-43).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with `FakeDialogService` and `InMemoryCollectionStore`: new collection and nested
+- [x] Tests in `Yaapic.ViewModels.Tests` with `FakeDialogService` and `InMemoryCollectionStore`: new collection and nested
       folder appear after refresh with the entered name; cancel creates nothing; rename updates the name and keeps the
       children; delete confirmed removes the folder and closes the open tabs of its requests, with the label wording for
       empty and non-empty folders; delete refused changes nothing; a storage failure sets `LastError`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
