@@ -23,6 +23,9 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     [ObservableProperty]
     private string? _lastError;
 
+    [ObservableProperty]
+    private bool _isEditingGlobals;
+
     /// <summary>Creates the view model.</summary>
     /// <param name="store">Where environments are saved.</param>
     /// <param name="dialogs">Asks the user to confirm deletions.</param>
@@ -111,6 +114,28 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     {
         oldValue?.IsEdited = false;
         newValue?.IsEdited = true;
+        if (newValue is not null)
+        {
+            IsEditingGlobals = false;
+        }
+    }
+
+    partial void OnIsEditingGlobalsChanged(bool value)
+    {
+        if (value)
+        {
+            EditedEnvironment = null;
+        }
+    }
+
+    [RelayCommand]
+    private void Duplicate(EnvironmentItemViewModel item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        var source = item.ToDefinition();
+        var copy = EnvironmentItemViewModel.FromNew(new(Guid.NewGuid(), $"{source.Name} copy", source.Variables));
+        Environments.Add(copy);
+        EditedEnvironment = copy;
     }
 
     [RelayCommand]

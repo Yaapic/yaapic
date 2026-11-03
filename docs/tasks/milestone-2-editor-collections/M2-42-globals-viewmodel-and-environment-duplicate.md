@@ -1,6 +1,6 @@
 # M2-42: Globals ViewModel and environment duplicate
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-40
 
@@ -28,10 +28,10 @@ Composition and sending (M2-44, M2-45), views (M2-47, M2-50).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: globals load, edit -> dirty, save clears dirty and writes the store, revert
+- [x] Tests in `Yaapic.ViewModels.Tests`: globals load, edit -> dirty, save clears dirty and writes the store, revert
       cleans, load failure sets `LastError` and disables save; duplicate creates an unsaved copy with new id and
       name suffix, original untouched, copy saveable; `IsEditingGlobals` and `EditedEnvironment` exclude each other.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

@@ -148,7 +148,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-39](milestone-2-editor-collections/M2-39-avalonia-tree-menus-and-prompts.md) | Avalonia tree context menus and prompts | unix | M2-38, M2-20 | done |
 | [M2-40](milestone-2-editor-collections/M2-40-core-variable-scopes-and-globals-port.md) | Core: variable scopes, sender and globals port | any | M2-01 | done |
 | [M2-41](milestone-2-editor-collections/M2-41-file-globals-store.md) | Globals YAML serializer and file store | any | M2-40 | done |
-| [M2-42](milestone-2-editor-collections/M2-42-globals-viewmodel-and-environment-duplicate.md) | Globals ViewModel and environment duplicate | any | M2-40 | todo |
+| [M2-42](milestone-2-editor-collections/M2-42-globals-viewmodel-and-environment-duplicate.md) | Globals ViewModel and environment duplicate | any | M2-40 | done |
 | [M2-43](milestone-2-editor-collections/M2-43-folder-settings-viewmodel.md) | Folder and collection settings ViewModel | any | M2-34 | todo |
 | [M2-44](milestone-2-editor-collections/M2-44-variable-scope-provider.md) | Variable scope provider: sending with all scopes | any | M2-35, M2-41, M2-42, M2-43 | todo |
 | [M2-45](milestone-2-editor-collections/M2-45-shell-globals.md) | Shell: globals | any | M2-44 | todo |
