@@ -135,7 +135,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-26](milestone-2-editor-collections/M2-26-collection-store-port-and-double.md) | Core: collection store port and in-memory double | any | M2-25 | done |
 | [M2-27](milestone-2-editor-collections/M2-27-yaml-folder-serializer.md) | YAML folder serializer | any | M2-25 | done |
 | [M2-28](milestone-2-editor-collections/M2-28-workspace-index-scanner.md) | Workspace index scanner | any | M2-27 | done |
-| [M2-29](milestone-2-editor-collections/M2-29-file-request-store-folders.md) | File request store: requests inside folders | any | M2-28 | todo |
+| [M2-29](milestone-2-editor-collections/M2-29-file-request-store-folders.md) | File request store: requests inside folders | any | M2-28 | done |
 | [M2-30](milestone-2-editor-collections/M2-30-file-collection-store-tree-and-folders.md) | File collection store: tree and folder management | any | M2-26, M2-29 | todo |
 | [M2-31](milestone-2-editor-collections/M2-31-file-collection-store-move.md) | File collection store: move folders and requests | any | M2-30 | todo |
 | [M2-32](milestone-2-editor-collections/M2-32-collection-tree-viewmodel.md) | Collection tree ViewModel | any | M2-26 | todo |

@@ -101,9 +101,9 @@ public sealed class FileRequestStoreTests : IDisposable
         await File.WriteAllTextAsync(Path.Combine(Requests, "bad.request.yaml"), "version: [", CancellationToken.None);
 
         Assert.Single(await store.ListAsync(CancellationToken.None));
-        Assert.Equal(["bad.request.yaml"], store.LastListErrors);
+        Assert.StartsWith("bad.request.yaml:", Assert.Single(store.LastListErrors));
         await store.ListAsync(CancellationToken.None);
-        Assert.Equal(["bad.request.yaml"], store.LastListErrors);
+        Assert.StartsWith("bad.request.yaml:", Assert.Single(store.LastListErrors));
     }
 
     [Fact]
@@ -114,7 +114,7 @@ public sealed class FileRequestStoreTests : IDisposable
         File.Copy(Path.Combine(Requests, "b.request.yaml"), Path.Combine(Requests, "c.request.yaml"));
 
         Assert.Single(await store.ListAsync(CancellationToken.None));
-        Assert.Equal(["c.request.yaml"], store.LastListErrors);
+        Assert.StartsWith("c.request.yaml:", Assert.Single(store.LastListErrors));
     }
 
     [Fact]
@@ -144,5 +144,74 @@ public sealed class FileRequestStoreTests : IDisposable
     {
         Assert.Equal("get-users-caf", WorkspaceFiles.Slugify("  Get users - café ☕", "request"));
         Assert.Equal(60, WorkspaceFiles.Slugify(new string('a', 100), "request").Length);
+    }
+
+    private async Task<HttpRequestDefinition> SeedNestedAsync(string folderDir, string name)
+    {
+        Directory.CreateDirectory(Path.Combine(Requests, folderDir));
+        var folder = Path.Combine(Requests, folderDir, "folder.yaml");
+        if (!File.Exists(folder))
+        {
+            await File.WriteAllTextAsync(folder, FolderYamlSerializer.Serialize(Yaapic.Domain.Collections.FolderDefinition.Create(folderDir)));
+        }
+
+        var request = HttpRequestDefinition.Create(name);
+        await File.WriteAllTextAsync(Path.Combine(Requests, folderDir, "seed.request.yaml"), RequestYamlSerializer.Serialize(request));
+        return request;
+    }
+
+    [Fact]
+    public async Task NestedRequestsAreListed()
+    {
+        var nested = await SeedNestedAsync("api", "N");
+        var list = await new FileRequestStore(_root).ListAsync(CancellationToken.None);
+        Assert.Equal(nested.Id, Assert.Single(list).Id);
+    }
+
+    [Fact]
+    public async Task SavingNestedRequestKeepsItsFolderAndRenamesInPlace()
+    {
+        var nested = await SeedNestedAsync("api", "N");
+        var store = new FileRequestStore(_root);
+        await store.SaveAsync(nested, CancellationToken.None);
+        Assert.True(File.Exists(Path.Combine(Requests, "api", "n.request.yaml")));
+        Assert.False(File.Exists(Path.Combine(Requests, "api", "seed.request.yaml")));
+
+        await store.SaveAsync(nested with { Name = "Renamed" }, CancellationToken.None);
+        Assert.True(File.Exists(Path.Combine(Requests, "api", "renamed.request.yaml")));
+        Assert.False(File.Exists(Path.Combine(Requests, "api", "n.request.yaml")));
+        Assert.Empty(Directory.GetFiles(Requests));
+    }
+
+    [Fact]
+    public async Task NameCollisionIsPerDirectory()
+    {
+        await SeedNestedAsync("api", "Same");
+        File.Move(Path.Combine(Requests, "api", "seed.request.yaml"), Path.Combine(Requests, "api", "same.request.yaml"));
+        var store = new FileRequestStore(_root);
+        await store.SaveAsync(HttpRequestDefinition.Create("Same"), CancellationToken.None);
+        Assert.Equal(["same.request.yaml"], FileNames());
+
+        await store.SaveAsync(HttpRequestDefinition.Create("Same"), CancellationToken.None);
+        Assert.Equal(["same-2.request.yaml", "same.request.yaml"], FileNames());
+    }
+
+    [Fact]
+    public async Task DeleteRemovesNestedRequestAndKeepsFolder()
+    {
+        var nested = await SeedNestedAsync("api", "N");
+        var store = new FileRequestStore(_root);
+        await store.DeleteAsync(nested.Id, CancellationToken.None);
+        Assert.False(File.Exists(Path.Combine(Requests, "api", "seed.request.yaml")));
+        Assert.True(File.Exists(Path.Combine(Requests, "api", "folder.yaml")));
+    }
+
+    [Fact]
+    public async Task FolderErrorsSurface()
+    {
+        Directory.CreateDirectory(Path.Combine(Requests, "nofolderyaml"));
+        var store = new FileRequestStore(_root);
+        Assert.Empty(await store.ListAsync(CancellationToken.None));
+        Assert.StartsWith("nofolderyaml:", Assert.Single(store.LastListErrors));
     }
 }

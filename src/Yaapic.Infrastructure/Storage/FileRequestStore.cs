@@ -11,52 +11,32 @@ public sealed class FileRequestStore(string workspaceRoot) : IRequestStore
     private readonly string _directory = Path.Combine(workspaceRoot, "requests");
     private readonly Dictionary<Guid, string> _paths = [];
 
-    /// <summary>Gets the names of the files skipped by the last <see cref="ListAsync"/> call (corrupt or duplicate id).</summary>
+    /// <summary>Gets the entries skipped by the last <see cref="ListAsync"/> call, as relative paths followed by the reason.</summary>
     public IReadOnlyList<string> LastListErrors { get; private set; } = [];
 
     /// <inheritdoc />
-    public async Task<IReadOnlyList<HttpRequestDefinition>> ListAsync(CancellationToken ct)
+    public Task<IReadOnlyList<HttpRequestDefinition>> ListAsync(CancellationToken ct)
     {
-        var errors = new List<string>();
-        var found = new Dictionary<Guid, (HttpRequestDefinition Request, string Path)>();
+        ct.ThrowIfCancellationRequested();
         try
         {
-            if (Directory.Exists(_directory))
+            var index = WorkspaceIndex.Scan(_directory);
+            LastListErrors = index.Errors;
+            _paths.Clear();
+            foreach (var r in index.Requests)
             {
-                var files = Directory.EnumerateFiles(_directory, "*" + Extension, SearchOption.TopDirectoryOnly)
-                    .OrderBy(f => Path.GetFileName(f), StringComparer.Ordinal);
-                foreach (var file in files)
-                {
-                    try
-                    {
-                        var request = RequestYamlSerializer.Deserialize(await File.ReadAllTextAsync(file, ct));
-                        if (!found.TryAdd(request.Id, (request, file)))
-                        {
-                            errors.Add(Path.GetFileName(file));
-                        }
-                    }
-                    catch (StorageException)
-                    {
-                        errors.Add(Path.GetFileName(file));
-                    }
-                }
+                _paths[r.Request.Id] = r.FilePath;
             }
+
+            IReadOnlyList<HttpRequestDefinition> list = [.. index.Requests.Select(r => r.Request)
+                .OrderBy(r => r.Name, StringComparer.OrdinalIgnoreCase)
+                .ThenBy(r => r.Id)];
+            return Task.FromResult(list);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             throw new StorageException($"Cannot read '{_directory}': {ex.Message}", ex);
         }
-
-        LastListErrors = errors;
-        _paths.Clear();
-        foreach (var (id, entry) in found)
-        {
-            _paths[id] = entry.Path;
-        }
-
-        return [.. found.Values.Select(e => e.Request)
-            .OrderBy(r => r.Name, StringComparer.OrdinalIgnoreCase)
-            .ThenBy(r => r.Id)];
     }
 
     /// <inheritdoc />
@@ -70,15 +50,13 @@ public sealed class FileRequestStore(string workspaceRoot) : IRequestStore
 
         try
         {
-            var slug = WorkspaceFiles.Slugify(request.Name, "request");
-            var path = Path.Combine(_directory, slug + Extension);
-            for (var n = 2; _paths.Any(p => p.Key != request.Id && IsSamePath(p.Value, path)); n++)
-            {
-                path = Path.Combine(_directory, $"{slug}-{n}{Extension}");
-            }
+            _paths.TryGetValue(request.Id, out var old);
+            var directory = old is null ? _directory : Path.GetDirectoryName(old)!;
+            var name = WorkspaceFiles.UniqueName(directory, WorkspaceFiles.Slugify(request.Name, "request"), Extension, old);
+            var path = Path.Combine(directory, name);
 
             await WorkspaceFiles.WriteAtomicAsync(path, RequestYamlSerializer.Serialize(request), ct);
-            if (_paths.TryGetValue(request.Id, out var old) && !IsSamePath(old, path))
+            if (old is not null && !IsSamePath(old, path))
             {
                 File.Delete(old);
             }

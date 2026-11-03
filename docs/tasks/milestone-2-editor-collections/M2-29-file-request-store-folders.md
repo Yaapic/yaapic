@@ -1,6 +1,6 @@
 # M2-29: File request store: requests inside folders
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-28
 
@@ -26,11 +26,11 @@ Creating, renaming or moving folders (M2-30, M2-31), the sidebar.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: requests in nested folders are listed; saving an existing nested request
+- [x] Tests in `Yaapic.Infrastructure.Tests`: requests in nested folders are listed; saving an existing nested request
       overwrites in place and keeps its folder; renaming it renames the file inside the same folder; a name that collides
       only inside its folder gets `-2`, the same name in another folder does not; unknown id saves unfiled; delete of a
       nested request; folder errors surface in `LastListErrors`; all M1 tests unchanged and green.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
