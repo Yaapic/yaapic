@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Workspace;
 using Yaapic.UI.Abstractions;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Tabs;
@@ -21,23 +22,27 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>Creates the shell.</summary>
     /// <param name="tabs">The open tabs.</param>
     /// <param name="requests">The sidebar request list.</param>
+    /// <param name="collections">The collection tree.</param>
     /// <param name="environments">The environment selection and editing.</param>
     /// <param name="session">Where the session is saved.</param>
     /// <param name="dialogs">Asks the user about unsaved changes when the window closes.</param>
     public ShellViewModel(
         TabsViewModel tabs,
         RequestListViewModel requests,
+        CollectionTreeViewModel collections,
         EnvironmentsViewModel environments,
         ISessionStore session,
         IDialogService dialogs)
     {
         ArgumentNullException.ThrowIfNull(tabs);
         ArgumentNullException.ThrowIfNull(requests);
+        ArgumentNullException.ThrowIfNull(collections);
         ArgumentNullException.ThrowIfNull(environments);
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(dialogs);
         Tabs = tabs;
         Requests = requests;
+        Collections = collections;
         Environments = environments;
         _session = session;
         _dialogs = dialogs;
@@ -52,6 +57,9 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>Gets the sidebar request list.</summary>
     public RequestListViewModel Requests { get; }
 
+    /// <summary>Gets the collection tree.</summary>
+    public CollectionTreeViewModel Collections { get; }
+
     /// <summary>Gets the environments view model.</summary>
     public EnvironmentsViewModel Environments { get; }
 
@@ -62,6 +70,7 @@ public sealed partial class ShellViewModel : ObservableObject
         var state = await _session.LoadAsync(CancellationToken.None);
         await Environments.LoadAsync(state.ActiveEnvironmentId);
         await Requests.RefreshAsync();
+        await Collections.RefreshAsync();
 
         foreach (var id in state.OpenRequestIds)
         {

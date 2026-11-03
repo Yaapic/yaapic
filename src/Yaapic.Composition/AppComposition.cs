@@ -2,6 +2,7 @@ using Yaapic.Core.Http;
 using Yaapic.Infrastructure.Http;
 using Yaapic.Infrastructure.Storage;
 using Yaapic.UI.Abstractions;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
@@ -33,6 +34,7 @@ public static class AppComposition
             dialogs,
             (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, environments, isNew, dialogs));
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
-        return new ShellViewModel(tabs, requests, environments, sessionStore, dialogs);
+        var collections = new CollectionTreeViewModel(new FileCollectionStore(workspaceRoot), requestStore, tabs, dialogs);
+        return new ShellViewModel(tabs, requests, collections, environments, sessionStore, dialogs);
     }
 }
