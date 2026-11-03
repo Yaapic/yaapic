@@ -12,6 +12,13 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenNull(object? value) => value is null ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> when neither the globals nor an environment is edited.</summary>
+    /// <param name="editingGlobals">Whether the globals are edited.</param>
+    /// <param name="environment">The edited environment, if any.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenNeither(bool editingGlobals, object? environment) =>
+        !editingGlobals && environment is null ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Returns <see cref="Visibility.Visible"/> when the value is not null.</summary>
     /// <param name="value">The value to test.</param>
     /// <returns>The visibility.</returns>

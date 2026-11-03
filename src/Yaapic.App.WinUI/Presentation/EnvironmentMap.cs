@@ -24,4 +24,10 @@ public static class EnvironmentMap
     /// <param name="count">The number of enabled, non-empty variables.</param>
     /// <returns>For example <c>3 variables</c>.</returns>
     public static string VariableCount(int count) => count == 1 ? "1 variable" : $"{count} variables";
+
+    /// <summary>Gets the background of the fixed Globals row: raised surface when it is the edited entry.</summary>
+    /// <param name="isSelected">Whether the globals are being edited.</param>
+    /// <returns>The brush from the application resources.</returns>
+    public static Brush RowBackground(bool isSelected) =>
+        (Brush)Application.Current.Resources[isSelected ? "YaapicSurfaceRaisedBrush" : "YaapicSurfaceSidebarBrush"];
 }

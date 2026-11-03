@@ -1,6 +1,6 @@
 # M2-47: WinUI environments dialog: globals and duplicate
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-42, M2-45
 
@@ -29,11 +29,11 @@ Secrets, import/export, per-collection editing here (that is the folder settings
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: add a global `baseUrl = https://httpbin.org`, save, send `{{baseUrl}}/get`: 200;
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: add a global `baseUrl = https://httpbin.org`, save, send `{{baseUrl}}/get`: 200;
       `globals.yaml` exists in the workspace; define the same name in an environment and select it: the environment value wins;
       duplicate an environment, rename it, save: both files exist.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
