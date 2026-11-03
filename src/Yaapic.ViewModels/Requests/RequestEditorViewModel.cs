@@ -2,6 +2,7 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
+using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Editing;
@@ -134,6 +135,12 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <summary>Gets the upper-case method label shown in the tab header.</summary>
     public string MethodText => Method.ToText();
 
+    /// <summary>Gets the variables the URL uses and whether each resolves; empty while the tab is inactive.</summary>
+    public IReadOnlyList<VariableHint> UrlVariables { get; private set; } = [];
+
+    /// <summary>Gets a value indicating whether the URL uses at least one variable.</summary>
+    public bool HasUrlVariables => UrlVariables.Count > 0;
+
     /// <summary>Gets the tab name without the dirty marker: the trimmed name, or "New Request" when it is empty.</summary>
     public string DisplayName => Name.Trim().Length == 0 ? DefaultName : Name.Trim();
 
@@ -248,6 +255,39 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         }
 
         Refresh();
+        RefreshUrlVariables();
+    }
+
+    partial void OnIsActiveChanged(bool value)
+    {
+        _scopes.ScopesChanged -= OnScopesChanged;
+        if (value)
+        {
+            _scopes.ScopesChanged += OnScopesChanged;
+        }
+
+        RefreshUrlVariables();
+    }
+
+    private void OnScopesChanged(object? sender, EventArgs e) => RefreshUrlVariables();
+
+    private void RefreshUrlVariables()
+    {
+        List<VariableHint> hints = [];
+        if (IsActive)
+        {
+            var scopes = _scopes.GetScopes(Id);
+            foreach (var name in VariableScanner.Scan(Url))
+            {
+                hints.Add(scopes.TryResolve(name, out var value, out var scope)
+                    ? new VariableHint(name, true, scope == VariableScopeKind.Dynamic ? null : value, scope)
+                    : new VariableHint(name, false, null, null));
+            }
+        }
+
+        UrlVariables = hints;
+        OnPropertyChanged(nameof(UrlVariables));
+        OnPropertyChanged(nameof(HasUrlVariables));
     }
 
     partial void OnBodyKindChanged(BodyKind value) => Refresh();
