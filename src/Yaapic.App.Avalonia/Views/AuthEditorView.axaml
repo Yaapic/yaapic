@@ -1,0 +1,62 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:req="using:Yaapic.ViewModels.Requests"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             x:Class="Yaapic.App.Avalonia.Views.AuthEditorView"
+             x:DataType="req:AuthEditorViewModel">
+  <StackPanel Margin="16,12" Spacing="12" MaxWidth="480" HorizontalAlignment="Left">
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="Type" />
+      <ComboBox x:Name="KindBox" MinWidth="200" AutomationProperties.Name="Authentication type"
+                SelectedIndex="{Binding Kind, Converter={x:Static p:EditorMap.AuthKindIndex}, Mode=OneWay}"
+                SelectionChanged="OnKindChanged">
+        <ComboBoxItem Content="None" />
+        <ComboBoxItem Content="Basic Auth" />
+        <ComboBoxItem Content="Bearer Token" />
+        <ComboBoxItem Content="API Key" />
+      </ComboBox>
+    </StackPanel>
+
+    <TextBlock Classes="bodySmall" Text="This request does not use any authentication."
+               Foreground="{DynamicResource YaapicTextTertiaryBrush}"
+               IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsNoAuth}}" />
+
+    <StackPanel Spacing="12" IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsBasicAuth}}">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="Username" />
+        <TextBox PlaceholderText="{}Use {{variable}} to keep secrets out of the file" Text="{Binding Username, Mode=TwoWay}" />
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="Password" />
+        <TextBox PlaceholderText="{}Use {{variable}} to keep secrets out of the file" PasswordChar="●"
+                 Text="{Binding Password, Mode=TwoWay}" />
+      </StackPanel>
+    </StackPanel>
+
+    <StackPanel Spacing="6" IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsBearerAuth}}">
+      <TextBlock Classes="bodyStrong" Text="Token" />
+      <TextBox PlaceholderText="{}Use {{variable}} to keep secrets out of the file" PasswordChar="●"
+               Text="{Binding Token, Mode=TwoWay}" />
+    </StackPanel>
+
+    <StackPanel Spacing="12" IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsApiKeyAuth}}">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="Key" />
+        <TextBox PlaceholderText="{}Use {{variable}} to keep secrets out of the file" Text="{Binding Key, Mode=TwoWay}" />
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="Value" />
+        <TextBox PlaceholderText="{}Use {{variable}} to keep secrets out of the file" Text="{Binding Value, Mode=TwoWay}" />
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="Add to" />
+        <ComboBox x:Name="LocationBox" MinWidth="200" AutomationProperties.Name="API key location"
+                  SelectedIndex="{Binding Location, Converter={x:Static p:EditorMap.LocationIndex}, Mode=OneWay}"
+                  SelectionChanged="OnLocationChanged">
+          <ComboBoxItem Content="Header" />
+          <ComboBoxItem Content="Query Params" />
+        </ComboBox>
+      </StackPanel>
+    </StackPanel>
+  </StackPanel>
+</UserControl>

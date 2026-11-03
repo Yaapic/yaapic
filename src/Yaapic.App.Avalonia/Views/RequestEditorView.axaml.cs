@@ -64,5 +64,13 @@ public sealed partial class RequestEditorView : UserControl
         }
     }
 
+    private void OnTimeoutChanged(object? sender, NumericUpDownValueChangedEventArgs e)
+    {
+        if (Editor is { } editor)
+        {
+            editor.TimeoutSeconds = (int)(e.NewValue ?? 0);
+        }
+    }
+
     private void OnSaveClick(object? sender, RoutedEventArgs e) => SaveRequested?.Invoke(this, EventArgs.Empty);
 }

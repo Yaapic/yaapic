@@ -117,6 +117,29 @@
           </Grid>
         </Grid>
       </TabItem>
+      <TabItem>
+        <TabItem.Header>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <TextBlock Text="Auth" />
+            <Ellipse Width="6" Height="6" VerticalAlignment="Center" Fill="{DynamicResource YaapicAccentTextBrush}"
+                     IsVisible="{Binding Auth.IsActive}" />
+          </StackPanel>
+        </TabItem.Header>
+        <v:AuthEditorView DataContext="{Binding Auth}" />
+      </TabItem>
+      <TabItem Header="Settings">
+        <StackPanel Margin="16,12" Spacing="16" HorizontalAlignment="Left">
+          <ToggleSwitch OnContent="Follow redirects" OffContent="Follow redirects"
+                        IsChecked="{Binding FollowRedirects, Mode=TwoWay}" />
+          <StackPanel Spacing="6" Width="260">
+            <TextBlock Classes="bodyStrong" Text="Timeout (seconds, 0 = default)" />
+            <NumericUpDown Minimum="0" Increment="1" FormatString="0"
+                           AutomationProperties.Name="Timeout in seconds"
+                           Value="{Binding TimeoutSeconds, Converter={x:Static p:EditorMap.TimeoutValue}, Mode=OneWay}"
+                           ValueChanged="OnTimeoutChanged" />
+          </StackPanel>
+        </StackPanel>
+      </TabItem>
     </TabControl>
 
     <GridSplitter Grid.Row="3" Classes="rows" />

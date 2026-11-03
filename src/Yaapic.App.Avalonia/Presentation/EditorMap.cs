@@ -52,4 +52,31 @@ public static class EditorMap
 
     /// <summary>Converts a form field kind to its index in the Text/File picker.</summary>
     public static FuncValueConverter<FormFieldKind, int> FieldKindIndex { get; } = new(k => k == FormFieldKind.File ? 1 : 0);
+
+    /// <summary>Converts an authentication kind to its index in the type picker (the order of <c>AuthEditorViewModel.Kinds</c>).</summary>
+    public static FuncValueConverter<AuthKind, int> AuthKindIndex { get; } = new(k => k switch
+    {
+        AuthKind.Basic => 1,
+        AuthKind.Bearer => 2,
+        AuthKind.ApiKey => 3,
+        _ => 0,
+    });
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> when no authentication is used.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsNoAuth { get; } = new(k => k == AuthKind.None);
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> for Basic authentication.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsBasicAuth { get; } = new(k => k == AuthKind.Basic);
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> for Bearer authentication.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsBearerAuth { get; } = new(k => k == AuthKind.Bearer);
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> for API key authentication.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsApiKeyAuth { get; } = new(k => k == AuthKind.ApiKey);
+
+    /// <summary>Converts an API key location to its index in the "Add to" picker (Header, Query Params).</summary>
+    public static FuncValueConverter<ApiKeyLocation, int> LocationIndex { get; } = new(l => l == ApiKeyLocation.Query ? 1 : 0);
+
+    /// <summary>Converts a timeout in seconds to the value of a <c>NumericUpDown</c>.</summary>
+    public static FuncValueConverter<int, decimal?> TimeoutValue { get; } = new(n => n);
 }
