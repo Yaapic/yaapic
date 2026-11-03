@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
+using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Tabs;
 
@@ -118,6 +119,107 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         foreach (var id in requests)
             _tabs.CloseWithoutPrompt(id);
         await RunAsync(() => _collections.DeleteFolderAsync(folder.Id, CancellationToken.None));
+    }
+
+    [RelayCommand]
+    private async Task NewRequestAsync(CollectionNodeViewModel? parent)
+    {
+        var folderId = parent is { IsFolder: true } ? parent.Id : (Guid?)null;
+        var definition = HttpRequestDefinition.Create("New Request");
+        await RunAsync(
+            async () =>
+            {
+                await Requests.SaveAsync(definition, CancellationToken.None);
+                if (folderId is { } id) await _collections.MoveAsync(definition.Id, id, CancellationToken.None);
+            },
+            () =>
+            {
+                if (folderId is { } id) _expanded.Add(id);
+                _tabs.Open(definition);
+            });
+    }
+
+    [RelayCommand]
+    private async Task RenameRequestAsync(CollectionNodeViewModel node)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        if (node.IsFolder || await PromptNameAsync("Rename", node.Name) is not { } name || name == node.Name) return;
+        if (_tabs.Tabs.FirstOrDefault(t => t.Id == node.Id) is { } tab)
+        {
+            var wasClean = !tab.IsDirty;
+            tab.Name = name;
+            // A dirty tab keeps the new name unsaved; the user saves it with the rest of their edits.
+            if (wasClean && !await _tabs.SaveAsync(tab))
+            {
+                LastError = _tabs.LastError;
+                return;
+            }
+
+            await RefreshAsync();
+            return;
+        }
+
+        await RunAsync(() => Requests.SaveAsync(node.Node.Request! with { Name = name }, CancellationToken.None));
+    }
+
+    [RelayCommand]
+    private async Task DuplicateRequestAsync(CollectionNodeViewModel node)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        if (node.IsFolder) return;
+        var copy = node.Node.Request! with { Id = Guid.NewGuid(), Name = $"{node.Name} copy" };
+        var folderId = node.Parent?.Id;
+        await RunAsync(
+            async () =>
+            {
+                await Requests.SaveAsync(copy, CancellationToken.None);
+                if (folderId is { } id) await _collections.MoveAsync(copy.Id, id, CancellationToken.None);
+            },
+            () => _tabs.Open(copy));
+    }
+
+    [RelayCommand]
+    private async Task DeleteRequestAsync(CollectionNodeViewModel node)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        if (node.IsFolder || !await Dialogs.ConfirmDeleteAsync(node.Name)) return;
+        _tabs.CloseWithoutPrompt(node.Id);
+        await RunAsync(() => Requests.DeleteAsync(node.Id, CancellationToken.None));
+    }
+
+    /// <summary>Lists where <paramref name="node"/> can be moved: the top level, then every folder in tree order.</summary>
+    /// <param name="node">The folder or request to move.</param>
+    /// <returns>The targets, excluding the current parent and, for a folder, itself and its descendants.</returns>
+    public IReadOnlyList<FolderOption> GetMoveTargets(CollectionNodeViewModel node)
+    {
+        ArgumentNullException.ThrowIfNull(node);
+        List<FolderOption> options = [];
+        if (node.Parent is not null) options.Add(new FolderOption(null, "Top level"));
+        AddTargets(_tree, "", node, options);
+        return options;
+    }
+
+    [RelayCommand]
+    private async Task MoveAsync(MoveRequest move)
+    {
+        ArgumentNullException.ThrowIfNull(move);
+        await RunAsync(
+            () => _collections.MoveAsync(move.Node.Id, move.Target.Id, CancellationToken.None),
+            () =>
+            {
+                if (move.Target.Id is { } id) _expanded.Add(id);
+            });
+    }
+
+    private static void AddTargets(IEnumerable<CollectionNode> nodes, string prefix, CollectionNodeViewModel moved, List<FolderOption> options)
+    {
+        foreach (var folder in nodes.Where(static n => n.Kind == CollectionNodeKind.Folder))
+        {
+            if (moved.IsFolder && folder.Id == moved.Id) continue;
+            var path = prefix.Length == 0 ? folder.Name : $"{prefix} / {folder.Name}";
+            if (folder.Id != moved.Parent?.Id) options.Add(new FolderOption(folder.Id, path));
+            AddTargets(folder.Children, path, moved, options);
+        }
     }
 
     // A blank answer counts as a cancel.

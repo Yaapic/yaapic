@@ -211,7 +211,7 @@ public sealed class CollectionTreeViewModelTests
 
         public Task DeleteFolderAsync(Guid id, CancellationToken ct) => throw new StorageException("nope");
 
-        public Task MoveAsync(Guid id, Guid? newParentId, CancellationToken ct) => throw new NotSupportedException();
+        public Task MoveAsync(Guid id, Guid? newParentId, CancellationToken ct) => throw new StorageException("nope");
     }
 
     [Fact]
@@ -327,6 +327,254 @@ public sealed class CollectionTreeViewModelTests
 
         Assert.Single(_tree.Roots);
         Assert.Single(_tabs.Tabs);
+    }
+
+    private static CollectionNodeViewModel Find(IEnumerable<CollectionNodeViewModel> nodes, Guid id) =>
+        FindOrNull(nodes, id) ?? throw new InvalidOperationException();
+
+    private static CollectionNodeViewModel? FindOrNull(IEnumerable<CollectionNodeViewModel> nodes, Guid id)
+    {
+        foreach (var n in nodes)
+        {
+            if (n.Id == id) return n;
+            if (FindOrNull(n.Children, id) is { } found) return found;
+        }
+
+        return null;
+    }
+
+    [Fact]
+    public async Task NewRequestIsUnfiledAndOpenedInACleanTab()
+    {
+        await _tree.NewRequestCommand.ExecuteAsync(null);
+
+        var node = Assert.Single(_tree.Roots);
+        Assert.Equal("New Request", node.Name);
+        Assert.Equal(node.Id, _tabs.ActiveTab!.Id);
+        Assert.False(_tabs.ActiveTab.IsNew);
+        Assert.False(_tabs.ActiveTab.IsDirty);
+    }
+
+    [Fact]
+    public async Task NewRequestInAFolderIsFiledThereAndExpandsIt()
+    {
+        var f = await FolderAsync("F");
+        await _tree.RefreshAsync();
+
+        await _tree.NewRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        var root = Assert.Single(_tree.Roots);
+        Assert.True(root.IsExpanded);
+        Assert.Equal(["New Request"], root.Children.Select(n => n.Name));
+        Assert.Equal(root.Children[0].Id, _tabs.ActiveTab!.Id);
+        Assert.Equal(f.Id, root.Id);
+    }
+
+    [Fact]
+    public async Task NewRequestOnARequestNodeIsUnfiled()
+    {
+        await RequestAsync("r");
+        await _tree.RefreshAsync();
+
+        await _tree.NewRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal(2, _tree.Roots.Count);
+    }
+
+    [Fact]
+    public async Task RenameOfAClosedRequestSavesTheStoredDefinition()
+    {
+        var r = await RequestAsync("old", "https://x");
+        await _tree.RefreshAsync();
+        _dialogs.PromptAnswers.Enqueue("new");
+
+        await _tree.RenameRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal("new", _tree.Roots[0].Name);
+        Assert.Equal("https://x", _tree.Roots[0].Url);
+        Assert.Equal(r.Id, _tree.Roots[0].Id);
+        Assert.Equal("old", _dialogs.Prompts[0].Initial);
+    }
+
+    [Fact]
+    public async Task RenameOfACleanOpenRequestRenamesAndSavesItsTab()
+    {
+        var r = await RequestAsync("old");
+        await _tree.RefreshAsync();
+        _tabs.Open(r);
+        _dialogs.PromptAnswers.Enqueue("new");
+
+        await _tree.RenameRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal("new", _tabs.ActiveTab!.Name);
+        Assert.False(_tabs.ActiveTab.IsDirty);
+        Assert.Equal("new", _tree.Roots[0].Name);
+    }
+
+    [Fact]
+    public async Task RenameOfADirtyOpenRequestOnlyRenamesTheTab()
+    {
+        var r = await RequestAsync("old");
+        await _tree.RefreshAsync();
+        _tabs.Open(r);
+        _tabs.ActiveTab!.Url = "https://edited";
+        _dialogs.PromptAnswers.Enqueue("new");
+
+        await _tree.RenameRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal("new", _tabs.ActiveTab.Name);
+        Assert.True(_tabs.ActiveTab.IsDirty);
+        Assert.Equal("old", _tree.Roots[0].Name);
+        Assert.Equal("", _tree.Roots[0].Url);
+    }
+
+    [Fact]
+    public async Task RenameIsIgnoredForAFolder()
+    {
+        await FolderAsync("F");
+        await _tree.RefreshAsync();
+
+        await _tree.RenameRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Empty(_dialogs.Prompts);
+    }
+
+    [Fact]
+    public async Task DuplicateKeepsContentAndFolderWithANewIdAndName()
+    {
+        var f = await FolderAsync("F");
+        var r = await RequestAsync("r", "https://x", f.Id);
+        await _tree.RefreshAsync();
+
+        await _tree.DuplicateRequestCommand.ExecuteAsync(Find(_tree.Roots, r.Id));
+
+        var children = _tree.Roots[0].Children;
+        Assert.Equal(["r", "r copy"], children.Select(n => n.Name));
+        Assert.Equal("https://x", children[1].Url);
+        Assert.NotEqual(r.Id, children[1].Id);
+        Assert.Equal(children[1].Id, _tabs.ActiveTab!.Id);
+    }
+
+    [Fact]
+    public async Task DuplicateOfAnUnfiledRequestStaysUnfiled()
+    {
+        await RequestAsync("r");
+        await _tree.RefreshAsync();
+
+        await _tree.DuplicateRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Equal(["r", "r copy"], _tree.Roots.Select(n => n.Name));
+    }
+
+    [Fact]
+    public async Task ConfirmedDeleteOfARequestClosesItsTab()
+    {
+        var r = await RequestAsync("r");
+        var keep = await RequestAsync("keep");
+        await _tree.RefreshAsync();
+        _tabs.Open(r);
+        _tabs.Open(keep);
+        _dialogs.DeleteAnswer = true;
+
+        await _tree.DeleteRequestCommand.ExecuteAsync(_tree.Roots.Single(n => n.Id == r.Id));
+
+        Assert.Equal(["r"], _dialogs.DeletePrompts);
+        Assert.Equal(["keep"], _tree.Roots.Select(n => n.Name));
+        Assert.Equal([keep.Id], _tabs.Tabs.Select(t => t.Id));
+    }
+
+    [Fact]
+    public async Task RefusedDeleteOfARequestChangesNothing()
+    {
+        var r = await RequestAsync("r");
+        await _tree.RefreshAsync();
+        _tabs.Open(r);
+
+        await _tree.DeleteRequestCommand.ExecuteAsync(_tree.Roots[0]);
+
+        Assert.Single(_tree.Roots);
+        Assert.Single(_tabs.Tabs);
+    }
+
+    [Fact]
+    public async Task MoveTargetsListTheTopLevelThenFoldersWithPathsAndExclusions()
+    {
+        var a = await FolderAsync("A");
+        var sub = await FolderAsync("Sub", a.Id);
+        var b = await FolderAsync("B");
+        var r = await RequestAsync("r", parent: a.Id);
+        await _tree.RefreshAsync();
+
+        var forRequest = _tree.GetMoveTargets(Find(_tree.Roots, r.Id));
+        Assert.Equal(["Top level", "A / Sub", "B"], forRequest.Select(o => o.Path));
+        Assert.Null(forRequest[0].Id);
+
+        var forSub = _tree.GetMoveTargets(Find(_tree.Roots, sub.Id));
+        Assert.Equal(["Top level", "B"], forSub.Select(o => o.Path));
+
+        var forA = _tree.GetMoveTargets(Find(_tree.Roots, a.Id));
+        Assert.Equal(["B"], forA.Select(o => o.Path));
+        Assert.Equal(b.Id, forA[0].Id);
+    }
+
+    [Fact]
+    public async Task MoveRequestRelocatesItAndExpandsTheTarget()
+    {
+        var f = await FolderAsync("F");
+        var r = await RequestAsync("r");
+        await _tree.RefreshAsync();
+        var target = _tree.GetMoveTargets(Find(_tree.Roots, r.Id)).Single();
+
+        await _tree.MoveCommand.ExecuteAsync(new MoveRequest(Find(_tree.Roots, r.Id), target));
+
+        var root = Assert.Single(_tree.Roots);
+        Assert.Equal(f.Id, root.Id);
+        Assert.True(root.IsExpanded);
+        Assert.Equal([r.Id], root.Children.Select(n => n.Id));
+    }
+
+    [Fact]
+    public async Task MoveFolderKeepsItsRequestIds()
+    {
+        var a = await FolderAsync("A");
+        var b = await FolderAsync("B");
+        var r = await RequestAsync("r", parent: a.Id);
+        await _tree.RefreshAsync();
+        var target = _tree.GetMoveTargets(Find(_tree.Roots, a.Id)).Single();
+
+        await _tree.MoveCommand.ExecuteAsync(new MoveRequest(Find(_tree.Roots, a.Id), target));
+
+        var root = Assert.Single(_tree.Roots);
+        Assert.Equal(b.Id, root.Id);
+        Assert.Equal(a.Id, root.Children[0].Id);
+        Assert.Equal(r.Id, root.Children[0].Children[0].Id);
+    }
+
+    [Fact]
+    public async Task MoveToTheTopLevelUnfilesARequest()
+    {
+        var f = await FolderAsync("F");
+        var r = await RequestAsync("r", parent: f.Id);
+        await _tree.RefreshAsync();
+        var node = Find(_tree.Roots, r.Id);
+        var top = _tree.GetMoveTargets(node)[0];
+
+        await _tree.MoveCommand.ExecuteAsync(new MoveRequest(node, top));
+
+        Assert.Equal(2, _tree.Roots.Count);
+        Assert.Empty(_tree.Roots.Single(n => n.IsFolder).Children);
+    }
+
+    [Fact]
+    public async Task RequestCommandsReportStorageFailures()
+    {
+        var tree = new CollectionTreeViewModel(new FailingWriteStore(), _requests, _tabs, _dialogs);
+        var r = await RequestAsync("r");
+        var node = new CollectionNodeViewModel(CollectionNode.ForRequest(r), null);
+
+        await tree.MoveCommand.ExecuteAsync(new MoveRequest(node, new FolderOption(Guid.NewGuid(), "x")));
+
+        Assert.Equal("nope", tree.LastError);
     }
 
     [Fact]

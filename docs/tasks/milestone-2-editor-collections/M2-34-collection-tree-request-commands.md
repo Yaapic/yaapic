@@ -1,6 +1,6 @@
 # M2-34: Collection tree: request commands and move
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-33
 
@@ -35,11 +35,11 @@ Drag and drop, manual ordering, multi-select, copying between workspaces.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` (in-memory doubles): new request unfiled and inside a folder, opened in a tab;
+- [x] Tests in `Yaapic.ViewModels.Tests` (in-memory doubles): new request unfiled and inside a folder, opened in a tab;
       rename of a closed, clean-open and dirty-open request; duplicate keeps content, folder and gets the new id and name;
       delete confirmed/refused with its tab closed; `GetMoveTargets` exclusions and path text; move request and folder, the
       moved folder's requests keep their ids; storage failure -> `LastError`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
