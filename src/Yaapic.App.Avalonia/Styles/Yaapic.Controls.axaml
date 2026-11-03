@@ -5,6 +5,7 @@
   <Styles.Resources>
     <StreamGeometry x:Key="YaapicGlyphClose">M6 6l12 12M18 6 6 18</StreamGeometry>
     <StreamGeometry x:Key="YaapicGlyphAdd">M12 5v14M5 12h14</StreamGeometry>
+    <StreamGeometry x:Key="YaapicGlyphCopy">M9 9h10.5v10.5H9zM15 9V4.5H4.5V15H9</StreamGeometry>
     <StreamGeometry x:Key="YaapicGlyphTheme">M12 3a9 9 0 1 0 0 18V3z</StreamGeometry>
     <StreamGeometry x:Key="YaapicGlyphStatusSuccess">M5 12.5l4.5 4.5L19 7.5</StreamGeometry>
     <StreamGeometry x:Key="YaapicGlyphStatusClientError">M12 4 21 19.5H3zM12 10v4M12 17h.01</StreamGeometry>

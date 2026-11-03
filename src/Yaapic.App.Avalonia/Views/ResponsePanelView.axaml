@@ -78,12 +78,23 @@
               <TextBlock Text="Body" />
             </TabItem.Header>
             <Grid RowDefinitions="40,*">
-              <ListBox Classes="segmented" Margin="16,0,12,0" HorizontalAlignment="Left" VerticalAlignment="Center"
-                       SelectedIndex="{Binding ViewMode, Converter={x:Static p:ResponseMap.ViewModeIndex}, Mode=OneWay}"
-                       SelectionChanged="OnViewModeChanged">
-                <ListBoxItem Content="Pretty" />
-                <ListBoxItem Content="Raw" />
-              </ListBox>
+              <StackPanel Orientation="Horizontal" Spacing="8" Margin="16,0,12,0" HorizontalAlignment="Left"
+                          VerticalAlignment="Center">
+                <ListBox Classes="segmented" VerticalAlignment="Center"
+                         SelectedIndex="{Binding ViewMode, Converter={x:Static p:ResponseMap.ViewModeIndex}, Mode=OneWay}"
+                         SelectionChanged="OnViewModeChanged">
+                  <ListBoxItem Content="Pretty" />
+                  <ListBoxItem Content="Raw" />
+                </ListBox>
+                <Button Classes="icon" Command="{Binding CopyBodyCommand}"
+                        AutomationProperties.Name="Copy response body" ToolTip.Tip="Copy response body">
+                  <PathIcon Data="{StaticResource YaapicGlyphCopy}" />
+                </Button>
+                <Button Classes="icon" Command="{Binding SaveBodyCommand}"
+                        AutomationProperties.Name="Save response to file" ToolTip.Tip="Save response to file">
+                  <PathIcon Data="{StaticResource YiExport}" />
+                </Button>
+              </StackPanel>
               <Panel Grid.Row="1" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
                 <Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}" />
                 <TextBox IsReadOnly="True" TextWrapping="NoWrap" AcceptsReturn="True" BorderThickness="0"
@@ -127,7 +138,7 @@
           </TabItem>
         </TabControl>
 
-        <!-- Status block, in the header row at the right of the panel tabs. M2-24 adds copy and save after it. -->
+        <!-- Status block, in the header row at the right of the panel tabs. -->
         <StackPanel Orientation="Horizontal" Spacing="10" Height="36" Margin="0,0,12,0"
                     HorizontalAlignment="Right" VerticalAlignment="Top">
           <Border Classes="chip" VerticalAlignment="Center"
