@@ -100,7 +100,7 @@ Scope: all HTTP methods and body kinds, authentication and per-request settings,
 collections as folders on disk, globals and collection variables, request history, command palette. Storage decisions are
 in [ADR 0008](../adr/0008-collections-globals-history-storage.md) (written by M2-01, read it first). Each slice runs
 Domain, Core, Infrastructure and ViewModels (`any`) first, then WinUI (`windows`), then Avalonia (`unix`) cards. M2-67 is
-the WinUI visual check; the Avalonia visual pass is M1-47 to M1-57 (see the Milestone 1 block above).
+the WinUI visual check; the Avalonia visual pass is M1-47 to M1-57 (see the Milestone 1 block above). M2-68 to M2-70 add the syntax-highlighted code editors (Windows App SDK 2.x migration, LoomEditor on WinUI, AvaloniaEdit on Avalonia).
 
 Deferred beyond M2 (listed in ADR 0008): manual ordering and drag and drop, cookie jar, proxy and TLS settings, workspace
 picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`: every product choice is fixed in M2-01.
@@ -174,12 +174,15 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-65](milestone-2-editor-collections/M2-65-avalonia-command-palette.md) | Avalonia command palette | unix | M2-63, M2-59 | todo |
 | [M2-66](milestone-2-editor-collections/M2-66-end-to-end-tests-and-docs.md) | End-to-end tests and milestone docs | any | M2-07, M2-31, M2-45, M2-57, M2-63 | todo |
 | [M2-67](milestone-2-editor-collections/M2-67-winui-visual-verification.md) | WinUI visual verification of the milestone 2 views | windows | M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64 | todo |
+| [M2-68](milestone-2-editor-collections/M2-68-winui-windows-app-sdk-2.md) | WinUI: migrate to Windows App SDK 2.x | windows | M2-67 | todo |
+| [M2-69](milestone-2-editor-collections/M2-69-winui-loomeditor-code-editor.md) | WinUI: adopt LoomEditor in CodeEditorView | windows | M2-68 | todo |
+| [M2-70](milestone-2-editor-collections/M2-70-avalonia-avaloniaedit-code-editor.md) | Avalonia: AvaloniaEdit code editor with TextMate grammars | unix | M2-65, M1-57 | todo |
 
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |
 |---|---|---|
-| M2 | Full request editor, collections, environments, history, command palette | detailed (67 cards, see above) |
+| M2 | Full request editor, collections, environments, history, command palette | detailed (70 cards, see above) |
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | planned |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | planned |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | planned |
