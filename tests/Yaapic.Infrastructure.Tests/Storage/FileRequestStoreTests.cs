@@ -1,4 +1,5 @@
 using System.Text;
+using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
 using Yaapic.Infrastructure.Storage;
 
@@ -213,5 +214,22 @@ public sealed class FileRequestStoreTests : IDisposable
         var store = new FileRequestStore(_root);
         Assert.Empty(await store.ListAsync(CancellationToken.None));
         Assert.StartsWith("nofolderyaml:", Assert.Single(store.LastListErrors));
+    }
+
+    [Fact]
+    public async Task SaveAfterAnotherStoreMovedTheFileUpdatesItInPlace()
+    {
+        var store = new FileRequestStore(_root);
+        var request = HttpRequestDefinition.Create("Ping");
+        await store.SaveAsync(request, CancellationToken.None);
+        var folder = FolderDefinition.Create("v1");
+        var collections = new FileCollectionStore(_root);
+        await collections.SaveFolderAsync(folder, null, CancellationToken.None);
+        await collections.MoveAsync(request.Id, folder.Id, CancellationToken.None);
+
+        await store.SaveAsync(request with { Name = "Pong" }, CancellationToken.None);
+
+        Assert.Equal([Path.Combine(Requests, "v1", "pong.request.yaml")],
+            Directory.GetFiles(Requests, "*.request.yaml", SearchOption.AllDirectories));
     }
 }

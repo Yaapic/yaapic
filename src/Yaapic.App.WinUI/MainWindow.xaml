@@ -131,9 +131,14 @@
           </Grid.ColumnDefinitions>
           <TextBlock Text="Requests" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
           <Button Grid.Column="1" Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="New request"
-                  ToolTipService.ToolTip="New request (Ctrl+T)"
-                  Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}">
+                  ToolTipService.ToolTip="New request or collection">
             <ic:FluentIcon Icon="Add" IconVariant="Regular" IconSize="Size16"/>
+            <Button.Flyout>
+              <MenuFlyout>
+                <MenuFlyoutItem Text="New request" Command="{x:Bind ViewModel.Collections.NewRequestCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem Text="New collection" Command="{x:Bind ViewModel.Collections.NewCollectionCommand, Mode=OneWay}"/>
+              </MenuFlyout>
+            </Button.Flyout>
           </Button>
         </Grid>
         <Grid Grid.Row="1" Padding="10,0,10,8">
@@ -148,7 +153,7 @@
         </Grid>
         <TreeView x:Name="CollectionTree" Grid.Row="2" SelectionMode="Single"
                   ItemsSource="{x:Bind ViewModel.Collections.Roots, Mode=OneWay}"
-                  ItemInvoked="OnNodeInvoked">
+                  ItemInvoked="OnNodeInvoked" ContextRequested="OnNodeContextRequested" KeyDown="OnTreeKeyDown">
           <TreeView.ItemTemplate>
             <DataTemplate x:DataType="col:CollectionNodeViewModel">
               <TreeViewItem AutomationProperties.Name="{x:Bind Name}" ItemsSource="{x:Bind Children}" IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}" MinHeight="26">

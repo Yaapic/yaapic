@@ -44,7 +44,7 @@ public sealed class FileRequestStore(string workspaceRoot) : IRequestStore
     public async Task SaveAsync(HttpRequestDefinition request, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(request);
-        if (_paths.Count == 0)
+        if (IsStale(request.Id))
         {
             await ListAsync(ct);
         }
@@ -73,7 +73,7 @@ public sealed class FileRequestStore(string workspaceRoot) : IRequestStore
     /// <inheritdoc />
     public async Task DeleteAsync(Guid id, CancellationToken ct)
     {
-        if (_paths.Count == 0)
+        if (IsStale(id))
         {
             await ListAsync(ct);
         }
@@ -92,6 +92,9 @@ public sealed class FileRequestStore(string workspaceRoot) : IRequestStore
             throw new StorageException($"Cannot delete '{path}': {ex.Message}", ex);
         }
     }
+
+    // The collection store moves files behind this cache: a missing file means the cached path is stale.
+    private bool IsStale(Guid id) => _paths.Count == 0 || (_paths.TryGetValue(id, out var path) && !File.Exists(path));
 
     private static bool IsSamePath(string a, string b) =>
         string.Equals(a, b, StringComparison.OrdinalIgnoreCase);

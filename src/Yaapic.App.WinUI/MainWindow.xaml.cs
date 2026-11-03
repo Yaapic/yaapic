@@ -2,6 +2,8 @@ using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Windows.System;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
@@ -140,6 +142,97 @@ public sealed partial class MainWindow : Window
         if (args.InvokedItem is CollectionNodeViewModel node)
         {
             _viewModel?.Collections.OpenCommand.Execute(node);
+        }
+    }
+
+    private void OnNodeContextRequested(UIElement sender, ContextRequestedEventArgs args)
+    {
+        if (_viewModel is null || NodeAt(args.OriginalSource as DependencyObject) is not { } node)
+        {
+            return;
+        }
+
+        var tree = _viewModel.Collections;
+        var menu = new MenuFlyout();
+        if (node.IsFolder)
+        {
+            AddItem(menu, "New request", tree.NewRequestCommand, node);
+            AddItem(menu, "New folder", tree.NewFolderCommand, node);
+            AddItem(menu, "Rename", tree.RenameFolderCommand, node);
+            AddItem(menu, "Delete", tree.DeleteFolderCommand, node);
+        }
+        else
+        {
+            AddItem(menu, "Rename", tree.RenameRequestCommand, node);
+            AddItem(menu, "Duplicate", tree.DuplicateRequestCommand, node);
+            AddItem(menu, "Delete", tree.DeleteRequestCommand, node);
+        }
+
+        var targets = tree.GetMoveTargets(node);
+        if (targets.Count > 0)
+        {
+            var moveTo = new MenuFlyoutSubItem { Text = "Move to" };
+            foreach (var target in targets)
+            {
+                AddItem(moveTo.Items, target.Path, tree.MoveCommand, new MoveRequest(node, target));
+            }
+
+            menu.Items.Add(moveTo);
+        }
+
+        args.Handled = true;
+        if (args.TryGetPosition((UIElement)sender, out var point))
+        {
+            menu.ShowAt((UIElement)sender, point);
+        }
+        else
+        {
+            menu.ShowAt((FrameworkElement)args.OriginalSource);
+        }
+    }
+
+    private static void AddItem(MenuFlyout menu, string text, System.Windows.Input.ICommand command, object parameter) =>
+        AddItem(menu.Items, text, command, parameter);
+
+    private static void AddItem(IList<MenuFlyoutItemBase> items, string text, System.Windows.Input.ICommand command, object parameter) =>
+        items.Add(new MenuFlyoutItem { Text = text, Command = command, CommandParameter = parameter });
+
+    private static CollectionNodeViewModel? NodeAt(DependencyObject? element)
+    {
+        for (; element is not null; element = VisualTreeHelper.GetParent(element))
+        {
+            if (element is FrameworkElement { DataContext: CollectionNodeViewModel node })
+            {
+                return node;
+            }
+
+            if (element is TreeViewItem { Content: CollectionNodeViewModel content })
+            {
+                return content;
+            }
+        }
+
+        return null;
+    }
+
+    private void OnTreeKeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        if (_viewModel is null || CollectionTree.SelectedItem is not CollectionNodeViewModel node)
+        {
+            return;
+        }
+
+        var tree = _viewModel.Collections;
+        var command = e.Key switch
+        {
+            VirtualKey.F2 => node.IsFolder ? tree.RenameFolderCommand : tree.RenameRequestCommand,
+            VirtualKey.Delete => node.IsFolder ? tree.DeleteFolderCommand : tree.DeleteRequestCommand,
+            _ => null,
+        };
+        if (command is not null)
+        {
+            command.Execute(node);
+            e.Handled = true;
         }
     }
 
