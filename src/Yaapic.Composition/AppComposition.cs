@@ -29,12 +29,15 @@ public static class AppComposition
         var sessionStore = new FileSessionStore(workspaceRoot);
         var sender = new RequestSender(new HttpClientTransport(DefaultHttpClient.Create(), DefaultHttpClient.CreateNonRedirecting(), TimeSpan.FromSeconds(30)));
         var environments = new EnvironmentsViewModel(environmentStore, dialogs);
+        var globals = new GlobalsViewModel(new FileGlobalsStore(workspaceRoot));
+        VariableScopeProvider? scopes = null;
         var tabs = new TabsViewModel(
             requestStore,
             dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, environments, isNew, dialogs));
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, scopes!, isNew, dialogs));
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
         var collections = new CollectionTreeViewModel(new FileCollectionStore(workspaceRoot), requestStore, tabs, dialogs);
+        scopes = new VariableScopeProvider(environments, globals, collections);
         return new ShellViewModel(tabs, requests, collections, environments, sessionStore, dialogs);
     }
 }

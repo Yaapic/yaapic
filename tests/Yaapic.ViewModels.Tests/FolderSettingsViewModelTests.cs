@@ -12,11 +12,6 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class FolderSettingsViewModelTests
 {
-    private sealed class NoEnvironment : IActiveEnvironmentProvider
-    {
-        public EnvironmentDefinition? Current => null;
-    }
-
     private sealed class FailingStore : ICollectionStore
     {
         public Task<IReadOnlyList<CollectionNode>> LoadTreeAsync(CancellationToken ct) => throw new NotSupportedException();
@@ -40,7 +35,7 @@ public sealed class FolderSettingsViewModelTests
         var tabs = new TabsViewModel(
             _requests,
             _dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new NoEnvironment(), isNew));
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew));
         _tree = new CollectionTreeViewModel(_store, _requests, tabs, _dialogs);
     }
 

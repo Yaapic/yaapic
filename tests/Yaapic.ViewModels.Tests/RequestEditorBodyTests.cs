@@ -9,11 +9,6 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class RequestEditorBodyTests
 {
-    private sealed class StubEnvironments : IActiveEnvironmentProvider
-    {
-        public EnvironmentDefinition? Current => null;
-    }
-
     private static RequestSender Sender() =>
         new(new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Fail(SendFailureKind.Unknown, "unused"))));
 
@@ -21,7 +16,7 @@ public sealed class RequestEditorBodyTests
         HttpRequestDefinition.Create("r") with { Method = HttpMethodKind.Post, Url = "https://x.test", Body = body };
 
     private static RequestEditorViewModel Editor(RequestBody body, FakeDialogService? dialogs = null) =>
-        RequestEditorViewModel.FromDefinition(With(body), Sender(), new StubEnvironments(), dialogs: dialogs);
+        RequestEditorViewModel.FromDefinition(With(body), Sender(), new FakeVariableScopeProvider(), dialogs: dialogs);
 
     private static readonly FormField[] Fields =
     [

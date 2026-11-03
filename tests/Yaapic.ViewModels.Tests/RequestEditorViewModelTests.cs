@@ -8,11 +8,6 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class RequestEditorViewModelTests
 {
-    private sealed class StubEnvironments : IActiveEnvironmentProvider
-    {
-        public EnvironmentDefinition? Current => null;
-    }
-
     private static RequestSender Sender() =>
         new(new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Fail(SendFailureKind.Unknown, "unused"))));
 
@@ -70,7 +65,7 @@ public sealed class RequestEditorViewModelTests
     [MemberData(nameof(AllMethods))]
     public void MethodRoundTripsAndAllowsBodyFollowsIt(HttpMethodKind method)
     {
-        var editor = RequestEditorViewModel.FromDefinition(Sample() with { Method = method }, Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(Sample() with { Method = method }, Sender(), new FakeVariableScopeProvider());
         var raised = new List<string?>();
         editor.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
 
@@ -88,7 +83,7 @@ public sealed class RequestEditorViewModelTests
     public void AuthRoundTripsAndLoadIsClean(RequestAuth auth)
     {
         var definition = Sample() with { Auth = auth };
-        var editor = RequestEditorViewModel.FromDefinition(definition, Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(definition, Sender(), new FakeVariableScopeProvider());
 
         Assert.False(editor.IsDirty);
         Assert.Equal(auth, editor.Auth.ToAuth());
@@ -100,7 +95,7 @@ public sealed class RequestEditorViewModelTests
     public void SettingsRoundTrip()
     {
         var definition = Sample() with { Settings = new RequestSettings(false, 15) };
-        var editor = RequestEditorViewModel.FromDefinition(definition, Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(definition, Sender(), new FakeVariableScopeProvider());
 
         Assert.False(editor.FollowRedirects);
         Assert.Equal(15, editor.TimeoutSeconds);
@@ -110,7 +105,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void NegativeTimeoutBecomesZero()
     {
-        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new FakeVariableScopeProvider());
 
         editor.TimeoutSeconds = -5;
 
@@ -137,13 +132,13 @@ public sealed class RequestEditorViewModelTests
     {
         var definition = Sample();
 
-        Assert.True(RequestEditorViewModel.FromDefinition(definition, Sender(), new StubEnvironments()).ToDefinition().IsEquivalentTo(definition));
+        Assert.True(RequestEditorViewModel.FromDefinition(definition, Sender(), new FakeVariableScopeProvider()).ToDefinition().IsEquivalentTo(definition));
     }
 
     [Fact]
     public void LoadedRequestIsClean()
     {
-        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new FakeVariableScopeProvider());
 
         Assert.False(editor.IsDirty);
         Assert.Equal("Get users", editor.Title);
@@ -154,7 +149,7 @@ public sealed class RequestEditorViewModelTests
     public void EditMakesDirtyAndRevertMakesClean(string field, Action<RequestEditorViewModel> edit, Action<RequestEditorViewModel> revert)
     {
         Assert.NotEmpty(field);
-        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new FakeVariableScopeProvider());
         var cleanTitle = editor.Title;
         var raised = new List<string?>();
         editor.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
@@ -175,7 +170,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void MarkSavedClearsDirty()
     {
-        var editor = RequestEditorViewModel.CreateNew(Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.CreateNew(Sender(), new FakeVariableScopeProvider());
         editor.Url = "https://x.test";
 
         editor.MarkSaved();
@@ -187,7 +182,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void CreateNewIsNewAndDirty()
     {
-        var editor = RequestEditorViewModel.CreateNew(Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.CreateNew(Sender(), new FakeVariableScopeProvider());
 
         Assert.True(editor.IsNew);
         Assert.True(editor.IsDirty);
@@ -197,7 +192,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void BlankNameBecomesDefault()
     {
-        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new FakeVariableScopeProvider());
         editor.Name = "   ";
 
         Assert.Equal("New Request", editor.ToDefinition().Name);
@@ -207,7 +202,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void DisplayNameIsDefaultForNewRequestWithoutDirtyMarker()
     {
-        var editor = RequestEditorViewModel.CreateNew(Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.CreateNew(Sender(), new FakeVariableScopeProvider());
 
         Assert.Equal("New Request", editor.DisplayName);
     }
@@ -215,7 +210,7 @@ public sealed class RequestEditorViewModelTests
     [Fact]
     public void DisplayNameIsTrimmedNameAndChangeIsNotified()
     {
-        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new StubEnvironments());
+        var editor = RequestEditorViewModel.FromDefinition(Sample(), Sender(), new FakeVariableScopeProvider());
         var raised = new List<string?>();
         editor.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
 

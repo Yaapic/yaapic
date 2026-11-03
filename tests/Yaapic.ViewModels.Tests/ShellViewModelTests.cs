@@ -30,7 +30,7 @@ public sealed class ShellViewModelTests
         var tabs = new TabsViewModel(
             _requests,
             _dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, environments, isNew));
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew));
         return new ShellViewModel(
             tabs,
             new RequestListViewModel(_requests, tabs, _dialogs),

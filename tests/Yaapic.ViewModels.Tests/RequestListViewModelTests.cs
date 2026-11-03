@@ -9,11 +9,6 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class RequestListViewModelTests
 {
-    private sealed class NoEnvironment : IActiveEnvironmentProvider
-    {
-        public EnvironmentDefinition? Current => null;
-    }
-
     private readonly InMemoryRequestStore _store = new();
     private readonly FakeDialogService _dialogs = new();
     private readonly TabsViewModel _tabs;
@@ -25,7 +20,7 @@ public sealed class RequestListViewModelTests
         _tabs = new TabsViewModel(
             _store,
             _dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new NoEnvironment(), isNew));
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew));
         _list = new RequestListViewModel(_store, _tabs, _dialogs);
     }
 

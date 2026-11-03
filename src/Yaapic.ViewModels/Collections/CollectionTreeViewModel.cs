@@ -48,6 +48,9 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         tabs.RequestSaved += (_, _) => _ = RefreshAsync();
     }
 
+    /// <summary>Occurs after the tree was reloaded from the store.</summary>
+    public event EventHandler? Refreshed;
+
     /// <summary>Gets the nodes matching <see cref="FilterText"/>, in store order.</summary>
     public ObservableCollection<CollectionNodeViewModel> Roots { get; } = [];
 
@@ -73,6 +76,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         IsEmpty = _tree.Count == 0;
         _expanded.IntersectWith(CollectionNode.Flatten(_tree).Where(static n => n.Kind == CollectionNodeKind.Folder).Select(static n => n.Id));
         ApplyFilter();
+        Refreshed?.Invoke(this, EventArgs.Empty);
     }
 
     partial void OnFilterTextChanged(string value) => ApplyFilter();

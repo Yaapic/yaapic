@@ -8,15 +8,10 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class RequestEditorUrlSyncTests
 {
-    private sealed class NoEnvironment : IActiveEnvironmentProvider
-    {
-        public EnvironmentDefinition? Current => null;
-    }
-
     private static readonly HttpResponseData Ok = new(200, "OK", [], [], TimeSpan.FromMilliseconds(5), "https://x.test");
 
     private static RequestEditorViewModel Editor(FakeHttpTransport? transport = null) =>
-        RequestEditorViewModel.CreateNew(new RequestSender(transport ?? new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(Ok)))), new NoEnvironment());
+        RequestEditorViewModel.CreateNew(new RequestSender(transport ?? new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(Ok)))), new FakeVariableScopeProvider());
 
     private static string[] Rows(RequestEditorViewModel e) =>
         [.. e.QueryParams.Rows.Where(r => !r.IsEmpty).Select(r => (r.Enabled ? "" : "!") + r.Key + "=" + r.Value)];
@@ -113,7 +108,7 @@ public sealed class RequestEditorUrlSyncTests
             QueryParams = [new KeyValueEntry("c", "2")],
         };
 
-        var editor = RequestEditorViewModel.FromDefinition(definition, new RequestSender(new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(Ok)))), new NoEnvironment());
+        var editor = RequestEditorViewModel.FromDefinition(definition, new RequestSender(new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(Ok)))), new FakeVariableScopeProvider());
 
         Assert.Equal(["b=1", "c=2"], Rows(editor));
         Assert.Equal("https://x.test/a?b=1&c=2", editor.Url);

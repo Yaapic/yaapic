@@ -1,3 +1,4 @@
+using Yaapic.Core.Variables;
 using Yaapic.Core.Http;
 using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
@@ -215,7 +216,7 @@ public sealed class EnvironmentsViewModelTests
         _vm.ActiveEnvironment!.Variables.Rows[0].Value = "api.test";
         var transport = new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(
             new HttpResponseData(200, "OK", [], [], TimeSpan.FromMilliseconds(1), "https://api.test"))));
-        var editor = RequestEditorViewModel.CreateNew(new RequestSender(transport), _vm);
+        var editor = RequestEditorViewModel.CreateNew(new RequestSender(transport), new FakeVariableScopeProvider { Scopes = new VariableScopes(_vm.Current, [], []) });
         editor.Url = "https://{{host}}/users";
 
         await editor.SendCommand.ExecuteAsync(null);

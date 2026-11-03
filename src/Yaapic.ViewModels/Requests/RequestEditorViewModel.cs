@@ -15,7 +15,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private const string DefaultName = "New Request";
 
     private readonly RequestSender _sender;
-    private readonly IActiveEnvironmentProvider _environments;
+    private readonly IVariableScopeProvider _scopes;
     private readonly IDialogService? _dialogs;
     private HttpRequestDefinition? _baseline;
     private bool _syncingUrl;
@@ -56,11 +56,11 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isActive;
 
-    private RequestEditorViewModel(Guid id, RequestSender sender, IActiveEnvironmentProvider environments, IDialogService? dialogs)
+    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs)
     {
         Id = id;
         _sender = sender;
-        _environments = environments;
+        _scopes = scopes;
         _dialogs = dialogs;
         Response = new ResponsePanelViewModel(dialogs);
         FormData = new FormDataEditorViewModel(dialogs);
@@ -140,21 +140,21 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <summary>Creates an editor showing <paramref name="definition"/>, with it as the saved baseline.</summary>
     /// <param name="definition">The request to edit.</param>
     /// <param name="sender">The use case that sends the request.</param>
-    /// <param name="environments">Provides the active environment at send time.</param>
+    /// <param name="scopes">Provides the variable scopes at send time.</param>
     /// <param name="isNew">Whether the request has never been saved.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel FromDefinition(
         HttpRequestDefinition definition,
         RequestSender sender,
-        IActiveEnvironmentProvider environments,
+        IVariableScopeProvider scopes,
         bool isNew = false,
         IDialogService? dialogs = null)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(sender);
-        ArgumentNullException.ThrowIfNull(environments);
-        var editor = new RequestEditorViewModel(definition.Id, sender, environments, dialogs)
+        ArgumentNullException.ThrowIfNull(scopes);
+        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs)
         {
             Name = definition.Name,
             Method = definition.Method,
@@ -184,11 +184,11 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     /// <summary>Creates an editor for a new, unsaved request.</summary>
     /// <param name="sender">The use case that sends the request.</param>
-    /// <param name="environments">Provides the active environment at send time.</param>
+    /// <param name="scopes">Provides the variable scopes at send time.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
     /// <returns>The editor.</returns>
-    public static RequestEditorViewModel CreateNew(RequestSender sender, IActiveEnvironmentProvider environments, IDialogService? dialogs = null) =>
-        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, environments, isNew: true, dialogs);
+    public static RequestEditorViewModel CreateNew(RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs = null) =>
+        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs);
 
     /// <summary>Builds the domain request from the current state.</summary>
     /// <returns>The request; a blank name becomes "New Request".</returns>
@@ -230,7 +230,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private async Task SendAsync(CancellationToken ct)
     {
         Response.ShowSending();
-        var report = await _sender.SendAsync(ToDefinition(), _environments.Current, ct);
+        var report = await _sender.SendAsync(ToDefinition(), _scopes.GetScopes(Id), ct);
         Response.ShowReport(report);
     }
 
