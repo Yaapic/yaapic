@@ -1,6 +1,6 @@
 # M2-30: File collection store: tree and folder management
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-26, M2-29
 
@@ -31,11 +31,11 @@ Moving (M2-31), file watching, trash/undo.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` on a temp directory: empty tree; create top-level and nested folder (files and
+- [x] Tests in `Yaapic.Infrastructure.Tests` on a temp directory: empty tree; create top-level and nested folder (files and
       names on disk, `folder.yaml` content); tree contains unfiled and nested requests with order; rename renames the
       directory and keeps the requests inside; slug collision gives `-2`; update variables and description in place;
       delete removes nested folders and request files; unknown ids; unknown parent throws; `.tmp` files never left.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
