@@ -128,6 +128,67 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    private void OnNodeContextRequested(object? sender, ContextRequestedEventArgs e)
+    {
+        if (Shell is not { } shell || (e.Source as Visual)?.FindAncestorOfType<TreeViewItem>() is not { DataContext: CollectionNodeViewModel node } item)
+        {
+            return;
+        }
+
+        var tree = shell.Collections;
+        var menu = new ContextMenu();
+        if (node.IsFolder)
+        {
+            AddItem(menu.Items, "New request", tree.NewRequestCommand, node);
+            AddItem(menu.Items, "New folder", tree.NewFolderCommand, node);
+            AddItem(menu.Items, "Rename", tree.RenameFolderCommand, node);
+            AddItem(menu.Items, "Delete", tree.DeleteFolderCommand, node);
+        }
+        else
+        {
+            AddItem(menu.Items, "Rename", tree.RenameRequestCommand, node);
+            AddItem(menu.Items, "Duplicate", tree.DuplicateRequestCommand, node);
+            AddItem(menu.Items, "Delete", tree.DeleteRequestCommand, node);
+        }
+
+        var targets = tree.GetMoveTargets(node);
+        if (targets.Count > 0)
+        {
+            var moveTo = new MenuItem { Header = "Move to" };
+            foreach (var target in targets)
+            {
+                AddItem(moveTo.Items, target.Path, tree.MoveCommand, new MoveRequest(node, target));
+            }
+
+            menu.Items.Add(moveTo);
+        }
+
+        e.Handled = true;
+        menu.Open(item);
+    }
+
+    private static void AddItem(global::Avalonia.Controls.ItemCollection items, string header, System.Windows.Input.ICommand command, object parameter) =>
+        items.Add(new MenuItem { Header = header, Command = command, CommandParameter = parameter });
+
+    private void OnTreeKeyDown(object? sender, KeyEventArgs e)
+    {
+        if (Shell is not { } shell || CollectionTree.SelectedItem is not CollectionNodeViewModel node)
+        {
+            return;
+        }
+
+        var tree = shell.Collections;
+        var delete = e.Key == Key.Delete || (OperatingSystem.IsMacOS() && e.Key == Key.Back && e.KeyModifiers == KeyModifiers.Meta);
+        var command = e.Key == Key.F2
+            ? (node.IsFolder ? tree.RenameFolderCommand : tree.RenameRequestCommand)
+            : delete ? (node.IsFolder ? tree.DeleteFolderCommand : tree.DeleteRequestCommand) : null;
+        if (command is not null)
+        {
+            command.Execute(node);
+            e.Handled = true;
+        }
+    }
+
     private void OnThemeDark(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => SetTheme(ThemeVariant.Dark);
 
     private void OnThemeLight(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => SetTheme(ThemeVariant.Light);

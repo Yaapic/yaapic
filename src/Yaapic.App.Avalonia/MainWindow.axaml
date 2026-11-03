@@ -128,9 +128,14 @@
         <Grid RowDefinitions="40,Auto,*">
           <Grid Grid.Row="0" Margin="14,0,8,0" ColumnDefinitions="*,Auto">
             <TextBlock Text="Requests" Classes="bodyStrong" VerticalAlignment="Center" />
-            <Button Grid.Column="1" Classes="icon" Command="{Binding Requests.NewRequestCommand}"
-                    ToolTip.Tip="New request (Ctrl+T)" AutomationProperties.Name="New request">
+            <Button Grid.Column="1" Classes="icon" ToolTip.Tip="New request or collection" AutomationProperties.Name="New request">
               <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
+              <Button.Flyout>
+                <MenuFlyout>
+                  <MenuItem Header="New request" Command="{Binding Collections.NewRequestCommand}" />
+                  <MenuItem Header="New collection" Command="{Binding Collections.NewCollectionCommand}" />
+                </MenuFlyout>
+              </Button.Flyout>
             </Button>
           </Grid>
           <Grid Grid.Row="1" Margin="10,0,10,8">
@@ -152,7 +157,8 @@
             </Border>
           </Grid>
           <TreeView x:Name="CollectionTree" Grid.Row="2" Background="Transparent" SelectionMode="Single"
-                    ItemsSource="{Binding Collections.Roots}" SelectionChanged="OnTreeSelectionChanged">
+                    ItemsSource="{Binding Collections.Roots}" SelectionChanged="OnTreeSelectionChanged"
+                    ContextRequested="OnNodeContextRequested" KeyDown="OnTreeKeyDown">
             <TreeView.Styles>
               <Style Selector="TreeViewItem" x:DataType="col:CollectionNodeViewModel">
                 <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
