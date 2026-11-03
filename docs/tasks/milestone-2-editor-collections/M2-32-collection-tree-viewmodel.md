@@ -1,6 +1,6 @@
 # M2-32: Collection tree ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-26
 
@@ -35,11 +35,11 @@ Folder and request commands (M2-33, M2-34), shell wiring (M2-35), persisting exp
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with `InMemoryCollectionStore`: refresh builds the tree in store order with
+- [x] Tests in `Yaapic.ViewModels.Tests` with `InMemoryCollectionStore`: refresh builds the tree in store order with
       parents set; `IsCollection` only for top-level folders; expansion survives a refresh and a removed folder is forgotten;
       filter by request name, URL, folder name and nested match, case-insensitive; clearing the filter; saving a tab refreshes
       the tree; opening a request activates its tab, opening a folder toggles it; a failing store sets `LastError`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
