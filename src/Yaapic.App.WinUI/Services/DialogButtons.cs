@@ -27,7 +27,25 @@ internal static class DialogButtons
         for (var i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
         {
             var child = VisualTreeHelper.GetChild(parent, i);
-            if (child is Button { Name: var name } button && Array.IndexOf(Names, name) >= 0)
+            if (child is Grid { Name: "CommandSpace", ColumnDefinitions.Count: 4 } commands && inset is not null)
+            {
+                // Columns are primary, secondary, close, trailing gap: the first two buttons hug the close button on the right.
+                void Hug()
+                {
+                    if (commands.ColumnDefinitions[2].Width != GridLength.Auto)
+                    {
+                        commands.ColumnDefinitions[0].Width = new GridLength(1, GridUnitType.Star);
+                        commands.ColumnDefinitions[1].Width = GridLength.Auto;
+                        commands.ColumnDefinitions[2].Width = GridLength.Auto;
+                        commands.ColumnDefinitions[3].Width = new GridLength(0);
+                    }
+                }
+
+                Hug();
+                commands.LayoutUpdated += (_, _) => Hug(); // the dialog's visual states reset the widths when the buttons change
+                Apply(child, inset);
+            }
+            else if (child is Button { Name: var name } button && Array.IndexOf(Names, name) >= 0)
             {
                 button.MinHeight = (double)Application.Current.Resources["YaapicControlHeight"];
                 button.VerticalAlignment = VerticalAlignment.Center;

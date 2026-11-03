@@ -26,6 +26,13 @@ public sealed partial class FolderSettingsDialog : ContentDialog
     /// <summary>Gets the edited folder settings.</summary>
     public FolderSettingsViewModel ViewModel { get; }
 
+    // The footer Save runs the command; the dialog stays open unless the view model closes it.
+    private void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+    {
+        args.Cancel = true;
+        ViewModel.SaveCommand.Execute(null);
+    }
+
     // Keeps the dialog clear of the title bar (the system caption buttons draw above any popup) when the window is small.
     private void Fit()
     {

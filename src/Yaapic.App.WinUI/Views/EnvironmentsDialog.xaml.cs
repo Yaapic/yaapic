@@ -51,9 +51,15 @@ public sealed partial class EnvironmentsDialog : ContentDialog
 
     private void OnSelectGlobals(object sender, RoutedEventArgs e) => ViewModel.IsEditingGlobals = true;
 
-    private void OnSave(object sender, RoutedEventArgs e)
+    // The footer Save keeps the dialog open and saves whichever pane is shown.
+    private void OnPrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
     {
-        if (ViewModel.EditedEnvironment is { } item)
+        args.Cancel = true;
+        if (ViewModel.IsEditingGlobals)
+        {
+            Globals.SaveCommand.Execute(null);
+        }
+        else if (ViewModel.EditedEnvironment is { } item)
         {
             ViewModel.SaveCommand.Execute(item);
         }
