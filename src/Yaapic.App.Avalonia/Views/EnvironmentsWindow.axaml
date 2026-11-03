@@ -2,62 +2,76 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:env="using:Yaapic.ViewModels.Environments"
         xmlns:views="using:Yaapic.App.Avalonia.Views"
+        xmlns:pres="using:Yaapic.App.Avalonia.Presentation"
         x:Class="Yaapic.App.Avalonia.Views.EnvironmentsWindow"
         x:DataType="env:EnvironmentsViewModel"
         Title="Environments"
         Width="960" Height="560" MinWidth="560" MinHeight="320"
         WindowStartupLocation="CenterOwner"
         Background="{DynamicResource YaapicSurfaceBaseBrush}">
-  <Grid ColumnDefinitions="240,*">
-    <Border Grid.Column="0" Background="{DynamicResource YaapicSurfaceSidebarBrush}"
-            BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-      <Grid RowDefinitions="Auto,*" Margin="12" RowSpacing="8">
-        <Grid Grid.Row="0" ColumnDefinitions="*,Auto">
-          <TextBlock Text="Environments" Classes="bodyStrong" VerticalAlignment="Center" />
-          <Button Grid.Column="1" Content="Add" Command="{Binding AddCommand}" />
-        </Grid>
-        <ListBox Grid.Row="1" Background="Transparent" ItemsSource="{Binding Environments}"
-                 SelectedItem="{Binding EditedEnvironment, Mode=TwoWay}">
-          <ListBox.ItemTemplate>
-            <DataTemplate x:DataType="env:EnvironmentItemViewModel">
-              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
-                <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
-                  <Ellipse Width="6" Height="6" Fill="{DynamicResource YaapicAccentFillBrush}"
-                           IsVisible="{Binding IsDirty}" ToolTip.Tip="Unsaved changes" />
-                  <TextBlock Text="active" Classes="bodySmall" Foreground="{DynamicResource YaapicTextTertiaryBrush}"
-                             IsVisible="{Binding IsActive}" />
-                </StackPanel>
-              </Grid>
-            </DataTemplate>
-          </ListBox.ItemTemplate>
-        </ListBox>
+  <Grid ColumnDefinitions="240,Auto,*">
+    <Grid Grid.Column="0" RowDefinitions="40,*" Background="{DynamicResource YaapicSurfaceSidebarBrush}">
+      <Grid Margin="14,0,8,0" ColumnDefinitions="*,Auto">
+        <TextBlock Text="Environments" Classes="bodyStrong" VerticalAlignment="Center" />
+        <Button Grid.Column="1" Classes="icon" Command="{Binding AddCommand}"
+                ToolTip.Tip="New environment" AutomationProperties.Name="New environment">
+          <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
+        </Button>
       </Grid>
-    </Border>
+      <ListBox Grid.Row="1" Background="Transparent" ItemsSource="{Binding Environments}"
+               SelectedItem="{Binding EditedEnvironment, Mode=TwoWay}">
+        <ListBox.ItemContainerTheme>
+          <ControlTheme TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+            <Setter Property="Padding" Value="14,0" />
+            <Setter Property="MinHeight" Value="32" />
+          </ControlTheme>
+        </ListBox.ItemContainerTheme>
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="env:EnvironmentItemViewModel">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+              <Ellipse Width="8" Height="8" Fill="{Binding IsActive, Converter={x:Static pres:EnvironmentMap.Dot}}" />
+              <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                         FontWeight="{Binding IsEdited, Converter={x:Static pres:EnvironmentMap.Weight}}" />
+              <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="6" VerticalAlignment="Center">
+                <Ellipse Width="6" Height="6" Fill="{DynamicResource YaapicAccentFillBrush}"
+                         IsVisible="{Binding IsDirty}" ToolTip.Tip="Unsaved changes" />
+                <TextBlock Text="active" Classes="caption" IsVisible="{Binding IsActive}" />
+              </StackPanel>
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+    <Border Grid.Column="1" Width="1" Background="{DynamicResource YaapicBorderSubtleBrush}" />
 
-    <Grid Grid.Column="1">
+    <Grid Grid.Column="2" Background="{DynamicResource YaapicSurfaceBaseBrush}">
       <Grid RowDefinitions="56,*" IsVisible="{Binding EditedEnvironment, Converter={x:Static ObjectConverters.IsNotNull}}">
-        <Grid Margin="20,0" ColumnDefinitions="*,Auto,Auto" ColumnSpacing="12"
-              DataContext="{Binding EditedEnvironment}" x:DataType="env:EnvironmentItemViewModel">
-          <TextBox Grid.Column="0" VerticalAlignment="Center" PlaceholderText="Environment name"
-                   Text="{Binding Name, Mode=TwoWay}" />
-          <TextBlock Grid.Column="1" VerticalAlignment="Center"
-                     Foreground="{DynamicResource YaapicTextTertiaryBrush}"
-                     Text="{Binding Variables.ActiveCount, StringFormat='{}{0} enabled'}" />
-          <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
-            <Button x:Name="DeleteButton" Content="Delete" Foreground="{DynamicResource YaapicDangerBrush}">
-              <Button.Flyout>
-                <Flyout>
-                  <StackPanel Spacing="8">
-                    <TextBlock x:Name="DeletePrompt" />
-                    <Button Content="Delete" Foreground="{DynamicResource YaapicDangerBrush}" Click="OnConfirmDelete" />
-                  </StackPanel>
-                </Flyout>
-              </Button.Flyout>
-            </Button>
-            <Button Content="Save" Classes="accent" Click="OnSave" />
-          </StackPanel>
-        </Grid>
+        <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+          <Grid Margin="20,0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10"
+                DataContext="{Binding EditedEnvironment}" x:DataType="env:EnvironmentItemViewModel">
+            <Ellipse Width="10" Height="10" Fill="{Binding IsActive, Converter={x:Static pres:EnvironmentMap.Dot}}" />
+            <TextBox Grid.Column="1" VerticalAlignment="Center" PlaceholderText="Environment name"
+                     BorderThickness="0" Background="Transparent" Padding="0"
+                     FontSize="{DynamicResource YaapicFontSizeTitle}" FontWeight="SemiBold"
+                     Text="{Binding Name, Mode=TwoWay}" />
+            <TextBlock Grid.Column="2" Classes="bodySmall" Foreground="{DynamicResource YaapicTextTertiaryBrush}"
+                       VerticalAlignment="Center" Margin="0,0,6,0"
+                       Text="{Binding Variables.ActiveCount, Converter={x:Static pres:EnvironmentMap.VariableCount}}" />
+            <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+              <Button x:Name="DeleteButton" Content="Delete" Classes="danger">
+                <Button.Flyout>
+                  <Flyout>
+                    <StackPanel Spacing="8">
+                      <TextBlock x:Name="DeletePrompt" />
+                      <Button Content="Delete" Classes="danger" Click="OnConfirmDelete" />
+                    </StackPanel>
+                  </Flyout>
+                </Button.Flyout>
+              </Button>
+              <Button Content="Save" Classes="accent" Click="OnSave" />
+            </StackPanel>
+          </Grid>
+        </Border>
         <views:KeyValueEditorView Grid.Row="1" Margin="20,12,20,16" KeyHeader="VARIABLE"
                                   DataContext="{Binding EditedEnvironment.Variables}" />
       </Grid>

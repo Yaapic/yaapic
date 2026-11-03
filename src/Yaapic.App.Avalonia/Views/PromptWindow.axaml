@@ -4,7 +4,7 @@
         Classes="dialog">
   <StackPanel>
     <StackPanel Margin="24,24,24,20" Spacing="8">
-      <TextBlock x:Name="LabelText" Classes="dialogBody" />
+      <TextBlock x:Name="LabelText" Classes="title" TextWrapping="Wrap" />
       <TextBox x:Name="Input" />
     </StackPanel>
     <Border Classes="dialogCommands">

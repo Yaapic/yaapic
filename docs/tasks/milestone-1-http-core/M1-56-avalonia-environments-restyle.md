@@ -1,6 +1,6 @@
 # M1-56: Avalonia environment management and prompt restyle
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-51, M1-53
 
@@ -46,10 +46,10 @@ preview, the "production" marker.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual check on the published exe: add, rename, edit variables, save, delete with the flyout; the active dot
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual check on the published exe: add, rename, edit variables, save, delete with the flyout; the active dot
       follows the title-bar pill; the prompt returns the typed text and cancels cleanly.
-- [ ] Screenshots (`-Open environments` with the fixture `local` and `staging`, dark and light; the prompt) inspected
+- [x] Screenshots (`-Open environments` with the fixture `local` and `staging`, dark and light; the prompt) inspected
       against `EnvVars.dc.html` / `EnvVarsLight.dc.html` and `DSComposants2.dc.html` (dialog). Deviations listed in the
       card, PNGs not committed.
 

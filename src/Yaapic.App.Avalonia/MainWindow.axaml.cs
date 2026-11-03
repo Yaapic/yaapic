@@ -214,18 +214,22 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
-    /// <param name="name"><c>environments</c> or <c>unsaved</c>.</param>
+    /// <param name="name"><c>environments</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
     /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
     internal void OpenNamed(string name)
     {
         switch (name.ToLowerInvariant())
         {
-            case "environments":
+            case "environments" when Shell is { } shell:
+                shell.Environments.EditedEnvironment ??= shell.Environments.ActiveEnvironment;
                 _ = ManageEnvironmentsAsync();
                 break;
             case "unsaved" when Shell?.Tabs.ActiveTab is { } tab:
                 tab.Name += "x";
                 _ = Shell.Tabs.CloseAsync(tab);
+                break;
+            case "prompt":
+                _ = new Views.PromptWindow("Rename request", "Request name", "Create user").ShowDialog<string?>(this);
                 break;
             case "empty" when Shell?.Tabs.ActiveTab is { } open:
                 _ = Shell.Tabs.CloseAsync(open);
