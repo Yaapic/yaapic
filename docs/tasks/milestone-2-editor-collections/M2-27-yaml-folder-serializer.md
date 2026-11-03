@@ -1,6 +1,6 @@
 # M2-27: YAML folder serializer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-25
 
@@ -27,10 +27,10 @@ Disk access (M2-28 onwards).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: round trip equivalence with variables, unicode and a multi-line
+- [x] Tests in `Yaapic.Infrastructure.Tests`: round trip equivalence with variables, unicode and a multi-line
       description; golden match byte for byte; defaults for missing keys; unknown key ignored; version 2 and malformed YAML
       throw `StorageException`.
-- [ ] 0 warnings (AOT analyzers on).
+- [x] 0 warnings (AOT analyzers on).
 
 ## Suggested commit message
 
