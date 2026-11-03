@@ -22,6 +22,9 @@ public sealed class VariableContext
     /// <summary>Raised while <see cref="IsActive"/> when the scopes changed; views tokenise their text again.</summary>
     public event EventHandler? Changed;
 
+    /// <summary>Raised when the context becomes active, since scopes may have changed while it was not listening.</summary>
+    public event EventHandler? Activated;
+
     /// <summary>Raised when a popup asks to open the editor of a scope.</summary>
     public event EventHandler<VariableScopeKind>? OpenRequested;
 
@@ -41,6 +44,7 @@ public sealed class VariableContext
             if (value)
             {
                 _scopes.ScopesChanged += OnScopesChanged;
+                Activated?.Invoke(this, EventArgs.Empty);
             }
         }
     }

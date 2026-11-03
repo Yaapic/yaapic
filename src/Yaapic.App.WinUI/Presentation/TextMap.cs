@@ -1,4 +1,3 @@
-using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
 
 namespace Yaapic.App.WinUI.Presentation;
@@ -38,41 +37,4 @@ public static class TextMap
     /// <param name="kind">The field kind.</param>
     /// <returns>0 for text, 1 for file.</returns>
     public static int KindIndex(FormFieldKind kind) => kind == FormFieldKind.File ? 1 : 0;
-
-    /// <summary>Gets the text of a URL variable chip: <c>{{name}}</c>, plus the value or "dynamic" when it resolves.</summary>
-    /// <param name="name">The variable name.</param>
-    /// <param name="isResolved">Whether the variable is defined in any scope.</param>
-    /// <param name="value">The stored value; null when unresolved or dynamic.</param>
-    /// <param name="scope">The scope the value comes from; null when unresolved.</param>
-    /// <returns>The chip text, with the value trimmed to 40 characters.</returns>
-    public static string HintText(string name, bool isResolved, string? value, VariableScopeKind? scope)
-    {
-        string chip = "{{" + name + "}}";
-        if (!isResolved)
-        {
-            return chip;
-        }
-
-        if (scope == VariableScopeKind.Dynamic)
-        {
-            return chip + " = dynamic";
-        }
-
-        string shown = value is { Length: > 40 } ? value[..40] + "…" : value ?? "";
-        return $"{chip} = {shown}";
-    }
-
-    /// <summary>Gets the tooltip of a URL variable chip.</summary>
-    /// <param name="isResolved">Whether the variable is defined in any scope.</param>
-    /// <param name="scope">The scope the value comes from; null when unresolved.</param>
-    /// <returns>The scope word, or a hint that the variable is not defined.</returns>
-    public static string HintTooltip(bool isResolved, VariableScopeKind? scope) => !isResolved || scope is null
-        ? "Not defined in the active environment, collection or globals"
-        : scope switch
-        {
-            VariableScopeKind.Environment => "Environment",
-            VariableScopeKind.Collection => "Collection",
-            VariableScopeKind.Globals => "Globals",
-            _ => "Dynamic",
-        };
 }

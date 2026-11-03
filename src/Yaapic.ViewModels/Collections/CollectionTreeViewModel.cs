@@ -125,6 +125,23 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         SettingsEditor = editor;
     }
 
+    /// <summary>Opens the settings editor of the collection that contains a request.</summary>
+    /// <param name="requestId">The request identifier.</param>
+    /// <returns><see langword="true"/> when the request belongs to a collection and its editor was opened.</returns>
+    public bool OpenCollectionSettings(Guid requestId)
+    {
+        var root = _tree.FirstOrDefault(r => r.Kind == CollectionNodeKind.Folder && r.Descendants().Any(n => n.Id == requestId && n.Kind == CollectionNodeKind.Request));
+        if (root?.Folder is not { } folder)
+        {
+            return false;
+        }
+
+        var editor = new FolderSettingsViewModel(folder, true, _collections);
+        editor.Saved += (_, _) => _ = RefreshAsync();
+        SettingsEditor = editor;
+        return true;
+    }
+
     [RelayCommand]
     private void CloseSettings() => SettingsEditor = null;
 

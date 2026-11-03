@@ -226,7 +226,8 @@
                              Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsDirty), Mode=OneWay}"/>
                   </StackPanel>
                 </TabViewItem.Header>
-                <v:RequestEditorView ViewModel="{x:Bind}" SaveRequested="OnEditorSaveRequested"/>
+                <v:RequestEditorView ViewModel="{x:Bind}" SaveRequested="OnEditorSaveRequested"
+                                     VariableScopeOpenRequested="OnVariableScopeOpenRequested"/>
               </TabViewItem>
             </DataTemplate>
           </TabView.TabItemTemplate>

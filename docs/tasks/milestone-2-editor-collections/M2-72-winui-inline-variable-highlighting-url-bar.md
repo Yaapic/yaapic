@@ -1,6 +1,6 @@
 # M2-72: WinUI inline variable highlighting and popup in the URL bar
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-71, M2-49, M2-16
 
@@ -102,34 +102,34 @@ changing token colours or adding new brushes to the generator.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; architecture tests green.
-- [ ] Every resource key used by the new XAML exists in `design/xaml/Yaapic.Colors.WinUI.xaml` (or the app's own
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; architecture tests green.
+- [x] Every resource key used by the new XAML exists in `design/xaml/Yaapic.Colors.WinUI.xaml` (or the app's own
       resources); list the keys in Notes. No hex colours in the new files.
-- [ ] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true`: 0 IL2xxx/IL3xxx warnings.
-- [ ] **Exercise the PUBLISHED exe** (launch it through `tools/screenshots/Capture-WinUI.ps1` with the seeded workspace,
+- [x] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true`: 0 IL2xxx/IL3xxx warnings.
+- [x] **Exercise the PUBLISHED exe** (launch it through `tools/screenshots/Capture-WinUI.ps1` with the seeded workspace,
       environment `Local` active, `baseUrl` = `http://127.0.0.1:5199`; UI Automation and real mouse input):
-  - [ ] URL `{{baseUrl}}/get?x={{nope}}`: `{{baseUrl}}` is drawn in the resolved colour and `{{nope}}` in the unresolved
+  - [x] URL `{{baseUrl}}/get?x={{nope}}`: `{{baseUrl}}` is drawn in the resolved colour and `{{nope}}` in the unresolved
         colour **inside the text**; the text is not doubled or shifted; caret, selection and typing in the middle of a
         token behave normally; no chip strip remains and no empty gap under the URL bar.
-  - [ ] Hover `{{baseUrl}}`: popup shows the name, `http://127.0.0.1:5199`, the scope `Environment`; Edit changes the value,
+  - [x] Hover `{{baseUrl}}`: popup shows the name, `http://127.0.0.1:5199`, the scope `Environment`; Edit changes the value,
         Save recolours without retyping, Open opens the environments dialog.
-  - [ ] Hover `{{nope}}`: popup shows "Unresolved variable", the exact sentence "This variable is not defined in the
+  - [x] Hover `{{nope}}`: popup shows "Unresolved variable", the exact sentence "This variable is not defined in the
         active collection, environment or globals.", the scope list with disabled entries explained; create it in the
         active environment with value `1`: the token turns green live, the environment file on disk contains it; repeat
         for Globals and Collection (request inside a collection) and check the files.
-  - [ ] Switch to "No environment": `{{baseUrl}}` turns unresolved without retyping; the Environment scope choice is
+  - [x] Switch to "No environment": `{{baseUrl}}` turns unresolved without retyping; the Environment scope choice is
         disabled with its reason.
-  - [ ] A URL longer than the box (scroll horizontally): colours stay aligned with the text while scrolling and typing.
-  - [ ] Dark and light theme (switch at run time): colours follow the theme and stay readable; `{{$guid}}` is shown in the
+  - [x] A URL longer than the box (scroll horizontally): colours stay aligned with the text while scrolling and typing.
+  - [x] Dark and light theme (switch at run time): colours follow the theme and stay readable; `{{$guid}}` is shown in the
         dynamic colour with the dynamic message.
-  - [ ] `Ctrl+.` inside a token opens the popup, `Escape` closes it and returns the caret; popup never steals focus
+  - [x] `Ctrl+.` inside a token opens the popup, `Escape` closes it and returns the caret; popup never steals focus
         while merely hovering.
-  - [ ] Params tab still syncs with the URL (M2-13), Ctrl+Enter still sends, the sent request resolves the variables.
-- [ ] Screenshots via `Capture-WinUI.ps1` (dark and light, resolved + unresolved + popup open if the script can capture
+  - [x] Params tab still syncs with the URL (M2-13), Ctrl+Enter still sends, the sent request resolves the variables.
+- [x] Screenshots via `Capture-WinUI.ps1` (dark and light, resolved + unresolved + popup open if the script can capture
       popups; otherwise describe them in Notes), not committed.
-- [ ] The chip-strip code is gone (grep for `UrlVariables`, `HasUrlVariables`, `ListMap.Hints`, `HintTooltip` returns
+- [x] The chip-strip code is gone (grep for `UrlVariables`, `HasUrlVariables`, `ListMap.Hints`, `HintTooltip` returns
       nothing in `src` and `tests`).
-- [ ] No Yaapic or stub-server process left running.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
@@ -148,3 +148,49 @@ changing token colours or adding new brushes to the generator.
 `feat(winui): colour variables inline in the URL bar with a hover popup`
 
 ## Notes
+
+**Spike outcome (option 1, overlay, shipped; the `RichEditBox` fallback was not needed).** A transparent-text `TextBox` over a
+`TextBlock` works with these workarounds:
+
+- (a) Transparent in every state: the `TextControlBackground*`, `TextControlBorderBrush*` and `TextControlForeground*`
+  resources are overridden on the `Input` box only (not on the control, so the popup fields keep their frames; the popup
+  view restores the frame brushes because the hosting editor flattens every `TextBox`).
+- (b) Metrics: same `YaapicMonoFont`, `YaapicFontSizeBody`, `NoWrap`; the overlay sits in a padded border using
+  `InputPadding` (default `10,7,10,5`) and is centred vertically. Text and colours never drift (the overlay text is the
+  `TextBox` text, character for character).
+- (c) Scrolling: the template `ScrollViewer` `ContentElement` is found after `Loaded`; its `HorizontalOffset` drives a
+  `TranslateTransform` of the overlay, clipped to the content area. The overlay lives in a `Canvas` because a `TextBlock`
+  directly in a `Grid`/`Border` is layout-clipped to its slot, which hid the scrolled text.
+- (d) Caret and selection: there is no `CaretBrush` in this Windows App SDK (1.8), but the caret stays visible with the
+  transparent foreground. The selection highlight is opaque (alpha ignored), so the selected text is drawn again in a
+  second overlay in front of the box in `YaapicAccentOnBrush`. The spell-check squiggles are disabled on the box.
+- (e) AOT: the `Context` dependency property is typed `VariableContext` and works under Native AOT; the publish has no
+  IL2xxx/IL3xxx warning. The popup scope picker is filled in code (index based, like the other pickers).
+- Colours: `ThemeResource` probes did not refresh on a runtime theme change and `ActualThemeChanged` is not raised on the
+  control, so the brushes are read from the `Light`/`Default` theme dictionary of the element theme and the control
+  re-renders on the window root `ActualThemeChanged`. Background tints use `TextHighlighter` (rectangular, no metric change).
+- Popup: closing is driven by timers and focus; the card also stays open while one of its dropdowns is open (a dropdown is a
+  separate popup, so the pointer "leaves" the card).
+- `VariableContext.Activated` was added (raised when the tab becomes active) so the URL box re-tokenises after scopes changed
+  while the tab was inactive. `CollectionTreeViewModel.OpenCollectionSettings(requestId)` opens the collection settings for
+  the `Open` link; `RequestEditorView` raises `VariableScopeOpenRequested` to `MainWindow`.
+- The test class of the removed chips was migrated and renamed `RequestEditorVariableTokensTests`.
+
+**Resource keys used (all exist in `design/xaml/Yaapic.Colors.WinUI.xaml`):** `YaapicSuccessBrush`,
+`YaapicSuccessBackgroundBrush`, `YaapicWarningBrush`, `YaapicWarningBackgroundBrush`, `YaapicInfoBrush`,
+`YaapicInfoBackgroundBrush`, `YaapicDangerBrush`, `YaapicAccentOnBrush`, `YaapicTextPrimaryBrush`,
+`YaapicTextSecondaryBrush`, `YaapicSurfaceElevatedBrush`, `YaapicSurfaceRaisedBrush`, `YaapicBorderOverlayBrush`,
+`YaapicSurfaceSunkenColor`, `YaapicBorderControlColor`, `YaapicFocusRingColor`; plus the app resources `YaapicMonoFont`,
+`YaapicFontSizeBody`, `YaapicRadiusMd`, `YaapicChipBorderStyle`, `YaapicChipTextStyle`, `YaapicBodyTextStyle` and
+`YaapicPrimaryButtonStyle`. No hex colours in the new files. Contrast: the light `Warning` (`#8A5A00`) and `Success`
+(`#157F4A`) are readable on the light URL bar; the dark ones on the dark bar.
+
+**Verification (published exe, real mouse via `mouse_event` and UI Automation, own driver script because
+`Capture-WinUI.ps1` is one-shot):** inline colours for resolved/unresolved/dynamic, no doubling, caret and typing in the
+middle of a token, hover popups (value + `Environment`, `Unresolved variable` + the exact sentence + scope list with the
+disabled entry explained), Edit/Save, Open (environments dialog and collection settings), create in Environment, Globals and
+Collection (files on disk checked, token turned green live), "No environment" (Environment scope disabled with its reason),
+long URL scrolling and selection, dark/light switch at run time, `Ctrl+.` then `Escape` (caret kept, typing continues),
+Params sync, Ctrl+Enter send. Screenshots were taken with the driver (not committed). Not exercised: IME composition (no IME
+available; the box is the stock `TextBox`, whose composition is unchanged) and Narrator.
+

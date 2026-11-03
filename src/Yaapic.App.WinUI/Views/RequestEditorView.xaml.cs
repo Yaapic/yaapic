@@ -20,6 +20,9 @@ public sealed partial class RequestEditorView : UserControl
     /// <summary>Raised when the user asks to save the request from the header button.</summary>
     public event RoutedEventHandler? SaveRequested;
 
+    /// <summary>Raised when a variable popup asks to open the editor of the scope that holds the variable.</summary>
+    public event EventHandler<VariableScopeOpenRequest>? VariableScopeOpenRequested;
+
     /// <summary>Initializes the view.</summary>
     public RequestEditorView()
     {
@@ -49,9 +52,22 @@ public sealed partial class RequestEditorView : UserControl
         set => SetValue(ViewModelProperty, value);
     }
 
+    private VariableContext? _variables;
+
     private void OnViewModelChanged()
     {
         Bindings?.Update();
+        if (_variables is not null)
+        {
+            _variables.OpenRequested -= OnVariableOpenRequested;
+        }
+
+        _variables = ViewModel?.Variables;
+        if (_variables is not null)
+        {
+            _variables.OpenRequested += OnVariableOpenRequested;
+        }
+
         if (ViewModel is not { } vm)
         {
             return;
@@ -65,6 +81,14 @@ public sealed partial class RequestEditorView : UserControl
         BodyBinary.IsChecked = vm.BodyKind == BodyKind.Binary;
         ContentTypeLabel.Text = ContentTypeNames[IndexOf(RequestEditorViewModel.ContentTypes, vm.BodyContentType)];
         TimeoutBox.Value = vm.TimeoutSeconds;
+    }
+
+    private void OnVariableOpenRequested(object? sender, Yaapic.Core.Variables.VariableScopeKind scope)
+    {
+        if (ViewModel is { } vm)
+        {
+            VariableScopeOpenRequested?.Invoke(this, new VariableScopeOpenRequest(vm.Id, scope));
+        }
     }
 
     private void OnTimeoutChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
@@ -251,3 +275,8 @@ public sealed partial class RequestEditorView : UserControl
         return 0;
     }
 }
+
+/// <summary>A request to open the editor of a variable scope.</summary>
+/// <param name="RequestId">The request whose variable was shown.</param>
+/// <param name="Scope">The scope to open.</param>
+public sealed record VariableScopeOpenRequest(Guid RequestId, Yaapic.Core.Variables.VariableScopeKind Scope);

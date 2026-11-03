@@ -312,6 +312,33 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    private void OnVariableScopeOpenRequested(object? sender, Views.VariableScopeOpenRequest request)
+    {
+        if (_viewModel is null)
+        {
+            return;
+        }
+
+        if (request.Scope == Yaapic.Core.Variables.VariableScopeKind.Collection)
+        {
+            // The settings dialog opens through OnCollectionsChanged once the editor is set.
+            _viewModel.Collections.OpenCollectionSettings(request.RequestId);
+            return;
+        }
+
+        var environments = _viewModel.Environments;
+        if (request.Scope == Yaapic.Core.Variables.VariableScopeKind.Globals)
+        {
+            environments.IsEditingGlobals = true;
+        }
+        else if (environments.ActiveEnvironment is { } active)
+        {
+            environments.EditedEnvironment = active;
+        }
+
+        OnManageEnvironments(this, new RoutedEventArgs());
+    }
+
     private async void OnManageEnvironments(object sender, RoutedEventArgs e)
     {
         // One ContentDialog at a time: ignore the shortcut / rail click while a dialog is already open.
