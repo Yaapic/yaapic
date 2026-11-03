@@ -12,6 +12,7 @@ public interface IRequestStore
     Task<IReadOnlyList<HttpRequestDefinition>> ListAsync(CancellationToken ct);
 
     /// <summary>Inserts the request, or replaces the one with the same identifier.</summary>
+    /// <remarks>A request with an unknown identifier lands unfiled; a known one stays where it is (see <see cref="ICollectionStore"/>).</remarks>
     /// <param name="request">The request to save.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <exception cref="StorageException">The store cannot be written.</exception>
