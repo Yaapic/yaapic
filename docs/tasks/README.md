@@ -83,7 +83,7 @@ Scope: domain model, variable engine, GET/POST, Pretty/Raw, tabs, file storage.
 | [M1-54](milestone-1-http-core/M1-54-avalonia-request-editor-restyle.md) | Avalonia request editor restyle | unix | M1-52, M1-53, M2-22 | done |
 | [M1-55](milestone-1-http-core/M1-55-avalonia-response-panel-restyle.md) | Avalonia response panel restyle | unix | M1-54 | done |
 | [M1-56](milestone-1-http-core/M1-56-avalonia-environments-restyle.md) | Avalonia environment management and prompt restyle | unix | M1-51, M1-53 | done |
-| [M1-57](milestone-1-http-core/M1-57-avalonia-visual-verification.md) | Avalonia visual verification against the mockups | unix | M1-55, M1-56 | todo |
+| [M1-57](milestone-1-http-core/M1-57-avalonia-visual-verification.md) | Avalonia visual verification against the mockups | unix | M1-55, M1-56 | done |
 
 M1-33 to M1-46 bring the WinUI app in line with the design mockups (`design/mockups/`, see its README).
 
@@ -92,7 +92,7 @@ the Avalonia app much less faithful than the WinUI one). They are numbered as a 
 Milestone 2: M1-47 depends on M2-22, and they sit before the remaining Avalonia UI cards of M2 so that fidelity is fixed
 before more Avalonia UI is added. M2-23, M2-24, M2-38, M2-50, M2-52 and M2-59 depend on M1-57 for that reason (the other
 Avalonia cards follow them). The WinUI-only M1-44 (code editor) and M1-46 (splitter) have no separate Avalonia card: the
-splitter is part of M1-54, and an AvaloniaEdit-based editor is a candidate follow-up listed by M1-57.
+splitter is part of M1-54, and an AvaloniaEdit-based editor is a candidate follow-up listed by the [Avalonia visual verification](../screenshots/m1-avalonia/README.md) (M1-57).
 
 ## Milestone 2: Full request editor, collections, environments, history, command palette
 

@@ -1,6 +1,6 @@
 # M1-57: Avalonia visual verification against the mockups
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M1-55, M1-56
 
@@ -40,10 +40,10 @@ New features, pixel-perfect diff tooling, CI image comparison, fixing large devi
 
 ## Acceptance criteria
 
-- [ ] 20 or more PNGs present, each under 500 KB, all linked from the README; the README lists a class for every
+- [x] 20 or more PNGs present, each under 500 KB, all linked from the README; the README lists a class for every
       deviation and the operating systems checked.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green (only fixes of one line or so were made).
-- [ ] The Avalonia and WinUI captures of the same screen are visually equivalent at the level the README states.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green (only fixes of one line or so were made).
+- [x] The Avalonia and WinUI captures of the same screen are visually equivalent at the level the README states.
 
 ## Suggested commit message
 

@@ -50,7 +50,7 @@ try {
                 if ($p -eq '/users' -and $c.Request.HttpMethod -eq 'POST') { $code = 201; $body = '{"id":42,"name":"Ada Lovelace","email":"ada@example.test"}' }
                 elseif ($p -eq '/users') { $body = '[{"id":1,"name":"Ada"},{"id":2,"name":"Grace"}]' }
                 elseif ($p -match '^/status/(\d+)$') { $code = [int]$Matches[1]; $body = '{"title":"Problem","status":' + $code + '}' }
-                elseif ($p -match '^/delay/(\d+)$') { Start-Sleep -Milliseconds ([int]$Matches[1]); $body = '{"delayed":true}' }
+                elseif ($p -match '^/delay/(\d+)$') { [Threading.Thread]::Sleep([int]$Matches[1]); $body = '{"delayed":true}' }
                 $b = [Text.Encoding]::UTF8.GetBytes($body)
                 $c.Response.StatusCode = $code; $c.Response.ContentType = 'application/json'
                 $c.Response.OutputStream.Write($b, 0, $b.Length); $c.Response.Close()

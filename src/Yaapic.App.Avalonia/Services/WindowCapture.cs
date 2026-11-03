@@ -2,7 +2,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Media.Imaging;
-using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.App.Avalonia.Services;
@@ -23,11 +22,8 @@ internal static class WindowCapture
             await shell.InitializeAsync();
             if (options.Send && shell.Tabs.ActiveTab is { } tab)
             {
-                await tab.SendCommand.ExecuteAsync(null);
-                while (tab.Response.State == ResponseState.Sending)
-                {
-                    await Task.Delay(50);
-                }
+                var sent = tab.SendCommand.ExecuteAsync(null);
+                await Task.WhenAny(sent, Task.Delay(options.WaitMs)); // a slow request stays in the Sending state for the capture
             }
 
             await Task.Delay(500); // let the tab content materialise before walking the visual tree
