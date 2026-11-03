@@ -137,6 +137,13 @@ public static class VisibilityMap
     public static Visibility WhenNoSavedRequests(int count, string? filter) =>
         count == 0 && string.IsNullOrWhiteSpace(filter) ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> for a folder that is not a collection.</summary>
+    /// <param name="isFolder">Whether the row is a folder.</param>
+    /// <param name="isCollection">Whether the row is a collection.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenSubfolder(bool isFolder, bool isCollection) =>
+        isFolder && !isCollection ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when a filter is typed and nothing matches.</summary>
     /// <param name="count">The number of listed requests.</param>
     /// <param name="filter">The filter text.</param>

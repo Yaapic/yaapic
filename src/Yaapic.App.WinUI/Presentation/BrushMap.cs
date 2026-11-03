@@ -23,6 +23,11 @@ public static class BrushMap
         _ => "YaapicMethodCustomBrush",
     });
 
+    /// <summary>Gets the method brush of a tree row.</summary>
+    /// <param name="method">The HTTP method; null for a folder.</param>
+    /// <returns>The method brush, or the custom-method brush for a folder (never shown).</returns>
+    public static Brush MethodOrDefault(HttpMethodKind? method) => Method(method ?? HttpMethodKind.Get);
+
     /// <summary>Gets the text brush of the status chip.</summary>
     /// <param name="category">The class of the status code.</param>
     /// <returns>The brush from the application resources.</returns>

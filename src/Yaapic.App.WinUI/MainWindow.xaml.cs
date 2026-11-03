@@ -1,9 +1,8 @@
-using System.Collections.Specialized;
-using System.ComponentModel;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -66,17 +65,12 @@ public sealed partial class MainWindow : Window
         {
             if (_viewModel is not null)
             {
-                _viewModel.Tabs.PropertyChanged -= OnTabsChanged;
-                _viewModel.Requests.Items.CollectionChanged -= OnItemsChanged;
-            }
+                }
 
             _viewModel = value;
             Bindings.Update();
             if (_viewModel is not null)
             {
-                _viewModel.Tabs.PropertyChanged += OnTabsChanged;
-                _viewModel.Requests.Items.CollectionChanged += OnItemsChanged;
-                SyncListSelection();
             }
         }
     }
@@ -141,37 +135,12 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    private void OnRequestClick(object sender, ItemClickEventArgs e)
+    private void OnNodeInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
     {
-        if (e.ClickedItem is RequestListItem item)
+        if (args.InvokedItem is CollectionNodeViewModel node)
         {
-            _viewModel?.Requests.OpenCommand.Execute(item);
+            _viewModel?.Collections.OpenCommand.Execute(node);
         }
-    }
-
-    private void OnDeleteRequest(object sender, RoutedEventArgs e)
-    {
-        if (((FrameworkElement)sender).Tag is RequestListItem item)
-        {
-            _viewModel?.Requests.DeleteCommand.Execute(item);
-        }
-    }
-
-    private void OnTabsChanged(object? sender, PropertyChangedEventArgs e)
-    {
-        if (e.PropertyName == nameof(TabsViewModel.ActiveTab))
-        {
-            SyncListSelection();
-        }
-    }
-
-    private void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e) => SyncListSelection();
-
-    // The list selection mirrors the active tab; ItemClick (not SelectionChanged) opens requests, so this never opens one.
-    private void SyncListSelection()
-    {
-        var id = _viewModel?.Tabs.ActiveTab?.Id;
-        RequestList.SelectedItem = id is null ? null : _viewModel?.Requests.Items.FirstOrDefault(i => i.Id == id);
     }
 
     private void OnEnvironmentMenuOpening(object? sender, object e)
