@@ -27,6 +27,9 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     [ObservableProperty]
     private string? _lastError;
 
+    [ObservableProperty]
+    private FolderSettingsViewModel? _settingsEditor;
+
     /// <summary>Creates the tree.</summary>
     /// <param name="collections">Where the tree is loaded from.</param>
     /// <param name="requests">Where requests are saved; used by the request commands.</param>
@@ -107,6 +110,26 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         if (!folder.IsFolder || await PromptNameAsync("Rename", folder.Name) is not { } name || name == folder.Name) return;
         await RunAsync(() => _collections.SaveFolderAsync(folder.Node.Folder! with { Name = name }, null, CancellationToken.None));
     }
+
+    [RelayCommand]
+    private void EditSettings(CollectionNodeViewModel folder)
+    {
+        ArgumentNullException.ThrowIfNull(folder);
+        if (!folder.IsFolder) return;
+        var editor = new FolderSettingsViewModel(folder.Node.Folder!, folder.IsCollection, _collections);
+        editor.Saved += (_, _) => _ = RefreshAsync();
+        SettingsEditor = editor;
+    }
+
+    [RelayCommand]
+    private void CloseSettings() => SettingsEditor = null;
+
+    /// <summary>Gets the variables of the collection (top-level folder) that contains a request.</summary>
+    /// <param name="requestId">The request identifier.</param>
+    /// <returns>The saved variables of the collection in the loaded tree; empty for an unfiled or unknown request. Unsaved edits are not included.</returns>
+    public IReadOnlyList<KeyValueEntry> FindCollectionVariables(Guid requestId) =>
+        _tree.FirstOrDefault(root => root.Kind == CollectionNodeKind.Folder && root.Descendants().Any(n => n.Id == requestId && n.Kind == CollectionNodeKind.Request))
+            ?.Folder!.Variables ?? [];
 
     [RelayCommand]
     private async Task DeleteFolderAsync(CollectionNodeViewModel folder)
