@@ -67,12 +67,14 @@ public sealed partial class MainWindow : Window
         {
             if (_viewModel is not null)
             {
-                }
+                _viewModel.Collections.PropertyChanged -= OnCollectionsChanged;
+            }
 
             _viewModel = value;
             Bindings.Update();
             if (_viewModel is not null)
             {
+                _viewModel.Collections.PropertyChanged += OnCollectionsChanged;
             }
         }
     }
@@ -159,6 +161,7 @@ public sealed partial class MainWindow : Window
             AddItem(menu, "New request", tree.NewRequestCommand, node);
             AddItem(menu, "New folder", tree.NewFolderCommand, node);
             AddItem(menu, "Rename", tree.RenameFolderCommand, node);
+            AddItem(menu, "Settings", tree.EditSettingsCommand, node);
             AddItem(menu, "Delete", tree.DeleteFolderCommand, node);
         }
         else
@@ -281,6 +284,32 @@ public sealed partial class MainWindow : Window
     {
         FilterBox.Focus(FocusState.Keyboard);
         args.Handled = true;
+    }
+
+    private async void OnCollectionsChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(CollectionTreeViewModel.SettingsEditor) || _viewModel?.Collections is not { SettingsEditor: { } editor } tree)
+        {
+            return;
+        }
+
+        // One ContentDialog at a time: drop the request while another dialog is open.
+        if (_dialogOpen)
+        {
+            tree.CloseSettingsCommand.Execute(null);
+            return;
+        }
+
+        _dialogOpen = true;
+        try
+        {
+            await new Views.FolderSettingsDialog(editor) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
+        }
+        finally
+        {
+            _dialogOpen = false;
+            tree.CloseSettingsCommand.Execute(null);
+        }
     }
 
     private async void OnManageEnvironments(object sender, RoutedEventArgs e)
