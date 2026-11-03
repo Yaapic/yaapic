@@ -42,7 +42,7 @@ public static class EnvironmentYamlSerializer
         {
             dto = YamlSerializer.Deserialize<EnvironmentFileDto>(Encoding.UTF8.GetBytes(yaml));
         }
-        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException)
+        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or YamlTokenizerException)
         {
             throw new StorageException($"Invalid environment file: {ex.Message}", ex);
         }

@@ -72,7 +72,7 @@ public static class RequestYamlSerializer
         {
             dto = YamlSerializer.Deserialize<RequestFileDto>(Encoding.UTF8.GetBytes(yaml));
         }
-        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException)
+        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or YamlTokenizerException)
         {
             throw new StorageException($"Invalid request file: {ex.Message}", ex);
         }

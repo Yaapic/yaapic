@@ -43,7 +43,7 @@ public static class FolderYamlSerializer
         {
             dto = YamlSerializer.Deserialize<FolderFileDto>(Encoding.UTF8.GetBytes(yaml));
         }
-        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException)
+        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or YamlTokenizerException)
         {
             throw new StorageException($"Invalid folder file: {ex.Message}", ex);
         }
