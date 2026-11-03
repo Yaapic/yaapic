@@ -4,6 +4,7 @@ using Yaapic.Domain.Http;
 namespace Yaapic.Infrastructure.Storage;
 
 /// <summary>Stores requests as <c>requests/*.request.yaml</c> files in a workspace.</summary>
+/// <remarks>Its id to path map is not shared with <see cref="FileCollectionStore"/>: after a move, list again to rescan.</remarks>
 /// <param name="workspaceRoot">The workspace root directory.</param>
 public sealed class FileRequestStore(string workspaceRoot) : IRequestStore
 {

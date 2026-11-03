@@ -1,6 +1,6 @@
 # M2-31: File collection store: move folders and requests
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-30
 
@@ -28,11 +28,11 @@ Reordering inside a folder, copy.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: move a request into a folder and back to the root; move a folder under
+- [x] Tests in `Yaapic.Infrastructure.Tests`: move a request into a folder and back to the root; move a folder under
       another with its requests intact; name collision at the target gets `-2`; moving a folder into itself or a
       descendant throws and changes nothing; unknown id and unknown target throw; same-parent move is a no-op;
       `FileRequestStore` lists moved requests with their new location after a scan.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

@@ -8,6 +8,7 @@ namespace Yaapic.Infrastructure.Storage;
 public sealed class FileCollectionStore(string workspaceRoot) : ICollectionStore
 {
     private const string FolderFileName = "folder.yaml";
+    private const string RequestSuffix = ".request.yaml";
     private readonly string _directory = Path.Combine(workspaceRoot, "requests");
 
     /// <summary>Gets the entries skipped by the last <see cref="LoadTreeAsync"/> call, as relative paths followed by the reason.</summary>
@@ -93,7 +94,64 @@ public sealed class FileCollectionStore(string workspaceRoot) : ICollectionStore
         }
     }
 
+    /// <remarks>The id to path map of <see cref="FileRequestStore"/> is not shared: it rescans on its next list.</remarks>
     /// <inheritdoc />
-    public Task MoveAsync(Guid id, Guid? newParentId, CancellationToken ct) =>
-        throw new NotSupportedException("Implemented by M2-31");
+    public Task MoveAsync(Guid id, Guid? newParentId, CancellationToken ct)
+    {
+        ct.ThrowIfCancellationRequested();
+        try
+        {
+            var index = WorkspaceIndex.Scan(_directory);
+            var isFolder = index.TryGetFolder(id, out var folder);
+            IndexedRequest? request = null;
+            if (!isFolder && !index.TryGetRequest(id, out request))
+            {
+                throw new StorageException("Unknown item");
+            }
+
+            var targetDirectory = _directory;
+            if (newParentId is { } pid)
+            {
+                targetDirectory = index.TryGetFolder(pid, out var parent)
+                    ? parent.DirectoryPath
+                    : throw new StorageException($"Unknown target folder '{pid}'.");
+            }
+
+            var target = Path.GetFullPath(targetDirectory);
+            if (isFolder)
+            {
+                var own = Path.GetFullPath(folder!.DirectoryPath);
+                if (string.Equals(target, own, StringComparison.OrdinalIgnoreCase)
+                    || target.StartsWith(own + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase))
+                {
+                    throw new StorageException("Cannot move a folder into itself or one of its descendants.");
+                }
+
+                if (!SameDirectory(Path.GetDirectoryName(own)!, target))
+                {
+                    var name = WorkspaceFiles.UniqueName(target, Path.GetFileName(own), "", own);
+                    Directory.Move(own, Path.Combine(target, name));
+                }
+            }
+            else
+            {
+                var file = Path.GetFullPath(request!.FilePath);
+                if (!SameDirectory(Path.GetDirectoryName(file)!, target))
+                {
+                    var slug = Path.GetFileName(file)[..^RequestSuffix.Length];
+                    var name = WorkspaceFiles.UniqueName(target, slug, RequestSuffix, file);
+                    File.Move(file, Path.Combine(target, name));
+                }
+            }
+
+            return Task.CompletedTask;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            throw new StorageException($"Cannot move '{id}': {ex.Message}", ex);
+        }
+    }
+
+    private static bool SameDirectory(string a, string b) =>
+        string.Equals(a.TrimEnd(Path.DirectorySeparatorChar), b.TrimEnd(Path.DirectorySeparatorChar), StringComparison.OrdinalIgnoreCase);
 }
