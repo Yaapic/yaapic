@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -21,7 +22,6 @@ public sealed partial class MainWindow : Window
         InitializeComponent();
         // The system caption buttons overlay the right of the bar on Windows; macOS puts the traffic lights on the left.
         TitleBar.Padding = new Thickness(OperatingSystem.IsMacOS() ? 80 : 12, 0, OperatingSystem.IsWindows() ? 140 : 12, 0);
-        DataContextChanged += (_, _) => WireShell();
         var modifier = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.T, modifier), Command = new Relay(() => Shell?.Tabs.NewTab()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => Shell?.Tabs.CloseActiveCommand.Execute(null)) });
@@ -39,49 +39,6 @@ public sealed partial class MainWindow : Window
         {
             await new Views.EnvironmentsWindow { DataContext = shell.Environments }.ShowDialog(this);
         }
-    }
-
-    private void WireShell()
-    {
-        if (Shell is not { } shell)
-        {
-            return;
-        }
-
-        shell.Requests.Items.CollectionChanged += (_, _) => SyncList();
-        shell.Requests.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(RequestListViewModel.FilterText))
-            {
-                SyncList();
-            }
-        };
-        shell.Tabs.PropertyChanged += (_, e) =>
-        {
-            if (e.PropertyName == nameof(TabsViewModel.ActiveTab))
-            {
-                SyncList();
-            }
-        };
-        SyncList();
-    }
-
-    // Selection follows the active tab; a selection made here never opens a request (only Tapped does).
-    private void SyncList()
-    {
-        if (Shell is not { } shell)
-        {
-            return;
-        }
-
-        var activeId = shell.Tabs.ActiveTab?.Id;
-        RequestList.SelectedItem = activeId is { } id ? shell.Requests.Items.FirstOrDefault(i => i.Id == id) : null;
-
-        var filter = shell.Requests.FilterText.Trim();
-        EmptyList.IsVisible = shell.Requests.Items.Count == 0;
-        EmptyTitle.Text = filter.Length > 0 ? $"No request matches '{filter}'." : "No saved requests yet.";
-        EmptyHint.Text = "Press Ctrl+S in a tab to save it here.";
-        EmptyHint.IsVisible = filter.Length == 0;
     }
 
     private void OnEnvironmentMenuOpening(object? sender, EventArgs e)
@@ -154,19 +111,20 @@ public sealed partial class MainWindow : Window
 
     private void OnSaveRequested(object? sender, EventArgs e) => Shell?.Tabs.SaveActiveCommand.Execute(null);
 
-    private void OnRequestTapped(object? sender, TappedEventArgs e)
+    private void OnNodeTapped(object? sender, TappedEventArgs e)
     {
-        if ((sender as Control)?.DataContext is RequestListItem item)
+        if ((sender as Control)?.DataContext is CollectionNodeViewModel node)
         {
-            Shell?.Requests.OpenCommand.Execute(item);
+            Shell?.Collections.OpenCommand.Execute(node);
         }
     }
 
-    private void OnDeleteRequest(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    // Selecting a request opens it, which also covers the keyboard; a folder only toggles on Tapped.
+    private void OnTreeSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if ((sender as Control)?.DataContext is RequestListItem item)
+        if (e.AddedItems is [CollectionNodeViewModel { IsFolder: false } node, ..])
         {
-            Shell?.Requests.DeleteCommand.Execute(item);
+            Shell?.Collections.OpenCommand.Execute(node);
         }
     }
 

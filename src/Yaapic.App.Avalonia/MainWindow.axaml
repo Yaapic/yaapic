@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Yaapic.ViewModels.Shell"
+        xmlns:col="using:Yaapic.ViewModels.Collections"
         xmlns:req="using:Yaapic.ViewModels.Requests"
         xmlns:env="using:Yaapic.ViewModels.Environments"
         xmlns:p="using:Yaapic.App.Avalonia.Presentation"
@@ -85,6 +86,10 @@
             IsVisible="{Binding Tabs.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
       <TextBlock Text="{Binding Tabs.LastError}" TextWrapping="Wrap" />
     </Border>
+    <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
+            IsVisible="{Binding Collections.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding Collections.LastError}" TextWrapping="Wrap" />
+    </Border>
 
     <!-- Column widths are literals: a GridLength cannot come from the x:Double resources. 48 = YaapicRailWidth, 272 = YaapicSidebarWidth. -->
     <Grid Grid.Row="2" ColumnDefinitions="48,272,*">
@@ -130,8 +135,8 @@
           </Grid>
           <Grid Grid.Row="1" Margin="10,0,10,8">
             <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,0,8,0" VerticalContentAlignment="Center"
-                     PlaceholderText="Filter" AutomationProperties.Name="Filter requests"
-                     Text="{Binding Requests.FilterText, Mode=TwoWay}" />
+                     PlaceholderText="Filter requests" AutomationProperties.Name="Filter requests"
+                     Text="{Binding Collections.FilterText, Mode=TwoWay}" />
             <Viewbox Width="14" Height="14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0"
                      IsHitTestVisible="False">
               <Canvas Width="24" Height="24">
@@ -141,36 +146,49 @@
             </Viewbox>
             <Border Classes="keycap" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0"
                     IsHitTestVisible="False"
-                    IsVisible="{Binding Requests.FilterText, Converter={x:Static StringConverters.IsNullOrEmpty}}">
+                    IsVisible="{Binding Collections.FilterText, Converter={x:Static StringConverters.IsNullOrEmpty}}">
               <TextBlock Text="Ctrl+Shift+F" Classes="bodySmall" FontSize="10"
                          Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
             </Border>
           </Grid>
-          <ListBox x:Name="RequestList" Grid.Row="2" Background="Transparent" SelectionMode="Single"
-                   ItemsSource="{Binding Requests.Items}">
-            <ListBox.ItemTemplate>
-              <DataTemplate x:DataType="req:RequestListItem">
-                <Grid ColumnDefinitions="34,*" ColumnSpacing="8" Background="Transparent" Tapped="OnRequestTapped">
-                  <Grid.ContextMenu>
-                    <ContextMenu>
-                      <MenuItem Header="Delete" Click="OnDeleteRequest" />
-                    </ContextMenu>
-                  </Grid.ContextMenu>
-                  <TextBlock Grid.Column="0" Text="{Binding MethodText}" Classes="method"
-                             VerticalAlignment="Center"
-                             Foreground="{Binding Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
+          <TreeView x:Name="CollectionTree" Grid.Row="2" Background="Transparent" SelectionMode="Single"
+                    ItemsSource="{Binding Collections.Roots}" SelectionChanged="OnTreeSelectionChanged">
+            <TreeView.Styles>
+              <Style Selector="TreeViewItem" x:DataType="col:CollectionNodeViewModel">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="MinHeight" Value="26" />
+                <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+              </Style>
+            </TreeView.Styles>
+            <TreeView.DataTemplates>
+              <TreeDataTemplate DataType="col:CollectionNodeViewModel" ItemsSource="{Binding Children}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6" Background="Transparent" Tapped="OnNodeTapped"
+                      ToolTip.Tip="{Binding Url}">
+                  <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsFolder}">
+                    <Viewbox Width="16" Height="16" VerticalAlignment="Center">
+                      <Canvas Width="24" Height="24">
+                        <Path Data="{StaticResource YiCollection}" Stroke="{DynamicResource YaapicTextSecondaryBrush}"
+                              StrokeThickness="1.8" StrokeJoin="Round" IsVisible="{Binding IsCollection}" />
+                        <Path Data="{StaticResource YiFolder}" Stroke="{DynamicResource YaapicTextSecondaryBrush}"
+                              StrokeThickness="1.8" StrokeJoin="Round" IsVisible="{Binding !IsCollection}" />
+                      </Canvas>
+                    </Viewbox>
+                  </StackPanel>
+                  <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsFolder}">
+                    <TextBlock Width="44" Text="{Binding MethodText}" Classes="method" VerticalAlignment="Center"
+                               Foreground="{Binding Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
+                  </StackPanel>
                   <TextBlock Grid.Column="1" Text="{Binding Name}" Classes="body" VerticalAlignment="Center"
                              TextTrimming="CharacterEllipsis" />
                 </Grid>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
-          <StackPanel x:Name="EmptyList" Grid.Row="2" Margin="16,24" Spacing="4" HorizontalAlignment="Center"
-                      IsHitTestVisible="False" IsVisible="False">
-            <TextBlock x:Name="EmptyTitle" Classes="bodySmall" TextAlignment="Center" TextWrapping="Wrap"
+              </TreeDataTemplate>
+            </TreeView.DataTemplates>
+          </TreeView>
+          <StackPanel Grid.Row="2" Margin="16,24,16,0" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Top"
+                      IsVisible="{Binding Collections.IsEmpty}">
+            <TextBlock Text="No collections yet" Classes="bodySmall" TextAlignment="Center"
                        Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
-            <TextBlock x:Name="EmptyHint" Classes="bodySmall" TextAlignment="Center" TextWrapping="Wrap"
-                       Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+            <Button Content="New request" HorizontalAlignment="Center" Command="{Binding Requests.NewRequestCommand}" />
           </StackPanel>
         </Grid>
       </Border>
