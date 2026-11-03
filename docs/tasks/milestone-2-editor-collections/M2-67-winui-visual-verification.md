@@ -2,7 +2,7 @@
 
 Status: todo
 Platform: windows
-Depends on: M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64
+Depends on: M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64, M2-72, M2-73
 
 ## Goal
 

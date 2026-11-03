@@ -4,7 +4,8 @@ Cards are small, reviewable and reversible. `/next-task` picks the first card in
 and whose dependencies are all `done`.
 
 Statuses: `todo`, `in progress`, `done`, `blocked` (waiting for a product decision), `planned` (milestone not detailed
-yet: write its cards before it can be picked). In the milestone summary table, `detailed` means its cards are written.
+yet: write its cards before it can be picked), `superseded` (replaced by another card, never picked; its card says by
+which). In the milestone summary table, `detailed` means its cards are written.
 
 Platform column: `any`, `windows` (WinUI 3 only), `unix` (macOS + Linux, Avalonia).
 
@@ -102,6 +103,15 @@ in [ADR 0008](../adr/0008-collections-globals-history-storage.md) (written by M2
 Domain, Core, Infrastructure and ViewModels (`any`) first, then WinUI (`windows`), then Avalonia (`unix`) cards. M2-67 is
 the WinUI visual check; the Avalonia visual pass is M1-47 to M1-57 (see the Milestone 1 block above). M2-68 to M2-70 add the syntax-highlighted code editors (Windows App SDK 2.x migration, LoomEditor on WinUI, AvaloniaEdit on Avalonia).
 
+M2-71 to M2-75 rework the variable UX after the user's review of the chip strip (M2-46, M2-49): variables are coloured
+**inside the text** (Postman / Bruno style) with a hover popup that shows the value or creates the variable in a scope.
+M2-71 is the shared model (token ranges, `VariableContext`, popup view model, write path); M2-72/M2-73 (WinUI, URL bar
+then header/param values; M2-72 removes the M2-49 chips) and M2-74/M2-75 (Avalonia) draw it with a transparent-text
+`TextBox` over a coloured `TextBlock` overlay (fallbacks in the cards). M2-52 (the never-built Avalonia chip strip) is
+`superseded` by M2-74. These cards sit right after M2-52 in the table so they run before the history slice; they do
+**not** wait for M2-68 to M2-70 (the code editors only own body text, where `{{variable}}` highlighting is a later card
+that reuses `VariableContext`). The numbers follow M2-70 only because they were added afterwards.
+
 Deferred beyond M2 (listed in ADR 0008): manual ordering and drag and drop, cookie jar, proxy and TLS settings, workspace
 picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`: every product choice is fixed in M2-01.
 
@@ -158,7 +168,12 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-49](milestone-2-editor-collections/M2-49-winui-url-variable-hints.md) | WinUI URL variable hints | windows | M2-46, M2-16 | done |
 | [M2-50](milestone-2-editor-collections/M2-50-avalonia-environments-globals-and-duplicate.md) | Avalonia environments window: globals and duplicate | unix | M2-42, M2-45, M1-57 | done |
 | [M2-51](milestone-2-editor-collections/M2-51-avalonia-folder-settings-window.md) | Avalonia folder and collection settings window | unix | M2-43, M2-39 | todo |
-| [M2-52](milestone-2-editor-collections/M2-52-avalonia-url-variable-hints.md) | Avalonia URL variable hints | unix | M2-46, M2-21, M1-57 | todo |
+| [M2-52](milestone-2-editor-collections/M2-52-avalonia-url-variable-hints.md) | Avalonia URL variable hints (chip strip) | unix | M2-46, M2-21, M1-57 | superseded |
+| [M2-71](milestone-2-editor-collections/M2-71-variable-tokens-context-and-create.md) | Variable tokens, context and create-variable popup model | any | M2-44, M2-46, M2-43 | todo |
+| [M2-72](milestone-2-editor-collections/M2-72-winui-inline-variable-highlighting-url-bar.md) | WinUI inline variable highlighting and popup in the URL bar (replaces the M2-49 chips) | windows | M2-71, M2-49, M2-16 | todo |
+| [M2-73](milestone-2-editor-collections/M2-73-winui-variables-in-headers-and-params.md) | WinUI inline variables in header and param values | windows | M2-72 | todo |
+| [M2-74](milestone-2-editor-collections/M2-74-avalonia-inline-variable-highlighting-url-bar.md) | Avalonia inline variable highlighting and popup in the URL bar | unix | M2-71, M2-21, M1-57 | todo |
+| [M2-75](milestone-2-editor-collections/M2-75-avalonia-variables-in-headers-and-params.md) | Avalonia inline variables in header and param values | unix | M2-74 | todo |
 | [M2-53](milestone-2-editor-collections/M2-53-domain-history-entry.md) | Domain: history entry | any | M2-01 | todo |
 | [M2-54](milestone-2-editor-collections/M2-54-history-store-port-and-double.md) | Core: history store port and in-memory double | any | M2-53 | todo |
 | [M2-55](milestone-2-editor-collections/M2-55-file-history-store.md) | File history store (JSON Lines) | any | M2-54, M2-08 | todo |
@@ -173,7 +188,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-64](milestone-2-editor-collections/M2-64-winui-command-palette.md) | WinUI command palette | windows | M2-63, M2-58 | todo |
 | [M2-65](milestone-2-editor-collections/M2-65-avalonia-command-palette.md) | Avalonia command palette | unix | M2-63, M2-59 | todo |
 | [M2-66](milestone-2-editor-collections/M2-66-end-to-end-tests-and-docs.md) | End-to-end tests and milestone docs | any | M2-07, M2-31, M2-45, M2-57, M2-63 | todo |
-| [M2-67](milestone-2-editor-collections/M2-67-winui-visual-verification.md) | WinUI visual verification of the milestone 2 views | windows | M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64 | todo |
+| [M2-67](milestone-2-editor-collections/M2-67-winui-visual-verification.md) | WinUI visual verification of the milestone 2 views | windows | M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64, M2-72, M2-73 | todo |
 | [M2-68](milestone-2-editor-collections/M2-68-winui-windows-app-sdk-2.md) | WinUI: migrate to Windows App SDK 2.x | windows | M2-67 | todo |
 | [M2-69](milestone-2-editor-collections/M2-69-winui-loomeditor-code-editor.md) | WinUI: adopt LoomEditor in CodeEditorView | windows | M2-68 | todo |
 | [M2-70](milestone-2-editor-collections/M2-70-avalonia-avaloniaedit-code-editor.md) | Avalonia: AvaloniaEdit code editor with TextMate grammars | unix | M2-65, M1-57 | todo |
@@ -182,7 +197,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 
 | Milestone | Scope | Status |
 |---|---|---|
-| M2 | Full request editor, collections, environments, history, command palette | detailed (70 cards, see above) |
+| M2 | Full request editor, collections, environments, history, command palette | detailed (75 cards, see above) |
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | planned |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | planned |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | planned |

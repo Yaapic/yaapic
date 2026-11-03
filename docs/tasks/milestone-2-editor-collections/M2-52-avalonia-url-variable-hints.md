@@ -1,8 +1,11 @@
 # M2-52: Avalonia URL variable hints
 
-Status: todo
+Status: superseded
 Platform: unix
 Depends on: M2-46, M2-21, M1-57
+
+> **Superseded by [M2-74](M2-74-avalonia-inline-variable-highlighting-url-bar.md).** The user rejected the chip strip
+> (see M2-71); do not implement this card. Kept for history.
 
 ## Goal
 
