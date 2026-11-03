@@ -275,10 +275,12 @@ public sealed partial class VariableTextBox : UserControl
 
     private void OnOverlayTextSizeChanged(object sender, SizeChangedEventArgs e) => CenterOverlay();
 
+    // The box draws its text about 2 px above the centre of its content area (font ascent), so the overlays sit there too.
     private void CenterOverlay()
     {
-        Canvas.SetTop(Overlay, Math.Max(0, (OverlayCanvas.ActualHeight - Overlay.ActualHeight) / 2));
-        Canvas.SetTop(SelectionOverlay, Math.Max(0, (SelectionCanvas.ActualHeight - SelectionOverlay.ActualHeight) / 2));
+        var top = (OverlayCanvas.ActualHeight - Overlay.ActualHeight) / 2 - 2;
+        Canvas.SetTop(Overlay, top);
+        Canvas.SetTop(SelectionOverlay, top);
     }
 
     private void OnInputSelectionChanged(object sender, RoutedEventArgs e) => RenderSelection();
@@ -320,6 +322,7 @@ public sealed partial class VariableTextBox : UserControl
 
         _renderedText = text;
         _tokens = tokens;
+        CenterOverlay();
         Overlay.TextHighlighters.Clear();
         Overlay.Inlines.Clear();
         if (tokens.Count == 0)
