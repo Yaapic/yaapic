@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Yaapic.Domain.Http;
+using Yaapic.ViewModels.Requests;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -14,4 +15,9 @@ public static class ListMap
     /// stowed XAML exception once the list is not empty.
     /// </returns>
     public static ObservableCollection<KeyValueEntry> Entries(IReadOnlyList<KeyValueEntry> entries) => new(entries);
+
+    /// <summary>Copies URL variable hints into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="hints">The hints to show.</param>
+    /// <returns>An <see cref="ObservableCollection{T}"/> of the hints.</returns>
+    public static ObservableCollection<VariableHint> Hints(IReadOnlyList<VariableHint> hints) => new(hints);
 }

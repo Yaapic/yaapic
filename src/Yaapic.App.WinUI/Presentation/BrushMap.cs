@@ -52,5 +52,16 @@ public static class BrushMap
         _ => new SolidColorBrush(Microsoft.UI.Colors.Transparent),
     };
 
+    /// <summary>Gets the text brush of a URL variable chip.</summary>
+    /// <param name="isResolved">Whether the variable resolves.</param>
+    /// <returns>The success brush when resolved, the warning brush otherwise.</returns>
+    public static Brush HintForeground(bool isResolved) => Get(isResolved ? "YaapicSuccessBrush" : "YaapicWarningBrush");
+
+    /// <summary>Gets the background brush of a URL variable chip.</summary>
+    /// <param name="isResolved">Whether the variable resolves.</param>
+    /// <returns>The success background when resolved, the warning background otherwise.</returns>
+    public static Brush HintBackground(bool isResolved) =>
+        Get(isResolved ? "YaapicSuccessBackgroundBrush" : "YaapicWarningBackgroundBrush");
+
     private static Brush Get(string key) => (Brush)Application.Current.Resources[key];
 }
