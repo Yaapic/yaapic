@@ -37,7 +37,7 @@ public sealed partial class MainWindow : Window
     {
         if (Shell is { } shell)
         {
-            await new Views.EnvironmentsWindow { DataContext = shell.Environments }.ShowDialog(this);
+            await new Views.EnvironmentsWindow { DataContext = shell }.ShowDialog(this);
         }
     }
 

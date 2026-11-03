@@ -156,7 +156,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-47](milestone-2-editor-collections/M2-47-winui-environments-globals-and-duplicate.md) | WinUI environments dialog: globals and duplicate | windows | M2-42, M2-45 | done |
 | [M2-48](milestone-2-editor-collections/M2-48-winui-folder-settings-dialog.md) | WinUI folder and collection settings dialog | windows | M2-43, M2-37 | done |
 | [M2-49](milestone-2-editor-collections/M2-49-winui-url-variable-hints.md) | WinUI URL variable hints | windows | M2-46, M2-16 | done |
-| [M2-50](milestone-2-editor-collections/M2-50-avalonia-environments-globals-and-duplicate.md) | Avalonia environments window: globals and duplicate | unix | M2-42, M2-45, M1-57 | todo |
+| [M2-50](milestone-2-editor-collections/M2-50-avalonia-environments-globals-and-duplicate.md) | Avalonia environments window: globals and duplicate | unix | M2-42, M2-45, M1-57 | done |
 | [M2-51](milestone-2-editor-collections/M2-51-avalonia-folder-settings-window.md) | Avalonia folder and collection settings window | unix | M2-43, M2-39 | todo |
 | [M2-52](milestone-2-editor-collections/M2-52-avalonia-url-variable-hints.md) | Avalonia URL variable hints | unix | M2-46, M2-21, M1-57 | todo |
 | [M2-53](milestone-2-editor-collections/M2-53-domain-history-entry.md) | Domain: history entry | any | M2-01 | todo |
