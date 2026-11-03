@@ -35,7 +35,7 @@ public sealed class ShellViewModelTests
             tabs,
             new RequestListViewModel(_requests, tabs, _dialogs),
             new CollectionTreeViewModel(_collections, _requests, tabs, _dialogs),
-            environments, _session, _dialogs);
+            environments, new GlobalsViewModel(new InMemoryGlobalsStore()), _session, _dialogs);
     }
 
     private async Task<HttpRequestDefinition> SeedAsync(string name)

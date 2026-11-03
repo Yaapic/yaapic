@@ -38,6 +38,6 @@ public static class AppComposition
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
         var collections = new CollectionTreeViewModel(new FileCollectionStore(workspaceRoot), requestStore, tabs, dialogs);
         scopes = new VariableScopeProvider(environments, globals, collections);
-        return new ShellViewModel(tabs, requests, collections, environments, sessionStore, dialogs);
+        return new ShellViewModel(tabs, requests, collections, environments, globals, sessionStore, dialogs);
     }
 }

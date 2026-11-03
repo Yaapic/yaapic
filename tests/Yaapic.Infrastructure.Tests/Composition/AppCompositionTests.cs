@@ -54,4 +54,47 @@ public sealed class AppCompositionTests
             Directory.Delete(root, recursive: true);
         }
     }
+
+    [Fact]
+    public async Task CreateShellLoadsTheGlobalsOfTheWorkspace()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "yaapic-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            Workspace.EnsureCreated(root);
+            await File.WriteAllTextAsync(
+                Path.Combine(root, "globals.yaml"),
+                "version: 1\nvariables:\n- key: token\n  value: abc\n  enabled: true\n", TestContext.Current.CancellationToken);
+            var shell = AppComposition.CreateShell(root, new FakeDialogService());
+
+            await shell.InitializeAsync();
+
+            Assert.Contains(shell.Globals.Variables.ToEntries(), e => e.Key == "token" && e.Value == "abc");
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task CorruptGlobalsSetLastErrorAndLeaveTheShellUsable()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "yaapic-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            Workspace.EnsureCreated(root);
+            await File.WriteAllTextAsync(Path.Combine(root, "globals.yaml"), "version: [unclosed", TestContext.Current.CancellationToken);
+            var shell = AppComposition.CreateShell(root, new FakeDialogService());
+
+            await shell.InitializeAsync();
+
+            Assert.NotNull(shell.Globals.LastError);
+            Assert.Single(shell.Tabs.Tabs);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
 }

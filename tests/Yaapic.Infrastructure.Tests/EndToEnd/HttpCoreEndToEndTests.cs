@@ -94,6 +94,23 @@ public sealed class HttpCoreEndToEndTests : IClassFixture<LoopbackServer>, IDisp
     }
 
     [Fact]
+    public async Task GlobalVariableOfTheWorkspaceIsResolvedWhenSending()
+    {
+        Directory.CreateDirectory(_root);
+        await File.WriteAllTextAsync(
+            Path.Combine(_root, "globals.yaml"),
+            $"version: 1\nvariables:\n- key: host\n  value: {_server.BaseUrl}\n  enabled: true\n", TestContext.Current.CancellationToken);
+        var shell = await NewShellAsync();
+        var tab = shell.Tabs.Tabs[0];
+        tab.Url = "{{host}}/echo";
+
+        await tab.SendCommand.ExecuteAsync(null);
+
+        Assert.Equal(ResponseState.Completed, tab.Response.State);
+        Assert.Contains("\"path\": \"/echo\"", tab.Response.BodyText);
+    }
+
+    [Fact]
     public async Task ServerErrorIsCategorizedAndSlowRequestCanBeCanceled()
     {
         var shell = await NewShellAsync();

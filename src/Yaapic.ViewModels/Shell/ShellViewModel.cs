@@ -24,6 +24,7 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <param name="requests">The sidebar request list.</param>
     /// <param name="collections">The collection tree.</param>
     /// <param name="environments">The environment selection and editing.</param>
+    /// <param name="globals">The global variables editing.</param>
     /// <param name="session">Where the session is saved.</param>
     /// <param name="dialogs">Asks the user about unsaved changes when the window closes.</param>
     public ShellViewModel(
@@ -31,6 +32,7 @@ public sealed partial class ShellViewModel : ObservableObject
         RequestListViewModel requests,
         CollectionTreeViewModel collections,
         EnvironmentsViewModel environments,
+        GlobalsViewModel globals,
         ISessionStore session,
         IDialogService dialogs)
     {
@@ -38,12 +40,14 @@ public sealed partial class ShellViewModel : ObservableObject
         ArgumentNullException.ThrowIfNull(requests);
         ArgumentNullException.ThrowIfNull(collections);
         ArgumentNullException.ThrowIfNull(environments);
+        ArgumentNullException.ThrowIfNull(globals);
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(dialogs);
         Tabs = tabs;
         Requests = requests;
         Collections = collections;
         Environments = environments;
+        Globals = globals;
         _session = session;
         _dialogs = dialogs;
         tabs.SessionChanged += (_, _) => QueueSave();
@@ -63,12 +67,16 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>Gets the environments view model.</summary>
     public EnvironmentsViewModel Environments { get; }
 
+    /// <summary>Gets the global variables view model.</summary>
+    public GlobalsViewModel Globals { get; }
+
     /// <summary>Loads the stores and restores the saved session; opens one new tab when none is restored.</summary>
     /// <returns>A task that completes when the shell is ready.</returns>
     public async Task InitializeAsync()
     {
         var state = await _session.LoadAsync(CancellationToken.None);
         await Environments.LoadAsync(state.ActiveEnvironmentId);
+        await Globals.LoadAsync();
         await Requests.RefreshAsync();
         await Collections.RefreshAsync();
 
