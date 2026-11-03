@@ -45,8 +45,8 @@ public sealed partial class EnvironmentsDialog : ContentDialog
     private void Fit()
     {
         var size = XamlRoot.Size;
-        Body.Width = Math.Clamp(size.Width - 64, 480, 960);
-        Body.Height = Math.Clamp(size.Height - 2 * 56 - 52, 240, 560);
+        Body.Width = Math.Clamp(size.Width - 64, 320, 960);
+        Body.Height = Math.Clamp(size.Height - 2 * 56 - 52, 96, 560);
     }
 
     private void OnSelectGlobals(object sender, RoutedEventArgs e) => ViewModel.IsEditingGlobals = true;

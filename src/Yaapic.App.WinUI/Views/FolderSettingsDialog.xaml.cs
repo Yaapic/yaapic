@@ -16,8 +16,21 @@ public sealed partial class FolderSettingsDialog : ContentDialog
         InitializeComponent();
         Services.DialogButtons.Normalize(this, new Thickness(0, 10, 16, 10));
         Variables.ViewModel = viewModel.Variables;
+        Loaded += (_, _) =>
+        {
+            Fit();
+            XamlRoot.Changed += (_, _) => Fit();
+        };
     }
 
     /// <summary>Gets the edited folder settings.</summary>
     public FolderSettingsViewModel ViewModel { get; }
+
+    // Keeps the dialog clear of the title bar (the system caption buttons draw above any popup) when the window is small.
+    private void Fit()
+    {
+        var size = XamlRoot.Size;
+        Body.Width = Math.Clamp(size.Width - 64, 320, 640);
+        Scroller.MaxHeight = Math.Max(64, size.Height - 2 * 56 - 52 - 56);
+    }
 }

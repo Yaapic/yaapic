@@ -24,7 +24,8 @@
       <Button Grid.Column="1" Content="Save" VerticalAlignment="Center" Style="{StaticResource AccentButtonStyle}"
               Command="{x:Bind ViewModel.SaveCommand}"/>
     </Grid>
-    <StackPanel Grid.Row="1" Margin="20,16,20,16" Spacing="12">
+    <ScrollViewer x:Name="Scroller" Grid.Row="1">
+    <StackPanel Margin="20,16,20,16" Spacing="12">
       <InfoBar Severity="Error" IsClosable="False"
                IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.LastError), Mode=OneWay}"
                Message="{x:Bind ViewModel.LastError, Mode=OneWay}"/>
@@ -37,8 +38,9 @@
         <TextBlock Text="Collection variables" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
         <TextBlock Style="{StaticResource YaapicBodySmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                    Text="Override globals; the active environment overrides them."/>
-        <v:KeyValueEditorView x:Name="Variables" KeyHeader="Variable" Height="220"/>
+        <v:KeyValueEditorView x:Name="Variables" KeyHeader="Variable" Height="220" MinHeight="120"/>
       </StackPanel>
     </StackPanel>
+    </ScrollViewer>
   </Grid>
 </ContentDialog>
