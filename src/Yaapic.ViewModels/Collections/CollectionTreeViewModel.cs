@@ -131,9 +131,17 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     /// <summary>Gets the variables of the collection (top-level folder) that contains a request.</summary>
     /// <param name="requestId">The request identifier.</param>
     /// <returns>The saved variables of the collection in the loaded tree; empty for an unfiled or unknown request. Unsaved edits are not included.</returns>
-    public IReadOnlyList<KeyValueEntry> FindCollectionVariables(Guid requestId) =>
+    public IReadOnlyList<KeyValueEntry> FindCollectionVariables(Guid requestId) => FindCollection(requestId)?.Variables ?? [];
+
+    /// <summary>Gets the collection (top-level folder) that contains a request.</summary>
+    /// <param name="requestId">The request identifier.</param>
+    /// <returns>The saved collection in the loaded tree; <see langword="null"/> for an unfiled or unknown request.</returns>
+    public FolderDefinition? FindCollection(Guid requestId) =>
         _tree.FirstOrDefault(root => root.Kind == CollectionNodeKind.Folder && root.Descendants().Any(n => n.Id == requestId && n.Kind == CollectionNodeKind.Request))
-            ?.Folder!.Variables ?? [];
+            ?.Folder;
+
+    /// <summary>Gets the store the collections are saved to, for view models that edit a collection outside the tree.</summary>
+    internal ICollectionStore Store => _collections;
 
     [RelayCommand]
     private async Task DeleteFolderAsync(CollectionNodeViewModel folder)

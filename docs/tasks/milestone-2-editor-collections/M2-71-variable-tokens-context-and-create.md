@@ -1,6 +1,6 @@
 # M2-71: Variable tokens, context and create-variable popup model
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-44, M2-46, M2-43
 
@@ -113,13 +113,13 @@ context); folder scope; autocomplete; variable rename or delete; request-level v
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` (and `Yaapic.CrossPlatform.slnf`) 0 warnings; every public type and member has
+- [x] `dotnet build Yaapic.sln -c Release` (and `Yaapic.CrossPlatform.slnf`) 0 warnings; every public type and member has
       an XML doc comment; all tests green; architecture tests green (`Yaapic.ViewModels` still references no UI
       framework, no reflection).
-- [ ] The tests listed above exist and pass; existing `RequestEditorUrlVariablesTests` still pass unchanged.
-- [ ] Notes record: the final shape of the interface changes, the collection write path chosen, and the no-folder-scope
+- [x] The tests listed above exist and pass; existing `RequestEditorUrlVariablesTests` still pass unchanged.
+- [x] Notes record: the final shape of the interface changes, the collection write path chosen, and the no-folder-scope
       decision.
-- [ ] SonarCloud issues of the changed files checked and fixed.
+- [x] SonarCloud issues of the changed files checked and fixed.
 
 ## Rules
 
@@ -138,3 +138,15 @@ context); folder scope; autocomplete; variable rename or delete; request-level v
 `feat: model inline variable tokens, hover details and create-in-scope`
 
 ## Notes
+
+- Interface: `IVariableScopeProvider` gained `GetWritableScopes(Guid)` and `SetVariableAsync(Guid, VariableScopeKind, string, string)`
+  (returns an error message or `null`); `FakeVariableScopeProvider` records writes (`Writes`, `WritableScopes`, `WriteError`).
+  `VariableScanner` gained `ScanSpans` and `IsValidName`; `Scan` is built on `ScanSpans`.
+- Collection write path: `SetVariableAsync` builds a `FolderSettingsViewModel` for the collection returned by the new
+  `CollectionTreeViewModel.FindCollection(requestId)`, upserts the row, runs its `SaveCommand`, then awaits
+  `CollectionTreeViewModel.RefreshAsync()` itself (that editor is not the dialog's, so no `Saved` subscriber exists); the refresh
+  raises `ScopesChanged`.
+- No Folder scope: M2-43/M2-44 resolve only the top-level collection's variables, so a sub-folder variable would never
+  resolve; ADR 0008 may add folder scope later.
+- Known limitation: saving the environment or globals also saves other unsaved edits of the same scope held by an open dialog.
+- SonarCloud: no open issue on the touched files (the API reported 0 open issues; the new code is analysed after the push).

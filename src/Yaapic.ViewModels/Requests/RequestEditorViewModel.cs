@@ -63,6 +63,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         _sender = sender;
         _scopes = scopes;
         _dialogs = dialogs;
+        Variables = new VariableContext(id, scopes);
         Response = new ResponsePanelViewModel(dialogs);
         FormData = new FormDataEditorViewModel(dialogs);
         SendCommand.PropertyChanged += (_, e) =>
@@ -134,6 +135,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     /// <summary>Gets the upper-case method label shown in the tab header.</summary>
     public string MethodText => Method.ToText();
+
+    /// <summary>Gets the variable tokeniser and popup factory of this tab.</summary>
+    public VariableContext Variables { get; }
 
     /// <summary>Gets the variables the URL uses and whether each resolves; empty while the tab is inactive.</summary>
     public IReadOnlyList<VariableHint> UrlVariables { get; private set; } = [];
@@ -260,6 +264,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     partial void OnIsActiveChanged(bool value)
     {
+        Variables.IsActive = value;
         _scopes.ScopesChanged -= OnScopesChanged;
         if (value)
         {

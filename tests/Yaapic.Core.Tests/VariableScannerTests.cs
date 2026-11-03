@@ -32,4 +32,30 @@ public sealed class VariableScannerTests
         Assert.Equal(expected, string.Join(",", scanned));
         Assert.Equal(scanned, VariableResolver.Resolve(text, new EmptySource()).Unresolved);
     }
+
+    [Theory]
+    [InlineData("{{ a }}", "0:7:a")]
+    [InlineData("x{{a}}{{b}}", "1:5:a;6:5:b")]
+    [InlineData("{{{a}}}", "1:5:a")]
+    [InlineData("{{a", "")]
+    [InlineData("{{}}", "")]
+    [InlineData("{{a}}-{{a}}", "0:5:a;6:5:a")]
+    [InlineData(null, "")]
+    public void ScanSpansReportsOffsets(string? text, string expected)
+    {
+        var spans = VariableScanner.ScanSpans(text);
+
+        Assert.Equal(expected, string.Join(";", spans.Select(s => $"{s.Start}:{s.Length}:{s.Name}")));
+        Assert.All(spans, s => Assert.Equal(s.Start + s.Length, s.End));
+    }
+
+    [Theory]
+    [InlineData("a", true)]
+    [InlineData(" a ", true)]
+    [InlineData("", false)]
+    [InlineData("  ", false)]
+    [InlineData("a{b", false)]
+    [InlineData(null, false)]
+    public void IsValidNameFollowsTheTokenRules(string? name, bool expected) =>
+        Assert.Equal(expected, VariableScanner.IsValidName(name));
 }
