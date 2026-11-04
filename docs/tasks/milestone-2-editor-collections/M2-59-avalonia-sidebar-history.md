@@ -1,6 +1,6 @@
 # M2-59: Avalonia sidebar mode switch and history list
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-57, M2-38, M1-57
 
@@ -22,9 +22,9 @@ Same as M2-58.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M2-58 on the host OS.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M2-58 on the host OS.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

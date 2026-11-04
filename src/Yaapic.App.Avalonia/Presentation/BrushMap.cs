@@ -1,9 +1,11 @@
+using System.Globalization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Responses;
 
 namespace Yaapic.App.Avalonia.Presentation;
 
@@ -12,6 +14,18 @@ public static class BrushMap
 {
     /// <summary>Converts an HTTP method to the brush that colors its label.</summary>
     public static FuncValueConverter<HttpMethodKind, IBrush?> MethodBrush { get; } = new(m => Method(m));
+
+    /// <summary>Converts a history row's status category and failure flag to the brush of its status text.</summary>
+    public static FuncMultiValueConverter<object?, IBrush?> HistoryStatus { get; } = new(values =>
+    {
+        var list = values.ToList();
+        if (list is not [StatusCategory category, bool failed])
+        {
+            return null;
+        }
+
+        return failed ? Get("YaapicDangerBrush") : ResponseMap.StatusForeground.Convert(category, typeof(IBrush), null, CultureInfo.InvariantCulture) as IBrush;
+    });
 
     /// <summary>Gets the brush that colors an HTTP method label.</summary>
     /// <param name="method">The HTTP method.</param>

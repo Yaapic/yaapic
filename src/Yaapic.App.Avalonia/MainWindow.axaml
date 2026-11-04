@@ -90,6 +90,10 @@
             IsVisible="{Binding Collections.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
       <TextBlock Text="{Binding Collections.LastError}" TextWrapping="Wrap" />
     </Border>
+    <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
+            IsVisible="{Binding History.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding History.LastError}" TextWrapping="Wrap" />
+    </Border>
 
     <!-- Column widths are literals: a GridLength cannot come from the x:Double resources. 48 = YaapicRailWidth, 272 = YaapicSidebarWidth. -->
     <Grid Grid.Row="2" ColumnDefinitions="48,272,*">
@@ -109,11 +113,22 @@
           </Button>
           <StackPanel Spacing="4">
             <Grid HorizontalAlignment="Center">
-              <Button Classes="icon rail selected" ToolTip.Tip="Requests" AutomationProperties.Name="Requests">
+              <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}"
+                      Command="{Binding ShowCollectionsCommand}" ToolTip.Tip="Collections" AutomationProperties.Name="Collections">
                 <PathIcon Data="{StaticResource YiCollection}" />
               </Button>
               <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
-                      Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False" />
+                      Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                      IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" />
+            </Grid>
+            <Grid HorizontalAlignment="Center">
+              <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}"
+                      Command="{Binding ShowHistoryCommand}" ToolTip.Tip="History" AutomationProperties.Name="History">
+                <PathIcon Data="{StaticResource YiHistory}" />
+              </Button>
+              <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                      Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                      IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
             </Grid>
             <Button Classes="icon rail" HorizontalAlignment="Center" Click="OnManageEnvironments"
                     ToolTip.Tip="Environments (Ctrl+Shift+E)" AutomationProperties.Name="Environments">
@@ -127,8 +142,12 @@
               BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
         <Grid RowDefinitions="40,Auto,*">
           <Grid Grid.Row="0" Margin="14,0,8,0" ColumnDefinitions="*,Auto">
-            <TextBlock Text="Requests" Classes="bodyStrong" VerticalAlignment="Center" />
-            <Button Grid.Column="1" Classes="icon" ToolTip.Tip="New request or collection" AutomationProperties.Name="New request">
+            <TextBlock Text="Requests" Classes="bodyStrong" VerticalAlignment="Center"
+                       IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" />
+            <TextBlock Text="History" Classes="bodyStrong" VerticalAlignment="Center"
+                       IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
+            <Button Grid.Column="1" Classes="icon" ToolTip.Tip="New request or collection"
+                    IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" AutomationProperties.Name="New request">
               <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
               <Button.Flyout>
                 <MenuFlyout>
@@ -138,7 +157,9 @@
               </Button.Flyout>
             </Button>
           </Grid>
-          <Grid Grid.Row="1" Margin="10,0,10,8">
+          <views:HistoryView Grid.Row="1" Grid.RowSpan="2" DataContext="{Binding History}"
+                             IsVisible="{Binding $parent[Window].((vm:ShellViewModel)DataContext).Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
+          <Grid Grid.Row="1" Margin="10,0,10,8" IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}">
             <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,0,8,0" VerticalContentAlignment="Center"
                      PlaceholderText="Filter requests" AutomationProperties.Name="Filter requests"
                      Text="{Binding Collections.FilterText, Mode=TwoWay}" />
@@ -156,7 +177,8 @@
                          Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
             </Border>
           </Grid>
-          <TreeView x:Name="CollectionTree" Grid.Row="2" Background="Transparent" SelectionMode="Single"
+          <TreeView x:Name="CollectionTree" Grid.Row="2" Background="Transparent"
+                    IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" SelectionMode="Single"
                     ItemsSource="{Binding Collections.Roots}" SelectionChanged="OnTreeSelectionChanged"
                     ContextRequested="OnNodeContextRequested" KeyDown="OnTreeKeyDown">
             <TreeView.Styles>
@@ -191,7 +213,13 @@
             </TreeView.DataTemplates>
           </TreeView>
           <StackPanel Grid.Row="2" Margin="16,24,16,0" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Top"
-                      IsVisible="{Binding Collections.IsEmpty}">
+                      >
+            <StackPanel.IsVisible>
+              <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="Collections.IsEmpty" />
+                <Binding Path="Mode" Converter="{x:Static p:SidebarMap.IsCollections}" />
+              </MultiBinding>
+            </StackPanel.IsVisible>
             <TextBlock Text="No collections yet" Classes="bodySmall" TextAlignment="Center"
                        Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
             <Button Content="New request" HorizontalAlignment="Center" Command="{Binding Requests.NewRequestCommand}" />

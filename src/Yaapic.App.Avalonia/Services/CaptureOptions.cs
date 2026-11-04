@@ -18,7 +18,7 @@ internal sealed class CaptureOptions
     /// <summary>Header text of the request section tab to select, or <see langword="null"/>.</summary>
     public string? Select { get; private set; }
 
-    /// <summary>Name of the window or prompt to open (<c>environments</c>, <c>unsaved</c>), or <see langword="null"/>.</summary>
+    /// <summary>Name of the window or prompt to open (<c>environments</c>, <c>unsaved</c>, <c>history</c>), or <see langword="null"/>.</summary>
     public string? Open { get; private set; }
 
     /// <summary>PNG path to write before exiting, or <see langword="null"/> for a normal run.</summary>

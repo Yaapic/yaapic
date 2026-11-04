@@ -267,6 +267,9 @@ public sealed partial class MainWindow : Window
                 tab.Name += "x";
                 _ = Shell.Tabs.CloseAsync(tab);
                 break;
+            case "history" when Shell is { } historyShell:
+                historyShell.ShowHistoryCommand.Execute(null);
+                break;
             case "prompt":
                 _ = new Views.PromptWindow("Rename request", "Request name", "Create user").ShowDialog<string?>(this);
                 break;
