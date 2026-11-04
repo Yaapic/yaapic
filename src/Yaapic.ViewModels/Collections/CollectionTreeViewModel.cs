@@ -142,6 +142,19 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         return true;
     }
 
+    /// <summary>Opens the saved request with the given id in a tab.</summary>
+    /// <param name="id">The request identifier; an id that is not in the loaded tree is ignored.</param>
+    public void OpenRequest(Guid id)
+    {
+        var node = CollectionNode.Flatten(_tree).FirstOrDefault(n => n.Kind == CollectionNodeKind.Request && n.Id == id);
+        if (node?.Request is { } request)
+        {
+            _tabs.Open(request);
+        }
+    }
+
+    internal IReadOnlyList<CollectionNode> Tree => _tree;
+
     [RelayCommand]
     private void CloseSettings() => SettingsEditor = null;
 

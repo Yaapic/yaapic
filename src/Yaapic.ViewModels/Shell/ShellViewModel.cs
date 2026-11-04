@@ -6,6 +6,7 @@ using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
+using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Tabs;
 
@@ -16,6 +17,7 @@ public sealed partial class ShellViewModel : ObservableObject
 {
     private readonly ISessionStore _session;
     private readonly IDialogService _dialogs;
+    private CommandPaletteViewModel? _palette;
     private bool _initialized;
     private bool _saving;
     private SessionState? _pending;
@@ -81,6 +83,25 @@ public sealed partial class ShellViewModel : ObservableObject
 
     /// <summary>Gets the global variables view model.</summary>
     public GlobalsViewModel Globals { get; }
+
+    /// <summary>Gets the command palette.</summary>
+    /// <exception cref="InvalidOperationException">Read before <see cref="AttachPalette"/>.</exception>
+    public CommandPaletteViewModel Palette =>
+        _palette ?? throw new InvalidOperationException("The palette has not been attached.");
+
+    /// <summary>Attaches the palette; called once by the composition root, because the palette sources need the shell.</summary>
+    /// <param name="palette">The palette to attach.</param>
+    /// <exception cref="InvalidOperationException">A palette is already attached.</exception>
+    public void AttachPalette(CommandPaletteViewModel palette)
+    {
+        ArgumentNullException.ThrowIfNull(palette);
+        if (_palette is not null)
+        {
+            throw new InvalidOperationException("The palette is already attached.");
+        }
+
+        _palette = palette;
+    }
 
     /// <summary>Raised when the user asks to manage environments; the views open their environments dialog.</summary>
     public event EventHandler? EnvironmentsRequested;
@@ -149,6 +170,9 @@ public sealed partial class ShellViewModel : ObservableObject
         await _drain;
         return true;
     }
+
+    [RelayCommand]
+    private void OpenPalette() => Palette.OpenCommand.Execute(null);
 
     [RelayCommand]
     private void ShowCollections() => Mode = SidebarMode.Collections;

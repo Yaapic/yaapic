@@ -1,6 +1,6 @@
 # M2-63: Palette sources for requests, environments and tabs, and shell wiring
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-62, M2-44
 
@@ -37,11 +37,11 @@ Views (M2-64, M2-65), search in request bodies, history as a source.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: requests source lists nested requests with path subtitles and opens one into a
+- [x] Tests in `Yaapic.ViewModels.Tests`: requests source lists nested requests with path subtitles and opens one into a
       tab (`OpenRequest`); unknown id is a no-op; environments source switches and clears; tabs source activates; the shell test opens the
       palette with a query and executes the first result; `AppCompositionTests` assert `Shell.Palette` is set and its
       first open lists the commands.
-- [ ] 0 warnings; architecture tests green.
+- [x] 0 warnings; architecture tests green.
 
 ## Suggested commit message
 

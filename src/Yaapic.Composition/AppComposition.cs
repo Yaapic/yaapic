@@ -5,6 +5,7 @@ using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
+using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -46,6 +47,14 @@ public static class AppComposition
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
         var collections = new CollectionTreeViewModel(new FileCollectionStore(workspaceRoot), requestStore, tabs, dialogs);
         scopes = new VariableScopeProvider(environments, globals, collections);
-        return new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs);
+        var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs);
+        shell.AttachPalette(new CommandPaletteViewModel(
+        [
+            new CommandsPaletteSource(shell),
+            new RequestsPaletteSource(collections),
+            new EnvironmentsPaletteSource(environments),
+            new TabsPaletteSource(tabs),
+        ]));
+        return shell;
     }
 }

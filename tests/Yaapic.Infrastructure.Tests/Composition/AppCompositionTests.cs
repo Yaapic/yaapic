@@ -29,6 +29,24 @@ public sealed class AppCompositionTests
     }
 
     [Fact]
+    public void CreateShellAttachesAPaletteListingTheCommands()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "yaapic-" + Guid.NewGuid().ToString("N"));
+        try
+        {
+            var shell = AppComposition.CreateShell(root, new FakeDialogService());
+
+            shell.Palette.OpenCommand.Execute(null);
+
+            Assert.Contains(shell.Palette.Results, r => r.Item.Id == "command:new-request");
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
     public async Task SendingARequestRecordsItInTheHistoryAndTheHistoryFile()
     {
         var root = Path.Combine(Path.GetTempPath(), "yaapic-" + Guid.NewGuid().ToString("N"));
