@@ -13,13 +13,7 @@ public sealed class HttpCoreEndToEndTests : IClassFixture<LoopbackServer>, IDisp
 
     public HttpCoreEndToEndTests(LoopbackServer server) => _server = server;
 
-    public void Dispose()
-    {
-        if (Directory.Exists(_root))
-        {
-            Directory.Delete(_root, recursive: true);
-        }
-    }
+    public void Dispose() => TempWorkspace.Delete(_root);
 
     private async Task<ShellViewModel> NewShellAsync()
     {

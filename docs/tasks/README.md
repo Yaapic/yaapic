@@ -187,11 +187,23 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-63](milestone-2-editor-collections/M2-63-palette-sources-and-shell-wiring.md) | Palette sources for requests, environments and tabs, and shell wiring | any | M2-62, M2-44 | done |
 | [M2-64](milestone-2-editor-collections/M2-64-winui-command-palette.md) | WinUI command palette | windows | M2-63, M2-58 | done |
 | [M2-65](milestone-2-editor-collections/M2-65-avalonia-command-palette.md) | Avalonia command palette | unix | M2-63, M2-59 | done |
-| [M2-66](milestone-2-editor-collections/M2-66-end-to-end-tests-and-docs.md) | End-to-end tests and milestone docs | any | M2-07, M2-31, M2-45, M2-57, M2-63 | todo |
+| [M2-66](milestone-2-editor-collections/M2-66-end-to-end-tests-and-docs.md) | End-to-end tests and milestone docs | any | M2-07, M2-31, M2-45, M2-57, M2-63 | done |
 | [M2-67](milestone-2-editor-collections/M2-67-winui-visual-verification.md) | WinUI visual verification of the milestone 2 views | windows | M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64, M2-72, M2-73 | todo |
 | [M2-68](milestone-2-editor-collections/M2-68-winui-windows-app-sdk-2.md) | WinUI: migrate to Windows App SDK 2.x | windows | M2-67 | todo |
 | [M2-69](milestone-2-editor-collections/M2-69-winui-loomeditor-code-editor.md) | WinUI: adopt LoomEditor in CodeEditorView | windows | M2-68 | todo |
 | [M2-70](milestone-2-editor-collections/M2-70-avalonia-avaloniaedit-code-editor.md) | Avalonia: AvaloniaEdit code editor with TextMate grammars | unix | M2-65, M1-57 | todo |
+
+### Milestone 2 summary
+
+Delivered: every HTTP method and body kind (raw, url-encoded, form-data, binary), basic, bearer and API key auth,
+per-request redirect and timeout settings, query/URL sync, collections and folders as directories, globals, collection
+and environment variables with the precedence environment > collection > globals > dynamic, inline variable
+highlighting, send history (JSON Lines), the command palette with fuzzy search, and end-to-end tests over a loopback
+server (`Milestone2EndToEndTests`). No package was added.
+
+Deferred (ADR 0008): manual ordering and drag and drop, cookie jar, proxy and TLS settings, workspace picker,
+`{{variable}}` autocomplete, request scripts (M3). Still open in M2: M2-67 to M2-70 (visual check, Windows App SDK 2.x,
+code editors).
 
 ## Milestones 2 to 10
 

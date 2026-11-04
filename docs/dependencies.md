@@ -10,6 +10,8 @@ Every third-party dependency needs a written justification here before it is add
 | Microsoft.WindowsAppSDK | 1.8.260921001 | Yaapic.App.WinUI | WinUI 3 runtime and XAML compiler; first-party, Native AOT supported (1.6+). |
 | Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
 
+Milestone 2 (editor, collections, environments, history, command palette) added no package.
+
 ## Architecture tests: NetArchTest
 
 NetArchTest was not adopted. The dependency rules are project-level, so `Yaapic.Architecture.Tests` checks the
