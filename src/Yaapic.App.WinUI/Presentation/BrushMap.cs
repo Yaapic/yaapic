@@ -78,6 +78,11 @@ public static class BrushMap
 
     // A code lookup in Application.Resources only sees the application theme (dark), so the theme dictionary of the
     // window theme is searched first. Elements already bound keep their brush until their binding is evaluated again.
+    /// <summary>Gets a brush by resource key from the dictionary of the window theme.</summary>
+    /// <param name="key">The resource key, such as <c>YaapicSuccessBrush</c>.</param>
+    /// <returns>The brush of the current window theme.</returns>
+    public static Brush Themed(string key) => Get(key, IsLight);
+
     private static Brush Get(string key) => Get(key, IsLight);
 
     private static Brush Get(string key, bool light) =>

@@ -133,7 +133,7 @@ public sealed partial class RequestEditorView : UserControl
     private void SetUrlBarFocused(bool focused)
     {
         // A 2 px focus border replaces the 1 px one; the negative content margin keeps the text from moving.
-        UrlBar.BorderBrush = (Brush)Application.Current.Resources[focused ? "YaapicFocusRingBrush" : "YaapicBorderControlBrush"];
+        UrlBar.BorderBrush = BrushMap.Themed(focused ? "YaapicFocusRingBrush" : "YaapicBorderControlBrush");
         UrlBar.BorderThickness = new Thickness(focused ? 2 : 1);
         UrlBarContent.Margin = new Thickness(focused ? -1 : 0);
     }
@@ -255,7 +255,7 @@ public sealed partial class RequestEditorView : UserControl
     {
         var active = hovered || _splitterDragging || Splitter.FocusState != FocusState.Unfocused;
         SplitterLine.Height = _splitterDragging ? 2 : 1;
-        SplitterLine.Fill = (Brush)Application.Current.Resources[active ? "YaapicAccentFillBrush" : "YaapicBorderSubtleBrush"];
+        SplitterLine.Fill = BrushMap.Themed(active ? "YaapicAccentFillBrush" : "YaapicBorderSubtleBrush");
     }
 
     private void MoveSplitter(double delta)

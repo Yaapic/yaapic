@@ -141,7 +141,7 @@ Run in the published AOT exe with UI Automation and injected keys/mouse (Windows
 |---|---|
 | `Ctrl+K` opens the palette, typing filters, Esc closes | works |
 | `Ctrl+P` opens the palette (new in M2-76) | works |
-| Rail button `Command palette` (new in M2-77) opens the palette | works |
+| Title-bar `Command palette` button opens the palette; title-bar `Environments` button opens the environments dialog (both moved out of the rail, which now only holds page navigation) | works |
 | Palette `Enter` on `Show history` switches the sidebar to History | works |
 | Palette results: requests of nested folders (`Delete user`, path `Users API / Admin`), tabs, environments, commands | works |
 | History: entries grouped by day, status colours, clicking an entry opens the request as a tab with the unsaved dot | works |

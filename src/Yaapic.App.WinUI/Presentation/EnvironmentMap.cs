@@ -1,4 +1,3 @@
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Text;
 using Windows.UI.Text;
@@ -12,7 +11,7 @@ public static class EnvironmentMap
     /// <param name="isActive">Whether the environment is the active one.</param>
     /// <returns>The brush from the application resources.</returns>
     public static Brush Dot(bool isActive) =>
-        (Brush)Application.Current.Resources[isActive ? "YaapicSuccessBrush" : "YaapicTextTertiaryBrush"];
+        BrushMap.Themed(isActive ? "YaapicSuccessBrush" : "YaapicTextTertiaryBrush");
 
     /// <summary>Gets the font weight of a list entry: semi-bold when it is the selected one.</summary>
     /// <param name="isEdited">Whether the environment is the edited one.</param>
@@ -29,5 +28,5 @@ public static class EnvironmentMap
     /// <param name="isSelected">Whether the globals are being edited.</param>
     /// <returns>The brush from the application resources.</returns>
     public static Brush RowBackground(bool isSelected) =>
-        (Brush)Application.Current.Resources[isSelected ? "YaapicSurfaceRaisedBrush" : "YaapicSurfaceSidebarBrush"];
+        BrushMap.Themed(isSelected ? "YaapicSurfaceRaisedBrush" : "YaapicSurfaceSidebarBrush");
 }
