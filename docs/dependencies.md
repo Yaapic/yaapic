@@ -47,3 +47,8 @@ folding, `Theme` from a VS Code theme JSON, `IsReadOnly`, `ResetText`, `Model.Co
 Adopting it therefore means moving the whole WinUI app to Windows App SDK 2.x and a 26100 target, which is a platform
 decision outside the card. The AOT and runtime checks were not run for that reason. The views use `CodeEditorView`
 (ADR 0002) over a borderless `TextBox`, so switching later only changes that one control.
+
+## System.Text.Json (history store, M2-55)
+
+`FileHistoryStore` writes `.yaapic/history.jsonl` with source-generated `System.Text.Json` (`HistoryJsonContext`, no
+reflection). `System.Text.Json` is part of the framework: no new package.
