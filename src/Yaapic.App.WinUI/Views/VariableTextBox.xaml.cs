@@ -45,6 +45,16 @@ public sealed partial class VariableTextBox : UserControl
         nameof(InputPadding), typeof(Thickness), typeof(VariableTextBox),
         new PropertyMetadata(new Thickness(10, 7, 10, 5), (d, e) => ((VariableTextBox)d).ApplyPadding((Thickness)e.NewValue)));
 
+    /// <summary>Identifies the <see cref="CodeFontSize"/> dependency property.</summary>
+    public static readonly DependencyProperty CodeFontSizeProperty = DependencyProperty.Register(
+        nameof(CodeFontSize), typeof(double), typeof(VariableTextBox),
+        new PropertyMetadata(13.0, (d, e) => ((VariableTextBox)d).ApplyFontSize((double)e.NewValue)));
+
+    /// <summary>Identifies the <see cref="IsReadOnly"/> dependency property.</summary>
+    public static readonly DependencyProperty IsReadOnlyProperty = DependencyProperty.Register(
+        nameof(IsReadOnly), typeof(bool), typeof(VariableTextBox),
+        new PropertyMetadata(false, (d, e) => ((VariableTextBox)d).Input.IsReadOnly = (bool)e.NewValue));
+
     private static readonly SolidColorBrush TransparentBrush = new(Microsoft.UI.Colors.Transparent);
 
     private readonly DispatcherTimer _openTimer = new() { Interval = OpenDelay };
@@ -107,6 +117,43 @@ public sealed partial class VariableTextBox : UserControl
     {
         get => (Thickness)GetValue(InputPaddingProperty);
         set => SetValue(InputPaddingProperty, value);
+    }
+
+    /// <summary>Gets or sets the font size of the text and of its coloured overlay.</summary>
+    public double CodeFontSize
+    {
+        get => (double)GetValue(CodeFontSizeProperty);
+        set => SetValue(CodeFontSizeProperty, value);
+    }
+
+    /// <summary>Gets or sets whether the text can be selected but not edited.</summary>
+    public bool IsReadOnly
+    {
+        get => (bool)GetValue(IsReadOnlyProperty);
+        set => SetValue(IsReadOnlyProperty, value);
+    }
+
+    /// <summary>Sets <paramref name="context"/> on every <see cref="VariableTextBox"/> inside a realised table row.</summary>
+    internal static void ApplyContext(DependencyObject root, VariableContext? context)
+    {
+        if (root is VariableTextBox box)
+        {
+            box.Context = context;
+            return;
+        }
+
+        for (var i = 0; i < VisualTreeHelper.GetChildrenCount(root); i++)
+        {
+            ApplyContext(VisualTreeHelper.GetChild(root, i), context);
+        }
+    }
+
+    private void ApplyFontSize(double size)
+    {
+        Input.FontSize = size;
+        Overlay.FontSize = size;
+        SelectionOverlay.FontSize = size;
+        Render(force: true);
     }
 
     private void ApplyPadding(Thickness padding)

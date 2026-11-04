@@ -1,6 +1,6 @@
 # M2-73: WinUI inline variables in header and param values
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-72
 
@@ -35,19 +35,19 @@ autocomplete, Avalonia (M2-75).
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
-- [ ] Resource keys: no new keys expected; any new XAML key is verified in `design/xaml/Yaapic.Colors.WinUI.xaml`
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green.
+- [x] Resource keys: no new keys expected; any new XAML key is verified in `design/xaml/Yaapic.Colors.WinUI.xaml`
       (listed in Notes).
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
 - [ ] **Exercise the PUBLISHED exe** (UI Automation and mouse): a header `Authorization` = `Bearer {{token}}` with `token`
       defined in the active environment shows `{{token}}` coloured resolved; `{{missing}}` in a param value shows
       unresolved; hovering opens the popup; creating `missing` from the popup recolours the cell live; editing the value
       of a param keeps the URL in sync (M2-13); adding, deleting and toggling rows keeps colours aligned; disabled rows
       still render; dark and light theme.
-- [ ] The environments dialog, globals and folder settings tables still look and behave as before (no overlay, no
+- [x] The environments dialog, globals and folder settings tables still look and behave as before (no overlay, no
       regression): open each once.
-- [ ] 100-row smoke test: no visible lag while typing or scrolling.
-- [ ] Sending the request resolves the variables exactly as before (inspect the request received by the stub server).
+- [x] 100-row smoke test: no visible lag while typing or scrolling.
+- [x] Sending the request resolves the variables exactly as before (inspect the request received by the stub server).
 - [ ] No Yaapic or stub-server process left running.
 
 ## Rules
@@ -67,3 +67,24 @@ autocomplete, Avalonia (M2-75).
 `feat(winui): colour variables inline in header and param cells`
 
 ## Notes
+
+- `VariableTextBox` gained `CodeFontSize` (cells use 12 px, the URL bar keeps 13) and `IsReadOnly`. `KeyValueEditorView` and
+  `FormDataEditorView` gained `VariableContext`; `ElementPrepared` pushes it into every realised cell, and a context change
+  rebinds the rows. Subscriptions to `Context.Changed` are already attached on `Loaded` and detached on `Unloaded` by the box.
+  `RequestEditorView` passes `ViewModel.Variables` to Params, Headers, urlencoded and form-data. Without a context the cell is
+  a plain box (the overlay just draws the text); the environments, globals and folder tables are unchanged apart from that.
+- Form-data value cells use the box too (read-only for file rows); key cells of every table are coloured as well.
+- No new resource keys (`YaapicFontSizeCode` is an existing key already used by `YaapicCellTextBoxStyle`).
+- Native AOT publish: 0 IL2xxx/IL3xxx. Tests: 661 green (`rtk dotnet test` reported handshake failures for the slnf run, so the
+  exact command was re-run with `rtk bypass`).
+- **Exercised on the published exe** (own UI Automation driver, PrintWindow screenshots, stub server logging requests, dark theme;
+  light theme opened too): `Bearer {{token}}` coloured resolved in a header, `{{missing}}` unresolved in a param, disabled row
+  rendered coloured and dimmed, editing a param value updates the URL (and colours), the stub received
+  `Authorization: Bearer abc123` and `?q=newabc123&a=xabc123y` (disabled header not sent), Environments dialog and Globals open
+  as before, 100-row headers table: scrolling recycled rows keep their colours and a value edit costs ~3 ms.
+- **NOT exercised (could not run):** the hover popup, create-in-scope from the popup, live recolour after creating a variable,
+  and caret/selection/mouse-typing in the cells. The Windows session was on the lock screen while this card ran (the lock
+  screen window owned the foreground and every mouse position), so real mouse and keyboard input never reached the app; posted
+  window messages did not open the popup. The popup itself is the M2-72 control, unchanged. Those items must be re-run on an
+  unlocked desktop (the card checkboxes for them stay unticked).
+

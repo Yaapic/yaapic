@@ -168,9 +168,11 @@
 
     <Grid Grid.Row="3">
       <v:KeyValueEditorView x:Name="ParamsPane" Margin="16,12,16,12"
-                            ViewModel="{x:Bind ViewModel.QueryParams, Mode=OneWay}"/>
+                            VariableContext="{x:Bind ViewModel.Variables, Mode=OneWay}"
+                                    ViewModel="{x:Bind ViewModel.QueryParams, Mode=OneWay}"/>
       <v:KeyValueEditorView x:Name="HeadersPane" Margin="16,12,16,12" Visibility="Collapsed"
-                            ViewModel="{x:Bind ViewModel.Headers, Mode=OneWay}"/>
+                            VariableContext="{x:Bind ViewModel.Variables, Mode=OneWay}"
+                                    ViewModel="{x:Bind ViewModel.Headers, Mode=OneWay}"/>
       <v:AuthEditorView x:Name="AuthPane" Margin="16,12,16,12" Visibility="Collapsed"
                         ViewModel="{x:Bind ViewModel.Auth, Mode=OneWay}"/>
       <StackPanel x:Name="SettingsPane" Margin="16,12,16,12" Spacing="16" Visibility="Collapsed">
@@ -239,9 +241,11 @@
                                 Text="{x:Bind ViewModel.BodyText, Mode=TwoWay}"/>
               <v:KeyValueEditorView Margin="16,6" VerticalAlignment="Top"
                                     Visibility="{x:Bind p:VisibilityMap.WhenUrlEncoded(ViewModel.BodyKind), Mode=OneWay}"
+                                    VariableContext="{x:Bind ViewModel.Variables, Mode=OneWay}"
                                     ViewModel="{x:Bind ViewModel.UrlEncodedFields, Mode=OneWay}"/>
               <v:FormDataEditorView Margin="16,6" VerticalAlignment="Top"
                                     Visibility="{x:Bind p:VisibilityMap.WhenFormData(ViewModel.BodyKind), Mode=OneWay}"
+                                    VariableContext="{x:Bind ViewModel.Variables, Mode=OneWay}"
                                     ViewModel="{x:Bind ViewModel.FormData, Mode=OneWay}"/>
               <StackPanel Orientation="Horizontal" Spacing="8" Margin="16,6" VerticalAlignment="Top"
                           Visibility="{x:Bind p:VisibilityMap.WhenBinary(ViewModel.BodyKind), Mode=OneWay}">
