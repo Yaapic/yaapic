@@ -72,5 +72,32 @@ public static class BrushMap
 
     private static Brush Rail(bool selected) => Get(selected ? "YaapicAccentTextBrush" : "YaapicTextSecondaryBrush");
 
-    private static Brush Get(string key) => (Brush)Application.Current.Resources[key];
+    /// <summary>Gets or sets whether the window shows the light theme; set by the main window, which owns the element theme.</summary>
+    public static bool IsLight { get; set; }
+
+    // A code lookup in Application.Resources only sees the application theme (dark), so the theme dictionary of the
+    // window theme is searched first. Elements already bound keep their brush until their binding is evaluated again.
+    private static Brush Get(string key) =>
+        FindThemed(Application.Current.Resources, IsLight ? "Light" : "Dark", key) ?? (Brush)Application.Current.Resources[key];
+
+    private static Brush? FindThemed(ResourceDictionary dictionary, string theme, string key)
+    {
+        if (dictionary.ThemeDictionaries.TryGetValue(theme, out var themed)
+            && themed is ResourceDictionary colors
+            && colors.TryGetValue(key, out var value)
+            && value is Brush brush)
+        {
+            return brush;
+        }
+
+        foreach (var merged in dictionary.MergedDictionaries)
+        {
+            if (FindThemed(merged, theme, key) is { } found)
+            {
+                return found;
+            }
+        }
+
+        return null;
+    }
 }

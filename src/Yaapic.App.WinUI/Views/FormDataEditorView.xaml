@@ -29,7 +29,7 @@
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="36"/>
           <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
-          <ColumnDefinition Width="80"/>
+          <ColumnDefinition Width="96"/>
           <ColumnDefinition Width="2*"/>
           <ColumnDefinition Width="36"/>
         </Grid.ColumnDefinitions>
@@ -51,7 +51,7 @@
                 <Grid.ColumnDefinitions>
                   <ColumnDefinition Width="36"/>
                   <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
-                  <ColumnDefinition Width="80"/>
+                  <ColumnDefinition Width="96"/>
                   <ColumnDefinition Width="2*"/>
                   <ColumnDefinition Width="36"/>
                 </Grid.ColumnDefinitions>
@@ -60,7 +60,7 @@
                           IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
                 <v:VariableTextBox Grid.Column="1" PlaceholderText="Key" InputName="Key" CodeFontSize="{StaticResource YaapicFontSizeCode}"
                                    InputPadding="10,5" Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <ComboBox Grid.Column="2" Tag="{x:Bind}" MinWidth="0" Width="72" Height="26" Padding="8,0"
+                <ComboBox Grid.Column="2" Tag="{x:Bind}" MinWidth="0" Width="88" Height="26" Padding="8,0"
                           HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0"
                           FontSize="{StaticResource YaapicFontSizeBodySm}" AutomationProperties.Name="Field type"
                           SelectedIndex="{x:Bind p:TextMap.KindIndex(Kind), Mode=OneWay}"

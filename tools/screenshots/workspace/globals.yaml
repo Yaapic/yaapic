@@ -1,0 +1,8 @@
+version: 1
+variables:
+  - key: apiVersion
+    value: v1
+    enabled: true
+  - key: userAgent
+    value: Yaapic/0.2
+    enabled: true

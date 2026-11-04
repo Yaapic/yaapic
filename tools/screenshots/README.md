@@ -14,6 +14,8 @@ Parameters: `-Exe`, `-Theme dark|light`, `-Out`, `-Width 1440 -Height 900`, `-Se
 `-WaitMs 1500`, `-Keys` (`SendKeys` syntax, sent before `-Send`), `-Request <slug>` (open and active request,
 default `create-user`), `-Select <AutomationId>` (invoke a button before the keys, e.g. `BodyTab`), `-FocusElement <name>` (focus a field by its automation name), `-NoTabs` (no open request), `-NoStub` (no stub server, to capture a connection failure).
 
+Milestone 2 additions: `-Steps` (`|`-separated UI steps run before `-Send`: `invoke:`/`toggle:`/`select:`/`focus:` by AutomationId or name, `keys:`, `type:`, `click:`/`rclick:`/`hover:x,y` in window pixels, `wait:ms`) and `-Screen` (copy the screen instead of `PrintWindow`, required to capture menu and combo-box popups). The fixture has a `Users API` collection with a nested `Admin` folder, `globals.yaml`, and generated history entries; see `docs/screenshots/m2/README.md` for the commands.
+
 The app itself accepts `--workspace <dir>` and `--theme dark|light|system`. The script always cleans up the app, the
 stub server and the temp folder, even on failure. The window must be on an unlocked interactive desktop.
 

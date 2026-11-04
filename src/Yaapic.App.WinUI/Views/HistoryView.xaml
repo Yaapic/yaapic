@@ -54,7 +54,7 @@
                                      TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicBodyTextStyle}"/>
                         </Grid>
                         <StackPanel Orientation="Horizontal" Spacing="8" Margin="50,0,0,0">
-                          <TextBlock Text="{x:Bind StatusText}" TextTrimming="CharacterEllipsis" MaxWidth="150"
+                          <TextBlock Text="{x:Bind StatusText}" TextTrimming="CharacterEllipsis" MaxWidth="96"
                                      Style="{StaticResource YaapicBodySmallTextStyle}"
                                      Foreground="{x:Bind p:BrushMap.HistoryStatus(StatusCategory, IsFailed)}"/>
                           <TextBlock Text="{x:Bind TimeText}" Style="{StaticResource YaapicBodySmallTextStyle}"
