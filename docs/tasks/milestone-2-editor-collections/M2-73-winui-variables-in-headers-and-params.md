@@ -39,7 +39,7 @@ autocomplete, Avalonia (M2-75).
 - [x] Resource keys: no new keys expected; any new XAML key is verified in `design/xaml/Yaapic.Colors.WinUI.xaml`
       (listed in Notes).
 - [x] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] **Exercise the PUBLISHED exe** (UI Automation and mouse): a header `Authorization` = `Bearer {{token}}` with `token`
+- [x] **Exercise the PUBLISHED exe** (UI Automation and mouse): a header `Authorization` = `Bearer {{token}}` with `token`
       defined in the active environment shows `{{token}}` coloured resolved; `{{missing}}` in a param value shows
       unresolved; hovering opens the popup; creating `missing` from the popup recolours the cell live; editing the value
       of a param keeps the URL in sync (M2-13); adding, deleting and toggling rows keeps colours aligned; disabled rows
@@ -48,7 +48,7 @@ autocomplete, Avalonia (M2-75).
       regression): open each once.
 - [x] 100-row smoke test: no visible lag while typing or scrolling.
 - [x] Sending the request resolves the variables exactly as before (inspect the request received by the stub server).
-- [ ] No Yaapic or stub-server process left running.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
@@ -82,9 +82,9 @@ autocomplete, Avalonia (M2-75).
   rendered coloured and dimmed, editing a param value updates the URL (and colours), the stub received
   `Authorization: Bearer abc123` and `?q=newabc123&a=xabc123y` (disabled header not sent), Environments dialog and Globals open
   as before, 100-row headers table: scrolling recycled rows keep their colours and a value edit costs ~3 ms.
-- **NOT exercised (could not run):** the hover popup, create-in-scope from the popup, live recolour after creating a variable,
-  and caret/selection/mouse-typing in the cells. The Windows session was on the lock screen while this card ran (the lock
-  screen window owned the foreground and every mouse position), so real mouse and keyboard input never reached the app; posted
-  window messages did not open the popup. The popup itself is the M2-72 control, unchanged. Those items must be re-run on an
-  unlocked desktop (the card checkboxes for them stay unticked).
-
+- **Second pass on an unlocked desktop (real mouse and keyboard, published exe):** hovering `{{token}}` in a header value and
+  `{{missing}}` in a param value opens the popup (resolved: value + `Environment`; unresolved: sentence, scope picker, value,
+  `Create`); the popup is not clipped by the table. Creating `missing` in the active environment recoloured the cell and the URL
+  green live. Typing in the middle of a value, Shift+Arrow selection (selected text redrawn in front), Ctrl+A/Delete/retype,
+  a long value scrolling with the caret, and typing `{{token}}` in a key cell all behave and colour correctly in dark and
+  light; the sent request resolved the key and values as before. Not exercised: IME composition and Narrator.
