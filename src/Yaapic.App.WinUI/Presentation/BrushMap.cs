@@ -2,6 +2,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -51,6 +52,25 @@ public static class BrushMap
         StatusCategory.ServerError => Get("YaapicDangerBackgroundBrush"),
         _ => new SolidColorBrush(Microsoft.UI.Colors.Transparent),
     };
+
+    /// <summary>Gets the text brush of a history row status.</summary>
+    /// <param name="category">The class of the status code.</param>
+    /// <param name="isFailed">Whether the send produced no response.</param>
+    /// <returns>The danger brush for a failed send, else the status brush.</returns>
+    public static Brush HistoryStatus(StatusCategory category, bool isFailed) =>
+        isFailed ? Get("YaapicDangerBrush") : StatusForeground(category);
+
+    /// <summary>Gets the icon brush of the collections rail entry.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <returns>The accent brush when selected, else the secondary text brush.</returns>
+    public static Brush CollectionsRail(SidebarMode mode) => Rail(mode == SidebarMode.Collections);
+
+    /// <summary>Gets the icon brush of the history rail entry.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <returns>The accent brush when selected, else the secondary text brush.</returns>
+    public static Brush HistoryRail(SidebarMode mode) => Rail(mode == SidebarMode.History);
+
+    private static Brush Rail(bool selected) => Get(selected ? "YaapicAccentTextBrush" : "YaapicTextSecondaryBrush");
 
     private static Brush Get(string key) => (Brush)Application.Current.Resources[key];
 }

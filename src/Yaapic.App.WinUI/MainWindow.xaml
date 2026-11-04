@@ -72,6 +72,9 @@
       <InfoBar Severity="Error" IsClosable="False"
                IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Collections.LastError), Mode=OneWay}"
                Message="{x:Bind ViewModel.Collections.LastError, Mode=OneWay}"/>
+      <InfoBar Severity="Error" IsClosable="False"
+               IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.History.LastError), Mode=OneWay}"
+               Message="{x:Bind ViewModel.History.LastError, Mode=OneWay}"/>
     </StackPanel>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
@@ -90,13 +93,38 @@
           <StackPanel Spacing="4">
             <Grid>
               <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
-                         VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"/>
-              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicSelectionBackgroundBrush}">
-                <Button Style="{StaticResource YaapicRailButtonStyle}" AutomationProperties.Name="Requests"
-                        ToolTipService.ToolTip="Requests" Foreground="{ThemeResource YaapicAccentTextBrush}">
-                  <ic:FluentIcon Icon="Library" IconVariant="Regular" IconSize="Size20" Foreground="{ThemeResource YaapicAccentTextBrush}"/>
-                </Button>
-              </Border>
+                         VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicSelectionBackgroundBrush}"
+                      Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+              <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                      AutomationProperties.Name="Collections" ToolTipService.ToolTip="Collections"
+                      Command="{x:Bind ViewModel.ShowCollectionsCommand, Mode=OneWay}">
+                <Viewbox Width="20" Height="20">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YiCollection}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                          Stroke="{x:Bind p:BrushMap.CollectionsRail(ViewModel.Mode), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+              </Button>
+            </Grid>
+            <Grid>
+              <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
+                         VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicSelectionBackgroundBrush}"
+                      Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+              <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                      AutomationProperties.Name="History" ToolTipService.ToolTip="History"
+                      Command="{x:Bind ViewModel.ShowHistoryCommand, Mode=OneWay}">
+                <Viewbox Width="20" Height="20">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YiHistory}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                          Stroke="{x:Bind p:BrushMap.HistoryRail(ViewModel.Mode), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+              </Button>
             </Grid>
             <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
                     AutomationProperties.Name="Environments" ToolTipService.ToolTip="Environments (Ctrl+Shift+E)"
@@ -129,9 +157,13 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <TextBlock Text="Requests" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+          <TextBlock Text="Requests" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+          <TextBlock Text="History" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
           <Button Grid.Column="1" Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="New request"
-                  ToolTipService.ToolTip="New request or collection">
+                  ToolTipService.ToolTip="New request or collection"
+                  Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}">
             <ic:FluentIcon Icon="Add" IconVariant="Regular" IconSize="Size16"/>
             <Button.Flyout>
               <MenuFlyout>
@@ -141,7 +173,10 @@
             </Button.Flyout>
           </Button>
         </Grid>
-        <Grid Grid.Row="1" Padding="10,0,10,8">
+        <v:HistoryView Grid.Row="1" Grid.RowSpan="2" ViewModel="{x:Bind ViewModel.History, Mode=OneWay}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+        <Grid Grid.Row="1" Padding="10,0,10,8"
+              Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}">
           <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,3,84,3" PlaceholderText="Filter requests"
                    AutomationProperties.Name="Filter requests"
                    Background="{ThemeResource YaapicSurfaceSunkenBrush}"
@@ -152,6 +187,7 @@
                      Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
         </Grid>
         <TreeView x:Name="CollectionTree" Grid.Row="2" SelectionMode="Single"
+                  Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"
                   ItemsSource="{x:Bind ViewModel.Collections.Roots, Mode=OneWay}"
                   ItemInvoked="OnNodeInvoked" ContextRequested="OnNodeContextRequested" KeyDown="OnTreeKeyDown">
           <TreeView.ItemTemplate>
@@ -188,7 +224,7 @@
           </TreeView.ItemTemplate>
         </TreeView>
         <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="16,24,16,0" Spacing="8"
-                    Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Collections.IsEmpty), Mode=OneWay}">
+                    Visibility="{x:Bind p:VisibilityMap.WhenCollectionsEmpty(ViewModel.Mode, ViewModel.Collections.IsEmpty), Mode=OneWay}">
           <TextBlock Text="No collections yet" HorizontalAlignment="Center"
                      Style="{StaticResource YaapicBodySmallTextStyle}"/>
           <Button Content="New request" HorizontalAlignment="Center" Click="OnAddTab"/>

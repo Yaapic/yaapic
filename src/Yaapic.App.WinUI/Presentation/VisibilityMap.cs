@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -157,6 +158,23 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenNoMatch(int count, string? filter) =>
         count == 0 && !string.IsNullOrWhiteSpace(filter) ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> while the sidebar lists the collection tree.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenCollections(SidebarMode mode) => mode == SidebarMode.Collections ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the collection tree is shown and empty.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <param name="isEmpty">Whether the tree has no collection.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenCollectionsEmpty(SidebarMode mode, bool isEmpty) =>
+        mode == SidebarMode.Collections && isEmpty ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> while the sidebar lists the request history.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenHistory(SidebarMode mode) => mode == SidebarMode.History ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>Gets the message shown when a filter matches no request.</summary>
     /// <param name="filter">The filter text.</param>
