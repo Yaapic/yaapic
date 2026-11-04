@@ -1,6 +1,6 @@
 # M2-64: WinUI command palette
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-63, M2-58
 
@@ -35,11 +35,11 @@ Palette history persistence, icons per command, a settings page.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: Ctrl+K opens, typing `new` lists "New request" first, Enter runs it and closes;
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: Ctrl+K opens, typing `new` lists "New request" first, Enter runs it and closes;
       typing part of a saved request name opens it in a tab; "Use environment: Local" switches the environment selector;
       "Manage environments" opens the dialog; Esc closes and the focus returns; Alt+Up/Down switch tabs.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

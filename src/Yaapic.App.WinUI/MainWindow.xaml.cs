@@ -68,6 +68,7 @@ public sealed partial class MainWindow : Window
             if (_viewModel is not null)
             {
                 _viewModel.Collections.PropertyChanged -= OnCollectionsChanged;
+                _viewModel.EnvironmentsRequested -= OnEnvironmentsRequested;
             }
 
             _viewModel = value;
@@ -75,6 +76,7 @@ public sealed partial class MainWindow : Window
             if (_viewModel is not null)
             {
                 _viewModel.Collections.PropertyChanged += OnCollectionsChanged;
+                _viewModel.EnvironmentsRequested += OnEnvironmentsRequested;
             }
         }
     }
@@ -279,6 +281,26 @@ public sealed partial class MainWindow : Window
         OnManageEnvironments(sender, new RoutedEventArgs());
         args.Handled = true;
     }
+
+    private void OnPaletteShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        _viewModel?.OpenPaletteCommand.Execute(null);
+        args.Handled = true;
+    }
+
+    private void OnNextTabShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        _viewModel?.Tabs.NextTabCommand.Execute(null);
+        args.Handled = true;
+    }
+
+    private void OnPreviousTabShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        _viewModel?.Tabs.PreviousTabCommand.Execute(null);
+        args.Handled = true;
+    }
+
+    private void OnEnvironmentsRequested(object? sender, EventArgs e) => OnManageEnvironments(this, new RoutedEventArgs());
 
     private void OnFilterShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {

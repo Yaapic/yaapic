@@ -35,6 +35,11 @@ public static class VisibilityMap
     /// <returns><see langword="true"/> when the text is not empty.</returns>
     public static bool HasText(string? text) => !string.IsNullOrEmpty(text);
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> when <paramref name="text"/> is not empty.</summary>
+    /// <param name="text">The text to test.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenText(string? text) => string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when <paramref name="value"/> is <see langword="true"/>.</summary>
     /// <param name="value">The flag to test.</param>
     /// <returns>The visibility.</returns>

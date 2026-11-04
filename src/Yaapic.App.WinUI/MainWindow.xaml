@@ -17,6 +17,10 @@
       <KeyboardAccelerator Key="S" Modifiers="Control" Invoked="OnSaveTab"/>
       <KeyboardAccelerator Key="E" Modifiers="Control,Shift" Invoked="OnEnvironmentsShortcut"/>
       <KeyboardAccelerator Key="F" Modifiers="Control,Shift" Invoked="OnFilterShortcut"/>
+      <KeyboardAccelerator Key="K" Modifiers="Control" Invoked="OnPaletteShortcut"/>
+      <KeyboardAccelerator Key="P" Modifiers="Control,Shift" Invoked="OnPaletteShortcut"/>
+      <KeyboardAccelerator Key="Down" Modifiers="Menu" Invoked="OnNextTabShortcut"/>
+      <KeyboardAccelerator Key="Up" Modifiers="Menu" Invoked="OnPreviousTabShortcut"/>
     </Grid.KeyboardAccelerators>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -75,6 +79,9 @@
       <InfoBar Severity="Error" IsClosable="False"
                IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.History.LastError), Mode=OneWay}"
                Message="{x:Bind ViewModel.History.LastError, Mode=OneWay}"/>
+      <InfoBar Severity="Error" IsClosable="False"
+               IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Palette.LastError), Mode=OneWay}"
+               Message="{x:Bind ViewModel.Palette.LastError, Mode=OneWay}"/>
     </StackPanel>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
@@ -298,5 +305,6 @@
         </StackPanel>
       </Grid>
     </Grid>
+    <v:CommandPaletteView Grid.RowSpan="3" ViewModel="{x:Bind ViewModel.Palette, Mode=OneWay}"/>
   </Grid>
 </Window>
