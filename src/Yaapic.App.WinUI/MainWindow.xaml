@@ -17,6 +17,7 @@
       <KeyboardAccelerator Key="S" Modifiers="Control" Invoked="OnSaveTab"/>
       <KeyboardAccelerator Key="E" Modifiers="Control,Shift" Invoked="OnEnvironmentsShortcut"/>
       <KeyboardAccelerator Key="F" Modifiers="Control,Shift" Invoked="OnFilterShortcut"/>
+      <KeyboardAccelerator Key="P" Modifiers="Control" Invoked="OnPaletteShortcut"/>
       <KeyboardAccelerator Key="K" Modifiers="Control" Invoked="OnPaletteShortcut"/>
       <KeyboardAccelerator Key="P" Modifiers="Control,Shift" Invoked="OnPaletteShortcut"/>
       <KeyboardAccelerator Key="Down" Modifiers="Menu" Invoked="OnNextTabShortcut"/>
@@ -137,6 +138,11 @@
                     AutomationProperties.Name="Environments" ToolTipService.ToolTip="Environments (Ctrl+Shift+E)"
                     Click="OnManageEnvironments">
               <ic:FluentIcon Icon="Globe" IconVariant="Regular" IconSize="Size20"/>
+            </Button>
+            <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                    AutomationProperties.Name="Command palette" ToolTipService.ToolTip="Command palette (Ctrl+P)"
+                    Command="{x:Bind ViewModel.OpenPaletteCommand}">
+              <ic:FluentIcon Icon="Search" IconVariant="Regular" IconSize="Size20"/>
             </Button>
           </StackPanel>
           <Button Grid.Row="2" Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"

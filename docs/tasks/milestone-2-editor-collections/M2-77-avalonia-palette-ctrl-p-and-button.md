@@ -1,6 +1,6 @@
 # M2-77: Avalonia palette Ctrl+P shortcut and button
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-65
 
@@ -20,9 +20,9 @@ New palette behaviour, other shortcuts, remapping UI.
 
 ## Acceptance criteria
 
-- [ ] Ctrl+P (Cmd+P on macOS) and the button open the palette; Ctrl+K and Ctrl+Shift+P keep working.
-- [ ] The button tooltip shows the shortcut; the `Commands` palette entry for the palette shows `Ctrl+P`.
-- [ ] 0 warnings, all tests green.
+- [x] Ctrl+P (Cmd+P on macOS) and the button open the palette; Ctrl+K and Ctrl+Shift+P keep working.
+- [x] The button tooltip shows the shortcut; the `Commands` palette entry for the palette shows `Ctrl+P`.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

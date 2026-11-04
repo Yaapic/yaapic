@@ -138,6 +138,10 @@
                     ToolTip.Tip="Environments (Ctrl+Shift+E)" AutomationProperties.Name="Environments">
               <PathIcon Data="{StaticResource YiEnvironment}" />
             </Button>
+            <Button Classes="icon rail" HorizontalAlignment="Center" Command="{Binding OpenPaletteCommand}"
+                    ToolTip.Tip="Command palette (Ctrl+P)" AutomationProperties.Name="Command palette">
+              <PathIcon Data="{StaticResource YiSearch}" />
+            </Button>
           </StackPanel>
         </DockPanel>
       </Border>

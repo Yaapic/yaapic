@@ -29,6 +29,7 @@ public sealed partial class MainWindow : Window
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => Shell?.Tabs.SaveActiveCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.E, modifier | KeyModifiers.Shift), Command = new Relay(() => _ = ManageEnvironmentsAsync()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.F, modifier | KeyModifiers.Shift), Command = new Relay(() => FilterBox.Focus()) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.P, modifier), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.K, modifier), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.P, modifier | KeyModifiers.Shift), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.Down, KeyModifiers.Alt), Command = new Relay(() => Shell?.Tabs.NextTabCommand.Execute(null)) });
