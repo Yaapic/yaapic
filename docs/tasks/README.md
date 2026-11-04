@@ -174,7 +174,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-73](milestone-2-editor-collections/M2-73-winui-variables-in-headers-and-params.md) | WinUI inline variables in header and param values | windows | M2-72 | done |
 | [M2-74](milestone-2-editor-collections/M2-74-avalonia-inline-variable-highlighting-url-bar.md) | Avalonia inline variable highlighting and popup in the URL bar | unix | M2-71, M2-21, M1-57 | done |
 | [M2-75](milestone-2-editor-collections/M2-75-avalonia-variables-in-headers-and-params.md) | Avalonia inline variables in header and param values | unix | M2-74 | done |
-| [M2-53](milestone-2-editor-collections/M2-53-domain-history-entry.md) | Domain: history entry | any | M2-01 | todo |
+| [M2-53](milestone-2-editor-collections/M2-53-domain-history-entry.md) | Domain: history entry | any | M2-01 | done |
 | [M2-54](milestone-2-editor-collections/M2-54-history-store-port-and-double.md) | Core: history store port and in-memory double | any | M2-53 | todo |
 | [M2-55](milestone-2-editor-collections/M2-55-file-history-store.md) | File history store (JSON Lines) | any | M2-54, M2-08 | todo |
 | [M2-56](milestone-2-editor-collections/M2-56-history-viewmodel-and-recording.md) | History ViewModel and recording | any | M2-54, M2-11 | todo |

@@ -1,6 +1,6 @@
 # M2-53: Domain: history entry
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-01
 
@@ -27,9 +27,9 @@ Storage, ViewModels, canceled sends (the recorder skips them, M2-56).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: `From` for a success and for each `SendFailureKind`; UTC conversion;
+- [x] Tests in `Yaapic.Domain.Tests`: `From` for a success and for each `SendFailureKind`; UTC conversion;
       `IsSuccess`; `IsEquivalentTo` true/false cases.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
