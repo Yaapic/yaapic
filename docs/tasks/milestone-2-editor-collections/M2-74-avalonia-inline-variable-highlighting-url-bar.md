@@ -1,6 +1,6 @@
 # M2-74: Avalonia inline variable highlighting and popup in the URL bar
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-71, M2-21, M1-57
 
@@ -70,26 +70,26 @@ Header and param cells (M2-75), body (later, AvaloniaEdit from M2-70), autocompl
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.CrossPlatform.slnf -c Release` (and `Yaapic.sln` on Windows) 0 warnings; all tests green;
+- [x] `dotnet build Yaapic.CrossPlatform.slnf -c Release` (and `Yaapic.sln` on Windows) 0 warnings; all tests green;
       architecture tests green.
-- [ ] Resource keys used by the new AXAML exist in both theme dictionaries of `design/xaml/Yaapic.Colors.Avalonia.axaml`
+- [x] Resource keys used by the new AXAML exist in both theme dictionaries of `design/xaml/Yaapic.Colors.Avalonia.axaml`
       (listed in Notes); no hex colours in the new files.
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings (the existing Avalonia.Win32 ILC
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings (the existing Avalonia.Win32 ILC
       messages are not new).
-- [ ] **Exercise the PUBLISHED binary** (UI Automation, or `tools/screenshots/Capture-Avalonia.ps1` plus real input):
-  - [ ] `{{baseUrl}}/get?x={{nope}}` with environment `Local` active: first token resolved colour, second unresolved,
+- [x] **Exercise the PUBLISHED binary** (UI Automation, or `tools/screenshots/Capture-Avalonia.ps1` plus real input):
+  - [x] `{{baseUrl}}/get?x={{nope}}` with environment `Local` active: first token resolved colour, second unresolved,
         inside the URL text; text not shifted or doubled; caret, selection and typing inside a token normal.
-  - [ ] Hover each token: the popup content of M2-72 (resolved details and Edit/Save; "Unresolved variable" + the exact
+  - [x] Hover each token: the popup content of M2-72 (resolved details and Edit/Save; "Unresolved variable" + the exact
         sentence + create form). Create `nope` in Environment, then in Globals and Collection: token turns resolved live,
         files on disk updated.
-  - [ ] "No environment": `{{baseUrl}}` becomes unresolved without retyping; Environment choice disabled with its reason.
-  - [ ] Long URL scrolled horizontally keeps colours aligned.
-  - [ ] Dark and light (switch at run time) readable; `{{$guid}}` in the dynamic colour.
-  - [ ] `Ctrl+.` opens the popup, `Escape` closes it; hover never steals focus.
-  - [ ] Ctrl+Enter still sends; params sync with the URL (M2-13).
-- [ ] Screenshots through `Capture-Avalonia.ps1` (dark and light, `-Send`), not committed; differences from the WinUI
+  - [x] "No environment": `{{baseUrl}}` becomes unresolved without retyping; Environment choice disabled with its reason.
+  - [x] Long URL scrolled horizontally keeps colours aligned.
+  - [x] Dark and light (switch at run time) readable; `{{$guid}}` in the dynamic colour.
+  - [x] `Ctrl+.` opens the popup, `Escape` closes it; hover never steals focus.
+  - [x] Ctrl+Enter still sends; params sync with the URL (M2-13).
+- [x] Screenshots through `Capture-Avalonia.ps1` (dark and light, `-Send`), not committed; differences from the WinUI
       look listed in Notes.
-- [ ] No Yaapic or stub-server process left running.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
@@ -108,3 +108,53 @@ Header and param cells (M2-75), body (later, AvaloniaEdit from M2-70), autocompl
 `feat(avalonia): colour variables inline in the URL bar with a hover popup`
 
 ## Notes
+
+**Spike outcome (option 2, overlay, shipped).** Option 1 (custom `TextPresenter`) was dropped: the layout creation of
+`TextPresenter` is not overridable in Avalonia 12.1.4 (only the read-only `TextLayout` is public). Option 3 was not
+needed, so the card still depends on M2-71, M2-21 and M1-57 only. A transparent-text `TextBox` over a `TextBlock` of
+`Run`s works with these details:
+
+- `VariableTextBox` is a `UserControl` (`Controls/VariableTextBox.axaml(.cs)`) around the `bare` box: `Foreground`,
+  `Background` and `BorderThickness` of the inner box are fixed (`BorderThickness` 0 keeps the content at the same offset
+  in every pseudo-class, including the 2 px focus border); `CaretBrush` and `SelectionForegroundBrush`
+  (`YaapicAccentOnBrush`, otherwise the selected text is invisible) stay explicit. No `ControlTheme` was needed.
+- Metrics: the overlay follows the box `FontSize` (observable binding) and uses `YaapicMonoFont`; text and colours cannot
+  drift because the overlay text is the box text character for character (`Run` lengths sum to `Text.Length`). The
+  resolved/unresolved/dynamic highlight is the `Run.Background` (translucent), no metric change.
+- Scrolling: `PART_ScrollViewer.ScrollChanged` drives a `TranslateTransform` of the overlay; the overlay sits in a
+  horizontal `StackPanel` (unbounded width), otherwise the scrolled text was clipped to its slot and disappeared.
+- Hit test: `TextPresenter.TextLayout.HitTestPoint` for the hover, `HitTestTextPosition` for the popup placement.
+- Popup: a `Popup` (`IsLightDismissEnabled` false, `BottomEdgeAlignedLeft` on the box) so hovering never steals focus;
+  closing is timer and focus driven; it stays open while the scope dropdown is open. `VariablePopupView` has a public
+  parameterless constructor plus `Load` (a view with constructor arguments is not reachable by the Avalonia runtime
+  loader and raises a build warning).
+- `Ctrl+.` is matched on `Key.OemPeriod` like the WinUI `VK_OEM_PERIOD`; on layouts where `.` needs Shift (AZERTY) it is
+  `Ctrl+Shift+;`, which does not match (same limitation as WinUI).
+- **Open link:** the Collection scope has no editor on this platform yet (M2-51 is `todo`), so the popup hides `Open` for
+  a Collection variable; Environment opens the environments window on the active environment, Globals opens it on
+  Globals (`RequestEditorView.VariableScopeOpenRequested` to `MainWindow`).
+- After a successful create the popup closes if the pointer is no longer over it (a new card is shown only when the focus
+  was inside), which matches M2-72 ("closes if the pointer left").
+
+**Resource keys used (all exist in both theme dictionaries of `design/xaml/Yaapic.Colors.Avalonia.axaml`):**
+`YaapicSuccessBrush`, `YaapicSuccessBackgroundBrush`, `YaapicWarningBrush`, `YaapicWarningBackgroundBrush`,
+`YaapicInfoBrush`, `YaapicInfoBackgroundBrush`, `YaapicDangerBrush`, `YaapicAccentOnBrush`, `YaapicTextPrimaryBrush`,
+`YaapicTextSecondaryBrush`, `YaapicSurfaceElevatedBrush`, `YaapicSurfaceRaisedBrush`, `YaapicBorderOverlayBrush`,
+`YaapicRadiusMd`, `YaapicRadiusSm`, `YaapicMonoFont`, `YaapicGlyphStatusClientError`. No hex colours in the new files.
+
+**Verification (published Native AOT exe on Windows, real mouse and keyboard input through `mouse_event`, `SendKeys` and
+`keybd_event` with screen captures, plus `Capture-Avalonia.ps1`):** `{{baseUrl}}/get?x={{nope}}` with `local`: resolved and
+unresolved colours inside the text, caret, selection and typing in a token normal; hover popups (value + `Environment`
+badge + Edit/Open; `Unresolved variable` + the exact sentence + scope list with the disabled entry and its reason);
+create in Environment, Globals and Collection (`local.env.yaml`, `globals.yaml`, `folder.yaml` checked on disk, token
+turned green live); active environment deleted: `{{baseUrl}}` unresolved without retyping and the Environment choice
+disabled ("No environment is active"); long URL scrolled and selected: colours aligned; dark and light switched at run
+time; `{{$guid}}` in the info colour with the dynamic message; `Ctrl+.` then `Escape` (typing continues in the box);
+`Ctrl+Enter` sends and the variables resolve; Params stay in sync. The `Capture-Avalonia.ps1` run is `-Send` in dark and
+light.
+Not exercised: the environment pill menu (`MenuFlyout`) rendered as an empty sliver in this session, so "No environment"
+was reached by deleting the active environment in the Environments window (same `ScopesChanged` path); IME composition
+and screen readers.
+
+**Differences from the WinUI look:** the highlight is `Run.Background` (rounded corners are not available), the popup uses
+the Avalonia `subtle` button style for `Edit`/`Open` instead of hyperlinks, and `Open` is hidden for the Collection scope.

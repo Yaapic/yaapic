@@ -1,0 +1,16 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="Yaapic.App.Avalonia.Controls.VariableTextBox">
+  <!-- A transparent-text TextBox keeps every editing behaviour; the TextBlock behind it draws the colours. -->
+  <Grid x:Name="Host" ClipToBounds="True">
+    <!-- A horizontal stack measures the text without a width limit, so it stays drawn when it is scrolled out of the slot. -->
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" IsHitTestVisible="False">
+      <TextBlock x:Name="Overlay" TextWrapping="NoWrap" FontFamily="{DynamicResource YaapicMonoFont}"
+                 Foreground="{DynamicResource YaapicTextPrimaryBrush}" />
+    </StackPanel>
+    <TextBox x:Name="Input" Classes="bare" Foreground="Transparent" Background="Transparent" BorderThickness="0"
+             FontFamily="{DynamicResource YaapicMonoFont}" CaretBrush="{DynamicResource YaapicTextPrimaryBrush}"
+             SelectionForegroundBrush="{DynamicResource YaapicAccentOnBrush}"
+             TextChanged="OnInputTextChanged" KeyDown="OnInputKeyDown" LostFocus="OnInputLostFocus" />
+  </Grid>
+</UserControl>

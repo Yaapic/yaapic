@@ -222,7 +222,7 @@
           </TabControl.ItemTemplate>
           <TabControl.ContentTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <views:RequestEditorView SaveRequested="OnSaveRequested" />
+              <views:RequestEditorView SaveRequested="OnSaveRequested" VariableScopeOpenRequested="OnVariableScopeOpenRequested" />
             </DataTemplate>
           </TabControl.ContentTemplate>
         </TabControl>

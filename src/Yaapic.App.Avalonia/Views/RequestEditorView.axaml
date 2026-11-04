@@ -3,6 +3,7 @@
              xmlns:req="using:Yaapic.ViewModels.Requests"
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
              xmlns:v="using:Yaapic.App.Avalonia.Views"
+             xmlns:c="using:Yaapic.App.Avalonia.Controls"
              x:Class="Yaapic.App.Avalonia.Views.RequestEditorView"
              x:DataType="req:RequestEditorViewModel">
   <Grid>
@@ -31,8 +32,8 @@
         <ComboBox x:Name="MethodBox" Classes="methodpicker"
                   SelectedIndex="{Binding Method, Converter={x:Static p:EditorMap.MethodIndex}, Mode=OneWay}"
                   SelectionChanged="OnMethodChanged" />
-        <TextBox Grid.Column="1" Classes="bare" Margin="12,0" PlaceholderText="Enter URL or paste text"
-                 FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding Url, Mode=TwoWay}" />
+        <c:VariableTextBox Grid.Column="1" Margin="12,0" Watermark="Enter URL or paste text" InputName="URL"
+                           Context="{Binding Variables}" Text="{Binding Url, Mode=TwoWay}" />
         <Button Grid.Column="2" Classes="accent" Margin="0,3,3,3" Command="{Binding SendCommand}"
                 IsVisible="{Binding !IsSending}">
           <StackPanel Orientation="Horizontal" Spacing="8">

@@ -41,6 +41,26 @@ public sealed partial class MainWindow : Window
         }
     }
 
+    private void OnVariableScopeOpenRequested(object? sender, Yaapic.Core.Variables.VariableScopeKind scope)
+    {
+        // The Collection scope has no editor on this platform yet (M2-51), so the popup does not offer it.
+        if (Shell is not { } shell || scope == Yaapic.Core.Variables.VariableScopeKind.Collection)
+        {
+            return;
+        }
+
+        if (scope == Yaapic.Core.Variables.VariableScopeKind.Globals)
+        {
+            shell.Environments.IsEditingGlobals = true;
+        }
+        else if (shell.Environments.ActiveEnvironment is { } active)
+        {
+            shell.Environments.EditedEnvironment = active;
+        }
+
+        _ = ManageEnvironmentsAsync();
+    }
+
     private void OnEnvironmentMenuOpening(object? sender, EventArgs e)
     {
         if (sender is not MenuFlyout flyout || Shell is not { } shell)

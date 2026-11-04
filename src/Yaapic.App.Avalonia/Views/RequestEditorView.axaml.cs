@@ -2,6 +2,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Yaapic.App.Avalonia.Presentation;
+using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
 
@@ -23,7 +24,30 @@ public sealed partial class RequestEditorView : UserControl
     /// <summary>Raised when the user clicks Save; the shell saves the active tab.</summary>
     public event EventHandler? SaveRequested;
 
+    /// <summary>Raised when a variable popup asks to open the editor of a scope (the shell shows it).</summary>
+    public event EventHandler<VariableScopeKind>? VariableScopeOpenRequested;
+
     private RequestEditorViewModel? Editor => DataContext as RequestEditorViewModel;
+
+    private VariableContext? _variables;
+
+    /// <inheritdoc />
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+        if (_variables is not null)
+        {
+            _variables.OpenRequested -= OnVariableOpenRequested;
+        }
+
+        _variables = Editor?.Variables;
+        if (_variables is not null)
+        {
+            _variables.OpenRequested += OnVariableOpenRequested;
+        }
+    }
+
+    private void OnVariableOpenRequested(object? sender, VariableScopeKind scope) => VariableScopeOpenRequested?.Invoke(this, scope);
 
     /// <inheritdoc />
     protected override void OnKeyDown(KeyEventArgs e)
