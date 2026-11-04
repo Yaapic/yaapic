@@ -193,7 +193,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         RefreshCommands();
     }
 
-    private static string FormatDuration(TimeSpan duration)
+    internal static string FormatDuration(TimeSpan duration)
     {
         var ms = duration.TotalMilliseconds;
         return ms < 1000

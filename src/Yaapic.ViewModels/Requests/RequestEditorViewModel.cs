@@ -80,6 +80,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         FormData.Changed += (_, _) => Refresh();
     }
 
+    /// <summary>Raised after a send completed, successfully or not; not raised when the user canceled it.</summary>
+    public event EventHandler<RequestSentEventArgs>? Sent;
+
     /// <summary>Gets the HTTP methods offered by the editor.</summary>
     public static IReadOnlyList<HttpMethodKind> Methods { get; } = [
         HttpMethodKind.Get,
@@ -235,8 +238,13 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private async Task SendAsync(CancellationToken ct)
     {
         Response.ShowSending();
-        var report = await _sender.SendAsync(ToDefinition(), _scopes.GetScopes(Id), ct);
+        var request = ToDefinition();
+        var report = await _sender.SendAsync(request, _scopes.GetScopes(Id), ct);
         Response.ShowReport(report);
+        if (report.Result.Failure?.Kind != SendFailureKind.Canceled)
+        {
+            Sent?.Invoke(this, new RequestSentEventArgs(request, report));
+        }
     }
 
     private bool CanSend() => Url.Trim().Length > 0;
