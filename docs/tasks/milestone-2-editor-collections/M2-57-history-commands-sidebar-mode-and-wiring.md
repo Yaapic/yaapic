@@ -1,6 +1,6 @@
 # M2-57: History commands, sidebar mode and shell wiring
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-56, M2-55, M2-35
 
@@ -32,11 +32,11 @@ Views (M2-58, M2-59), keyboard shortcuts for the mode switch.
 
 ## Acceptance criteria
 
-- [ ] Tests: `OpenAsNew` creates a new tab with a different id, dirty/new, request content equal; open from history
+- [x] Tests: `OpenAsNew` creates a new tab with a different id, dirty/new, request content equal; open from history
       activates it; delete; clear confirmed and refused; `Mode` switching commands; an `AppComposition` test sends a request
       through the shell (fake transport not possible there: use the loopback server of the end-to-end tests) and finds the
       entry in `Shell.History` and in `.yaapic/history.jsonl` of the temp workspace.
-- [ ] 0 warnings; architecture tests green.
+- [x] 0 warnings; architecture tests green.
 
 ## Suggested commit message
 

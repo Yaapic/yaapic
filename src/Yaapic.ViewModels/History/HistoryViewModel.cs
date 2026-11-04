@@ -1,10 +1,13 @@
 using System.Collections.ObjectModel;
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.History;
 using Yaapic.Domain.Http;
+using Yaapic.UI.Abstractions;
+using Yaapic.ViewModels.Tabs;
 
 namespace Yaapic.ViewModels.History;
 
@@ -13,6 +16,8 @@ public sealed partial class HistoryViewModel : ObservableObject
 {
     private readonly IHistoryStore _store;
     private readonly TimeProvider _time;
+    private readonly TabsViewModel _tabs;
+    private readonly IDialogService _dialogs;
     private List<HistoryEntry> _entries = [];
 
     [ObservableProperty]
@@ -27,12 +32,18 @@ public sealed partial class HistoryViewModel : ObservableObject
     /// <summary>Initializes a new instance of the <see cref="HistoryViewModel"/> class.</summary>
     /// <param name="store">The history store.</param>
     /// <param name="time">The clock and local time zone.</param>
-    public HistoryViewModel(IHistoryStore store, TimeProvider time)
+    /// <param name="tabs">The open tabs, where entries are reopened.</param>
+    /// <param name="dialogs">Confirms clearing the whole history.</param>
+    public HistoryViewModel(IHistoryStore store, TimeProvider time, TabsViewModel tabs, IDialogService dialogs)
     {
         ArgumentNullException.ThrowIfNull(store);
         ArgumentNullException.ThrowIfNull(time);
+        ArgumentNullException.ThrowIfNull(tabs);
+        ArgumentNullException.ThrowIfNull(dialogs);
         _store = store;
         _time = time;
+        _tabs = tabs;
+        _dialogs = dialogs;
     }
 
     /// <summary>Gets the filtered entries grouped by local day, newest day first.</summary>
@@ -82,6 +93,55 @@ public sealed partial class HistoryViewModel : ObservableObject
         }
 
         LastError = null;
+        Rebuild();
+    }
+
+    [RelayCommand]
+    private void Open(HistoryItemViewModel item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        _tabs.OpenAsNew(item.Entry.Request);
+    }
+
+    [RelayCommand]
+    private async Task DeleteAsync(HistoryItemViewModel item)
+    {
+        ArgumentNullException.ThrowIfNull(item);
+        try
+        {
+            await _store.DeleteAsync(item.Id, CancellationToken.None);
+        }
+        catch (StorageException ex)
+        {
+            LastError = ex.Message;
+            return;
+        }
+
+        LastError = null;
+        _entries.RemoveAll(e => e.Id == item.Id);
+        Rebuild();
+    }
+
+    [RelayCommand]
+    private async Task ClearAsync()
+    {
+        if (!await _dialogs.ConfirmDeleteAsync("the whole history"))
+        {
+            return;
+        }
+
+        try
+        {
+            await _store.ClearAsync(CancellationToken.None);
+        }
+        catch (StorageException ex)
+        {
+            LastError = ex.Message;
+            return;
+        }
+
+        LastError = null;
+        _entries = [];
         Rebuild();
     }
 

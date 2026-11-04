@@ -1,9 +1,11 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Workspace;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
+using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Tabs;
 
@@ -19,10 +21,14 @@ public sealed partial class ShellViewModel : ObservableObject
     private SessionState? _pending;
     private Task _drain = Task.CompletedTask;
 
+    [ObservableProperty]
+    private SidebarMode _mode = SidebarMode.Collections;
+
     /// <summary>Creates the shell.</summary>
     /// <param name="tabs">The open tabs.</param>
     /// <param name="requests">The sidebar request list.</param>
     /// <param name="collections">The collection tree.</param>
+    /// <param name="history">The request history.</param>
     /// <param name="environments">The environment selection and editing.</param>
     /// <param name="globals">The global variables editing.</param>
     /// <param name="session">Where the session is saved.</param>
@@ -31,6 +37,7 @@ public sealed partial class ShellViewModel : ObservableObject
         TabsViewModel tabs,
         RequestListViewModel requests,
         CollectionTreeViewModel collections,
+        HistoryViewModel history,
         EnvironmentsViewModel environments,
         GlobalsViewModel globals,
         ISessionStore session,
@@ -39,6 +46,7 @@ public sealed partial class ShellViewModel : ObservableObject
         ArgumentNullException.ThrowIfNull(tabs);
         ArgumentNullException.ThrowIfNull(requests);
         ArgumentNullException.ThrowIfNull(collections);
+        ArgumentNullException.ThrowIfNull(history);
         ArgumentNullException.ThrowIfNull(environments);
         ArgumentNullException.ThrowIfNull(globals);
         ArgumentNullException.ThrowIfNull(session);
@@ -46,6 +54,7 @@ public sealed partial class ShellViewModel : ObservableObject
         Tabs = tabs;
         Requests = requests;
         Collections = collections;
+        History = history;
         Environments = environments;
         Globals = globals;
         _session = session;
@@ -64,6 +73,9 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>Gets the collection tree.</summary>
     public CollectionTreeViewModel Collections { get; }
 
+    /// <summary>Gets the request history.</summary>
+    public HistoryViewModel History { get; }
+
     /// <summary>Gets the environments view model.</summary>
     public EnvironmentsViewModel Environments { get; }
 
@@ -79,6 +91,7 @@ public sealed partial class ShellViewModel : ObservableObject
         await Globals.LoadAsync();
         await Requests.RefreshAsync();
         await Collections.RefreshAsync();
+        await History.RefreshAsync();
 
         foreach (var id in state.OpenRequestIds)
         {
@@ -130,6 +143,12 @@ public sealed partial class ShellViewModel : ObservableObject
         await _drain;
         return true;
     }
+
+    [RelayCommand]
+    private void ShowCollections() => Mode = SidebarMode.Collections;
+
+    [RelayCommand]
+    private void ShowHistory() => Mode = SidebarMode.History;
 
     private void QueueSave()
     {

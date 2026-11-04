@@ -4,6 +4,7 @@ using Yaapic.TestDoubles;
 using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Tabs;
 
 namespace Yaapic.ViewModels.Tests;
 
@@ -15,6 +16,8 @@ public sealed class HistoryViewModelTests
     private static readonly HttpResponseData Ok = new(200, "OK", [], [], TimeSpan.FromMilliseconds(5), "https://x.test");
 
     private readonly InMemoryHistoryStore _store = new();
+    private readonly FakeDialogService _dialogs = new();
+    private readonly TabsViewModel _tabs;
     private readonly FakeTime _time = new(new DateTimeOffset(2026, 11, 4, 12, 0, 0, TimeSpan.Zero));
 
     private static SendReport Report(SendResult result) => new(result, []);
@@ -22,7 +25,98 @@ public sealed class HistoryViewModelTests
     private static HttpRequestDefinition Request(string name, string url = "https://x.test", HttpMethodKind method = HttpMethodKind.Get) =>
         HttpRequestDefinition.Create(name) with { Url = url, Method = method };
 
-    private HistoryViewModel Create() => new(_store, _time);
+    public HistoryViewModelTests() =>
+        _tabs = new TabsViewModel(
+            new InMemoryRequestStore(),
+            _dialogs,
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(
+                definition,
+                new RequestSender(new FakeHttpTransport((_, _) => throw new NotSupportedException())),
+                new FakeVariableScopeProvider(),
+                isNew));
+
+    private HistoryViewModel Create() => new(_store, _time, _tabs, _dialogs);
+
+    [Fact]
+    public async Task OpenActivatesANewUnsavedTabWithACopyOfTheRequest()
+    {
+        var history = Create();
+        var request = Request("a", "https://x.test/a", HttpMethodKind.Post);
+        await history.RecordAsync(request, Report(SendResult.Success(Ok)));
+
+        history.OpenCommand.Execute(history.Groups[0].Items[0]);
+        history.OpenCommand.Execute(history.Groups[0].Items[0]);
+
+        Assert.Equal(2, _tabs.Tabs.Count);
+        Assert.Same(_tabs.Tabs[1], _tabs.ActiveTab);
+        Assert.NotEqual(_tabs.Tabs[0].Id, _tabs.Tabs[1].Id);
+        Assert.NotEqual(request.Id, _tabs.Tabs[0].Id);
+        var active = _tabs.ActiveTab!;
+        Assert.True(active.IsNew);
+        Assert.True(active.IsDirty);
+        Assert.True(active.ToDefinition().IsEquivalentTo(request with { Id = active.Id }));
+    }
+
+    [Fact]
+    public async Task DeleteRemovesFromStoreAndListWithoutConfirmation()
+    {
+        var history = Create();
+        await history.RecordAsync(Request("a"), Report(SendResult.Success(Ok)));
+        _time.Now = _time.Now.AddMinutes(1);
+        await history.RecordAsync(Request("b"), Report(SendResult.Success(Ok)));
+
+        await history.DeleteCommand.ExecuteAsync(history.Groups[0].Items[0]);
+
+        Assert.Equal(["a"], history.Groups.SelectMany(g => g.Items).Select(i => i.Name));
+        Assert.Equal(["a"], (await _store.ListAsync(CancellationToken.None)).Select(e => e.Request.Name));
+        Assert.Empty(_dialogs.DeletePrompts);
+    }
+
+    [Fact]
+    public async Task ClearEmptiesTheHistoryWhenConfirmed()
+    {
+        var history = Create();
+        await history.RecordAsync(Request("a"), Report(SendResult.Success(Ok)));
+        _dialogs.DeleteAnswer = true;
+
+        await history.ClearCommand.ExecuteAsync(null);
+
+        Assert.Equal(["the whole history"], _dialogs.DeletePrompts);
+        Assert.True(history.IsEmpty);
+        Assert.Empty(history.Groups);
+        Assert.Empty(await _store.ListAsync(CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task ClearKeepsTheHistoryWhenRefused()
+    {
+        var history = Create();
+        await history.RecordAsync(Request("a"), Report(SendResult.Success(Ok)));
+        _dialogs.DeleteAnswer = false;
+
+        await history.ClearCommand.ExecuteAsync(null);
+
+        Assert.False(history.IsEmpty);
+        Assert.Single(await _store.ListAsync(CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task DeleteAndClearStorageErrorsGoToLastError()
+    {
+        var history = Create();
+        await history.RecordAsync(Request("a"), Report(SendResult.Success(Ok)));
+        _dialogs.DeleteAnswer = true;
+        _store.FailureMessage = "disk full";
+
+        await history.DeleteCommand.ExecuteAsync(history.Groups[0].Items[0]);
+        Assert.Equal("disk full", history.LastError);
+        Assert.False(history.IsEmpty);
+
+        history.LastError = null;
+        await history.ClearCommand.ExecuteAsync(null);
+        Assert.Equal("disk full", history.LastError);
+        Assert.False(history.IsEmpty);
+    }
 
     [Fact]
     public async Task RecordsSuccessAndFailureNewestFirst()

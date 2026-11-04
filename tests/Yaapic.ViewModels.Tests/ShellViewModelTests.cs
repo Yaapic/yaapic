@@ -7,6 +7,7 @@ using Yaapic.TestDoubles;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
+using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -35,7 +36,21 @@ public sealed class ShellViewModelTests
             tabs,
             new RequestListViewModel(_requests, tabs, _dialogs),
             new CollectionTreeViewModel(_collections, _requests, tabs, _dialogs),
+            new HistoryViewModel(new InMemoryHistoryStore(), TimeProvider.System, tabs, _dialogs),
             environments, new GlobalsViewModel(new InMemoryGlobalsStore()), _session, _dialogs);
+    }
+
+    [Fact]
+    public void ModeSwitchesBetweenCollectionsAndHistory()
+    {
+        var shell = Create();
+        Assert.Equal(SidebarMode.Collections, shell.Mode);
+
+        shell.ShowHistoryCommand.Execute(null);
+        Assert.Equal(SidebarMode.History, shell.Mode);
+
+        shell.ShowCollectionsCommand.Execute(null);
+        Assert.Equal(SidebarMode.Collections, shell.Mode);
     }
 
     private async Task<HttpRequestDefinition> SeedAsync(string name)

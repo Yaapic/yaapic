@@ -2,6 +2,7 @@ using Yaapic.Composition;
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
 using Yaapic.Infrastructure.Storage;
+using Yaapic.Infrastructure.Tests.EndToEnd;
 using Yaapic.TestDoubles;
 
 namespace Yaapic.Infrastructure.Tests.Composition;
@@ -24,6 +25,40 @@ public sealed class AppCompositionTests
         finally
         {
             Directory.Delete(root, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task SendingARequestRecordsItInTheHistoryAndTheHistoryFile()
+    {
+        var root = Path.Combine(Path.GetTempPath(), "yaapic-" + Guid.NewGuid().ToString("N"));
+        using var server = new LoopbackServer();
+        try
+        {
+            var shell = AppComposition.CreateShell(root, new FakeDialogService());
+            await shell.InitializeAsync();
+            var tab = shell.Tabs.ActiveTab!;
+            tab.Url = server.BaseUrl + "/echo";
+
+            await tab.SendCommand.ExecuteAsync(null);
+            await Eventually(() => shell.History.Groups.Count > 0);
+
+            var item = Assert.Single(shell.History.Groups.SelectMany(g => g.Items));
+            Assert.Equal(server.BaseUrl + "/echo", item.Url);
+            var file = await File.ReadAllTextAsync(Path.Combine(root, ".yaapic", "history.jsonl"), TestContext.Current.CancellationToken);
+            Assert.Contains("/echo", file, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(root, recursive: true);
+        }
+    }
+
+    private static async Task Eventually(Func<bool> condition)
+    {
+        for (var i = 0; i < 100 && !condition(); i++)
+        {
+            await Task.Delay(50, TestContext.Current.CancellationToken);
         }
     }
 

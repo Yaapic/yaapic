@@ -4,6 +4,7 @@ using Yaapic.Infrastructure.Storage;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
+using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -31,13 +32,20 @@ public static class AppComposition
         var environments = new EnvironmentsViewModel(environmentStore, dialogs);
         var globals = new GlobalsViewModel(new FileGlobalsStore(workspaceRoot));
         VariableScopeProvider? scopes = null;
+        HistoryViewModel? history = null;
         var tabs = new TabsViewModel(
             requestStore,
             dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, scopes!, isNew, dialogs));
+            (definition, isNew) =>
+            {
+                var editor = RequestEditorViewModel.FromDefinition(definition, sender, scopes!, isNew, dialogs);
+                editor.Sent += (_, e) => _ = history!.RecordAsync(e.Request, e.Report);
+                return editor;
+            });
+        history = new HistoryViewModel(new FileHistoryStore(workspaceRoot), TimeProvider.System, tabs, dialogs);
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
         var collections = new CollectionTreeViewModel(new FileCollectionStore(workspaceRoot), requestStore, tabs, dialogs);
         scopes = new VariableScopeProvider(environments, globals, collections);
-        return new ShellViewModel(tabs, requests, collections, environments, globals, sessionStore, dialogs);
+        return new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs);
     }
 }
