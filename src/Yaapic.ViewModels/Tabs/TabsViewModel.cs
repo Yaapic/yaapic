@@ -158,6 +158,12 @@ public sealed partial class TabsViewModel : ObservableObject
     [RelayCommand]
     private Task CloseActiveAsync() => ActiveTab is { } tab ? CloseAsync(tab) : Task.CompletedTask;
 
+    [RelayCommand]
+    private void NextTab() => Step(1);
+
+    [RelayCommand]
+    private void PreviousTab() => Step(-1);
+
     partial void OnActiveTabChanging(RequestEditorViewModel? value)
     {
         if (_activeTab is { } previous)
@@ -179,6 +185,17 @@ public sealed partial class TabsViewModel : ObservableObject
     internal static bool IsUntouched(RequestEditorViewModel tab) =>
         tab.IsNew && tab.ToDefinition().IsEquivalentTo(
             new HttpRequestDefinition(tab.Id, DefaultName, HttpMethodKind.Get, "", [], [], RequestBody.None, RequestAuth.None, RequestSettings.Default));
+
+    private void Step(int delta)
+    {
+        if (Tabs.Count < 2)
+        {
+            return;
+        }
+
+        var index = ActiveTab is null ? -1 : Tabs.IndexOf(ActiveTab);
+        ActiveTab = Tabs[((index + delta) % Tabs.Count + Tabs.Count) % Tabs.Count];
+    }
 
     private void Remove(RequestEditorViewModel tab)
     {

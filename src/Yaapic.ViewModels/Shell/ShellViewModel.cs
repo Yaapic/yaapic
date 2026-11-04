@@ -82,6 +82,12 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>Gets the global variables view model.</summary>
     public GlobalsViewModel Globals { get; }
 
+    /// <summary>Raised when the user asks to manage environments; the views open their environments dialog.</summary>
+    public event EventHandler? EnvironmentsRequested;
+
+    /// <summary>Asks the views to open the environments dialog.</summary>
+    public void RequestEnvironments() => EnvironmentsRequested?.Invoke(this, EventArgs.Empty);
+
     /// <summary>Loads the stores and restores the saved session; opens one new tab when none is restored.</summary>
     /// <returns>A task that completes when the shell is ready.</returns>
     public async Task InitializeAsync()
