@@ -15,6 +15,7 @@ public sealed partial class MainWindow : Window
 {
     private bool _closeConfirmed;
     private bool _closePending;
+    private ShellViewModel? _shellSubscribed;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
     public MainWindow()
@@ -28,7 +29,10 @@ public sealed partial class MainWindow : Window
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => Shell?.Tabs.SaveActiveCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.E, modifier | KeyModifiers.Shift), Command = new Relay(() => _ = ManageEnvironmentsAsync()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.F, modifier | KeyModifiers.Shift), Command = new Relay(() => FilterBox.Focus()) });
-        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.K, modifier), Command = new Relay(() => FilterBox.Focus()) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.K, modifier), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.P, modifier | KeyModifiers.Shift), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.Down, KeyModifiers.Alt), Command = new Relay(() => Shell?.Tabs.NextTabCommand.Execute(null)) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.Up, KeyModifiers.Alt), Command = new Relay(() => Shell?.Tabs.PreviousTabCommand.Execute(null)) });
     }
 
     private async void OnManageEnvironments(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => await ManageEnvironmentsAsync();
@@ -88,6 +92,24 @@ public sealed partial class MainWindow : Window
     }
 
     private ShellViewModel? Shell => DataContext as ShellViewModel;
+
+    /// <inheritdoc />
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+        if (_shellSubscribed is not null)
+        {
+            _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
+        }
+
+        _shellSubscribed = Shell;
+        if (_shellSubscribed is not null)
+        {
+            _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
+        }
+    }
+
+    private void OnEnvironmentsRequested(object? sender, EventArgs e) => _ = ManageEnvironmentsAsync();
 
     /// <inheritdoc />
     protected override async void OnClosing(WindowClosingEventArgs e)
@@ -253,7 +275,7 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
-    /// <param name="name"><c>environments</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
+    /// <param name="name"><c>environments</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
     /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
     internal void OpenNamed(string name)
     {
@@ -269,6 +291,13 @@ public sealed partial class MainWindow : Window
                 break;
             case "history" when Shell is { } historyShell:
                 historyShell.ShowHistoryCommand.Execute(null);
+                break;
+            case "palette" when Shell is { } paletteShell:
+                paletteShell.OpenPaletteCommand.Execute(null);
+                break;
+            case "palette-query" when Shell is { } queryShell:
+                queryShell.OpenPaletteCommand.Execute(null);
+                queryShell.Palette.Query = "nw";
                 break;
             case "prompt":
                 _ = new Views.PromptWindow("Rename request", "Request name", "Create user").ShowDialog<string?>(this);

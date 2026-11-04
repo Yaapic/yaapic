@@ -1,6 +1,6 @@
 # M2-65: Avalonia command palette
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-63, M2-59
 
@@ -26,9 +26,9 @@ Same as M2-64.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M2-64 on the host OS.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M2-64 on the host OS.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

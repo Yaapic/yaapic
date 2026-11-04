@@ -94,6 +94,10 @@
             IsVisible="{Binding History.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
       <TextBlock Text="{Binding History.LastError}" TextWrapping="Wrap" />
     </Border>
+    <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
+            IsVisible="{Binding Palette.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding Palette.LastError}" TextWrapping="Wrap" />
+    </Border>
 
     <!-- Column widths are literals: a GridLength cannot come from the x:Double resources. 48 = YaapicRailWidth, 272 = YaapicSidebarWidth. -->
     <Grid Grid.Row="2" ColumnDefinitions="48,272,*">
@@ -289,5 +293,6 @@
         </StackPanel>
       </Grid>
     </Grid>
+    <views:CommandPaletteView Grid.RowSpan="3" DataContext="{Binding Palette}" />
   </Grid>
 </Window>
