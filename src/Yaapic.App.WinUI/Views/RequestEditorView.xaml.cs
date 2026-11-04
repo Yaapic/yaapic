@@ -41,6 +41,20 @@ public sealed partial class RequestEditorView : UserControl
             item.Click += OnMethodClick;
             MethodFlyout.Items.Add(item);
         }
+
+        // The brushes depend on the window theme, which can change after construction: refresh them whenever the menu opens.
+        MethodFlyout.Opening += (_, _) =>
+        {
+            for (var i = 0; i < RequestEditorViewModel.Methods.Count; i++)
+            {
+                ((MenuFlyoutItem)MethodFlyout.Items[i]).Foreground = BrushMap.Method(RequestEditorViewModel.Methods[i]);
+            }
+        };
+        ActualThemeChanged += (_, _) =>
+        {
+            BrushMap.IsLight = ActualTheme == ElementTheme.Light;
+            Bindings?.Update();
+        };
     }
 
     private static readonly string[] ContentTypeNames = ["JSON", "Text", "XML", "HTML", "JavaScript"];

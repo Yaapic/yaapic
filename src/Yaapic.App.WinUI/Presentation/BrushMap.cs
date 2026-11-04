@@ -12,7 +12,13 @@ public static class BrushMap
     /// <summary>Gets the brush that colors an HTTP method label.</summary>
     /// <param name="method">The HTTP method.</param>
     /// <returns>The method brush from the application resources.</returns>
-    public static Brush Method(HttpMethodKind method) => Get(method switch
+    public static Brush Method(HttpMethodKind method) => Method(method, IsLight);
+
+    /// <summary>Gets the brush that colors an HTTP method label in a given theme.</summary>
+    /// <param name="method">The HTTP method.</param>
+    /// <param name="light">Whether the element shows the light theme.</param>
+    /// <returns>The method brush of that theme.</returns>
+    public static Brush Method(HttpMethodKind method, bool light) => Get(method switch
     {
         HttpMethodKind.Get => "YaapicMethodGetBrush",
         HttpMethodKind.Post => "YaapicMethodPostBrush",
@@ -22,12 +28,7 @@ public static class BrushMap
         HttpMethodKind.Head => "YaapicMethodHeadBrush",
         HttpMethodKind.Options => "YaapicMethodOptionsBrush",
         _ => "YaapicMethodCustomBrush",
-    });
-
-    /// <summary>Gets the method brush of a tree row.</summary>
-    /// <param name="method">The HTTP method; null for a folder.</param>
-    /// <returns>The method brush, or the custom-method brush for a folder (never shown).</returns>
-    public static Brush MethodOrDefault(HttpMethodKind? method) => Method(method ?? HttpMethodKind.Get);
+    }, light);
 
     /// <summary>Gets the text brush of the status chip.</summary>
     /// <param name="category">The class of the status code.</param>
@@ -77,8 +78,10 @@ public static class BrushMap
 
     // A code lookup in Application.Resources only sees the application theme (dark), so the theme dictionary of the
     // window theme is searched first. Elements already bound keep their brush until their binding is evaluated again.
-    private static Brush Get(string key) =>
-        FindThemed(Application.Current.Resources, IsLight ? "Light" : "Dark", key) ?? (Brush)Application.Current.Resources[key];
+    private static Brush Get(string key) => Get(key, IsLight);
+
+    private static Brush Get(string key, bool light) =>
+        FindThemed(Application.Current.Resources, light ? "Light" : "Dark", key) ?? (Brush)Application.Current.Resources[key];
 
     private static Brush? FindThemed(ResourceDictionary dictionary, string theme, string key)
     {

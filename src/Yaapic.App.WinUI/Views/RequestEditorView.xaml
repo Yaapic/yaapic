@@ -78,7 +78,7 @@
               <StackPanel Orientation="Horizontal" Spacing="6">
                 <TextBlock Style="{StaticResource YaapicMethodTextStyle}" VerticalAlignment="Center"
                            Text="{x:Bind ViewModel.MethodText, Mode=OneWay}"
-                           Foreground="{x:Bind p:BrushMap.Method(ViewModel.Method), Mode=OneWay}"/>
+                           p:MethodBrush.Method="{x:Bind ViewModel.Method, Mode=OneWay}"/>
                 <Viewbox Width="12" Height="12" VerticalAlignment="Center">
                   <Canvas Width="24" Height="24">
                     <Path Data="M6 9l6 6 6-6" Stroke="{ThemeResource YaapicTextTertiaryBrush}" StrokeThickness="2.4"

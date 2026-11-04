@@ -49,6 +49,7 @@ public sealed partial class MainWindow : Window
     {
         var light = Root.ActualTheme == ElementTheme.Light;
         Presentation.BrushMap.IsLight = light;
+        Presentation.MethodBrush.RefreshAll();
         var titleBar = AppWindow.TitleBar;
         var foreground = light ? Windows.UI.Color.FromArgb(0xFF, 0x4A, 0x51, 0x5B) : Windows.UI.Color.FromArgb(0xFF, 0xA3, 0xAA, 0xB4);
         var hoverForeground = light ? Windows.UI.Color.FromArgb(0xFF, 0x16, 0x19, 0x1D) : Windows.UI.Color.FromArgb(0xFF, 0xEC, 0xEE, 0xF1);

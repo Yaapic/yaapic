@@ -228,7 +228,7 @@
                   <TextBlock Width="44" Text="{x:Bind MethodText}" VerticalAlignment="Center"
                              Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsFolder)}"
                              Style="{StaticResource YaapicMethodTextStyle}"
-                             Foreground="{x:Bind p:BrushMap.MethodOrDefault(Method)}"/>
+                             p:MethodBrush.Method="{x:Bind Method}"/>
                   <TextBlock Grid.Column="1" Text="{x:Bind Name}" VerticalAlignment="Center"
                              TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicBodyTextStyle}"/>
                 </Grid>
@@ -268,7 +268,7 @@
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Style="{StaticResource YaapicMethodTextStyle}" VerticalAlignment="Center"
                                Text="{x:Bind MethodText, Mode=OneWay}"
-                               Foreground="{x:Bind p:BrushMap.Method(Method), Mode=OneWay}"/>
+                               p:MethodBrush.Method="{x:Bind Method, Mode=OneWay}"/>
                     <TextBlock Style="{StaticResource YaapicTabNameTextStyle}" Text="{x:Bind DisplayName, Mode=OneWay}"/>
                     <Ellipse Width="6" Height="6" VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentTextBrush}"
                              AutomationProperties.Name="Unsaved changes"

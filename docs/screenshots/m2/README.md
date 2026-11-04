@@ -36,8 +36,8 @@ a collection variable, `globals.yaml`, and two requests with a form-data body an
 | # | Deviation | Class |
 |---|---|---|
 | G1 | Same dark title bar / rail colour question as M1 (G1 there). | see M1 F1 |
-| G2 | **Fixed in this card:** in the light theme, method labels and status colours (tree, tabs, picker, history, response chip) were pale because `BrushMap` looked brushes up in `Application.Resources`, which only sees the dark application theme. It now searches the theme dictionary of the window theme (`BrushMap.IsLight`, set by the main window), as `VariableTextBox` already did; all light captures were taken after the fix (`GET` is now `#0F7A5C`, `POST` `#8F5B00`, ...). Rows already on screen keep their brush when the theme is switched at runtime until they are bound again. | fix now (done), see F1 |
-| G3 | `OPTIONS` is pink and bold; the mockup picker draws it in the neutral text colour with regular weight. Token `method.options`. | M2 scope (tokens are the source of truth) |
+| G2 | **Fixed in this card:** in the light theme, method labels and status colours were pale because `BrushMap` looked brushes up in `Application.Resources`, which only sees the dark application theme. `BrushMap` now searches the theme dictionary of the window theme (`BrushMap.IsLight`, set by the main window). Method labels (tree, tabs, URL bar) use the `MethodBrush` attached property, refreshed on every theme change, and the method picker recomputes its colours each time it opens, so a runtime switch from the Settings menu leaves them consistent (checked). Status colours (history, response chip) are correct at startup but keep their brush for rows already on screen after a runtime switch. | fix now (done), see F1 |
+| G3 | `OPTIONS` is pink; the mockup picker draws it in the neutral text colour. Token `method.options`. The bold weight of the labels is kept (visually good, confirmed). | M2 scope (tokens are the source of truth) |
 | G4 | No menu bar, breadcrumb, status bar, console. | later milestone |
 
 ## Screens
@@ -157,8 +157,7 @@ with `Enter`, keyboard focus lands on the environment pill (visible focus ring) 
 
 ## Follow-up (proposals, not written as cards)
 
-- F1: refresh the brushes of bound rows (tree, history, response chip) when the theme changes at runtime, and review the
-  light method colours for contrast once more (`POST` `#8F5B00` and `GET` `#0F7A5C` are readable, check `HEAD` and `OPTIONS`).
+- F1: refresh the status brushes of rows already on screen (history, response chip) when the theme changes at runtime.
 - F2: menu and picker polish: current method row tint, destructive menu items in the danger colour, object name in
   dialog titles (`Folder settings` instead of `Settings`).
 - F3: restore keyboard focus to the previously focused element when the command palette closes.
