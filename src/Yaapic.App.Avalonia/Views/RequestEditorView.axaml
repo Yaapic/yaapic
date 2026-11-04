@@ -56,7 +56,7 @@
                        IsVisible="{Binding QueryParams.ActiveCount, Converter={x:Static p:EditorMap.IsPositive}}" />
           </StackPanel>
         </TabItem.Header>
-        <v:KeyValueEditorView DataContext="{Binding QueryParams}" />
+        <v:KeyValueEditorView DataContext="{Binding QueryParams}" VariableContext="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).Variables}" />
       </TabItem>
       <TabItem>
         <TabItem.Header>
@@ -66,7 +66,7 @@
                        IsVisible="{Binding Headers.ActiveCount, Converter={x:Static p:EditorMap.IsPositive}}" />
           </StackPanel>
         </TabItem.Header>
-        <v:KeyValueEditorView DataContext="{Binding Headers}" />
+        <v:KeyValueEditorView DataContext="{Binding Headers}" VariableContext="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).Variables}" />
       </TabItem>
       <TabItem>
         <TabItem.Header>
