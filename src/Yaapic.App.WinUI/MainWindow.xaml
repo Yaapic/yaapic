@@ -115,7 +115,7 @@
               <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
                          VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
                          Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
-              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicSelectionBackgroundBrush}"
+              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
                       Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
               <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
                       AutomationProperties.Name="Collections" ToolTipService.ToolTip="Collections"
@@ -132,7 +132,7 @@
               <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
                          VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
                          Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
-              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicSelectionBackgroundBrush}"
+              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
                       Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
               <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
                       AutomationProperties.Name="History" ToolTipService.ToolTip="History"

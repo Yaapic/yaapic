@@ -63,15 +63,15 @@ public static class BrushMap
 
     /// <summary>Gets the icon brush of the collections rail entry.</summary>
     /// <param name="mode">The sidebar mode.</param>
-    /// <returns>The accent brush when selected, else the secondary text brush.</returns>
+    /// <returns>The on-accent brush when selected, else the secondary text brush.</returns>
     public static Brush CollectionsRail(SidebarMode mode) => Rail(mode == SidebarMode.Collections);
 
     /// <summary>Gets the icon brush of the history rail entry.</summary>
     /// <param name="mode">The sidebar mode.</param>
-    /// <returns>The accent brush when selected, else the secondary text brush.</returns>
+    /// <returns>The on-accent brush when selected, else the secondary text brush.</returns>
     public static Brush HistoryRail(SidebarMode mode) => Rail(mode == SidebarMode.History);
 
-    private static Brush Rail(bool selected) => Get(selected ? "YaapicAccentTextBrush" : "YaapicTextSecondaryBrush");
+    private static Brush Rail(bool selected) => Get(selected ? "YaapicAccentOnBrush" : "YaapicTextSecondaryBrush");
 
     /// <summary>Gets or sets whether the window shows the light theme; set by the main window, which owns the element theme.</summary>
     public static bool IsLight { get; set; }

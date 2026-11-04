@@ -15,6 +15,7 @@ public sealed class HistoryItemViewModel
     {
         ArgumentNullException.ThrowIfNull(entry);
         Entry = entry;
+        Method = entry.Request.Method;
         MethodText = entry.Request.Method.ToText();
         Url = entry.Request.Url;
         Name = entry.Request.Name;
@@ -46,6 +47,9 @@ public sealed class HistoryItemViewModel
 
     /// <summary>Gets the entry identifier.</summary>
     public Guid Id => Entry.Id;
+
+    /// <summary>Gets the HTTP method, which colors the label.</summary>
+    public HttpMethodKind Method { get; }
 
     /// <summary>Gets the upper-case method name.</summary>
     public string MethodText { get; }
