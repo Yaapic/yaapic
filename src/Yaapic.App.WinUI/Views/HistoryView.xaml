@@ -48,12 +48,12 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="*"/>
                           </Grid.ColumnDefinitions>
-                          <TextBlock Width="44" Text="{x:Bind MethodText}" VerticalAlignment="Center"
+                          <TextBlock Width="52" Text="{x:Bind MethodText}" VerticalAlignment="Center"
                                      Style="{StaticResource YaapicMethodTextStyle}"/>
                           <TextBlock Grid.Column="1" Text="{x:Bind Url}" VerticalAlignment="Center"
                                      TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicBodyTextStyle}"/>
                         </Grid>
-                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="50,0,0,0">
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="58,0,0,0">
                           <TextBlock Text="{x:Bind StatusText}" TextTrimming="CharacterEllipsis" MaxWidth="96"
                                      Style="{StaticResource YaapicBodySmallTextStyle}"
                                      Foreground="{x:Bind p:BrushMap.HistoryStatus(StatusCategory, IsFailed)}"/>

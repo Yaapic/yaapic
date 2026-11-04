@@ -225,7 +225,7 @@
                             StrokeThickness="1.8" StrokeLineJoin="Round"/>
                     </Canvas>
                   </Viewbox>
-                  <TextBlock Width="44" Text="{x:Bind MethodText}" VerticalAlignment="Center"
+                  <TextBlock Width="52" Text="{x:Bind MethodText}" VerticalAlignment="Center"
                              Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsFolder)}"
                              Style="{StaticResource YaapicMethodTextStyle}"
                              p:MethodBrush.Method="{x:Bind Method}"/>
