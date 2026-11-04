@@ -192,6 +192,8 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-68](milestone-2-editor-collections/M2-68-winui-windows-app-sdk-2.md) | WinUI: migrate to Windows App SDK 2.x | windows | M2-67 | todo |
 | [M2-69](milestone-2-editor-collections/M2-69-winui-loomeditor-code-editor.md) | WinUI: adopt LoomEditor in CodeEditorView | windows | M2-68 | todo |
 | [M2-70](milestone-2-editor-collections/M2-70-avalonia-avaloniaedit-code-editor.md) | Avalonia: AvaloniaEdit code editor with TextMate grammars | unix | M2-65, M1-57 | todo |
+| [M2-76](milestone-2-editor-collections/M2-76-winui-palette-ctrl-p-and-button.md) | WinUI palette Ctrl+P shortcut and button | windows | M2-64 | todo |
+| [M2-77](milestone-2-editor-collections/M2-77-avalonia-palette-ctrl-p-and-button.md) | Avalonia palette Ctrl+P shortcut and button | unix | M2-65 | todo |
 
 ### Milestone 2 summary
 
@@ -202,14 +204,14 @@ highlighting, send history (JSON Lines), the command palette with fuzzy search, 
 server (`Milestone2EndToEndTests`). No package was added.
 
 Deferred (ADR 0008): manual ordering and drag and drop, cookie jar, proxy and TLS settings, workspace picker,
-`{{variable}}` autocomplete, request scripts (M3). Still open in M2: M2-67 to M2-70 (visual check, Windows App SDK 2.x,
+`{{variable}}` autocomplete, request scripts (M3). Still open in M2: M2-67 to M2-70, M2-76 and M2-77 (visual check, Windows App SDK 2.x,
 code editors).
 
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |
 |---|---|---|
-| M2 | Full request editor, collections, environments, history, command palette | detailed (75 cards, see above) |
+| M2 | Full request editor, collections, environments, history, command palette | detailed (77 cards, see above) |
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | planned |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | planned |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | planned |
