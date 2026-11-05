@@ -1,6 +1,6 @@
 # M3-09: Core: script request and response snapshots, cookies
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-07
 
@@ -46,11 +46,11 @@ Applying scripts, pm bindings, auth mutation, response streaming.
 
 ## Acceptance criteria
 
-- [ ] Tests: `FromDefinition`/`ApplyTo` round trip is lossless for GET/POST raw JSON/urlencoded; params appended to and
+- [x] Tests: `FromDefinition`/`ApplyTo` round trip is lossless for GET/POST raw JSON/urlencoded; params appended to and
       split from the URL; changing method, URL, a header, the raw body; unknown method rejected; read-only request throws on
       every mutation; form-data and binary bodies survive `ApplyTo`; response charset handling (utf-8, latin-1, none),
       binary content type -> empty text; `SetCookieParser` cases (flags, expires, quoted, two cookies, malformed).
-- [ ] The M3-07 placeholders are gone; 0 warnings, XML docs, all tests green.
+- [x] The M3-07 placeholders are gone; 0 warnings, XML docs, all tests green.
 
 ## Rules
 
