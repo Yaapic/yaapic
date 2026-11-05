@@ -1,6 +1,6 @@
 # M3-08: Core: script variable layers and change tracking
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-07
 
@@ -44,12 +44,12 @@ Persisting the changes (M3-44), the host wrapper that adds request/response (M3-
 
 ## Acceptance criteria
 
-- [ ] Tests (`Yaapic.Core.Tests`): layer precedence for `Layered`; each scope read/write; upsert of an existing and of a
+- [x] Tests (`Yaapic.Core.Tests`): layer precedence for `Layered`; each scope read/write; upsert of an existing and of a
       disabled row; write to a missing environment / collection falls back to Local with a warning and **no**
       `VariableChange`; collapse of repeated writes; unset and clear produce unset changes for persisted scopes only;
       `ReplaceIn` with local, environment, dynamic (`{{$guid}}` replaced by a GUID) and unresolved names; `ToScopes()`
       resolves a Local value with highest priority; existing resolver and popup tests unchanged and green.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 

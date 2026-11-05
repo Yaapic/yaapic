@@ -7,10 +7,12 @@ namespace Yaapic.Core.Variables;
 /// <param name="Environment">The active environment, or <see langword="null"/> for none.</param>
 /// <param name="Collection">The collection variables.</param>
 /// <param name="Globals">The global variables.</param>
+/// <param name="Local">The variables local to one send; <see langword="null"/> for none. Consulted first.</param>
 public sealed record VariableScopes(
     EnvironmentDefinition? Environment,
     IReadOnlyList<KeyValueEntry> Collection,
-    IReadOnlyList<KeyValueEntry> Globals)
+    IReadOnlyList<KeyValueEntry> Globals,
+    IReadOnlyList<KeyValueEntry>? Local = null)
 {
     /// <summary>Gets scopes that define nothing besides the dynamic variables.</summary>
     public static VariableScopes None { get; } = new(null, [], []);
@@ -19,6 +21,7 @@ public sealed record VariableScopes(
     /// <returns>The composite source.</returns>
     public IVariableSource CreateSource() =>
         new CompositeVariableSource(
+            ListSource(Local ?? []),
             new EnvironmentVariableSource(Environment),
             ListSource(Collection),
             ListSource(Globals),
@@ -33,6 +36,7 @@ public sealed record VariableScopes(
     {
         (VariableScopeKind Kind, IVariableSource Source)[] ordered =
         [
+            (VariableScopeKind.Local, ListSource(Local ?? [])),
             (VariableScopeKind.Environment, new EnvironmentVariableSource(Environment)),
             (VariableScopeKind.Collection, ListSource(Collection)),
             (VariableScopeKind.Globals, ListSource(Globals)),

@@ -14,4 +14,7 @@ public enum VariableScopeKind
 
     /// <summary>The built-in dynamic variables such as <c>$guid</c>.</summary>
     Dynamic,
+
+    /// <summary>The variables local to one send, set by scripts; consulted before every other scope.</summary>
+    Local,
 }

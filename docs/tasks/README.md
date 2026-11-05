@@ -237,7 +237,7 @@ not run in their Notes.
 | [M3-05](milestone-3-scripting/M3-05-yaml-request-scripts.md) | YAML request serializer: scripts | any | M3-03 | done |
 | [M3-06](milestone-3-scripting/M3-06-yaml-folder-scripts.md) | YAML folder serializer: scripts | any | M3-05 | done |
 | [M3-07](milestone-3-scripting/M3-07-core-script-engine-port.md) | Core: script engine port, host contract and registry | any | M3-03, M3-04 | done |
-| [M3-08](milestone-3-scripting/M3-08-core-script-variable-layers.md) | Core: script variable layers and change tracking | any | M3-07 | todo |
+| [M3-08](milestone-3-scripting/M3-08-core-script-variable-layers.md) | Core: script variable layers and change tracking | any | M3-07 | done |
 | [M3-09](milestone-3-scripting/M3-09-core-script-request-and-response.md) | Core: script request and response snapshots, cookies | any | M3-07 | todo |
 | [M3-10](milestone-3-scripting/M3-10-script-chain-provider.md) | Script chain: collection, folders, request | any | M3-03, M3-06 | todo |
 | [M3-11](milestone-3-scripting/M3-11-core-scripted-sender-pre-request.md) | Core: scripted request sender, pre-request stage | any | M3-08, M3-09, M3-10 | todo |
