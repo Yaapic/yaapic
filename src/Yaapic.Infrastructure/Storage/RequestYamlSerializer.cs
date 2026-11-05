@@ -3,6 +3,7 @@ using VYaml.Parser;
 using VYaml.Serialization;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 
 namespace Yaapic.Infrastructure.Storage;
 
@@ -55,8 +56,13 @@ public static class RequestYamlSerializer
                 FollowRedirects = request.Settings.FollowRedirects,
                 TimeoutSeconds = request.Settings.TimeoutSeconds,
             },
+            Scripts = new ScriptsDto
+            {
+                PreRequest = ToDto(request.Scripts.PreRequest),
+                PostResponse = ToDto(request.Scripts.PostResponse),
+            },
         };
-        var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n");
+        var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
         return yaml.TrimEnd('\n') + "\n";
     }
 
@@ -70,7 +76,7 @@ public static class RequestYamlSerializer
         RequestFileDto? dto;
         try
         {
-            dto = YamlSerializer.Deserialize<RequestFileDto>(Encoding.UTF8.GetBytes(yaml));
+            dto = YamlSerializer.Deserialize<RequestFileDto>(Encoding.UTF8.GetBytes(yaml), ScriptSourceFormatter.Options);
         }
         catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or YamlTokenizerException)
         {
@@ -106,7 +112,8 @@ public static class RequestYamlSerializer
             [.. (dto.Headers ?? []).Select(FromDto)],
             ReadBody(dto.Body),
             ReadAuth(dto.Auth),
-            ReadSettings(dto.Settings));
+            ReadSettings(dto.Settings),
+            ReadScripts(dto.Scripts));
     }
 
     private static string BodyTypeText(BodyKind kind) => kind switch
@@ -212,5 +219,27 @@ public static class RequestYamlSerializer
         }
 
         return new RequestSettings(dto?.FollowRedirects ?? true, timeout);
+    }
+
+    private static ScriptBlockDto ToDto(ScriptBlock block) =>
+        new() { Language = block.Language.ToText(), Source = new ScriptSourceText(block.Source) };
+
+    private static ScriptSet ReadScripts(ScriptsDto? dto) =>
+        new(ReadBlock(dto?.PreRequest), ReadBlock(dto?.PostResponse));
+
+    private static ScriptBlock ReadBlock(ScriptBlockDto? dto)
+    {
+        if (dto is null)
+        {
+            return ScriptBlock.Empty;
+        }
+
+        var language = ScriptLanguage.JavaScript;
+        if (dto.Language is not null && !ScriptLanguageExtensions.TryParse(dto.Language, out language))
+        {
+            throw new StorageException($"Unknown script language '{dto.Language}'");
+        }
+
+        return new ScriptBlock(language, dto.Source?.Value ?? "");
     }
 }

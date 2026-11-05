@@ -24,6 +24,8 @@ internal partial class RequestFileDto
     public AuthDto? Auth { get; set; }
 
     public SettingsDto? Settings { get; set; }
+
+    public ScriptsDto? Scripts { get; set; }
 }
 
 [YamlObject(NamingConvention.LowerCamelCase)]
@@ -87,4 +89,20 @@ internal partial class SettingsDto
     public bool? FollowRedirects { get; set; }
 
     public int? TimeoutSeconds { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class ScriptsDto
+{
+    public ScriptBlockDto? PreRequest { get; set; }
+
+    public ScriptBlockDto? PostResponse { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class ScriptBlockDto
+{
+    public string? Language { get; set; }
+
+    public ScriptSourceText? Source { get; set; }
 }

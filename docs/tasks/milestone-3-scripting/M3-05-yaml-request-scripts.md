@@ -1,6 +1,6 @@
 # M3-05: YAML request serializer: scripts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-03
 
@@ -31,11 +31,11 @@ Folder files (M3-06), any UI.
 
 ## Acceptance criteria
 
-- [ ] Tests: default definition writes the exact YAML block for empty scripts; full round trip for JS and Lua blocks with
+- [x] Tests: default definition writes the exact YAML block for empty scripts; full round trip for JS and Lua blocks with
       multi-line sources and the special characters above; files without `scripts` (milestone 2 files, the fixtures under
       `tools/screenshots/workspace`) still load with `ScriptSet.Empty`; unknown language fails with the message; key order.
-- [ ] `FileRequestStore` round trip with scripts on disk (temp workspace).
-- [ ] 0 warnings with the AOT analyzers (the serializer is a library: no publish needed), all tests green;
+- [x] `FileRequestStore` round trip with scripts on disk (temp workspace).
+- [x] 0 warnings with the AOT analyzers (the serializer is a library: no publish needed), all tests green;
       `docs/file-format.md` already describes the shape (M3-01): fix any difference.
 
 ## Rules

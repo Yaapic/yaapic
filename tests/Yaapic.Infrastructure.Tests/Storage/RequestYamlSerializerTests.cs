@@ -1,5 +1,6 @@
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.Infrastructure.Storage;
 
 namespace Yaapic.Infrastructure.Tests.Storage;
@@ -152,5 +153,107 @@ public sealed class RequestYamlSerializerTests
         var ex = Assert.Throws<StorageException>(() =>
             RequestYamlSerializer.Deserialize($"version: 2\nid: {IdText}\nmethod: GET\n"));
         Assert.Equal("Unsupported request file version: 2", ex.Message);
+    }
+
+    public static TheoryData<string> Sources() => new()
+    {
+        "a();\nb();\n",
+        "a();\nb();",
+        "\tindented\n\t\tdeeper\n",
+        "  starts with spaces\nsecond",
+        "// comment: with colon # and hash\nkey: value # x\n- item\n",
+        "pm.test(\"é ☕ 日本語 😀\");\n",
+        "line\n\nafter blank\n\n",
+        LongSource,
+    };
+
+    private static readonly string LongSource =
+        "head\n" + string.Concat(Enumerable.Repeat("let v = 1; // padding\n", 5000));
+
+    [Fact]
+    public void LongSourceIsOver100Kb() => Assert.True(LongSource.Length > 100_000);
+
+    [Theory]
+    [MemberData(nameof(Sources))]
+    public void RoundTripKeepsScriptSources(string source)
+    {
+        var scripts = new ScriptSet(
+            new ScriptBlock(ScriptLanguage.JavaScript, source),
+            new ScriptBlock(ScriptLanguage.Lua, source));
+        var request = Sample() with { Scripts = scripts };
+        var back = RequestYamlSerializer.Deserialize(RequestYamlSerializer.Serialize(request));
+        Assert.Equal(scripts, back.Scripts);
+    }
+
+    [Fact]
+    public void CrLfInSourceIsNormalisedToLf()
+    {
+        var request = Sample() with
+        {
+            Scripts = new ScriptSet(new ScriptBlock(ScriptLanguage.Lua, "a\r\nb\r\n"), ScriptBlock.Empty),
+        };
+        var back = RequestYamlSerializer.Deserialize(RequestYamlSerializer.Serialize(request));
+        Assert.Equal("a\nb\n", back.Scripts.PreRequest.Source);
+        Assert.Equal(ScriptLanguage.Lua, back.Scripts.PreRequest.Language);
+    }
+
+    [Fact]
+    public void ScriptsAreWrittenLastWithBlockKeyOrder()
+    {
+        var request = Sample() with
+        {
+            Scripts = new ScriptSet(new ScriptBlock(ScriptLanguage.Lua, "a()\nb()\n"), ScriptBlock.Empty),
+        };
+        var yaml = RequestYamlSerializer.Serialize(request);
+        Assert.EndsWith(
+            "settings:\n  followRedirects: false\n  timeoutSeconds: 15\n"
+            + "scripts:\n  preRequest:\n    language: lua\n    source: |\n      a()\n      b()\n"
+            + "  postResponse:\n    language: javascript\n    source: \"\"\n",
+            yaml);
+    }
+
+    [Fact]
+    public void FilesWithoutScriptsReadEmptyScripts()
+    {
+        Assert.Equal(ScriptSet.Empty, RequestYamlSerializer.Deserialize(Golden("request-m1-legacy.request.yaml")).Scripts);
+        var dir = Path.Combine(FindRepoRoot(), "tools", "screenshots", "workspace", "requests");
+        var files = Directory.GetFiles(dir, "*.request.yaml");
+        Assert.NotEmpty(files);
+        foreach (var file in files)
+        {
+            Assert.Equal(ScriptSet.Empty, RequestYamlSerializer.Deserialize(File.ReadAllText(file)).Scripts);
+        }
+    }
+
+    [Fact]
+    public void MissingBlockLanguageOrSourceTakeDefaults()
+    {
+        var yaml = $"version: 1\nid: {IdText}\nmethod: GET\nscripts:\n  postResponse:\n    language: lua\n";
+        var scripts = RequestYamlSerializer.Deserialize(yaml).Scripts;
+        Assert.Equal(ScriptBlock.Empty, scripts.PreRequest);
+        Assert.Equal(new ScriptBlock(ScriptLanguage.Lua, ""), scripts.PostResponse);
+        var onlySource = $"version: 1\nid: {IdText}\nmethod: GET\nscripts:\n  preRequest:\n    source: x\n";
+        Assert.Equal(
+            new ScriptBlock(ScriptLanguage.JavaScript, "x"),
+            RequestYamlSerializer.Deserialize(onlySource).Scripts.PreRequest);
+    }
+
+    [Fact]
+    public void UnknownScriptLanguageThrowsWithMessage()
+    {
+        var yaml = $"version: 1\nid: {IdText}\nmethod: GET\nscripts:\n  preRequest:\n    language: python\n";
+        var ex = Assert.Throws<StorageException>(() => RequestYamlSerializer.Deserialize(yaml));
+        Assert.Equal("Unknown script language 'python'", ex.Message);
+    }
+
+    private static string FindRepoRoot()
+    {
+        var dir = new DirectoryInfo(AppContext.BaseDirectory);
+        while (dir is not null && !Directory.Exists(Path.Combine(dir.FullName, "tools", "screenshots", "workspace")))
+        {
+            dir = dir.Parent;
+        }
+
+        return dir?.FullName ?? throw new DirectoryNotFoundException("Repository root not found");
     }
 }
