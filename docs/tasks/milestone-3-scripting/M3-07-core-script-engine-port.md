@@ -1,6 +1,6 @@
 # M3-07: Core: script engine port, host contract and registry
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-03, M3-04
 
@@ -48,10 +48,10 @@ Real engines, host implementations, the pipeline, JSON bridging.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: registry returns the registered engine, replaces on a second add, returns the
+- [x] Tests in `Yaapic.Core.Tests`: registry returns the registered engine, replaces on a second add, returns the
       unavailable engine for a missing language with `Status == Unavailable` and the reason; `ScriptLimits.Default` values;
       `FakeScriptEngine` records invocations and honours cancellation.
-- [ ] Architecture tests green (Core still references only Domain), 0 warnings, XML docs complete, all tests green.
+- [x] Architecture tests green (Core still references only Domain), 0 warnings, XML docs complete, all tests green.
 
 ## Rules
 
