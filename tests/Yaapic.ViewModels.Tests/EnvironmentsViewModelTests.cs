@@ -1,5 +1,5 @@
-using Yaapic.Core.Variables;
 using Yaapic.Core.Http;
+using Yaapic.Core.Variables;
 using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
 using Yaapic.TestDoubles;

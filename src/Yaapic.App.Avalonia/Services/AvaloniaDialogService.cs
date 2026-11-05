@@ -1,7 +1,7 @@
-using Avalonia.Controls;
-using Avalonia.Input.Platform;
 using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Input.Platform;
 using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
