@@ -15,6 +15,8 @@ public sealed partial class MainWindow : Window
 {
     private bool _closeConfirmed;
     private bool _closePending;
+    private bool _settingsOpen;
+    private CollectionTreeViewModel? _collectionsSubscribed;
     private ShellViewModel? _shellSubscribed;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
@@ -48,9 +50,19 @@ public sealed partial class MainWindow : Window
 
     private void OnVariableScopeOpenRequested(object? sender, Yaapic.Core.Variables.VariableScopeKind scope)
     {
-        // The Collection scope has no editor on this platform yet (M2-51), so the popup does not offer it.
-        if (Shell is not { } shell || scope == Yaapic.Core.Variables.VariableScopeKind.Collection)
+        if (Shell is not { } shell)
         {
+            return;
+        }
+
+        if (scope == Yaapic.Core.Variables.VariableScopeKind.Collection)
+        {
+            // The settings window opens through OnCollectionsChanged once the editor is set.
+            if (shell.Tabs.ActiveTab is { } tab)
+            {
+                shell.Collections.OpenCollectionSettings(tab.Id);
+            }
+
             return;
         }
 
@@ -94,6 +106,32 @@ public sealed partial class MainWindow : Window
 
     private ShellViewModel? Shell => DataContext as ShellViewModel;
 
+    private async void OnCollectionsChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(CollectionTreeViewModel.SettingsEditor) || Shell?.Collections is not { SettingsEditor: { } editor } tree)
+        {
+            return;
+        }
+
+        if (_settingsOpen)
+        {
+            return;
+        }
+
+        _settingsOpen = true;
+        try
+        {
+            var window = new Views.FolderSettingsWindow { DataContext = editor };
+            window.FitTo(this);
+            await window.ShowDialog(this);
+        }
+        finally
+        {
+            _settingsOpen = false;
+            tree.CloseSettingsCommand.Execute(null);
+        }
+    }
+
     /// <inheritdoc />
     protected override void OnDataContextChanged(EventArgs e)
     {
@@ -103,10 +141,17 @@ public sealed partial class MainWindow : Window
             _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
         }
 
+        if (_collectionsSubscribed is not null)
+        {
+            _collectionsSubscribed.PropertyChanged -= OnCollectionsChanged;
+        }
+
         _shellSubscribed = Shell;
         if (_shellSubscribed is not null)
         {
             _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
+            _collectionsSubscribed = _shellSubscribed.Collections;
+            _collectionsSubscribed.PropertyChanged += OnCollectionsChanged;
         }
     }
 
@@ -185,6 +230,7 @@ public sealed partial class MainWindow : Window
             AddItem(menu.Items, "New request", tree.NewRequestCommand, node);
             AddItem(menu.Items, "New folder", tree.NewFolderCommand, node);
             AddItem(menu.Items, "Rename", tree.RenameFolderCommand, node);
+            AddItem(menu.Items, "Settings", tree.EditSettingsCommand, node);
             AddItem(menu.Items, "Delete", tree.DeleteFolderCommand, node);
         }
         else
@@ -276,7 +322,7 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
-    /// <param name="name"><c>environments</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
+    /// <param name="name"><c>environments</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
     /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
     internal void OpenNamed(string name)
     {
@@ -285,6 +331,9 @@ public sealed partial class MainWindow : Window
             case "environments" when Shell is { } shell:
                 shell.Environments.EditedEnvironment ??= shell.Environments.ActiveEnvironment;
                 _ = ManageEnvironmentsAsync();
+                break;
+            case "settings" when Shell is { } settingsShell && settingsShell.Collections.Roots.FirstOrDefault() is { } root:
+                settingsShell.Collections.EditSettingsCommand.Execute(root);
                 break;
             case "unsaved" when Shell?.Tabs.ActiveTab is { } tab:
                 tab.Name += "x";

@@ -167,7 +167,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-48](milestone-2-editor-collections/M2-48-winui-folder-settings-dialog.md) | WinUI folder and collection settings dialog | windows | M2-43, M2-37 | done |
 | [M2-49](milestone-2-editor-collections/M2-49-winui-url-variable-hints.md) | WinUI URL variable hints | windows | M2-46, M2-16 | done |
 | [M2-50](milestone-2-editor-collections/M2-50-avalonia-environments-globals-and-duplicate.md) | Avalonia environments window: globals and duplicate | unix | M2-42, M2-45, M1-57 | done |
-| [M2-51](milestone-2-editor-collections/M2-51-avalonia-folder-settings-window.md) | Avalonia folder and collection settings window | unix | M2-43, M2-39 | todo |
+| [M2-51](milestone-2-editor-collections/M2-51-avalonia-folder-settings-window.md) | Avalonia folder and collection settings window | unix | M2-43, M2-39 | done |
 | [M2-52](milestone-2-editor-collections/M2-52-avalonia-url-variable-hints.md) | Avalonia URL variable hints (chip strip) | unix | M2-46, M2-21, M1-57 | superseded |
 | [M2-71](milestone-2-editor-collections/M2-71-variable-tokens-context-and-create.md) | Variable tokens, context and create-variable popup model | any | M2-44, M2-46, M2-43 | done |
 | [M2-72](milestone-2-editor-collections/M2-72-winui-inline-variable-highlighting-url-bar.md) | WinUI inline variable highlighting and popup in the URL bar (replaces the M2-49 chips) | windows | M2-71, M2-49, M2-16 | done |
