@@ -58,10 +58,20 @@ auth:
 settings:
   followRedirects: true
   timeoutSeconds: 0    # 0 = application default (30 s)
+scripts:               # optional on read, see ADR 0009
+  preRequest:
+    language: javascript   # javascript | lua
+    source: |
+      pm.environment.set("ts", Date.now().toString());
+  postResponse:
+    language: javascript
+    source: ""
 ```
 
-Key order: `version, id, name, method, url, params, headers, body, auth, settings`; inside `body`:
-`type, contentType, text, fields, file`. Keys added in milestone 2 are optional on read (missing = default).
+Key order: `version, id, name, method, url, params, headers, body, auth, settings, scripts`; inside `body`:
+`type, contentType, text, fields, file`; inside `scripts`: `preRequest, postResponse`, each with `language, source`.
+Keys added in milestone 2 or later (including `scripts`) are optional on read (missing = default: both blocks empty,
+`javascript`).
 
 The stored `url` never contains the query of the `params` table. The editor shows the URL with the enabled params
 appended and keeps both in sync. A legacy URL that already contains `?a=b` is read as is; the editor moves that inline
@@ -69,8 +79,9 @@ query to the front of the params list on load.
 
 ## Folder file
 
-Keys: `version: 1`, `id`, `name`, `description`, `variables` (same list shape as `params`). Only the variables of a
-top-level folder are used (collection variables); nested folders keep the key for later.
+Keys, in order: `version: 1`, `id`, `name`, `description`, `variables` (same list shape as `params`), `scripts` (same
+shape as in the request file, optional on read; a top-level folder's scripts are the collection scripts). Only the
+variables of a top-level folder are used (collection variables); nested folders keep the key for later.
 
 ## Globals file
 

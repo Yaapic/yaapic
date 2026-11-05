@@ -1,6 +1,6 @@
 # M3-01: ADR 0009: scripting architecture, host protocol and file format
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -100,10 +100,10 @@ Any code, the vault (ADR 0010, next card), UI.
 
 ## Acceptance criteria
 
-- [ ] ADR 0009 contains every decision above, with the AOT risks of the native bindings and the fallback when a native
+- [x] ADR 0009 contains every decision above, with the AOT risks of the native bindings and the fallback when a native
       library is unavailable.
-- [ ] `docs/file-format.md` shows the `scripts` shape for request and folder files; ADR index updated.
-- [ ] No code changed; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
+- [x] `docs/file-format.md` shows the `scripts` shape for request and folder files; ADR index updated.
+- [x] No code changed; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
 
 ## Rules
 

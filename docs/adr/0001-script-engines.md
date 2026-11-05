@@ -2,6 +2,8 @@
 
 Status: Accepted
 
+See also: [ADR 0009](0009-scripting.md) (scripting architecture, host protocol and file format; decision unchanged).
+
 ## Context
 
 Pre-request and test scripts must run inside a Native AOT application, sandboxed, on Windows, macOS and Linux. The
