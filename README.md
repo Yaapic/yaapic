@@ -11,7 +11,7 @@ Prerequisites:
   it is picked up automatically).
 - Native AOT publishing needs a native toolchain: Visual Studio "Desktop development with C++" on Windows,
   `clang` and `zlib1g-dev` on Linux, Xcode command line tools on macOS.
-- The WinUI front-end builds on Windows only.
+- The WinUI front-end builds on Windows only and needs the Windows 11 SDK 10.0.26100 (target `net11.0-windows10.0.26100`).
 
 ```bash
 git clone https://github.com/Yaapic/yaapic.git

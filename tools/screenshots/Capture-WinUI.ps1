@@ -7,7 +7,7 @@ starts a loopback stub server on 127.0.0.1:5199, launches the exe with --workspa
 optionally sends keys and Ctrl+Enter, captures it with PrintWindow, then cleans up (also on failure).
 #>
 param(
-    [string]$Exe = (Join-Path $PSScriptRoot '..\..\src\Yaapic.App.WinUI\bin\Release\net11.0-windows10.0.19041.0\win-x64\publish\Yaapic.App.WinUI.exe'),
+    [string]$Exe = (Join-Path $PSScriptRoot '..\..\src\Yaapic.App.WinUI\bin\Release\net11.0-windows10.0.26100\win-x64\publish\Yaapic.App.WinUI.exe'),
     [ValidateSet('dark', 'light')][string]$Theme = 'dark',
     [Parameter(Mandatory)][string]$Out,
     [int]$Width = 1440,

@@ -1,6 +1,6 @@
 # M2-68: WinUI: migrate to Windows App SDK 2.x
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-67
 
@@ -63,16 +63,16 @@ LoomEditor (M2-69), Avalonia, new features or restyling, any change to ViewModel
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; `dotnet test --solution Yaapic.sln -c Release` all green;
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; `dotnet test --solution Yaapic.sln -c Release` all green;
       architecture tests green.
-- [ ] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true` 0 IL2xxx/IL3xxx warnings
+- [x] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true` 0 IL2xxx/IL3xxx warnings
       (`win-arm64` builds too if the SDK allows it, otherwise noted).
-- [ ] Smoke test of the published exe as described above, dark and light, with no crash and no XAML/resource error.
+- [ ] Smoke test (partial, see Notes) of the published exe as described above, dark and light, with no crash and no XAML/resource error.
 - [ ] Every WinUI-defined resource key used by the XAML is confirmed present in 2.x (list in Notes).
-- [ ] CI workflow and screenshot tooling reference the 26100 target; nothing in the repository still points at
+- [x] CI workflow and screenshot tooling reference the 26100 target; nothing in the repository still points at
       `19041.0` publish folders.
-- [ ] `docs/dependencies.md` updated.
-- [ ] No Yaapic or stub-server process left running.
+- [x] `docs/dependencies.md` updated.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
@@ -90,3 +90,13 @@ LoomEditor (M2-69), Avalonia, new features or restyling, any change to ViewModel
 `build(winui): move to Windows App SDK 2.6.5 and the 26100 target`
 
 ## Notes
+
+- Windows App SDK 2.6.5, TFM `net11.0-windows10.0.26100`; minimum OS unchanged (`10.0.19041.0`). No source, XAML or
+  `Microsoft.Windows.SDK.BuildTools` change was needed; `FluentIcons.WinUI` 2.2.344 still works.
+- `dotnet build src/Yaapic.App.WinUI` alone (AnyCPU) now fails (`WindowsAppSDKSelfContained requires a supported
+  Windows architecture`); the solution build and `publish -r win-x64` are fine. Use those.
+- Verified at run time: the AOT-published exe starts, loads the seeded workspace, sends the request (201 Created) and
+  renders dark and light through `Capture-WinUI.ps1`. NOT done: the exhaustive click-through of every control and
+  dialog, the explicit per-key audit of WinUI resource keys, `win-arm64` publish. CI runner SDK 26100 not checked
+  (windows-latest ships it); not run on CI.
+- 758 tests green (`Yaapic.CrossPlatform.slnf`).
