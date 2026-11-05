@@ -1,6 +1,6 @@
 # M3-03: Domain: script model on requests and folders
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-01
 
@@ -32,11 +32,11 @@ Serialisation (M3-05, M3-06), the engine port (M3-07), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: `ScriptLanguage` text round trip and unknown/case handling; `ScriptBlock.IsEmpty`
+- [x] Tests in `Yaapic.Domain.Tests`: `ScriptLanguage` text round trip and unknown/case handling; `ScriptBlock.IsEmpty`
       for `""`, spaces, newlines and real code; `ScriptSet.Get/With` for both phases; `Empty` equality;
       `HttpRequestDefinition.IsEquivalentTo` and `FolderDefinition.IsEquivalentTo` differ when only the source or only the
       language of one block differs; `Create` yields `ScriptSet.Empty`.
-- [ ] The whole solution still builds (existing callers untouched), 0 warnings, every public member has XML docs, all
+- [x] The whole solution still builds (existing callers untouched), 0 warnings, every public member has XML docs, all
       tests green.
 
 ## Rules
