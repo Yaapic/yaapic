@@ -1,0 +1,11 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000008
+name: Big response
+method: GET
+url: "{{baseUrl}}/big"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""

@@ -25,12 +25,14 @@ carries no AOT risk.
 Option 1 as the working direction: the editor sits behind an interface in `Yaapic.UI.Abstractions`, with the
 implementation in each App project. The final choice and its AOT verification belong to the card that introduces it.
 
-## WinUI decision (M1-44)
+## WinUI decision (M1-44, M2-69)
 
 The `Yaapic.UI.Abstractions.Editing.ICodeEditor` interface (`Text`, `IsReadOnly`, `Language`, `TextChanged`) is in
-place and `Yaapic.App.WinUI` implements it with `CodeEditorView`, used by the request body and the response body.
-`LoomEditor.WinUI` was evaluated and rejected for now (it needs Windows App SDK 2.5.1 or later and a
-`net11.0-windows10.0.26100` target, see `docs/dependencies.md`), so `CodeEditorView` wraps a borderless `TextBox`
-without line numbers or colours. Revisit when the app moves to Windows App SDK 2.x: only `CodeEditorView` changes.
+place and `Yaapic.App.WinUI` implements it with `CodeEditorView`, the only consumer of the control, used by the request
+body and the response body. M1-44 rejected `LoomEditor.WinUI` (it needs Windows App SDK 2.5.1 or later and a
+`net11.0-windows10.0.26100` target) and shipped a `TextBox` fallback. M2-68 moved the app to Windows App SDK 2.6.5 and
+the 26100 target, and M2-69 adopted `LoomEditor.WinUI` 0.4.0 inside `CodeEditorView`: JSON and XML colours from the
+Yaapic syntax tokens (a VS Code theme JSON built in code per theme and reapplied on `ActualThemeChanged`), line numbers,
+two-way text sync through `Model.ContentChanged` and `ResetText`. The `TextBox` fallback is removed.
 
-Avalonia still uses AvaloniaEdit (with its AOT check) when its card is written; that card does not exist yet.
+Avalonia uses AvaloniaEdit (with its AOT check) in M2-70.

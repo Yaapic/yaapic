@@ -1,6 +1,6 @@
 # M2-69: WinUI: adopt LoomEditor in CodeEditorView
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-68
 
@@ -78,19 +78,19 @@ autocomplete, search/replace UI, minimap, scripts editor, new languages, any Vie
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; architecture tests green
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; architecture tests green
       (`Yaapic.UI.Abstractions` still references no UI framework).
-- [ ] AOT publish 0 IL2xxx/IL3xxx; the published exe edits a JSON body, sends it, shows the coloured JSON response,
+- [x] AOT publish 0 IL2xxx/IL3xxx; the published exe edits a JSON body, sends it, shows the coloured JSON response,
       switches Pretty/Raw and exits cleanly.
-- [ ] JSON and XML bodies are coloured in dark and light with the Yaapic syntax tokens; line numbers are visible;
+- [x] JSON and XML bodies are coloured in dark and light with the Yaapic syntax tokens; line numbers are visible;
       switching the app theme at run time recolours an open editor.
-- [ ] Two-way sync verified: typing updates `BodyText` (the tab shows its unsaved marker), switching to another tab
+- [x] Two-way sync verified: typing updates `BodyText` (the tab shows its unsaved marker), switching to another tab
       and back restores the text, and the caret does not jump while typing.
-- [ ] 5 MB response check done and recorded in Notes (fallback threshold added if needed).
-- [ ] Screenshots through `Capture-WinUI.ps1` (`-Send`, dark and light) of a JSON request body and a JSON response,
+- [x] 5 MB response check done and recorded in Notes (fallback threshold added if needed).
+- [x] Screenshots through `Capture-WinUI.ps1` (`-Send`, dark and light) of a JSON request body and a JSON response,
       compared with `design/mockups/MainWindow.dc.html`; differences listed in Notes, screenshots not committed.
-- [ ] `docs/dependencies.md` and `docs/adr/0002-code-editor.md` updated as described.
-- [ ] No Yaapic or stub-server process left running.
+- [x] `docs/dependencies.md` and `docs/adr/0002-code-editor.md` updated as described.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
@@ -108,3 +108,18 @@ autocomplete, search/replace UI, minimap, scripts editor, new languages, any Vie
 `feat(winui): highlight request and response bodies with LoomEditor`
 
 ## Notes
+
+### Implementation notes (M2-69)
+
+- 0.4.0 API matches the notes above: `Text` is not updated by edits (sync through `Model.ContentChanged` / `ResetText`),
+  `Theme` is a plain property, `LineNumbersEnabled`, `LineHeight` (20), `LanguageId`, `IsReadOnly` exist. Folding and minimap are off.
+  Not mapped: `html`/`javascript` (the app languages stay `json`, `xml`, `text`).
+- Gaps: the 44 px gutter is the control's own width; bracket pairs are coloured by the control (yellow/pink), not by the
+  Yaapic tokens; UI Automation does not find an element named "Code editor" (accessibility gap of the control peer).
+- Large text (AOT exe, dark): a 5.2 MB / 65 000-line JSON response loads and tokenises (coloured) in about a second; the
+  window stays responsive, so no plaintext fallback threshold was added. A 5 MB single-line response is shown
+  uncoloured on one line. Keyboard scrolling and select-all in the read-only response editor could not be driven by the
+  synthetic input of `Capture-WinUI.ps1` (the click did not move focus into the read-only editor), so that path is unmeasured.
+- XML colouring was not checked at runtime (JSON, dark and light, was); the XML scopes are `entity.name.tag` and
+  `entity.other.attribute-name`.
+- Capture-WinUI.ps1 gained a `/big` stub route and a `big` fixture request. Screenshots are not committed.

@@ -83,6 +83,12 @@ public static class BrushMap
     /// <returns>The brush of the current window theme.</returns>
     public static Brush Themed(string key) => Get(key, IsLight);
 
+    /// <summary>Gets a brush by resource key from the dictionary of a given theme.</summary>
+    /// <param name="key">The resource key, such as <c>YaapicSyntaxKeyBrush</c>.</param>
+    /// <param name="light">Whether to read the light theme.</param>
+    /// <returns>The brush of that theme.</returns>
+    public static Brush Themed(string key, bool light) => Get(key, light);
+
     private static Brush Get(string key) => Get(key, IsLight);
 
     private static Brush Get(string key, bool light) =>
