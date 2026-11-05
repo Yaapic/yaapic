@@ -101,7 +101,7 @@ Scope: all HTTP methods and body kinds, authentication and per-request settings,
 collections as folders on disk, globals and collection variables, request history, command palette. Storage decisions are
 in [ADR 0008](../adr/0008-collections-globals-history-storage.md) (written by M2-01, read it first). Each slice runs
 Domain, Core, Infrastructure and ViewModels (`any`) first, then WinUI (`windows`), then Avalonia (`unix`) cards. M2-67 is
-the WinUI visual check; the Avalonia visual pass is M1-47 to M1-57 (see the Milestone 1 block above). M2-68 to M2-70 add the syntax-highlighted code editors (Windows App SDK 2.x migration, LoomEditor on WinUI, AvaloniaEdit on Avalonia).
+the WinUI visual check; the Avalonia visual pass is M1-47 to M1-57 (see the Milestone 1 block above). M2-68 to M2-70 add the syntax-highlighted code editors (Windows App SDK 2.x migration, LoomEditor on WinUI, LoomEditor on Avalonia).
 
 M2-71 to M2-75 rework the variable UX after the user's review of the chip strip (M2-46, M2-49): variables are coloured
 **inside the text** (Postman / Bruno style) with a hover popup that shows the value or creates the variable in a scope.
@@ -191,7 +191,7 @@ picker, `{{variable}}` autocomplete, request scripts (M3). No card is `blocked`:
 | [M2-67](milestone-2-editor-collections/M2-67-winui-visual-verification.md) | WinUI visual verification of the milestone 2 views | windows | M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64, M2-72, M2-73 | done |
 | [M2-68](milestone-2-editor-collections/M2-68-winui-windows-app-sdk-2.md) | WinUI: migrate to Windows App SDK 2.x | windows | M2-67 | done |
 | [M2-69](milestone-2-editor-collections/M2-69-winui-loomeditor-code-editor.md) | WinUI: adopt LoomEditor in CodeEditorView | windows | M2-68 | done |
-| [M2-70](milestone-2-editor-collections/M2-70-avalonia-avaloniaedit-code-editor.md) | Avalonia: AvaloniaEdit code editor with TextMate grammars | unix | M2-65, M1-57 | todo |
+| [M2-70](milestone-2-editor-collections/M2-70-avalonia-loomeditor-code-editor.md) | Avalonia: adopt LoomEditor in CodeEditorView | unix | M2-69 | todo |
 | [M2-76](milestone-2-editor-collections/M2-76-winui-palette-ctrl-p-and-button.md) | WinUI palette Ctrl+P shortcut and button | windows | M2-64 | done |
 | [M2-77](milestone-2-editor-collections/M2-77-avalonia-palette-ctrl-p-and-button.md) | Avalonia palette Ctrl+P shortcut and button | unix | M2-65 | done |
 

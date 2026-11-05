@@ -22,7 +22,7 @@ Notes of M2-74 first. No new model code.
   row and the right edge.
 - `Views/FormDataEditorView.axaml`: same treatment for its text value cells if they are single-line `TextBox`es;
   otherwise list it in Notes.
-- Body (AvaloniaEdit, M2-70) and auth secrets are untouched.
+- Body (LoomEditor, M2-70) and auth secrets are untouched.
 
 ## Out of scope
 

@@ -26,7 +26,7 @@ Avalonia's `TextBox` cannot colour sub-ranges either. Options, in the order to t
    overlay (`RenderTransform`, clipped) on `ScrollChanged`. The `TextBox` background must be transparent in all
    pseudo-classes (`:pointerover`, `:focus`, `:disabled`); the surface comes from the host `Border`. Same risks and
    checks as M2-72 (a) to (e).
-3. **AvaloniaEdit single-line `TextEditor` + `DocumentColorizingTransformer`** (M2-70 package): robust and gives
+3. **LoomEditor.Avalonia single-line editor with decorations** (M2-70 package): robust and gives
    hit-testing (`GetPositionFromPoint`), but a full editor for a one-line bar (Enter handling, gutter off, height, theme),
    and it would make this card depend on M2-70 (which waits for M2-65 and the whole history/palette slice). **Only if (1)
    and (2) fail**; if used, add M2-70 to this card's dependencies and say so in Notes.
@@ -66,7 +66,7 @@ stop and report.
 
 ## Out of scope
 
-Header and param cells (M2-75), body (later, AvaloniaEdit from M2-70), autocomplete, folder scope, WinUI.
+Header and param cells (M2-75), body (later, LoomEditor from M2-70), autocomplete, folder scope, WinUI.
 
 ## Acceptance criteria
 
