@@ -9,6 +9,7 @@ Decision records: [ADR 0005](adr/0005-storage-format.md), [ADR 0008](adr/0008-co
   .gitignore                      contains ".yaapic/"
   .yaapic/session.yaml            per-user state, never committed
   .yaapic/history.jsonl           per-user send history, never committed
+  .yaapic/workspace.id            workspace GUID (names the user's vault file), never committed
   globals.yaml                    global variables (optional)
   requests/<slug>.request.yaml    unfiled request
   requests/<folder-slug>/         top-level folder = collection
@@ -86,6 +87,21 @@ variables of a top-level folder are used (collection variables); nested folders 
 ## Globals file
 
 `<workspace>/globals.yaml`: `version: 1`, `variables` (same list shape as `params`). A missing file means no globals.
+
+## Secret variables
+
+A variable row of an environment, a folder or the globals file may carry `secret: true` (default `false`, omitted when
+false). The row then keeps `value: ""` in the YAML: the real value lives in the per-user vault
+(`<user data dir>/Yaapic/vaults/<workspaceId>.vault`, outside the workspace, never in Git), see
+[ADR 0010](adr/0010-secret-vault.md). `.yaapic/workspace.id` holds the workspace GUID (one line, "D" format), created on
+first use. A fresh clone has no vault, so its secret variables are unresolved until the values are entered again.
+
+```yaml
+variables:
+  - key: token
+    value: ""
+    secret: true
+```
 
 ## Variable precedence
 

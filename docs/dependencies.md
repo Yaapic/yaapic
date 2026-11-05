@@ -14,6 +14,11 @@ Every third-party dependency needs a written justification here before it is add
 
 Milestone 2 (editor, collections, environments, history, command palette) added the two code editor packages above (`LoomEditor.WinUI`, `LoomEditor.Avalonia`).
 
+## Secret vault (ADR 0010)
+
+The vault adds **no package**: `System.Security.Cryptography` (AES-GCM, PBKDF2, random) and `System.Text.Json` are part of
+the framework. The only exception is `System.Security.Cryptography.ProtectedData` (DPAPI), which M3-48 adds for Windows.
+
 ## Architecture tests: NetArchTest
 
 NetArchTest was not adopted. The dependency rules are project-level, so `Yaapic.Architecture.Tests` checks the

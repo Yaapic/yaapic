@@ -1,6 +1,6 @@
 # M3-02: ADR 0010: secret vault
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -65,9 +65,9 @@ Code, UI, secret sharing, hardware keys, auth-field secrets.
 
 ## Acceptance criteria
 
-- [ ] ADR 0010 contains every decision above and the accepted limits.
-- [ ] `docs/file-format.md` documents `secret: true` and `.yaapic/workspace.id`; ADR index and dependencies note updated.
-- [ ] No code changed; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
+- [x] ADR 0010 contains every decision above and the accepted limits.
+- [x] `docs/file-format.md` documents `secret: true` and `.yaapic/workspace.id`; ADR index and dependencies note updated.
+- [x] No code changed; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
 
 ## Rules
 
