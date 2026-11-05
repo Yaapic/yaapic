@@ -233,7 +233,7 @@ not run in their Notes.
 | [M3-01](milestone-3-scripting/M3-01-adr-scripting-architecture.md) | ADR 0009: scripting architecture, host protocol and file format | any | none | done |
 | [M3-02](milestone-3-scripting/M3-02-adr-secret-vault.md) | ADR 0010: secret vault | any | none | done |
 | [M3-03](milestone-3-scripting/M3-03-domain-script-model.md) | Domain: script model on requests and folders | any | M3-01 | done |
-| [M3-04](milestone-3-scripting/M3-04-domain-console-tests-and-run-result.md) | Domain: console entries, test results and script run result | any | M3-03 | todo |
+| [M3-04](milestone-3-scripting/M3-04-domain-console-tests-and-run-result.md) | Domain: console entries, test results and script run result | any | M3-03 | done |
 | [M3-05](milestone-3-scripting/M3-05-yaml-request-scripts.md) | YAML request serializer: scripts | any | M3-03 | todo |
 | [M3-06](milestone-3-scripting/M3-06-yaml-folder-scripts.md) | YAML folder serializer: scripts | any | M3-05 | todo |
 | [M3-07](milestone-3-scripting/M3-07-core-script-engine-port.md) | Core: script engine port, host contract and registry | any | M3-03, M3-04 | todo |

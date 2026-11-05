@@ -1,6 +1,6 @@
 # M3-04: Domain: console entries, test results and script run result
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-03
 
@@ -35,8 +35,8 @@ Producing these values (engines, M3-17), persistence (not stored), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: both factories; `Succeeded`; `TestSummary.Count/Format` for none, all passed, mixed.
-- [ ] 0 warnings, XML docs on every public member, all tests green.
+- [x] Tests in `Yaapic.Domain.Tests`: both factories; `Succeeded`; `TestSummary.Count/Format` for none, all passed, mixed.
+- [x] 0 warnings, XML docs on every public member, all tests green.
 
 ## Rules
 
