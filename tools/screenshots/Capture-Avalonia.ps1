@@ -35,7 +35,7 @@ try {
     Copy-Item (Join-Path $PSScriptRoot 'workspace') $temp -Recurse
     $ids = @{ 'list-users' = '11111111-0000-0000-0000-000000000001'; 'create-user' = '11111111-0000-0000-0000-000000000002'
               'missing-item' = '11111111-0000-0000-0000-000000000003'; 'server-error' = '11111111-0000-0000-0000-000000000004'
-              'slow' = '11111111-0000-0000-0000-000000000005' }
+              'slow' = '11111111-0000-0000-0000-000000000005'; 'big' = '11111111-0000-0000-0000-000000000008' }
     $session = Join-Path $temp '.yaapic\session.yaml'
     $openList = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$openList`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))
@@ -48,6 +48,7 @@ try {
                 $c = $l.GetContext(); $p = $c.Request.Url.AbsolutePath; $code = 200
                 $body = '{"error":"not found"}'
                 if ($p -eq '/users' -and $c.Request.HttpMethod -eq 'POST') { $code = 201; $body = '{"id":42,"name":"Ada Lovelace","email":"ada@example.test"}' }
+                elseif ($p -eq '/big') { $sb = [Text.StringBuilder]::new('['); for ($i = 0; $i -lt 40000; $i++) { if ($i) { [void]$sb.Append(',') }; [void]$sb.Append('{"id":' + $i + ',"name":"user-' + $i + '","active":true,"score":1.5,"tags":["a","b"],"note":null}') }; $body = $sb.Append(']').ToString() }
                 elseif ($p -eq '/users') { $body = '[{"id":1,"name":"Ada"},{"id":2,"name":"Grace"}]' }
                 elseif ($p -match '^/status/(\d+)$') { $code = [int]$Matches[1]; $body = '{"title":"Problem","status":' + $code + '}' }
                 elseif ($p -match '^/delay/(\d+)$') { [Threading.Thread]::Sleep([int]$Matches[1]); $body = '{"delayed":true}' }

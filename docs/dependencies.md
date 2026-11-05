@@ -9,9 +9,10 @@ Every third-party dependency needs a written justification here before it is add
 | CommunityToolkit.Mvvm | 8.4.2 | Yaapic.ViewModels | `ObservableObject`, `[ObservableProperty]` and `[RelayCommand]` source generators for ViewModels. MIT, first-party .NET Foundation; generated code is reflection-free on the paths we use (`ObservableValidator` and `Messenger.RegisterAll` are forbidden). |
 | Microsoft.WindowsAppSDK | 2.6.5 | Yaapic.App.WinUI | WinUI 3 runtime and XAML compiler; first-party, Native AOT supported. Target `net11.0-windows10.0.26100` (M2-68); verified with `LoomEditor.WinUI` 0.4.0 and `FluentIcons.WinUI` 2.2.344 (restore, build, AOT publish without IL2xxx/IL3xxx). Minimum OS stays Windows 10 2004 (`10.0.19041.0`). |
 | LoomEditor.WinUI | 0.4.0 | Yaapic.App.WinUI | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002): syntax colours from the Yaapic tokens, line numbers and large text on WinUI, where no other mature editor exists. MIT. Restore, build and Native AOT publish with Windows App SDK 2.6.5 give 0 warnings and 0 IL2xxx/IL3xxx; the AOT exe renders, edits and recolours on theme change (M2-69). |
+| LoomEditor.Avalonia | 0.5.0 | Yaapic.App.Avalonia | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002), the Avalonia twin of LoomEditor.WinUI: syntax colours from the Yaapic tokens, line numbers, folding and large text, with no TextMate registry or grammar files to bundle. MIT. Requires `Avalonia >= 12.1.5` (the Avalonia packages moved from 12.1.4 to 12.1.5 for it). Restore, build and Native AOT publish give 0 new IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages); the publish ships `onig.dll` (native regex engine of the grammars). The AOT exe renders, edits, folds and recolours on theme change (M2-70). |
 | Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
 
-Milestone 2 (editor, collections, environments, history, command palette) added no package.
+Milestone 2 (editor, collections, environments, history, command palette) added the two code editor packages above (`LoomEditor.WinUI`, `LoomEditor.Avalonia`).
 
 ## Architecture tests: NetArchTest
 
@@ -39,7 +40,7 @@ Property names are emitted in camelCase by default (`openRequests`), matching th
 ## History: LoomEditor.WinUI (M1-44, M2-68, M2-69)
 
 Rejected by M1-44, unblocked by M2-68 (Windows App SDK 2.6.5, 26100 target), adopted by M2-69 (`LoomEditor.WinUI` 0.4.0,
-see the table above). The text below is the historical M1-44 finding.
+see the table above). `LoomEditor.Avalonia` 0.5.0 followed on Avalonia in M2-70 (AvaloniaEdit + TextMate was planned and abandoned). The text below is the historical M1-44 finding.
 
 `LoomEditor.WinUI` `0.2.0-alpha.5` (MIT, WinUI 3 code editor ported from Monaco, TextMate grammars, line numbers,
 folding, `Theme` from a VS Code theme JSON, `IsReadOnly`, `ResetText`, `Model.ContentChanged`) was evaluated and

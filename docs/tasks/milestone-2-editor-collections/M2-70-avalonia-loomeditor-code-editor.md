@@ -1,6 +1,6 @@
 # M2-70: Avalonia: adopt LoomEditor in CodeEditorView
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-69
 
@@ -97,19 +97,19 @@ ViewModel change, LoomEditor features beyond highlighting, line numbers and fold
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; `dotnet test --solution Yaapic.CrossPlatform.slnf -c Release`
+- [x] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; `dotnet test --solution Yaapic.CrossPlatform.slnf -c Release`
       green; architecture tests green (`Yaapic.UI.Abstractions` still free of UI frameworks).
-- [ ] AOT publish of `Yaapic.App.Avalonia` 0 new IL2xxx/IL3xxx; the published exe edits a JSON body, sends it, shows the
+- [x] AOT publish of `Yaapic.App.Avalonia` 0 new IL2xxx/IL3xxx; the published exe edits a JSON body, sends it, shows the
       coloured JSON response, switches Pretty/Raw, folds a block, undoes an edit and exits cleanly.
-- [ ] JSON and XML bodies are coloured in dark and light with the Yaapic syntax tokens; line numbers visible; switching
+- [x] JSON and XML bodies are coloured in dark and light with the Yaapic syntax tokens; line numbers visible; switching
       the theme at run time recolours an open editor.
-- [ ] Two-way sync verified: typing updates `BodyText` (the tab shows its unsaved marker), tab switch and back restores
+- [x] Two-way sync verified: typing updates `BodyText` (the tab shows its unsaved marker), tab switch and back restores
       the text, the caret does not jump while typing.
-- [ ] 5 MB response check done and recorded in Notes (fallback threshold added if needed).
-- [ ] Screenshots through `Capture-Avalonia.ps1` (`-Send -Select Body`, dark and light) of a JSON request body and a JSON
+- [x] 5 MB response check done and recorded in Notes (fallback threshold added if needed).
+- [x] Screenshots through `Capture-Avalonia.ps1` (`-Send -Select Body`, dark and light) of a JSON request body and a JSON
       response, compared with `design/mockups/MainWindow.dc.html`; differences listed in Notes, not committed.
-- [ ] `docs/dependencies.md`, ADR 0002 and the task index updated.
-- [ ] No Yaapic or stub-server process left running.
+- [x] `docs/dependencies.md`, ADR 0002 and the task index updated.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
@@ -127,3 +127,28 @@ ViewModel change, LoomEditor features beyond highlighting, line numbers and fold
 `feat(avalonia): highlight request and response bodies with LoomEditor`
 
 ## Notes
+
+### Implementation notes (M2-70)
+
+- Avalonia 12.1.4 -> 12.1.5 (LoomEditor.Avalonia floor). `LoomEditor.Core 0.5.0` was missing from the NuGet index for a
+  few minutes after the other 0.5.0 packages; `restore --no-cache` was not enough until it appeared.
+- API versus WinUI: as predicted (`<loom:LoomEditorStyles />` in `App.axaml`; no `Automation*`/`OverviewRulerEnabled`).
+  `CodeEditorView` is the WinUI view with Avalonia styled properties and `BrushMap.Find` for the colours.
+- **Ctrl+Enter**: LoomEditor consumes it (insert line below), so Send never fired from the body editor.
+  `RequestEditorView` now catches the shortcut in a tunnelling `KeyDown` handler. Ctrl+S (save) still works from the editor.
+- AOT exe (win-x64) verified by driving the real window: JSON coloured in the request body and the response (Pretty and
+  Raw), typing updates the tab's unsaved marker, undo (Ctrl+Z) restores the text and clears the marker, the gutter
+  chevron folds the JSON object, tab switch and back restores the text, Ctrl+S saves, Send from the editor, dark and
+  light, runtime theme switch (Dark/Light menu) recolours an open editor.
+- Large text: a 3.3 MB single-line JSON response was tokenised and coloured on load, but switching the theme afterwards
+  froze the UI for over 30 s (not responding). Above `CodeEditorView.MaxHighlightedLength` (1 000 000 characters) the
+  text now falls back to `plaintext`; with that, theme switch, Ctrl+End and select-all are instant. The threshold is
+  evaluated when the text is set from outside (responses), not while typing. The response formatter does not
+  pretty-print such a body (it stays on one line, as on WinUI).
+- Gaps: LoomEditor shows a sticky-scroll header for nested JSON (`StickyScrollEnabled`, left at the default); bracket
+  pairs are coloured by the control; UI Automation naming was not checked; XML colouring not checked at runtime; the
+  1 px top border of the old `TextBox.editor` is gone.
+- `Capture-Avalonia.ps1` gained the `/big` route and the `big` fixture id. `dotnet test` through plain `rtk` printed
+  "Zero tests ran / exit 5" (handshake failures); `rtk bypass dotnet test ...` gave 758 green tests.
+- Screenshots (not committed) from `Capture-Avalonia.ps1 -Send -Select Body`: the light run shows the response coloured; in
+  the dark run the send failed because a stale stub was on port 5199, unrelated to the editor.

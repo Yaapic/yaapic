@@ -19,6 +19,16 @@ public static class EditorMap
         _ => 4,
     });
 
+    /// <summary>Converts a raw content type to the code editor language: <c>json</c>, <c>xml</c> or <c>text</c> (mirrors the WinUI <c>TextMap.Language</c>).</summary>
+    public static FuncValueConverter<RawContentType, string> Language { get; } = new(c => c switch
+    {
+        RawContentType.Json => "json",
+        RawContentType.Xml => "xml",
+        RawContentType.Html => "html",
+        RawContentType.JavaScript => "javascript",
+        _ => "text",
+    });
+
     /// <summary>Converts a body kind to <see langword="true"/> when no body is sent.</summary>
     public static FuncValueConverter<BodyKind, bool> IsNone { get; } = new(k => k == BodyKind.None);
 

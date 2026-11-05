@@ -15,6 +15,7 @@ public sealed partial class RequestEditorView : UserControl
     public RequestEditorView()
     {
         InitializeComponent();
+        AddHandler(KeyDownEvent, OnSendShortcut, RoutingStrategies.Tunnel);
         foreach (var method in RequestEditorViewModel.Methods)
         {
             MethodBox.Items.Add(new ComboBoxItem { Content = method.ToText(), Foreground = BrushMap.Method(method) });
@@ -49,8 +50,8 @@ public sealed partial class RequestEditorView : UserControl
 
     private void OnVariableOpenRequested(object? sender, VariableScopeKind scope) => VariableScopeOpenRequested?.Invoke(this, scope);
 
-    /// <inheritdoc />
-    protected override void OnKeyDown(KeyEventArgs e)
+    // Tunnelling: the code editor binds Ctrl+Enter itself (insert line below), so Send must see the key first.
+    private void OnSendShortcut(object? sender, KeyEventArgs e)
     {
         var modifier = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
         if (e.Key == Key.Enter && e.KeyModifiers == modifier && Editor?.SendCommand.CanExecute(null) == true)
@@ -58,8 +59,6 @@ public sealed partial class RequestEditorView : UserControl
             Editor.SendCommand.Execute(null);
             e.Handled = true;
         }
-
-        base.OnKeyDown(e);
     }
 
     private void OnMethodChanged(object? sender, SelectionChangedEventArgs e)

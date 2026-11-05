@@ -103,9 +103,10 @@
                 <ComboBoxItem Content="JavaScript" />
               </ComboBox>
             </Grid>
-            <TextBox Grid.Row="1" Classes="editor" Margin="0,8,0,0" AcceptsReturn="True" TextWrapping="NoWrap"
-                     IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
-                     Text="{Binding BodyText, Mode=TwoWay}" />
+            <v:CodeEditorView Grid.Row="1" Margin="0,8,0,0" AutomationProperties.Name="Body"
+                              IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
+                              EditorLanguage="{Binding BodyContentType, Converter={x:Static p:EditorMap.Language}}"
+                              Text="{Binding BodyText, Mode=TwoWay}" />
             <v:KeyValueEditorView Grid.Row="1" DataContext="{Binding UrlEncodedFields}"
                                   IsVisible="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).BodyKind, Converter={x:Static p:EditorMap.IsUrlEncoded}}" />
             <v:FormDataEditorView Grid.Row="1" DataContext="{Binding FormData}"

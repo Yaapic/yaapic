@@ -255,17 +255,6 @@
     <Setter Property="BorderBrush" Value="Transparent" />
     <Setter Property="BorderThickness" Value="0" />
   </Style>
-  <Style Selector="TextBox.editor">
-    <Setter Property="Padding" Value="12,8" />
-    <Setter Property="CornerRadius" Value="0" />
-    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
-    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeCode}" />
-  </Style>
-  <Style Selector="TextBox.editor /template/ Border#PART_BorderElement, TextBox.editor:pointerover /template/ Border#PART_BorderElement, TextBox.editor:focus /template/ Border#PART_BorderElement">
-    <Setter Property="Background" Value="{DynamicResource YaapicSurfaceSunkenBrush}" />
-    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
-    <Setter Property="BorderThickness" Value="0,1,0,0" />
-  </Style>
   <Style Selector="ComboBox.methodpicker">
     <Setter Property="Width" Value="88" />
     <Setter Property="MinHeight" Value="0" />

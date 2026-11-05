@@ -3,6 +3,7 @@
              xmlns:rsp="using:Yaapic.ViewModels.Responses"
              xmlns:d="using:Yaapic.Domain.Http"
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             xmlns:v="using:Yaapic.App.Avalonia.Views"
              x:Class="Yaapic.App.Avalonia.Views.ResponsePanelView"
              x:DataType="rsp:ResponsePanelViewModel">
   <UserControl.Styles>
@@ -97,10 +98,9 @@
               </StackPanel>
               <Panel Grid.Row="1" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
                 <Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}" />
-                <TextBox IsReadOnly="True" TextWrapping="NoWrap" AcceptsReturn="True" BorderThickness="0"
-                         Background="Transparent" Padding="12,2" FontFamily="{DynamicResource YaapicMonoFont}"
-                         FontSize="{DynamicResource YaapicFontSizeCode}" LineHeight="20"
-                         IsVisible="{Binding !IsBinary}" Text="{Binding BodyText, Mode=OneWay}" />
+                <v:CodeEditorView IsReadOnly="True" AutomationProperties.Name="Body"
+                                  IsVisible="{Binding !IsBinary}" EditorLanguage="{Binding BodyLanguage, Mode=OneWay}"
+                                  Text="{Binding BodyText, Mode=OneWay}" />
                 <TextBox IsReadOnly="True" BorderThickness="0" Background="Transparent" Padding="12,2"
                          FontFamily="{DynamicResource YaapicMonoFont}"
                          FontSize="{DynamicResource YaapicFontSizeCode}" LineHeight="20"
