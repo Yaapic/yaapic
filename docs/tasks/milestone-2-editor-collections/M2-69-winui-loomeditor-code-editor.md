@@ -112,7 +112,7 @@ autocomplete, search/replace UI, minimap, scripts editor, new languages, any Vie
 ### Implementation notes (M2-69)
 
 - 0.4.0 API matches the notes above: `Text` is not updated by edits (sync through `Model.ContentChanged` / `ResetText`),
-  `Theme` is a plain property, `LineNumbersEnabled`, `LineHeight` (20), `LanguageId`, `IsReadOnly` exist. Folding and minimap are off.
+  `Theme` is a plain property, `LineNumbersEnabled`, `LineHeight` (20), `LanguageId`, `IsReadOnly` exist. Folding is on (chevrons appear on hover, verified in the AOT exe); the minimap is off.
   Not mapped: `html`/`javascript` (the app languages stay `json`, `xml`, `text`).
 - Gaps: the 44 px gutter is the control's own width; bracket pairs are coloured by the control (yellow/pink), not by the
   Yaapic tokens; UI Automation does not find an element named "Code editor" (accessibility gap of the control peer).
