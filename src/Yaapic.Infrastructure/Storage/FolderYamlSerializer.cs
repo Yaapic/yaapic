@@ -26,8 +26,9 @@ public static class FolderYamlSerializer
             Description = folder.Description,
             Variables = [.. folder.Variables.Select(v =>
                 new KeyValueDto { Key = v.Key, Value = v.Value, Enabled = v.Enabled })],
+            Scripts = ScriptsMapper.ToDto(folder.Scripts),
         };
-        var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n");
+        var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
         return yaml.TrimEnd('\n') + "\n";
     }
 
@@ -41,7 +42,7 @@ public static class FolderYamlSerializer
         FolderFileDto? dto;
         try
         {
-            dto = YamlSerializer.Deserialize<FolderFileDto>(Encoding.UTF8.GetBytes(yaml));
+            dto = YamlSerializer.Deserialize<FolderFileDto>(Encoding.UTF8.GetBytes(yaml), ScriptSourceFormatter.Options);
         }
         catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or YamlTokenizerException)
         {
@@ -67,6 +68,7 @@ public static class FolderYamlSerializer
             id,
             string.IsNullOrWhiteSpace(dto.Name) ? "Untitled" : dto.Name,
             dto.Description ?? "",
-            [.. (dto.Variables ?? []).Select(v => new KeyValueEntry(v.Key ?? "", v.Value ?? "", v.Enabled ?? true))]);
+            [.. (dto.Variables ?? []).Select(v => new KeyValueEntry(v.Key ?? "", v.Value ?? "", v.Enabled ?? true))],
+            ScriptsMapper.FromDto(dto.Scripts));
     }
 }

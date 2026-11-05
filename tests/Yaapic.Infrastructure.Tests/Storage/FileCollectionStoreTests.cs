@@ -1,6 +1,7 @@
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.Infrastructure.Storage;
 
 namespace Yaapic.Infrastructure.Tests.Storage;
@@ -77,6 +78,33 @@ public sealed class FileCollectionStoreTests : IDisposable
         var node = Assert.Single(await store.LoadTreeAsync(CancellationToken.None));
         Assert.Equal("New", node.Name);
         Assert.Single(node.Children);
+    }
+
+    private static readonly ScriptSet Scripts = new(
+        new ScriptBlock(ScriptLanguage.JavaScript, "pm.environment.set('a', '1');"),
+        new ScriptBlock(ScriptLanguage.Lua, "print('x')"));
+
+    [Fact]
+    public async Task SaveRenameAndMoveKeepFolderScripts()
+    {
+        var store = new FileCollectionStore(_root);
+        var top = FolderDefinition.Create("Top") with { Scripts = Scripts };
+        var nested = FolderDefinition.Create("Nested") with { Scripts = Scripts };
+        var other = FolderDefinition.Create("Other");
+        await store.SaveFolderAsync(top, null, CancellationToken.None);
+        await store.SaveFolderAsync(nested, top.Id, CancellationToken.None);
+        await store.SaveFolderAsync(other, null, CancellationToken.None);
+
+        await store.SaveFolderAsync(nested with { Name = "Renamed" }, top.Id, CancellationToken.None);
+        var tree = await store.LoadTreeAsync(CancellationToken.None);
+        Assert.Equal(Scripts, tree.Single(n => n.Id == top.Id).Children.Single().Folder!.Scripts);
+
+        await store.MoveAsync(nested.Id, other.Id, CancellationToken.None);
+        tree = await store.LoadTreeAsync(CancellationToken.None);
+        Assert.Equal(Scripts, tree.Single(n => n.Id == top.Id).Folder!.Scripts);
+        var moved = tree.Single(n => n.Id == other.Id).Children.Single();
+        Assert.Equal("Renamed", moved.Name);
+        Assert.Equal(Scripts, moved.Folder!.Scripts);
     }
 
     [Fact]

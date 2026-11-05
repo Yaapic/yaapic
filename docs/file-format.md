@@ -82,7 +82,10 @@ query to the front of the params list on load.
 
 Keys, in order: `version: 1`, `id`, `name`, `description`, `variables` (same list shape as `params`), `scripts` (same
 shape as in the request file, optional on read; a top-level folder's scripts are the collection scripts). Only the
-variables of a top-level folder are used (collection variables); nested folders keep the key for later.
+variables of a top-level folder are used (collection variables); nested folders keep the key for later. Scripts exist on every folder level.
+
+A script `source` that starts with a space or a tab is written as a double-quoted scalar (the YAML library emits an
+unparsable literal block for it); this applies to request and folder files alike, and both forms read back identically.
 
 ## Globals file
 

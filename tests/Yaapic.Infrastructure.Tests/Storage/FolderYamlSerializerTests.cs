@@ -1,6 +1,7 @@
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.Infrastructure.Storage;
 
 namespace Yaapic.Infrastructure.Tests.Storage;
@@ -62,6 +63,42 @@ public sealed class FolderYamlSerializerTests
     [InlineData("version: 1\nid: nope\n")]
     public void InvalidFilesThrowStorageException(string yaml) =>
         Assert.Throws<StorageException>(() => FolderYamlSerializer.Deserialize(yaml));
+
+    [Fact]
+    public void ScriptsRoundTripForJavaScriptAndLua()
+    {
+        var scripts = new ScriptSet(
+            new ScriptBlock(ScriptLanguage.JavaScript, "pm.test(\"a: b\", () => {});\n  indented\n"),
+            new ScriptBlock(ScriptLanguage.Lua, " leading space\nprint('é ☕')"));
+        var folder = Sample() with { Scripts = scripts };
+        Assert.Equal(scripts, FolderYamlSerializer.Deserialize(FolderYamlSerializer.Serialize(folder)).Scripts);
+    }
+
+    [Fact]
+    public void ScriptsAreWrittenLastWithBlockKeyOrder()
+    {
+        var folder = FolderDefinition.Create("F") with
+        {
+            Scripts = new ScriptSet(new ScriptBlock(ScriptLanguage.Lua, "a()\nb()\n"), ScriptBlock.Empty),
+        };
+        var yaml = FolderYamlSerializer.Serialize(folder);
+        Assert.EndsWith(
+            "scripts:\n  preRequest:\n    language: lua\n    source: |\n      a()\n      b()\n"
+            + "  postResponse:\n    language: javascript\n    source: \"\"\n",
+            yaml);
+        Assert.True(yaml.IndexOf("variables:", StringComparison.Ordinal) < yaml.IndexOf("scripts:", StringComparison.Ordinal));
+    }
+
+    [Fact]
+    public void MilestoneTwoFolderLoadsWithEmptyScripts() =>
+        Assert.Equal(
+            ScriptSet.Empty,
+            FolderYamlSerializer.Deserialize($"version: 1\nid: {IdText}\nname: A\ndescription: \"\"\nvariables: []\n").Scripts);
+
+    [Fact]
+    public void UnknownScriptLanguageThrows() =>
+        Assert.Throws<StorageException>(() => FolderYamlSerializer.Deserialize(
+            $"version: 1\nid: {IdText}\nscripts:\n  preRequest:\n    language: python\n    source: x\n"));
 
     [Fact]
     public void Version2MessageNamesTheVersion()

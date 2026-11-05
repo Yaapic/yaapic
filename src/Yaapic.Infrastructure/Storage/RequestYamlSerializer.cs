@@ -56,11 +56,7 @@ public static class RequestYamlSerializer
                 FollowRedirects = request.Settings.FollowRedirects,
                 TimeoutSeconds = request.Settings.TimeoutSeconds,
             },
-            Scripts = new ScriptsDto
-            {
-                PreRequest = ToDto(request.Scripts.PreRequest),
-                PostResponse = ToDto(request.Scripts.PostResponse),
-            },
+            Scripts = ScriptsMapper.ToDto(request.Scripts),
         };
         var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
         return yaml.TrimEnd('\n') + "\n";
@@ -113,7 +109,7 @@ public static class RequestYamlSerializer
             ReadBody(dto.Body),
             ReadAuth(dto.Auth),
             ReadSettings(dto.Settings),
-            ReadScripts(dto.Scripts));
+            ScriptsMapper.FromDto(dto.Scripts));
     }
 
     private static string BodyTypeText(BodyKind kind) => kind switch
@@ -219,27 +215,5 @@ public static class RequestYamlSerializer
         }
 
         return new RequestSettings(dto?.FollowRedirects ?? true, timeout);
-    }
-
-    private static ScriptBlockDto ToDto(ScriptBlock block) =>
-        new() { Language = block.Language.ToText(), Source = new ScriptSourceText(block.Source) };
-
-    private static ScriptSet ReadScripts(ScriptsDto? dto) =>
-        new(ReadBlock(dto?.PreRequest), ReadBlock(dto?.PostResponse));
-
-    private static ScriptBlock ReadBlock(ScriptBlockDto? dto)
-    {
-        if (dto is null)
-        {
-            return ScriptBlock.Empty;
-        }
-
-        var language = ScriptLanguage.JavaScript;
-        if (dto.Language is not null && !ScriptLanguageExtensions.TryParse(dto.Language, out language))
-        {
-            throw new StorageException($"Unknown script language '{dto.Language}'");
-        }
-
-        return new ScriptBlock(language, dto.Source?.Value ?? "");
     }
 }

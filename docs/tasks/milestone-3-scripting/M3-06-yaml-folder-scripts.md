@@ -1,6 +1,6 @@
 # M3-06: YAML folder serializer: scripts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-05
 
@@ -27,9 +27,9 @@ UI, running the scripts.
 
 ## Acceptance criteria
 
-- [ ] Tests: folder round trip with scripts (JS and Lua); a milestone 2 `folder.yaml` loads with `ScriptSet.Empty`; key
+- [x] Tests: folder round trip with scripts (JS and Lua); a milestone 2 `folder.yaml` loads with `ScriptSet.Empty`; key
       order; `FileCollectionStore` tests: save, rename, move keep scripts; nested folder scripts load in the tree.
-- [ ] 0 warnings, all tests green, `docs/file-format.md` matches.
+- [x] 0 warnings, all tests green, `docs/file-format.md` matches.
 
 ## Rules
 

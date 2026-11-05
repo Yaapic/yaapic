@@ -14,4 +14,6 @@ internal partial class FolderFileDto
     public string? Description { get; set; }
 
     public List<KeyValueDto>? Variables { get; set; }
+
+    public ScriptsDto? Scripts { get; set; }
 }
