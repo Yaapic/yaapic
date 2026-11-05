@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Yaapic.Domain.Http;
+using Yaapic.ViewModels.Requests;
 
 namespace Yaapic.App.WinUI.Presentation;
 

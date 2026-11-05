@@ -2,7 +2,10 @@ using Yaapic.Core.Http;
 using Yaapic.Infrastructure.Http;
 using Yaapic.Infrastructure.Storage;
 using Yaapic.UI.Abstractions;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
+using Yaapic.ViewModels.History;
+using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -26,13 +29,32 @@ public static class AppComposition
         var requestStore = new FileRequestStore(workspaceRoot);
         var environmentStore = new FileEnvironmentStore(workspaceRoot);
         var sessionStore = new FileSessionStore(workspaceRoot);
-        var sender = new RequestSender(new HttpClientTransport(DefaultHttpClient.Create(), TimeSpan.FromSeconds(30)));
+        var sender = new RequestSender(new HttpClientTransport(DefaultHttpClient.Create(), DefaultHttpClient.CreateNonRedirecting(), TimeSpan.FromSeconds(30)));
         var environments = new EnvironmentsViewModel(environmentStore, dialogs);
+        var globals = new GlobalsViewModel(new FileGlobalsStore(workspaceRoot));
+        VariableScopeProvider? scopes = null;
+        HistoryViewModel? history = null;
         var tabs = new TabsViewModel(
             requestStore,
             dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, environments, isNew));
+            (definition, isNew) =>
+            {
+                var editor = RequestEditorViewModel.FromDefinition(definition, sender, scopes!, isNew, dialogs);
+                editor.Sent += (_, e) => _ = history!.RecordAsync(e.Request, e.Report);
+                return editor;
+            });
+        history = new HistoryViewModel(new FileHistoryStore(workspaceRoot), TimeProvider.System, tabs, dialogs);
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
-        return new ShellViewModel(tabs, requests, environments, sessionStore, dialogs);
+        var collections = new CollectionTreeViewModel(new FileCollectionStore(workspaceRoot), requestStore, tabs, dialogs);
+        scopes = new VariableScopeProvider(environments, globals, collections);
+        var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs);
+        shell.AttachPalette(new CommandPaletteViewModel(
+        [
+            new CommandsPaletteSource(shell),
+            new RequestsPaletteSource(collections),
+            new EnvironmentsPaletteSource(environments),
+            new TabsPaletteSource(tabs),
+        ]));
+        return shell;
     }
 }

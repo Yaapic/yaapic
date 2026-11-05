@@ -1,6 +1,6 @@
 # M2-11: Request editor ViewModel: methods, authentication and settings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-04
 
@@ -29,11 +29,11 @@ Body kinds (M2-12), URL sync (M2-13), views (M2-16, M2-18, M2-21, M2-23).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: all seven methods round trip and `AllowsBody` follows the method; auth round
+- [x] Tests in `Yaapic.ViewModels.Tests`: all seven methods round trip and `AllowsBody` follows the method; auth round
       trips for each kind; editing any auth field, `FollowRedirects` or `TimeoutSeconds` makes the tab dirty and reverting
       cleans it; negative timeout becomes 0; `Load` of an auth does not mark the tab dirty; every M1 editor test still
       green.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

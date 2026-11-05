@@ -2,6 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:ic="using:FluentIcons.WinUI"
+             xmlns:v="using:Yaapic.App.WinUI.Views"
              xmlns:ed="using:Yaapic.ViewModels.Editing">
   <UserControl.Resources>
     <!-- Borderless cell editors: every state is transparent, only the focused state draws the 2 px inset ring. -->
@@ -41,7 +43,7 @@
         </Border>
       </Grid>
       <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-        <ItemsRepeater x:Name="RowList">
+        <ItemsRepeater x:Name="RowList" ElementPrepared="OnRowPrepared">
           <ItemsRepeater.ItemTemplate>
             <DataTemplate x:DataType="ed:KeyValueRowViewModel">
               <Grid Height="30" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0"
@@ -55,16 +57,16 @@
                 <CheckBox MinWidth="0" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"
                           AutomationProperties.Name="Enabled"
                           IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
-                <TextBox Grid.Column="1" PlaceholderText="Key" Style="{StaticResource YaapicCellTextBoxStyle}"
-                         Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <v:VariableTextBox Grid.Column="1" PlaceholderText="Key" InputName="Key" CodeFontSize="{StaticResource YaapicFontSizeCode}"
+                                   InputPadding="10,7,10,3" Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 <Border Grid.Column="2" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="1,0,0,0">
-                  <TextBox PlaceholderText="Value" Style="{StaticResource YaapicCellTextBoxStyle}"
-                           Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                  <v:VariableTextBox PlaceholderText="Value" InputName="Value" CodeFontSize="{StaticResource YaapicFontSizeCode}"
+                                     InputPadding="10,7,10,3" Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
                 </Border>
                 <Button Grid.Column="3" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnRemove"
                         HorizontalAlignment="Center" AutomationProperties.Name="Remove row"
                         Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
-                  <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="14" Height="14"/>
+                  <ic:FluentIcon Icon="Dismiss" IconVariant="Regular" IconSize="Size16"/>
                 </Button>
               </Grid>
             </DataTemplate>

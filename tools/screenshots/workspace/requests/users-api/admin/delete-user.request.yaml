@@ -1,0 +1,13 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000013
+name: Delete user
+method: DELETE
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+auth:
+  type: none

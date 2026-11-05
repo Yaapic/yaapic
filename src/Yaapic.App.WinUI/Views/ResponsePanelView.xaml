@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
              xmlns:d="using:Yaapic.Domain.Http"
-             xmlns:v="using:Yaapic.App.WinUI.Views">
+             xmlns:v="using:Yaapic.App.WinUI.Views"
+             xmlns:ic="using:FluentIcons.WinUI">
   <Grid Background="{ThemeResource YaapicSurfaceBaseBrush}">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -163,11 +164,23 @@
               <RowDefinition Height="40"/>
               <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <ListView x:Name="ViewModes" Style="{StaticResource YaapicSegmentedStyle}" Margin="16,0,12,0"
-                      VerticalAlignment="Center" SelectionChanged="OnViewModeChanged">
-              <x:String>Pretty</x:String>
-              <x:String>Raw</x:String>
-            </ListView>
+            <StackPanel Orientation="Horizontal" Margin="16,0,12,0" Spacing="8" VerticalAlignment="Center">
+              <ListView x:Name="ViewModes" Style="{StaticResource YaapicSegmentedStyle}"
+                        VerticalAlignment="Center" SelectionChanged="OnViewModeChanged">
+                <x:String>Pretty</x:String>
+                <x:String>Raw</x:String>
+              </ListView>
+              <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="Copy response body"
+                      ToolTipService.ToolTip="Copy response body"
+                      Command="{x:Bind ViewModel.CopyBodyCommand, Mode=OneWay}">
+                <ic:FluentIcon Icon="Copy" IconVariant="Regular" IconSize="Size16"/>
+              </Button>
+              <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="Save response to file"
+                      ToolTipService.ToolTip="Save response to file"
+                      Command="{x:Bind ViewModel.SaveBodyCommand, Mode=OneWay}">
+                <ic:FluentIcon Icon="Save" IconVariant="Regular" IconSize="Size16"/>
+              </Button>
+            </StackPanel>
             <Border Grid.Row="1" Padding="0,2" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
                     BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
               <Grid>

@@ -1,6 +1,6 @@
 # M2-43: Folder and collection settings ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-34
 
@@ -30,12 +30,12 @@ Views (M2-48 WinUI, M2-51 Avalonia), collection-level auth, headers or scripts (
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: editing name, description or a variable makes it dirty, save writes through the
+- [x] Tests in `Yaapic.ViewModels.Tests`: editing name, description or a variable makes it dirty, save writes through the
       store and the tree shows the new name, `Saved` is raised, blank name keeps the old one, nested folder keeps its
       variables, `ShowVariables` false for non-collections, `EditSettings`/`CloseSettings` set and clear
       `SettingsEditor`, `FindCollectionVariables` for a request in a nested folder, an unfiled one and an unknown id,
       storage failure -> `LastError`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

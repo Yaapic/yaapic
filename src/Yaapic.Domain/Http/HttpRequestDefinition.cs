@@ -8,6 +8,8 @@ namespace Yaapic.Domain.Http;
 /// <param name="QueryParams">The query parameters, in order.</param>
 /// <param name="Headers">The request headers, in order.</param>
 /// <param name="Body">The request body.</param>
+/// <param name="Auth">The request authentication.</param>
+/// <param name="Settings">The per-request settings.</param>
 public sealed record HttpRequestDefinition(
     Guid Id,
     string Name,
@@ -15,7 +17,9 @@ public sealed record HttpRequestDefinition(
     string Url,
     IReadOnlyList<KeyValueEntry> QueryParams,
     IReadOnlyList<KeyValueEntry> Headers,
-    RequestBody Body)
+    RequestBody Body,
+    RequestAuth Auth,
+    RequestSettings Settings)
 {
     /// <summary>Creates an empty GET request with a new identifier.</summary>
     /// <param name="name">The display name; it is trimmed.</param>
@@ -24,7 +28,7 @@ public sealed record HttpRequestDefinition(
     public static HttpRequestDefinition Create(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        return new(Guid.NewGuid(), name.Trim(), HttpMethodKind.Get, "", [], [], RequestBody.None);
+        return new(Guid.NewGuid(), name.Trim(), HttpMethodKind.Get, "", [], [], RequestBody.None, RequestAuth.None, RequestSettings.Default);
     }
 
     /// <summary>Compares two requests by value, including the contents of the lists.</summary>
@@ -37,5 +41,7 @@ public sealed record HttpRequestDefinition(
         && Url == other.Url
         && QueryParams.SequenceEqual(other.QueryParams)
         && Headers.SequenceEqual(other.Headers)
-        && Body == other.Body;
+        && Body == other.Body
+        && Auth == other.Auth
+        && Settings == other.Settings;
 }

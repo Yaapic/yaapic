@@ -1,6 +1,6 @@
 # M2-12: Request editor ViewModel: body editors
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-03, M2-10, M2-11
 
@@ -32,11 +32,11 @@ Views (M2-17, M2-22), resolving or sending (M2-05, M2-07), drag and drop of file
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: each body kind round trips through `FromDefinition`/`ToDefinition`; editing
+- [x] Tests in `Yaapic.ViewModels.Tests`: each body kind round trips through `FromDefinition`/`ToDefinition`; editing
       a form row, switching a row to File, adding/removing rows, or changing the binary path makes the tab dirty and
       reverting cleans it; the placeholder row never appears in `ToFields`; `PickFileAsync` sets the value from
       `FakeDialogService.PickFileAnswer` and keeps it on cancel (null); only the active kind's fields are written.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

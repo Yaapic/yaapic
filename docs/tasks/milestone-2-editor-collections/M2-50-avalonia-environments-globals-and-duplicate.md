@@ -1,8 +1,8 @@
 # M2-50: Avalonia environments window: globals and duplicate
 
-Status: todo
+Status: done
 Platform: unix
-Depends on: M2-42, M2-45
+Depends on: M2-42, M2-45, M1-57
 
 ## Goal
 
@@ -23,9 +23,11 @@ Same as M2-47.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M2-47 on the host OS.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M2-47 on the host OS (Windows, published AOT exe driven through UI Automation: global
+      `gbase` saved to `globals.yaml`, `{{gbase}}/users` sent and hit the stub at the global's value; "staging" duplicated
+      to "staging copy", renamed and saved: both env files exist; the environment-wins check is covered by the VariableResolver tests).
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -11,6 +12,13 @@ public static class VisibilityMap
     /// <param name="value">The value to test.</param>
     /// <returns>The visibility.</returns>
     public static Visibility WhenNull(object? value) => value is null ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when neither the globals nor an environment is edited.</summary>
+    /// <param name="editingGlobals">Whether the globals are edited.</param>
+    /// <param name="environment">The edited environment, if any.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenNeither(bool editingGlobals, object? environment) =>
+        !editingGlobals && environment is null ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>Returns <see cref="Visibility.Visible"/> when the value is not null.</summary>
     /// <param name="value">The value to test.</param>
@@ -27,6 +35,11 @@ public static class VisibilityMap
     /// <returns><see langword="true"/> when the text is not empty.</returns>
     public static bool HasText(string? text) => !string.IsNullOrEmpty(text);
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> when <paramref name="text"/> is not empty.</summary>
+    /// <param name="text">The text to test.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenText(string? text) => string.IsNullOrEmpty(text) ? Visibility.Collapsed : Visibility.Visible;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when <paramref name="value"/> is <see langword="true"/>.</summary>
     /// <param name="value">The flag to test.</param>
     /// <returns>The visibility.</returns>
@@ -37,11 +50,6 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenFalse(bool value) => value ? Visibility.Collapsed : Visibility.Visible;
 
-    /// <summary>Gets <see cref="Visibility.Visible"/> when the method is GET, which is sent without a body.</summary>
-    /// <param name="method">The HTTP method.</param>
-    /// <returns>The visibility.</returns>
-    public static Visibility WhenGet(HttpMethodKind method) => method == HttpMethodKind.Get ? Visibility.Visible : Visibility.Collapsed;
-
     /// <summary>Gets <see cref="Visibility.Visible"/> when <paramref name="count"/> is above zero.</summary>
     /// <param name="count">The count to test.</param>
     /// <returns>The visibility.</returns>
@@ -51,6 +59,41 @@ public static class VisibilityMap
     /// <param name="kind">The body kind.</param>
     /// <returns>The visibility.</returns>
     public static Visibility WhenRaw(BodyKind kind) => kind == BodyKind.Raw ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the body is url-encoded.</summary>
+    /// <param name="kind">The body kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenUrlEncoded(BodyKind kind) => kind == BodyKind.UrlEncoded ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the body is multipart form-data.</summary>
+    /// <param name="kind">The body kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenFormData(BodyKind kind) => kind == BodyKind.FormData ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the body is a binary file.</summary>
+    /// <param name="kind">The body kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenBinary(BodyKind kind) => kind == BodyKind.Binary ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when no authentication is selected.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenNoAuth(AuthKind kind) => kind == AuthKind.None ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for Basic authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenBasicAuth(AuthKind kind) => kind == AuthKind.Basic ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for Bearer authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenBearerAuth(AuthKind kind) => kind == AuthKind.Bearer ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for API key authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenApiKeyAuth(AuthKind kind) => kind == AuthKind.ApiKey ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>Gets <see cref="Visibility.Visible"/> when the panel shows a response.</summary>
     /// <param name="state">The panel state.</param>
@@ -107,12 +150,36 @@ public static class VisibilityMap
     public static Visibility WhenNoSavedRequests(int count, string? filter) =>
         count == 0 && string.IsNullOrWhiteSpace(filter) ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> for a folder that is not a collection.</summary>
+    /// <param name="isFolder">Whether the row is a folder.</param>
+    /// <param name="isCollection">Whether the row is a collection.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenSubfolder(bool isFolder, bool isCollection) =>
+        isFolder && !isCollection ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when a filter is typed and nothing matches.</summary>
     /// <param name="count">The number of listed requests.</param>
     /// <param name="filter">The filter text.</param>
     /// <returns>The visibility.</returns>
     public static Visibility WhenNoMatch(int count, string? filter) =>
         count == 0 && !string.IsNullOrWhiteSpace(filter) ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> while the sidebar lists the collection tree.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenCollections(SidebarMode mode) => mode == SidebarMode.Collections ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when the collection tree is shown and empty.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <param name="isEmpty">Whether the tree has no collection.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenCollectionsEmpty(SidebarMode mode, bool isEmpty) =>
+        mode == SidebarMode.Collections && isEmpty ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> while the sidebar lists the request history.</summary>
+    /// <param name="mode">The sidebar mode.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenHistory(SidebarMode mode) => mode == SidebarMode.History ? Visibility.Visible : Visibility.Collapsed;
 
     /// <summary>Gets the message shown when a filter matches no request.</summary>
     /// <param name="filter">The filter text.</param>

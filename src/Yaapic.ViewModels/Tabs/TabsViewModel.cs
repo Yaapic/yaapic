@@ -65,6 +65,16 @@ public sealed partial class TabsViewModel : ObservableObject
         ActiveTab = tab;
     }
 
+    /// <summary>Opens <paramref name="definition"/> as a new unsaved tab with a fresh identifier and activates it.</summary>
+    /// <param name="definition">The request to copy, for example from the history.</param>
+    public void OpenAsNew(HttpRequestDefinition definition)
+    {
+        ArgumentNullException.ThrowIfNull(definition);
+        var tab = _createEditor(definition with { Id = Guid.NewGuid() }, true);
+        Tabs.Add(tab);
+        ActiveTab = tab;
+    }
+
     /// <summary>Activates the tab showing <paramref name="definition"/>, opening one when needed.</summary>
     /// <param name="definition">The saved request to show.</param>
     public void Open(HttpRequestDefinition definition)
@@ -148,6 +158,12 @@ public sealed partial class TabsViewModel : ObservableObject
     [RelayCommand]
     private Task CloseActiveAsync() => ActiveTab is { } tab ? CloseAsync(tab) : Task.CompletedTask;
 
+    [RelayCommand]
+    private void NextTab() => Step(1);
+
+    [RelayCommand]
+    private void PreviousTab() => Step(-1);
+
     partial void OnActiveTabChanging(RequestEditorViewModel? value)
     {
         if (_activeTab is { } previous)
@@ -168,7 +184,18 @@ public sealed partial class TabsViewModel : ObservableObject
 
     internal static bool IsUntouched(RequestEditorViewModel tab) =>
         tab.IsNew && tab.ToDefinition().IsEquivalentTo(
-            new HttpRequestDefinition(tab.Id, DefaultName, HttpMethodKind.Get, "", [], [], RequestBody.None));
+            new HttpRequestDefinition(tab.Id, DefaultName, HttpMethodKind.Get, "", [], [], RequestBody.None, RequestAuth.None, RequestSettings.Default));
+
+    private void Step(int delta)
+    {
+        if (Tabs.Count < 2)
+        {
+            return;
+        }
+
+        var index = ActiveTab is null ? -1 : Tabs.IndexOf(ActiveTab);
+        ActiveTab = Tabs[((index + delta) % Tabs.Count + Tabs.Count) % Tabs.Count];
+    }
 
     private void Remove(RequestEditorViewModel tab)
     {

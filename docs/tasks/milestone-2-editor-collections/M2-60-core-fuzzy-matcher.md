@@ -1,6 +1,6 @@
 # M2-60: Core: fuzzy matcher
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-01
 
@@ -31,11 +31,11 @@ Typo tolerance, searching several fields (the palette decides what to match), hi
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: blank query; non-subsequence returns null; case-insensitivity; indices correct;
+- [x] Tests in `Yaapic.Core.Tests`: blank query; non-subsequence returns null; case-insensitivity; indices correct;
       a prefix match beats a mid-word match; a word-start match (`gr` in `Get Request`... `New Request` with `nr`) beats a
       scattered one; consecutive beats gapped; exact numeric score of three small hand-computed cases (`"ab"` on `"ab"`,
       `"ab"` on `"a-b"`, `"ac"` on `"abc"`); `Compare` tie-breaks.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

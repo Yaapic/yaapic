@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Yaapic.ViewModels.Editing;
+using Yaapic.ViewModels.Requests;
 
 namespace Yaapic.App.WinUI.Views;
 
@@ -19,6 +20,11 @@ public sealed partial class KeyValueEditorView : UserControl
     /// <summary>Identifies the <see cref="ValueHeader"/> dependency property.</summary>
     public static readonly DependencyProperty ValueHeaderProperty = DependencyProperty.Register(
         nameof(ValueHeader), typeof(string), typeof(KeyValueEditorView), new PropertyMetadata("Value"));
+
+    /// <summary>Identifies the <see cref="VariableContext"/> dependency property.</summary>
+    public static readonly DependencyProperty VariableContextProperty = DependencyProperty.Register(
+        nameof(VariableContext), typeof(VariableContext), typeof(KeyValueEditorView),
+        new PropertyMetadata(null, (d, _) => ((KeyValueEditorView)d).OnViewModelChanged()));
 
     /// <summary>Initializes the view.</summary>
     public KeyValueEditorView() => InitializeComponent();
@@ -44,7 +50,22 @@ public sealed partial class KeyValueEditorView : UserControl
         set => SetValue(ViewModelProperty, value);
     }
 
-    private void OnViewModelChanged() => RowList.ItemsSource = ViewModel?.Rows;
+    /// <summary>Gets or sets the context that colours <c>{{variables}}</c> in the cells; <see langword="null"/> keeps them plain.</summary>
+    public VariableContext? VariableContext
+    {
+        get => (VariableContext?)GetValue(VariableContextProperty);
+        set => SetValue(VariableContextProperty, value);
+    }
+
+    // Rebinding recreates the rows, so every realised cell picks up the new context.
+    private void OnViewModelChanged()
+    {
+        RowList.ItemsSource = null;
+        RowList.ItemsSource = ViewModel?.Rows;
+    }
+
+    private void OnRowPrepared(ItemsRepeater sender, ItemsRepeaterElementPreparedEventArgs args) =>
+        VariableTextBox.ApplyContext(args.Element, VariableContext);
 
     private void OnRemove(object sender, RoutedEventArgs e)
     {

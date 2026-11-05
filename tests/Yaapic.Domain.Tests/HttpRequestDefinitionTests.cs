@@ -11,7 +11,13 @@ public class HttpRequestDefinitionTests
         Assert.Equal("Login", r.Name);
         Assert.Equal(HttpMethodKind.Get, r.Method);
         Assert.Equal(RequestBody.None, r.Body);
+        Assert.Equal(RequestAuth.None, r.Auth);
+        Assert.Equal(RequestSettings.Default, r.Settings);
     }
+
+    [Fact]
+    public void Negative_timeout_throws() =>
+        Assert.Throws<ArgumentOutOfRangeException>(() => new RequestSettings(true, -1));
 
     [Theory]
     [InlineData(null)]
@@ -48,6 +54,9 @@ public class HttpRequestDefinitionTests
         r => r with { QueryParams = [new("q", "2")] },
         r => r with { Headers = [new("h", "2")] },
         r => r with { Body = RequestBody.Raw(RawContentType.Json, "[]") },
+        r => r with { Auth = RequestAuth.None with { Kind = AuthKind.Bearer, Token = "t" } },
+        r => r with { Settings = new RequestSettings(false, 0) },
+        r => r with { Settings = new RequestSettings(true, 5) },
     };
 
     [Theory]

@@ -1,6 +1,6 @@
 # M2-58: WinUI sidebar mode switch and history list
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-57, M2-36
 
@@ -30,11 +30,11 @@ Search inside request bodies, pinning entries, keyboard shortcuts for the mode s
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: send two requests, switch to History: both appear under "Today", newest first;
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: send two requests, switch to History: both appear under "Today", newest first;
       click one: a new unsaved tab opens with the same request; delete one; clear (confirmation); restart: the
       remaining history is still there.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

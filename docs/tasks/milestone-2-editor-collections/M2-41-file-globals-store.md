@@ -1,6 +1,6 @@
 # M2-41: Globals YAML serializer and file store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-40
 
@@ -26,10 +26,10 @@ The ViewModel (M2-42), secrets.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` (temp directory): serializer round trip, golden match, version 2 and
+- [x] Tests in `Yaapic.Infrastructure.Tests` (temp directory): serializer round trip, golden match, version 2 and
       malformed YAML throw; store: missing file loads empty, save then load, overwrite, corrupt file throws on load,
       no `.tmp` left behind, `\n` endings and no BOM.
-- [ ] 0 warnings (AOT analyzers on).
+- [x] 0 warnings (AOT analyzers on).
 
 ## Suggested commit message
 

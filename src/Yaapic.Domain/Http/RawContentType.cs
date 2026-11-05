@@ -11,4 +11,10 @@ public enum RawContentType
 
     /// <summary>XML.</summary>
     Xml,
+
+    /// <summary>HTML.</summary>
+    Html,
+
+    /// <summary>JavaScript.</summary>
+    JavaScript,
 }

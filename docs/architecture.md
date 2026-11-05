@@ -23,22 +23,35 @@ No library references an App project.
 ```
 RequestEditorViewModel.SendCommand
   -> RequestSender            (Core: use case)
-     -> RequestResolver       (Core: {{variables}} resolved from the active environment and dynamic variables;
+     -> RequestResolver       (Core: {{variables}} resolved by scope, highest first: active environment, collection
+                               variables, globals, dynamic variables; the scopes come from IVariableScopeProvider;
                                unresolved names are reported, they never block the send)
      -> IHttpTransport        (Core port, implemented by HttpClientTransport in Infrastructure)
   -> SendReport               (result + unresolved variables)
   -> ResponsePanelViewModel   (status, time, size, Pretty/Raw body, headers, errors)
 ```
 
+Every completed send raises `Sent`; the composition root records it through `HistoryViewModel` (`IHistoryStore`).
 Cancellation maps to a failed result "Request canceled"; any other transport error becomes a failed result too.
 
 ## Storage
 
-`Core.Storage` defines `IRequestStore`, `IEnvironmentStore` and `ISessionStore`. `Infrastructure` implements them as
-YAML files in the workspace folder (`FileRequestStore`, `FileEnvironmentStore`, `FileSessionStore`); see
-[file-format.md](file-format.md). `Composition.AppComposition.CreateShell` wires the whole graph for every App project.
+`Core.Storage` defines the ports `IRequestStore`, `IEnvironmentStore`, `ISessionStore`, `ICollectionStore` (folder tree,
+moves), `IGlobalsStore` and `IHistoryStore`. `Infrastructure` implements them in the workspace folder: YAML files
+(`FileRequestStore`, `FileEnvironmentStore`, `FileSessionStore`, `FileCollectionStore`, `FileGlobalsStore`) and an
+append-only JSON Lines file (`FileHistoryStore`); see [file-format.md](file-format.md) and
+[ADR 0008](adr/0008-collections-globals-history-storage.md). `Composition.AppComposition.CreateShell` wires the whole
+graph for every App project.
+
+## Search and command palette
+
+`Core.Search.FuzzyMatcher` ranks and highlights matches. `CommandPaletteViewModel` aggregates `IPaletteSource`s
+(commands, requests, environments, tabs), ranks them with the matcher and runs the chosen item; the composition root
+attaches it to the shell with `ShellViewModel.AttachPalette`. The App projects only render it.
 
 ## End-to-end tests
 
 `tests/Yaapic.Infrastructure.Tests/EndToEnd` drives the shell view model against a loopback `HttpListener` server
-(echo, `/status/{code}`, `/delay/{ms}`) on a temporary workspace, with no external network.
+(echo, `/status/{code}`, `/delay/{ms}`, `/redirect`) on a temporary workspace, with no external network.
+Milestone 2 scenarios (verbs, bodies, auth, redirects, collections, variable scopes, history, palette) are in
+`Milestone2EndToEndTests`.

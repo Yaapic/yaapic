@@ -27,8 +27,8 @@ public static class TokenGenerator
         var sb = new StringBuilder();
         sb.Append($"<ResourceDictionary xmlns=\"{WinUiNs}\" xmlns:x=\"{XNs}\">\n");
         sb.Append("  <ResourceDictionary.ThemeDictionaries>\n");
-        AppendTheme(sb, "Default", Theme.Dark, tokens, systemAccent: true);
-        AppendTheme(sb, "Light", Theme.Light, tokens, systemAccent: true);
+        AppendTheme(sb, "Default", Theme.Dark, tokens, systemAccent: true, isWinUi: true);
+        AppendTheme(sb, "Light", Theme.Light, tokens, systemAccent: true, isWinUi: true);
         AppendTheme(sb, "HighContrast", Theme.HighContrast, tokens);
         sb.Append("  </ResourceDictionary.ThemeDictionaries>\n");
         sb.Append($"  <CornerRadius x:Key=\"ControlCornerRadius\">{Px(Get(root, "radius", "control"), "windows")}</CornerRadius>\n");
@@ -54,8 +54,8 @@ public static class TokenGenerator
         var sb = new StringBuilder();
         sb.Append($"<ResourceDictionary xmlns=\"{AvaloniaNs}\" xmlns:x=\"{XNs}\">\n");
         sb.Append("  <ResourceDictionary.ThemeDictionaries>\n");
-        AppendTheme(sb, "Dark", Theme.Dark, tokens);
-        AppendTheme(sb, "Light", Theme.Light, tokens);
+        AppendTheme(sb, "Dark", Theme.Dark, tokens, systemAccent: true);
+        AppendTheme(sb, "Light", Theme.Light, tokens, systemAccent: true);
         sb.Append("  </ResourceDictionary.ThemeDictionaries>\n");
         sb.Append("  <!-- Contraste élevé : ThemeVariant personnalisée « HighContrast » déclarée dans App.axaml -->\n");
         sb.Append($"  <CornerRadius x:Key=\"YaapicRadiusControl\">{Px(Get(root, "radius", "control"))}</CornerRadius>\n");
@@ -75,7 +75,7 @@ public static class TokenGenerator
 
     private sealed record ColorToken(string Key, string[] Values, string[] Aliases);
 
-    private static void AppendTheme(StringBuilder sb, string key, Theme theme, List<ColorToken> tokens, bool systemAccent = false)
+    private static void AppendTheme(StringBuilder sb, string key, Theme theme, List<ColorToken> tokens, bool systemAccent = false, bool isWinUi = false)
     {
         sb.Append($"    <ResourceDictionary x:Key=\"{key}\">\n");
         foreach (var t in tokens)
@@ -89,7 +89,18 @@ public static class TokenGenerator
             sb.Append($"      <Color x:Key=\"{t.Key[..^"Brush".Length]}Color\">{color}</Color>\n");
         }
         if (systemAccent)
-            sb.Append($"      <Color x:Key=\"SystemAccentColor\">{ToXamlColor(tokens.Single(t => t.Key == "YaapicAccentFillBrush").Values[(int)theme])}</Color>\n");
+        {
+            string Accent(string key) => ToXamlColor(tokens.Single(t => t.Key == key).Values[(int)theme]);
+            sb.Append($"      <Color x:Key=\"SystemAccentColor\">{Accent("YaapicAccentFillBrush")}</Color>\n");
+            // Avalonia derives six shades from the accent; the palette has no more, so the hover colour stands for
+            // the lighter ones and the pressed colour for the darker ones.
+            if (!isWinUi)
+                for (var i = 1; i <= 3; i++)
+                {
+                    sb.Append($"      <Color x:Key=\"SystemAccentColorLight{i}\">{Accent("YaapicAccentFillHoverBrush")}</Color>\n");
+                    sb.Append($"      <Color x:Key=\"SystemAccentColorDark{i}\">{Accent("YaapicAccentFillPressedBrush")}</Color>\n");
+                }
+        }
         sb.Append("    </ResourceDictionary>\n");
     }
 
@@ -142,7 +153,7 @@ public static class TokenGenerator
                 var themes = ext.GetProperty(ThemesKey);
                 var xaml = ext.GetProperty(XamlKey);
                 var dark = value.GetString()!;
-                string[] aliases = platform == "winui" && xaml.TryGetProperty("winuiAliases", out var list)
+                string[] aliases = xaml.TryGetProperty(platform + "Aliases", out var list)
                     ? [.. list.EnumerateArray().Select(a => a.GetString()!)]
                     : [];
                 result.Add(new ColorToken(xaml.GetProperty(platform).GetString()!,

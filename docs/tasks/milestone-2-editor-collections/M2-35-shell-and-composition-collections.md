@@ -1,6 +1,6 @@
 # M2-35: Shell and composition: collections
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-31, M2-34
 
@@ -25,10 +25,10 @@ Views, history, globals.
 
 ## Acceptance criteria
 
-- [ ] Tests: `ShellViewModelTests` assert `Collections` is refreshed during initialization (a nested request in the
+- [x] Tests: `ShellViewModelTests` assert `Collections` is refreshed during initialization (a nested request in the
       store appears in `Collections.Roots`); `AppCompositionTests` assert the tree of a temp workspace that contains a
       collection with one request after `InitializeAsync`; all M1 shell tests green.
-- [ ] 0 warnings; architecture tests green.
+- [x] 0 warnings; architecture tests green.
 
 ## Suggested commit message
 

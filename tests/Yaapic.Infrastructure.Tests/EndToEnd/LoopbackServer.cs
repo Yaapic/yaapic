@@ -5,7 +5,7 @@ using System.Text.Json;
 
 namespace Yaapic.Infrastructure.Tests.EndToEnd;
 
-/// <summary>A loopback HTTP server echoing requests as JSON, with <c>/status/{code}</c> and <c>/delay/{ms}</c> routes.</summary>
+/// <summary>A loopback HTTP server echoing requests as JSON, with <c>/status/{code}</c> and <c>/delay/{ms}</c> routes, and <c>/redirect</c> answering 302 to <c>/echo</c>.</summary>
 public sealed class LoopbackServer : IDisposable
 {
     private readonly HttpListener _listener = new();
@@ -58,8 +58,15 @@ public sealed class LoopbackServer : IDisposable
                 await Task.Delay(int.Parse(path["/delay/".Length..]));
             }
 
-            using var reader = new StreamReader(context.Request.InputStream, Encoding.UTF8);
-            var body = await reader.ReadToEndAsync();
+            else if (path == "/redirect")
+            {
+                context.Response.StatusCode = 302;
+                context.Response.RedirectLocation = "/echo";
+            }
+
+            using var raw = new MemoryStream();
+            await context.Request.InputStream.CopyToAsync(raw);
+            var bodyBytes = raw.ToArray();
             var stream = new MemoryStream();
             using (var json = new Utf8JsonWriter(stream))
             {
@@ -73,7 +80,8 @@ public sealed class LoopbackServer : IDisposable
                 }
 
                 json.WriteEndObject();
-                json.WriteString("body", body);
+                json.WriteString("body", Encoding.UTF8.GetString(bodyBytes));
+                json.WriteString("bodyBase64", Convert.ToBase64String(bodyBytes));
                 json.WriteEndObject();
             }
 

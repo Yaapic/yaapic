@@ -1,0 +1,26 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000006
+name: Upload avatar
+method: POST
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: form-data
+  contentType: json
+  text: ""
+  fields:
+    - key: name
+      value: Ada Lovelace
+      enabled: true
+      kind: text
+    - key: avatar
+      value: C:\img\ada.png
+      enabled: true
+      kind: file
+    - key: note
+      value: first programmer
+      enabled: false
+      kind: text
+auth:
+  type: none

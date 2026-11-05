@@ -20,10 +20,44 @@ public sealed partial class RequestEditorView : UserControl
     /// <summary>Raised when the user asks to save the request from the header button.</summary>
     public event RoutedEventHandler? SaveRequested;
 
-    /// <summary>Initializes the view.</summary>
-    public RequestEditorView() => InitializeComponent();
+    /// <summary>Raised when a variable popup asks to open the editor of the scope that holds the variable.</summary>
+    public event EventHandler<VariableScopeOpenRequest>? VariableScopeOpenRequested;
 
-    private static readonly string[] ContentTypeNames = ["JSON", "Text", "XML"];
+    /// <summary>Initializes the view.</summary>
+    public RequestEditorView()
+    {
+        InitializeComponent();
+        foreach (var method in RequestEditorViewModel.Methods)
+        {
+            var item = new MenuFlyoutItem
+            {
+                Text = method.ToText(),
+                Tag = method.ToText(),
+                Foreground = BrushMap.Method(method),
+                FontFamily = (FontFamily)Application.Current.Resources["YaapicMonoFont"],
+                FontWeight = Microsoft.UI.Text.FontWeights.Bold,
+                FontSize = 12,
+            };
+            item.Click += OnMethodClick;
+            MethodFlyout.Items.Add(item);
+        }
+
+        // The brushes depend on the window theme, which can change after construction: refresh them whenever the menu opens.
+        MethodFlyout.Opening += (_, _) =>
+        {
+            for (var i = 0; i < RequestEditorViewModel.Methods.Count; i++)
+            {
+                ((MenuFlyoutItem)MethodFlyout.Items[i]).Foreground = BrushMap.Method(RequestEditorViewModel.Methods[i]);
+            }
+        };
+        ActualThemeChanged += (_, _) =>
+        {
+            BrushMap.IsLight = ActualTheme == ElementTheme.Light;
+            Bindings?.Update();
+        };
+    }
+
+    private static readonly string[] ContentTypeNames = ["JSON", "Text", "XML", "HTML", "JavaScript"];
 
     /// <summary>Gets or sets the edited request.</summary>
     public RequestEditorViewModel? ViewModel
@@ -32,18 +66,52 @@ public sealed partial class RequestEditorView : UserControl
         set => SetValue(ViewModelProperty, value);
     }
 
+    private VariableContext? _variables;
+
     private void OnViewModelChanged()
     {
         Bindings?.Update();
+        if (_variables is not null)
+        {
+            _variables.OpenRequested -= OnVariableOpenRequested;
+        }
+
+        _variables = ViewModel?.Variables;
+        if (_variables is not null)
+        {
+            _variables.OpenRequested += OnVariableOpenRequested;
+        }
+
         if (ViewModel is not { } vm)
         {
             return;
         }
 
         // The pickers are index based: boxed managed enums cannot cross into XAML under Native AOT.
-        BodyNone.IsChecked = vm.BodyKind != BodyKind.Raw;
+        BodyNone.IsChecked = vm.BodyKind == BodyKind.None;
         BodyRaw.IsChecked = vm.BodyKind == BodyKind.Raw;
+        BodyUrlEncoded.IsChecked = vm.BodyKind == BodyKind.UrlEncoded;
+        BodyFormData.IsChecked = vm.BodyKind == BodyKind.FormData;
+        BodyBinary.IsChecked = vm.BodyKind == BodyKind.Binary;
         ContentTypeLabel.Text = ContentTypeNames[IndexOf(RequestEditorViewModel.ContentTypes, vm.BodyContentType)];
+        TimeoutBox.Value = vm.TimeoutSeconds;
+    }
+
+    private void OnVariableOpenRequested(object? sender, Yaapic.Core.Variables.VariableScopeKind scope)
+    {
+        if (ViewModel is { } vm)
+        {
+            VariableScopeOpenRequested?.Invoke(this, new VariableScopeOpenRequest(vm.Id, scope));
+        }
+    }
+
+    private void OnTimeoutChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+    {
+        if (ViewModel is not null)
+        {
+            // An emptied box reports NaN; it means "use the default".
+            ViewModel.TimeoutSeconds = double.IsNaN(args.NewValue) ? 0 : (int)args.NewValue;
+        }
     }
 
     private void OnSaveClick(object sender, RoutedEventArgs e) => SaveRequested?.Invoke(this, e);
@@ -65,7 +133,7 @@ public sealed partial class RequestEditorView : UserControl
     private void SetUrlBarFocused(bool focused)
     {
         // A 2 px focus border replaces the 1 px one; the negative content margin keeps the text from moving.
-        UrlBar.BorderBrush = (Brush)Application.Current.Resources[focused ? "YaapicFocusRingBrush" : "YaapicBorderControlBrush"];
+        UrlBar.BorderBrush = BrushMap.Themed(focused ? "YaapicFocusRingBrush" : "YaapicBorderControlBrush");
         UrlBar.BorderThickness = new Thickness(focused ? 2 : 1);
         UrlBarContent.Margin = new Thickness(focused ? -1 : 0);
     }
@@ -74,7 +142,8 @@ public sealed partial class RequestEditorView : UserControl
     {
         if (ViewModel is not null)
         {
-            ViewModel.Method = ((MenuFlyoutItem)sender).Tag is "Post" ? HttpMethodKind.Post : HttpMethodKind.Get;
+            // The flyout is built from Methods in order, so the item index is the method index.
+            ViewModel.Method = RequestEditorViewModel.Methods[MethodFlyout.Items.IndexOf((MenuFlyoutItem)sender)];
         }
     }
 
@@ -92,7 +161,11 @@ public sealed partial class RequestEditorView : UserControl
     {
         if (ViewModel is not null)
         {
-            ViewModel.BodyKind = ReferenceEquals(sender, BodyRaw) ? BodyKind.Raw : BodyKind.None;
+            ViewModel.BodyKind = ReferenceEquals(sender, BodyRaw) ? BodyKind.Raw
+                : ReferenceEquals(sender, BodyUrlEncoded) ? BodyKind.UrlEncoded
+                : ReferenceEquals(sender, BodyFormData) ? BodyKind.FormData
+                : ReferenceEquals(sender, BodyBinary) ? BodyKind.Binary
+                : BodyKind.None;
         }
     }
 
@@ -111,6 +184,11 @@ public sealed partial class RequestEditorView : UserControl
         ParamsTab.IsChecked = ReferenceEquals(sender, ParamsTab);
         HeadersTab.IsChecked = ReferenceEquals(sender, HeadersTab);
         BodyTab.IsChecked = ReferenceEquals(sender, BodyTab);
+        AuthTab.IsChecked = ReferenceEquals(sender, AuthTab);
+        SettingsTab.IsChecked = ReferenceEquals(sender, SettingsTab);
+        AuthPane.Visibility = AuthTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        SettingsPane.Visibility = SettingsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        AuthBadge.Style = BadgeStyle(AuthTab);
         ParamsPane.Visibility = ParamsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         HeadersPane.Visibility = HeadersTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         BodyPane.Visibility = BodyTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
@@ -177,7 +255,7 @@ public sealed partial class RequestEditorView : UserControl
     {
         var active = hovered || _splitterDragging || Splitter.FocusState != FocusState.Unfocused;
         SplitterLine.Height = _splitterDragging ? 2 : 1;
-        SplitterLine.Fill = (Brush)Application.Current.Resources[active ? "YaapicAccentBrush" : "YaapicBorderSubtleBrush"];
+        SplitterLine.Fill = BrushMap.Themed(active ? "YaapicAccentFillBrush" : "YaapicBorderSubtleBrush");
     }
 
     private void MoveSplitter(double delta)
@@ -211,3 +289,8 @@ public sealed partial class RequestEditorView : UserControl
         return 0;
     }
 }
+
+/// <summary>A request to open the editor of a variable scope.</summary>
+/// <param name="RequestId">The request whose variable was shown.</param>
+/// <param name="Scope">The scope to open.</param>
+public sealed record VariableScopeOpenRequest(Guid RequestId, Yaapic.Core.Variables.VariableScopeKind Scope);

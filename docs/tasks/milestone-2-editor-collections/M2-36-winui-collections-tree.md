@@ -1,6 +1,6 @@
 # M2-36: WinUI collections tree
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-35, M2-16
 
@@ -31,14 +31,16 @@ Context menus and prompts (M2-37), drag and drop, keyboard navigation beyond the
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe, with a workspace holding `requests/demo/folder.yaml`,
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe, with a workspace holding `requests/demo/folder.yaml`,
       `requests/demo/sub/folder.yaml` and requests at each level (create the files by hand): the tree shows them,
       expanding/collapsing works, clicking a request opens its tab, the filter narrows the tree.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): show collections as a tree in the sidebar`
 
 ## Notes
+
+- No CsWinRT/AOT warnings for `ObservableCollection<CollectionNodeViewModel>`; no fix needed. Tree rows use `YiCollection`/`YiFolder` path data (no new resource keys). Smoke done with UI Automation on the AOT exe: expand/collapse, request opens its tab, filter narrows the tree.

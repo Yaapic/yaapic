@@ -1,6 +1,6 @@
 # M2-06: Request resolution: authentication
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-05
 
@@ -26,11 +26,11 @@ OAuth 2.0, JWT, digest, AWS signing (M4), the UI (M2-18, M2-23).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: each auth kind with its expected header or query (Basic for `Aladdin` /
+- [x] Tests in `Yaapic.Core.Tests`: each auth kind with its expected header or query (Basic for `Aladdin` /
       `open sesame` is `Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==`); variables in fields; unresolved reported; skipped when
       empty; a user `Authorization` header wins; API key in the query goes after the params and before the fragment;
       `None` changes nothing.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

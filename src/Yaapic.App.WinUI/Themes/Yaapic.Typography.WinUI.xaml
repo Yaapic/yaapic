@@ -70,8 +70,8 @@
   <!-- Foreground is set by the caller (method brush). -->
   <Style x:Key="YaapicMethodTextStyle" TargetType="TextBlock">
     <Setter Property="FontFamily" Value="{StaticResource YaapicMonoFont}"/>
-    <Setter Property="FontSize" Value="{StaticResource YaapicFontSizeLabelMono}"/>
-    <Setter Property="LineHeight" Value="{StaticResource YaapicLineHeightLabelMono}"/>
+    <Setter Property="FontSize" Value="12"/>
+    <Setter Property="LineHeight" Value="16"/>
     <Setter Property="LineStackingStrategy" Value="BlockLineHeight"/>
     <Setter Property="FontWeight" Value="Bold"/>
   </Style>

@@ -1,5 +1,4 @@
 using Avalonia.Controls;
-using Avalonia.Interactivity;
 using Yaapic.Core.Responses;
 using Yaapic.ViewModels.Responses;
 
@@ -11,15 +10,11 @@ public sealed partial class ResponsePanelView : UserControl
     /// <summary>Creates the view.</summary>
     public ResponsePanelView() => InitializeComponent();
 
-    private void OnPretty(object? sender, RoutedEventArgs e) => SetMode(BodyViewMode.Pretty);
-
-    private void OnRaw(object? sender, RoutedEventArgs e) => SetMode(BodyViewMode.Raw);
-
-    private void SetMode(BodyViewMode mode)
+    private void OnViewModeChanged(object? sender, SelectionChangedEventArgs e)
     {
-        if (DataContext is ResponsePanelViewModel vm)
+        if (sender is ListBox { SelectedIndex: >= 0 and var index } && DataContext is ResponsePanelViewModel vm)
         {
-            vm.ViewMode = mode;
+            vm.ViewMode = index == 1 ? BodyViewMode.Raw : BodyViewMode.Pretty;
         }
     }
 }

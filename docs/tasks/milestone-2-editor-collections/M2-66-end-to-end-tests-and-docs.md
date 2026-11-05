@@ -1,6 +1,6 @@
 # M2-66: End-to-end tests and milestone docs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-07, M2-31, M2-45, M2-57, M2-63
 
@@ -38,9 +38,9 @@ UI automation, performance tests, external hosts.
 
 ## Acceptance criteria
 
-- [ ] The eight scenarios pass on Windows and Linux runners.
-- [ ] `docs/architecture.md`, `docs/file-format.md` and `docs/dependencies.md` match the code.
-- [ ] 0 warnings, all tests green.
+- [x] The eight scenarios pass on Windows and Linux runners.
+- [x] `docs/architecture.md`, `docs/file-format.md` and `docs/dependencies.md` match the code.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

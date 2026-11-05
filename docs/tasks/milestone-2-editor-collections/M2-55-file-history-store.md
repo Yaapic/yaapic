@@ -1,6 +1,6 @@
 # M2-55: File history store (JSON Lines)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-54, M2-08
 
@@ -34,11 +34,11 @@ Searching in the file, response bodies, export.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` on a temp directory: append and list round trip of a success and a failure
+- [x] Tests in `Yaapic.Infrastructure.Tests` on a temp directory: append and list round trip of a success and a failure
       entry (request equivalence, status, duration, size, failure members); newest first; a corrupt line in the middle is
       skipped; 551 appends leave 500 lines and the newest 500 entries; delete and clear; missing directory and file;
       concurrent appends (e.g. 20 `Task`s) lose nothing and never interleave a line; no `.tmp` left; no BOM.
-- [ ] AOT analyzers clean, 0 warnings.
+- [x] AOT analyzers clean, 0 warnings.
 
 ## Suggested commit message
 

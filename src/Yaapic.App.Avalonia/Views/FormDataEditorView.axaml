@@ -1,0 +1,73 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ed="using:Yaapic.ViewModels.Editing"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             x:Class="Yaapic.App.Avalonia.Views.FormDataEditorView"
+             x:DataType="ed:FormDataEditorViewModel">
+  <UserControl.Styles>
+    <Style Selector="Border.row.placeholder">
+      <Setter Property="Opacity" Value="0.6" />
+    </Style>
+    <Style Selector="Border.row.disabled">
+      <Setter Property="Opacity" Value="0.55" />
+    </Style>
+    <Style Selector="Border.row Button.remove">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="Border.row:pointerover Button.remove">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="Border.row Button.remove:focus">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+  </UserControl.Styles>
+  <Border BorderThickness="1" BorderBrush="{DynamicResource YaapicBorderDefaultBrush}"
+          CornerRadius="{DynamicResource YaapicRadiusMd}" ClipToBounds="True">
+    <DockPanel>
+      <Grid DockPanel.Dock="Top" Height="28" ColumnDefinitions="36,*,72,2*,36"
+            Background="{DynamicResource YaapicSurfaceSidebarBrush}">
+        <TextBlock Grid.Column="1" Classes="caption" VerticalAlignment="Center" Margin="10,0" Text="KEY" />
+        <TextBlock Grid.Column="2" Classes="caption" VerticalAlignment="Center" Margin="10,0,0,0" Text="TYPE" />
+        <Border Grid.Column="3" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource YaapicBorderDefaultBrush}">
+          <TextBlock Classes="caption" VerticalAlignment="Center" Margin="10,0" Text="VALUE" />
+        </Border>
+      </Grid>
+      <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding Rows}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="ed:FormDataRowViewModel">
+              <Border Classes="row" Classes.placeholder="{Binding IsEmpty}" Classes.disabled="{Binding !Enabled}"
+                      Height="30" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+                <Grid ColumnDefinitions="36,*,72,2*,36">
+                  <CheckBox Grid.Column="0" HorizontalAlignment="Center" MinWidth="0" Padding="0"
+                            AutomationProperties.Name="Enabled" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+                  <TextBox Grid.Column="1" Classes="cell" PlaceholderText="Key" Text="{Binding Key, Mode=TwoWay}" />
+                  <ComboBox Grid.Column="2" Classes="cell" Tag="{Binding}" AutomationProperties.Name="Kind"
+                            SelectedIndex="{Binding Kind, Converter={x:Static p:EditorMap.FieldKindIndex}, Mode=OneWay}"
+                            SelectionChanged="OnKindChanged">
+                    <ComboBoxItem Content="Text" />
+                    <ComboBoxItem Content="File" />
+                  </ComboBox>
+                  <Border Grid.Column="3" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+                    <Grid ColumnDefinitions="*,Auto">
+                      <TextBox Classes="cell" PlaceholderText="Value" IsReadOnly="{Binding IsFile}"
+                               Text="{Binding Value, Mode=TwoWay}" />
+                      <Button Grid.Column="1" Classes="subtle" Content="Browse" Margin="0,0,4,0" VerticalAlignment="Center"
+                              IsVisible="{Binding IsFile}" Command="{Binding PickFileCommand}" />
+                    </Grid>
+                  </Border>
+                  <Button Grid.Column="4" Classes="icon remove" HorizontalAlignment="Center"
+                          AutomationProperties.Name="Remove row" ToolTip.Tip="Remove row" IsVisible="{Binding !IsEmpty}"
+                          Command="{Binding $parent[ItemsControl].((ed:FormDataEditorViewModel)DataContext).RemoveRowCommand}"
+                          CommandParameter="{Binding}">
+                    <PathIcon Data="{StaticResource YaapicGlyphClose}" />
+                  </Button>
+                </Grid>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+      </ScrollViewer>
+    </DockPanel>
+  </Border>
+</UserControl>

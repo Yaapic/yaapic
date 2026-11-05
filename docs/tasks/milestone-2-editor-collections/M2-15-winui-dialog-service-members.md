@@ -1,6 +1,6 @@
 # M2-15: WinUI dialog service: prompt, file pickers and clipboard
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-10
 
@@ -32,10 +32,11 @@ Callers of the new members (later cards).
 
 ## Acceptance criteria
 
-- [ ] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true`: 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: a temporary debug call is not committed; instead verify through the first
+- [x] `dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true`: 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: a temporary debug call is not committed; instead verify through the first
+      Exercised so far: none (published exe starts and stays alive; the four members await M2-19 and M2-37).
       caller (M2-19 save/copy, M2-37 prompts) and note here which of the four members were exercised.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

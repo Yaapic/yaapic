@@ -1,6 +1,6 @@
 # M2-21: Avalonia method picker and URL bar for all methods
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-11, M2-13
 
@@ -24,9 +24,9 @@ Body pane (M2-22), Auth/Settings (M2-23).
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M2-16 on the host OS.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M2-16 on the host OS.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

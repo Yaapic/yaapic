@@ -1,0 +1,8 @@
+version: 1
+variables:
+- key: baseUrl
+  value: "https://example.com"
+  enabled: true
+- key: token
+  value: "{{secret}}"
+  enabled: false

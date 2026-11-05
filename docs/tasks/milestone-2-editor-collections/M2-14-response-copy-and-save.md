@@ -1,6 +1,6 @@
 # M2-14: Response panel ViewModel: copy and save body
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-10, M2-12
 
@@ -26,10 +26,10 @@ Views (M2-19, M2-24), copying headers, response search, saving a request togethe
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: copy sends the displayed text (Pretty or Raw as shown); copy disabled for
+- [x] Tests in `Yaapic.ViewModels.Tests`: copy sends the displayed text (Pretty or Raw as shown); copy disabled for
       binary and for no response; save passes the raw bytes and the expected suggested name for json, xml, html,
       plain text and unknown types; commands disabled after `Clear`; with a null dialog service nothing throws.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

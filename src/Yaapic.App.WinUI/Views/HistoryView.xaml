@@ -1,0 +1,80 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.HistoryView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:ic="using:FluentIcons.WinUI"
+             xmlns:h="using:Yaapic.ViewModels.History">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid Padding="10,0,10,8" ColumnSpacing="6">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBox Height="28" MinHeight="28" Padding="28,3,8,3" PlaceholderText="Filter history"
+               AutomationProperties.Name="Filter history"
+               Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+               Text="{x:Bind ViewModel.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <ic:FluentIcon Icon="Search" IconVariant="Regular" IconSize="Size16" HorizontalAlignment="Left" Margin="8,0,0,0"
+                     IsHitTestVisible="False" Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+      <Button Grid.Column="1" Content="Clear" Height="28" MinHeight="28" Padding="10,0"
+              AutomationProperties.Name="Clear history"
+              Command="{x:Bind ViewModel.ClearCommand, Mode=OneWay}"/>
+    </Grid>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <ItemsRepeater ItemsSource="{x:Bind ViewModel.Groups, Mode=OneWay}">
+        <ItemsRepeater.ItemTemplate>
+          <DataTemplate x:DataType="h:HistoryGroup">
+            <StackPanel>
+              <TextBlock Text="{x:Bind Title}" Margin="14,8,14,4" Style="{StaticResource YaapicCaptionTextStyle}"/>
+              <ItemsRepeater ItemsSource="{x:Bind Items}">
+                <ItemsRepeater.ItemTemplate>
+                  <DataTemplate x:DataType="h:HistoryItemViewModel">
+                    <Button Tag="{x:Bind}" Click="OnOpen" Style="{StaticResource YaapicSubtleButtonStyle}"
+                            HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch"
+                            Padding="14,5" CornerRadius="0" AutomationProperties.Name="{x:Bind Url}">
+                      <Button.ContextFlyout>
+                        <MenuFlyout>
+                          <MenuFlyoutItem Text="Open" Tag="{x:Bind}" Click="OnOpen"/>
+                          <MenuFlyoutItem Text="Delete" Tag="{x:Bind}" Click="OnDelete"/>
+                        </MenuFlyout>
+                      </Button.ContextFlyout>
+                      <StackPanel Spacing="2">
+                        <Grid ColumnSpacing="6">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                          </Grid.ColumnDefinitions>
+                          <TextBlock Width="52" Text="{x:Bind MethodText}" VerticalAlignment="Center"
+                                     Style="{StaticResource YaapicMethodTextStyle}"
+                                     p:MethodBrush.Method="{x:Bind Method}"/>
+                          <TextBlock Grid.Column="1" Text="{x:Bind Url}" VerticalAlignment="Center"
+                                     TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicBodyTextStyle}"/>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" Spacing="8" Margin="58,0,0,0">
+                          <TextBlock Text="{x:Bind StatusText}" TextTrimming="CharacterEllipsis" MaxWidth="96"
+                                     Style="{StaticResource YaapicBodySmallTextStyle}"
+                                     Foreground="{x:Bind p:BrushMap.HistoryStatus(StatusCategory, IsFailed)}"/>
+                          <TextBlock Text="{x:Bind TimeText}" Style="{StaticResource YaapicBodySmallTextStyle}"
+                                     Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+                          <TextBlock Text="{x:Bind DurationText}" Style="{StaticResource YaapicBodySmallTextStyle}"
+                                     Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+                        </StackPanel>
+                      </StackPanel>
+                    </Button>
+                  </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+              </ItemsRepeater>
+            </StackPanel>
+          </DataTemplate>
+        </ItemsRepeater.ItemTemplate>
+      </ItemsRepeater>
+    </ScrollViewer>
+    <TextBlock Grid.Row="1" Text="No requests sent yet" HorizontalAlignment="Center" VerticalAlignment="Top"
+               Margin="16,24,16,0" Style="{StaticResource YaapicBodySmallTextStyle}"
+               Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsEmpty), Mode=OneWay}"/>
+  </Grid>
+</UserControl>

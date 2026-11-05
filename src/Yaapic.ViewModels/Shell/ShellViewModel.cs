@@ -1,8 +1,12 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Workspace;
 using Yaapic.UI.Abstractions;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
+using Yaapic.ViewModels.History;
+using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Tabs;
 
@@ -13,32 +17,48 @@ public sealed partial class ShellViewModel : ObservableObject
 {
     private readonly ISessionStore _session;
     private readonly IDialogService _dialogs;
+    private CommandPaletteViewModel? _palette;
     private bool _initialized;
     private bool _saving;
     private SessionState? _pending;
     private Task _drain = Task.CompletedTask;
 
+    [ObservableProperty]
+    private SidebarMode _mode = SidebarMode.Collections;
+
     /// <summary>Creates the shell.</summary>
     /// <param name="tabs">The open tabs.</param>
     /// <param name="requests">The sidebar request list.</param>
+    /// <param name="collections">The collection tree.</param>
+    /// <param name="history">The request history.</param>
     /// <param name="environments">The environment selection and editing.</param>
+    /// <param name="globals">The global variables editing.</param>
     /// <param name="session">Where the session is saved.</param>
     /// <param name="dialogs">Asks the user about unsaved changes when the window closes.</param>
     public ShellViewModel(
         TabsViewModel tabs,
         RequestListViewModel requests,
+        CollectionTreeViewModel collections,
+        HistoryViewModel history,
         EnvironmentsViewModel environments,
+        GlobalsViewModel globals,
         ISessionStore session,
         IDialogService dialogs)
     {
         ArgumentNullException.ThrowIfNull(tabs);
         ArgumentNullException.ThrowIfNull(requests);
+        ArgumentNullException.ThrowIfNull(collections);
+        ArgumentNullException.ThrowIfNull(history);
         ArgumentNullException.ThrowIfNull(environments);
+        ArgumentNullException.ThrowIfNull(globals);
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(dialogs);
         Tabs = tabs;
         Requests = requests;
+        Collections = collections;
+        History = history;
         Environments = environments;
+        Globals = globals;
         _session = session;
         _dialogs = dialogs;
         tabs.SessionChanged += (_, _) => QueueSave();
@@ -52,8 +72,42 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <summary>Gets the sidebar request list.</summary>
     public RequestListViewModel Requests { get; }
 
+    /// <summary>Gets the collection tree.</summary>
+    public CollectionTreeViewModel Collections { get; }
+
+    /// <summary>Gets the request history.</summary>
+    public HistoryViewModel History { get; }
+
     /// <summary>Gets the environments view model.</summary>
     public EnvironmentsViewModel Environments { get; }
+
+    /// <summary>Gets the global variables view model.</summary>
+    public GlobalsViewModel Globals { get; }
+
+    /// <summary>Gets the command palette.</summary>
+    /// <exception cref="InvalidOperationException">Read before <see cref="AttachPalette"/>.</exception>
+    public CommandPaletteViewModel Palette =>
+        _palette ?? throw new InvalidOperationException("The palette has not been attached.");
+
+    /// <summary>Attaches the palette; called once by the composition root, because the palette sources need the shell.</summary>
+    /// <param name="palette">The palette to attach.</param>
+    /// <exception cref="InvalidOperationException">A palette is already attached.</exception>
+    public void AttachPalette(CommandPaletteViewModel palette)
+    {
+        ArgumentNullException.ThrowIfNull(palette);
+        if (_palette is not null)
+        {
+            throw new InvalidOperationException("The palette is already attached.");
+        }
+
+        _palette = palette;
+    }
+
+    /// <summary>Raised when the user asks to manage environments; the views open their environments dialog.</summary>
+    public event EventHandler? EnvironmentsRequested;
+
+    /// <summary>Asks the views to open the environments dialog.</summary>
+    public void RequestEnvironments() => EnvironmentsRequested?.Invoke(this, EventArgs.Empty);
 
     /// <summary>Loads the stores and restores the saved session; opens one new tab when none is restored.</summary>
     /// <returns>A task that completes when the shell is ready.</returns>
@@ -61,7 +115,10 @@ public sealed partial class ShellViewModel : ObservableObject
     {
         var state = await _session.LoadAsync(CancellationToken.None);
         await Environments.LoadAsync(state.ActiveEnvironmentId);
+        await Globals.LoadAsync();
         await Requests.RefreshAsync();
+        await Collections.RefreshAsync();
+        await History.RefreshAsync();
 
         foreach (var id in state.OpenRequestIds)
         {
@@ -113,6 +170,15 @@ public sealed partial class ShellViewModel : ObservableObject
         await _drain;
         return true;
     }
+
+    [RelayCommand]
+    private void OpenPalette() => Palette.OpenCommand.Execute(null);
+
+    [RelayCommand]
+    private void ShowCollections() => Mode = SidebarMode.Collections;
+
+    [RelayCommand]
+    private void ShowHistory() => Mode = SidebarMode.History;
 
     private void QueueSave()
     {

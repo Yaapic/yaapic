@@ -3,61 +3,148 @@
              xmlns:req="using:Yaapic.ViewModels.Requests"
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
              xmlns:v="using:Yaapic.App.Avalonia.Views"
+             xmlns:c="using:Yaapic.App.Avalonia.Controls"
              x:Class="Yaapic.App.Avalonia.Views.RequestEditorView"
              x:DataType="req:RequestEditorViewModel">
-  <Grid RowDefinitions="Auto,Auto,*,Auto,2*" Margin="16,8" RowSpacing="8">
-    <TextBox Grid.Row="0" PlaceholderText="Untitled request" FontWeight="SemiBold"
-             Text="{Binding Name, Mode=TwoWay}" />
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="40" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="9*" MinHeight="120" />
+      <RowDefinition Height="Auto" />
+      <RowDefinition Height="11*" MinHeight="180" />
+    </Grid.RowDefinitions>
 
-    <Grid Grid.Row="1" ColumnDefinitions="100,*,Auto" ColumnSpacing="8">
-      <ComboBox x:Name="MethodBox" Grid.Column="0" HorizontalAlignment="Stretch"
-                SelectedIndex="{Binding Method, Converter={x:Static p:EditorMap.MethodIndex}, Mode=OneWay}"
-                SelectionChanged="OnMethodChanged">
-        <ComboBoxItem Content="GET" Foreground="{DynamicResource YaapicMethodGetBrush}" />
-        <ComboBoxItem Content="POST" Foreground="{DynamicResource YaapicMethodPostBrush}" />
-      </ComboBox>
-      <TextBox Grid.Column="1" PlaceholderText="Enter URL or paste text"
-               FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding Url, Mode=TwoWay}" />
-      <Button Grid.Column="2" Content="Send" Command="{Binding SendCommand}"
-              IsVisible="{Binding !IsSending}" />
-      <Button Grid.Column="2" Content="Cancel" Command="{Binding CancelCommand}"
-              IsVisible="{Binding IsSending}" />
+    <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="16,0,12,0" ColumnSpacing="10">
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <TextBox Classes="bare" PlaceholderText="Untitled request" FontSize="13" FontWeight="SemiBold" MinWidth="160"
+                 Text="{Binding Name, Mode=TwoWay}" AutomationProperties.Name="Request name" />
+        <Ellipse Width="6" Height="6" VerticalAlignment="Center" IsVisible="{Binding IsDirty}"
+                 Fill="{DynamicResource YaapicAccentTextBrush}" AutomationProperties.Name="Unsaved changes" />
+      </StackPanel>
+      <TextBlock Grid.Column="1" Classes="codeSmall" Text="Ctrl+S" VerticalAlignment="Center"
+                 Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+      <Button Grid.Column="2" Content="Save" Click="OnSaveClick" />
     </Grid>
 
-    <TabControl Grid.Row="2">
-      <TabItem Header="Params">
-        <v:KeyValueEditorView DataContext="{Binding QueryParams}" />
-      </TabItem>
-      <TabItem Header="Headers">
-        <v:KeyValueEditorView DataContext="{Binding Headers}" />
-      </TabItem>
-      <TabItem Header="Body">
-        <Grid RowDefinitions="Auto,*" RowSpacing="8">
-          <StackPanel Orientation="Horizontal" Spacing="14">
-            <RadioButton GroupName="BodyKind" Content="none" Click="OnBodyNone"
-                         IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsNone}, Mode=OneWay}" />
-            <RadioButton GroupName="BodyKind" Content="raw" Click="OnBodyRaw"
-                         IsChecked="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}, Mode=OneWay}" />
-            <ComboBox x:Name="ContentTypeBox" IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
-                      SelectedIndex="{Binding BodyContentType, Converter={x:Static p:EditorMap.ContentTypeIndex}, Mode=OneWay}"
-                      SelectionChanged="OnContentTypeChanged">
-              <ComboBoxItem Content="JSON" />
-              <ComboBoxItem Content="Text" />
-              <ComboBoxItem Content="XML" />
-            </ComboBox>
-            <TextBlock Text="GET requests are sent without a body" VerticalAlignment="Center"
-                       Foreground="{DynamicResource YaapicTextTertiaryBrush}"
-                       IsVisible="{Binding Method, Converter={x:Static p:EditorMap.IsGet}}" />
+    <Border Grid.Row="1" Classes="urlbar" Margin="16,0,16,12">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <ComboBox x:Name="MethodBox" Classes="methodpicker"
+                  SelectedIndex="{Binding Method, Converter={x:Static p:EditorMap.MethodIndex}, Mode=OneWay}"
+                  SelectionChanged="OnMethodChanged" />
+        <c:VariableTextBox Grid.Column="1" Margin="12,0" Watermark="Enter URL or paste text" InputName="URL"
+                           Context="{Binding Variables}" Text="{Binding Url, Mode=TwoWay}" />
+        <Button Grid.Column="2" Classes="accent" Margin="0,3,3,3" Command="{Binding SendCommand}"
+                IsVisible="{Binding !IsSending}">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <TextBlock Text="Send" />
+            <TextBlock Classes="codeSmall" Text="Ctrl+Enter" Opacity="0.7" VerticalAlignment="Center"
+                       Foreground="{Binding $parent[Button].Foreground}" />
           </StackPanel>
-          <TextBox Grid.Row="1" AcceptsReturn="True" TextWrapping="NoWrap"
-                   FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCode}"
-                   IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
-                   Text="{Binding BodyText, Mode=TwoWay}" />
+        </Button>
+        <Button Grid.Column="2" Content="Cancel" Margin="0,3,3,3" Command="{Binding CancelCommand}"
+                IsVisible="{Binding IsSending}" />
+      </Grid>
+    </Border>
+
+    <TabControl Grid.Row="2" Classes="panel" Padding="0">
+      <TabItem>
+        <TabItem.Header>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <TextBlock Text="Params" />
+            <TextBlock Classes="badge" Text="{Binding QueryParams.ActiveCount}"
+                       IsVisible="{Binding QueryParams.ActiveCount, Converter={x:Static p:EditorMap.IsPositive}}" />
+          </StackPanel>
+        </TabItem.Header>
+        <v:KeyValueEditorView DataContext="{Binding QueryParams}" VariableContext="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).Variables}" />
+      </TabItem>
+      <TabItem>
+        <TabItem.Header>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <TextBlock Text="Headers" />
+            <TextBlock Classes="badge" Text="{Binding Headers.ActiveCount}"
+                       IsVisible="{Binding Headers.ActiveCount, Converter={x:Static p:EditorMap.IsPositive}}" />
+          </StackPanel>
+        </TabItem.Header>
+        <v:KeyValueEditorView DataContext="{Binding Headers}" VariableContext="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).Variables}" />
+      </TabItem>
+      <TabItem>
+        <TabItem.Header>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <TextBlock Text="Body" />
+            <Ellipse Width="6" Height="6" VerticalAlignment="Center" Fill="{DynamicResource YaapicAccentTextBrush}"
+                     IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsNotNone}}" />
+          </StackPanel>
+        </TabItem.Header>
+        <Grid RowDefinitions="Auto,*">
+          <TextBlock Classes="bodySmall" Margin="16,12"
+                     Text="{Binding MethodText, StringFormat='{}{0} requests are sent without a body'}"
+                     Foreground="{DynamicResource YaapicTextTertiaryBrush}" IsVisible="{Binding !AllowsBody}" />
+          <Grid Grid.Row="1" RowDefinitions="Auto,*" IsVisible="{Binding AllowsBody}">
+            <Grid ColumnDefinitions="Auto,Auto,*,Auto" Margin="16,8,16,0" ColumnSpacing="10">
+              <TextBlock Classes="bodyStrong" Text="Body" VerticalAlignment="Center" />
+              <ListBox x:Name="BodyKindBox" Grid.Column="1" Classes="segmented"
+                       SelectedIndex="{Binding BodyKind, Converter={x:Static p:EditorMap.BodyKindIndex}, Mode=OneWay}"
+                       SelectionChanged="OnBodyKindChanged">
+                <ListBoxItem Content="none" />
+                <ListBoxItem Content="raw" />
+                <ListBoxItem Content="x-www-form-urlencoded" />
+                <ListBoxItem Content="form-data" />
+                <ListBoxItem Content="binary" />
+              </ListBox>
+              <ComboBox x:Name="ContentTypeBox" Grid.Column="3"
+                        IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
+                        SelectedIndex="{Binding BodyContentType, Converter={x:Static p:EditorMap.ContentTypeIndex}, Mode=OneWay}"
+                        SelectionChanged="OnContentTypeChanged">
+                <ComboBoxItem Content="JSON" />
+                <ComboBoxItem Content="Text" />
+                <ComboBoxItem Content="XML" />
+                <ComboBoxItem Content="HTML" />
+                <ComboBoxItem Content="JavaScript" />
+              </ComboBox>
+            </Grid>
+            <v:CodeEditorView Grid.Row="1" Margin="0,8,0,0" AutomationProperties.Name="Body"
+                              IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsRaw}}"
+                              EditorLanguage="{Binding BodyContentType, Converter={x:Static p:EditorMap.Language}}"
+                              Text="{Binding BodyText, Mode=TwoWay}" />
+            <v:KeyValueEditorView Grid.Row="1" DataContext="{Binding UrlEncodedFields}"
+                                  IsVisible="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).BodyKind, Converter={x:Static p:EditorMap.IsUrlEncoded}}" />
+            <v:FormDataEditorView Grid.Row="1" DataContext="{Binding FormData}"
+                                  IsVisible="{Binding $parent[v:RequestEditorView].((req:RequestEditorViewModel)DataContext).BodyKind, Converter={x:Static p:EditorMap.IsFormData}}" />
+            <Grid Grid.Row="1" ColumnDefinitions="*,Auto" ColumnSpacing="8" VerticalAlignment="Top" Margin="16,8"
+                  IsVisible="{Binding BodyKind, Converter={x:Static p:EditorMap.IsBinary}}">
+              <TextBox IsReadOnly="True" PlaceholderText="No file selected" Text="{Binding BinaryFilePath, Mode=OneWay}" />
+              <Button Grid.Column="1" Content="Select file" Command="{Binding PickBinaryFileCommand}" />
+            </Grid>
+          </Grid>
         </Grid>
+      </TabItem>
+      <TabItem>
+        <TabItem.Header>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <TextBlock Text="Auth" />
+            <Ellipse Width="6" Height="6" VerticalAlignment="Center" Fill="{DynamicResource YaapicAccentTextBrush}"
+                     IsVisible="{Binding Auth.IsActive}" />
+          </StackPanel>
+        </TabItem.Header>
+        <v:AuthEditorView DataContext="{Binding Auth}" />
+      </TabItem>
+      <TabItem Header="Settings">
+        <StackPanel Margin="16,12" Spacing="16" HorizontalAlignment="Left">
+          <ToggleSwitch OnContent="Follow redirects" OffContent="Follow redirects"
+                        IsChecked="{Binding FollowRedirects, Mode=TwoWay}" />
+          <StackPanel Spacing="6" Width="260">
+            <TextBlock Classes="bodyStrong" Text="Timeout (seconds, 0 = default)" />
+            <NumericUpDown Minimum="0" Increment="1" FormatString="0"
+                           AutomationProperties.Name="Timeout in seconds"
+                           Value="{Binding TimeoutSeconds, Converter={x:Static p:EditorMap.TimeoutValue}, Mode=OneWay}"
+                           ValueChanged="OnTimeoutChanged" />
+          </StackPanel>
+        </StackPanel>
       </TabItem>
     </TabControl>
 
-    <GridSplitter Grid.Row="3" Height="4" HorizontalAlignment="Stretch" />
+    <GridSplitter Grid.Row="3" Classes="rows" />
     <v:ResponsePanelView Grid.Row="4" DataContext="{Binding Response}" />
   </Grid>
 </UserControl>

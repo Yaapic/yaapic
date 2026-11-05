@@ -1,0 +1,13 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000011
+name: Get user
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+auth:
+  type: none

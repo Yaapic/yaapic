@@ -1,8 +1,8 @@
 # M2-67: WinUI visual verification of the milestone 2 views
 
-Status: todo
+Status: done
 Platform: windows
-Depends on: M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64
+Depends on: M2-18, M2-19, M2-37, M2-47, M2-48, M2-49, M2-58, M2-64, M2-72, M2-73
 
 ## Goal
 
@@ -42,10 +42,10 @@ New features, Avalonia, pixel-diff tooling.
 
 ## Acceptance criteria
 
-- [ ] 20 screenshots committed under `docs/screenshots/m2/`, 1440 x 900, from the AOT build.
-- [ ] `docs/screenshots/m2/README.md` lists every screen with deviations and classification, plus follow-up proposals.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] No Yaapic or stub-server process left running.
+- [x] 20 screenshots committed under `docs/screenshots/m2/`, 1440 x 900, from the AOT build.
+- [x] `docs/screenshots/m2/README.md` lists every screen with deviations and classification, plus follow-up proposals.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] No Yaapic or stub-server process left running.
 
 ## Suggested commit message
 

@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net11.0-windows10.0.19041.0</TargetFramework>
+    <TargetFramework>net11.0-windows10.0.26100</TargetFramework>
     <TargetPlatformMinVersion>10.0.19041.0</TargetPlatformMinVersion>
     <RootNamespace>Yaapic.App.WinUI</RootNamespace>
     <UseWinUI>true</UseWinUI>
@@ -23,6 +23,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.WindowsAppSDK" />
     <PackageReference Include="FluentIcons.WinUI" />
+    <PackageReference Include="LoomEditor.WinUI" />
     <PackageReference Include="Microsoft.Windows.SDK.BuildTools" />
   </ItemGroup>
   <ItemGroup>

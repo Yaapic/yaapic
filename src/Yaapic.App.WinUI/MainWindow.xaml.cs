@@ -1,9 +1,10 @@
-using System.Collections.Specialized;
-using System.ComponentModel;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Media;
+using Windows.System;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -47,6 +48,9 @@ public sealed partial class MainWindow : Window
     private void ApplyCaptionButtonColors()
     {
         var light = Root.ActualTheme == ElementTheme.Light;
+        Presentation.BrushMap.IsLight = light;
+        Presentation.MethodBrush.RefreshAll();
+        Bindings?.Update(); // the rail brushes come from BrushMap and are bound once
         var titleBar = AppWindow.TitleBar;
         var foreground = light ? Windows.UI.Color.FromArgb(0xFF, 0x4A, 0x51, 0x5B) : Windows.UI.Color.FromArgb(0xFF, 0xA3, 0xAA, 0xB4);
         var hoverForeground = light ? Windows.UI.Color.FromArgb(0xFF, 0x16, 0x19, 0x1D) : Windows.UI.Color.FromArgb(0xFF, 0xEC, 0xEE, 0xF1);
@@ -66,17 +70,16 @@ public sealed partial class MainWindow : Window
         {
             if (_viewModel is not null)
             {
-                _viewModel.Tabs.PropertyChanged -= OnTabsChanged;
-                _viewModel.Requests.Items.CollectionChanged -= OnItemsChanged;
+                _viewModel.Collections.PropertyChanged -= OnCollectionsChanged;
+                _viewModel.EnvironmentsRequested -= OnEnvironmentsRequested;
             }
 
             _viewModel = value;
             Bindings.Update();
             if (_viewModel is not null)
             {
-                _viewModel.Tabs.PropertyChanged += OnTabsChanged;
-                _viewModel.Requests.Items.CollectionChanged += OnItemsChanged;
-                SyncListSelection();
+                _viewModel.Collections.PropertyChanged += OnCollectionsChanged;
+                _viewModel.EnvironmentsRequested += OnEnvironmentsRequested;
             }
         }
     }
@@ -141,37 +144,104 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    private void OnRequestClick(object sender, ItemClickEventArgs e)
+    private void OnNodeInvoked(TreeView sender, TreeViewItemInvokedEventArgs args)
     {
-        if (e.ClickedItem is RequestListItem item)
+        if (args.InvokedItem is CollectionNodeViewModel node)
         {
-            _viewModel?.Requests.OpenCommand.Execute(item);
+            _viewModel?.Collections.OpenCommand.Execute(node);
         }
     }
 
-    private void OnDeleteRequest(object sender, RoutedEventArgs e)
+    private void OnNodeContextRequested(UIElement sender, ContextRequestedEventArgs args)
     {
-        if (((FrameworkElement)sender).Tag is RequestListItem item)
+        if (_viewModel is null || NodeAt(args.OriginalSource as DependencyObject) is not { } node)
         {
-            _viewModel?.Requests.DeleteCommand.Execute(item);
+            return;
+        }
+
+        var tree = _viewModel.Collections;
+        var menu = new MenuFlyout();
+        if (node.IsFolder)
+        {
+            AddItem(menu, "New request", tree.NewRequestCommand, node);
+            AddItem(menu, "New folder", tree.NewFolderCommand, node);
+            AddItem(menu, "Rename", tree.RenameFolderCommand, node);
+            AddItem(menu, "Settings", tree.EditSettingsCommand, node);
+            AddItem(menu, "Delete", tree.DeleteFolderCommand, node);
+        }
+        else
+        {
+            AddItem(menu, "Rename", tree.RenameRequestCommand, node);
+            AddItem(menu, "Duplicate", tree.DuplicateRequestCommand, node);
+            AddItem(menu, "Delete", tree.DeleteRequestCommand, node);
+        }
+
+        var targets = tree.GetMoveTargets(node);
+        if (targets.Count > 0)
+        {
+            var moveTo = new MenuFlyoutSubItem { Text = "Move to" };
+            foreach (var target in targets)
+            {
+                AddItem(moveTo.Items, target.Path, tree.MoveCommand, new MoveRequest(node, target));
+            }
+
+            menu.Items.Add(moveTo);
+        }
+
+        args.Handled = true;
+        if (args.TryGetPosition((UIElement)sender, out var point))
+        {
+            menu.ShowAt((UIElement)sender, point);
+        }
+        else
+        {
+            menu.ShowAt((FrameworkElement)args.OriginalSource);
         }
     }
 
-    private void OnTabsChanged(object? sender, PropertyChangedEventArgs e)
+    private static void AddItem(MenuFlyout menu, string text, System.Windows.Input.ICommand command, object parameter) =>
+        AddItem(menu.Items, text, command, parameter);
+
+    private static void AddItem(IList<MenuFlyoutItemBase> items, string text, System.Windows.Input.ICommand command, object parameter) =>
+        items.Add(new MenuFlyoutItem { Text = text, Command = command, CommandParameter = parameter });
+
+    private static CollectionNodeViewModel? NodeAt(DependencyObject? element)
     {
-        if (e.PropertyName == nameof(TabsViewModel.ActiveTab))
+        for (; element is not null; element = VisualTreeHelper.GetParent(element))
         {
-            SyncListSelection();
+            if (element is FrameworkElement { DataContext: CollectionNodeViewModel node })
+            {
+                return node;
+            }
+
+            if (element is TreeViewItem { Content: CollectionNodeViewModel content })
+            {
+                return content;
+            }
         }
+
+        return null;
     }
 
-    private void OnItemsChanged(object? sender, NotifyCollectionChangedEventArgs e) => SyncListSelection();
-
-    // The list selection mirrors the active tab; ItemClick (not SelectionChanged) opens requests, so this never opens one.
-    private void SyncListSelection()
+    private void OnTreeKeyDown(object sender, KeyRoutedEventArgs e)
     {
-        var id = _viewModel?.Tabs.ActiveTab?.Id;
-        RequestList.SelectedItem = id is null ? null : _viewModel?.Requests.Items.FirstOrDefault(i => i.Id == id);
+        if (_viewModel is null || CollectionTree.SelectedItem is not CollectionNodeViewModel node)
+        {
+            return;
+        }
+
+        var tree = _viewModel.Collections;
+        var command = e.Key switch
+        {
+            VirtualKey.F2 => node.IsFolder ? tree.RenameFolderCommand : tree.RenameRequestCommand,
+            VirtualKey.Delete => node.IsFolder ? tree.DeleteFolderCommand : tree.DeleteRequestCommand,
+            _ => null,
+        };
+        if (command is not null)
+        {
+            command.Execute(node);
+            e.Handled = true;
+        }
     }
 
     private void OnEnvironmentMenuOpening(object? sender, object e)
@@ -215,10 +285,83 @@ public sealed partial class MainWindow : Window
         args.Handled = true;
     }
 
+    private void OnPaletteShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        _viewModel?.OpenPaletteCommand.Execute(null);
+        args.Handled = true;
+    }
+
+    private void OnNextTabShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        _viewModel?.Tabs.NextTabCommand.Execute(null);
+        args.Handled = true;
+    }
+
+    private void OnPreviousTabShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
+    {
+        _viewModel?.Tabs.PreviousTabCommand.Execute(null);
+        args.Handled = true;
+    }
+
+    private void OnEnvironmentsRequested(object? sender, EventArgs e) => OnManageEnvironments(this, new RoutedEventArgs());
+
     private void OnFilterShortcut(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
         FilterBox.Focus(FocusState.Keyboard);
         args.Handled = true;
+    }
+
+    private async void OnCollectionsChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName != nameof(CollectionTreeViewModel.SettingsEditor) || _viewModel?.Collections is not { SettingsEditor: { } editor } tree)
+        {
+            return;
+        }
+
+        // One ContentDialog at a time: drop the request while another dialog is open.
+        if (_dialogOpen)
+        {
+            tree.CloseSettingsCommand.Execute(null);
+            return;
+        }
+
+        _dialogOpen = true;
+        try
+        {
+            await new Views.FolderSettingsDialog(editor) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
+        }
+        finally
+        {
+            _dialogOpen = false;
+            tree.CloseSettingsCommand.Execute(null);
+        }
+    }
+
+    private void OnVariableScopeOpenRequested(object? sender, Views.VariableScopeOpenRequest request)
+    {
+        if (_viewModel is null)
+        {
+            return;
+        }
+
+        if (request.Scope == Yaapic.Core.Variables.VariableScopeKind.Collection)
+        {
+            // The settings dialog opens through OnCollectionsChanged once the editor is set.
+            _viewModel.Collections.OpenCollectionSettings(request.RequestId);
+            return;
+        }
+
+        var environments = _viewModel.Environments;
+        if (request.Scope == Yaapic.Core.Variables.VariableScopeKind.Globals)
+        {
+            environments.IsEditingGlobals = true;
+        }
+        else if (environments.ActiveEnvironment is { } active)
+        {
+            environments.EditedEnvironment = active;
+        }
+
+        OnManageEnvironments(this, new RoutedEventArgs());
     }
 
     private async void OnManageEnvironments(object sender, RoutedEventArgs e)
@@ -229,7 +372,7 @@ public sealed partial class MainWindow : Window
             _dialogOpen = true;
             try
             {
-                await new Views.EnvironmentsDialog(_viewModel.Environments) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
+                await new Views.EnvironmentsDialog(_viewModel.Environments, _viewModel.Globals) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
             }
             finally
             {

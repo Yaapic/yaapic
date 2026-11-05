@@ -1,6 +1,6 @@
 # M2-61: Command palette ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-60
 
@@ -36,11 +36,11 @@ Concrete sources and commands (M2-62, M2-63), views (M2-64, M2-65), persistence 
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with fake sources: open collects items and shows source order; recents come
+- [x] Tests in `Yaapic.ViewModels.Tests` with fake sources: open collects items and shows source order; recents come
       first after executing; query filters and ranks (prefix beats scattered, shorter beats longer on tie); at most 50
       results; selection wraps; execute closes, runs the action and records the recent; a throwing action and a throwing
       source set `LastError` without crashing; query change resets the selection; `IsEmpty`.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

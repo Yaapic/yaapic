@@ -1,6 +1,6 @@
 # M2-39: Avalonia tree context menus and prompts
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-38, M2-20
 
@@ -23,9 +23,9 @@ Same as M2-37.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M2-37 on the host OS, workspace under `~/Yaapic/Default`.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M2-37 on the host OS, workspace under `~/Yaapic/Default`.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

@@ -11,11 +11,6 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class TabsViewModelTests
 {
-    private sealed class NoEnvironment : IActiveEnvironmentProvider
-    {
-        public EnvironmentDefinition? Current => null;
-    }
-
     private sealed class FailingStore : IRequestStore
     {
         public Task<IReadOnlyList<HttpRequestDefinition>> ListAsync(CancellationToken ct) => throw new NotSupportedException();
@@ -34,7 +29,7 @@ public sealed class TabsViewModelTests
         return new TabsViewModel(
             store ?? _store,
             _dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new NoEnvironment(), isNew));
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew));
     }
 
     private static HttpRequestDefinition Saved(string name) => HttpRequestDefinition.Create(name);

@@ -20,6 +20,10 @@ internal partial class RequestFileDto
     public List<KeyValueDto>? Headers { get; set; }
 
     public BodyDto? Body { get; set; }
+
+    public AuthDto? Auth { get; set; }
+
+    public SettingsDto? Settings { get; set; }
 }
 
 [YamlObject(NamingConvention.LowerCamelCase)]
@@ -40,4 +44,47 @@ internal partial class BodyDto
     public string? ContentType { get; set; }
 
     public string? Text { get; set; }
+
+    public List<FormFieldDto>? Fields { get; set; }
+
+    public string? File { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class FormFieldDto
+{
+    public string? Key { get; set; }
+
+    public string? Value { get; set; }
+
+    public bool? Enabled { get; set; }
+
+    public string? Kind { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class AuthDto
+{
+    public string? Type { get; set; }
+
+    public string? Username { get; set; }
+
+    public string? Password { get; set; }
+
+    public string? Token { get; set; }
+
+    public string? Key { get; set; }
+
+    public string? Value { get; set; }
+
+    [YamlMember("in")]
+    public string? Location { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class SettingsDto
+{
+    public bool? FollowRedirects { get; set; }
+
+    public int? TimeoutSeconds { get; set; }
 }

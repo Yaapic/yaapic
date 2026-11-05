@@ -1,0 +1,98 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.FormDataEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:ic="using:FluentIcons.WinUI"
+             xmlns:v="using:Yaapic.App.WinUI.Views"
+             xmlns:ed="using:Yaapic.ViewModels.Editing">
+  <UserControl.Resources>
+    <!-- Borderless cell editors: every state is transparent, only the focused state draws the 2 px inset ring. -->
+    <SolidColorBrush x:Key="TextControlBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundFocused" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBackgroundDisabled" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlElevationBorderBrush" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="Transparent"/>
+    <SolidColorBrush x:Key="TextControlBorderBrushDisabled" Color="Transparent"/>
+    <Thickness x:Key="TextControlBorderThemeThickness">0</Thickness>
+    <Thickness x:Key="TextControlBorderThemeThicknessFocused">2</Thickness>
+  </UserControl.Resources>
+  <Border VerticalAlignment="Top"
+          BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" BorderThickness="1"
+          CornerRadius="{StaticResource YaapicRadiusMd}">
+    <Grid>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="28"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Grid Background="{ThemeResource YaapicSurfaceSidebarBrush}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="36"/>
+          <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
+          <ColumnDefinition Width="96"/>
+          <ColumnDefinition Width="2*"/>
+          <ColumnDefinition Width="36"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="1" Padding="10,0" VerticalAlignment="Center" CharacterSpacing="30" Text="KEY"
+                   Style="{StaticResource YaapicCaptionTextStyle}"/>
+        <TextBlock Grid.Column="2" Padding="10,0" VerticalAlignment="Center" CharacterSpacing="30" Text="TYPE"
+                   Style="{StaticResource YaapicCaptionTextStyle}"/>
+        <Border Grid.Column="3" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" BorderThickness="1,0,0,0">
+          <TextBlock Padding="10,0" VerticalAlignment="Center" CharacterSpacing="30" Text="VALUE"
+                     Style="{StaticResource YaapicCaptionTextStyle}"/>
+        </Border>
+      </Grid>
+      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ItemsRepeater x:Name="RowList" ElementPrepared="OnRowPrepared">
+          <ItemsRepeater.ItemTemplate>
+            <DataTemplate x:DataType="ed:FormDataRowViewModel">
+              <Grid Height="30" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0"
+                    Opacity="{x:Bind p:OpacityMap.KeyValueRow(IsEmpty, Enabled), Mode=OneWay}">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="36"/>
+                  <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
+                  <ColumnDefinition Width="96"/>
+                  <ColumnDefinition Width="2*"/>
+                  <ColumnDefinition Width="36"/>
+                </Grid.ColumnDefinitions>
+                <CheckBox MinWidth="0" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"
+                          AutomationProperties.Name="Enabled"
+                          IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
+                <v:VariableTextBox Grid.Column="1" PlaceholderText="Key" InputName="Key" CodeFontSize="{StaticResource YaapicFontSizeCode}"
+                                   InputPadding="10,7,10,3" Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                <ComboBox Grid.Column="2" Tag="{x:Bind}" MinWidth="0" Width="88" Height="26" Padding="8,0"
+                          HorizontalAlignment="Center" VerticalAlignment="Center" BorderThickness="0"
+                          FontSize="{StaticResource YaapicFontSizeBodySm}" AutomationProperties.Name="Field type"
+                          SelectedIndex="{x:Bind p:TextMap.KindIndex(Kind), Mode=OneWay}"
+                          SelectionChanged="OnKindChanged">
+                  <ComboBoxItem Content="Text"/>
+                  <ComboBoxItem Content="File"/>
+                </ComboBox>
+                <Border Grid.Column="3" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="1,0,0,0">
+                  <Grid>
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <v:VariableTextBox PlaceholderText="Value" InputName="Value" CodeFontSize="{StaticResource YaapicFontSizeCode}"
+                                     InputPadding="10,7,10,3" IsReadOnly="{x:Bind IsFile, Mode=OneWay}" Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    <Button Grid.Column="1" Content="Browse" Height="24" MinHeight="24" Padding="8,0" Margin="0,0,6,0"
+                            VerticalAlignment="Center" FontSize="{StaticResource YaapicFontSizeBodySm}"
+                            Command="{x:Bind PickFileCommand}"
+                            Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsFile), Mode=OneWay}"/>
+                  </Grid>
+                </Border>
+                <Button Grid.Column="4" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnRemove"
+                        HorizontalAlignment="Center" AutomationProperties.Name="Remove row"
+                        Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
+                  <ic:FluentIcon Icon="Dismiss" IconVariant="Regular" IconSize="Size16"/>
+                </Button>
+              </Grid>
+            </DataTemplate>
+          </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
+      </ScrollViewer>
+    </Grid>
+  </Border>
+</UserControl>

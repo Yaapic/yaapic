@@ -1,4 +1,5 @@
 using Yaapic.Core.Http;
+using Yaapic.Core.Variables;
 using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
 using Yaapic.TestDoubles;
@@ -167,6 +168,47 @@ public sealed class EnvironmentsViewModelTests
     }
 
     [Fact]
+    public async Task DuplicateCreatesAnUnsavedCopyAndLeavesTheOriginalUntouched()
+    {
+        var a = await SeedAsync("a", new KeyValueEntry("host", "x"));
+        await _vm.LoadAsync(null);
+        var original = _vm.Environments[0];
+
+        _vm.DuplicateCommand.Execute(original);
+
+        Assert.Equal(2, _vm.Environments.Count);
+        var copy = _vm.EditedEnvironment!;
+        Assert.NotSame(original, copy);
+        Assert.NotEqual(a.Id, copy.Id);
+        Assert.Equal("a copy", copy.Name);
+        Assert.Equal("host", Assert.Single(copy.ToDefinition().Variables).Key);
+        Assert.True(copy.IsDirty);
+        Assert.False(original.IsDirty);
+        Assert.Equal("a", original.Name);
+        Assert.Single(await _store.ListAsync(CancellationToken.None));
+
+        await _vm.SaveCommand.ExecuteAsync(copy);
+
+        Assert.False(copy.IsDirty);
+        Assert.Equal(2, (await _store.ListAsync(CancellationToken.None)).Count);
+    }
+
+    [Fact]
+    public async Task EditingGlobalsAndEditingAnEnvironmentExcludeEachOther()
+    {
+        await SeedAsync("a");
+        await _vm.LoadAsync(null);
+        _vm.EditedEnvironment = _vm.Environments[0];
+
+        _vm.IsEditingGlobals = true;
+        Assert.Null(_vm.EditedEnvironment);
+        Assert.False(_vm.Environments[0].IsEdited);
+
+        _vm.EditedEnvironment = _vm.Environments[0];
+        Assert.False(_vm.IsEditingGlobals);
+    }
+
+    [Fact]
     public async Task RequestEditorSendsWithTheActiveEnvironmentVariable()
     {
         var a = await SeedAsync("a", new KeyValueEntry("host", "old.test"));
@@ -174,7 +216,7 @@ public sealed class EnvironmentsViewModelTests
         _vm.ActiveEnvironment!.Variables.Rows[0].Value = "api.test";
         var transport = new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(
             new HttpResponseData(200, "OK", [], [], TimeSpan.FromMilliseconds(1), "https://api.test"))));
-        var editor = RequestEditorViewModel.CreateNew(new RequestSender(transport), _vm);
+        var editor = RequestEditorViewModel.CreateNew(new RequestSender(transport), new FakeVariableScopeProvider { Scopes = new VariableScopes(_vm.Current, [], []) });
         editor.Url = "https://{{host}}/users";
 
         await editor.SendCommand.ExecuteAsync(null);

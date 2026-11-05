@@ -11,6 +11,10 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
+    <!-- The Avalonia launch-option parser is plain BCL code: compile it here instead of referencing the UI project. -->
+    <Compile Include="..\..\src\Yaapic.App.Avalonia\Services\CaptureOptions.cs" Link="CaptureOptions.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.Core\Yaapic.Core.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />

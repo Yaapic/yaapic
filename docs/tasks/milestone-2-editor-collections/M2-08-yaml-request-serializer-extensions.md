@@ -1,6 +1,6 @@
 # M2-08: YAML request serializer: methods, bodies, auth and settings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-04
 
@@ -31,10 +31,10 @@ Folder and globals files (M2-27, M2-41), file system access.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: round trip equivalence for a request using PUT, urlencoded fields,
+- [x] Tests in `Yaapic.Infrastructure.Tests`: round trip equivalence for a request using PUT, urlencoded fields,
       form-data with a file field, binary, each auth kind and non-default settings; golden match byte for byte; the legacy
       M1 file reads with defaults; each unknown value throws; unicode and `{{variables}}` survive.
-- [ ] No new reflection (AOT); 0 warnings.
+- [x] No new reflection (AOT); 0 warnings.
 
 ## Suggested commit message
 

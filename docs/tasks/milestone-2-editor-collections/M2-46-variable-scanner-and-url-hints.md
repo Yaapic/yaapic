@@ -1,6 +1,6 @@
 # M2-46: Variable scanner and URL variable hints
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-44
 
@@ -29,10 +29,10 @@ Autocomplete, highlighting inside the text box, hints for headers and body, view
 
 ## Acceptance criteria
 
-- [ ] Tests: scanner table; hints for an env variable, a collection variable, a globals variable, an unknown name and a
+- [x] Tests: scanner table; hints for an env variable, a collection variable, a globals variable, an unknown name and a
       dynamic variable; they update after typing, after `RaiseScopesChanged` while active, and not while inactive; an
       empty or variable-free URL gives `HasUrlVariables` false.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

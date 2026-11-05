@@ -15,6 +15,9 @@ public enum SendFailureKind
     /// <summary>The user canceled the request.</summary>
     Canceled,
 
+    /// <summary>A file referenced by the body could not be read.</summary>
+    FileUnreadable,
+
     /// <summary>Any other failure.</summary>
     Unknown,
 }

@@ -1,6 +1,6 @@
 # M2-22: Avalonia body pane: all body kinds
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-12, M2-20, M2-21
 
@@ -24,9 +24,9 @@ Same as M2-17.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M2-17 on the host OS.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M2-17 on the host OS.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

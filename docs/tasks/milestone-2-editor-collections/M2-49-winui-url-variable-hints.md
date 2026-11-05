@@ -1,6 +1,6 @@
 # M2-49: WinUI URL variable hints
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-46, M2-16
 
@@ -24,12 +24,23 @@ Click actions on chips, hints for headers and body, autocomplete.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: with environment `Local` (`baseUrl`) active, the URL `{{baseUrl}}/get?x={{nope}}`
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: with environment `Local` (`baseUrl`) active, the URL `{{baseUrl}}/get?x={{nope}}`
       shows a resolved chip and an unresolved chip; switching to "No environment" turns the first into unresolved without
       retyping.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): show URL variable hints under the URL bar`
+
+## Notes
+
+- The chips use a horizontal `StackLayout` (no wrap): WinUI has no built-in wrapping layout; long URLs with many
+  variables overflow instead of wrapping.
+- `ItemsSource` goes through `ListMap.Hints` (an `ObservableCollection`): binding the VM's `IReadOnlyList` directly
+  rendered nothing under Native AOT (CsWinRT marshalling of non-WinRT generics).
+- Smoke run on the published exe (UI Automation + mouse): `{{baseUrl}}/get?x={{nope}}` shows
+  `{{baseUrl}} = http://127.0.0.1:5199` and `{{nope}}`; hover and click on a chip are harmless (no click action);
+  switching to "No environment" turns `{{baseUrl}}` into an unresolved chip without retyping. The tooltip text is
+  checked through the chip's accessible name (the tooltip popup itself was not captured).

@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:req="using:Yaapic.ViewModels.Requests"
+             x:Class="Yaapic.App.Avalonia.Views.VariablePopupView"
+             x:DataType="req:VariablePopupViewModel"
+             KeyDown="OnKeyDown">
+  <Border Background="{DynamicResource YaapicSurfaceElevatedBrush}"
+          BorderBrush="{DynamicResource YaapicBorderOverlayBrush}" BorderThickness="1"
+          CornerRadius="{DynamicResource YaapicRadiusMd}" Padding="12" MinWidth="280" MaxWidth="380">
+    <StackPanel Spacing="8">
+      <!-- Resolved and dynamic: the name in the token colour and the scope badge. -->
+      <Grid x:Name="KnownHeader" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <TextBlock x:Name="NameText" Text="{Binding Name}" FontFamily="{DynamicResource YaapicMonoFont}"
+                   FontWeight="SemiBold" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+        <Border Grid.Column="1" Background="{DynamicResource YaapicSurfaceRaisedBrush}"
+                CornerRadius="{DynamicResource YaapicRadiusSm}" Padding="6,2"
+                AutomationProperties.Name="{Binding ScopeLabel}">
+          <TextBlock Text="{Binding ScopeLabel}" FontSize="11" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+        </Border>
+      </Grid>
+
+      <!-- Unresolved: icon and title. -->
+      <StackPanel x:Name="UnresolvedHeader" Orientation="Horizontal" Spacing="8">
+        <PathIcon Data="{StaticResource YaapicGlyphStatusClientError}" Width="16" Height="16"
+                  Foreground="{DynamicResource YaapicDangerBrush}" VerticalAlignment="Center" />
+        <TextBlock Text="{Binding Title}" FontWeight="SemiBold" VerticalAlignment="Center"
+                   Foreground="{DynamicResource YaapicTextPrimaryBrush}" />
+      </StackPanel>
+
+      <TextBlock x:Name="MessageText" Text="{Binding Message}" TextWrapping="Wrap"
+                 Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+
+      <!-- Resolved: value, Edit, Open. -->
+      <StackPanel x:Name="ResolvedPanel" Spacing="8">
+        <TextBlock Text="{Binding Value}" TextWrapping="Wrap" FontFamily="{DynamicResource YaapicMonoFont}"
+                   Foreground="{DynamicResource YaapicTextPrimaryBrush}" IsVisible="{Binding !IsEditing}" />
+        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" IsVisible="{Binding IsEditing}">
+          <TextBox x:Name="EditBox" MinHeight="0" Padding="8,5" AutomationProperties.Name="Value"
+                   FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding EditableValue, Mode=TwoWay}"
+                   KeyDown="OnValueKeyDown" />
+          <Button Grid.Column="1" Classes="accent" Content="Save" AutomationProperties.Name="Save"
+                  Command="{Binding SubmitCommand}" />
+        </Grid>
+        <StackPanel Orientation="Horizontal" Spacing="4">
+          <Button x:Name="EditLink" Classes="subtle" Content="Edit" MinHeight="24" Padding="8,0"
+                  AutomationProperties.Name="Edit" Command="{Binding ToggleEditCommand}" />
+          <Button x:Name="OpenLink" Classes="subtle" Content="Open" MinHeight="24" Padding="8,0"
+                  AutomationProperties.Name="Open" Command="{Binding OpenCommand}" />
+        </StackPanel>
+      </StackPanel>
+
+      <!-- Unresolved: where to create it and with which value. -->
+      <StackPanel x:Name="UnresolvedPanel" Spacing="8">
+        <ComboBox x:Name="ScopeBox" HorizontalAlignment="Stretch" AutomationProperties.Name="Scope"
+                  SelectionChanged="OnScopeChanged" />
+        <TextBox x:Name="CreateBox" PlaceholderText="Value" MinHeight="0" Padding="8,5" AutomationProperties.Name="Value"
+                 FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding EditableValue, Mode=TwoWay}"
+                 KeyDown="OnValueKeyDown" />
+        <Button Classes="accent" Content="Create" HorizontalAlignment="Right" AutomationProperties.Name="Create"
+                Command="{Binding SubmitCommand}" />
+      </StackPanel>
+
+      <TextBlock Text="{Binding LastError}" TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}"
+                 IsVisible="{Binding LastError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+    </StackPanel>
+  </Border>
+</UserControl>

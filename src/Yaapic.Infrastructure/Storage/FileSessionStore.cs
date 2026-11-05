@@ -26,7 +26,7 @@ public sealed class FileSessionStore(string workspaceRoot) : ISessionStore
 
             dto = YamlSerializer.Deserialize<SessionFileDto>(Encoding.UTF8.GetBytes(await File.ReadAllTextAsync(_path, ct)));
         }
-        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or IOException or UnauthorizedAccessException)
+        catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or YamlTokenizerException or IOException or UnauthorizedAccessException)
         {
             return SessionState.Empty;
         }

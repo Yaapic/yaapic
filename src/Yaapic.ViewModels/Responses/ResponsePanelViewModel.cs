@@ -1,14 +1,17 @@
 using System.Globalization;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
 using Yaapic.Core.Responses;
 using Yaapic.Domain.Http;
+using Yaapic.UI.Abstractions;
 
 namespace Yaapic.ViewModels.Responses;
 
 /// <summary>Display-ready state of a response: status, time, size, body, headers, warnings and errors.</summary>
 public sealed partial class ResponsePanelViewModel : ObservableObject
 {
+    private readonly IDialogService? _dialogs;
     private HttpResponseData? _response;
 
     [ObservableProperty]
@@ -26,6 +29,10 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     private IReadOnlyList<KeyValueEntry> _headers = [];
     private string? _errorMessage;
     private string? _unresolvedWarning;
+
+    /// <summary>Initializes a new instance of the <see cref="ResponsePanelViewModel"/> class.</summary>
+    /// <param name="dialogs">Used to copy and save the body; <see langword="null"/> makes both commands do nothing.</param>
+    public ResponsePanelViewModel(IDialogService? dialogs = null) => _dialogs = dialogs;
 
     /// <summary>Gets what the panel is showing.</summary>
     public ResponseState State { get => _state; private set => SetProperty(ref _state, value); }
@@ -122,6 +129,51 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         Headers = [];
         ErrorMessage = null;
         UnresolvedWarning = null;
+        RefreshCommands();
+    }
+
+    private void RefreshCommands()
+    {
+        CopyBodyCommand.NotifyCanExecuteChanged();
+        SaveBodyCommand.NotifyCanExecuteChanged();
+    }
+
+    private bool CanCopyBody() => _response is not null && !IsBinary;
+
+    private bool CanSaveBody() => _response is not null;
+
+    [RelayCommand(CanExecute = nameof(CanCopyBody))]
+    private async Task CopyBodyAsync()
+    {
+        if (_dialogs is not null)
+        {
+            await _dialogs.SetClipboardTextAsync(BodyText);
+        }
+    }
+
+    [RelayCommand(CanExecute = nameof(CanSaveBody))]
+    private async Task SaveBodyAsync()
+    {
+        if (_dialogs is not null && _response is { } response)
+        {
+            await _dialogs.SaveFileAsync(SuggestedName(response.ContentType), response.Body);
+        }
+    }
+
+    private static string SuggestedName(string? contentType)
+    {
+        var mediaType = (contentType ?? "").Split(';')[0].Trim().ToLowerInvariant();
+        var extension = mediaType switch
+        {
+            "application/json" => "json",
+            "application/xml" or "text/xml" => "xml",
+            "text/html" => "html",
+            "text/javascript" or "application/javascript" => "js",
+            _ when mediaType.StartsWith("text/", StringComparison.Ordinal) => "txt",
+            _ => mediaType.EndsWith("+json", StringComparison.Ordinal) ? "json"
+                : mediaType.EndsWith("+xml", StringComparison.Ordinal) ? "xml" : "bin",
+        };
+        return "response." + extension;
     }
 
     partial void OnViewModeChanged(BodyViewMode value) => ApplyBody();
@@ -138,9 +190,10 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         BodyLanguage = body.Language;
         IsBinary = body.IsBinary;
         BinaryText = body.IsBinary ? $"Binary content, {SizeText}" : "";
+        RefreshCommands();
     }
 
-    private static string FormatDuration(TimeSpan duration)
+    internal static string FormatDuration(TimeSpan duration)
     {
         var ms = duration.TotalMilliseconds;
         return ms < 1000

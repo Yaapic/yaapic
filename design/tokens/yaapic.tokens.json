@@ -306,6 +306,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceBaseBrush",
             "avalonia": "YaapicSurfaceBaseBrush",
+            "avaloniaAliases": ["ButtonBackgroundPressed", "TabItemHeaderBackgroundSelected"],
             "winuiAliases": ["LayerFillColorDefaultBrush", "ButtonBackgroundPressed", "TabViewItemHeaderBackgroundSelected"]
           }
         }
@@ -321,6 +322,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceSidebarBrush",
             "avalonia": "YaapicSurfaceSidebarBrush",
+            "avaloniaAliases": ["TextControlBackgroundPointerOver", "ComboBoxBackgroundPointerOver", "TabItemHeaderBackgroundUnselected"],
             "winuiAliases": ["TextControlBackgroundPointerOver", "ComboBoxBackgroundPointerOver", "TabViewBackground", "TabViewItemHeaderBackground"]
           }
         }
@@ -336,6 +338,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceRaisedBrush",
             "avalonia": "YaapicSurfaceRaisedBrush",
+            "avaloniaAliases": ["ButtonBackground"],
             "winuiAliases": ["ControlFillColorDefaultBrush", "CardBackgroundFillColorDefaultBrush", "ButtonBackground", "ContentDialogBackground"]
           }
         }
@@ -351,6 +354,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceElevatedBrush",
             "avalonia": "YaapicSurfaceElevatedBrush",
+            "avaloniaAliases": ["ButtonBackgroundPointerOver"],
             "winuiAliases": ["ButtonBackgroundPointerOver"]
           }
         }
@@ -366,6 +370,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceSunkenBrush",
             "avalonia": "YaapicSurfaceSunkenBrush",
+            "avaloniaAliases": ["TextControlBackground", "TextControlBackgroundFocused", "ComboBoxBackground"],
             "winuiAliases": ["ControlFillColorInputActiveBrush", "TextControlBackground", "TextControlBackgroundFocused", "ComboBoxBackground"]
           }
         }
@@ -381,6 +386,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSurfaceOverlayBrush",
             "avalonia": "YaapicSurfaceOverlayBrush",
+            "avaloniaAliases": ["FlyoutPresenterBackground", "MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "ToolTipBackground"],
             "winuiAliases": ["FlyoutPresenterBackground", "MenuFlyoutPresenterBackground", "ComboBoxDropDownBackground", "ToolTipBackground", "ContentDialogTopOverlay"]
           }
         }
@@ -398,6 +404,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderSubtleBrush",
             "avalonia": "YaapicBorderSubtleBrush",
+            "avaloniaAliases": ["ButtonBorderBrushDisabled", "ProgressBarBackground"],
             "winuiAliases": ["DividerStrokeColorDefaultBrush", "CardStrokeColorDefaultBrush", "ButtonBorderBrushDisabled", "ProgressBarBackground", "TabViewItemSeparator", "TabViewBorderBrush"]
           }
         }
@@ -413,6 +420,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderDefaultBrush",
             "avalonia": "YaapicBorderDefaultBrush",
+            "avaloniaAliases": ["ButtonBorderBrush", "ButtonBorderBrushPressed"],
             "winuiAliases": ["ControlStrokeColorDefaultBrush", "SurfaceStrokeColorDefaultBrush", "ButtonBorderBrush", "ButtonBorderBrushPressed", "ContentDialogSeparatorBorderBrush"]
           }
         }
@@ -428,6 +436,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderControlBrush",
             "avalonia": "YaapicBorderControlBrush",
+            "avaloniaAliases": ["ButtonBorderBrushPointerOver", "TextControlBorderBrush", "ComboBoxBorderBrush", "CheckBoxCheckBackgroundStrokeUnchecked", "RadioButtonOuterEllipseStroke"],
             "winuiAliases": ["ControlStrongStrokeColorDefaultBrush", "ButtonBorderBrushPointerOver", "TextControlBorderBrush", "TextControlElevationBorderBrush", "ComboBoxBorderBrush", "CheckBoxCheckBackgroundStrokeUnchecked", "RadioButtonOuterEllipseStroke"]
           }
         }
@@ -443,6 +452,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicBorderOverlayBrush",
             "avalonia": "YaapicBorderOverlayBrush",
+            "avaloniaAliases": ["FlyoutBorderThemeBrush", "MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "ToolTipBorderBrush"],
             "winuiAliases": ["FlyoutBorderThemeBrush", "MenuFlyoutPresenterBorderBrush", "ComboBoxDropDownBorderBrush", "ToolTipBorderBrush", "ContentDialogBorderBrush"]
           }
         }
@@ -460,6 +470,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicTextPrimaryBrush",
             "avalonia": "YaapicTextPrimaryBrush",
+            "avaloniaAliases": ["ButtonForeground", "ButtonForegroundPointerOver", "TextControlForeground", "TextControlForegroundPointerOver", "TextControlForegroundFocused", "TabItemHeaderForegroundSelected", "TabItemHeaderForegroundPointerOver", "ToolTipForeground"],
             "winuiAliases": ["TextFillColorPrimaryBrush", "ButtonForeground", "ButtonForegroundPointerOver", "TextControlForeground", "TextControlForegroundFocused", "SelectorBarItemForegroundSelected", "SelectorBarItemForegroundPointerOver", "SelectorBarItemForegroundPressed", "TabViewItemHeaderForegroundSelected", "TabViewItemHeaderForegroundPointerOver"]
           }
         }
@@ -475,6 +486,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicTextSecondaryBrush",
             "avalonia": "YaapicTextSecondaryBrush",
+            "avaloniaAliases": ["ButtonForegroundPressed", "TabItemHeaderForegroundUnselected"],
             "winuiAliases": ["TextFillColorSecondaryBrush", "ButtonForegroundPressed", "SelectorBarItemForeground", "TabViewItemHeaderForeground"]
           }
         }
@@ -490,6 +502,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicTextTertiaryBrush",
             "avalonia": "YaapicTextTertiaryBrush",
+            "avaloniaAliases": ["TextControlBorderBrushPointerOver", "ComboBoxBorderBrushPointerOver", "TextControlPlaceholderForeground", "TextControlPlaceholderForegroundPointerOver", "TextControlPlaceholderForegroundFocused"],
             "winuiAliases": ["TextFillColorTertiaryBrush", "TextControlBorderBrushPointerOver", "ComboBoxBorderBrushPointerOver", "TextControlPlaceholderForeground", "TextControlPlaceholderForegroundFocused"]
           }
         }
@@ -505,6 +518,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicTextDisabledBrush",
             "avalonia": "YaapicTextDisabledBrush",
+            "avaloniaAliases": ["ButtonForegroundDisabled", "TextControlForegroundDisabled"],
             "winuiAliases": ["TextFillColorDisabledBrush", "ButtonForegroundDisabled", "TextControlForegroundDisabled"]
           }
         }
@@ -522,6 +536,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillBrush",
             "avalonia": "YaapicAccentFillBrush",
+            "avaloniaAliases": ["AccentButtonBackground", "CheckBoxCheckBackgroundStrokeChecked", "CheckBoxCheckBackgroundFillChecked", "RadioButtonOuterEllipseCheckedStroke", "RadioButtonOuterEllipseCheckedFill", "ProgressBarForeground"],
             "winuiAliases": ["AccentFillColorDefaultBrush", "AccentButtonBackground", "CheckBoxCheckBackgroundStrokeChecked", "CheckBoxCheckBackgroundFillChecked", "RadioButtonOuterEllipseCheckedStroke", "RadioButtonOuterEllipseCheckedFill", "ListViewItemSelectionIndicatorBrush", "ListViewItemSelectionIndicatorPointerOverBrush", "ListViewItemSelectionIndicatorPressedBrush", "SelectorBarItemPillFill", "ProgressBarForeground"]
           }
         }
@@ -537,6 +552,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillHoverBrush",
             "avalonia": "YaapicAccentFillHoverBrush",
+            "avaloniaAliases": ["AccentButtonBackgroundPointerOver", "CheckBoxCheckBackgroundStrokeCheckedPointerOver", "CheckBoxCheckBackgroundFillCheckedPointerOver", "RadioButtonOuterEllipseCheckedStrokePointerOver", "RadioButtonOuterEllipseCheckedFillPointerOver"],
             "winuiAliases": ["AccentFillColorSecondaryBrush", "AccentButtonBackgroundPointerOver", "CheckBoxCheckBackgroundStrokeCheckedPointerOver", "CheckBoxCheckBackgroundFillCheckedPointerOver", "RadioButtonOuterEllipseCheckedStrokePointerOver", "RadioButtonOuterEllipseCheckedFillPointerOver"]
           }
         }
@@ -552,6 +568,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentFillPressedBrush",
             "avalonia": "YaapicAccentFillPressedBrush",
+            "avaloniaAliases": ["AccentButtonBackgroundPressed", "CheckBoxCheckBackgroundStrokeCheckedPressed", "CheckBoxCheckBackgroundFillCheckedPressed", "RadioButtonOuterEllipseCheckedStrokePressed", "RadioButtonOuterEllipseCheckedFillPressed"],
             "winuiAliases": ["AccentFillColorTertiaryBrush", "AccentButtonBackgroundPressed", "CheckBoxCheckBackgroundStrokeCheckedPressed", "CheckBoxCheckBackgroundFillCheckedPressed", "RadioButtonOuterEllipseCheckedStrokePressed", "RadioButtonOuterEllipseCheckedFillPressed"]
           }
         }
@@ -567,6 +584,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentBorderBrush",
             "avalonia": "YaapicAccentBorderBrush",
+            "avaloniaAliases": ["AccentButtonBorderBrush", "AccentButtonBorderBrushPointerOver", "AccentButtonBorderBrushPressed"],
             "winuiAliases": ["AccentButtonBorderBrush", "AccentButtonBorderBrushPointerOver"]
           }
         }
@@ -597,6 +615,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicAccentOnBrush",
             "avalonia": "YaapicAccentOnBrush",
+            "avaloniaAliases": ["AccentButtonForeground", "AccentButtonForegroundPointerOver", "AccentButtonForegroundPressed", "CheckBoxCheckGlyphForegroundChecked", "CheckBoxCheckGlyphForegroundCheckedPointerOver", "CheckBoxCheckGlyphForegroundCheckedPressed"],
             "winuiAliases": ["TextOnAccentFillColorPrimaryBrush", "AccentButtonForeground", "AccentButtonForegroundPointerOver", "AccentButtonForegroundPressed", "RadioButtonCheckGlyphFill", "CheckBoxCheckGlyphForegroundChecked", "CheckBoxCheckGlyphForegroundCheckedPointerOver", "CheckBoxCheckGlyphForegroundCheckedPressed"]
           }
         }
@@ -614,6 +633,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicOverlayHoverBrush",
             "avalonia": "YaapicOverlayHoverBrush",
+            "avaloniaAliases": ["ListBoxItemBackgroundPointerOver", "MenuFlyoutItemBackgroundPointerOver", "TabItemHeaderBackgroundPointerOver"],
             "winuiAliases": ["ListViewItemBackgroundPointerOver", "MenuFlyoutItemBackgroundPointerOver", "TabViewItemHeaderBackgroundPointerOver"]
           }
         }
@@ -629,6 +649,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicOverlayPressedBrush",
             "avalonia": "YaapicOverlayPressedBrush",
+            "avaloniaAliases": ["ListBoxItemBackgroundPressed", "TabItemHeaderBackgroundPressed"],
             "winuiAliases": ["ListViewItemBackgroundPressed"]
           }
         }
@@ -646,6 +667,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicSelectionBackgroundBrush",
             "avalonia": "YaapicSelectionBackgroundBrush",
+            "avaloniaAliases": ["ListBoxItemBackgroundSelected", "ListBoxItemBackgroundSelectedPointerOver", "ListBoxItemBackgroundSelectedPressed"],
             "winuiAliases": ["ListViewItemBackgroundSelected", "ListViewItemBackgroundSelectedPointerOver", "ListViewItemBackgroundSelectedPressed"]
           }
         }
@@ -663,6 +685,7 @@
           "dev.yaapic.xaml": {
             "winui": "YaapicFocusRingBrush",
             "avalonia": "YaapicFocusRingBrush",
+            "avaloniaAliases": ["TextControlBorderBrushFocused", "ComboBoxBorderBrushFocused"],
             "winuiAliases": ["FocusStrokeColorOuterBrush", "TextControlBorderBrushFocused", "ComboBoxBorderBrushFocused", "FocusVisualPrimaryBrush"]
           }
         }

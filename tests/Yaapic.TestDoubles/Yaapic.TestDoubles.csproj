@@ -8,5 +8,6 @@
     <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.Core\Yaapic.Core.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />
+    <ProjectReference Include="..\..\src\Yaapic.ViewModels\Yaapic.ViewModels.csproj" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,6 @@
 # M2-40: Core: variable scopes, sender and globals port
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-01
 
@@ -33,11 +33,11 @@ Persistence (M2-41), ViewModels (M2-42, M2-44).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: precedence (same name in all four scopes resolves to the environment value, then
+- [x] Tests in `Yaapic.Core.Tests`: precedence (same name in all four scopes resolves to the environment value, then
       collection, then globals; a name only in globals resolves from globals); disabled and empty-key entries ignored;
       `TryResolve` reports the right scope for each, `Dynamic` for `{{$guid}}`, false for unknown; `SendAsync` with scopes
       substitutes from each scope through `FakeHttpTransport`; the old overload still works; unresolved names still reported.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

@@ -1,0 +1,44 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:col="using:Yaapic.ViewModels.Collections"
+        xmlns:views="using:Yaapic.App.Avalonia.Views"
+        x:Class="Yaapic.App.Avalonia.Views.FolderSettingsWindow"
+        x:DataType="col:FolderSettingsViewModel"
+        Title="Settings"
+        Width="640" MinWidth="400" SizeToContent="Height"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+        Background="{DynamicResource YaapicSurfaceBaseBrush}">
+  <Grid RowDefinitions="56,*,Auto">
+    <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+      <TextBlock Margin="20,0" Text="Settings" VerticalAlignment="Center" FontSize="{DynamicResource YaapicFontSizeTitle}" FontWeight="SemiBold" />
+    </Border>
+    <ScrollViewer Grid.Row="1">
+      <StackPanel Margin="20,16" Spacing="12">
+        <Border Classes="error" IsVisible="{Binding LastError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" Padding="12,8"
+                Background="{DynamicResource YaapicSurfaceRaisedBrush}" BorderBrush="{DynamicResource YaapicBorderDefaultBrush}" BorderThickness="1" CornerRadius="4">
+          <TextBlock Text="{Binding LastError}" TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextPrimaryBrush}" />
+        </Border>
+        <StackPanel Spacing="4">
+          <TextBlock Text="Name" Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <TextBox Text="{Binding Name, Mode=TwoWay}" AutomationProperties.Name="Name" />
+        </StackPanel>
+        <StackPanel Spacing="4">
+          <TextBlock Text="Description" Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <TextBox Text="{Binding Description, Mode=TwoWay}" AutomationProperties.Name="Description" AcceptsReturn="True" TextWrapping="Wrap"
+                   MinHeight="88" MaxHeight="160" PlaceholderText="What is this collection for?" />
+        </StackPanel>
+        <StackPanel Spacing="8" IsVisible="{Binding ShowVariables}">
+          <TextBlock Text="Collection variables" Classes="bodyStrong" />
+          <TextBlock Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="Override globals; the active environment overrides them." />
+          <views:KeyValueEditorView Height="220" KeyHeader="VARIABLE" DataContext="{Binding Variables}" />
+        </StackPanel>
+      </StackPanel>
+    </ScrollViewer>
+    <Border Grid.Row="2" Classes="dialogCommands">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
+        <Button Content="Save" Classes="accent" Command="{Binding SaveCommand}" MinWidth="96" HorizontalContentAlignment="Center" />
+        <Button Content="Close" IsCancel="True" Click="OnClose" MinWidth="96" HorizontalContentAlignment="Center" />
+      </StackPanel>
+    </Border>
+  </Grid>
+</Window>

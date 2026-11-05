@@ -1,10 +1,13 @@
 using Yaapic.Core.Http;
+using Yaapic.Domain.Collections;
 using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Workspace;
 using Yaapic.TestDoubles;
 using Yaapic.UI.Abstractions;
+using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Environments;
+using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -17,6 +20,9 @@ public sealed class ShellViewModelTests
     private readonly InMemoryEnvironmentStore _environments = new();
     private readonly InMemorySessionStore _session = new();
     private readonly FakeDialogService _dialogs = new();
+    private readonly InMemoryCollectionStore _collections;
+
+    public ShellViewModelTests() => _collections = new InMemoryCollectionStore(_requests);
 
     private ShellViewModel Create()
     {
@@ -25,8 +31,26 @@ public sealed class ShellViewModelTests
         var tabs = new TabsViewModel(
             _requests,
             _dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, environments, isNew));
-        return new ShellViewModel(tabs, new RequestListViewModel(_requests, tabs, _dialogs), environments, _session, _dialogs);
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew));
+        return new ShellViewModel(
+            tabs,
+            new RequestListViewModel(_requests, tabs, _dialogs),
+            new CollectionTreeViewModel(_collections, _requests, tabs, _dialogs),
+            new HistoryViewModel(new InMemoryHistoryStore(), TimeProvider.System, tabs, _dialogs),
+            environments, new GlobalsViewModel(new InMemoryGlobalsStore()), _session, _dialogs);
+    }
+
+    [Fact]
+    public void ModeSwitchesBetweenCollectionsAndHistory()
+    {
+        var shell = Create();
+        Assert.Equal(SidebarMode.Collections, shell.Mode);
+
+        shell.ShowHistoryCommand.Execute(null);
+        Assert.Equal(SidebarMode.History, shell.Mode);
+
+        shell.ShowCollectionsCommand.Execute(null);
+        Assert.Equal(SidebarMode.Collections, shell.Mode);
     }
 
     private async Task<HttpRequestDefinition> SeedAsync(string name)
@@ -34,6 +58,22 @@ public sealed class ShellViewModelTests
         var request = HttpRequestDefinition.Create(name);
         await _requests.SaveAsync(request, CancellationToken.None);
         return request;
+    }
+
+    [Fact]
+    public async Task InitializationRefreshesTheCollectionTree()
+    {
+        var folder = FolderDefinition.Create("api");
+        await _collections.SaveFolderAsync(folder, null, CancellationToken.None);
+        var request = await SeedAsync("nested");
+        await _collections.MoveAsync(request.Id, folder.Id, CancellationToken.None);
+        var shell = Create();
+
+        await shell.InitializeAsync();
+
+        var root = Assert.Single(shell.Collections.Roots);
+        Assert.Equal(folder.Id, root.Id);
+        Assert.Contains(root.Children, c => c.Id == request.Id);
     }
 
     [Fact]

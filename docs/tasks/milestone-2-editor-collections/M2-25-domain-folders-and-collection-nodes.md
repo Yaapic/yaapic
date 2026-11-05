@@ -1,6 +1,6 @@
 # M2-25: Domain: folders and collection nodes
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-01
 
@@ -32,10 +32,10 @@ Storage (M2-26 onwards), view models.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: `Create` trims and rejects blank; `Sort` puts folders first, orders ignoring case,
+- [x] Tests in `Yaapic.Domain.Tests`: `Create` trims and rejects blank; `Sort` puts folders first, orders ignoring case,
       breaks ties by id; factories set the right members and reject inconsistent input; `Descendants`/`Flatten` order;
       `IsEquivalentTo` with variables.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

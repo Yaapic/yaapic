@@ -1,8 +1,8 @@
 # M2-38: Avalonia collections tree
 
-Status: todo
+Status: done
 Platform: unix
-Depends on: M2-35, M2-21
+Depends on: M2-35, M2-21, M1-57
 
 ## Goal
 
@@ -26,10 +26,14 @@ Menus and prompts (M2-39), drag and drop.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke: same checks as M2-36 on the host OS.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke: same checks as M2-36 on the host OS.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): show collections as a tree in the sidebar`
+
+## Notes
+
+- Nodes open on selection (keyboard included); a folder toggles on tap. The AOT publish shows only the existing Avalonia.Win32 ILC messages, no IL2xxx/IL3xxx. Smoke done by UI Automation on the AOT exe: expand/collapse, nested request opens its tab, filter box bound to the tree.

@@ -1,0 +1,14 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000007
+name: Secure call
+method: GET
+url: "{{baseUrl}}/users/{{userId}}"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+auth:
+  type: bearer
+  token: "{{apiToken}}"

@@ -1,6 +1,6 @@
 # M2-56: History ViewModel and recording
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-54, M2-11
 
@@ -37,11 +37,11 @@ Open/delete/clear commands, shell and composition wiring (M2-57), views.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with `InMemoryHistoryStore` and a fake `TimeProvider`: record a success and a
+- [x] Tests in `Yaapic.ViewModels.Tests` with `InMemoryHistoryStore` and a fake `TimeProvider`: record a success and a
       failure; canceled sends are not recorded; grouping across today, yesterday and an older day with a non-UTC local
       zone; ordering; filter by method, name, URL and status; `IsEmpty`; a failing store sets `LastError` without
       throwing; the editor raises `Sent` after a send with the request as sent and not on cancel (use `FakeHttpTransport`).
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

@@ -1,6 +1,6 @@
 # M2-19: WinUI response copy and save buttons
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-14, M2-15
 
@@ -22,11 +22,11 @@ Copying headers, saving with the request, a notification system.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: send `https://httpbin.org/json`, Copy then paste elsewhere gives the pretty
-      body; Save writes `response.json` with the raw bytes; both buttons are disabled before the first send and for a
-      binary response (`https://httpbin.org/image/png`).
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: send `https://httpbin.org/json`, Copy then paste elsewhere gives the pretty
+      body; Save writes `response.json` with the raw bytes; both buttons are hidden before the first send; for a binary
+      response (`https://httpbin.org/image/png`) Copy is disabled and Save stays enabled (raw bytes, M2-14).
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

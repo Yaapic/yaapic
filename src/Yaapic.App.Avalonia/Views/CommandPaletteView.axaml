@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:pal="using:Yaapic.ViewModels.Palette"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             x:Class="Yaapic.App.Avalonia.Views.CommandPaletteView"
+             x:DataType="pal:CommandPaletteViewModel"
+             IsVisible="{Binding IsOpen}">
+  <Grid RowDefinitions="15*,Auto,85*">
+    <Border x:Name="Scrim" Grid.RowSpan="3" Background="#66000000" PointerPressed="OnScrimPressed" />
+    <Border x:Name="Card" Grid.Row="1" Width="560" MaxHeight="440" HorizontalAlignment="Center"
+            Background="{DynamicResource YaapicSurfaceOverlayBrush}"
+            BorderBrush="{DynamicResource YaapicBorderOverlayBrush}" BorderThickness="1"
+            CornerRadius="{DynamicResource YaapicRadiusLg}">
+      <Grid RowDefinitions="Auto,*">
+        <TextBox x:Name="QueryBox" MinHeight="44" Padding="16,11" BorderThickness="0" Background="Transparent"
+                 PlaceholderText="Type a command or search requests" AutomationProperties.Name="Command palette"
+                 Text="{Binding Query, Mode=TwoWay}" />
+        <Border Grid.Row="1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
+          <Grid>
+            <ListBox x:Name="ResultList" Padding="6" Background="Transparent"
+                     ItemsSource="{Binding Results}" SelectedIndex="{Binding SelectedIndex, Mode=TwoWay}">
+              <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="pal:PaletteResult">
+                  <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10" Margin="4,2" Background="Transparent"
+                        Tapped="OnRowTapped">
+                    <StackPanel VerticalAlignment="Center">
+                      <TextBlock Classes="body" TextTrimming="CharacterEllipsis" DataContextChanged="OnTitleDataContextChanged" />
+                      <TextBlock Text="{Binding Item.Subtitle}" Classes="bodySmall" TextTrimming="CharacterEllipsis"
+                                 Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                                 IsVisible="{Binding Item.Subtitle, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    </StackPanel>
+                    <Border Grid.Column="1" Classes="chip" VerticalAlignment="Center"
+                            Background="{DynamicResource YaapicSurfaceSunkenBrush}">
+                      <TextBlock Text="{Binding Item.Category}" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                    </Border>
+                    <Border Grid.Column="2" Classes="keycap" VerticalAlignment="Center"
+                            IsVisible="{Binding Item.Shortcut, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+                      <TextBlock Text="{Binding Item.Shortcut, Converter={x:Static p:ShortcutText.ForHost}}" Classes="bodySmall"
+                                 Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                    </Border>
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+            <TextBlock Text="No matching commands" Classes="bodySmall" HorizontalAlignment="Center" Margin="16,20"
+                       Foreground="{DynamicResource YaapicTextSecondaryBrush}" IsVisible="{Binding IsEmpty}" />
+          </Grid>
+        </Border>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

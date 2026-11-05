@@ -13,12 +13,20 @@ public sealed class RequestSender(IHttpTransport transport)
     /// <param name="environment">The active environment, or <see langword="null"/> for none.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>The result and the unresolved variable names; unresolved variables never block the send.</returns>
-    public async Task<SendReport> SendAsync(HttpRequestDefinition request, EnvironmentDefinition? environment, CancellationToken ct)
+    public Task<SendReport> SendAsync(HttpRequestDefinition request, EnvironmentDefinition? environment, CancellationToken ct) =>
+        SendAsync(request, new VariableScopes(environment, [], []), ct);
+
+    /// <summary>Resolves the request against the environment, collection, globals and dynamic variables, then sends it.</summary>
+    /// <param name="request">The request definition.</param>
+    /// <param name="scopes">The variable scopes.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>The result and the unresolved variable names; unresolved variables never block the send.</returns>
+    public async Task<SendReport> SendAsync(HttpRequestDefinition request, VariableScopes scopes, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(request);
+        ArgumentNullException.ThrowIfNull(scopes);
 
-        var source = new CompositeVariableSource(new EnvironmentVariableSource(environment), new DynamicVariableSource());
-        var resolved = RequestResolver.Resolve(request, source);
+        var resolved = RequestResolver.Resolve(request, scopes.CreateSource());
 
         SendResult result;
         try

@@ -8,6 +8,9 @@ public sealed class InMemoryEnvironmentStore : IEnvironmentStore
 {
     private readonly Dictionary<Guid, EnvironmentDefinition> _items = [];
 
+    /// <summary>Gets or sets a message that makes <see cref="SaveAsync"/> throw a <see cref="StorageException"/>; <see langword="null"/> for none.</summary>
+    public string? FailureMessage { get; set; }
+
     /// <summary>Gets the number of <see cref="SaveAsync"/> calls.</summary>
     public int SaveCount { get; private set; }
 
@@ -19,6 +22,11 @@ public sealed class InMemoryEnvironmentStore : IEnvironmentStore
     /// <inheritdoc/>
     public Task SaveAsync(EnvironmentDefinition environment, CancellationToken ct)
     {
+        if (FailureMessage is not null)
+        {
+            throw new StorageException(FailureMessage);
+        }
+
         _items[environment.Id] = environment;
         SaveCount++;
         return Task.CompletedTask;

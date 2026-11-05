@@ -1,7 +1,7 @@
 version: 1
 id: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8
 name: Get users – café ☕
-method: POST
+method: PUT
 url: "{{baseUrl}}/users"
 params:
 - key: page
@@ -22,3 +22,24 @@ body:
       "name": "Zoë",
       "id": "{{id}}"
     }
+  fields:
+  - key: a
+    value: "{{v}}"
+    enabled: false
+    kind: text
+  - key: avatar
+    value: img.png
+    enabled: true
+    kind: file
+  file: blob.bin
+auth:
+  type: apikey
+  username: u
+  password: p
+  token: t
+  key: X-Key
+  value: "{{secret}}"
+  in: query
+settings:
+  followRedirects: false
+  timeoutSeconds: 15

@@ -18,11 +18,23 @@ public sealed class App : Application
     {
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
+            var options = CaptureOptions.Parse(desktop.Args ?? []);
             var window = new MainWindow();
-            var shell = AppComposition.CreateShell(Workspace.DefaultRoot(), new AvaloniaDialogService(() => window));
+            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window));
             window.DataContext = shell;
+            if (options.Theme is { } theme)
+            {
+                MainWindow.ApplyTheme(theme);
+            }
+
+            if (options.Size is { } size)
+            {
+                window.Width = size.Width;
+                window.Height = size.Height;
+            }
+
             desktop.MainWindow = window;
-            _ = shell.InitializeAsync();
+            _ = WindowCapture.RunAsync(desktop, window, shell, options);
         }
         base.OnFrameworkInitializationCompleted();
     }

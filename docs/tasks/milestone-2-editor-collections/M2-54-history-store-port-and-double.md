@@ -1,6 +1,6 @@
 # M2-54: Core: history store port and in-memory double
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-53
 
@@ -28,9 +28,9 @@ The file implementation (M2-55), ViewModels.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` for the double: append then list newest first; equal times ordered by id; retention
+- [x] Tests in `Yaapic.Core.Tests` for the double: append then list newest first; equal times ordered by id; retention
       drops the oldest beyond 500; delete; unknown delete; clear.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

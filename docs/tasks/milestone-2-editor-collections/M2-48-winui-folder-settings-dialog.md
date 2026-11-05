@@ -1,6 +1,6 @@
 # M2-48: WinUI folder and collection settings dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-43, M2-37
 
@@ -27,12 +27,19 @@ Collection auth, headers or scripts.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: in collection "Demo" add variable `host = https://httpbin.org`, save; a request in
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: in collection "Demo" add variable `host = https://httpbin.org`, save; a request in
       that collection sending `{{host}}/get` returns 200, the same request moved to the top level shows the variable
       unresolved; renaming the collection renames its directory on disk.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add folder and collection settings dialog`
+
+## Notes
+
+- Verified on the AOT-published exe (win-x64, 0 IL2xxx/IL3xxx): created collection "Demo", set `host = https://httpbin.org`
+  and renamed it to "Demo2" in the dialog; `requests/demo2/folder.yaml` holds the variable and the directory was renamed.
+  `{{host}}/get` showed "Unresolved variables: host" at the top level and returned 200 OK after moving into the collection.
+- Every theme key used by the dialog is already used by `EnvironmentsDialog` and exists in `Yaapic.Colors.WinUI.xaml`.

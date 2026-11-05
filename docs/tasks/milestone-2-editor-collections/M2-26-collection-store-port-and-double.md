@@ -1,6 +1,6 @@
 # M2-26: Core: collection store port and in-memory double
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-25
 
@@ -34,10 +34,10 @@ The file implementation (M2-30, M2-31), view models.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` (next to `InMemoryStoreTests`) for the double: empty tree; create top-level and nested
+- [x] Tests in `Yaapic.Core.Tests` (next to `InMemoryStoreTests`) for the double: empty tree; create top-level and nested
       folder; update keeps location; unfiled request appears at the root; move request and folder; move into own
       descendant throws; unknown ids; delete folder removes nested folders and requests; sort order.
-- [ ] 0 warnings; the architecture rule test needs no change.
+- [x] 0 warnings; the architecture rule test needs no change.
 
 ## Suggested commit message
 

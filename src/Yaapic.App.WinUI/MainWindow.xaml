@@ -5,6 +5,7 @@
         xmlns:ic="using:FluentIcons.WinUI"
         xmlns:v="using:Yaapic.App.WinUI.Views"
         xmlns:req="using:Yaapic.ViewModels.Requests"
+        xmlns:col="using:Yaapic.ViewModels.Collections"
         Title="Yaapic">
   <Window.SystemBackdrop>
     <MicaBackdrop/>
@@ -16,6 +17,11 @@
       <KeyboardAccelerator Key="S" Modifiers="Control" Invoked="OnSaveTab"/>
       <KeyboardAccelerator Key="E" Modifiers="Control,Shift" Invoked="OnEnvironmentsShortcut"/>
       <KeyboardAccelerator Key="F" Modifiers="Control,Shift" Invoked="OnFilterShortcut"/>
+      <KeyboardAccelerator Key="P" Modifiers="Control" Invoked="OnPaletteShortcut"/>
+      <KeyboardAccelerator Key="K" Modifiers="Control" Invoked="OnPaletteShortcut"/>
+      <KeyboardAccelerator Key="P" Modifiers="Control,Shift" Invoked="OnPaletteShortcut"/>
+      <KeyboardAccelerator Key="Down" Modifiers="Menu" Invoked="OnNextTabShortcut"/>
+      <KeyboardAccelerator Key="Up" Modifiers="Menu" Invoked="OnPreviousTabShortcut"/>
     </Grid.KeyboardAccelerators>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -42,24 +48,36 @@
         </Viewbox>
         <TextBlock Text="Yaapic" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
       </StackPanel>
-      <Button x:Name="EnvironmentPill" Grid.Column="2" Style="{StaticResource YaapicPillButtonStyle}"
-              VerticalAlignment="Center" Margin="0,0,8,0"
-              AutomationProperties.Name="Environment">
-        <StackPanel Orientation="Horizontal" Spacing="8">
-          <Grid Width="8" Height="8" VerticalAlignment="Center">
-            <Ellipse Fill="{ThemeResource YaapicSuccessBrush}"
-                     Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.Environments.ActiveEnvironment), Mode=OneWay}"/>
-            <Ellipse Fill="{ThemeResource YaapicTextTertiaryBrush}"
-                     Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Environments.ActiveEnvironment), Mode=OneWay}"/>
-          </Grid>
-          <TextBlock Text="{x:Bind ViewModel.Environments.ActiveEnvironment.Name, Mode=OneWay, FallbackValue='No environment', TargetNullValue='No environment'}"
-                     VerticalAlignment="Center" Style="{StaticResource YaapicBodyTextStyle}"/>
-          <ic:FluentIcon Icon="ChevronDown" IconVariant="Regular" IconSize="Size12" Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
-        </StackPanel>
-        <Button.Flyout>
-          <MenuFlyout x:Name="EnvironmentMenu" Opening="OnEnvironmentMenuOpening"/>
-        </Button.Flyout>
-      </Button>
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center" Margin="0,0,8,0">
+        <Button Style="{StaticResource YaapicIconButtonStyle}"
+                AutomationProperties.Name="Command palette" ToolTipService.ToolTip="Command palette (Ctrl+P)"
+                Command="{x:Bind ViewModel.OpenPaletteCommand}">
+          <ic:FluentIcon Icon="Search" IconVariant="Regular" IconSize="Size16"/>
+        </Button>
+        <Button Style="{StaticResource YaapicIconButtonStyle}"
+                AutomationProperties.Name="Environments" ToolTipService.ToolTip="Environments (Ctrl+Shift+E)"
+                Click="OnManageEnvironments">
+          <ic:FluentIcon Icon="Globe" IconVariant="Regular" IconSize="Size16"/>
+        </Button>
+        <Button x:Name="EnvironmentPill" Style="{StaticResource YaapicPillButtonStyle}"
+                VerticalAlignment="Center"
+                AutomationProperties.Name="Environment">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Grid Width="8" Height="8" VerticalAlignment="Center">
+              <Ellipse Fill="{ThemeResource YaapicSuccessBrush}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.Environments.ActiveEnvironment), Mode=OneWay}"/>
+              <Ellipse Fill="{ThemeResource YaapicTextTertiaryBrush}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Environments.ActiveEnvironment), Mode=OneWay}"/>
+            </Grid>
+            <TextBlock Text="{x:Bind ViewModel.Environments.ActiveEnvironment.Name, Mode=OneWay, FallbackValue='No environment', TargetNullValue='No environment'}"
+                       VerticalAlignment="Center" Style="{StaticResource YaapicBodyTextStyle}"/>
+            <ic:FluentIcon Icon="ChevronDown" IconVariant="Regular" IconSize="Size12" Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+          </StackPanel>
+          <Button.Flyout>
+            <MenuFlyout x:Name="EnvironmentMenu" Opening="OnEnvironmentMenuOpening"/>
+          </Button.Flyout>
+        </Button>
+      </StackPanel>
     </Grid>
     <StackPanel Grid.Row="1">
       <InfoBar Severity="Error" IsClosable="False"
@@ -68,6 +86,15 @@
       <InfoBar Severity="Error" IsClosable="False"
                IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Environments.LastError), Mode=OneWay}"
                Message="{x:Bind ViewModel.Environments.LastError, Mode=OneWay}"/>
+      <InfoBar Severity="Error" IsClosable="False"
+               IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Collections.LastError), Mode=OneWay}"
+               Message="{x:Bind ViewModel.Collections.LastError, Mode=OneWay}"/>
+      <InfoBar Severity="Error" IsClosable="False"
+               IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.History.LastError), Mode=OneWay}"
+               Message="{x:Bind ViewModel.History.LastError, Mode=OneWay}"/>
+      <InfoBar Severity="Error" IsClosable="False"
+               IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Palette.LastError), Mode=OneWay}"
+               Message="{x:Bind ViewModel.Palette.LastError, Mode=OneWay}"/>
     </StackPanel>
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
@@ -86,19 +113,39 @@
           <StackPanel Spacing="4">
             <Grid>
               <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
-                         VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"/>
-              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicSelectionBackgroundBrush}">
-                <Button Style="{StaticResource YaapicRailButtonStyle}" AutomationProperties.Name="Requests"
-                        ToolTipService.ToolTip="Requests" Foreground="{ThemeResource YaapicAccentTextBrush}">
-                  <ic:FluentIcon Icon="Library" IconVariant="Regular" IconSize="Size20" Foreground="{ThemeResource YaapicAccentTextBrush}"/>
-                </Button>
-              </Border>
+                         VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
+                      Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+              <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                      AutomationProperties.Name="Collections" ToolTipService.ToolTip="Collections"
+                      Command="{x:Bind ViewModel.ShowCollectionsCommand, Mode=OneWay}">
+                <Viewbox Width="20" Height="20">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YiCollection}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                          Stroke="{x:Bind p:BrushMap.CollectionsRail(ViewModel.Mode), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+              </Button>
             </Grid>
-            <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
-                    AutomationProperties.Name="Environments" ToolTipService.ToolTip="Environments (Ctrl+Shift+E)"
-                    Click="OnManageEnvironments">
-              <ic:FluentIcon Icon="Globe" IconVariant="Regular" IconSize="Size20"/>
-            </Button>
+            <Grid>
+              <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
+                         VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+              <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
+                      Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+              <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                      AutomationProperties.Name="History" ToolTipService.ToolTip="History"
+                      Command="{x:Bind ViewModel.ShowHistoryCommand, Mode=OneWay}">
+                <Viewbox Width="20" Height="20">
+                  <Canvas Width="24" Height="24">
+                    <Path Data="{StaticResource YiHistory}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                          StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                          Stroke="{x:Bind p:BrushMap.HistoryRail(ViewModel.Mode), Mode=OneWay}"/>
+                  </Canvas>
+                </Viewbox>
+              </Button>
+            </Grid>
           </StackPanel>
           <Button Grid.Row="2" Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
                   AutomationProperties.Name="Settings" ToolTipService.ToolTip="Settings">
@@ -125,62 +172,78 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <TextBlock Text="Requests" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+          <TextBlock Text="Requests" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+          <TextBlock Text="History" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
           <Button Grid.Column="1" Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="New request"
-                  ToolTipService.ToolTip="New request (Ctrl+T)"
-                  Command="{x:Bind ViewModel.Requests.NewRequestCommand, Mode=OneWay}">
+                  ToolTipService.ToolTip="New request or collection"
+                  Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}">
             <ic:FluentIcon Icon="Add" IconVariant="Regular" IconSize="Size16"/>
+            <Button.Flyout>
+              <MenuFlyout>
+                <MenuFlyoutItem Text="New request" Command="{x:Bind ViewModel.Collections.NewRequestCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem Text="New collection" Command="{x:Bind ViewModel.Collections.NewCollectionCommand, Mode=OneWay}"/>
+              </MenuFlyout>
+            </Button.Flyout>
           </Button>
         </Grid>
-        <Grid Grid.Row="1" Padding="10,0,10,8">
-          <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,3,84,3" PlaceholderText="Filter"
+        <v:HistoryView Grid.Row="1" Grid.RowSpan="2" ViewModel="{x:Bind ViewModel.History, Mode=OneWay}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+        <Grid Grid.Row="1" Padding="10,0,10,8"
+              Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}">
+          <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,3,84,3" PlaceholderText="Filter requests"
                    AutomationProperties.Name="Filter requests"
                    Background="{ThemeResource YaapicSurfaceSunkenBrush}"
-                   Text="{x:Bind ViewModel.Requests.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                   Text="{x:Bind ViewModel.Collections.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
           <ic:FluentIcon Icon="Search" IconVariant="Regular" IconSize="Size16" HorizontalAlignment="Left" Margin="8,0,0,0" IsHitTestVisible="False" Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
           <TextBlock Text="Ctrl+Shift+F" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,8,0"
                      IsHitTestVisible="False" Style="{StaticResource YaapicCodeSmallTextStyle}"
                      Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
         </Grid>
-        <ListView x:Name="RequestList" Grid.Row="2" IsItemClickEnabled="True" SelectionMode="Single" ItemContainerStyle="{StaticResource YaapicListRowStyle}"
-                 
-                  ItemsSource="{x:Bind ViewModel.Requests.Items, Mode=OneWay}"
-                  ItemClick="OnRequestClick">
-          <ListView.ItemTemplate>
-            <DataTemplate x:DataType="req:RequestListItem">
-              <Grid ColumnSpacing="6">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="34"/>
-                  <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <Grid.ContextFlyout>
-                  <MenuFlyout>
-                    <MenuFlyoutItem Text="Delete" Tag="{x:Bind}" Click="OnDeleteRequest"/>
-                  </MenuFlyout>
-                </Grid.ContextFlyout>
-                <TextBlock Text="{x:Bind MethodText}" VerticalAlignment="Center"
-                           Style="{StaticResource YaapicMethodTextStyle}"
-                           Foreground="{x:Bind p:BrushMap.Method(Method)}"/>
-                <TextBlock Grid.Column="1" Text="{x:Bind Name}" VerticalAlignment="Center"
-                           TextTrimming="CharacterEllipsis"
-                           Style="{StaticResource YaapicBodyTextStyle}"/>
-              </Grid>
+        <TreeView x:Name="CollectionTree" Grid.Row="2" SelectionMode="Single"
+                  Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"
+                  ItemsSource="{x:Bind ViewModel.Collections.Roots, Mode=OneWay}"
+                  ItemInvoked="OnNodeInvoked" ContextRequested="OnNodeContextRequested" KeyDown="OnTreeKeyDown">
+          <TreeView.ItemTemplate>
+            <DataTemplate x:DataType="col:CollectionNodeViewModel">
+              <TreeViewItem AutomationProperties.Name="{x:Bind Name}" ItemsSource="{x:Bind Children}" IsExpanded="{x:Bind IsExpanded, Mode=TwoWay}" MinHeight="26">
+                <Grid ColumnSpacing="6" ToolTipService.ToolTip="{x:Bind Url}">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <Viewbox Width="16" Height="16" VerticalAlignment="Center"
+                           Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsCollection)}">
+                    <Canvas Width="24" Height="24">
+                      <Path Data="{StaticResource YiCollection}" Stroke="{ThemeResource YaapicTextSecondaryBrush}"
+                            StrokeThickness="1.8" StrokeLineJoin="Round"/>
+                    </Canvas>
+                  </Viewbox>
+                  <Viewbox Width="16" Height="16" VerticalAlignment="Center"
+                           Visibility="{x:Bind p:VisibilityMap.WhenSubfolder(IsFolder, IsCollection)}">
+                    <Canvas Width="24" Height="24">
+                      <Path Data="{StaticResource YiFolder}" Stroke="{ThemeResource YaapicTextSecondaryBrush}"
+                            StrokeThickness="1.8" StrokeLineJoin="Round"/>
+                    </Canvas>
+                  </Viewbox>
+                  <TextBlock Width="52" Text="{x:Bind MethodText}" VerticalAlignment="Center"
+                             Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsFolder)}"
+                             Style="{StaticResource YaapicMethodTextStyle}"
+                             p:MethodBrush.Method="{x:Bind Method}"/>
+                  <TextBlock Grid.Column="1" Text="{x:Bind Name}" VerticalAlignment="Center"
+                             TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicBodyTextStyle}"/>
+                </Grid>
+              </TreeViewItem>
             </DataTemplate>
-          </ListView.ItemTemplate>
-        </ListView>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="16,24,16,0" Spacing="4"
-                    IsHitTestVisible="False"
-                    Visibility="{x:Bind p:VisibilityMap.WhenNoSavedRequests(ViewModel.Requests.Items.Count, ViewModel.Requests.FilterText), Mode=OneWay}">
-          <TextBlock Text="No saved requests yet." HorizontalAlignment="Center"
+          </TreeView.ItemTemplate>
+        </TreeView>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="16,24,16,0" Spacing="8"
+                    Visibility="{x:Bind p:VisibilityMap.WhenCollectionsEmpty(ViewModel.Mode, ViewModel.Collections.IsEmpty), Mode=OneWay}">
+          <TextBlock Text="No collections yet" HorizontalAlignment="Center"
                      Style="{StaticResource YaapicBodySmallTextStyle}"/>
-          <TextBlock Text="Press Ctrl+S in a tab to save it here." HorizontalAlignment="Center" TextWrapping="Wrap"
-                     Style="{StaticResource YaapicBodySmallTextStyle}"
-                     Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
+          <Button Content="New request" HorizontalAlignment="Center" Click="OnAddTab"/>
         </StackPanel>
-        <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="16,24,16,0"
-                   TextWrapping="Wrap" IsHitTestVisible="False" Style="{StaticResource YaapicBodySmallTextStyle}"
-                   Text="{x:Bind p:VisibilityMap.NoMatchText(ViewModel.Requests.FilterText), Mode=OneWay}"
-                   Visibility="{x:Bind p:VisibilityMap.WhenNoMatch(ViewModel.Requests.Items.Count, ViewModel.Requests.FilterText), Mode=OneWay}"/>
       </Grid>
       <Grid Grid.Column="2">
         <TabView IsAddTabButtonVisible="False" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
@@ -207,14 +270,15 @@
                   <StackPanel Orientation="Horizontal" Spacing="8">
                     <TextBlock Style="{StaticResource YaapicMethodTextStyle}" VerticalAlignment="Center"
                                Text="{x:Bind MethodText, Mode=OneWay}"
-                               Foreground="{x:Bind p:BrushMap.Method(Method), Mode=OneWay}"/>
+                               p:MethodBrush.Method="{x:Bind Method, Mode=OneWay}"/>
                     <TextBlock Style="{StaticResource YaapicTabNameTextStyle}" Text="{x:Bind DisplayName, Mode=OneWay}"/>
                     <Ellipse Width="6" Height="6" VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentTextBrush}"
                              AutomationProperties.Name="Unsaved changes"
                              Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsDirty), Mode=OneWay}"/>
                   </StackPanel>
                 </TabViewItem.Header>
-                <v:RequestEditorView ViewModel="{x:Bind}" SaveRequested="OnEditorSaveRequested"/>
+                <v:RequestEditorView ViewModel="{x:Bind}" SaveRequested="OnEditorSaveRequested"
+                                     VariableScopeOpenRequested="OnVariableScopeOpenRequested"/>
               </TabViewItem>
             </DataTemplate>
           </TabView.TabItemTemplate>
@@ -249,5 +313,6 @@
         </StackPanel>
       </Grid>
     </Grid>
+    <v:CommandPaletteView Grid.RowSpan="3" ViewModel="{x:Bind ViewModel.Palette, Mode=OneWay}"/>
   </Grid>
 </Window>

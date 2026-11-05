@@ -1,6 +1,6 @@
 # M2-44: Variable scope provider: sending with all scopes
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-35, M2-41, M2-42, M2-43
 
@@ -32,12 +32,12 @@ Exposing `Globals` on the shell and loading it (M2-45), hints (M2-46).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: the provider combines the three scopes for a request inside a collection
+- [x] Tests in `Yaapic.ViewModels.Tests`: the provider combines the three scopes for a request inside a collection
       (collection variables of its top-level folder) and for an unfiled request (none); `ScopesChanged` on environment
       change, globals edit and tree refresh; sending a request uses a collection variable and a globals variable (assert on
       `FakeHttpTransport`); precedence environment over collection over globals through the whole path; every M1 send
       test still green.
-- [ ] 0 warnings; architecture tests green.
+- [x] 0 warnings; architecture tests green.
 
 ## Suggested commit message
 

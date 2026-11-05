@@ -1,8 +1,8 @@
 # M2-23: Avalonia Auth and Settings tabs
 
-Status: todo
+Status: done
 Platform: unix
-Depends on: M2-11, M2-21
+Depends on: M2-11, M2-21, M1-57
 
 ## Goal
 
@@ -24,9 +24,9 @@ Same as M2-18.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
 - [ ] Manual smoke: same checks as M2-18 on the host OS.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

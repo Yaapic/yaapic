@@ -1,0 +1,77 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <!-- Type ramp of M1-35 (design/mockups/DSFondations.dc.html). Sizes and line heights come from the generated keys. -->
+  <Style Selector="Window">
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicUiFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeBody}" />
+  </Style>
+  <Style Selector=":is(TextBlock)">
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicUiFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeBody}" />
+  </Style>
+
+  <Style Selector=":is(TextBlock).title">
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeTitle}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightTitle}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextPrimaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).subtitle">
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeSubtitle}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightSubtitle}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextPrimaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).body">
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeBody}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightBody}" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextPrimaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).bodyStrong">
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeBodyStrong}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightBodyStrong}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextPrimaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).bodySmall">
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeBodySm}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightBodySm}" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).caption">
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeCaption}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightCaption}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextTertiaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).code">
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeCode}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightCode}" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextPrimaryBrush}" />
+  </Style>
+  <Style Selector=":is(TextBlock).codeSmall">
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeCodeSm}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightCodeSm}" />
+    <Setter Property="FontWeight" Value="Medium" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
+  </Style>
+  <!-- The method label colour is set by the caller. -->
+  <Style Selector=":is(TextBlock).method">
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeLabelMono}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightLabelMono}" />
+    <Setter Property="FontWeight" Value="Bold" />
+  </Style>
+  <Style Selector=":is(TextBlock).badge">
+    <Setter Property="FontFamily" Value="{DynamicResource YaapicMonoFont}" />
+    <Setter Property="FontSize" Value="{DynamicResource YaapicFontSizeLabelMono}" />
+    <Setter Property="LineHeight" Value="{DynamicResource YaapicLineHeightLabelMono}" />
+    <Setter Property="FontWeight" Value="SemiBold" />
+    <Setter Property="Foreground" Value="{DynamicResource YaapicTextTertiaryBrush}" />
+  </Style>
+</Styles>

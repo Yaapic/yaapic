@@ -1,6 +1,7 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Yaapic.ViewModels.Shell"
+        xmlns:col="using:Yaapic.ViewModels.Collections"
         xmlns:req="using:Yaapic.ViewModels.Requests"
         xmlns:env="using:Yaapic.ViewModels.Environments"
         xmlns:p="using:Yaapic.App.Avalonia.Presentation"
@@ -10,91 +11,292 @@
         Title="Yaapic"
         Width="1280" Height="800"
         MinWidth="900" MinHeight="600"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaTitleBarHeightHint="40"
         Background="{DynamicResource YaapicSurfaceAppBrush}">
-  <Grid RowDefinitions="Auto,Auto,*">
-    <Border Grid.Row="0" Height="48" Padding="12,0" BorderThickness="0,0,0,1"
-            BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Spacing="8">
-        <ComboBox Width="200" PlaceholderText="No environment"
-                  ItemsSource="{Binding Environments.Environments}"
-                  SelectedItem="{Binding Environments.ActiveEnvironment, Mode=TwoWay}">
-          <ComboBox.ItemTemplate>
-            <DataTemplate x:DataType="env:EnvironmentItemViewModel">
-              <TextBlock Text="{Binding Name}" />
-            </DataTemplate>
-          </ComboBox.ItemTemplate>
-        </ComboBox>
-        <Button Content="Environments" Click="OnManageEnvironments" ToolTip.Tip="Manage environments (Ctrl+Shift+E)" />
-        <Button Content="Theme">
+  <Window.Styles>
+    <Style Selector="Button.icon.rail">
+      <Setter Property="Width" Value="36" />
+      <Setter Property="Height" Value="36" />
+      <Setter Property="MinHeight" Value="36" />
+    </Style>
+    <Style Selector="Button.icon.rail PathIcon">
+      <Setter Property="Width" Value="20" />
+      <Setter Property="Height" Value="20" />
+    </Style>
+    <Style Selector="TabItem Button.close">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="TabItem:selected Button.close:not(.dirty), TabItem:pointerover Button.close">
+      <Setter Property="Opacity" Value="1" />
+    </Style>
+    <Style Selector="TabItem:pointerover Ellipse.dirtyDot">
+      <Setter Property="Opacity" Value="0" />
+    </Style>
+    <Style Selector="Button.icon.selected">
+      <Setter Property="Foreground" Value="{DynamicResource YaapicAccentTextBrush}" />
+    </Style>
+    <Style Selector="Button.icon.selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="{DynamicResource YaapicSelectionBackgroundBrush}" />
+      <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicAccentTextBrush}" />
+    </Style>
+  </Window.Styles>
+  <Grid RowDefinitions="40,Auto,*">
+    <!-- Title bar: the OS caption buttons stay (PreferSystemChrome); the right padding clears them, set in code-behind. -->
+    <Border x:Name="TitleBar" Grid.Row="0" Padding="12,0" Background="{DynamicResource YaapicSurfaceAppBrush}"
+            BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+      <Grid ColumnDefinitions="Auto,*,Auto">
+        <StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+          <Viewbox Width="18" Height="18">
+            <Canvas Width="24" Height="24">
+              <Path Data="M5.5 4.5l6.3 8.2" StrokeThickness="2.6" StrokeLineCap="Round" StrokeJoin="Round"
+                    Stroke="{DynamicResource YaapicTextPrimaryBrush}" />
+              <Path Data="M18.5 4.5l-7.4 12.8a2.6 2.6 0 0 1-2.3 1.3H5.2M7.6 16.1l-2.5 2.5 2.5 2.5" StrokeThickness="2.6"
+                    StrokeLineCap="Round" StrokeJoin="Round" Stroke="{DynamicResource YaapicAccentTextBrush}" />
+            </Canvas>
+          </Viewbox>
+          <TextBlock Text="Yaapic" Classes="bodyStrong" VerticalAlignment="Center" />
+        </StackPanel>
+        <Button Grid.Column="2" Classes="pill" VerticalAlignment="Center"
+                AutomationProperties.Name="{Binding Environments.ActiveEnvironment.Name, StringFormat='Environment: {0}', FallbackValue='Environment: No environment'}">
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Ellipse Width="8" Height="8" VerticalAlignment="Center"
+                     Fill="{DynamicResource YaapicTextTertiaryBrush}"
+                     IsVisible="{Binding Environments.ActiveEnvironment, Converter={x:Static ObjectConverters.IsNull}}" />
+            <Ellipse Width="8" Height="8" VerticalAlignment="Center"
+                     Fill="{DynamicResource YaapicSuccessBrush}"
+                     IsVisible="{Binding Environments.ActiveEnvironment, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            <TextBlock Classes="bodySmall" VerticalAlignment="Center"
+                       Text="{Binding Environments.ActiveEnvironment.Name, FallbackValue='No environment'}" />
+            <Viewbox Width="12" Height="12" VerticalAlignment="Center">
+              <Canvas Width="24" Height="24">
+                <Path Data="M6 9l6 6 6-6" Stroke="{DynamicResource YaapicTextSecondaryBrush}" StrokeThickness="2.5"
+                      StrokeLineCap="Round" StrokeJoin="Round" />
+              </Canvas>
+            </Viewbox>
+          </StackPanel>
           <Button.Flyout>
-            <MenuFlyout>
-              <MenuItem Header="Dark" Click="OnThemeDark" />
-              <MenuItem Header="Light" Click="OnThemeLight" />
-              <MenuItem Header="System" Click="OnThemeSystem" />
-            </MenuFlyout>
+            <MenuFlyout Opening="OnEnvironmentMenuOpening" />
           </Button.Flyout>
         </Button>
-      </StackPanel>
+      </Grid>
     </Border>
 
-    <Border Grid.Row="1" Padding="12,6" Background="{DynamicResource YaapicDangerBackgroundBrush}"
+    <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
             IsVisible="{Binding Tabs.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
-      <TextBlock Text="{Binding Tabs.LastError}" Foreground="{DynamicResource YaapicDangerBrush}" />
+      <TextBlock Text="{Binding Tabs.LastError}" TextWrapping="Wrap" />
+    </Border>
+    <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
+            IsVisible="{Binding Collections.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding Collections.LastError}" TextWrapping="Wrap" />
+    </Border>
+    <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
+            IsVisible="{Binding History.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding History.LastError}" TextWrapping="Wrap" />
+    </Border>
+    <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
+            IsVisible="{Binding Palette.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <TextBlock Text="{Binding Palette.LastError}" TextWrapping="Wrap" />
     </Border>
 
-    <Grid Grid.Row="2" ColumnDefinitions="260,*">
-      <Border Grid.Column="0" Background="{DynamicResource YaapicSurfaceSidebarBrush}"
+    <!-- Column widths are literals: a GridLength cannot come from the x:Double resources. 48 = YaapicRailWidth, 272 = YaapicSidebarWidth. -->
+    <Grid Grid.Row="2" ColumnDefinitions="48,272,*">
+      <Border Grid.Column="0" Background="{DynamicResource YaapicSurfaceAppBrush}"
               BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-        <Grid RowDefinitions="Auto,Auto,*" Margin="12" RowSpacing="8">
-          <Button Grid.Row="0" Content="New" HorizontalAlignment="Stretch"
-                  Command="{Binding Requests.NewRequestCommand}" />
-          <TextBox x:Name="FilterBox" Grid.Row="1" PlaceholderText="Filter requests"
-                   Text="{Binding Requests.FilterText, Mode=TwoWay}" />
-          <ListBox Grid.Row="2" Background="Transparent" ItemsSource="{Binding Requests.Items}">
-            <ListBox.ItemTemplate>
-              <DataTemplate x:DataType="req:RequestListItem">
-                <Grid ColumnDefinitions="44,*" Background="Transparent" Tapped="OnRequestTapped">
-                  <Grid.ContextMenu>
-                    <ContextMenu>
-                      <MenuItem Header="Delete" Click="OnDeleteRequest" />
-                    </ContextMenu>
-                  </Grid.ContextMenu>
-                  <TextBlock Grid.Column="0" Text="{Binding MethodText}" FontFamily="monospace" FontSize="12"
-                             VerticalAlignment="Center"
-                             Foreground="{Binding Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
-                  <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+        <DockPanel Margin="0,8">
+          <Button DockPanel.Dock="Bottom" Classes="icon rail" HorizontalAlignment="Center"
+                  ToolTip.Tip="Settings" AutomationProperties.Name="Settings">
+            <PathIcon Data="{StaticResource YiSettings}" />
+            <Button.Flyout>
+              <MenuFlyout Placement="RightEdgeAlignedBottom">
+                <MenuItem Header="Dark" Click="OnThemeDark" />
+                <MenuItem Header="Light" Click="OnThemeLight" />
+                <MenuItem Header="System" Click="OnThemeSystem" />
+              </MenuFlyout>
+            </Button.Flyout>
+          </Button>
+          <StackPanel Spacing="4">
+            <Grid HorizontalAlignment="Center">
+              <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}"
+                      Command="{Binding ShowCollectionsCommand}" ToolTip.Tip="Collections" AutomationProperties.Name="Collections">
+                <PathIcon Data="{StaticResource YiCollection}" />
+              </Button>
+              <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                      Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                      IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" />
+            </Grid>
+            <Grid HorizontalAlignment="Center">
+              <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}"
+                      Command="{Binding ShowHistoryCommand}" ToolTip.Tip="History" AutomationProperties.Name="History">
+                <PathIcon Data="{StaticResource YiHistory}" />
+              </Button>
+              <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                      Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                      IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
+            </Grid>
+            <Button Classes="icon rail" HorizontalAlignment="Center" Click="OnManageEnvironments"
+                    ToolTip.Tip="Environments (Ctrl+Shift+E)" AutomationProperties.Name="Environments">
+              <PathIcon Data="{StaticResource YiEnvironment}" />
+            </Button>
+            <Button Classes="icon rail" HorizontalAlignment="Center" Command="{Binding OpenPaletteCommand}"
+                    ToolTip.Tip="Command palette (Ctrl+P)" AutomationProperties.Name="Command palette">
+              <PathIcon Data="{StaticResource YiSearch}" />
+            </Button>
+          </StackPanel>
+        </DockPanel>
+      </Border>
+
+      <Border Grid.Column="1" Background="{DynamicResource YaapicSurfaceSidebarBrush}"
+              BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+        <Grid RowDefinitions="40,Auto,*">
+          <Grid Grid.Row="0" Margin="14,0,8,0" ColumnDefinitions="*,Auto">
+            <TextBlock Text="Requests" Classes="bodyStrong" VerticalAlignment="Center"
+                       IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" />
+            <TextBlock Text="History" Classes="bodyStrong" VerticalAlignment="Center"
+                       IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
+            <Button Grid.Column="1" Classes="icon" ToolTip.Tip="New request or collection"
+                    IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" AutomationProperties.Name="New request">
+              <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
+              <Button.Flyout>
+                <MenuFlyout>
+                  <MenuItem Header="New request" Command="{Binding Collections.NewRequestCommand}" />
+                  <MenuItem Header="New collection" Command="{Binding Collections.NewCollectionCommand}" />
+                </MenuFlyout>
+              </Button.Flyout>
+            </Button>
+          </Grid>
+          <views:HistoryView Grid.Row="1" Grid.RowSpan="2" DataContext="{Binding History}"
+                             IsVisible="{Binding $parent[Window].((vm:ShellViewModel)DataContext).Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
+          <Grid Grid.Row="1" Margin="10,0,10,8" IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}">
+            <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,0,8,0" VerticalContentAlignment="Center"
+                     PlaceholderText="Filter requests" AutomationProperties.Name="Filter requests"
+                     Text="{Binding Collections.FilterText, Mode=TwoWay}" />
+            <Viewbox Width="14" Height="14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0"
+                     IsHitTestVisible="False">
+              <Canvas Width="24" Height="24">
+                <Path Data="{StaticResource YiSearch}" Stroke="{DynamicResource YaapicTextTertiaryBrush}" StrokeThickness="2"
+                      StrokeLineCap="Round" StrokeJoin="Round" />
+              </Canvas>
+            </Viewbox>
+            <Border Classes="keycap" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,6,0"
+                    IsHitTestVisible="False"
+                    IsVisible="{Binding Collections.FilterText, Converter={x:Static StringConverters.IsNullOrEmpty}}">
+              <TextBlock Text="Ctrl+Shift+F" Classes="bodySmall" FontSize="10"
+                         Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+            </Border>
+          </Grid>
+          <TreeView x:Name="CollectionTree" Grid.Row="2" Background="Transparent"
+                    IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" SelectionMode="Single"
+                    ItemsSource="{Binding Collections.Roots}" SelectionChanged="OnTreeSelectionChanged"
+                    ContextRequested="OnNodeContextRequested" KeyDown="OnTreeKeyDown">
+            <TreeView.Styles>
+              <Style Selector="TreeViewItem" x:DataType="col:CollectionNodeViewModel">
+                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                <Setter Property="MinHeight" Value="26" />
+                <Setter Property="AutomationProperties.Name" Value="{Binding Name}" />
+              </Style>
+            </TreeView.Styles>
+            <TreeView.DataTemplates>
+              <TreeDataTemplate DataType="col:CollectionNodeViewModel" ItemsSource="{Binding Children}">
+                <Grid ColumnDefinitions="Auto,*" ColumnSpacing="6" Background="Transparent" Tapped="OnNodeTapped"
+                      ToolTip.Tip="{Binding Url}">
+                  <StackPanel Orientation="Horizontal" Spacing="6" IsVisible="{Binding IsFolder}">
+                    <Viewbox Width="16" Height="16" VerticalAlignment="Center">
+                      <Canvas Width="24" Height="24">
+                        <Path Data="{StaticResource YiCollection}" Stroke="{DynamicResource YaapicTextSecondaryBrush}"
+                              StrokeThickness="1.8" StrokeJoin="Round" IsVisible="{Binding IsCollection}" />
+                        <Path Data="{StaticResource YiFolder}" Stroke="{DynamicResource YaapicTextSecondaryBrush}"
+                              StrokeThickness="1.8" StrokeJoin="Round" IsVisible="{Binding !IsCollection}" />
+                      </Canvas>
+                    </Viewbox>
+                  </StackPanel>
+                  <StackPanel Orientation="Horizontal" IsVisible="{Binding !IsFolder}">
+                    <TextBlock Width="44" Text="{Binding MethodText}" Classes="method" VerticalAlignment="Center"
+                               Foreground="{Binding Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
+                  </StackPanel>
+                  <TextBlock Grid.Column="1" Text="{Binding Name}" Classes="body" VerticalAlignment="Center"
+                             TextTrimming="CharacterEllipsis" />
                 </Grid>
-              </DataTemplate>
-            </ListBox.ItemTemplate>
-          </ListBox>
+              </TreeDataTemplate>
+            </TreeView.DataTemplates>
+          </TreeView>
+          <StackPanel Grid.Row="2" Margin="16,24,16,0" Spacing="8" HorizontalAlignment="Center" VerticalAlignment="Top"
+                      >
+            <StackPanel.IsVisible>
+              <MultiBinding Converter="{x:Static BoolConverters.And}">
+                <Binding Path="Collections.IsEmpty" />
+                <Binding Path="Mode" Converter="{x:Static p:SidebarMap.IsCollections}" />
+              </MultiBinding>
+            </StackPanel.IsVisible>
+            <TextBlock Text="No collections yet" Classes="bodySmall" TextAlignment="Center"
+                       Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+            <Button Content="New request" HorizontalAlignment="Center" Command="{Binding Requests.NewRequestCommand}" />
+          </StackPanel>
         </Grid>
       </Border>
 
-      <Grid Grid.Column="1">
-        <TabControl ItemsSource="{Binding Tabs.Tabs}" SelectedItem="{Binding Tabs.ActiveTab, Mode=TwoWay}"
-                    IsVisible="{Binding !Tabs.IsEmpty}" Margin="0,0,40,0">
+      <Grid Grid.Column="2">
+        <TabControl Classes="requests" ItemsSource="{Binding Tabs.Tabs}"
+                    SelectedItem="{Binding Tabs.ActiveTab, Mode=TwoWay}" IsVisible="{Binding !Tabs.IsEmpty}">
           <TabControl.ItemTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <StackPanel Orientation="Horizontal" Spacing="8">
-                <TextBlock Text="{Binding Title}" VerticalAlignment="Center" />
-                <Button Content="✕" Padding="4,0" Background="Transparent" Click="OnCloseTab" />
+              <StackPanel Orientation="Horizontal" Spacing="8" AutomationProperties.Name="{Binding Title}">
+                <TextBlock Text="{Binding MethodText}" Classes="method" VerticalAlignment="Center"
+                           Foreground="{Binding Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
+                <TextBlock Text="{Binding DisplayName}" Classes="body" VerticalAlignment="Center" MaxWidth="140"
+                           TextTrimming="CharacterEllipsis" />
+                <Panel Width="18" Height="18" VerticalAlignment="Center">
+                  <Ellipse Classes="dirtyDot" Width="6" Height="6" IsVisible="{Binding IsDirty}"
+                           Fill="{DynamicResource YaapicAccentTextBrush}" AutomationProperties.Name="Unsaved changes" />
+                  <Button Classes="icon close" Classes.dirty="{Binding IsDirty}" Width="18" Height="18" MinHeight="18"
+                          Padding="0" Click="OnCloseTab" AutomationProperties.Name="Close tab" ToolTip.Tip="Close tab">
+                    <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="10" Height="10" />
+                  </Button>
+                </Panel>
               </StackPanel>
             </DataTemplate>
           </TabControl.ItemTemplate>
           <TabControl.ContentTemplate>
             <DataTemplate x:DataType="req:RequestEditorViewModel">
-              <views:RequestEditorView />
+              <views:RequestEditorView SaveRequested="OnSaveRequested" VariableScopeOpenRequested="OnVariableScopeOpenRequested" />
             </DataTemplate>
           </TabControl.ContentTemplate>
         </TabControl>
-        <Button Content="+" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,4,8,0"
-                IsVisible="{Binding !Tabs.IsEmpty}" Click="OnAddTab" />
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12"
+        <Button Classes="icon" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,4,8,0"
+                IsVisible="{Binding !Tabs.IsEmpty}" Command="{Binding Requests.NewRequestCommand}"
+                AutomationProperties.Name="New tab" ToolTip.Tip="New tab (Ctrl+T)">
+          <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
+        </Button>
+        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10"
                     IsVisible="{Binding Tabs.IsEmpty}">
-          <TextBlock Text="No request open" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
-          <Button Content="New request" HorizontalAlignment="Center" Click="OnAddTab" />
+          <Viewbox Width="110" Height="76">
+            <Canvas Width="120" Height="84">
+              <Path Data="M20 72h80" StrokeThickness="2" Stroke="{DynamicResource YaapicBorderOverlayBrush}" />
+              <Canvas>
+                <Canvas.RenderTransform><MatrixTransform Matrix="2.2,0,0,2.2,34,6" /></Canvas.RenderTransform>
+                <Path Data="M5.5 4.5l6.3 8.2" StrokeThickness="1" StrokeDashArray="2,1.5" StrokeLineCap="Round"
+                      Stroke="{DynamicResource YaapicBorderOverlayBrush}" />
+                <Path Data="M18.5 4.5l-7.4 12.8a2.6 2.6 0 0 1-2.3 1.3H5.2M7.6 16.1l-2.5 2.5 2.5 2.5"
+                      StrokeThickness="1" StrokeDashArray="2,1.5" StrokeLineCap="Round"
+                      Stroke="{DynamicResource YaapicBorderOverlayBrush}" />
+              </Canvas>
+              <Path Data="M92 18h10M96 12l4-4M98 24h8" StrokeThickness="2" StrokeLineCap="Round"
+                    Stroke="{DynamicResource YaapicAccentBorderBrush}" />
+            </Canvas>
+          </Viewbox>
+          <TextBlock Text="No request open." Classes="subtitle" HorizontalAlignment="Center" />
+          <TextBlock Text="Create a request, or open a saved one from the list." Classes="body" MaxWidth="320"
+                     TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"
+                     Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
+            <Button Classes="accent" Content="New request" Command="{Binding Requests.NewRequestCommand}" />
+            <Border Classes="keycap" VerticalAlignment="Center">
+              <TextBlock Text="Ctrl+T" Classes="bodySmall" Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+            </Border>
+          </StackPanel>
         </StackPanel>
       </Grid>
     </Grid>
+    <views:CommandPaletteView Grid.RowSpan="3" DataContext="{Binding Palette}" />
   </Grid>
 </Window>

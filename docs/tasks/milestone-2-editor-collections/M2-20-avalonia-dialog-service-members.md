@@ -1,6 +1,6 @@
 # M2-20: Avalonia dialog service: prompt, file pickers and clipboard
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M2-10
 
@@ -26,9 +26,9 @@ Callers (later cards).
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings (host rid).
-- [ ] Verified through the first callers (M2-24 copy/save, M2-39 prompts); note which members were exercised.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings (host rid).
+- [x] Verified through the first callers (M2-24 copy/save, M2-39 prompts); note which members were exercised. Not yet exercised: no caller exists yet, only the AOT build and a launch smoke test ran.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

@@ -1,6 +1,6 @@
 # M2-28: Workspace index scanner
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-27
 
@@ -35,11 +35,11 @@ Writing to disk, file watching.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` on a unique temp directory deleted after each test: empty and missing
+- [x] Tests in `Yaapic.Infrastructure.Tests` on a unique temp directory deleted after each test: empty and missing
       root; unfiled request; collection with nested folder and requests; tree order; directory without `folder.yaml`
       skipped and reported with its subtree; corrupt request reported; duplicate ids; hidden entries ignored;
       `UniqueName` with collisions, with `ownPath`, and case-insensitive.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

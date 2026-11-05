@@ -1,6 +1,6 @@
 # M2-62: Tab navigation and the commands palette source
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-61, M2-57, M2-33
 
@@ -41,11 +41,11 @@ Request, environment and tab sources and the shell property (M2-63), the views.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: next/previous wrap and no-op cases; `RequestEnvironments` raises the event; the
+- [x] Tests in `Yaapic.ViewModels.Tests`: next/previous wrap and no-op cases; `RequestEnvironments` raises the event; the
       source lists exactly the expected titles for an empty shell, for a shell with one tab, with two tabs, while sending,
       and with history entries; executing "New request" adds a tab, "Show history" switches the mode, "Manage
       environments" raises the event.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 

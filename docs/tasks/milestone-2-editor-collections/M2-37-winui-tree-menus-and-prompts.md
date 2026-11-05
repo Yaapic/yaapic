@@ -1,6 +1,6 @@
 # M2-37: WinUI tree context menus and prompts
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M2-36, M2-15
 
@@ -28,11 +28,11 @@ Drag and drop, folder settings (M2-48), multi-select.
 
 ## Acceptance criteria
 
-- [ ] AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] Manual smoke on the published exe: create a collection "Demo", a folder "v1" inside it, a request in the folder;
+- [x] AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] Manual smoke on the published exe: create a collection "Demo", a folder "v1" inside it, a request in the folder;
       rename the request; duplicate it; move the duplicate to the top level; delete the folder (confirmation names its
       request count); restart: the structure on disk (`%USERPROFILE%\Yaapic\Default\requests`) matches the UI.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

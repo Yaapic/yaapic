@@ -1,4 +1,5 @@
 using Yaapic.Core.Http;
+using Yaapic.Core.Variables;
 using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
 using Yaapic.TestDoubles;
@@ -9,16 +10,11 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class RequestEditorSendTests
 {
-    private sealed class StubEnvironments(EnvironmentDefinition? current) : IActiveEnvironmentProvider
-    {
-        public EnvironmentDefinition? Current { get; } = current;
-    }
-
     private static readonly HttpResponseData Ok = new(200, "OK", [], [], TimeSpan.FromMilliseconds(5), "https://x.test");
 
     private static RequestEditorViewModel Editor(FakeHttpTransport transport, EnvironmentDefinition? environment = null, string url = "https://x.test")
     {
-        var editor = RequestEditorViewModel.CreateNew(new RequestSender(transport), new StubEnvironments(environment));
+        var editor = RequestEditorViewModel.CreateNew(new RequestSender(transport), new FakeVariableScopeProvider { Scopes = new VariableScopes(environment, [], []) });
         editor.Url = url;
         return editor;
     }

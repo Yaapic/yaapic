@@ -1,6 +1,6 @@
 # M2-45: Shell: globals
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M2-44
 
@@ -22,10 +22,10 @@ Views, a prompt for unsaved globals when closing.
 
 ## Acceptance criteria
 
-- [ ] Tests: after `InitializeAsync` the globals of a temp workspace (`globals.yaml` with one variable) are in
+- [x] Tests: after `InitializeAsync` the globals of a temp workspace (`globals.yaml` with one variable) are in
       `Shell.Globals.Variables`; a send from the shell resolves `{{thatVariable}}` (add to the end-to-end test of M1-32 or
       a new `AppCompositionTests` case); a corrupt `globals.yaml` leaves `Globals.LastError` set and the shell usable.
-- [ ] 0 warnings.
+- [x] 0 warnings.
 
 ## Suggested commit message
 
