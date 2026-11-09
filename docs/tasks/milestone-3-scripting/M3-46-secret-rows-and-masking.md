@@ -1,6 +1,6 @@
 # M3-46: Secret rows in the key/value editor and masking in variable hints
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-33, M3-45
 
@@ -40,11 +40,11 @@ Creating a secret from the popup form, views, changing the protector.
 
 ## Acceptance criteria
 
-- [ ] Tests: toggle secret (unlocked) and refusal (locked); masking text, reveal and reset on lock; `AllowSecrets` false editors
+- [x] Tests: toggle secret (unlocked) and refusal (locked); masking text, reveal and reset on lock; `AllowSecrets` false editors
       never expose the flag; flag round trip through `EnvironmentsViewModel` save with the secret-aware store and in-memory
       vault (YAML row blank, vault holds the value, reload shows the value, lock then reload shows empty); popup masks the value
       and `Reveal` shows it; hint `IsSecret`; locked-vault warning text; existing editor and popup tests unchanged and green.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 

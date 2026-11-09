@@ -32,24 +32,39 @@ public sealed record VariableScopes(
     /// <param name="value">The value when found; otherwise an empty string.</param>
     /// <param name="scope">The scope of the value when found; otherwise <see cref="VariableScopeKind.Dynamic"/>.</param>
     /// <returns><see langword="true"/> when the variable is defined in any scope.</returns>
-    public bool TryResolve(string name, out string value, out VariableScopeKind scope)
+    public bool TryResolve(string name, out string value, out VariableScopeKind scope) =>
+        TryResolve(name, out value, out scope, out _);
+
+    /// <summary>Resolves a variable and reports the scope it came from and whether its row is secret.</summary>
+    /// <param name="name">The exact, case-sensitive variable name.</param>
+    /// <param name="value">The value when found; otherwise an empty string.</param>
+    /// <param name="scope">The scope of the value when found; otherwise <see cref="VariableScopeKind.Dynamic"/>.</param>
+    /// <param name="isSecret">Whether the winning row is a secret variable.</param>
+    /// <returns><see langword="true"/> when the variable is defined in any scope.</returns>
+    public bool TryResolve(string name, out string value, out VariableScopeKind scope, out bool isSecret)
     {
-        (VariableScopeKind Kind, IVariableSource Source)[] ordered =
+        (VariableScopeKind Kind, EnvironmentVariableSource Source)[] ordered =
         [
             (VariableScopeKind.Local, ListSource(Local ?? [])),
             (VariableScopeKind.Environment, new EnvironmentVariableSource(Environment)),
             (VariableScopeKind.Collection, ListSource(Collection)),
             (VariableScopeKind.Globals, ListSource(Globals)),
-            (VariableScopeKind.Dynamic, new DynamicVariableSource()),
         ];
 
         foreach (var (kind, source) in ordered)
         {
-            if (source.TryGet(name, out value))
+            if (source.TryGet(name, out value, out isSecret))
             {
                 scope = kind;
                 return true;
             }
+        }
+
+        isSecret = false;
+        if (new DynamicVariableSource().TryGet(name, out value))
+        {
+            scope = VariableScopeKind.Dynamic;
+            return true;
         }
 
         value = "";

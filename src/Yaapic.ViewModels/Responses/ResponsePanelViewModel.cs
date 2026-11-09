@@ -74,6 +74,11 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     /// <summary>Gets the unresolved-variables warning, or <see langword="null"/> when every variable resolved.</summary>
     public string? UnresolvedWarning { get => _unresolvedWarning; private set => SetProperty(ref _unresolvedWarning, value); }
 
+    /// <summary>Adds a line to the unresolved-variables warning.</summary>
+    /// <param name="line">The line to add.</param>
+    public void AddWarningLine(string line) =>
+        UnresolvedWarning = UnresolvedWarning is null ? line : UnresolvedWarning + Environment.NewLine + line;
+
     /// <summary>Shows that a request is in flight and drops the previous result.</summary>
     public void ShowSending()
     {

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Yaapic.Core.Secrets;
 using Yaapic.Domain.Http;
 
 namespace Yaapic.ViewModels.Editing;
@@ -16,6 +17,12 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
 
     /// <summary>Raised when a row's key, value or enabled flag changes, or a row is removed; never raised by <see cref="Load"/>.</summary>
     public event EventHandler? Changed;
+
+    /// <summary>Gets or sets a value indicating whether rows can be secret; only the variable editors turn it on, so a flag never leaks into params, headers or forms.</summary>
+    public bool AllowSecrets { get; set; }
+
+    /// <summary>Gets a value indicating whether the vault is unlocked, so rows can be marked secret and secret values edited.</summary>
+    public bool SecretsAvailable { get; private set; }
 
     /// <summary>Gets the rows; the last one is always the empty placeholder.</summary>
     public ObservableCollection<KeyValueRowViewModel> Rows { get; } = [];
@@ -51,10 +58,22 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
         }
     }
 
+    /// <summary>Tells the rows whether the vault is unlocked; locking hides every revealed value.</summary>
+    /// <param name="state">The vault state.</param>
+    public void SetVaultState(VaultState state)
+    {
+        SecretsAvailable = state == VaultState.Unlocked;
+        OnPropertyChanged(nameof(SecretsAvailable));
+        foreach (var row in Rows)
+        {
+            row.SecretsUnlocked = SecretsAvailable;
+        }
+    }
+
     /// <summary>Returns the non-empty rows as entries, in order.</summary>
     /// <returns>The entries.</returns>
     public IReadOnlyList<KeyValueEntry> ToEntries() =>
-        [.. Rows.Where(r => !r.IsEmpty).Select(r => new KeyValueEntry(r.Key, r.Value, r.Enabled))];
+        [.. Rows.Where(r => !r.IsEmpty).Select(r => new KeyValueEntry(r.Key, r.Value, r.Enabled, AllowSecrets && r.IsSecret))];
 
     /// <summary>Removes a row; the placeholder row cannot be removed.</summary>
     /// <param name="row">The row to remove.</param>
@@ -79,15 +98,18 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
             row.Key = entry.Key;
             row.Value = entry.Value;
             row.Enabled = entry.Enabled;
+            row.IsSecret = AllowSecrets && entry.IsSecret;
         }
 
+        row.SecretsUnlocked = SecretsAvailable;
         row.PropertyChanged += OnRowPropertyChanged;
         Rows.Add(row);
     }
 
     private void OnRowPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
-        if (_loading || e.PropertyName == nameof(KeyValueRowViewModel.IsEmpty))
+        if (_loading || e.PropertyName is not (nameof(KeyValueRowViewModel.Key) or nameof(KeyValueRowViewModel.Value)
+            or nameof(KeyValueRowViewModel.Enabled) or nameof(KeyValueRowViewModel.IsSecret)))
         {
             return;
         }

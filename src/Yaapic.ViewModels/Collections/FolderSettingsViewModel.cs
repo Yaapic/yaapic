@@ -4,6 +4,7 @@ using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Scripting;
+using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.ViewModels.Collections;
 
@@ -34,7 +35,8 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
     /// <param name="folder">The folder to edit; its current state is the saved baseline.</param>
     /// <param name="isCollection">Whether the folder is a top-level one; only those expose variables.</param>
     /// <param name="store">Where the folder is saved.</param>
-    public FolderSettingsViewModel(FolderDefinition folder, bool isCollection, ICollectionStore store)
+    /// <param name="vaultState">Tells whether secret rows can be edited; <see langword="null"/> means they never can.</param>
+    public FolderSettingsViewModel(FolderDefinition folder, bool isCollection, ICollectionStore store, IVaultStateSource? vaultState = null)
     {
         ArgumentNullException.ThrowIfNull(folder);
         ArgumentNullException.ThrowIfNull(store);
@@ -47,6 +49,13 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
         Scripts.Load(folder.Scripts);
         Scripts.Changed += (_, _) => OnPropertyChanged(nameof(IsDirty));
         Variables.Load(folder.Variables);
+        if (vaultState is not null)
+        {
+            Variables.SetVaultState(vaultState.State);
+            // shortcut: never unsubscribed, fine while the vault outlives few editors; dispose the editor when many are opened.
+            vaultState.StateChanged += (_, _) => Variables.SetVaultState(vaultState.State);
+        }
+
         Variables.Changed += (_, _) => OnPropertyChanged(nameof(IsDirty));
     }
 
@@ -54,7 +63,7 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
     public event EventHandler? Saved;
 
     /// <summary>Gets the variables editor.</summary>
-    public KeyValueEditorViewModel Variables { get; } = new();
+    public KeyValueEditorViewModel Variables { get; } = new() { AllowSecrets = true };
 
     /// <summary>Gets the scripts editor.</summary>
     public ScriptsEditorViewModel Scripts { get; } = new();

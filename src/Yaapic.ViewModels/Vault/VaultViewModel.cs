@@ -5,7 +5,7 @@ using Yaapic.Core.Secrets;
 namespace Yaapic.ViewModels.Vault;
 
 /// <summary>The state machine behind the vault UI: set up, unlock, lock, and reload the secret-bearing view models.</summary>
-public sealed partial class VaultViewModel : ObservableObject
+public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
 {
     /// <summary>The minimum length of a new passphrase.</summary>
     public const int MinPassphraseLength = 8;
@@ -67,6 +67,9 @@ public sealed partial class VaultViewModel : ObservableObject
 
     /// <summary>Raised when the UI should open the vault unlock dialog.</summary>
     public event EventHandler? UnlockRequested;
+
+    /// <inheritdoc />
+    public event EventHandler? StateChanged;
 
     /// <summary>Gets the vault state.</summary>
     public VaultState State { get; private set; }
@@ -210,6 +213,7 @@ public sealed partial class VaultViewModel : ObservableObject
     {
         State = _vault.State;
         OnPropertyChanged(nameof(State));
+        StateChanged?.Invoke(this, EventArgs.Empty);
         OnPropertyChanged(nameof(StatusText));
         OnPropertyChanged(nameof(ProtectorLabel));
         OnPropertyChanged(nameof(IsUnlocked));

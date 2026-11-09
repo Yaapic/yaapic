@@ -258,11 +258,24 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         var request = ToDefinition();
         var report = await _sender.SendAsync(request, _scopes.GetScopes(Id), ct);
         Response.ShowReport(report);
+        if (UsesLockedSecret(request))
+        {
+            Response.AddWarningLine(VaultLockedWarning);
+        }
+
         if (report.Result.Failure?.Kind != SendFailureKind.Canceled)
         {
             Sent?.Invoke(this, new RequestSentEventArgs(request, report));
         }
     }
+
+    private bool UsesLockedSecret(HttpRequestDefinition request) =>
+        new[] { request.Url, request.Body.Text }
+            .Concat(request.Headers.Where(h => h.Enabled).Select(h => h.Value))
+            .Any(text => Variables.Tokenize(text).Any(t => t.Hint is { IsSecret: true, Value.Length: 0 }));
+
+    /// <summary>The warning line added when a request uses a secret variable that is empty because the vault is locked.</summary>
+    public const string VaultLockedWarning = "Vault is locked: secret variables are not available.";
 
     private bool CanSend() => Url.Trim().Length > 0;
 

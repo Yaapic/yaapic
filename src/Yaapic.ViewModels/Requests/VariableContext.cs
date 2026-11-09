@@ -97,8 +97,8 @@ public sealed class VariableContext
     internal void RaiseOpenRequested(VariableScopeKind scope) => OpenRequested?.Invoke(this, scope);
 
     private static VariableHint Describe(VariableScopes scopes, string name) =>
-        scopes.TryResolve(name, out var value, out var scope)
-            ? new VariableHint(name, true, scope == VariableScopeKind.Dynamic ? null : value, scope)
+        scopes.TryResolve(name, out var value, out var scope, out var isSecret)
+            ? new VariableHint(name, true, scope == VariableScopeKind.Dynamic ? null : value, scope, isSecret)
             : new VariableHint(name, false, null, null);
 
     private void OnScopesChanged(object? sender, EventArgs e) => Changed?.Invoke(this, EventArgs.Empty);
