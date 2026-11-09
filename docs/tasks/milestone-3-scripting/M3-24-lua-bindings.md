@@ -1,6 +1,6 @@
 # M3-24: Lua 5.4 native shim, bindings and AOT smoke
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-15
 
@@ -49,15 +49,24 @@ host function, and error extraction. Proven under Native AOT. No `pm`, no `IScri
 
 ## Acceptance criteria
 
-- [ ] Tests (`Yaapic.Scripting.Tests`): syntax error and runtime error carry message and line; `error("x")` with a table;
+- [x] Tests (`Yaapic.Scripting.Tests`): syntax error and runtime error carry message and line; `error("x")` with a table;
       host callback round trip including unicode and a 1 MB string; a host callback that throws makes the Lua call raise
       (catchable with `pcall` inside the script) and never crashes; infinite loop -> timeout status; cancel flag -> canceled;
       memory limit -> out of memory status; `io`, `os`, `package`, `debug`, `dofile`, `loadfile`, `require`, `load` with a
       binary chunk, `string.dump` are `nil`/refused; `print` is `nil` (M3-25 defines console); 1 000 sequential states without
       leak growth; two states on two threads concurrently.
-- [ ] `tools/NativeSmoke` AOT publish 0 IL2xxx/IL3xxx and prints `OK` on the host RID; CI step from M3-16 covers it.
-- [ ] `native/Build-Natives.ps1` rebuilds the library with the shim from a clean cache; `docs/dependencies.md` notes the shim.
-- [ ] 0 warnings, XML docs, all tests green. Notes record the shim API as built.
+- [x] `tools/NativeSmoke` AOT publish 0 IL2xxx/IL3xxx and prints `OK` on the host RID; CI step from M3-16 covers it.
+- [x] `native/Build-Natives.ps1` rebuilds the library with the shim from a clean cache; `docs/dependencies.md` notes the shim.
+- [x] 0 warnings, XML docs, all tests green. Notes record the shim API as built.
+
+## Notes (as built)
+
+- Shim API (`native/lua/yaapic_lua.c`): `yl_new(limit)`, `yl_close`, `yl_open_libs`, `yl_set_host(L, cb)`, `yl_set_limits(L, deadline*, cancel*)`, `yl_last_abort`, `yl_run(L, chunk, len, name, &msg, &line)` (0 ok, 1 runtime, 2 syntax, 3 memory, 4 timeout, 5 canceled), `yl_alloc`, `yl_free`, `yl_now_ms`. No registry helpers (not needed yet).
+- The deadline is in `yl_now_ms` units (monotonic milliseconds from the shim), not `Stopwatch` ticks, so C and .NET share one clock on every OS.
+- The host callback has no user-data parameter (as specified), so `LuaState.Run` publishes the running state in a thread-static slot that the callback reads.
+- After a timeout or cancel the hook fires at every instruction, so `pcall` cannot swallow it; `LuaState.ResetLimits` clears the deadline and flag, and the next `Run` re-arms the 1000-instruction hook.
+- `print` and `warn` are removed as well; `collectgarbage` only accepts `"count"`; chunks load in text mode only.
+- Out of memory is reported even when a script catches the Lua error with `pcall` and then fails later.
 
 ## Rules
 

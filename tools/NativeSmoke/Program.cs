@@ -2,6 +2,7 @@ using System.Diagnostics;
 using Yaapic.Core.Scripting;
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
+using Yaapic.Scripting.Lua;
 using Yaapic.Scripting.QuickJs;
 
 // Proves under Native AOT that the QuickJS-NG bindings load and run; prints OK and exits 0, or names the failed check.
@@ -138,6 +139,45 @@ try
     if (send.Status != ScriptRunStatus.Failed || send.Error?.Message != "cb" || send.Console.Count != 1 || send.Console[0].Message != "not supported 0")
     {
         return Fail($"pm sendRequest run: {send.Status} {send.Error?.Message}");
+    }
+
+    using (var lua = new LuaState())
+    {
+        var seen = "";
+        lua.DefineHost((op, args) =>
+        {
+            seen = op + args;
+            return args + "!";
+        });
+        if (!lua.Run("local r = __host('a', 'hi'); __host('b', r)", "smoke").IsSuccess || seen != "bhi!")
+        {
+            return Fail($"Lua host callback: {seen}");
+        }
+
+        if (lua.Run("1+1", "smoke").Error?.Kind != LuaErrorKind.Syntax || lua.Run("error('x')", "smoke").Error?.Line != 1)
+        {
+            return Fail("Lua errors");
+        }
+
+        lua.DefineHost((_, _) => throw new InvalidOperationException("boom"));
+        if (lua.Run("local ok = pcall(__host, 'a', 'b'); assert(not ok)", "smoke").Error is not null)
+        {
+            return Fail("Lua throwing host callback");
+        }
+
+        lua.SetTimeout(TimeSpan.FromMilliseconds(200));
+        if (lua.Run("while true do end", "smoke").Error?.Kind != LuaErrorKind.Timeout)
+        {
+            return Fail("Lua timeout");
+        }
+    }
+
+    using (var lua = new LuaState(4 * 1024 * 1024))
+    {
+        if (lua.Run("local s = string.rep('x', 1e8)", "smoke").Error?.Kind != LuaErrorKind.OutOfMemory)
+        {
+            return Fail("Lua memory limit");
+        }
     }
 
     Console.WriteLine("OK");

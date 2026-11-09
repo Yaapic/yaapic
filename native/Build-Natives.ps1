@@ -46,7 +46,8 @@ $outDir = Join-Path $artifacts $Rid
 $stamp = Join-Path $outDir '.built'
 $signature = (Get-FileHash $versionsPath -Algorithm SHA256).Hash + "|$Rid|$Configuration|" +
     (Get-FileHash $PSCommandPath -Algorithm SHA256).Hash +
-    (Get-FileHash (Join-Path $PSScriptRoot 'lua/CMakeLists.txt') -Algorithm SHA256).Hash
+    (Get-FileHash (Join-Path $PSScriptRoot 'lua/CMakeLists.txt') -Algorithm SHA256).Hash +
+    (Get-FileHash (Join-Path $PSScriptRoot 'lua/yaapic_lua.c') -Algorithm SHA256).Hash
 
 if (-not $Force -and (Test-Path $stamp) -and (Get-Content $stamp -Raw).Trim() -eq $signature -and
     (Test-Path (Join-Path $outDir $names.qjs)) -and (Test-Path (Join-Path $outDir $names.lua))) {

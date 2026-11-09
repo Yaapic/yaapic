@@ -10,6 +10,8 @@ endif()
 
 file(GLOB LUA_SOURCES CONFIGURE_DEPENDS "${LUA_SRC_DIR}/*.c")
 list(FILTER LUA_SOURCES EXCLUDE REGEX "/(lua|luac)\\.c$")
+# yaapic_lua.c is the non-raising shim the .NET bindings call (a Lua longjmp must never cross a managed frame).
+list(APPEND LUA_SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/yaapic_lua.c")
 
 add_library(lua54 SHARED ${LUA_SOURCES})
 target_include_directories(lua54 PUBLIC "${LUA_SRC_DIR}")

@@ -25,6 +25,8 @@ licence file. `native/Build-Natives.ps1` (PowerShell 7, Windows, Linux and macOS
 `Yaapic.Scripting` runs the script when that folder is missing and copies the libraries and
 `native/THIRD-PARTY-NOTICES.md` next to every app build and publish. No binary is committed.
 
+`native/lua/yaapic_lua.c` (M3-24) is compiled into the `lua54` library. A Lua error is a `longjmp`, which must never cross a managed frame under Native AOT, so the bindings call only the non-raising `yl_*` shim (`yl_new`, `yl_close`, `yl_open_libs`, `yl_set_host`, `yl_set_limits`, `yl_last_abort`, `yl_run`, `yl_alloc`, `yl_free`, `yl_now_ms`), never the Lua API itself. The shim owns the memory-limited allocator, the restricted library set, the deadline and cancel hook and the traceback handler. `Build-Natives.ps1` rebuilds when the shim changes.
+
 To update a version: change `tag`, `url`, `archive`, `folder` and `sha256` in `native/versions.json` (compute the hash
 with `Get-FileHash`), update `native/THIRD-PARTY-NOTICES.md` and the rows above, then run
 `pwsh native/Build-Natives.ps1 -Force`. Delete `artifacts/native/<rid>` to make the next MSBuild build rebuild it.
