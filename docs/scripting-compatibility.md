@@ -49,6 +49,20 @@ no timers (`setTimeout`) and no host module.
 - **Errors.** A pre-request error or timeout (5 s per block) aborts the send; a post-response error keeps the response and
   the tests already recorded.
 
+## Lua differences (request and response)
+
+- **Setters instead of assignment.** The `pm.request`, `pm.request.url`, `pm.request.body` and `pm.response` tables are read-only,
+  so `pm.request.method = 'POST'` raises an error. Use `pm.request.set_method(m)`, `pm.request.set_url(s)`,
+  `pm.request.url.update(s)`, `pm.request.body.set_mode(m)` and `pm.request.body.set_raw(s)`. Reading `pm.request.method`
+  and `pm.request.body.mode` / `raw` still works, as do the `get_*` functions.
+- **No URL part setters.** `pm.request.url.protocol`, `host`, `port`, `path` and `hash` are read-only (arrays are 1-based tables);
+  rebuild the URL with `update`.
+- **Lists.** `headers`, `url.query`, `body.urlencoded`, `body.formdata` and `pm.response.headers` share one list API
+  (`get`, `has`, `add{...}`, `upsert{...}`, `remove`, `each`, `count`, `all`, `idx` (1-based), `to_object`); every function is
+  called with a dot, and both `snake_case` and `camelCase` names exist.
+- **`pm.response` in pre-request.** Fetching `pm.response` itself does not fail; the first member access raises
+  `pm.response is only available in post-response scripts`.
+
 ## Reporting a gap
 
 Open an issue with the script (or the smallest piece that fails), the Postman behavior you expect, and what Yaapic

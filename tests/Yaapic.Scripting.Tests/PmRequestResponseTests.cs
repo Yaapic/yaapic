@@ -8,11 +8,11 @@ namespace Yaapic.Scripting.Tests;
 /// <summary>The JavaScript <c>pm.request</c> and <c>pm.response</c>, on the real QuickJS engine over a real <see cref="ScriptRequest"/>.</summary>
 public sealed class PmRequestResponseTests
 {
-    private const string Origin = "pre-request · Users API";
+    internal const string Origin = "pre-request · Users API";
 
-    private static readonly Guid RequestId = Guid.Parse("11111111-2222-3333-4444-555555555555");
+    internal static readonly Guid RequestId = Guid.Parse("11111111-2222-3333-4444-555555555555");
 
-    private static HttpRequestDefinition Definition(string url = "https://api.example.com:8443/v1/users?page=1&q=a%20b#top", RequestBody? body = null) =>
+    internal static HttpRequestDefinition Definition(string url = "https://api.example.com:8443/v1/users?page=1&q=a%20b#top", RequestBody? body = null) =>
         new(
             RequestId,
             "Users API",
@@ -50,7 +50,7 @@ public sealed class PmRequestResponseTests
         return Assert.Single(result.Console).Message;
     }
 
-    private static ScriptResponse Response(string text, string contentType = "application/json", int code = 200, int padding = 0) =>
+    internal static ScriptResponse Response(string text, string contentType = "application/json", int code = 200, int padding = 0) =>
         ScriptResponse.FromData(new(
             code,
             code == 200 ? "OK" : "Not Found",
@@ -301,7 +301,7 @@ public sealed class PmRequestResponseTests
         Assert.Equal("pm.response is only available in post-response scripts", result.Error?.Message);
     }
 
-    private sealed class TestHost(ScriptRequest request, ScriptResponse? response, ScriptInfo info) : IScriptHost
+    internal sealed class TestHost(ScriptRequest request, ScriptResponse? response, ScriptInfo info) : IScriptHost
     {
         public ScriptInfo Info => info;
 

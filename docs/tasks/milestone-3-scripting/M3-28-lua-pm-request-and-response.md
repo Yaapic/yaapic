@@ -1,6 +1,6 @@
 # M3-28: Lua `pm`: request and response
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-27, M3-09
 
@@ -30,11 +30,11 @@ Authentication objects, `pm.response.to` (M3-30), cookies and `sendRequest` (M3-
 
 ## Acceptance criteria
 
-- [ ] Tests: the M3-19 table translated to Lua (method get/set, url get/set/update, query add/upsert/remove with
+- [x] Tests: the M3-19 table translated to Lua (method get/set, url get/set/update, query add/upsert/remove with
       `{{variable}}` URLs and fragments, headers, raw body, urlencoded, formdata read-only, read-only failures in
       post-response, response members for JSON/text/empty/binary bodies, invalid JSON message, pre-request access error) using
       the real `ScriptRequest.ApplyTo` for assertions.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 
