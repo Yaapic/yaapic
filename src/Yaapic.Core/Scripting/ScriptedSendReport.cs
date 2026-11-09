@@ -11,7 +11,7 @@ namespace Yaapic.Core.Scripting;
 /// <param name="Warnings">The warnings raised while scripts wrote variables.</param>
 /// <param name="AbortedBy">The first run that did not succeed, or <see langword="null"/>.</param>
 /// <param name="SentDefinition">The definition after pre-request mutation; <see langword="null"/> when aborted.</param>
-/// <param name="NetworkLog">The network console lines of the main request; empty when the send was aborted.</param>
+/// <param name="NetworkLog">The network console lines: the <c>pm.sendRequest</c> sub-requests in order, then the main request unless the send was aborted.</param>
 public sealed record ScriptedSendReport(
     SendReport? Report,
     IReadOnlyList<ScriptRunResult> Runs,

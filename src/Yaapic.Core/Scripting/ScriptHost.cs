@@ -8,10 +8,16 @@ internal sealed class ScriptHost(
     ScriptRequest request,
     ScriptResponse? response,
     ScriptInfo info,
-    Func<ScriptRequest, ScriptSendResult>? send = null) : IScriptHost
+    Func<ScriptRequest, CancellationToken, ScriptSendResult>? send = null) : IScriptHost
 {
-    private readonly Func<ScriptRequest, ScriptSendResult> _send =
-        send ?? (_ => new ScriptSendResult(null, "pm.sendRequest is not available yet"));
+    private readonly Func<ScriptRequest, CancellationToken, ScriptSendResult> _send =
+        send ?? ((_, _) => new ScriptSendResult(null, "pm.sendRequest is not available yet"));
+
+    /// <summary>
+    /// Gets or sets the token observed by <see cref="Send"/>. <see cref="ScriptedRequestSender"/> sets it to the send's token;
+    /// an engine replaces it with a token linked to its timeout so that a blocked <c>pm.sendRequest</c> is interrupted.
+    /// </summary>
+    public CancellationToken CancellationToken { get; set; }
 
     public ScriptInfo Info => info;
 
@@ -39,5 +45,5 @@ internal sealed class ScriptHost(
 
     public string ReplaceIn(string template) => overlay.ReplaceIn(template);
 
-    public ScriptSendResult Send(ScriptRequest scriptRequest) => _send(scriptRequest);
+    public ScriptSendResult Send(ScriptRequest scriptRequest) => _send(scriptRequest, CancellationToken);
 }

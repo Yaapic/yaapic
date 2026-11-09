@@ -1,6 +1,6 @@
 # M3-13: Core: host support for `pm.sendRequest`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-12
 
@@ -35,11 +35,11 @@ The script-side `pm.sendRequest` API (M3-22, M3-31), cookies jar, request script
 
 ## Acceptance criteria
 
-- [ ] Tests with `FakeHttpTransport` and `FakeScriptEngine` whose function calls `invocation.Host.Send(...)`: the transport
+- [x] Tests with `FakeHttpTransport` and `FakeScriptEngine` whose function calls `invocation.Host.Send(...)`: the transport
       receives the resolved request (variables from the overlay, including one set earlier in the same block); the response
       is returned with the body text; failures are returned as `Error`; the 21st call is refused; sub-requests are not
       recorded as chain runs and produce network log entries; cancelling the token cancels an in-flight send promptly.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 

@@ -25,6 +25,7 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
         var overlay = new ScriptVariableOverlay(input.Scopes, input.HasEnvironment, input.HasCollection);
         var request = ScriptRequest.FromDefinition(input.Request, readOnly: false);
         List<ScriptRunResult> runs = [];
+        ScriptSendService sends = new(sender, overlay, limits.MaxSendRequests, _time);
 
         var preSteps = input.Chain.Steps.Where(s => !s.Scripts.PreRequest.IsEmpty).ToList();
         foreach (var step in preSteps)
@@ -38,13 +39,13 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
                         block,
                         ScriptPhase.PreRequest,
                         origin,
-                        new ScriptHost(overlay, request, null, new ScriptInfo("prerequest", input.Request.Name, input.Request.Id, origin)),
+                        new ScriptHost(overlay, request, null, new ScriptInfo("prerequest", input.Request.Name, input.Request.Id, origin), sends.Send) { CancellationToken = ct },
                         limits),
                     ct).ConfigureAwait(false);
             runs.Add(run);
             if (!run.Succeeded)
             {
-                return Aborted(runs, overlay, run);
+                return Aborted(runs, overlay, run, sends);
             }
         }
 
@@ -60,16 +61,16 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
                 var last = preSteps[^1];
                 var failed = Failure(ScriptPhase.PreRequest, $"pre-request · {last.Origin}", last.Scripts.PreRequest.Language, ScriptRunStatus.Failed, ex.Message);
                 runs.Add(failed);
-                return Aborted(runs, overlay, failed);
+                return Aborted(runs, overlay, failed, sends);
             }
         }
 
         var report = await sender.SendAsync(definition, preSteps.Count > 0 ? overlay.ToScopes() : input.Scopes, ct).ConfigureAwait(false);
-        var networkLog = NetworkLog(definition, report);
+        List<ConsoleEntry> networkLog = [.. sends.NetworkLog, .. NetworkLog(_time.GetUtcNow(), definition, report)];
 
         if (report.Result.IsSuccess)
         {
-            await RunPostResponseAsync(input, definition, report.Result.Response!, overlay, limits, runs, ct).ConfigureAwait(false);
+            await RunPostResponseAsync(input, definition, report.Result.Response!, overlay, limits, sends, runs, networkLog, ct).ConfigureAwait(false);
         }
 
         return new(report, runs, overlay.Changes, overlay.Warnings, null, definition, networkLog);
@@ -85,7 +86,9 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
         HttpResponseData response,
         ScriptVariableOverlay overlay,
         ScriptLimits limits,
+        ScriptSendService sends,
         List<ScriptRunResult> runs,
+        List<ConsoleEntry> networkLog,
         CancellationToken ct)
     {
         var scriptResponse = ScriptResponse.FromData(response);
@@ -103,37 +106,39 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
                 overlay,
                 ScriptRequest.FromDefinition(definition, readOnly: true),
                 scriptResponse,
-                new ScriptInfo("test", input.Request.Name, input.Request.Id, origin));
+                new ScriptInfo("test", input.Request.Name, input.Request.Id, origin),
+                sends.Send) { CancellationToken = ct };
+            var logged = sends.NetworkLog.Count;
             runs.Add(await engines.Get(block.Language)
                 .RunAsync(new ScriptInvocation(block, ScriptPhase.PostResponse, origin, host, limits), ct).ConfigureAwait(false));
+            networkLog.AddRange(sends.NetworkLog.Skip(logged));
         }
     }
 
-    private List<ConsoleEntry> NetworkLog(HttpRequestDefinition definition, SendReport report)
+    internal static List<ConsoleEntry> NetworkLog(DateTimeOffset now, HttpRequestDefinition definition, SendReport report, string? origin = null)
     {
-        var now = _time.GetUtcNow();
         var method = definition.Method.ToText();
         List<ConsoleEntry> log = [];
         if (report.Result.Response is { } r)
         {
             var level = r.IsSuccessStatusCode ? ConsoleLevel.Info : ConsoleLevel.Error;
-            log.Add(new(now, level, ConsoleSource.Network, $"{method} {r.FinalUrl}   {r.StatusCode} · {ResponseText.FormatDuration(r.Duration)} · {ResponseText.FormatSize(r.SizeBytes)}"));
+            log.Add(new(now, level, ConsoleSource.Network, $"{method} {r.FinalUrl}   {r.StatusCode} · {ResponseText.FormatDuration(r.Duration)} · {ResponseText.FormatSize(r.SizeBytes)}", origin));
         }
         else
         {
-            log.Add(new(now, ConsoleLevel.Error, ConsoleSource.Network, $"{method} {definition.Url}   {report.Result.Failure?.Message}"));
+            log.Add(new(now, ConsoleLevel.Error, ConsoleSource.Network, $"{method} {definition.Url}   {report.Result.Failure?.Message}", origin));
         }
 
         if (report.UnresolvedVariables.Count > 0)
         {
-            log.Add(new(now, ConsoleLevel.Warn, ConsoleSource.System, $"Unresolved variables: {string.Join(", ", report.UnresolvedVariables)}"));
+            log.Add(new(now, ConsoleLevel.Warn, ConsoleSource.System, $"Unresolved variables: {string.Join(", ", report.UnresolvedVariables)}", origin));
         }
 
         return log;
     }
 
-    private static ScriptedSendReport Aborted(List<ScriptRunResult> runs, ScriptVariableOverlay overlay, ScriptRunResult by) =>
-        new(null, runs, [], overlay.Warnings, by, null, []);
+    private static ScriptedSendReport Aborted(List<ScriptRunResult> runs, ScriptVariableOverlay overlay, ScriptRunResult by, ScriptSendService sends) =>
+        new(null, runs, [], overlay.Warnings, by, null, [.. sends.NetworkLog]);
 
     private static ScriptRunResult Failure(ScriptPhase phase, string origin, ScriptLanguage language, ScriptRunStatus status, string message) =>
         new(phase, origin, language, status, new ScriptError(message), [], [], TimeSpan.Zero);
