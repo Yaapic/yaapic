@@ -33,6 +33,8 @@ internal static unsafe partial class QuickJsNative
     [LibraryImport(Lib)] internal static partial int JS_AddIntrinsicPromise(nint ctx);
 
     [LibraryImport(Lib)] internal static partial JSValue JS_Eval(nint ctx, byte* input, nuint length, byte* fileName, int flags);
+    [LibraryImport(Lib)] internal static partial int JS_PromiseState(nint ctx, JSValue promise);
+    [LibraryImport(Lib)] internal static partial JSValue JS_PromiseResult(nint ctx, JSValue promise);
     [LibraryImport(Lib)] internal static partial JSValue JS_GetException(nint ctx);
     [LibraryImport(Lib)] internal static partial void JS_FreeValue(nint ctx, JSValue value);
     [LibraryImport(Lib)] internal static partial JSValue JS_JSONStringify(nint ctx, JSValue obj, JSValue replacer, JSValue space);

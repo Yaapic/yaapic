@@ -9,6 +9,9 @@ namespace Yaapic.Scripting.QuickJs;
 internal sealed unsafe partial class QuickJsContext : IDisposable
 {
     private const string OutOfMemoryText = "out of memory";
+    private const int EvalFlagAsync = 1 << 7; // JS_EVAL_FLAG_ASYNC
+    private const int PromisePending = 0;
+    private const int PromiseRejected = 2;
 
     private readonly QuickJsRuntime runtime;
     private readonly List<Func<string, string, string>> callbacks = [];
@@ -71,6 +74,51 @@ internal sealed unsafe partial class QuickJsContext : IDisposable
         }
     }
 
+    /// <summary>
+    /// Evaluates a global script that may use top-level <c>await</c>, then drains the promise job queue.
+    /// </summary>
+    /// <param name="source">The JavaScript source.</param>
+    /// <param name="fileName">The name shown in stack traces.</param>
+    /// <param name="pending">Set when the script's promise never settled once the job queue was empty.</param>
+    /// <returns>The error, or <see langword="null"/> when the script finished.</returns>
+    internal JsError? EvalAsync(string source, string fileName, out bool pending)
+    {
+        ThrowIfDisposed();
+        pending = false;
+        var input = Utf8(source);
+        var name = Utf8(fileName);
+        JSValue promise;
+        fixed (byte* inputPtr = input)
+        fixed (byte* namePtr = name)
+        {
+            promise = Own(QuickJsNative.JS_Eval(Handle, inputPtr, (nuint)(input.Length - 1), namePtr, EvalFlagAsync));
+        }
+
+        try
+        {
+            if (promise.IsException)
+            {
+                return ReadError();
+            }
+
+            var jobError = runtime.RunPendingJobs();
+            switch (QuickJsNative.JS_PromiseState(Handle, promise))
+            {
+                case PromiseRejected:
+                    return DescribeError(Own(QuickJsNative.JS_PromiseResult(Handle, promise)));
+                case PromisePending:
+                    pending = true;
+                    return jobError;
+                default:
+                    return jobError;
+            }
+        }
+        finally
+        {
+            Free(promise);
+        }
+    }
+
     /// <summary>Defines a global function <c>name(a, b)</c> that calls <paramref name="callback"/> with both arguments as strings.</summary>
     /// <param name="name">The global name.</param>
     /// <param name="callback">Receives the first two arguments (empty when missing); its result is returned to JavaScript. A throw becomes a JavaScript error.</param>
@@ -92,9 +140,10 @@ internal sealed unsafe partial class QuickJsContext : IDisposable
 
     /// <summary>Reads and clears the pending exception.</summary>
     /// <returns>The error, classified by the interrupt state and the message.</returns>
-    internal JsError ReadError()
+    internal JsError ReadError() => DescribeError(Own(QuickJsNative.JS_GetException(Handle)));
+
+    private JsError DescribeError(JSValue exception)
     {
-        var exception = Own(QuickJsNative.JS_GetException(Handle));
         string? stack = null;
         string? message;
         if (exception.IsObject)

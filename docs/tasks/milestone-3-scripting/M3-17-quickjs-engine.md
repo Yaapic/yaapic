@@ -1,6 +1,6 @@
 # M3-17: `QuickJsEngine`: run a block with console, timeout and the host bridge
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-16, M3-14
 
@@ -46,7 +46,7 @@ The `pm` object (M3-18 onward), `pm.sendRequest` callbacks (M3-22), Lua, wiring 
 
 ## Acceptance criteria
 
-- [ ] Tests (`Yaapic.Scripting.Tests`, real QuickJS, fake host): `console.*` entries with levels, formatting of objects,
+- [x] Tests (`Yaapic.Scripting.Tests`, real QuickJS, fake host): `console.*` entries with levels, formatting of objects,
       arrays, errors, circular objects, 10 000 entries capped at 1 000 with the truncation warning, a 20 000 character
       message truncated; a thrown error reports message, exact user line and column and `Failed`; syntax error is `Failed`;
       `while(true){}` is `TimedOut` within timeout + 500 ms (use a 300 ms limit in the test); cancellation token ->
@@ -55,9 +55,9 @@ The `pm` object (M3-18 onward), `pm.sendRequest` callbacks (M3-22), Lua, wiring 
       calls reach the fake host and an `err` result throws in the script; two engines running concurrently on different
       threads do not interfere; `IsAvailable` false with the reason when the library cannot be loaded (simulate through
       an internal resolver override).
-- [ ] Native AOT: extend `tools/NativeSmoke` to run one `QuickJsEngine` block with a fake host; AOT publish 0 IL2xxx/IL3xxx,
+- [x] Native AOT: extend `tools/NativeSmoke` to run one `QuickJsEngine` block with a fake host; AOT publish 0 IL2xxx/IL3xxx,
       published exe prints `OK`.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 

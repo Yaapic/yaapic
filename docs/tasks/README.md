@@ -246,7 +246,7 @@ not run in their Notes.
 | [M3-14](milestone-3-scripting/M3-14-scripting-project-and-host-protocol.md) | `Yaapic.Scripting` project, host bridge and JSON protocol | any | M3-07 | done |
 | [M3-15](milestone-3-scripting/M3-15-native-build-pipeline.md) | Native build pipeline for QuickJS-NG and Lua 5.4 | any | M3-14 | done |
 | [M3-16](milestone-3-scripting/M3-16-quickjs-bindings.md) | QuickJS-NG P/Invoke bindings and AOT smoke | any | M3-15 | done |
-| [M3-17](milestone-3-scripting/M3-17-quickjs-engine.md) | `QuickJsEngine`: run a block with console, timeout and the host bridge | any | M3-16, M3-14 | todo |
+| [M3-17](milestone-3-scripting/M3-17-quickjs-engine.md) | `QuickJsEngine`: run a block with console, timeout and the host bridge | any | M3-16, M3-14 | done |
 | [M3-18](milestone-3-scripting/M3-18-js-pm-variables-and-info.md) | JavaScript `pm`: info, variables, environment, collection variables, globals | any | M3-17, M3-08 | todo |
 | [M3-19](milestone-3-scripting/M3-19-js-pm-request-and-response.md) | JavaScript `pm`: request and response | any | M3-18, M3-09 | todo |
 | [M3-20](milestone-3-scripting/M3-20-js-pm-test-and-expect-core.md) | JavaScript `pm.test` and `pm.expect`, core assertions | any | M3-19 | todo |

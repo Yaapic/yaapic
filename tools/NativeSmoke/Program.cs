@@ -1,4 +1,7 @@
 using System.Diagnostics;
+using Yaapic.Core.Scripting;
+using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.Scripting.QuickJs;
 
 // Proves under Native AOT that the QuickJS-NG bindings load and run; prints OK and exits 0, or names the failed check.
@@ -46,10 +49,66 @@ try
         }
     }
 
+    var host = new SmokeHost();
+    var run = await new QuickJsEngine().RunAsync(
+        new(
+            new(ScriptLanguage.JavaScript, "console.log({ n: 1 }); __host('var.set', { scope: 'local', name: 'k', value: 'v' }); await Promise.resolve();"),
+            ScriptPhase.PreRequest,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (run.Status != ScriptRunStatus.Succeeded || run.Console.Count != 1 || run.Console[0].Message != "{\"n\":1}" || host.Value != "v")
+    {
+        return Fail($"QuickJsEngine run: {run.Status} {run.Error?.Message}");
+    }
+
+    var loop = await new QuickJsEngine().RunAsync(
+        new(new(ScriptLanguage.JavaScript, "while (true) {}"), ScriptPhase.PreRequest, "smoke", host, ScriptLimits.Default with { Timeout = TimeSpan.FromMilliseconds(300) }),
+        CancellationToken.None);
+    if (loop.Status != ScriptRunStatus.TimedOut)
+    {
+        return Fail($"QuickJsEngine timeout: {loop.Status}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }
 catch (Exception ex)
 {
     return Fail(ex.ToString());
+}
+
+// A host that only records the one variable the smoke script sets.
+sealed class SmokeHost : IScriptHost
+{
+    public string? Value { get; private set; }
+
+    public ScriptInfo Info { get; } = new("prerequest", "smoke", Guid.Empty, "smoke");
+
+    public ScriptRequest Request { get; } = new();
+
+    public ScriptResponse? Response => null;
+
+    public IReadOnlyList<ScriptCookie> ResponseCookies => [];
+
+    public bool TryGetVariable(ScriptScope scope, string name, out string value)
+    {
+        value = Value ?? "";
+        return Value is not null;
+    }
+
+    public void SetVariable(ScriptScope scope, string name, string value) => Value = value;
+
+    public bool UnsetVariable(ScriptScope scope, string name) => false;
+
+    public void ClearVariables(ScriptScope scope)
+    {
+    }
+
+    public IReadOnlyList<KeyValueEntry> ListVariables(ScriptScope scope) => [];
+
+    public string ReplaceIn(string template) => template;
+
+    public ScriptSendResult Send(ScriptRequest request) => new(null, "not supported");
 }
