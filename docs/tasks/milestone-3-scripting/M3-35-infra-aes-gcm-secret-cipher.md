@@ -1,6 +1,6 @@
 # M3-35: Infrastructure: AES-GCM secret cipher and key derivation
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-34
 
@@ -36,12 +36,12 @@ The file format, the vault service, OS protectors.
 
 ## Acceptance criteria
 
-- [ ] Tests: encrypt/decrypt round trip (empty, ASCII, unicode, 1 MB); nonce differs between two encryptions of the same
+- [x] Tests: encrypt/decrypt round trip (empty, ASCII, unicode, 1 MB); nonce differs between two encryptions of the same
       value; flipping any byte of nonce/ciphertext/tag fails; decrypting under another `SecretRef` (name, owner, kind) fails;
       wrong key fails; PBKDF2 wrap/unwrap round trip, wrong passphrase, unsupported algorithm, iteration bounds; a known-answer
       test for PBKDF2-HMAC-SHA512 against a published vector (RFC 6070 style vector for SHA-512 with a small iteration count
       through `Rfc2898DeriveBytes.Pbkdf2` itself, to guard the parameter order).
-- [ ] No reflection, AOT analyzers clean, 0 warnings, XML docs where public, all tests green.
+- [x] No reflection, AOT analyzers clean, 0 warnings, XML docs where public, all tests green.
 
 ## Rules
 
