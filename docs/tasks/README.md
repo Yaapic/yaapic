@@ -269,7 +269,7 @@ not run in their Notes.
 | [M3-37](milestone-3-scripting/M3-37-secret-aware-environment-and-globals-stores.md) | Core: secret-aware environment and globals stores | any | M3-34, M3-33 | done |
 | [M3-38](milestone-3-scripting/M3-38-secret-aware-collection-store-and-redactor.md) | Core: secret-aware collection store and secret redaction | any | M3-37, M3-12 | done |
 | [M3-39](milestone-3-scripting/M3-39-request-editor-scripts-viewmodel.md) | Request editor ViewModel: scripts | any | M3-03, M3-05 | done |
-| [M3-40](milestone-3-scripting/M3-40-folder-settings-scripts-viewmodel.md) | Folder and collection settings ViewModel: scripts | any | M3-39, M3-06 | todo |
+| [M3-40](milestone-3-scripting/M3-40-folder-settings-scripts-viewmodel.md) | Folder and collection settings ViewModel: scripts | any | M3-39, M3-06 | done |
 | [M3-41](milestone-3-scripting/M3-41-console-viewmodel.md) | Console ViewModel | any | M3-04 | todo |
 | [M3-42](milestone-3-scripting/M3-42-test-results-viewmodel.md) | Test results ViewModel and response panel integration | any | M3-04, M3-12 | todo |
 | [M3-43](milestone-3-scripting/M3-43-send-integration.md) | Request editor: send through scripts | any | M3-12, M3-39, M3-41, M3-42, M3-10 | todo |

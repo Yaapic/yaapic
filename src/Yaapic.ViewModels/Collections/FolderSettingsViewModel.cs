@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
 using Yaapic.ViewModels.Editing;
+using Yaapic.ViewModels.Scripting;
 
 namespace Yaapic.ViewModels.Collections;
 
@@ -23,6 +24,12 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
     [ObservableProperty]
     private string? _lastError;
 
+    /// <summary>Hint shown above the scripts of a folder.</summary>
+    public const string FolderScriptsHint = "Runs for every request in this folder, before the request's own script.";
+
+    /// <summary>Hint shown above the scripts of a collection.</summary>
+    public const string CollectionScriptsHint = "Runs for every request in this collection, before the folder and request scripts.";
+
     /// <summary>Creates the view model.</summary>
     /// <param name="folder">The folder to edit; its current state is the saved baseline.</param>
     /// <param name="isCollection">Whether the folder is a top-level one; only those expose variables.</param>
@@ -35,7 +42,10 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
         _baseline = folder;
         _name = folder.Name;
         _description = folder.Description;
+        IsCollection = isCollection;
         ShowVariables = isCollection;
+        Scripts.Load(folder.Scripts);
+        Scripts.Changed += (_, _) => OnPropertyChanged(nameof(IsDirty));
         Variables.Load(folder.Variables);
         Variables.Changed += (_, _) => OnPropertyChanged(nameof(IsDirty));
     }
@@ -46,12 +56,25 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
     /// <summary>Gets the variables editor.</summary>
     public KeyValueEditorViewModel Variables { get; } = new();
 
+    /// <summary>Gets the scripts editor.</summary>
+    public ScriptsEditorViewModel Scripts { get; } = new();
+
+    /// <summary>Gets a value indicating whether the edited folder is a collection.</summary>
+    public bool IsCollection { get; }
+
+    /// <summary>Gets a value indicating whether scripts are editable; always true, they exist on every level.</summary>
+    public bool ShowScripts => true;
+
+    /// <summary>Gets the hint that explains when the scripts run, for the level being edited.</summary>
+    public string ScriptsHint => IsCollection ? CollectionScriptsHint : FolderScriptsHint;
+
     /// <summary>Gets a value indicating whether the variables are editable (top-level folders only).</summary>
     public bool ShowVariables { get; }
 
     /// <summary>Gets a value indicating whether the editor differs from the last saved state.</summary>
     public bool IsDirty => Name != _baseline.Name || Description != _baseline.Description
-        || (ShowVariables && !Variables.ToEntries().SequenceEqual(_baseline.Variables));
+        || (ShowVariables && !Variables.ToEntries().SequenceEqual(_baseline.Variables))
+        || Scripts.ToSet() != _baseline.Scripts;
 
     [RelayCommand]
     private async Task SaveAsync()
@@ -61,6 +84,7 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
             Name = Name.Trim() is { Length: > 0 } name ? name : _baseline.Name,
             Description = Description,
             Variables = ShowVariables ? Variables.ToEntries() : _baseline.Variables,
+            Scripts = Scripts.ToSet(),
         };
         try
         {

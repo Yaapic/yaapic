@@ -1,6 +1,6 @@
 # M3-40: Folder and collection settings ViewModel: scripts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-39, M3-06
 
@@ -30,10 +30,10 @@ Views (M3-52, M3-59), running scripts.
 
 ## Acceptance criteria
 
-- [ ] Tests: dirty tracking for source and language; save writes the scripts to the store double and reloads them; scripts of a
+- [x] Tests: dirty tracking for source and language; save writes the scripts to the store double and reloads them; scripts of a
       nested folder do not affect the collection's; hint text per level; cancel/revert restores; chain provider returns the saved
       scripts after the save; existing folder settings tests unchanged.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 
