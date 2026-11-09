@@ -17,6 +17,7 @@
       "tests/Yaapic.ViewModels.Tests/Yaapic.ViewModels.Tests.csproj",
       "src/Yaapic.Scripting/Yaapic.Scripting.csproj",
       "tests/Yaapic.Scripting.Tests/Yaapic.Scripting.Tests.csproj",
+      "tools/NativeSmoke/NativeSmoke.csproj",
       "src/Yaapic.Composition/Yaapic.Composition.csproj",
       "src/Yaapic.App.Avalonia/Yaapic.App.Avalonia.csproj"
     ]

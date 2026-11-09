@@ -1,6 +1,6 @@
 # M3-16: QuickJS-NG P/Invoke bindings and AOT smoke
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-15
 
@@ -48,14 +48,14 @@ limit, interrupt handler and one host callback. Proven under Native AOT. No `pm`
 
 ## Acceptance criteria
 
-- [ ] Tests (`Yaapic.Scripting.Tests`): eval of numbers, strings, JSON, unicode; syntax error and thrown error carry message
+- [x] Tests (`Yaapic.Scripting.Tests`): eval of numbers, strings, JSON, unicode; syntax error and thrown error carry message
       and line; a host callback receives and returns strings (including unicode and 1 MB payloads); an infinite loop is
       interrupted by the deadline and by a cancellation flag; the memory limit stops a runaway allocation with
       `OutOfMemory`; `Promise.resolve().then(...)` runs through `RunPendingJobs`; context and runtime dispose repeatedly
       without crash; no leaked `JSValue` (counter == 0) after all of the above; `std`, `os` and `require` are `undefined`.
-- [ ] `tools/NativeSmoke` AOT publish: 0 IL2xxx/IL3xxx; the published exe prints `OK`, exit code 0 (host RID).
-- [ ] 0 warnings, XML docs on public members (types may be `internal`), all tests green.
-- [ ] Notes record the `JSValue` layout, the intrinsics list and any API that had to be re-implemented.
+- [x] `tools/NativeSmoke` AOT publish: 0 IL2xxx/IL3xxx; the published exe prints `OK`, exit code 0 (host RID).
+- [x] 0 warnings, XML docs on public members (types may be `internal`), all tests green.
+- [x] Notes record the `JSValue` layout, the intrinsics list and any API that had to be re-implemented.
 
 ## Rules
 
@@ -72,3 +72,26 @@ limit, interrupt handler and one host callback. Proven under Native AOT. No `pm`
 ## Suggested commit message
 
 `feat(scripting): add QuickJS-NG bindings and AOT smoke test`
+
+## Notes
+
+- `JSValue` layout: NaN boxing is off on 64-bit (`JS_NAN_BOXING` only defaults on for 32-bit), so `JSValue` is
+  `struct { union u (8 bytes); int64 tag; }` = 16 bytes, mirrored as `JSValue(ulong Bits, long Tag)` and passed by value
+  through `LibraryImport`. 32-bit processes are refused with `PlatformNotSupportedException`.
+- Intrinsics (on `JS_NewContextRaw`): base objects, Date, Eval, RegExp (+ compiler), JSON, Proxy, Map/Set, typed arrays,
+  Promise. No `std`, `os`, module loader, BigInt, WeakRef or DOMException: `std`, `os` and `require` are `undefined`.
+- Re-implemented in C#: `JS_IsException`/`JS_IsUndefined` and the `JS_UNDEFINED`/`JS_EXCEPTION` constants (inline in the
+  header), `JS_ToCStringLen` (calls `JS_ToCStringLen2`), the host-function error throw (`JS_NewError` + `message`
+  property + `JS_Throw`, since `JS_ThrowInternalError` is variadic).
+- Host callback: `JS_NewCFunctionData` with the callback index in `magic`; the context is found again from
+  `JS_GetContextOpaque` (a `GCHandle` to the `QuickJsContext`). The JS function passes its first two arguments as strings.
+- Interrupt: `InterruptState` (deadline via `Stopwatch` timestamp, cancellation flag, `Fired`); a failure while `Fired` is
+  `Interrupted`, a message containing `out of memory` is `OutOfMemory`. The default JS stack limit is 256 KiB so it stays
+  under the 1 MB secondary-thread stack on Windows.
+- A rejected promise is not a failed job: `RunPendingJobs` only returns an error when `JS_ExecutePendingJob` fails.
+- Library resolution: `NativeLibraryResolver` (shared with the Lua bindings of M3-24) tries `AppContext.BaseDirectory`, then
+  `runtimes/<rid>/native`.
+- `tools/NativeSmoke` published with Native AOT for win-x64: 0 IL2xxx/IL3xxx, exe prints `OK`, exit code 0. The CI step was
+  added but not run; only win-x64 was verified locally.
+- `dotnet test` through `rtk` showed handshake failures with exit code 5 for every project while `rtk bypass` passed:
+  the condensed output was unusable for that command.
