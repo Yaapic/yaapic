@@ -350,6 +350,7 @@ internal static class PmRequestResponsePrelude
               }
             });
             define(result, 'reason', () => dto.status);
+            Object.defineProperty(result, 'to', { enumerable: true, get: () => globalThis.__responseTo(dto) });
             define(result, 'size', () => ({ body: dto.size, header: 0, total: dto.size }));
             return Object.freeze(result);
           };

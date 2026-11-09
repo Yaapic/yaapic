@@ -1,6 +1,6 @@
 # M3-21: JavaScript `pm.expect` collections/strings and `pm.response.to.*`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-20
 
@@ -37,12 +37,12 @@ JSON schema validation, `chai.use` plugins, `pm.expect.fail` already done, `resp
 
 ## Acceptance criteria
 
-- [ ] Tests (real QuickJS): each assertion above passing, failing (exact Chai-style message) and negated; chaining
+- [x] Tests (real QuickJS): each assertion above passing, failing (exact Chai-style message) and negated; chaining
       (`property` then `that.equals`); nested property paths; deep include; keys any/all/include; members ordered/deep;
       `throw` with constructor, message and regex; every `pm.response.to` helper against 200/201/202/301/400/401/403/404/
       429/500 responses with and without body, JSON and HTML content types; `have.jsonBody` paths; `have.jsonSchema` error
       message; `pm.response.to` in pre-request throws the post-response-only error.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

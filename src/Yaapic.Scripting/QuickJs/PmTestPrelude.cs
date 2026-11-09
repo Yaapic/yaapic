@@ -211,12 +211,21 @@ internal static class PmTestPrelude
             'expected #{this} to be empty',
             'expected #{this} not to be empty');
 
-          method(['a', 'an'], function (type) {
+          const typeCheck = function (type) {
             const name = String(type).toLowerCase();
             const article = 'aeiou'.includes(name.charAt(0)) ? 'an ' : 'a ';
             check(this, typeOf(objectOf(this)) === name, 'expected #{this} to be ' + article + name, 'expected #{this} not to be ' + article + name);
             return this;
-          });
+          };
+          // "a" and "an" are calls and chains (an.instanceOf): the getter returns a callable assertion.
+          for (const name of ['a', 'an']) {
+            Object.defineProperty(proto, name, {
+              get() {
+                return callableChain(this, typeCheck);
+              },
+              configurable: true,
+            });
+          }
 
           const lengthOfValue = (value) => {
             const type = typeOf(value);
@@ -291,6 +300,382 @@ internal static class PmTestPrelude
               configurable: true,
             });
           }
+          // ---- flags and chains of the second half ----
+          for (const name of ['own', 'nested', 'ordered', 'any', 'all']) {
+            Object.defineProperty(proto, name, {
+              get() {
+                this[flagsKey][name] = true;
+                return this;
+              },
+              configurable: true,
+            });
+          }
+          const prefixOf = (self) => (flagOf(self).message ? flagOf(self).message + ': ' : '');
+          const hasOwn = (target, name) => Object.prototype.hasOwnProperty.call(target, name);
+          // shortcut: no backslash escapes in nested paths ('a\\.b'), upgrade when a key containing a dot is needed.
+          const parsePath = (path) => [...String(path).matchAll(/\[(\d+)\]|([^.[\]]+)/g)].map((m) => m[1] ?? m[2]);
+          const walk = (root, parts) => {
+            let current = root;
+            for (const part of parts) {
+              if (current === null || current === undefined || !(part in Object(current))) {
+                return { found: false };
+              }
+              current = current[part];
+            }
+            return { found: true, value: current };
+          };
+
+          // "include" is a call and a chain (include.members): the getter arms "contains" and returns a callable assertion.
+          const callableChain = (self, fn) => {
+            const callable = (...args) => fn.apply(self, args);
+            Object.setPrototypeOf(callable, self);
+            return callable;
+          };
+
+          const propertyOf = (self, name, hasValue, value) => {
+            const flags = flagOf(self);
+            const target = flags.object;
+            if (target === null || target === undefined) {
+              throw new AssertionError(prefixOf(self) + 'Target cannot be null or undefined.');
+            }
+            let found;
+            let actual;
+            if (flags.nested) {
+              ({ found, value: actual } = walk(target, parsePath(name)));
+            } else {
+              const wrapped = Object(target);
+              found = flags.own ? hasOwn(wrapped, name) : name in wrapped;
+              actual = found ? wrapped[name] : undefined;
+            }
+            const descriptor = (flags.deep ? 'deep ' : '') + (flags.own ? 'own ' : '') + (flags.nested ? 'nested ' : '') + 'property ' + inspect(name);
+            if (!flags.not || !hasValue) {
+              check(self, found, 'expected #{this} to have ' + descriptor, 'expected #{this} to not have ' + descriptor);
+            }
+            if (hasValue) {
+              check(self, found && (flags.deep ? deepEqual(actual, value) : actual === value), 'expected #{this} to have ' + descriptor + ' of #{exp}, but got #{act}', 'expected #{this} to not have ' + descriptor + ' of #{act}', value, actual);
+            }
+            flags.object = actual;
+          };
+          method(['property'], function (name, ...value) {
+            propertyOf(this, name, value.length > 0, value[0]);
+            return this;
+          });
+          method(['ownProperty', 'haveOwnProperty'], function (name) {
+            const target = objectOf(this);
+            if (target === null || target === undefined) {
+              throw new AssertionError(prefixOf(this) + 'Target cannot be null or undefined.');
+            }
+            check(this, hasOwn(Object(target), name), 'expected #{this} to have own property ' + inspect(name), 'expected #{this} to not have own property ' + inspect(name));
+            return this;
+          });
+
+          const includeOf = function (val) {
+            const flags = flagOf(this);
+            const target = flags.object;
+            const type = typeOf(target);
+            const same = (a, b) => (flags.deep ? deepEqual(a, b) : a === b);
+            let included;
+            if (type === 'string') {
+              included = target.indexOf(val) !== -1;
+            } else if (type === 'array') {
+              included = flags.deep ? target.some((item) => deepEqual(item, val)) : target.indexOf(val) !== -1;
+            } else if (type === 'map' || type === 'set') {
+              included = [...target.values()].some((item) => same(item, val));
+            } else {
+              if (target === null || target === undefined) {
+                throw new AssertionError(prefixOf(this) + 'object tested must be an array, a map, an object, a set, a string, or a weakset, but ' + typeOf(target) + ' given');
+              }
+              if (val !== Object(val)) {
+                throw new AssertionError(prefixOf(this) + 'the given combination of arguments (' + type + ' and ' + typeOf(val) + ') is invalid for this assertion. You can use an array, a map, an object, a set, a string, or a weakset instead of a ' + typeOf(val));
+              }
+              const names = Object.keys(val);
+              let first = null;
+              let failures = 0;
+              for (const name of names) {
+                const sub = new Assertion(target, flags.message);
+                Object.assign(sub[flagsKey], flags);
+                try {
+                  propertyOf(sub, name, true, val[name]);
+                } catch (error) {
+                  if (!flags.not || names.length === 1) {
+                    throw error;
+                  }
+                  first ??= error;
+                  failures++;
+                }
+              }
+              if (flags.not && names.length > 1 && failures === names.length) {
+                throw first;
+              }
+              return this;
+            }
+            check(this, included, 'expected #{this} to include #{exp}', 'expected #{this} to not include #{exp}', val);
+            return this;
+          };
+          for (const name of ['include', 'includes', 'contain', 'contains']) {
+            Object.defineProperty(proto, name, {
+              get() {
+                flagOf(this).contains = true;
+                return callableChain(this, includeOf);
+              },
+              configurable: true,
+            });
+          }
+
+          const requireArray = (self, value) => {
+            if (!Array.isArray(value)) {
+              throw new AssertionError(prefixOf(self) + 'expected ' + inspect(value) + ' to be an array');
+            }
+          };
+          method(['members'], function (subset) {
+            const flags = flagOf(this);
+            requireArray(this, flags.object);
+            requireArray(this, subset);
+            const same = (a, b) => (flags.deep ? deepEqual(a, b) : a === b);
+            let superset = flags.object;
+            let ok = true;
+            if (!flags.contains) {
+              ok = subset.length === superset.length;
+              superset = superset.slice();
+            }
+            ok = ok && subset.every((item, index) => {
+              if (flags.ordered) {
+                return same(item, superset[index]);
+              }
+              const at = superset.findIndex((other) => same(item, other));
+              if (at === -1) {
+                return false;
+              }
+              if (!flags.contains) {
+                superset.splice(at, 1);
+              }
+              return true;
+            });
+            const subject = flags.contains ? (flags.ordered ? 'an ordered superset' : 'a superset') : flags.ordered ? 'ordered members' : 'members';
+            const positive = flags.contains ? 'expected #{this} to be ' + subject + ' of #{exp}' : 'expected #{this} to have the same ' + subject + ' as #{exp}';
+            const negative = flags.contains ? 'expected #{this} to not be ' + subject + ' of #{exp}' : 'expected #{this} to not have the same ' + subject + ' as #{exp}';
+            check(this, ok, positive, negative, subset, flags.object, true);
+            return this;
+          });
+
+          method(['keys', 'key'], function (...given) {
+            const flags = flagOf(this);
+            const target = flags.object;
+            const type = typeOf(target);
+            const actual = type === 'map' ? [...target.keys()] : type === 'set' ? [...target] : Object.keys(Object(target));
+            const expected = given.length === 1 && typeof given[0] === 'object' && given[0] !== null ? (Array.isArray(given[0]) ? given[0] : Object.keys(given[0])) : given;
+            if (expected.length === 0) {
+              throw new AssertionError(prefixOf(this) + 'keys required');
+            }
+            const any = flags.any === true;
+            const present = (k) => actual.some((a) => (flags.deep ? deepEqual(k, a) : k === a));
+            const ok = any ? expected.some(present) : expected.every(present) && (flags.contains === true || expected.length === actual.length);
+            let text;
+            if (expected.length > 1) {
+              const rendered = expected.map((k) => inspect(k));
+              const last = rendered.pop();
+              text = 'keys ' + rendered.join(', ') + (any ? ', or ' : ', and ') + last;
+            } else {
+              text = 'key ' + inspect(expected[0]);
+            }
+            text = (flags.contains ? 'contain ' : 'have ') + text;
+            const order = (list) => [...list].sort((a, b) => (inspect(a) < inspect(b) ? -1 : inspect(a) > inspect(b) ? 1 : 0));
+            check(this, ok, 'expected #{this} to ' + text, 'expected #{this} to not ' + text, order(expected), order(actual), true);
+            return this;
+          });
+
+          method(['match', 'matches'], function (re) {
+            check(this, re.exec(objectOf(this)) !== null, 'expected #{this} to match #{exp}', 'expected #{this} not to match #{exp}', re);
+            return this;
+          });
+          method(['string'], function (text) {
+            const value = objectOf(this);
+            if (typeof value !== 'string') {
+              throw new AssertionError(prefixOf(this) + 'expected ' + inspect(value) + ' to be a string');
+            }
+            check(this, value.indexOf(text) !== -1, 'expected #{this} to contain #{exp}', 'expected #{this} to not contain #{exp}', text);
+            return this;
+          });
+          method(['oneOf'], function (list) {
+            requireArray(this, list);
+            check(this, list.indexOf(objectOf(this)) !== -1, 'expected #{this} to be one of #{exp}', 'expected #{this} to not be one of #{exp}', list);
+            return this;
+          });
+          method(['instanceOf', 'instanceof'], function (ctor) {
+            const name = typeof ctor === 'function' ? ctor.name : inspect(ctor);
+            check(this, objectOf(this) instanceof ctor, 'expected #{this} to be an instance of ' + name, 'expected #{this} to not be an instance of ' + name);
+            return this;
+          });
+          method(['satisfy', 'satisfies'], function (matcher) {
+            const result = matcher(objectOf(this));
+            check(this, Boolean(result), 'expected #{this} to satisfy ' + inspect(matcher), 'expected #{this} to not satisfy ' + inspect(matcher), true, result);
+            return this;
+          });
+          method(['throw', 'throws', 'Throw'], function (errorLike, matcher) {
+            const flags = flagOf(this);
+            const fn = flags.object;
+            if (typeof fn !== 'function') {
+              throw new AssertionError(prefixOf(this) + 'expected ' + inspect(fn) + ' to be a function');
+            }
+            if (errorLike instanceof RegExp || typeof errorLike === 'string') {
+              matcher = errorLike;
+              errorLike = null;
+            }
+            let thrown = false;
+            let caught;
+            try {
+              fn();
+            } catch (error) {
+              thrown = true;
+              caught = error;
+            }
+            const message = caught instanceof Error ? caught.message : String(caught);
+            const described = caught instanceof Error ? String(caught) : typeof caught === 'string' ? caught : inspect(caught);
+            const name = typeof errorLike === 'function' ? errorLike.name : errorLike ? inspect(errorLike) : 'an error';
+            if ((errorLike === undefined && matcher === undefined) || !flags.not) {
+              check(this, thrown, 'expected #{this} to throw ' + name, 'expected #{this} to not throw an error but #{act} was thrown', undefined, described);
+            }
+            if (!thrown || (!errorLike && matcher === undefined)) {
+              return this;
+            }
+            const compatible = typeof errorLike === 'function' ? caught instanceof errorLike : errorLike instanceof Error ? caught === errorLike : true;
+            const kind = matcher instanceof RegExp ? 'matching' : 'including';
+            const matches = matcher === undefined || (matcher instanceof RegExp ? matcher.test(message) : message.indexOf(matcher) !== -1);
+            if (flags.not) {
+              check(this, compatible && matches, '', errorLike ? 'expected #{this} to not throw ' + name : 'expected #{this} to throw error not ' + kind + ' #{exp}', matcher);
+            } else {
+              check(this, compatible, 'expected #{this} to throw ' + name + ' but #{act} was thrown', '', undefined, described);
+              check(this, matches, 'expected #{this} to throw error ' + kind + ' #{exp} but got #{act}', '', matcher, message);
+            }
+            return this;
+          });
+
+          // ---- pm.response.to: Postman's response assertions, one fresh chain per access ----
+          class ResponseAssertion {
+            constructor(dto) {
+              Object.defineProperty(this, flagsKey, { value: { dto, not: false } });
+            }
+          }
+          const rproto = ResponseAssertion.prototype;
+          for (const name of ['to', 'be', 'been', 'is', 'and', 'have', 'has', 'with', 'that', 'a', 'an']) {
+            Object.defineProperty(rproto, name, {
+              get() {
+                return this;
+              },
+            });
+          }
+          Object.defineProperty(rproto, 'not', {
+            get() {
+              this[flagsKey].not = true;
+              return this;
+            },
+          });
+          const rcheck = (self, ok, positive, negative) => {
+            const flags = self[flagsKey];
+            if (flags.not ? ok : !ok) {
+              throw new AssertionError(flags.not ? negative : positive);
+            }
+          };
+          const rflag = (name, test, positive) =>
+            Object.defineProperty(rproto, name, {
+              get() {
+                const dto = this[flagsKey].dto;
+                rcheck(this, test(dto), positive(dto), 'expected response to not be ' + name);
+                return this;
+              },
+            });
+          const contentType = (dto) => (dto.headers.find((h) => h.key.toLowerCase() === 'content-type')?.value ?? '').toLowerCase();
+          const byCode = (name, test) => rflag(name, (dto) => test(dto.code), (dto) => 'expected response to be ' + name + ' but got ' + dto.code);
+          byCode('ok', (c) => c === 200);
+          byCode('success', (c) => c >= 200 && c < 300);
+          byCode('info', (c) => c >= 100 && c < 200);
+          byCode('redirection', (c) => c >= 300 && c < 400);
+          byCode('clientError', (c) => c >= 400 && c < 500);
+          byCode('serverError', (c) => c >= 500 && c < 600);
+          byCode('error', (c) => c >= 400 && c < 600);
+          byCode('accepted', (c) => c === 202);
+          byCode('badRequest', (c) => c === 400);
+          byCode('unauthorized', (c) => c === 401);
+          byCode('forbidden', (c) => c === 403);
+          byCode('notFound', (c) => c === 404);
+          byCode('rateLimited', (c) => c === 429);
+          Object.defineProperty(rproto, 'withBody', {
+            get() {
+              rcheck(this, this[flagsKey].dto.text.length > 0, 'expected response to have a body', 'expected response to not have a body');
+              return this;
+            },
+          });
+          const byType = (name, test) =>
+            rflag(name, (dto) => test(contentType(dto)), (dto) => 'expected response to be ' + name + ' but got ' + (contentType(dto) === '' ? 'no content type' : 'content type ' + inspect(contentType(dto))));
+          byType('json', (t) => /^application\/(.+\+)?json\b/.test(t) || t.startsWith('text/json'));
+          byType('html', (t) => t.startsWith('text/html'));
+          byType('text', (t) => t.startsWith('text/'));
+
+          const rmethod = (name, fn) => Object.defineProperty(rproto, name, { value: fn });
+          rmethod('status', function (expected) {
+            const dto = this[flagsKey].dto;
+            if (typeof expected === 'string') {
+              rcheck(this, dto.status === expected, 'expected response to have status reason ' + inspect(expected) + ' but got ' + inspect(dto.status), 'expected response to not have status reason ' + inspect(expected));
+            } else {
+              rcheck(this, dto.code === expected, 'expected response to have status code ' + expected + ' but got ' + dto.code, 'expected response to not have status code ' + expected);
+            }
+            return this;
+          });
+          rmethod('header', function (name, ...value) {
+            const dto = this[flagsKey].dto;
+            const wanted = String(name).toLowerCase();
+            const rows = dto.headers.filter((h) => h.key.toLowerCase() === wanted);
+            if (value.length === 0) {
+              rcheck(this, rows.length > 0, 'expected response to have header with key ' + inspect(name), 'expected response to not have header with key ' + inspect(name));
+            } else {
+              rcheck(
+                this,
+                rows.some((h) => h.value === value[0]),
+                'expected response to have header ' + inspect(name) + ' with value ' + inspect(value[0]) + (rows.length > 0 ? ' but got ' + inspect(rows[0].value) : ''),
+                'expected response to not have header ' + inspect(name) + ' with value ' + inspect(value[0]));
+            }
+            return this;
+          });
+          rmethod('body', function (expected) {
+            const text = this[flagsKey].dto.text;
+            if (expected === undefined) {
+              rcheck(this, text.length > 0, 'expected response to have a body', 'expected response to not have a body');
+            } else if (expected instanceof RegExp) {
+              rcheck(this, expected.test(text), 'expected response body to match ' + expected + ' but got ' + inspect(text), 'expected response body to not match ' + expected);
+            } else {
+              rcheck(this, text === String(expected), 'expected response to have body ' + inspect(String(expected)) + ' but got ' + inspect(text), 'expected response to not have body ' + inspect(String(expected)));
+            }
+            return this;
+          });
+          rmethod('jsonBody', function (path, ...value) {
+            let parsed;
+            let valid = true;
+            try {
+              parsed = JSON.parse(this[flagsKey].dto.text);
+            } catch {
+              valid = false;
+            }
+            if (path === undefined) {
+              rcheck(this, valid, 'expected response to have a JSON body but the body is not valid JSON', 'expected response to not have a JSON body');
+              return this;
+            }
+            const at = valid ? walk(parsed, parsePath(path)) : { found: false };
+            if (value.length === 0) {
+              rcheck(this, at.found, 'expected response JSON body to have path ' + inspect(path), 'expected response JSON body to not have path ' + inspect(path));
+            } else {
+              rcheck(
+                this,
+                at.found && deepEqual(at.value, value[0]),
+                'expected response JSON body path ' + inspect(path) + ' to equal ' + inspect(value[0]) + (at.found ? ' but got ' + inspect(at.value) : ' but the path does not exist'),
+                'expected response JSON body path ' + inspect(path) + ' to not equal ' + inspect(value[0]));
+            }
+            return this;
+          });
+          rmethod('jsonSchema', () => {
+            throw new Error('pm.response.to.have.jsonSchema is not supported in Yaapic');
+          });
+          Object.freeze(rproto);
+          Object.defineProperty(globalThis, '__responseTo', { value: (dto) => new ResponseAssertion(dto) });
           Object.freeze(proto);
 
           // ---- pm.expect ----

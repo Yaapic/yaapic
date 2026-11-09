@@ -113,6 +113,20 @@ try
         return Fail($"pm test run: {tests.Status} {tests.Error?.Message}");
     }
 
+    var more = await new QuickJsEngine().RunAsync(
+        new(
+            new(ScriptLanguage.JavaScript, "pm.test('chain', () => { pm.expect({ a: { b: [{ c: 3 }] } }).to.have.nested.property('a.b[0].c').that.equals(3); pm.expect([1, 2]).to.include.members([2]); pm.expect(() => { throw new TypeError('x'); }).to.throw(TypeError, 'x'); }); pm.test('bad', () => { pm.expect({ a: 1 }).to.have.keys('b'); });"),
+            ScriptPhase.PostResponse,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (more.Status != ScriptRunStatus.Succeeded || more.Tests.Count != 2 || !more.Tests[0].Passed || more.Tests[1].Passed
+        || more.Tests[1].Message != "AssertionError: expected { a: 1 } to have key 'b'")
+    {
+        return Fail($"pm expect collections run: {more.Status} {more.Error?.Message} {more.Tests[0].Message}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }
