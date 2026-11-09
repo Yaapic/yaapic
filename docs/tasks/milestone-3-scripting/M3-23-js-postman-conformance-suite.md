@@ -1,6 +1,6 @@
 # M3-23: JavaScript Postman conformance suite
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-22
 
@@ -39,9 +39,9 @@ Lua (M3-32), the UI, importing Postman collections (milestone 5).
 
 ## Acceptance criteria
 
-- [ ] At least 40 supported cases and 11 unsupported cases pass; each case has a one-line comment naming the Postman idiom.
-- [ ] `docs/scripting-compatibility.md` exists, matches the tests and is linked from ADR 0009.
-- [ ] 0 warnings, all tests green on the host RID.
+- [x] At least 40 supported cases and 11 unsupported cases pass; each case has a one-line comment naming the Postman idiom.
+- [x] `docs/scripting-compatibility.md` exists, matches the tests and is linked from ADR 0009.
+- [x] 0 warnings, all tests green on the host RID.
 
 ## Rules
 

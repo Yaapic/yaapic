@@ -146,3 +146,5 @@ scripts:
 
 Python and C# scripting, `require` of npm modules, script debugging and breakpoints, a snippets sidebar, timers
 (`setTimeout`), collection-run integration, importing Postman scripts (milestone 5; they stay JavaScript).
+
+See [scripting-compatibility.md](../scripting-compatibility.md) for the supported `pm` surface and the differences from Postman.

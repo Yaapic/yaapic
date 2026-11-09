@@ -141,6 +141,10 @@ internal static class PmVariablesPrelude
           define(postman, 'setNextRequest', unsupported('postman.setNextRequest'));
           define(postman, 'visualizer', unsupported('postman.visualizer'));
           Object.defineProperty(globalThis, 'postman', { value: Object.freeze(postman), writable: false, configurable: false });
+          // Node-style imports and the bundled libraries are not available: fail loudly instead of "x is not defined".
+          for (const name of ['require', 'CryptoJS']) {
+            Object.defineProperty(globalThis, name, { value: unsupported(name), writable: false, configurable: false });
+          }
         })();
         """;
 }

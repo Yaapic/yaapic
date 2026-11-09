@@ -195,7 +195,6 @@ public sealed class QuickJsEngineTests
 
     [Theory]
     [InlineData("process")]
-    [InlineData("require")]
     [InlineData("setTimeout")]
     [InlineData("fetch")]
     [InlineData("module")]
