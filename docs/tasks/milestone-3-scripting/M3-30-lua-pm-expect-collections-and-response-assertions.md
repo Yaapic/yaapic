@@ -1,6 +1,6 @@
 # M3-30: Lua `pm.expect` collections/strings and `pm.response.to`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-29
 
@@ -32,12 +32,12 @@ JSON schema, regex libraries, `instance_of`.
 
 ## Acceptance criteria
 
-- [ ] Tests (real Lua): the M3-21 cases translated, messages compared through the shared `ExpectMessages.json` where the
+- [x] Tests (real Lua): the M3-21 cases translated, messages compared through the shared `ExpectMessages.json` where the
       expression exists in both languages; Lua-pattern `match`; `throw` forms; `instance_of` message; every `pm.response.to`
       helper over the same response matrix as M3-21; `have.json_body` paths (`data[1].id` is **1-based in Lua** — decide and
       document: paths use JavaScript-style 0-based indices **as written by the user for JSON** (`data[0].id`) because they
       address the JSON document, not a Lua table; test both).
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

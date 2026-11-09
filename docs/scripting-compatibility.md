@@ -79,6 +79,19 @@ no timers (`setTimeout`) and no host module.
 - **`pm.test`.** `pm.test(name, fn)` runs `fn` under `pcall`; there is no `done` callback and no promise support. A failed test's
   message is `AssertionError: ...`, or the error text without its `origin:line:` prefix (the console keeps the position).
   Test durations are recorded as 0 ms.
+- **Collections and strings.** `include`/`contain` (string substring, array member, object subset, `deep.include`),
+  `include.members`, `members`, `ordered.members`, `deep.members`, `property(name[, value])` (the subject becomes the property
+  value, so `.property('a').that.equals(1)` works), `nested.property(path)`, `own.property`, `own_property`, `keys(...)` (`any`,
+  `all`, `contain`; a list or varargs), `string`, `one_of` (`oneOf`), `satisfy`, `throw([text])`. `instance_of` is not supported.
+  `match(pattern)` takes a **Lua pattern**, not a regex (its failure message shows the pattern as a string); `throw(text)`
+  checks that the error message contains the text.
+- **Paths use JavaScript-style 0-based indices** (`data[0].id`, also `data.0.id`) in `nested.property` and `have.json_body`,
+  because they address the JSON document, not a Lua table (`pm.response.json().data[1]` is the first element in Lua).
+- **`pm.response.to`** is call-style: `have.status(codeOrText)`, `have.header(name[, value])`, `have.body([text])` (exact text, or
+  a Lua pattern that matches), `have.json_body([path[, value]])`, and zero-argument flags `be.ok()`, `be.success()`,
+  `be.client_error()`, `be.with_body()`, `be.json()`, ... Negate with `is_not`; multi-word names also exist in camelCase
+  (`jsonBody`, `clientError`). `json_schema` is unsupported. Failure messages equal the JavaScript ones (flag names use the
+  camelCase spelling, e.g. `expected response to be clientError but got 200`).
 
 ## Reporting a gap
 

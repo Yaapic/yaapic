@@ -194,6 +194,19 @@ try
         return Fail($"LuaEngine run: {luaRun.Status} {luaRun.Error?.Message}");
     }
 
+    var luaTests = await new LuaEngine().RunAsync(
+        new(
+            new(ScriptLanguage.Lua, "pm.test('chain', function() pm.expect({ a = { b = { { c = 3 } } } }).to.have.nested.property('a.b[0].c').that.equals(3) pm.expect({ 1, 2 }).to.include.members({ 2 }) pm.expect(function() error('x', 0) end).to.throw('x') end) pm.test('bad', function() pm.expect({ a = 1 }).to.have.keys('b') end)"),
+            ScriptPhase.PreRequest,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (luaTests.Tests.Count != 2 || !luaTests.Tests[0].Passed || luaTests.Tests[1].Message != "AssertionError: expected { a: 1 } to have key 'b'")
+    {
+        return Fail($"Lua pm expect run: {luaTests.Status} {luaTests.Error?.Message}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }

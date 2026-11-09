@@ -481,7 +481,8 @@ internal static class LuaPmRequestResponsePrelude
             end
             function result.reason() return dto.status end
             function result.size() return { body = dto.size, header = 0, total = dto.size } end
-            return result
+            -- pm.response.to is a fresh assertion chain per access, defined by the test prelude.
+            return setmetatable(result, { __index = function(_, member) if member == 'to' then return __responseTo(dto) end end })
           end
           local function current()
             if response == nil then

@@ -258,5 +258,185 @@
     "javascript": "pm.expect(-0).to.equal(1)",
     "lua": "pm.expect(-0.0).to.equal(1)",
     "message": "AssertionError: expected -0 to equal 1"
+  },
+  {
+    "javascript": "pm.expect('hello').to.include('xyz')",
+    "lua": "pm.expect('hello').to.include('xyz')",
+    "message": "AssertionError: expected 'hello' to include 'xyz'"
+  },
+  {
+    "javascript": "pm.expect('hello').to.not.include('ell')",
+    "lua": "pm.expect('hello').to.is_not.include('ell')",
+    "message": "AssertionError: expected 'hello' to not include 'ell'"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.include(3)",
+    "lua": "pm.expect({1, 2}).to.include(3)",
+    "message": "AssertionError: expected [ 1, 2 ] to include 3"
+  },
+  {
+    "javascript": "pm.expect([{ a: 1 }]).to.deep.include({ a: 2 })",
+    "lua": "pm.expect({{ a = 1 }}).to.deep.include({ a = 2 })",
+    "message": "AssertionError: expected [ { a: 1 } ] to include { a: 2 }"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.include({ a: 2 })",
+    "lua": "pm.expect({ a = 1 }).to.include({ a = 2 })",
+    "message": "AssertionError: expected { a: 1 } to have property 'a' of 2, but got 1"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.include({ b: 2 })",
+    "lua": "pm.expect({ a = 1 }).to.include({ b = 2 })",
+    "message": "AssertionError: expected { a: 1 } to have property 'b'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1, b: 2 }).to.not.include({ a: 1 })",
+    "lua": "pm.expect({ a = 1, b = 2 }).to.is_not.include({ a = 1 })",
+    "message": "AssertionError: expected { a: 1, b: 2 } to not have property 'a' of 1"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.include.members([1, 5])",
+    "lua": "pm.expect({1, 2}).to.include.members({1, 5})",
+    "message": "AssertionError: expected [ 1, 2 ] to be a superset of [ 1, 5 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.have.members([1])",
+    "lua": "pm.expect({1, 2}).to.have.members({1})",
+    "message": "AssertionError: expected [ 1, 2 ] to have the same members as [ 1 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.have.ordered.members([2, 1])",
+    "lua": "pm.expect({1, 2}).to.have.ordered.members({2, 1})",
+    "message": "AssertionError: expected [ 1, 2 ] to have the same ordered members as [ 2, 1 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.include.ordered.members([2])",
+    "lua": "pm.expect({1, 2}).to.include.ordered.members({2})",
+    "message": "AssertionError: expected [ 1, 2 ] to be an ordered superset of [ 2 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.not.have.members([2, 1])",
+    "lua": "pm.expect({1, 2}).to.is_not.have.members({2, 1})",
+    "message": "AssertionError: expected [ 1, 2 ] to not have the same members as [ 2, 1 ]"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.property('b')",
+    "lua": "pm.expect({ a = 1 }).to.have.property('b')",
+    "message": "AssertionError: expected { a: 1 } to have property 'b'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.property('a', 2)",
+    "lua": "pm.expect({ a = 1 }).to.have.property('a', 2)",
+    "message": "AssertionError: expected { a: 1 } to have property 'a' of 2, but got 1"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.not.have.property('a')",
+    "lua": "pm.expect({ a = 1 }).to.is_not.have.property('a')",
+    "message": "AssertionError: expected { a: 1 } to not have property 'a'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.not.have.property('a', 1)",
+    "lua": "pm.expect({ a = 1 }).to.is_not.have.property('a', 1)",
+    "message": "AssertionError: expected { a: 1 } to not have property 'a' of 1"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.property('a').that.equals(2)",
+    "lua": "pm.expect({ a = 1 }).to.have.property('a').that.equals(2)",
+    "message": "AssertionError: expected 1 to equal 2"
+  },
+  {
+    "javascript": "pm.expect({ a: { b: [{ c: 3 }] } }).to.have.nested.property('a.b[0].d')",
+    "lua": "pm.expect({ a = { b = { { c = 3 } } } }).to.have.nested.property('a.b[0].d')",
+    "message": "AssertionError: expected { a: { b: [ [Object] ] } } to have nested property 'a.b[0].d'"
+  },
+  {
+    "javascript": "pm.expect({ a: { b: 1 } }).to.have.deep.property('a', { b: 2 })",
+    "lua": "pm.expect({ a = { b = 1 } }).to.have.deep.property('a', { b = 2 })",
+    "message": "AssertionError: expected { a: { b: 1 } } to have deep property 'a' of { b: 2 }, but got { b: 1 }"
+  },
+  {
+    "javascript": "pm.expect(null).to.have.property('a')",
+    "lua": "pm.expect(pm.null).to.have.property('a')",
+    "message": "AssertionError: Target cannot be null or undefined."
+  },
+  {
+    "javascript": "pm.expect({ a: 1, b: 2 }).to.have.keys('a')",
+    "lua": "pm.expect({ a = 1, b = 2 }).to.have.keys('a')",
+    "message": "AssertionError: expected { a: 1, b: 2 } to have key 'a'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.all.keys('a', 'b')",
+    "lua": "pm.expect({ a = 1 }).to.have.all.keys('a', 'b')",
+    "message": "AssertionError: expected { a: 1 } to have keys 'a', and 'b'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.any.keys('x', 'y')",
+    "lua": "pm.expect({ a = 1 }).to.have.any.keys('x', 'y')",
+    "message": "AssertionError: expected { a: 1 } to have keys 'x', or 'y'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.contain.keys('x')",
+    "lua": "pm.expect({ a = 1 }).to.contain.keys('x')",
+    "message": "AssertionError: expected { a: 1 } to contain key 'x'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.not.have.keys('a')",
+    "lua": "pm.expect({ a = 1 }).to.is_not.have.keys('a')",
+    "message": "AssertionError: expected { a: 1 } to not have key 'a'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.keys()",
+    "lua": "pm.expect({ a = 1 }).to.have.keys()",
+    "message": "AssertionError: keys required"
+  },
+  {
+    "javascript": "pm.expect('abc').to.have.string('z')",
+    "lua": "pm.expect('abc').to.have.string('z')",
+    "message": "AssertionError: expected 'abc' to contain 'z'"
+  },
+  {
+    "javascript": "pm.expect('abc').to.not.have.string('b')",
+    "lua": "pm.expect('abc').to.is_not.have.string('b')",
+    "message": "AssertionError: expected 'abc' to not contain 'b'"
+  },
+  {
+    "javascript": "pm.expect(404).to.be.oneOf([200, 201])",
+    "lua": "pm.expect(404).to.be.one_of({200, 201})",
+    "message": "AssertionError: expected 404 to be one of [ 200, 201 ]"
+  },
+  {
+    "javascript": "pm.expect(200).to.not.be.oneOf([200])",
+    "lua": "pm.expect(200).to.is_not.be.one_of({200})",
+    "message": "AssertionError: expected 200 to not be one of [ 200 ]"
+  },
+  {
+    "javascript": "pm.expect(200).to.be.oneOf(5)",
+    "lua": "pm.expect(200).to.be.one_of(5)",
+    "message": "AssertionError: expected 5 to be an array"
+  },
+  {
+    "javascript": "pm.expect(3).to.satisfy((n) => n % 2 === 0)",
+    "lua": "pm.expect(3).to.satisfy(function(n) return n % 2 == 0 end)",
+    "message": "AssertionError: expected 3 to satisfy [Function (anonymous)]"
+  },
+  {
+    "javascript": "pm.expect(() => 1).to.throw()",
+    "lua": "pm.expect(function() return 1 end).to.throw()",
+    "message": "AssertionError: expected [Function (anonymous)] to throw an error"
+  },
+  {
+    "javascript": "pm.expect(() => { throw new TypeError('boom'); }).to.throw('zzz')",
+    "lua": "pm.expect(function() error('boom', 0) end).to.throw('zzz')",
+    "message": "AssertionError: expected [Function (anonymous)] to throw error including 'zzz' but got 'boom'"
+  },
+  {
+    "javascript": "pm.expect(() => { throw new TypeError('boom'); }).to.not.throw('boom')",
+    "lua": "pm.expect(function() error('boom', 0) end).to.is_not.throw('boom')",
+    "message": "AssertionError: expected [Function (anonymous)] to throw error not including 'boom'"
+  },
+  {
+    "javascript": "pm.expect(1, 'custom').to.include.members([1])",
+    "lua": "pm.expect(1, 'custom').to.include.members({1})",
+    "message": "AssertionError: custom: expected 1 to be an array"
   }
 ]
