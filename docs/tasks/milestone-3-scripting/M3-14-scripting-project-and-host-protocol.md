@@ -1,6 +1,6 @@
 # M3-14: `Yaapic.Scripting` project, host bridge and JSON protocol
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-07
 
@@ -44,10 +44,10 @@ Native libraries (M3-15 to M3-17, M3-24, M3-25), preludes.
 
 ## Acceptance criteria
 
-- [ ] Tests: every op round trips through `HostBridge` against a recording host (variables per scope, replace, request get/set
+- [x] Tests: every op round trips through `HostBridge` against a recording host (variables per scope, replace, request get/set
       incl. read-only failure -> `err`, response get with and without a response, info, console with truncation and entry
       cap, test record, send success and failure, cookies); malformed JSON and unknown op -> `err`, never an exception.
-- [ ] Architecture tests green with the new project and rule; the solution and the cross-platform filter build with 0 warnings
+- [x] Architecture tests green with the new project and rule; the solution and the cross-platform filter build with 0 warnings
       (AOT analyzers on); all tests green.
 
 ## Rules

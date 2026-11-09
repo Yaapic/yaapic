@@ -10,10 +10,11 @@ Yaapic is a layered solution. Dependencies only point downwards; `tests/Yaapic.A
 | `Yaapic.Domain` | nothing |
 | `Yaapic.Core` | `Domain` |
 | `Yaapic.Infrastructure` | `Core`, `Domain` |
+| `Yaapic.Scripting` | `Core`, `Domain` |
 | `Yaapic.UI.Abstractions` | nothing |
 | `Yaapic.Design.Tokens` | nothing |
 | `Yaapic.ViewModels` | `Core`, `UI.Abstractions` (never `Infrastructure`) |
-| `Yaapic.Composition` | `Core`, `Domain`, `Infrastructure`, `UI.Abstractions`, `ViewModels` |
+| `Yaapic.Composition` | `Core`, `Domain`, `Infrastructure`, `Scripting`, `UI.Abstractions`, `ViewModels` |
 | `Yaapic.App.*` (WinUI, Avalonia) | `Composition`, `UI.Abstractions`, `ViewModels`; no business logic |
 
 No library references an App project.
