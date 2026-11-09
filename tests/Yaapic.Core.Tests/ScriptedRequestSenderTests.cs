@@ -267,4 +267,207 @@ public class ScriptedRequestSenderTests
 
         Assert.Same(ScriptLimits.Default, engine.Invocations[0].Limits);
     }
+
+    static ScriptSet Post() => ScriptSet.Empty with { PostResponse = Code };
+
+    static HttpResponseData Response(int code = 200, string url = "http://a/") =>
+        new(code, "OK", [], new byte[1536], TimeSpan.FromMilliseconds(120), url);
+
+    static (ScriptedRequestSender Sender, FakeHttpTransport Transport) BuildWith(FakeScriptEngine engine, SendResult result)
+    {
+        FakeHttpTransport transport = new((_, _) => Task.FromResult(result));
+        ScriptEngineRegistry registry = new();
+        registry.Add(engine);
+        return (new ScriptedRequestSender(new RequestSender(transport), registry, TimeProvider.System), transport);
+    }
+
+    [Fact]
+    public async Task Post_blocks_run_in_order_after_a_response_and_see_response_request_and_variables()
+    {
+        List<(string Origin, int Code, string Url, string Event, bool ReadOnly, string? Var)> seen = [];
+        var engine = new FakeScriptEngine(i =>
+        {
+            if (i.Phase == ScriptPhase.PreRequest)
+            {
+                i.Host.Request.Url = "http://mutated/";
+                i.Host.SetVariable(ScriptScope.Globals, "g", "1");
+            }
+            else
+            {
+                i.Host.TryGetVariable(ScriptScope.Globals, "g", out var v);
+                seen.Add((i.Origin, i.Host.Response!.Code, i.Host.Request.Url, i.Host.Info.EventName, i.Host.Request.IsReadOnly, v));
+            }
+
+            return Ok(i);
+        });
+        var (sender, _) = BuildWith(engine, SendResult.Success(Response(201, "http://mutated/")));
+        var chain = Chain(("col", Pre() with { PostResponse = Code }), ("req", Post()));
+
+        var report = await sender.SendAsync(Input(Req(), chain), CancellationToken.None);
+
+        Assert.Equal(["post-response · col", "post-response · req"], seen.Select(x => x.Origin));
+        Assert.All(seen, x =>
+        {
+            Assert.Equal(201, x.Code);
+            Assert.Equal("http://mutated/", x.Url);
+            Assert.Equal("test", x.Event);
+            Assert.True(x.ReadOnly);
+            Assert.Equal("1", x.Var);
+        });
+        Assert.Equal(3, report.Runs.Count);
+        Assert.Equal(ScriptPhase.PostResponse, report.Runs[2].Phase);
+    }
+
+    [Fact]
+    public async Task Failing_post_block_keeps_response_and_runs_next_block()
+    {
+        var calls = 0;
+        var engine = new FakeScriptEngine(i => ++calls == 1 ? Fail(i) : Ok(i));
+        var (sender, _) = BuildWith(engine, SendResult.Success(Response()));
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("a", Post()), ("b", Post()))), CancellationToken.None);
+
+        Assert.NotNull(report.Report);
+        Assert.Null(report.AbortedBy);
+        Assert.Equal([ScriptRunStatus.Failed, ScriptRunStatus.Succeeded], report.Runs.Select(r => r.Status));
+    }
+
+    [Fact]
+    public async Task Transport_failure_runs_no_post_block_but_keeps_pre_runs()
+    {
+        var engine = FakeScriptEngine.FromQueue();
+        var (sender, _) = BuildWith(engine, SendResult.Fail(SendFailureKind.Unknown, "down"));
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("a", Pre() with { PostResponse = Code }))), CancellationToken.None);
+
+        Assert.Single(report.Runs);
+        Assert.Equal(ScriptPhase.PreRequest, report.Runs[0].Phase);
+        Assert.Single(engine.Invocations);
+    }
+
+    [Fact]
+    public async Task Tests_aggregate_in_order_across_blocks()
+    {
+        var engine = new FakeScriptEngine(i => ScriptRunResult.Skipped(i.Phase, i.Origin, i.Block.Language) with
+        {
+            Tests = [new Yaapic.Domain.Scripting.TestResult(i.Origin, true, null, TimeSpan.Zero, i.Origin)],
+        });
+        var (sender, _) = BuildWith(engine, SendResult.Success(Response()));
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("a", Post()), ("b", Post()))), CancellationToken.None);
+
+        Assert.Equal(["post-response · a", "post-response · b"], report.Tests.Select(t => t.Name));
+    }
+
+    [Fact]
+    public async Task Changes_of_both_stages_are_merged_collapsed_and_kept_after_a_failed_post_block()
+    {
+        var engine = new FakeScriptEngine(i =>
+        {
+            i.Host.SetVariable(ScriptScope.Globals, "g", i.Phase == ScriptPhase.PreRequest ? "1" : "2");
+            if (i.Phase == ScriptPhase.PostResponse)
+            {
+                i.Host.SetVariable(ScriptScope.Globals, "h", "3");
+                return Fail(i);
+            }
+
+            return Ok(i);
+        });
+        var (sender, _) = BuildWith(engine, SendResult.Success(Response()));
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("a", Pre() with { PostResponse = Code }))), CancellationToken.None);
+
+        Assert.Equal([("g", "2"), ("h", "3")], report.Changes.Select(c => (c.Name, c.Value)));
+    }
+
+    [Fact]
+    public async Task Request_is_read_only_in_post_response()
+    {
+        InvalidOperationException? thrown = null;
+        var engine = new FakeScriptEngine(i =>
+        {
+            try
+            {
+                i.Host.Request.Url = "http://x/";
+                return Ok(i);
+            }
+            catch (InvalidOperationException ex)
+            {
+                thrown = ex;
+                return Fail(i);
+            }
+        });
+        var (sender, _) = BuildWith(engine, SendResult.Success(Response()));
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("a", Post()))), CancellationToken.None);
+
+        Assert.NotNull(thrown);
+        Assert.Equal(ScriptRunStatus.Failed, report.Runs[0].Status);
+    }
+
+    [Fact]
+    public async Task Cancellation_between_post_blocks_stops_with_a_canceled_run()
+    {
+        using CancellationTokenSource cts = new();
+        var engine = new FakeScriptEngine(i =>
+        {
+            cts.Cancel();
+            return Ok(i);
+        });
+        var (sender, _) = BuildWith(engine, SendResult.Success(Response()));
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("a", Post()), ("b", Post()), ("c", Post()))), cts.Token);
+
+        Assert.Equal([ScriptRunStatus.Succeeded, ScriptRunStatus.Canceled], report.Runs.Select(r => r.Status));
+        Assert.Single(engine.Invocations);
+        Assert.NotNull(report.Report);
+    }
+
+    [Fact]
+    public async Task Network_log_for_200()
+    {
+        var (sender, _) = BuildWith(FakeScriptEngine.FromQueue(), SendResult.Success(Response(200, "http://a/x")));
+
+        var report = await sender.SendAsync(Input(Req("http://a/x"), ScriptChain.Empty), CancellationToken.None);
+
+        var line = Assert.Single(report.NetworkLog);
+        Assert.Equal(ConsoleLevel.Info, line.Level);
+        Assert.Equal(ConsoleSource.Network, line.Source);
+        Assert.Equal("GET http://a/x   200 · 120 ms · 1.5 KB", line.Message);
+    }
+
+    [Fact]
+    public async Task Network_log_for_404_is_an_error()
+    {
+        var (sender, _) = BuildWith(FakeScriptEngine.FromQueue(), SendResult.Success(Response(404)));
+
+        var report = await sender.SendAsync(Input(Req(), ScriptChain.Empty), CancellationToken.None);
+
+        Assert.Equal(ConsoleLevel.Error, report.NetworkLog[0].Level);
+        Assert.Contains("404", report.NetworkLog[0].Message);
+    }
+
+    [Fact]
+    public async Task Network_log_for_failure_has_failure_text()
+    {
+        var (sender, _) = BuildWith(FakeScriptEngine.FromQueue(), SendResult.Fail(SendFailureKind.Unknown, "no route"));
+
+        var report = await sender.SendAsync(Input(Req("http://a/"), ScriptChain.Empty), CancellationToken.None);
+
+        Assert.Equal(ConsoleLevel.Error, report.NetworkLog[0].Level);
+        Assert.Equal("GET http://a/   no route", report.NetworkLog[0].Message);
+    }
+
+    [Fact]
+    public async Task Network_log_lists_unresolved_variables()
+    {
+        var (sender, _) = BuildWith(FakeScriptEngine.FromQueue(), SendResult.Success(Response()));
+
+        var report = await sender.SendAsync(Input(Req("http://a/{{x}}/{{y}}"), ScriptChain.Empty), CancellationToken.None);
+
+        Assert.Equal(2, report.NetworkLog.Count);
+        Assert.Equal(ConsoleLevel.Warn, report.NetworkLog[1].Level);
+        Assert.Equal(ConsoleSource.System, report.NetworkLog[1].Source);
+        Assert.Equal("Unresolved variables: x, y", report.NetworkLog[1].Message);
+    }
 }

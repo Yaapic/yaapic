@@ -11,13 +11,15 @@ namespace Yaapic.Core.Scripting;
 /// <param name="Warnings">The warnings raised while scripts wrote variables.</param>
 /// <param name="AbortedBy">The first run that did not succeed, or <see langword="null"/>.</param>
 /// <param name="SentDefinition">The definition after pre-request mutation; <see langword="null"/> when aborted.</param>
+/// <param name="NetworkLog">The network console lines of the main request; empty when the send was aborted.</param>
 public sealed record ScriptedSendReport(
     SendReport? Report,
     IReadOnlyList<ScriptRunResult> Runs,
     IReadOnlyList<VariableChange> Changes,
     IReadOnlyList<string> Warnings,
     ScriptRunResult? AbortedBy,
-    HttpRequestDefinition? SentDefinition)
+    HttpRequestDefinition? SentDefinition,
+    IReadOnlyList<ConsoleEntry> NetworkLog)
 {
     /// <summary>Gets the console entries of every run, in order.</summary>
     public IReadOnlyList<ConsoleEntry> Console => [.. Runs.SelectMany(r => r.Console)];

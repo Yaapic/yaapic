@@ -1,6 +1,6 @@
 # M3-12: Core: post-response stage, test results and network console line
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-11
 
@@ -39,12 +39,12 @@ response even when a script fails.
 
 ## Acceptance criteria
 
-- [ ] Tests (fakes): post blocks run in chain order after a 200 and see response, request and shared variables; a failing
+- [x] Tests (fakes): post blocks run in chain order after a 200 and see response, request and shared variables; a failing
       post block keeps the response and runs the next block; transport failure runs no post block; a test result list
       aggregates in order across blocks; changes of both stages merged and collapsed; read-only request in post (mutation
       reports a failed run through the fake host contract test, see M3-09); network log text for 200, 404, failure and
       unresolved variables; cancellation between blocks.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 

@@ -193,18 +193,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         RefreshCommands();
     }
 
-    internal static string FormatDuration(TimeSpan duration)
-    {
-        var ms = duration.TotalMilliseconds;
-        return ms < 1000
-            ? $"{Math.Round(ms).ToString(CultureInfo.InvariantCulture)} ms"
-            : $"{(ms / 1000).ToString("0.00", CultureInfo.InvariantCulture)} s";
-    }
+    internal static string FormatDuration(TimeSpan duration) => ResponseText.FormatDuration(duration);
 
-    private static string FormatSize(long bytes) => bytes switch
-    {
-        < 1024 => $"{bytes.ToString(CultureInfo.InvariantCulture)} B",
-        < 1024 * 1024 => $"{(bytes / 1024.0).ToString("0.0", CultureInfo.InvariantCulture)} KB",
-        _ => $"{(bytes / (1024.0 * 1024)).ToString("0.0", CultureInfo.InvariantCulture)} MB",
-    };
+    private static string FormatSize(long bytes) => ResponseText.FormatSize(bytes);
 }
