@@ -1,0 +1,42 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.ScriptsEditorView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:v="using:Yaapic.App.WinUI.Views">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid Padding="16,6" ColumnSpacing="12">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <ListView x:Name="ScriptPhases" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
+                AutomationProperties.Name="Script phase" SelectionChanged="OnScriptPhaseChanged">
+        <x:String>Pre-request</x:String>
+        <x:String>Post-response</x:String>
+      </ListView>
+      <ComboBox x:Name="ScriptLanguageBox" Grid.Column="1" MinWidth="130" VerticalAlignment="Center"
+                AutomationProperties.Name="Script language" SelectionChanged="OnScriptLanguageChanged"/>
+      <TextBlock x:Name="Hint" Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                 FontSize="{StaticResource YaapicFontSizeCaption}"
+                 Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+    </Grid>
+    <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+            BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
+      <Grid>
+        <v:CodeEditorView x:Name="ScriptEditor" AutomationProperties.Name="Script"
+                          EditorLanguage="{x:Bind p:TextMap.ScriptLanguage(ViewModel.Selected.Language), Mode=OneWay}"
+                          Text="{x:Bind ViewModel.Selected.Source, Mode=TwoWay}"/>
+        <TextBlock Margin="16,0,16,0" VerticalAlignment="Top" IsHitTestVisible="False"
+                   FontFamily="{StaticResource YaapicMonoFont}"
+                   Foreground="{ThemeResource YaapicTextDisabledBrush}"
+                   Text="{x:Bind ViewModel.Selected.Placeholder, Mode=OneWay}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Selected.IsEmpty), Mode=OneWay}"/>
+      </Grid>
+    </Border>
+  </Grid>
+</UserControl>

@@ -1,6 +1,6 @@
 # M3-52: WinUI: scripts in the folder and collection settings dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M3-40, M3-50, M3-51
 
@@ -27,13 +27,13 @@ New dialog features, Avalonia (M3-59), script libraries.
 
 ## Acceptance criteria
 
-- [ ] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
-- [ ] **Runtime check (AOT exe)**: open the collection settings from the tree context menu -> Scripts section shows the
+- [x] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
+- [ ] **Runtime check (AOT exe)** (all but the final send/header step done, see Notes): open the collection settings from the tree context menu -> Scripts section shows the
       collection hint; type a pre-request, save; `folder.yaml` on disk has the script; open a request of that collection, send
       it against the stub server and verify the header arrives (the stub echoes headers) — the full chain works with real
       engines; a nested folder shows the folder hint; cancel discards edits; dark and light.
-- [ ] Request editor Scripts tab still works after the extraction (re-run the M3-51 runtime steps briefly).
-- [ ] No process left running.
+- [x] Request editor Scripts tab still works after the extraction (re-run the M3-51 runtime steps briefly).
+- [x] No process left running.
 
 ## Rules
 
@@ -50,3 +50,19 @@ New dialog features, Avalonia (M3-59), script libraries.
 ## Suggested commit message
 
 `feat(winui): edit collection and folder scripts in the settings dialog`
+
+## Notes
+
+- `Views/ScriptsEditorView` (phase switch, language picker, `CodeEditorView`, placeholder; `ViewModel` and `HintText` dependency
+  properties) is shared by the request editor tab and the dialog; the request editor change is a pure refactor.
+- The dialog has no tabs (M2-48 uses one scrolling column), so a `Scripts` section follows Variables: hint from `ScriptsHint`
+  in its own wrapped line, editor 280 px tall (the pickers row hint is blank there). Shown for the collection and for folders.
+- Runtime check on the AOT exe (fixture copy, dark and light): the collection dialog shows the collection hint and the
+  fixture pre-request, the nested `Admin` folder shows the folder hint; typing a second pre-request line and Save writes
+  `scripts.preRequest` to `folder.yaml`; Esc discards typed edits (file unchanged, reopening shows the saved text); the
+  request editor Scripts tab still shows `Scripts 2` and its editor.
+- **Not verified**: sending a request of the collection and seeing the `X-Collection` header at the stub. The app does not run
+  scripts yet (send integration M3-43 and composition M3-47 are not done: even the request's own `X-Trace` pre-request
+  does not reach the stub), so this step moves to M3-64/M3-68.
+- No new tests (view-only change; the folder fixtures now carry scripts and the existing tests pass: 2116 passed, 1 skipped).
+- No Yaapic or stub-server process left running.

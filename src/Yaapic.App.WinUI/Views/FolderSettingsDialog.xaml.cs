@@ -4,7 +4,7 @@ using Yaapic.ViewModels.Collections;
 
 namespace Yaapic.App.WinUI.Views;
 
-/// <summary>Dialog that edits the name, description and variables of a folder through a <see cref="FolderSettingsViewModel"/>.</summary>
+/// <summary>Dialog that edits the name, description, variables and scripts of a folder through a <see cref="FolderSettingsViewModel"/>.</summary>
 public sealed partial class FolderSettingsDialog : ContentDialog
 {
     /// <summary>Initializes the dialog.</summary>
@@ -16,6 +16,7 @@ public sealed partial class FolderSettingsDialog : ContentDialog
         InitializeComponent();
         Services.DialogButtons.Normalize(this, new Thickness(0, 10, 16, 10));
         Variables.ViewModel = viewModel.Variables;
+        ScriptsEditor.ViewModel = viewModel.Scripts;
         Loaded += (_, _) =>
         {
             Fit();
