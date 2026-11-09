@@ -85,6 +85,20 @@ try
         return Fail($"pm prelude run: {pm.Status} {pm.Error?.Message}");
     }
 
+    var req = await new QuickJsEngine().RunAsync(
+        new(
+            new(ScriptLanguage.JavaScript, "pm.request.method = 'post'; pm.request.url.query.add({ key: 'a', value: 'b c' }); pm.request.headers.add({ key: 'X', value: '1' }); try { pm.response; } catch (e) { console.log(e.message); }"),
+            ScriptPhase.PreRequest,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (req.Status != ScriptRunStatus.Succeeded || host.Request.Method != "POST" || host.Request.Url != "?a=b%20c" || host.Request.Headers.Count != 1
+        || req.Console.Count != 1 || req.Console[0].Message != "pm.response is only available in post-response scripts")
+    {
+        return Fail($"pm request run: {req.Status} {req.Error?.Message} {host.Request.Url}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }

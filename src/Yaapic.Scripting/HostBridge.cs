@@ -135,7 +135,7 @@ internal sealed class HostBridge(IScriptHost host, RunCollector collector)
     private static List<KeyValueDto> Map(IEnumerable<KeyValueEntry> rows) => [.. rows.Select(e => new KeyValueDto(e.Key, e.Value, e.Enabled))];
 
     private static RequestDto ToDto(ScriptRequest r) =>
-        new(r.Method, r.Url, Map(r.Headers), r.BodyMode, r.BodyText, r.BodyContentType, Map(r.UrlEncoded));
+        new(r.Method, r.Url, Map(r.Headers), r.BodyMode, r.BodyText, r.BodyContentType, Map(r.UrlEncoded), Map(r.FormData));
 
     private static ResponseDto ToDto(ScriptResponse r) =>
         new(r.Code, r.Status, Map(r.Headers), r.BodyText, r.SizeBytes, r.ResponseTimeMs, r.FinalUrl, [.. r.Cookies.Select(ToDto)]);

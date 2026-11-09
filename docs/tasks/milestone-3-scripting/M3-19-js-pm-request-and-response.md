@@ -1,6 +1,6 @@
 # M3-19: JavaScript `pm`: request and response
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-18, M3-09
 
@@ -43,13 +43,13 @@ Authentication objects, certificates, `pm.response.to.*` (M3-21), cookies and `s
 
 ## Acceptance criteria
 
-- [ ] Tests with the real `ScriptHost` and `ScriptRequest`/`ScriptResponse`: method get/set; url get/set/`update`, query
+- [x] Tests with the real `ScriptHost` and `ScriptRequest`/`ScriptResponse`: method get/set; url get/set/`update`, query
       add/upsert/remove reflected in the **applied** definition (`ApplyTo`) including `{{variable}}` URLs and fragments;
       header add/upsert/remove/get case-insensitive; raw body set and mode switch; urlencoded edit; formdata read-only;
       every mutation in a post-response block throws the read-only message and leaves the request untouched; response
       `code/status/responseTime/responseSize/headers/text/json/reason/size` for JSON, text, empty and binary bodies; invalid
       JSON message; `pm.response` in pre-request throws.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

@@ -8,7 +8,7 @@ internal sealed record VarArgs(string Scope, string? Name, string? Value);
 /// <summary>A header or form row; <c>enabled</c> is an addition to the card so disabled rows survive a get/set round trip.</summary>
 internal sealed record KeyValueDto(string Key, string Value, bool Enabled = true);
 
-/// <summary>The request as exchanged by <c>req.get</c>, <c>req.set</c> and <c>send</c>.</summary>
+/// <summary>The request as exchanged by <c>req.get</c>, <c>req.set</c> and <c>send</c>; <c>FormData</c> is read-only and ignored when applied.</summary>
 internal sealed record RequestDto(
     string Method,
     string Url,
@@ -16,7 +16,8 @@ internal sealed record RequestDto(
     string BodyMode,
     string BodyText,
     string BodyContentType,
-    List<KeyValueDto> UrlEncoded);
+    List<KeyValueDto> UrlEncoded,
+    List<KeyValueDto>? FormData = null);
 
 /// <summary>A cookie of the current response.</summary>
 internal sealed record CookieDto(
