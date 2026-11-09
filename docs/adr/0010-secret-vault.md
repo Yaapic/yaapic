@@ -88,6 +88,7 @@ values are written to the vault and blanked in the YAML. Scripts read and write 
 - Decrypted values live as ordinary .NET strings in memory until the vault is locked or the app exits.
 - A malicious script can read every secret of the active scopes: scripts are trusted code, and imported scripts are a
   risk the import card must warn about.
+- Redaction matches values as written: a secret printed base64- or URL-encoded is not detected.
 - No secret versioning, no audit log.
 - Out of scope: secret sharing, hardware keys, secrets in auth fields.
 

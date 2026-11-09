@@ -1,5 +1,6 @@
 using Yaapic.Core.Http;
 using Yaapic.Core.Responses;
+using Yaapic.Core.Secrets;
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
 
@@ -9,7 +10,8 @@ namespace Yaapic.Core.Scripting;
 /// <param name="sender">The plain sender used once the scripts have run.</param>
 /// <param name="engines">The script engines.</param>
 /// <param name="time">The clock; stamps the network console lines.</param>
-public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegistry engines, TimeProvider time)
+/// <param name="redactor">Scrubs secret values from the returned runs and network log after the scripts ran; <see langword="null"/> keeps them as is.</param>
+public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegistry engines, TimeProvider time, ISecretRedactor? redactor = null)
 {
     private readonly TimeProvider _time = time;
 
@@ -20,6 +22,24 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
     public async Task<ScriptedSendReport> SendAsync(ScriptedSendInput input, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(input);
+        var report = await SendCoreAsync(input, ct).ConfigureAwait(false);
+        return redactor is null ? report : Redact(report, redactor);
+    }
+
+    private static ScriptedSendReport Redact(ScriptedSendReport report, ISecretRedactor redactor)
+    {
+        var runs = report.Runs.Select(r => ScriptRedaction.Redact(redactor, r)).ToList();
+        var aborted = report.AbortedBy is null ? null : runs[report.Runs.ToList().IndexOf(report.AbortedBy)];
+        return report with
+        {
+            Runs = runs,
+            AbortedBy = aborted,
+            NetworkLog = [.. report.NetworkLog.Select(c => ScriptRedaction.Redact(redactor, c))],
+        };
+    }
+
+    private async Task<ScriptedSendReport> SendCoreAsync(ScriptedSendInput input, CancellationToken ct)
+    {
 
         var limits = input.Limits ?? ScriptLimits.Default;
         var overlay = new ScriptVariableOverlay(input.Scopes, input.HasEnvironment, input.HasCollection);

@@ -1,6 +1,6 @@
 # M3-38: Core: secret-aware collection store and secret redaction
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-37, M3-12
 
@@ -36,11 +36,11 @@ UI, key/value masking (M3-46), history redaction (history stores templates).
 
 ## Acceptance criteria
 
-- [ ] Tests: collection store load/save/delete/move rules like M3-37; redactor cases (no secrets, one, several, overlapping,
+- [x] Tests: collection store load/save/delete/move rules like M3-37; redactor cases (no secrets, one, several, overlapping,
       repeated, case-sensitive, shorter than 4 ignored, locked vault no-op); `ScriptedRequestSender` with a fake engine that logs
       a secret, fails a test with a secret in the message and throws an error containing it: all outputs redacted while the
       variable value used by the transport is the real one.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 
