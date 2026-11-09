@@ -1,6 +1,6 @@
 # M3-26: Lua prelude: JSON codec and typed host wrapper
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-25, M3-14
 
@@ -35,11 +35,11 @@ Any `pm` member, a streaming parser, comments or trailing commas in JSON.
 
 ## Acceptance criteria
 
-- [ ] Tests (real Lua through `LuaEngine` with a fake host): the JSON conformance cases (RFC 8259 valid and invalid samples:
+- [x] Tests (real Lua through `LuaEngine` with a fake host): the JSON conformance cases (RFC 8259 valid and invalid samples:
       `[]`, `{}`, nested, unicode escapes, surrogate pairs, big ints, floats, `1e3`, `-0`, leading zeros rejected, trailing
       comma rejected, unterminated string, depth 101) for decode; encode/decode round trip of nested data with `pm.null`;
       arrays with trailing nulls keep `n`; the 1 MB budget; host wrapper raises on `err` and returns decoded data on `ok`.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

@@ -182,14 +182,14 @@ try
 
     var luaRun = await new LuaEngine().RunAsync(
         new(
-            new(ScriptLanguage.Lua, "console.log({ n = 1 }, 'x') __host('var.set', '{\"scope\":\"local\",\"name\":\"k\",\"value\":\"lua\"}') print(pcall(__host, 'nope', '{}'))"),
+            new(ScriptLanguage.Lua, """console.log({ n = 1 }, 'x') __host('var.set', '{"scope":"local","name":"k","value":"lua"}') print(pcall(__host, 'nope', '{}')) print(pm.json.encode(pm.json.decode('{"a":[1,null,"\\u00e9"]}')))"""),
             ScriptPhase.PreRequest,
             "smoke",
             host,
             ScriptLimits.Default),
         CancellationToken.None);
-    if (luaRun.Status != ScriptRunStatus.Succeeded || host.Value != "lua" || luaRun.Console.Count != 2 || luaRun.Console[0].Message != "{ n = 1 } x"
-        || luaRun.Console[1].Message != "false Unknown host op 'nope'")
+    if (luaRun.Status != ScriptRunStatus.Succeeded || host.Value != "lua" || luaRun.Console.Count != 3 || luaRun.Console[0].Message != "{ n = 1 } x"
+        || luaRun.Console[1].Message != "false Unknown host op 'nope'" || luaRun.Console[2].Message != "{\"a\":[1,null,\"é\"]}")
     {
         return Fail($"LuaEngine run: {luaRun.Status} {luaRun.Error?.Message}");
     }
