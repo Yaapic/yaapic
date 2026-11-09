@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
 using Yaapic.Core.Responses;
+using Yaapic.Core.Scripting;
 using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 
@@ -33,6 +34,9 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     /// <summary>Initializes a new instance of the <see cref="ResponsePanelViewModel"/> class.</summary>
     /// <param name="dialogs">Used to copy and save the body; <see langword="null"/> makes both commands do nothing.</param>
     public ResponsePanelViewModel(IDialogService? dialogs = null) => _dialogs = dialogs;
+
+    /// <summary>Gets the tests and script errors of the last scripted send.</summary>
+    public TestResultsViewModel Tests { get; } = new();
 
     /// <summary>Gets what the panel is showing.</summary>
     public ResponseState State { get => _state; private set => SetProperty(ref _state, value); }
@@ -113,6 +117,27 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         ApplyBody();
     }
 
+    /// <summary>Shows the outcome of a send with scripts.</summary>
+    /// <param name="report">The scripted report to display.</param>
+    public void ShowScripted(ScriptedSendReport report)
+    {
+        ArgumentNullException.ThrowIfNull(report);
+        if (report.AbortedBy is { } aborted)
+        {
+            Clear();
+            State = ResponseState.Failed;
+            var message = aborted.Error?.Message;
+            ErrorMessage = $"Pre-request script failed — {aborted.Origin}: "
+                + (string.IsNullOrEmpty(message) ? ScriptErrorItemViewModel.StatusTextFor(aborted.Status) : message);
+        }
+        else
+        {
+            ShowReport(report.Report!);
+        }
+
+        Tests.Show(report.Runs);
+    }
+
     /// <summary>Resets the panel to <see cref="ResponseState.Empty"/>.</summary>
     public void Clear()
     {
@@ -129,6 +154,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         Headers = [];
         ErrorMessage = null;
         UnresolvedWarning = null;
+        Tests.Clear();
         RefreshCommands();
     }
 

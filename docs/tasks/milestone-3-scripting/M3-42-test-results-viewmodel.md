@@ -1,6 +1,6 @@
 # M3-42: Test results ViewModel and response panel integration
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-04, M3-12
 
@@ -37,10 +37,10 @@ Views, the console, applying variable changes.
 
 ## Acceptance criteria
 
-- [ ] Tests: items and counts for passed/failed mixes, summary text, filter, errors list per status, `ShowScripted` for success
+- [x] Tests: items and counts for passed/failed mixes, summary text, filter, errors list per status, `ShowScripted` for success
       with tests, for a post-response error (response kept, error listed), for a pre-request abort (error state, no body),
       `ShowSending`/`Clear` reset, no-script report leaves `Tests` empty; existing response panel tests unchanged and green.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 
