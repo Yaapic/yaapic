@@ -5,6 +5,8 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Yaapic.App.WinUI.Presentation;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
+using Yaapic.ViewModels.Scripting;
 using Yaapic.ViewModels.Requests;
 
 namespace Yaapic.App.WinUI.Views;
@@ -40,6 +42,11 @@ public sealed partial class RequestEditorView : UserControl
             };
             item.Click += OnMethodClick;
             MethodFlyout.Items.Add(item);
+        }
+
+        foreach (var choice in ScriptBlockEditorViewModel.Languages)
+        {
+            ScriptLanguageBox.Items.Add(new ComboBoxItem { Content = choice.Label });
         }
 
         // The brushes depend on the window theme, which can change after construction: refresh them whenever the menu opens.
@@ -95,6 +102,60 @@ public sealed partial class RequestEditorView : UserControl
         BodyBinary.IsChecked = vm.BodyKind == BodyKind.Binary;
         ContentTypeLabel.Text = ContentTypeNames[IndexOf(RequestEditorViewModel.ContentTypes, vm.BodyContentType)];
         TimeoutBox.Value = vm.TimeoutSeconds;
+        SyncScriptPickers();
+    }
+
+    private bool _syncingScripts;
+
+    // Both pickers are index based (see above) and follow the selected block; Selected changes with the phase, not with Load.
+    private void SyncScriptPickers()
+    {
+        if (ViewModel is not { } vm)
+        {
+            return;
+        }
+
+        _syncingScripts = true;
+        try
+        {
+            ScriptPhases.SelectedIndex = vm.Scripts.SelectedPhase == ScriptPhase.PostResponse ? 1 : 0;
+            ScriptLanguageBox.SelectedIndex = ScriptLanguageIndex(vm.Scripts.Selected.Language);
+        }
+        finally
+        {
+            _syncingScripts = false;
+        }
+    }
+
+    private static int ScriptLanguageIndex(ScriptLanguage language)
+    {
+        for (var i = 0; i < ScriptBlockEditorViewModel.Languages.Count; i++)
+        {
+            if (ScriptBlockEditorViewModel.Languages[i].Language == language)
+            {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    private void OnScriptPhaseChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_syncingScripts && ViewModel is { } vm && ScriptPhases.SelectedIndex >= 0)
+        {
+            vm.Scripts.SelectedPhase = ScriptPhases.SelectedIndex == 1 ? ScriptPhase.PostResponse : ScriptPhase.PreRequest;
+            // The editor now shows the other block (x:Bind re-targets Selected); its undo history starts over.
+            SyncScriptPickers();
+        }
+    }
+
+    private void OnScriptLanguageChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_syncingScripts && ViewModel is { } vm && ScriptLanguageBox.SelectedIndex >= 0)
+        {
+            vm.Scripts.Selected.Language = ScriptBlockEditorViewModel.Languages[ScriptLanguageBox.SelectedIndex].Language;
+        }
     }
 
     private void OnVariableOpenRequested(object? sender, Yaapic.Core.Variables.VariableScopeKind scope)
@@ -186,6 +247,9 @@ public sealed partial class RequestEditorView : UserControl
         BodyTab.IsChecked = ReferenceEquals(sender, BodyTab);
         AuthTab.IsChecked = ReferenceEquals(sender, AuthTab);
         SettingsTab.IsChecked = ReferenceEquals(sender, SettingsTab);
+        ScriptsTab.IsChecked = ReferenceEquals(sender, ScriptsTab);
+        ScriptsPane.Visibility = ScriptsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        ScriptsBadge.Style = BadgeStyle(ScriptsTab);
         AuthPane.Visibility = AuthTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         SettingsPane.Visibility = SettingsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         AuthBadge.Style = BadgeStyle(AuthTab);

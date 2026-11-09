@@ -1,6 +1,6 @@
 # M3-51: WinUI: Scripts tab in the request editor
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M3-39, M3-50
 
@@ -40,16 +40,16 @@ Console, tests tab (M3-53, M3-54), folder scripts (M3-52), autocomplete, snippet
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx.
-- [ ] **Runtime check on the AOT exe** (drive the real window, not only the screenshot flag): open `scripted` -> the Scripts tab
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx.
+- [x] **Runtime check on the AOT exe** (drive the real window, not only the screenshot flag): open `scripted` -> the Scripts tab
       shows `2`; type in pre-request, switch to post-response and back, text kept; switch language to Lua and back; the
       request tab shows the unsaved marker; Ctrl+S saves and the YAML on disk contains the scripts; close and reopen the app, the
       scripts are back; Ctrl+Enter inside the script editor does not send accidentally unless the app's Send shortcut is meant
       to (record the behaviour, as M2-70 did for the body editor); dark and light; keyboard focus visible on the tab and the
       pickers. Record in Notes.
-- [ ] `Capture-WinUI.ps1 -Select Scripts` produces a screenshot compared with the mockup row of tabs; differences listed in
+- [x] `Capture-WinUI.ps1 -Select Scripts` produces a screenshot compared with the mockup row of tabs; differences listed in
       Notes (not committed).
-- [ ] No Yaapic or stub-server process left running.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
@@ -66,3 +66,20 @@ Console, tests tab (M3-53, M3-54), folder scripts (M3-52), autocomplete, snippet
 ## Suggested commit message
 
 `feat(winui): add the Scripts tab to the request editor`
+
+## Notes
+
+- Runtime check on the AOT exe (dark and light, driven through UI Automation and SendKeys on a copy of the fixture workspace):
+  `scripted` opens with `Scripts 2`; text typed in pre-request and post-response is kept when switching phase back and forth;
+  Lua and back works from the language picker; the tab shows the unsaved dot and Save enables; Ctrl+S writes both
+  `scripts.preRequest` and `scripts.postResponse` to the YAML; after closing and relaunching, the scripts are back.
+  Keyboard focus is visible on the tab, the phase control and the language picker.
+- Ctrl+Enter inside the script editor does **not** send: the editor consumes it and inserts a new line (same as the body editor).
+- Undo history is not preserved across phases (one editor, its text is swapped).
+- Card deviations: the hint uses `YaapicFontSizeCaption` (`YaapicFontSizeSmall` does not exist; using it crashes the app at
+  startup). The phase and language pickers are index based (enums cannot cross into XAML under Native AOT), like the body kind.
+- `FilesWithoutScriptsReadEmptyScripts` now skips the new `scripted` fixture and asserts it carries both scripts (no new test).
+- Screenshot compared with the mockup row `Params, Authorization, Headers, Body, Scripts 2, Tests, Settings` (not committed):
+  the app has `Auth` instead of `Authorization`, no `Tests` tab (by design), no Headers count on this request; the badge,
+  underline and spacing match. The hint is trimmed with an ellipsis at 1440 px.
+- No Yaapic process left running.

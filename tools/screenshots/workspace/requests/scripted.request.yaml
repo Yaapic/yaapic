@@ -1,0 +1,23 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000009
+name: Scripted
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+scripts:
+  preRequest:
+    language: javascript
+    source: |
+      pm.request.headers.add({ key: "X-Trace", value: "scripted" });
+      pm.environment.set("startedAt", Date.now().toString());
+  postResponse:
+    language: javascript
+    source: |
+      pm.test("Status is 200", () => pm.response.to.have.status(200));
+      pm.test("Responds with JSON", () => pm.response.to.be.json);
+      pm.test("Fails on purpose", () => pm.expect(1).to.equal(2));

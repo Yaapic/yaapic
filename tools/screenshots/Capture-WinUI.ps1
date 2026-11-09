@@ -66,7 +66,7 @@ try {
               'missing-item' = '11111111-0000-0000-0000-000000000003'; 'server-error' = '11111111-0000-0000-0000-000000000004'
               'slow' = '11111111-0000-0000-0000-000000000005'
               'upload-avatar' = '11111111-0000-0000-0000-000000000006'; 'secure-call' = '11111111-0000-0000-0000-000000000007'
-              'big' = '11111111-0000-0000-0000-000000000008' }
+              'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009' }
     $session = Join-Path $temp '.yaapic\session.yaml'
     $open = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$open`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))
