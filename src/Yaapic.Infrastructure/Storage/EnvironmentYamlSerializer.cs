@@ -23,11 +23,10 @@ public static class EnvironmentYamlSerializer
             Version = CurrentVersion,
             Id = environment.Id.ToString("D"),
             Name = environment.Name,
-            Variables = [.. environment.Variables.Select(v =>
-                new KeyValueDto { Key = v.Key, Value = v.Value, Enabled = v.Enabled })],
+            Variables = [.. environment.Variables.Select(v => KeyValueMapper.ToDto(v, true))],
         };
         var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n");
-        return yaml.TrimEnd('\n') + "\n";
+        return KeyValueMapper.StripNullSecret(yaml).TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses an environment file.</summary>
@@ -65,6 +64,6 @@ public static class EnvironmentYamlSerializer
         return new EnvironmentDefinition(
             id,
             string.IsNullOrWhiteSpace(dto.Name) ? "Untitled" : dto.Name,
-            [.. (dto.Variables ?? []).Select(v => new KeyValueEntry(v.Key ?? "", v.Value ?? "", v.Enabled ?? true))]);
+            [.. (dto.Variables ?? []).Select(v => KeyValueMapper.FromDto(v, true))]);
     }
 }

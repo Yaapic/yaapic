@@ -1,6 +1,6 @@
 # M3-33: Domain and YAML: secret flag on variable rows
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-02
 
@@ -30,10 +30,10 @@ The vault, decorators, UI, masking.
 
 ## Acceptance criteria
 
-- [ ] Tests: environment, folder and globals round trips with a mix of secret and normal rows; non-secret output unchanged
+- [x] Tests: environment, folder and globals round trips with a mix of secret and normal rows; non-secret output unchanged
       (golden string equal to the milestone 2 output); `secret: true` ignored and never written for params/headers; milestone 2
       files load with `IsSecret == false`; `KeyValueEntry` equality with the flag; key order (`key, value, enabled, secret`).
-- [ ] Existing tests untouched and green, 0 warnings, XML docs updated.
+- [x] Existing tests untouched and green, 0 warnings, XML docs updated.
 
 ## Rules
 

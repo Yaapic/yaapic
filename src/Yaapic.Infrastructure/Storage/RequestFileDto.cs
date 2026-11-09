@@ -36,6 +36,8 @@ internal partial class KeyValueDto
     public string? Value { get; set; }
 
     public bool? Enabled { get; set; }
+
+    public bool? Secret { get; set; }
 }
 
 [YamlObject(NamingConvention.LowerCamelCase)]

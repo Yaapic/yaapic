@@ -20,10 +20,10 @@ public static class GlobalsYamlSerializer
         var dto = new GlobalsFileDto
         {
             Version = CurrentVersion,
-            Variables = [.. variables.Select(v => new KeyValueDto { Key = v.Key, Value = v.Value, Enabled = v.Enabled })],
+            Variables = [.. variables.Select(v => KeyValueMapper.ToDto(v, true))],
         };
         var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n");
-        return yaml.TrimEnd('\n') + "\n";
+        return KeyValueMapper.StripNullSecret(yaml).TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses a globals file.</summary>
@@ -53,6 +53,6 @@ public static class GlobalsYamlSerializer
             throw new StorageException($"Unsupported globals file version: {dto.Version}");
         }
 
-        return [.. (dto.Variables ?? []).Select(v => new KeyValueEntry(v.Key ?? "", v.Value ?? "", v.Enabled ?? true))];
+        return [.. (dto.Variables ?? []).Select(v => KeyValueMapper.FromDto(v, true))];
     }
 }

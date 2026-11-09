@@ -24,12 +24,11 @@ public static class FolderYamlSerializer
             Id = folder.Id.ToString("D"),
             Name = folder.Name,
             Description = folder.Description,
-            Variables = [.. folder.Variables.Select(v =>
-                new KeyValueDto { Key = v.Key, Value = v.Value, Enabled = v.Enabled })],
+            Variables = [.. folder.Variables.Select(v => KeyValueMapper.ToDto(v, true))],
             Scripts = ScriptsMapper.ToDto(folder.Scripts),
         };
         var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
-        return yaml.TrimEnd('\n') + "\n";
+        return KeyValueMapper.StripNullSecret(yaml).TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses a folder file.</summary>
@@ -68,7 +67,7 @@ public static class FolderYamlSerializer
             id,
             string.IsNullOrWhiteSpace(dto.Name) ? "Untitled" : dto.Name,
             dto.Description ?? "",
-            [.. (dto.Variables ?? []).Select(v => new KeyValueEntry(v.Key ?? "", v.Value ?? "", v.Enabled ?? true))],
+            [.. (dto.Variables ?? []).Select(v => KeyValueMapper.FromDto(v, true))],
             ScriptsMapper.FromDto(dto.Scripts));
     }
 }
