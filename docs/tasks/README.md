@@ -249,7 +249,7 @@ not run in their Notes.
 | [M3-17](milestone-3-scripting/M3-17-quickjs-engine.md) | `QuickJsEngine`: run a block with console, timeout and the host bridge | any | M3-16, M3-14 | done |
 | [M3-18](milestone-3-scripting/M3-18-js-pm-variables-and-info.md) | JavaScript `pm`: info, variables, environment, collection variables, globals | any | M3-17, M3-08 | done |
 | [M3-19](milestone-3-scripting/M3-19-js-pm-request-and-response.md) | JavaScript `pm`: request and response | any | M3-18, M3-09 | done |
-| [M3-20](milestone-3-scripting/M3-20-js-pm-test-and-expect-core.md) | JavaScript `pm.test` and `pm.expect`, core assertions | any | M3-19 | todo |
+| [M3-20](milestone-3-scripting/M3-20-js-pm-test-and-expect-core.md) | JavaScript `pm.test` and `pm.expect`, core assertions | any | M3-19 | done |
 | [M3-21](milestone-3-scripting/M3-21-js-pm-expect-collections-and-response-assertions.md) | JavaScript `pm.expect` collections/strings and `pm.response.to.*` | any | M3-20 | todo |
 | [M3-22](milestone-3-scripting/M3-22-js-pm-send-request-and-cookies.md) | JavaScript `pm.sendRequest` and `pm.cookies` | any | M3-21, M3-13 | todo |
 | [M3-23](milestone-3-scripting/M3-23-js-postman-conformance-suite.md) | JavaScript Postman conformance suite | any | M3-22 | todo |

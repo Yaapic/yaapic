@@ -1,6 +1,6 @@
 # M3-20: JavaScript `pm.test` and `pm.expect`, core assertions
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-19
 
@@ -48,12 +48,12 @@ assertions with Chai-compatible failure messages.
 
 ## Acceptance criteria
 
-- [ ] Tests (real QuickJS, fake host recording tests): every assertion above passing and failing with the **exact** message
+- [x] Tests (real QuickJS, fake host recording tests): every assertion above passing and failing with the **exact** message
       text, with and without `not`, with a custom message; `pm.test` sync pass/fail, `done` pass/fail, promise resolve/
       reject, missing function, skip, never-settling promise cut by the timeout, ordering of results, error inside a
       test does not stop later tests, a non-test statement throwing outside `pm.test` fails the run (`Failed`) but keeps the
       tests recorded before it; `inspect()` truncation cases.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

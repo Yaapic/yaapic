@@ -99,6 +99,20 @@ try
         return Fail($"pm request run: {req.Status} {req.Error?.Message} {host.Request.Url}");
     }
 
+    var tests = await new QuickJsEngine().RunAsync(
+        new(
+            new(ScriptLanguage.JavaScript, "pm.test('ok', () => { pm.expect([1, 2]).to.eql([1, 2]); }); pm.test('bad', () => { pm.expect(409).to.equal(204); }); pm.test('async', async () => { await null; });"),
+            ScriptPhase.PostResponse,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (tests.Status != ScriptRunStatus.Succeeded || tests.Tests.Count != 3 || !tests.Tests[0].Passed || tests.Tests[1].Passed
+        || tests.Tests[1].Message != "AssertionError: expected 409 to equal 204" || !tests.Tests[2].Passed)
+    {
+        return Fail($"pm test run: {tests.Status} {tests.Error?.Message}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }

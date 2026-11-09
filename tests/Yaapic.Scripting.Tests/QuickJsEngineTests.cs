@@ -305,7 +305,7 @@ public sealed class QuickJsEngineTests
         Assert.Equal(ScriptLanguage.JavaScript, engine.Language);
     }
 
-    private sealed class FakeHost : IScriptHost
+    internal sealed class FakeHost : IScriptHost
     {
         public Dictionary<(ScriptScope, string), string> Vars { get; } = [];
 

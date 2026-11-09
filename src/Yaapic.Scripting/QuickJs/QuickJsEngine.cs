@@ -193,8 +193,15 @@ public sealed class QuickJsEngine : IScriptEngine
         }
 
         // Nothing can settle the promise any more (no timers), so waiting for the deadline would only delay the verdict.
-        return pending
-            ? (ScriptRunStatus.TimedOut, new ScriptError($"{TimeoutText(limits.Timeout)}: a promise never settled"))
+        if (pending)
+        {
+            return (ScriptRunStatus.TimedOut, new ScriptError($"{TimeoutText(limits.Timeout)}: a promise never settled"));
+        }
+
+        // The same for a pm.test whose done callback or promise is still open once the jobs are drained.
+        var open = context.Eval("__pendingTests()", PreludeName);
+        return open.IsSuccess && open.Value != "0"
+            ? (ScriptRunStatus.TimedOut, new ScriptError($"{TimeoutText(limits.Timeout)}: a test never completed"))
             : (ScriptRunStatus.Succeeded, null);
     }
 }
