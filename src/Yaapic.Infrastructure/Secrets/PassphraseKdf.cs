@@ -21,13 +21,14 @@ internal static class PassphraseKdf
     /// <summary>Wraps a data key.</summary>
     /// <param name="dataKey">The key to wrap.</param>
     /// <param name="passphrase">The non-empty passphrase.</param>
+    /// <param name="iterations">The PBKDF2 iteration count; production code keeps the default, tests lower it.</param>
     /// <returns>The wrapped key: <c>nonce | ciphertext | tag</c> plus the derivation parameters.</returns>
     /// <exception cref="ArgumentException">The passphrase is empty.</exception>
-    internal static WrappedKey Wrap(ReadOnlySpan<byte> dataKey, string passphrase)
+    internal static WrappedKey Wrap(ReadOnlySpan<byte> dataKey, string passphrase, int iterations = DefaultIterations)
     {
         ArgumentException.ThrowIfNullOrEmpty(passphrase);
         var salt = RandomNumberGenerator.GetBytes(SaltSize);
-        var key = Derive(passphrase, salt, DefaultIterations);
+        var key = Derive(passphrase, salt, iterations);
         try
         {
             var bytes = new byte[SecretCipher.NonceSize + dataKey.Length + SecretCipher.TagSize];
@@ -35,7 +36,7 @@ internal static class PassphraseKdf
             RandomNumberGenerator.Fill(nonce);
             using var aes = new AesGcm(key, SecretCipher.TagSize);
             aes.Encrypt(nonce, dataKey, bytes.AsSpan(SecretCipher.NonceSize, dataKey.Length), bytes.AsSpan(^SecretCipher.TagSize), WrapAad);
-            return new WrappedKey(bytes, new VaultKdf(Algorithm, DefaultIterations, salt));
+            return new WrappedKey(bytes, new VaultKdf(Algorithm, iterations, salt));
         }
         finally
         {

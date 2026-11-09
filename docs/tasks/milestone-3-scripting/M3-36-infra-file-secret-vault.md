@@ -1,6 +1,6 @@
 # M3-36: Infrastructure: file secret vault, passphrase protector and workspace id
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-35
 
@@ -45,7 +45,7 @@ OS protectors, decorators, UI, protector migration.
 
 ## Acceptance criteria
 
-- [ ] Tests on a temp directory with a deterministic fake protector and the real passphrase protector (reduce PBKDF2 cost in
+- [x] Tests on a temp directory with a deterministic fake protector and the real passphrase protector (reduce PBKDF2 cost in
       tests through an internal iteration override, never in production code paths): create -> set -> lock -> unlock with the
       right and a wrong passphrase -> values back; a second `FileSecretVault` instance (restart) reads the same file; file
       content contains neither plaintext values nor the passphrase (scan the bytes for a distinctive value); tampering with one
@@ -53,7 +53,7 @@ OS protectors, decorators, UI, protector migration.
       load; swapped entries (same ciphertext under another name) fail the AAD check; corrupt JSON and unknown version leave the
       file untouched; `RemoveOwnerAsync`; concurrent `SetAsync` calls all persist; Unix file mode 0600 (skipped on Windows);
       `Workspace.ReadWorkspaceId` creates and then keeps the id; `GetSecretValues` empty when locked.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Rules
 
