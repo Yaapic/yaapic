@@ -1,6 +1,6 @@
 # M3-10: Script chain: collection, folders, request
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-03, M3-06
 
@@ -34,10 +34,10 @@ Running the scripts (M3-11), editing folder scripts (M3-40).
 
 ## Acceptance criteria
 
-- [ ] Tests (`Yaapic.ViewModels.Tests`, in-memory store double): unfiled request -> empty ancestors; request in a collection
+- [x] Tests (`Yaapic.ViewModels.Tests`, in-memory store double): unfiled request -> empty ancestors; request in a collection
       -> `[collection]`; request in a nested folder -> `[collection, folder, subfolder]` in that order; scripts and names
       reflect a folder edit after refresh; unknown id -> empty; `WithRequest` appends last.
-- [ ] 0 warnings, XML docs, architecture tests green, all tests green.
+- [x] 0 warnings, XML docs, architecture tests green, all tests green.
 
 ## Rules
 

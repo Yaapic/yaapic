@@ -170,6 +170,33 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         _tree.FirstOrDefault(root => root.Kind == CollectionNodeKind.Folder && root.Descendants().Any(n => n.Id == requestId && n.Kind == CollectionNodeKind.Request))
             ?.Folder;
 
+    /// <summary>Gets the folders that contain a request, outermost (the collection) first.</summary>
+    /// <param name="requestId">The request identifier.</param>
+    /// <returns>The saved folders in the loaded tree; empty for an unfiled or unknown request.</returns>
+    public IReadOnlyList<FolderDefinition> FindFolderPath(Guid requestId)
+    {
+        foreach (var root in _tree)
+        {
+            if (FindPath(root, requestId) is { } path) return path;
+        }
+
+        return [];
+    }
+
+    private static List<FolderDefinition>? FindPath(CollectionNode node, Guid requestId)
+    {
+        if (node.Kind != CollectionNodeKind.Folder) return null;
+        if (node.Children.Any(c => c.Kind == CollectionNodeKind.Request && c.Id == requestId)) return [node.Folder!];
+        foreach (var child in node.Children)
+        {
+            if (FindPath(child, requestId) is not { } path) continue;
+            path.Insert(0, node.Folder!);
+            return path;
+        }
+
+        return null;
+    }
+
     /// <summary>Gets the store the collections are saved to, for view models that edit a collection outside the tree.</summary>
     internal ICollectionStore Store => _collections;
 
