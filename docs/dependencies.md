@@ -11,8 +11,23 @@ Every third-party dependency needs a written justification here before it is add
 | LoomEditor.WinUI | 0.5.0 | Yaapic.App.WinUI | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002): syntax colours from the Yaapic tokens, line numbers and large text on WinUI, where no other mature editor exists. MIT. Restore, build and Native AOT publish with Windows App SDK 2.6.5 give 0 warnings and 0 IL2xxx/IL3xxx; the AOT exe renders, edits and recolours on theme change (M2-69). |
 | LoomEditor.Avalonia | 0.5.0 | Yaapic.App.Avalonia | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002), the Avalonia twin of LoomEditor.WinUI: syntax colours from the Yaapic tokens, line numbers, folding and large text, with no TextMate registry or grammar files to bundle. MIT. Requires `Avalonia >= 12.1.5` (the Avalonia packages moved from 12.1.4 to 12.1.5 for it). Restore, build and Native AOT publish give 0 new IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages); the publish ships `onig.dll` (native regex engine of the grammars). The AOT exe renders, edits, folds and recolours on theme change (M2-70). |
 | Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
+| QuickJS-NG | v0.18.0 | Yaapic.Scripting | JavaScript engine (ADR 0001, ADR 0009). MIT. Native library built from source by `native/Build-Natives.ps1`, shipped next to the exe, loaded with `LibraryImport`. |
+| Lua | 5.4.8 | Yaapic.Scripting | Lua engine (ADR 0001, ADR 0009). MIT. Native library built from source by `native/Build-Natives.ps1`, shipped next to the exe, loaded with `LibraryImport`. |
 
 Milestone 2 (editor, collections, environments, history, command palette) added the two code editor packages above (`LoomEditor.WinUI`, `LoomEditor.Avalonia`).
+
+## Native libraries (M3-15)
+
+`native/versions.json` pins, for QuickJS-NG and Lua, the source URL, the tag, the SHA-256 of the source archive and the
+licence file. `native/Build-Natives.ps1` (PowerShell 7, Windows, Linux and macOS) downloads the archives into
+`artifacts/native/_src`, fails on a hash mismatch, builds them with CMake (MSVC on Windows, clang elsewhere) and writes
+`quickjs-ng` and `lua54` to `artifacts/native/<rid>/` (`win-x64`, `linux-x64`, `osx-arm64`). A second run does nothing.
+`Yaapic.Scripting` runs the script when that folder is missing and copies the libraries and
+`native/THIRD-PARTY-NOTICES.md` next to every app build and publish. No binary is committed.
+
+To update a version: change `tag`, `url`, `archive`, `folder` and `sha256` in `native/versions.json` (compute the hash
+with `Get-FileHash`), update `native/THIRD-PARTY-NOTICES.md` and the rows above, then run
+`pwsh native/Build-Natives.ps1 -Force`. Delete `artifacts/native/<rid>` to make the next MSBuild build rebuild it.
 
 ## Secret vault (ADR 0010)
 

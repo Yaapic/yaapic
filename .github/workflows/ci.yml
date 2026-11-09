@@ -44,6 +44,26 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev xvfb
 
+      - name: Cache native script engine sources
+        uses: actions/cache@v4
+        with:
+          path: artifacts/native/_src
+          key: native-src-${{ hashFiles('native/versions.json') }}
+
+      - name: Build native script engines (QuickJS-NG, Lua)
+        shell: pwsh
+        run: ./native/Build-Natives.ps1 -Rid ${{ matrix.rid }}
+
+      - name: Upload native libraries
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.rid }}
+          path: |
+            artifacts/native/${{ matrix.rid }}
+            !artifacts/native/${{ matrix.rid }}/.built
+          include-hidden-files: false
+          if-no-files-found: error
+
       - name: Check formatting
         if: runner.os == 'Linux'
         run: dotnet format ${{ matrix.solution }} --verify-no-changes

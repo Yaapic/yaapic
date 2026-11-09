@@ -7,6 +7,7 @@
     <ProjectReference Include="..\Yaapic.Infrastructure\Yaapic.Infrastructure.csproj" />
     <ProjectReference Include="..\Yaapic.Core\Yaapic.Core.csproj" />
     <ProjectReference Include="..\Yaapic.Domain\Yaapic.Domain.csproj" />
+    <ProjectReference Include="..\Yaapic.Scripting\Yaapic.Scripting.csproj" />
     <ProjectReference Include="..\Yaapic.UI.Abstractions\Yaapic.UI.Abstractions.csproj" />
   </ItemGroup>
 </Project>

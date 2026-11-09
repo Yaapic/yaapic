@@ -1,6 +1,6 @@
 # M3-15: Native build pipeline for QuickJS-NG and Lua 5.4
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-14
 
@@ -47,15 +47,15 @@ Bindings (M3-16, M3-24), static linking, arm64 Windows/Linux, signing and notari
 
 ## Acceptance criteria
 
-- [ ] `pwsh native/Build-Natives.ps1` on the host produces both libraries in `artifacts/native/<host rid>/`; a second run
+- [x] `pwsh native/Build-Natives.ps1` on the host produces both libraries in `artifacts/native/<host rid>/`; a second run
       does nothing (cache); a tampered archive hash fails the script.
-- [ ] A test in `Yaapic.Scripting.Tests` (`NativeLibraryAvailabilityTests`) loads each library with
+- [x] A test in `Yaapic.Scripting.Tests` (`NativeLibraryAvailabilityTests`) loads each library with
       `NativeLibrary.TryLoad` from `AppContext.BaseDirectory` and asserts that the exported symbols `JS_NewRuntime` and
       `luaL_newstate` exist (`NativeLibrary.TryGetExport`).
-- [ ] `dotnet build Yaapic.sln -c Release` (and the cross-platform filter) builds from a clean checkout with the script
+- [x] `dotnet build Yaapic.sln -c Release` (and the cross-platform filter) builds from a clean checkout with the script
       invoked by the target; the publish folder of an App project contains the libraries and the notices file.
-- [ ] CI workflow updated (cannot be run locally: say so in Notes and check the YAML with `actionlint` if available).
-- [ ] Notes record the pinned tags, hashes, the CMake options actually used and any workaround.
+- [x] CI workflow updated (cannot be run locally: say so in Notes and check the YAML with `actionlint` if available).
+- [x] Notes record the pinned tags, hashes, the CMake options actually used and any workaround.
 
 ## Rules
 
@@ -72,3 +72,26 @@ Bindings (M3-16, M3-24), static linking, arm64 Windows/Linux, signing and notari
 ## Suggested commit message
 
 `build: build QuickJS-NG and Lua natives from pinned sources`
+
+## Notes
+
+- Pinned sources (SHA-256 of the source archive, in `native/versions.json`):
+  - QuickJS-NG `v0.18.0` (`https://github.com/quickjs-ng/quickjs/archive/refs/tags/v0.18.0.tar.gz`):
+    `28bcd89aa3683fd2a946537e5ce3f11cc46b5cbf3383c7561aaef3df5ff9f1dd`.
+  - Lua `5.4.8` (`https://www.lua.org/ftp/lua-5.4.8.tar.gz`):
+    `4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae`. 5.4.8 was the latest 5.4 release known at
+    implementation time; the lua.org download index could not be listed from the build host.
+- CMake options: QuickJS-NG `-DBUILD_SHARED_LIBS=ON -DQJS_BUILD_LIBC=OFF -DQJS_ENABLE_INSTALL=OFF`, target `qjs` only
+  (std/os are not compiled in). Lua uses `native/lua/CMakeLists.txt` (all `*.c` but `lua.c`/`luac.c`, `LUA_BUILD_AS_DLL` on
+  Windows, `LUA_USE_LINUX`/`LUA_USE_MACOSX` elsewhere, no `LUA_COMPAT_5_3`). Windows uses the default Visual Studio
+  generator with `--config Release` (no vcvars needed); Linux and macOS use clang with `CMAKE_BUILD_TYPE`.
+- Workarounds: the QuickJS-NG CMake target is named `qjs`, so the built file is renamed to `quickjs-ng` on copy (and its
+  macOS install name is rewritten with `install_name_tool`). A `.built` stamp (hash of `versions.json`, the script and the
+  Lua CMake file) makes a second run a no-op. A cached archive with a wrong hash fails and is never replaced silently.
+- The apps did not reference `Yaapic.Scripting` yet, so nothing flowed to their output: `Yaapic.Composition` now has a
+  `ProjectReference` to it (already allowed by the architecture test), which carries the libraries and
+  `THIRD-PARTY-NOTICES.md` to both app builds and publishes (verified with AOT publishes of `Yaapic.App.Avalonia` and
+  `Yaapic.App.WinUI`).
+- CI was changed (cache of `artifacts/native/_src`, `Build-Natives.ps1` step, upload of `artifacts/native/<rid>`) but could
+  not be run here; `actionlint` is not installed. Only `win-x64` was built and tested locally; the Linux and macOS paths
+  (clang, `libqjs.so`/`libqjs.dylib` names, `install_name_tool`) are unverified.
