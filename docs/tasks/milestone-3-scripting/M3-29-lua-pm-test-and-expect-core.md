@@ -1,6 +1,6 @@
 # M3-29: Lua `pm.test` and `pm.expect`, core assertions
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-28
 
@@ -40,12 +40,12 @@ The Lua twin of M3-20: `pm.test` and the first half of the `expect` assertions, 
 
 ## Acceptance criteria
 
-- [ ] Tests (real Lua, recording fake host): each assertion passing/failing/negated with the **same message text** as the
+- [x] Tests (real Lua, recording fake host): each assertion passing/failing/negated with the **same message text** as the
       JavaScript tests of M3-20 (share a table of `(expression, expected message)` pairs between both test classes via a small
       data file `tests/Yaapic.Scripting.Tests/Conformance/ExpectMessages.json` read at test time — JSON through
       `System.Text.Json` source generators); `pm.test` pass/fail/skip/ordering/errors inside tests, runtime errors vs
       assertion errors, results recorded through the `test` op; `inspect()` cases.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

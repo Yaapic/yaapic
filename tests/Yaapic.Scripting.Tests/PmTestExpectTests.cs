@@ -1,6 +1,7 @@
 using Yaapic.Core.Scripting;
 using Yaapic.Domain.Scripting;
 using Yaapic.Scripting.QuickJs;
+using Yaapic.Scripting.Tests.Conformance;
 
 namespace Yaapic.Scripting.Tests;
 
@@ -25,60 +26,24 @@ public sealed class PmTestExpectTests
     }
 
     [Theory]
-    [InlineData("pm.expect(409).to.equal(204)", "AssertionError: expected 409 to equal 204")]
-    [InlineData("pm.expect(200).to.not.equal(200)", "AssertionError: expected 200 to not equal 200")]
-    [InlineData("pm.expect(NaN).to.equal(NaN)", "AssertionError: expected NaN to equal NaN")]
-    [InlineData("pm.expect(1).to.eq(2)", "AssertionError: expected 1 to equal 2")]
-    [InlineData("pm.expect([1, 2]).to.eql([1, 3])", "AssertionError: expected [ 1, 2 ] to deeply equal [ 1, 3 ]")]
-    [InlineData("pm.expect([1, 2]).to.deep.equal([1, 3])", "AssertionError: expected [ 1, 2 ] to deeply equal [ 1, 3 ]")]
-    [InlineData("pm.expect({ a: 1 }).to.not.eql({ a: 1 })", "AssertionError: expected { a: 1 } to not deeply equal { a: 1 }")]
-    [InlineData("pm.expect({ a: 1 }).to.equal({ a: 1 })", "AssertionError: expected { a: 1 } to equal { a: 1 }")]
     [InlineData("pm.expect(0).to.be.ok", "AssertionError: expected 0 to be truthy")]
-    [InlineData("pm.expect(1).to.not.be.ok", "AssertionError: expected 1 to be falsy")]
-    [InlineData("pm.expect(1).to.be.true", "AssertionError: expected 1 to be true")]
-    [InlineData("pm.expect(true).to.not.be.true", "AssertionError: expected true to be false")]
-    [InlineData("pm.expect(0).to.be.false", "AssertionError: expected 0 to be false")]
-    [InlineData("pm.expect(false).to.not.be.false", "AssertionError: expected false to be true")]
-    [InlineData("pm.expect(1).to.be.null", "AssertionError: expected 1 to be null")]
-    [InlineData("pm.expect(null).to.not.be.null", "AssertionError: expected null not to be null")]
-    [InlineData("pm.expect(1).to.be.undefined", "AssertionError: expected 1 to be undefined")]
-    [InlineData("pm.expect(undefined).to.not.be.undefined", "AssertionError: expected undefined not to be undefined")]
-    [InlineData("pm.expect(1).to.be.NaN", "AssertionError: expected 1 to be NaN")]
-    [InlineData("pm.expect(NaN).to.not.be.NaN", "AssertionError: expected NaN not to be NaN")]
-    [InlineData("pm.expect(undefined).to.exist", "AssertionError: expected undefined to exist")]
-    [InlineData("pm.expect(1).to.not.exist", "AssertionError: expected 1 to not exist")]
-    [InlineData("pm.expect([1]).to.be.empty", "AssertionError: expected [ 1 ] to be empty")]
-    [InlineData("pm.expect('').to.not.be.empty", "AssertionError: expected '' not to be empty")]
-    [InlineData("pm.expect({ a: 1 }).to.be.empty", "AssertionError: expected { a: 1 } to be empty")]
     [InlineData("pm.expect(new Set()).to.not.be.empty", "AssertionError: expected Set(0) {} not to be empty")]
-    [InlineData("pm.expect('abc').to.be.a('number')", "AssertionError: expected 'abc' to be a number")]
-    [InlineData("pm.expect({}).to.be.an('Array')", "AssertionError: expected {} to be an array")]
-    [InlineData("pm.expect([]).to.not.be.an('array')", "AssertionError: expected [] not to be an array")]
-    [InlineData("pm.expect(3).to.be.above(5)", "AssertionError: expected 3 to be above 5")]
-    [InlineData("pm.expect(7).to.not.be.above(5)", "AssertionError: expected 7 to be at most 5")]
-    [InlineData("pm.expect(1).to.be.at.least(5)", "AssertionError: expected 1 to be at least 5")]
-    [InlineData("pm.expect(5).to.not.be.at.least(1)", "AssertionError: expected 5 to be below 1")]
-    [InlineData("pm.expect(3).to.be.below(1)", "AssertionError: expected 3 to be below 1")]
-    [InlineData("pm.expect(1).to.not.be.below(3)", "AssertionError: expected 1 to be at least 3")]
-    [InlineData("pm.expect(9).to.be.at.most(5)", "AssertionError: expected 9 to be at most 5")]
-    [InlineData("pm.expect(1).to.not.be.at.most(5)", "AssertionError: expected 1 to be above 5")]
-    [InlineData("pm.expect(9).to.be.within(1, 5)", "AssertionError: expected 9 to be within 1..5")]
-    [InlineData("pm.expect(3).to.not.be.within(1, 5)", "AssertionError: expected 3 to not be within 1..5")]
-    [InlineData("pm.expect(1).to.be.closeTo(5, 0.5)", "AssertionError: expected 1 to be close to 5 +/- 0.5")]
-    [InlineData("pm.expect(5).to.not.be.approximately(5.2, 0.5)", "AssertionError: expected 5 not to be close to 5.2 +/- 0.5")]
-    [InlineData("pm.expect([1, 2]).to.have.length(3)", "AssertionError: expected [ 1, 2 ] to have a length of 3 but got 2")]
-    [InlineData("pm.expect([1, 2]).to.not.have.lengthOf(2)", "AssertionError: expected [ 1, 2 ] to not have a length of 2")]
     [InlineData("pm.expect([1]).to.have.lengthOf.above(2)", "AssertionError: expected [ 1 ] to have a length above 2 but got 1")]
     [InlineData("pm.expect([1, 2, 3]).to.have.lengthOf.below(2)", "AssertionError: expected [ 1, 2, 3 ] to have a length below 2 but got 3")]
     [InlineData("pm.expect([1, 2, 3]).to.have.lengthOf.within(1, 2)", "AssertionError: expected [ 1, 2, 3 ] to have a length within 1..2")]
-    [InlineData("pm.expect('abc').to.be.above(1)", "AssertionError: expected 'abc' to be a number or a date")]
-    [InlineData("pm.expect(1, 'boom').to.equal(2)", "AssertionError: boom: expected 1 to equal 2")]
-    [InlineData("pm.expect(1, 'boom').to.not.exist", "AssertionError: boom: expected 1 to not exist")]
-    [InlineData("pm.expect.fail('nope')", "AssertionError: nope")]
-    [InlineData("pm.expect.fail()", "AssertionError: expect.fail()")]
     [InlineData("throw new TypeError('x is not a function')", "TypeError: x is not a function")]
     [InlineData("throw 'plain'", "plain")]
     public async Task A_failing_assertion_reports_the_exact_chai_message(string statements, string message)
+    {
+        var test = await One(statements);
+
+        Assert.False(test.Passed);
+        Assert.Equal(message, test.Message);
+    }
+
+    [Theory]
+    [MemberData(nameof(ExpectMessages.JavaScript), MemberType = typeof(ExpectMessages))]
+    public async Task A_shared_failing_assertion_reports_the_same_message_as_lua(string statements, string message)
     {
         var test = await One(statements);
 
@@ -131,14 +96,9 @@ public sealed class PmTestExpectTests
     }
 
     [Theory]
-    [InlineData("pm.expect(Array.from({ length: 40 }, (_, i) => i)).to.equal(1)", "AssertionError: expected [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ... to equal 1")]
-    [InlineData("pm.expect({ a: { b: { c: { d: 1 } } } }).to.equal(1)", "AssertionError: expected { a: { b: { c: [Object] } } } to equal 1")]
-    [InlineData("pm.expect([[[[1]]]]).to.equal(1)", "AssertionError: expected [ [ [ [Array] ] ] ] to equal 1")]
-    [InlineData("pm.expect(\"it's\").to.equal(1)", "AssertionError: expected 'it\\'s' to equal 1")]
     [InlineData("pm.expect({ 'a-b': 'x', c: null, d: undefined }).to.equal(1)", "AssertionError: expected { 'a-b': 'x', c: null, d: undefined } to equal 1")]
     [InlineData("const o = { n: 1 }; o.self = o; pm.expect(o).to.equal(1)", "AssertionError: expected { n: 1, self: [Circular] } to equal 1")]
     [InlineData("pm.expect(new Map([['a', 1]])).to.equal(1)", "AssertionError: expected Map(1) { 'a' => 1 } to equal 1")]
-    [InlineData("pm.expect(-0).to.equal(1)", "AssertionError: expected -0 to equal 1")]
     [InlineData("pm.expect(new Date(0)).to.equal(1)", "AssertionError: expected 1970-01-01T00:00:00.000Z to equal 1")]
     [InlineData("pm.expect(function named() {}).to.equal(1)", "AssertionError: expected [Function: named] to equal 1")]
     public async Task Values_are_inspected_like_chai(string statements, string message)

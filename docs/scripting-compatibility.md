@@ -63,6 +63,23 @@ no timers (`setTimeout`) and no host module.
 - **`pm.response` in pre-request.** Fetching `pm.response` itself does not fail; the first member access raises
   `pm.response is only available in post-response scripts`.
 
+## Lua differences (`pm.test` and `pm.expect`)
+
+- **Every assertion is a call.** `pm.expect(x).to.equal(1)`, `pm.expect(x).to.be.ok()`. Chai property assertions become
+  zero-argument calls: `ok()`, `is_true()`, `is_false()`, `is_null()` (matches `pm.null`), `is_nil()` (matches `nil`),
+  `is_nan()`, `exist()`, `empty()`.
+- **Reserved words.** `not` is `is_not` and `and` is `also` (`pm.expect(x).to.is_not.equal(1)`, `.above(1).also.below(5)`);
+  `deep` is a property (`deep.equal`). `a(type)` accepts `string`, `number`, `integer`, `float`, `boolean`, `table`, `array`,
+  `object`, `function`, `nil` and `null`.
+- **Names.** `close_to` (`closeTo`), `length` (`length_of`, `lengthOf`), `gt`, `gte`, `lt`, `lte`; there is no `lengthOf.above(n)`
+  chain.
+- **Equality.** `equal` is `==` (tables by identity); `eql` is deep (arrays by length, objects by keys, `NaN` never equals `NaN`).
+- **Failure messages are the Chai texts** (`expected 409 to equal 204`), with values rendered like JavaScript (`nil` is
+  `undefined`, `pm.null` is `null`, `{ a = 1 }` is `{ a: 1 }`), so a failure reads the same in both languages.
+- **`pm.test`.** `pm.test(name, fn)` runs `fn` under `pcall`; there is no `done` callback and no promise support. A failed test's
+  message is `AssertionError: ...`, or the error text without its `origin:line:` prefix (the console keeps the position).
+  Test durations are recorded as 0 ms.
+
 ## Reporting a gap
 
 Open an issue with the script (or the smallest piece that fails), the Postman behavior you expect, and what Yaapic

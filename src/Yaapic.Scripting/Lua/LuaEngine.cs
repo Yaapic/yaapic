@@ -146,6 +146,11 @@ public sealed class LuaEngine : IScriptEngine
 
         if (result.IsSuccess)
         {
+            result = state.Run(LuaPmTestPrelude.Source, PreludeName);
+        }
+
+        if (result.IsSuccess)
+        {
             result = state.Run(LuaPrelude.Context(phase, invocation.Origin), PreludeName);
         }
 

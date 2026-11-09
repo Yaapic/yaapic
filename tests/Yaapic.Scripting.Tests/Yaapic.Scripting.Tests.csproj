@@ -11,6 +11,9 @@
     <Using Include="Xunit" />
   </ItemGroup>
   <ItemGroup>
+    <None Update="Conformance\ExpectMessages.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\src\Yaapic.Scripting\Yaapic.Scripting.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.Core\Yaapic.Core.csproj" />
     <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />
