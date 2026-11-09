@@ -258,7 +258,7 @@ public sealed class PmVariablesTests
         Assert.Equal("one two", Assert.Single(second.Console).Message);
     }
 
-    private sealed class OverlayHost(ScriptVariableOverlay overlay, ScriptInfo info) : IScriptHost
+    internal sealed class OverlayHost(ScriptVariableOverlay overlay, ScriptInfo info) : IScriptHost
     {
         public ScriptInfo Info => info;
 

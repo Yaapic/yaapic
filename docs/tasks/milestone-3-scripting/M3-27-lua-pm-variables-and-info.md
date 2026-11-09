@@ -1,6 +1,6 @@
 # M3-27: Lua `pm`: info, variables, environment, collection variables, globals
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-26, M3-08
 
@@ -33,11 +33,11 @@ Request/response, tests, `sendRequest`, cookies.
 
 ## Acceptance criteria
 
-- [ ] Tests (real Lua + real `ScriptHost`/`ScriptVariableOverlay`): the same table as M3-18 translated to Lua (get/set/unset/
+- [x] Tests (real Lua + real `ScriptHost`/`ScriptVariableOverlay`): the same table as M3-18 translated to Lua (get/set/unset/
       has/clear/to_object per scope, coercions including integer vs float formatting, layered precedence, `replace_in`
       with dynamic and unresolved names, missing-environment fallback, `info` in both events, unsupported messages, `pm`
       immutability, shared overlay between two blocks).
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

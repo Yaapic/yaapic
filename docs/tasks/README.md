@@ -256,7 +256,7 @@ not run in their Notes.
 | [M3-24](milestone-3-scripting/M3-24-lua-bindings.md) | Lua 5.4 native shim, bindings and AOT smoke | any | M3-15 | done |
 | [M3-25](milestone-3-scripting/M3-25-lua-engine.md) | `LuaEngine`: run a block with console, limits and the host bridge | any | M3-24, M3-17 | done |
 | [M3-26](milestone-3-scripting/M3-26-lua-json-codec-and-host-wrapper.md) | Lua prelude: JSON codec and typed host wrapper | any | M3-25, M3-14 | done |
-| [M3-27](milestone-3-scripting/M3-27-lua-pm-variables-and-info.md) | Lua `pm`: info, variables, environment, collection variables, globals | any | M3-26, M3-08 | todo |
+| [M3-27](milestone-3-scripting/M3-27-lua-pm-variables-and-info.md) | Lua `pm`: info, variables, environment, collection variables, globals | any | M3-26, M3-08 | done |
 | [M3-28](milestone-3-scripting/M3-28-lua-pm-request-and-response.md) | Lua `pm`: request and response | any | M3-27, M3-09 | todo |
 | [M3-29](milestone-3-scripting/M3-29-lua-pm-test-and-expect-core.md) | Lua `pm.test` and `pm.expect`, core assertions | any | M3-28 | todo |
 | [M3-30](milestone-3-scripting/M3-30-lua-pm-expect-collections-and-response-assertions.md) | Lua `pm.expect` collections/strings and `pm.response.to` | any | M3-29 | todo |
