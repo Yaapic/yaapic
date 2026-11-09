@@ -1,6 +1,6 @@
 # M3-25: `LuaEngine`: run a block with console, limits and the host bridge
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-24, M3-17
 
@@ -36,13 +36,13 @@ capture and the `__host` bridge shared with JavaScript.
 
 ## Acceptance criteria
 
-- [ ] Tests (real Lua, fake host): `console.*` and `print` levels and formatting (nested tables, booleans, nil, cycles, very
+- [x] Tests (real Lua, fake host): `console.*` and `print` levels and formatting (nested tables, booleans, nil, cycles, very
       long strings cut by the collector), 10 000 entries capped, thrown error and `error({code=1})`, syntax error with line,
       timeout (300 ms limit), cancellation, memory limit, `io`/`os`/`require` are `nil`, two runs share nothing, concurrent
       runs, `IsAvailable` false with a reason when the library is missing, `__host` round trip with an `err` result
       raising a Lua error catchable by `pcall`.
-- [ ] `tools/NativeSmoke` runs one `LuaEngine` block; AOT publish 0 IL2xxx/IL3xxx, `OK`.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] `tools/NativeSmoke` runs one `LuaEngine` block; AOT publish 0 IL2xxx/IL3xxx, `OK`.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 

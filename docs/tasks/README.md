@@ -254,7 +254,7 @@ not run in their Notes.
 | [M3-22](milestone-3-scripting/M3-22-js-pm-send-request-and-cookies.md) | JavaScript `pm.sendRequest` and `pm.cookies` | any | M3-21, M3-13 | done |
 | [M3-23](milestone-3-scripting/M3-23-js-postman-conformance-suite.md) | JavaScript Postman conformance suite | any | M3-22 | done |
 | [M3-24](milestone-3-scripting/M3-24-lua-bindings.md) | Lua 5.4 native shim, bindings and AOT smoke | any | M3-15 | done |
-| [M3-25](milestone-3-scripting/M3-25-lua-engine.md) | `LuaEngine`: run a block with console, limits and the host bridge | any | M3-24, M3-17 | todo |
+| [M3-25](milestone-3-scripting/M3-25-lua-engine.md) | `LuaEngine`: run a block with console, limits and the host bridge | any | M3-24, M3-17 | done |
 | [M3-26](milestone-3-scripting/M3-26-lua-json-codec-and-host-wrapper.md) | Lua prelude: JSON codec and typed host wrapper | any | M3-25, M3-14 | todo |
 | [M3-27](milestone-3-scripting/M3-27-lua-pm-variables-and-info.md) | Lua `pm`: info, variables, environment, collection variables, globals | any | M3-26, M3-08 | todo |
 | [M3-28](milestone-3-scripting/M3-28-lua-pm-request-and-response.md) | Lua `pm`: request and response | any | M3-27, M3-09 | todo |

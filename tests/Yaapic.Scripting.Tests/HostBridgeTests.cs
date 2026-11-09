@@ -201,6 +201,18 @@ public class HostBridgeTests
     }
 
     [Fact]
+    public void Plain_console_lines_split_the_level_from_the_text_at_the_first_newline()
+    {
+        var (bridge, _, collector) = Create();
+
+        bridge.Invoke(HostOps.ConsolePlain, "warn\nline one\nline two");
+        bridge.Invoke(HostOps.ConsolePlain, "nonsense\nx");
+
+        Assert.Equal(["line one\nline two", "x"], collector.Console.Select(e => e.Message));
+        Assert.Equal([ConsoleLevel.Warn, ConsoleLevel.Log], collector.Console.Select(e => e.Level));
+    }
+
+    [Fact]
     public void Console_truncates_long_entries_and_caps_the_entry_count()
     {
         var (bridge, _, collector) = Create(ScriptLimits.Default with { MaxConsoleEntries = 2, MaxConsoleEntryLength = 5 });

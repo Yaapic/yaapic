@@ -88,6 +88,15 @@ internal sealed class HostBridge(IScriptHost host, RunCollector collector)
                 return "null";
             }
 
+            case HostOps.ConsolePlain:
+            {
+                // "level\ntext": the Lua prelude has no JSON codec yet.
+                var split = argsJson.IndexOf('\n');
+                var level = split < 0 ? "" : argsJson[..split];
+                collector.AddConsole(Enum.TryParse<ConsoleLevel>(level, true, out var l) ? l : ConsoleLevel.Log, split < 0 ? argsJson : argsJson[(split + 1)..]);
+                return "null";
+            }
+
             case HostOps.Test:
             {
                 var t = Args(argsJson, HostJsonContext.Default.TestArgs);

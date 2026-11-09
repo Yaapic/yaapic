@@ -110,7 +110,7 @@ public sealed class QuickJsEngine : IScriptEngine
         return false;
     }
 
-    private static string TimeoutText(TimeSpan timeout) =>
+    internal static string TimeoutText(TimeSpan timeout) =>
         string.Create(CultureInfo.InvariantCulture, $"Script timed out after {timeout.TotalSeconds:0.##} s");
 
     private static ScriptError ToScriptError(JsError error, string origin)
