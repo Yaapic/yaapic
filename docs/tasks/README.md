@@ -266,7 +266,7 @@ not run in their Notes.
 | [M3-34](milestone-3-scripting/M3-34-core-vault-ports-and-doubles.md) | Core: vault ports and test doubles | any | M3-33 | done |
 | [M3-35](milestone-3-scripting/M3-35-infra-aes-gcm-secret-cipher.md) | Infrastructure: AES-GCM secret cipher and key derivation | any | M3-34 | done |
 | [M3-36](milestone-3-scripting/M3-36-infra-file-secret-vault.md) | Infrastructure: file secret vault, passphrase protector and workspace id | any | M3-35 | done |
-| [M3-37](milestone-3-scripting/M3-37-secret-aware-environment-and-globals-stores.md) | Core: secret-aware environment and globals stores | any | M3-34, M3-33 | todo |
+| [M3-37](milestone-3-scripting/M3-37-secret-aware-environment-and-globals-stores.md) | Core: secret-aware environment and globals stores | any | M3-34, M3-33 | done |
 | [M3-38](milestone-3-scripting/M3-38-secret-aware-collection-store-and-redactor.md) | Core: secret-aware collection store and secret redaction | any | M3-37, M3-12 | todo |
 | [M3-39](milestone-3-scripting/M3-39-request-editor-scripts-viewmodel.md) | Request editor ViewModel: scripts | any | M3-03, M3-05 | todo |
 | [M3-40](milestone-3-scripting/M3-40-folder-settings-scripts-viewmodel.md) | Folder and collection settings ViewModel: scripts | any | M3-39, M3-06 | todo |

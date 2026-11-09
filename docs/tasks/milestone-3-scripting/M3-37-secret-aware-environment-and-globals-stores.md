@@ -1,6 +1,6 @@
 # M3-37: Core: secret-aware environment and globals stores
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-34, M3-33
 
@@ -37,12 +37,12 @@ UI, folder variables, masking.
 
 ## Acceptance criteria
 
-- [ ] Tests with the in-memory store and vault doubles: load fills secret values and leaves others; load while locked gives
+- [x] Tests with the in-memory store and vault doubles: load fills secret values and leaves others; load while locked gives
       empty values; save unlocked writes the vault and blanks the inner rows (assert the inner store content has `Value ""`
       and `IsSecret true`); save locked keeps the vault untouched and refuses new secret flags; removed/renamed/unflagged rows
       clean the vault; vault failure leaves the inner store untouched and surfaces `StorageException`; environment delete
       removes the owner; duplicate environment keeps secrets; globals equivalents.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 
