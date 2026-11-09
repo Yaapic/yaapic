@@ -1,6 +1,6 @@
 # M3-50: WinUI: JavaScript and Lua in `CodeEditorView`
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M3-03
 
@@ -35,12 +35,29 @@ The Scripts tab (M3-51), autocomplete of `pm.*`, linting, new colours, Avalonia 
 
 ## Acceptance criteria
 
-- [ ] Build `Yaapic.sln` 0 warnings; tests green (add a small unit test for `TextMap.ScriptLanguage`).
-- [ ] Runtime (AOT exe of the card, a scratch hosted request body is fine since the Scripts tab does not exist yet: temporarily
+- [x] Build `Yaapic.sln` 0 warnings; tests green (add a small unit test for `TextMap.ScriptLanguage`).
+- [x] Runtime (AOT exe of the card, a scratch hosted request body is fine since the Scripts tab does not exist yet: temporarily
       point the response viewer at a JavaScript and a Lua sample through `Capture-WinUI.ps1` fixtures or a throwaway local
       harness, **not committed**): both languages are coloured in dark and light, keywords, strings, numbers and comments
       distinguishable; JSON and XML still coloured; no crash. Record what was run in Notes.
-- [ ] AOT publish 0 IL2xxx/IL3xxx; no Yaapic or stub-server process left running.
+- [x] AOT publish 0 IL2xxx/IL3xxx; no Yaapic or stub-server process left running.
+
+## Notes
+
+- LoomEditor.WinUI 0.5.0 bundles csharp, css, html, javascript, json, markdown, python, typescript, xml and yaml: **no Lua grammar**.
+  `lua` therefore falls back to plain text (product decision to report: Lua scripts are uncoloured until the package ships a
+  grammar). `"javascript"` maps to the `javascript` grammar. `TextMap.ScriptLanguage` still returns `"lua"` so nothing changes in the
+  views once the package gains it (add one `"lua" => "lua"` arm in `ApplyLanguage`).
+- Theme scope table added (existing tokens only): `keyword`, `storage` -> tag colour; `entity.name.function`, `support.function` ->
+  attribute colour; `keyword.operator` -> punctuation colour (more specific than `keyword`). `constant.numeric`, `constant.language`,
+  `string`, `comment`, `punctuation` were already mapped; `variable.*` keeps the primary text colour. Difference from the mockup: a
+  `YaapicSyntaxKeywordBrush` token (purple) exists but the card says to use the tag colour, so keywords are red/tag.
+- `TextMap.cs` is compiled into `Yaapic.ViewModels.Tests` (linked file, like `CaptureOptions.cs`) for `TextMapTests` (2 cases).
+- Runtime: AOT exe published (`-r win-x64 -p:PublishAot=true`, 0 warnings, 0 IL2xxx/IL3xxx), run through `Capture-WinUI.ps1 -Send`
+  in dark and light with a throwaway local hack (not committed) forcing the response editor to a JavaScript sample: comments,
+  keywords, numbers, booleans, strings, function names and punctuation distinguishable in both themes. Then the real build: the JSON
+  response is coloured as before in both themes. XML shares the unchanged code path and was not re-captured; Lua not capturable
+  (plain text). The WinUI exe and stub server were stopped.
 
 ## Rules
 

@@ -279,7 +279,7 @@ not run in their Notes.
 | [M3-47](milestone-3-scripting/M3-47-shell-console-vault-and-composition.md) | Shell, palette and composition: engines, console, vault | any | M3-17, M3-25, M3-38, M3-43, M3-44, M3-45, M3-46 | todo |
 | [M3-48](milestone-3-scripting/M3-48-windows-dpapi-key-protector.md) | Windows: DPAPI key protector | windows | M3-36, M3-47 | todo |
 | [M3-49](milestone-3-scripting/M3-49-unix-keychain-and-secret-service-protectors.md) | macOS Keychain and Linux Secret Service key protectors | unix | M3-36, M3-47 | todo |
-| [M3-50](milestone-3-scripting/M3-50-winui-code-editor-javascript-and-lua.md) | WinUI: JavaScript and Lua in `CodeEditorView` | windows | M3-03 | todo |
+| [M3-50](milestone-3-scripting/M3-50-winui-code-editor-javascript-and-lua.md) | WinUI: JavaScript and Lua in `CodeEditorView` | windows | M3-03 | done |
 | [M3-51](milestone-3-scripting/M3-51-winui-scripts-tab.md) | WinUI: Scripts tab in the request editor | windows | M3-39, M3-50 | todo |
 | [M3-52](milestone-3-scripting/M3-52-winui-folder-scripts-dialog.md) | WinUI: scripts in the folder and collection settings dialog | windows | M3-40, M3-50, M3-51 | todo |
 | [M3-53](milestone-3-scripting/M3-53-winui-console-panel-and-status-bar.md) | WinUI: status bar and console panel | windows | M3-47 | todo |

@@ -1,4 +1,5 @@
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -31,6 +32,15 @@ public static class TextMap
         RawContentType.Html => "html",
         RawContentType.JavaScript => "javascript",
         _ => "text",
+    };
+
+    /// <summary>Gets the code editor language of a script.</summary>
+    /// <param name="language">The script language.</param>
+    /// <returns><c>javascript</c> or <c>lua</c>.</returns>
+    public static string ScriptLanguage(ScriptLanguage language) => language switch
+    {
+        Domain.Scripting.ScriptLanguage.Lua => "lua",
+        _ => "javascript",
     };
 
     /// <summary>Gets the index of a form field kind in the Text/File picker.</summary>
