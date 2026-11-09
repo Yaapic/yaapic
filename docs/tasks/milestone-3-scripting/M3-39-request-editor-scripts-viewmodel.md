@@ -1,6 +1,6 @@
 # M3-39: Request editor ViewModel: scripts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-03, M3-05
 
@@ -39,12 +39,12 @@ Running the scripts (M3-43), folder scripts (M3-40), views.
 
 ## Acceptance criteria
 
-- [ ] Tests (`Yaapic.ViewModels.Tests`): load/`ToSet` round trip for both languages; changing source or language marks the
+- [x] Tests (`Yaapic.ViewModels.Tests`): load/`ToSet` round trip for both languages; changing source or language marks the
       request dirty and `Title` gains the marker, `MarkSaved` clears it; `FilledCount`/`BadgeText` for 0, 1, 2 filled and
       whitespace-only blocks; placeholders per language and phase; `ToDefinition()` carries the scripts and a saved/reloaded
       request through `InMemoryRequestStore` keeps them; `SelectedPhase` switches `Selected`; existing request editor tests
       unchanged and green.
-- [ ] 0 warnings, XML docs, architecture tests green (ViewModels still free of UI frameworks), all tests green.
+- [x] 0 warnings, XML docs, architecture tests green (ViewModels still free of UI frameworks), all tests green.
 
 ## Rules
 

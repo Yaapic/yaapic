@@ -7,6 +7,7 @@ using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Scripting;
 
 namespace Yaapic.ViewModels.Requests;
 
@@ -76,6 +77,14 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         QueryParams.Changed += (_, _) => ComposeUrlFromParams();
         Headers.Changed += (_, _) => Refresh();
         Auth.Changed += (_, _) => Refresh();
+        Scripts.Changed += (_, _) => Refresh();
+        Scripts.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(ScriptsEditorViewModel.BadgeText))
+            {
+                OnPropertyChanged(nameof(ScriptsBadge));
+            }
+        };
         UrlEncodedFields.Changed += (_, _) => Refresh();
         FormData.Changed += (_, _) => Refresh();
     }
@@ -117,6 +126,12 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     /// <summary>Gets the authentication editor.</summary>
     public AuthEditorViewModel Auth { get; } = new();
+
+    /// <summary>Gets the pre-request and post-response script editor.</summary>
+    public ScriptsEditorViewModel Scripts { get; } = new();
+
+    /// <summary>Gets the badge of the Scripts tab header: empty, or the number of filled scripts.</summary>
+    public string ScriptsBadge => Scripts.BadgeText;
 
     /// <summary>Gets a value indicating whether the current method carries a body.</summary>
     public bool AllowsBody => Method.AllowsBody();
@@ -174,6 +189,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             TimeoutSeconds = definition.Settings.TimeoutSeconds,
         };
         editor.Auth.Load(definition.Auth);
+        editor.Scripts.Load(definition.Scripts);
         editor.LoadUrlAndParams(definition);
         editor.Headers.Load(definition.Headers);
         if (definition.Body.Kind == BodyKind.UrlEncoded)
@@ -209,7 +225,8 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         Headers.ToEntries(),
         new RequestBody(BodyKind, BodyContentType, BodyText, BodyFields(), BodyKind == BodyKind.Binary ? BinaryFilePath : ""),
         Auth.ToAuth(),
-        new RequestSettings(FollowRedirects, TimeoutSeconds));
+        new RequestSettings(FollowRedirects, TimeoutSeconds),
+        Scripts.ToSet());
 
     /// <summary>Records the current state as saved: the request is no longer new nor dirty.</summary>
     public void MarkSaved()
