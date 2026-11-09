@@ -67,7 +67,7 @@ internal static class JsPrelude
         })();
         """;
 
-    /// <summary>Concatenates the preludes in their fixed order (the <c>pm</c> parts are appended by later cards).</summary>
-    /// <returns>The prelude source.</returns>
-    internal static string Build() => Core;
+    /// <summary>Lists the prelude parts in their fixed order; each is evaluated as its own script (later cards append the other <c>pm</c> parts).</summary>
+    /// <returns>The prelude sources.</returns>
+    internal static string[] Build() => [Core, PmVariablesPrelude.Source];
 }

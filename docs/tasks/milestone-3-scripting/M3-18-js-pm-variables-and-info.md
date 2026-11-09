@@ -1,6 +1,6 @@
 # M3-18: JavaScript `pm`: info, variables, environment, collection variables, globals
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-17, M3-08
 
@@ -41,13 +41,13 @@ Request/response objects, tests, `sendRequest`, cookies, secrets (they are ordin
 
 ## Acceptance criteria
 
-- [ ] Tests (`Yaapic.Scripting.Tests`, real QuickJS + the real `ScriptHost` with `ScriptVariableOverlay`, so M3-08 and the
+- [x] Tests (`Yaapic.Scripting.Tests`, real QuickJS + the real `ScriptHost` with `ScriptVariableOverlay`, so M3-08 and the
       prelude are exercised together): get/set/unset/has/clear/toObject for each scope; coercion table; layered precedence
       (local > environment > collection > globals); `replaceIn` with `{{name}}`, dynamic `{{$guid}}` and unresolved names;
       writes to a missing environment fall back to local (value visible, warning in the overlay); `pm.info` fields in both
       event names; legacy aliases; every unsupported stub throws the exact message; `pm = 1` and `delete globalThis.pm` do
       not replace it; a second block in the same run sees the first block's changes (shared overlay).
-- [ ] 0 warnings, all tests green; the AOT smoke tool still prints `OK`.
+- [x] 0 warnings, all tests green; the AOT smoke tool still prints `OK`.
 
 ## Rules
 

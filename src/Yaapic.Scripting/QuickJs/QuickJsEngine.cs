@@ -160,7 +160,16 @@ public sealed class QuickJsEngine : IScriptEngine
 
         var phase = invocation.Phase == ScriptPhase.PreRequest ? "preRequest" : "postResponse";
         var origin = JsonSerializer.Serialize(invocation.Origin, HostJsonContext.Default.String);
-        var setup = context.Eval(JsPrelude.Build(), PreludeName);
+        JsResult setup = new(null, null);
+        foreach (var part in JsPrelude.Build())
+        {
+            setup = context.Eval(part, PreludeName);
+            if (!setup.IsSuccess)
+            {
+                break;
+            }
+        }
+
         if (setup.IsSuccess)
         {
             setup = context.Eval($"Object.defineProperty(globalThis, '__yaapic', {{ value: Object.freeze({{ phase: '{phase}', origin: {origin} }}) }});", PreludeName);

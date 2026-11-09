@@ -71,6 +71,20 @@ try
         return Fail($"QuickJsEngine timeout: {loop.Status}");
     }
 
+    var pm = await new QuickJsEngine().RunAsync(
+        new(
+            new(ScriptLanguage.JavaScript, "pm.environment.set('p', 7); console.log(pm.info.eventName, pm.environment.get('p')); try { pm.vault.get; } catch (e) { console.log(e.message); }"),
+            ScriptPhase.PreRequest,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (pm.Status != ScriptRunStatus.Succeeded || host.Value != "7" || pm.Console.Count != 2 || pm.Console[0].Message != "prerequest 7"
+        || pm.Console[1].Message != "pm.vault.get is not supported in Yaapic")
+    {
+        return Fail($"pm prelude run: {pm.Status} {pm.Error?.Message}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }
