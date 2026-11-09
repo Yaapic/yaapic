@@ -260,7 +260,7 @@ not run in their Notes.
 | [M3-28](milestone-3-scripting/M3-28-lua-pm-request-and-response.md) | Lua `pm`: request and response | any | M3-27, M3-09 | done |
 | [M3-29](milestone-3-scripting/M3-29-lua-pm-test-and-expect-core.md) | Lua `pm.test` and `pm.expect`, core assertions | any | M3-28 | done |
 | [M3-30](milestone-3-scripting/M3-30-lua-pm-expect-collections-and-response-assertions.md) | Lua `pm.expect` collections/strings and `pm.response.to` | any | M3-29 | done |
-| [M3-31](milestone-3-scripting/M3-31-lua-pm-send-request-and-cookies.md) | Lua `pm.sendRequest` and `pm.cookies` | any | M3-30, M3-13 | todo |
+| [M3-31](milestone-3-scripting/M3-31-lua-pm-send-request-and-cookies.md) | Lua `pm.sendRequest` and `pm.cookies` | any | M3-30, M3-13 | done |
 | [M3-32](milestone-3-scripting/M3-32-lua-conformance-suite.md) | Lua conformance suite and compatibility doc | any | M3-31, M3-23 | todo |
 | [M3-33](milestone-3-scripting/M3-33-domain-secret-flag-and-serializers.md) | Domain and YAML: secret flag on variable rows | any | M3-02 | todo |
 | [M3-34](milestone-3-scripting/M3-34-core-vault-ports-and-doubles.md) | Core: vault ports and test doubles | any | M3-33 | todo |

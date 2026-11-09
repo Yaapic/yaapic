@@ -482,8 +482,16 @@ internal static class LuaPmRequestResponsePrelude
             function result.reason() return dto.status end
             function result.size() return { body = dto.size, header = 0, total = dto.size } end
             -- pm.response.to is a fresh assertion chain per access, defined by the test prelude.
-            return setmetatable(result, { __index = function(_, member) if member == 'to' then return __responseTo(dto) end end })
+            -- pm.response.cookies is a fresh read-only list per access, defined by the send prelude.
+            return setmetatable(result, { __index = function(_, member)
+              if member == 'to' then
+                return __responseTo(dto)
+              elseif member == 'cookies' then
+                return __cookieList(dto.cookies)
+              end
+            end })
           end
+          __buildResponse = buildResponse
           local function current()
             if response == nil then
               local dto = hostCall('res.get')

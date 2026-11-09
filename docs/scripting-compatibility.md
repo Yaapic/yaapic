@@ -93,6 +93,17 @@ no timers (`setTimeout`) and no host module.
   (`jsonBody`, `clientError`). `json_schema` is unsupported. Failure messages equal the JavaScript ones (flag names use the
   camelCase spelling, e.g. `expected response to be clientError but got 200`).
 
+## Lua differences (`pm.sendRequest` and `pm.cookies`)
+
+- **`pm.sendRequest(input[, callback])`** (alias `pm.send_request`) blocks and **returns `res, err`**; exactly one is `nil`
+  (`err` is a string). `input` is a URL string or a table `{ url, method, header, body }` (`header` an array of
+  `{ key =, value = }` or a map; `body` `{ mode = "raw"|"urlencoded", raw =, urlencoded = {...} }`). There is no
+  deferred delivery in Lua: with a callback, it runs immediately, before `sendRequest` returns, as `callback(err, res)`
+  (same argument order as JavaScript), its result is ignored, and an error it raises is a normal script error.
+- **`pm.cookies`** and `res.cookies` are read-only with snake_case names (`get`, `has`, `to_object`, `each`, `count`,
+  `all`; camelCase aliases exist). Cookie entries expose `http_only` and `httpOnly`. `jar()` raises
+  `The cookie jar is not available in Yaapic yet`.
+
 ## Reporting a gap
 
 Open an issue with the script (or the smallest piece that fails), the Postman behavior you expect, and what Yaapic

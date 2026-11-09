@@ -1,6 +1,6 @@
 # M3-31: Lua `pm.sendRequest` and `pm.cookies`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-30, M3-13
 
@@ -30,11 +30,11 @@ Coroutines, cookie jar, non-raw bodies.
 
 ## Acceptance criteria
 
-- [ ] Tests (fake host and the real `ScriptedRequestSender` + `FakeHttpTransport`): string and table forms, header array and
+- [x] Tests (fake host and the real `ScriptedRequestSender` + `FakeHttpTransport`): string and table forms, header array and
       map, raw and urlencoded bodies, `res, err` for success and failure, callback form order and error propagation, variables
       resolved in URL/body, 21st call error, `res.json()` and `res.to.have.status`, cookies in pre-request (empty) and post-
       response, `jar()` message, unsupported mode message.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

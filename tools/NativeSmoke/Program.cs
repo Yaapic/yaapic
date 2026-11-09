@@ -207,6 +207,20 @@ try
         return Fail($"Lua pm expect run: {luaTests.Status} {luaTests.Error?.Message}");
     }
 
+    var luaSend = await new LuaEngine().RunAsync(
+        new(
+            new(ScriptLanguage.Lua, "local res, err = pm.sendRequest('http://x', function(e) console.log(e, pm.cookies.count()) end) console.log(tostring(res), err) console.log(pcall(pm.cookies.jar))"),
+            ScriptPhase.PostResponse,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (luaSend.Status != ScriptRunStatus.Succeeded || luaSend.Console.Count != 3 || luaSend.Console[0].Message != "not supported 0"
+        || luaSend.Console[1].Message != "nil not supported" || !luaSend.Console[2].Message.EndsWith("The cookie jar is not available in Yaapic yet", StringComparison.Ordinal))
+    {
+        return Fail($"Lua pm sendRequest run: {luaSend.Status} {luaSend.Error?.Message}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }
