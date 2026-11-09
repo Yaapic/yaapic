@@ -352,8 +352,10 @@ internal static class PmRequestResponsePrelude
             define(result, 'reason', () => dto.status);
             Object.defineProperty(result, 'to', { enumerable: true, get: () => globalThis.__responseTo(dto) });
             define(result, 'size', () => ({ body: dto.size, header: 0, total: dto.size }));
+            Object.defineProperty(result, 'cookies', { enumerable: true, get: () => globalThis.__cookieList(dto.cookies ?? []) });
             return Object.freeze(result);
           };
+          Object.defineProperty(globalThis, '__buildResponse', { value: buildResponse });
           Object.defineProperty(pm, 'response', {
             enumerable: true,
             get() {

@@ -69,5 +69,5 @@ internal static class JsPrelude
 
     /// <summary>Lists the prelude parts in their fixed order; each is evaluated as its own script (later cards append the other <c>pm</c> parts).</summary>
     /// <returns>The prelude sources.</returns>
-    internal static string[] Build() => [Core, PmVariablesPrelude.Source, PmRequestResponsePrelude.Source, PmTestPrelude.Source];
+    internal static string[] Build() => [Core, PmVariablesPrelude.Source, PmRequestResponsePrelude.Source, PmTestPrelude.Source, PmSendPrelude.Source];
 }

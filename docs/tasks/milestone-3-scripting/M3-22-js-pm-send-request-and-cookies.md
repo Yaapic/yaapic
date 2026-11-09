@@ -1,6 +1,6 @@
 # M3-22: JavaScript `pm.sendRequest` and `pm.cookies`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-21, M3-13
 
@@ -40,12 +40,12 @@ Cookie jar, proxy options, certificates, streaming bodies, `pm.sendRequest` with
 
 ## Acceptance criteria
 
-- [ ] Tests with a recording fake host and with the real `ScriptedRequestSender` + `FakeHttpTransport`: string form, options
+- [x] Tests with a recording fake host and with the real `ScriptedRequestSender` + `FakeHttpTransport`: string form, options
       form (header array and object, raw JSON body, urlencoded body), callback order (code after the call runs before the
       callback), promise form with `await`, error form for a failed send and for the 21st call, a throwing callback fails the
       run, variables inside the URL and body are resolved, `res.json()`/`res.to.have.status`; `pm.cookies` with two
       `Set-Cookie` headers, in pre-request (empty), `jar()` message; unsupported body mode message.
-- [ ] 0 warnings, all tests green, AOT smoke `OK`.
+- [x] 0 warnings, all tests green, AOT smoke `OK`.
 
 ## Rules
 

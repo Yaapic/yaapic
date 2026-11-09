@@ -127,6 +127,19 @@ try
         return Fail($"pm expect collections run: {more.Status} {more.Error?.Message} {more.Tests[0].Message}");
     }
 
+    var send = await new QuickJsEngine().RunAsync(
+        new(
+            new(ScriptLanguage.JavaScript, "pm.sendRequest('http://x', (err) => { console.log(err.message, pm.cookies.count()); throw new Error('cb'); });"),
+            ScriptPhase.PostResponse,
+            "smoke",
+            host,
+            ScriptLimits.Default),
+        CancellationToken.None);
+    if (send.Status != ScriptRunStatus.Failed || send.Error?.Message != "cb" || send.Console.Count != 1 || send.Console[0].Message != "not supported 0")
+    {
+        return Fail($"pm sendRequest run: {send.Status} {send.Error?.Message}");
+    }
+
     Console.WriteLine("OK");
     return 0;
 }

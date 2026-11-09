@@ -172,7 +172,7 @@ public sealed class QuickJsEngine : IScriptEngine
 
         if (setup.IsSuccess)
         {
-            setup = context.Eval($"Object.defineProperty(globalThis, '__yaapic', {{ value: Object.freeze({{ phase: '{phase}', origin: {origin} }}) }});", PreludeName);
+            setup = context.Eval($"Object.defineProperty(globalThis, '__yaapic', {{ value: Object.freeze({{ phase: '{phase}', origin: {origin}, errors: [] }}) }});", PreludeName);
         }
 
         var pending = false;
@@ -190,6 +190,13 @@ public sealed class QuickJsEngine : IScriptEngine
             return error.Kind == JsErrorKind.OutOfMemory
                 ? (ScriptRunStatus.MemoryLimit, new ScriptError($"Script exceeded the memory limit of {limits.MemoryLimitBytes / (1024 * 1024)} MiB"))
                 : (ScriptRunStatus.Failed, ToScriptError(error, invocation.Origin));
+        }
+
+        // A pm.sendRequest callback that threw: the run fails with the first such error.
+        var thrown = context.Eval("__yaapic.errors.length === 0 ? '' : String(__yaapic.errors[0]?.message ?? __yaapic.errors[0])", PreludeName);
+        if (thrown is { IsSuccess: true, Value: { Length: > 0 } message })
+        {
+            return (ScriptRunStatus.Failed, new ScriptError(message));
         }
 
         // Nothing can settle the promise any more (no timers), so waiting for the deadline would only delay the verdict.
