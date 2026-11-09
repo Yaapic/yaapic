@@ -263,7 +263,7 @@ not run in their Notes.
 | [M3-31](milestone-3-scripting/M3-31-lua-pm-send-request-and-cookies.md) | Lua `pm.sendRequest` and `pm.cookies` | any | M3-30, M3-13 | done |
 | [M3-32](milestone-3-scripting/M3-32-lua-conformance-suite.md) | Lua conformance suite and compatibility doc | any | M3-31, M3-23 | done |
 | [M3-33](milestone-3-scripting/M3-33-domain-secret-flag-and-serializers.md) | Domain and YAML: secret flag on variable rows | any | M3-02 | done |
-| [M3-34](milestone-3-scripting/M3-34-core-vault-ports-and-doubles.md) | Core: vault ports and test doubles | any | M3-33 | todo |
+| [M3-34](milestone-3-scripting/M3-34-core-vault-ports-and-doubles.md) | Core: vault ports and test doubles | any | M3-33 | done |
 | [M3-35](milestone-3-scripting/M3-35-infra-aes-gcm-secret-cipher.md) | Infrastructure: AES-GCM secret cipher and key derivation | any | M3-34 | todo |
 | [M3-36](milestone-3-scripting/M3-36-infra-file-secret-vault.md) | Infrastructure: file secret vault, passphrase protector and workspace id | any | M3-35 | todo |
 | [M3-37](milestone-3-scripting/M3-37-secret-aware-environment-and-globals-stores.md) | Core: secret-aware environment and globals stores | any | M3-34, M3-33 | todo |

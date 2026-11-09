@@ -1,6 +1,6 @@
 # M3-34: Core: vault ports and test doubles
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-33
 
@@ -45,10 +45,10 @@ Cryptography and files (M3-35, M3-36), decorators (M3-37), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests for `InMemorySecretVault`: state transitions (`NotCreated` -> create -> `Unlocked` -> `Lock` -> `UnlockAsync`),
+- [x] Tests for `InMemorySecretVault`: state transitions (`NotCreated` -> create -> `Unlocked` -> `Lock` -> `UnlockAsync`),
       wrong passphrase returns false, set/get/remove/remove-owner, locked set throws, `GetSecretValues` ordering and the
       length-4 floor, `StateChanged` raised once per transition.
-- [ ] Architecture tests green (Core still references only Domain), 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green (Core still references only Domain), 0 warnings, XML docs, all tests green.
 
 ## Rules
 
