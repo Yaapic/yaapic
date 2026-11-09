@@ -1,6 +1,6 @@
 # M3-45: Vault ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-34, M3-37
 
@@ -37,11 +37,11 @@ Changing passphrase, switching protector, deleting the vault, views.
 
 ## Acceptance criteria
 
-- [ ] Tests with `InMemorySecretVault` and a recording reloader: state texts, protector choices order, setup validation matrix
+- [x] Tests with `InMemorySecretVault` and a recording reloader: state texts, protector choices order, setup validation matrix
       (short passphrase, mismatch, OS protector without passphrase), successful setup/unlock/lock reload exactly once, wrong
       passphrase message, passphrase fields cleared, busy flag during an awaited slow vault, `RequestXCommand` raises the right
       event per state.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 
