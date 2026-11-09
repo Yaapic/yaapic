@@ -1,6 +1,6 @@
 # M3-32: Lua conformance suite and compatibility doc
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-31, M3-23
 
@@ -35,9 +35,9 @@ UI, vault, E2E over the loopback server (M3-64, M3-65).
 
 ## Acceptance criteria
 
-- [ ] At least 30 supported + 10 unsupported Lua cases and the mixed-language chain test pass.
-- [ ] Compatibility doc updated and matching the tests.
-- [ ] 0 warnings, all tests green.
+- [x] At least 30 supported + 10 unsupported Lua cases and the mixed-language chain test pass.
+- [x] Compatibility doc updated and matching the tests.
+- [x] 0 warnings, all tests green.
 
 ## Rules
 

@@ -2,8 +2,8 @@
 
 Yaapic runs Postman-style scripts on QuickJS-NG with a `pm` object (ADR [0009](adr/0009-scripting.md)). This page lists
 what is supported and what differs. It is kept in step with the conformance suite
-`tests/Yaapic.Scripting.Tests/Conformance/JavaScriptConformanceTests.cs`: every `supported` row is covered by a case there,
-and every `unsupported` row by an unsupported-member case.
+`tests/Yaapic.Scripting.Tests/Conformance/JavaScriptConformanceTests.cs` (and, for Lua, `LuaConformanceTests.cs`): every
+`supported` row is covered by a case there, and every `unsupported` row by an unsupported-member case.
 
 ## The `pm` surface
 
@@ -48,6 +48,44 @@ no timers (`setTimeout`) and no host module.
   `pm.variables.replaceIn` to resolve a string. The sender resolves the mutated request afterwards.
 - **Errors.** A pre-request error or timeout (5 s per block) aborts the send; a post-response error keeps the response and
   the tests already recorded.
+
+## Lua overview
+
+Scripts written in Lua 5.4 use the same `pm` object with Lua naming; the Lua differences below are checked by
+`LuaConformanceTests.cs`, which also runs a mixed-language chain (JavaScript collection script, Lua folder and request
+scripts, JavaScript request test) and shows that variables and the response are shared across languages.
+
+- **Naming.** Functions are `snake_case` (`replace_in`, `to_string`, `response_time`, `json_body`); the JavaScript camelCase names
+  also exist for most of them (`replaceIn`, `jsonBody`).
+- **Reserved words.** Chai's `not` and `and` are `is_not` and `also`.
+- **Call-style assertions.** Property assertions are calls: `pm.response.to.be.ok()`, `pm.expect(x).to.is_null()`.
+- **Patterns, not regexes.** `match(pattern)` and `have.body(pattern)` take Lua patterns (`%d+`, not `\d+`).
+- **1-based tables, 0-based JSON paths.** `pm.response.json().data[1]` is the first element, while the path strings of
+  `nested.property` and `have.json_body` stay 0-based (`data[0].id`). JSON arrays carry their length in `n`, `null` is `pm.null`.
+- **Synchronous `pm.sendRequest`.** It returns `res, err`; with a callback, the callback runs before it returns.
+- **No `done`, no promises, no `postman.*`.** Use `pm.*` only.
+- **Unsupported.** `pm.execution`, `pm.iterationData`, `pm.vault`, `pm.visualizer`, `pm.require`, `pm.request.auth`,
+  `pm.response.to.have.json_schema`, `pm.cookies.jar()` and `instance_of` raise `... is not supported in Yaapic`; `require`, `os`
+  and `io` are not available (indexing them fails with a standard Lua `nil` error).
+
+| JavaScript | Lua |
+|---|---|
+| `pm.response.to.be.ok` | `pm.response.to.be.ok()` |
+| `pm.response.to.have.jsonBody('a', 1)` | `pm.response.to.have.json_body('a', 1)` |
+| `pm.expect(x).to.not.equal(1)` | `pm.expect(x).to.is_not.equal(1)` |
+| `pm.expect(x).to.be.null` | `pm.expect(x).to.is_null()` |
+| `pm.expect(x).to.be.above(1).and.below(5)` | `pm.expect(x).to.be.above(1).also.below(5)` |
+| `pm.expect(s).to.match(/^a\d+$/)` | `pm.expect(s).to.match('^a%d+$')` |
+| `pm.response.responseTime` | `pm.response.response_time` |
+| `pm.variables.replaceIn('{{$guid}}')` | `pm.variables.replace_in('{{$guid}}')` |
+| `pm.collectionVariables.set(k, v)` | `pm.collection_variables.set(k, v)` |
+| `pm.request.url.toString()` | `pm.request.url.to_string()` |
+| `pm.request.headers.upsert({ key: 'A', value: 'b' })` | `pm.request.headers.upsert({ key = 'A', value = 'b' })` |
+| `pm.response.json().data[0]` | `pm.response.json().data[1]` |
+| `await pm.sendRequest(url)` | `local res, err = pm.sendRequest(url)` |
+| `pm.sendRequest(url, (err, res) => ...)` | `pm.sendRequest(url, function(err, res) ... end)` |
+| `try { pm.response.json() } catch (e) {}` | `pcall(pm.response.json)` |
+| `console.log(obj)` (JSON) | `console.log(t)` (`{ a = 1, b = { 1, 2 } }`) |
 
 ## Lua differences (request and response)
 
