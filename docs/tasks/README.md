@@ -240,7 +240,7 @@ not run in their Notes.
 | [M3-08](milestone-3-scripting/M3-08-core-script-variable-layers.md) | Core: script variable layers and change tracking | any | M3-07 | done |
 | [M3-09](milestone-3-scripting/M3-09-core-script-request-and-response.md) | Core: script request and response snapshots, cookies | any | M3-07 | done |
 | [M3-10](milestone-3-scripting/M3-10-script-chain-provider.md) | Script chain: collection, folders, request | any | M3-03, M3-06 | done |
-| [M3-11](milestone-3-scripting/M3-11-core-scripted-sender-pre-request.md) | Core: scripted request sender, pre-request stage | any | M3-08, M3-09, M3-10 | todo |
+| [M3-11](milestone-3-scripting/M3-11-core-scripted-sender-pre-request.md) | Core: scripted request sender, pre-request stage | any | M3-08, M3-09, M3-10 | done |
 | [M3-12](milestone-3-scripting/M3-12-core-scripted-sender-post-response.md) | Core: post-response stage, test results and network console line | any | M3-11 | todo |
 | [M3-13](milestone-3-scripting/M3-13-core-script-send-request.md) | Core: host support for `pm.sendRequest` | any | M3-12 | todo |
 | [M3-14](milestone-3-scripting/M3-14-scripting-project-and-host-protocol.md) | `Yaapic.Scripting` project, host bridge and JSON protocol | any | M3-07 | todo |

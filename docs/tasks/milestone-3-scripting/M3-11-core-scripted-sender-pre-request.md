@@ -1,6 +1,6 @@
 # M3-11: Core: scripted request sender, pre-request stage
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-08, M3-09, M3-10
 
@@ -47,14 +47,14 @@ Post-response scripts and tests (M3-12), `pm.sendRequest` (M3-13), persisting ch
 
 ## Acceptance criteria
 
-- [ ] Tests with `FakeScriptEngine`, `FakeHttpTransport`, in-memory doubles: no scripts -> identical to `RequestSender`
+- [x] Tests with `FakeScriptEngine`, `FakeHttpTransport`, in-memory doubles: no scripts -> identical to `RequestSender`
       (same `SendReport`, no runs); order collection, folder, request (assert via invocation origins); two blocks share
       one request (a header added by the first is seen by the second); a variable set in a pre-request block resolves in
       `{{name}}` of the URL sent (assert the transport saw the substituted URL); a mutated method/URL/header/raw body reaches
       the transport; first failing block stops the chain, nothing is sent, changes discarded; `Unavailable` engine aborts
       with the reason; `ApplyTo` failure aborts; token cancelled -> aborted by `Canceled`; warnings propagate; empty blocks
       are not run (fake engine call count).
-- [ ] 0 warnings, XML docs, architecture tests green, all tests green.
+- [x] 0 warnings, XML docs, architecture tests green, all tests green.
 
 ## Rules
 
