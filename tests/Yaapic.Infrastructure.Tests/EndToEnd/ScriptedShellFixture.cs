@@ -2,8 +2,10 @@ using System.Text;
 using System.Text.Json;
 using Yaapic.Composition;
 using Yaapic.Core.Scripting;
+using Yaapic.Core.Secrets;
 using Yaapic.Domain.Scripting;
 using Yaapic.Infrastructure.Secrets;
+using Yaapic.Infrastructure.Storage;
 using Yaapic.Scripting.Lua;
 using Yaapic.Scripting.QuickJs;
 using Yaapic.TestDoubles;
@@ -31,6 +33,9 @@ internal sealed class ScriptedShellFixture : IDisposable
         TempWorkspace.Delete(Root);
         TempWorkspace.Delete(_vaults);
     }
+
+    /// <summary>Gets the path of the vault file of the workspace, in the temporary vault directory.</summary>
+    public string VaultFile => new TempVaultLocation(_vaults).GetVaultPath(Workspace.ReadWorkspaceId(Root));
 
     /// <summary>Gets a path under the workspace root.</summary>
     public string PathOf(params string[] parts) => Path.Combine([Root, .. parts]);
@@ -64,10 +69,10 @@ internal sealed class ScriptedShellFixture : IDisposable
     }
 
     /// <summary>Composes a shell with the real QuickJS engine and initializes it.</summary>
-    public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null, bool withLua = false)
+    public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null, bool withLua = false, IKeyProtectorFactory? protectors = null)
     {
         IScriptEngine[] engines = withLua ? [new QuickJsEngine(), new LuaEngine()] : [new QuickJsEngine()];
-        var shell = AppComposition.CreateShell(Root, new FakeDialogService(), null, new TempVaultLocation(_vaults), engines, limits);
+        var shell = AppComposition.CreateShell(Root, new FakeDialogService(), protectors, new TempVaultLocation(_vaults), engines, limits);
         await shell.InitializeAsync();
         var unavailable = shell.ScriptEngineWarnings.FirstOrDefault(w => w.StartsWith("JavaScript", StringComparison.Ordinal) || (withLua && w.StartsWith("Lua", StringComparison.Ordinal)));
         Assert.True(
@@ -116,7 +121,7 @@ internal sealed class ScriptedShellFixture : IDisposable
         File.WriteAllText(path, content, new UTF8Encoding(false));
     }
 
-    private sealed class TempVaultLocation(string directory) : IVaultLocation
+    internal sealed class TempVaultLocation(string directory) : IVaultLocation
     {
         public string GetVaultPath(string workspaceId)
         {

@@ -295,7 +295,7 @@ not run in their Notes.
 | [M3-63](milestone-3-scripting/M3-63-avalonia-vault-windows-and-status.md) | Avalonia: vault windows, status bar item and platform protector wiring | unix | M3-45, M3-49, M3-60, M3-62, M3-56 | done |
 | [M3-64](milestone-3-scripting/M3-64-end-to-end-javascript-scripting.md) | End-to-end tests: JavaScript scripting | any | M3-47, M3-44, M3-23 | done |
 | [M3-65](milestone-3-scripting/M3-65-end-to-end-lua-scripting.md) | End-to-end tests: Lua scripting and mixed languages | any | M3-64, M3-32 | done |
-| [M3-66](milestone-3-scripting/M3-66-end-to-end-secret-vault.md) | End-to-end tests: secret vault | any | M3-47, M3-64 | todo |
+| [M3-66](milestone-3-scripting/M3-66-end-to-end-secret-vault.md) | End-to-end tests: secret vault | any | M3-47, M3-64 | done |
 | [M3-67](milestone-3-scripting/M3-67-milestone-docs.md) | Milestone 3 docs | any | M3-64, M3-65, M3-66, M3-32, M3-49 | todo |
 | [M3-68](milestone-3-scripting/M3-68-winui-visual-verification.md) | WinUI visual verification of the milestone 3 views | windows | M3-51, M3-52, M3-53, M3-54, M3-55, M3-56 | todo |
 

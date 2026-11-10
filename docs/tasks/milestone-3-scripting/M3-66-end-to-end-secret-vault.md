@@ -1,6 +1,6 @@
 # M3-66: End-to-end tests: secret vault
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-47, M3-64
 
@@ -41,7 +41,7 @@ OS protectors (their cards test them), UI.
 
 ## Acceptance criteria
 
-- [ ] The eight scenarios pass on Windows and Linux runners; 0 warnings; existing tests green.
+- [x] The eight scenarios pass on Windows and Linux runners; 0 warnings; existing tests green.
 
 ## Rules
 
