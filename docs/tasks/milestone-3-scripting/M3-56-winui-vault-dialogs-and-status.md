@@ -72,7 +72,14 @@ created by this check are `%APPDATA%\Yaapicaults\<id>.vault` of those temp work
   `Wrong passphrase` and stays open, right passphrase unlocks, Esc cancels; dark and light screenshots of the setup dialog.
 - The vault file holds only the protector id and wrapped/encrypted data (`"protector": "dpapi"`, `wrappedKey`, 462 bytes);
   no secret variable was stored, so the no-plaintext check is only structural.
-- **Not done**: secret variable + request echo + console `••••`, `{{secret}}` unresolved hint while locked, palette commands,
-  keyboard-only pass beyond Enter/Esc. The item stays open: the card is not `done`.
+- Second pass (maximized window, stub echo server on 127.0.0.1:18080): a secret global `tok` is masked in the table; the request
+  `.../echo?x={{tok}}` echoes the real value; the console shows `••••` for `console.log(pm.variables.get('tok'))` and the request
+  line shows `x=••••`; after a restart the vault unlocks by itself and the value is back; neither the vault file (712 bytes) nor
+  the workspace folder contains the plaintext value.
+- **Open defect**: after `Lock vault`, the same request is sent with `x=` (empty) but the response panel and the console show no
+  `Vault is locked: secret variables are not available.` warning, although `RequestEditorViewModel.UsesLockedSecret` should add
+  it. The locked secret rows of the table were not inspected either. The card stays in progress until this is understood
+  (likely M3-55 scope: the hint of a secret global is probably not marked secret while locked).
+- Not checked: palette commands, a keyboard-only pass beyond Enter/Esc.
 - AOT finding: binding `RadioButtons.ItemsSource` to an `IReadOnlyList<T>` kills the process (stowed XAML exception), as already
   documented in `ListMap`; fixed with `ListMap.Protectors`.
