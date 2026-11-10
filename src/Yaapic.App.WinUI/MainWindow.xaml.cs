@@ -21,6 +21,8 @@ public sealed partial class MainWindow : Window
     private bool _closeConfirmed;
     private bool _closePending;
     private bool _dialogOpen;
+    private const double ConsoleReservedHeight = 300;
+    private const VirtualKey ConsoleToggleKey = (VirtualKey)0xC0;
 
     /// <summary>Initializes the window.</summary>
     public MainWindow()
@@ -41,6 +43,10 @@ public sealed partial class MainWindow : Window
         AppWindow.Closing += OnClosing;
         Root.ActualThemeChanged += (_, _) => ApplyCaptionButtonColors();
         ApplyCaptionButtonColors();
+        // Ctrl+` (the OEM 3 key, 0xC0 on a US layout) has no named VirtualKey and no KeyboardAccelerator match: handle the key.
+        Root.KeyDown += OnRootKeyDown;
+        // The console never takes the whole window: the request area keeps at least 300 dips (title bar, tabs and status bar included).
+        Root.SizeChanged += (_, e) => ConsolePanel.MaxHeight = Math.Max(ShellViewModel.MinConsoleHeight, e.NewSize.Height - ConsoleReservedHeight);
     }
 
     // The caption buttons follow the OS theme, not the element theme forced by --theme or the Settings menu: colour them
@@ -111,6 +117,16 @@ public sealed partial class MainWindow : Window
         finally
         {
             _closePending = false;
+        }
+    }
+
+    private void OnRootKeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        if (e.Key == ConsoleToggleKey
+            && Microsoft.UI.Input.InputKeyboardSource.GetKeyStateForCurrentThread(VirtualKey.Control).HasFlag(Windows.UI.Core.CoreVirtualKeyStates.Down))
+        {
+            _viewModel?.ToggleConsoleCommand.Execute(null);
+            e.Handled = true;
         }
     }
 

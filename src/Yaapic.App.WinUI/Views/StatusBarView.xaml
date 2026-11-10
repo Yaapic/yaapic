@@ -1,0 +1,40 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.StatusBarView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation">
+  <Grid Height="24" Padding="10,0" Background="{ThemeResource YaapicSurfaceAppBrush}"
+        BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+    </Grid.ColumnDefinitions>
+    <TextBlock Grid.Column="0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+               Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicWarningBrush}"
+               Text="{x:Bind p:TextMap.FirstLine(ViewModel.ScriptEngineWarnings), Mode=OneWay}"
+               ToolTipService.ToolTip="{x:Bind p:TextMap.JoinLines(ViewModel.ScriptEngineWarnings), Mode=OneWay}"
+               Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasScriptEngineWarnings), Mode=OneWay}"/>
+    <!-- Reserved for the secret vault item (M3-56). -->
+    <StackPanel x:Name="VaultSlot" Grid.Column="1" Orientation="Horizontal"/>
+    <Button x:Name="ConsoleToggle" Grid.Column="2" Style="{StaticResource YaapicSubtleButtonStyle}"
+            AutomationProperties.AutomationId="Console" AutomationProperties.Name="Console"
+            ToolTipService.ToolTip="Toggle the console (Ctrl+`)"
+            MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"
+            Command="{x:Bind ViewModel.ToggleConsoleCommand, Mode=OneWay}">
+      <StackPanel Orientation="Horizontal" Spacing="6">
+        <TextBlock Text="Console" VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}"
+                   Foreground="{x:Bind p:BrushMap.ConsoleToggle(ViewModel.IsConsoleOpen), Mode=OneWay}"/>
+        <Border CornerRadius="8" Padding="5,0" Background="{ThemeResource YaapicWarningBackgroundBrush}"
+                Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Console.WarnCount), Mode=OneWay}">
+          <TextBlock Text="{x:Bind ViewModel.Console.WarnCount, Mode=OneWay}" Style="{StaticResource YaapicBadgeTextStyle}"
+                     Foreground="{ThemeResource YaapicWarningBrush}" AutomationProperties.Name="Warnings"/>
+        </Border>
+        <Border CornerRadius="8" Padding="5,0" Background="{ThemeResource YaapicDangerBackgroundBrush}"
+                Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Console.ErrorCount), Mode=OneWay}">
+          <TextBlock Text="{x:Bind ViewModel.Console.ErrorCount, Mode=OneWay}" Style="{StaticResource YaapicBadgeTextStyle}"
+                     Foreground="{ThemeResource YaapicDangerBrush}" AutomationProperties.Name="Errors"/>
+        </Border>
+      </StackPanel>
+    </Button>
+  </Grid>
+</UserControl>

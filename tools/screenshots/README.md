@@ -12,7 +12,7 @@ pwsh tools/screenshots/Capture-WinUI.ps1 -Theme light -Send -Out docs/screenshot
 
 Parameters: `-Exe`, `-Theme dark|light`, `-Out`, `-Width 1440 -Height 900`, `-Send` (invokes the Send button through UI Automation, then waits),
 `-WaitMs 1500`, `-Keys` (`SendKeys` syntax, sent before `-Send`), `-Request <slug>` (open and active request,
-default `create-user`), `-Select <AutomationId>` (invoke a button before the keys, e.g. `BodyTab`), `-FocusElement <name>` (focus a field by its automation name), `-NoTabs` (no open request), `-NoStub` (no stub server, to capture a connection failure).
+default `create-user`), `-Select <AutomationId>` (invoke a button before the keys, e.g. `BodyTab`; with `-Send -SelectAfterSend` it is invoked after the send, e.g. `-Select Console` to open the console), `-FocusElement <name>` (focus a field by its automation name), `-NoTabs` (no open request), `-NoStub` (no stub server, to capture a connection failure).
 
 Milestone 2 additions: `-Steps` (`|`-separated UI steps run before `-Send`: `invoke:`/`toggle:`/`select:`/`focus:` by AutomationId or name, `keys:`, `type:`, `click:`/`rclick:`/`hover:x,y` in window pixels, `wait:ms`) and `-Screen` (copy the screen instead of `PrintWindow`, required to capture menu and combo-box popups). The fixture has a `Users API` collection with a nested `Admin` folder, `globals.yaml`, and generated history entries; see `docs/screenshots/m2/README.md` for the commands.
 

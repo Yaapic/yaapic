@@ -27,6 +27,8 @@
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="Auto"/>
     </Grid.RowDefinitions>
     <Grid x:Name="TitleBar" Height="48"
           Background="{ThemeResource YaapicSurfaceAppBrush}"
@@ -313,6 +315,8 @@
         </StackPanel>
       </Grid>
     </Grid>
-    <v:CommandPaletteView Grid.RowSpan="3" ViewModel="{x:Bind ViewModel.Palette, Mode=OneWay}"/>
+    <v:ConsolePanelView x:Name="ConsolePanel" Grid.Row="3" Shell="{x:Bind ViewModel, Mode=OneWay}"/>
+    <v:StatusBarView Grid.Row="4" ViewModel="{x:Bind ViewModel, Mode=OneWay}"/>
+    <v:CommandPaletteView Grid.RowSpan="5" ViewModel="{x:Bind ViewModel.Palette, Mode=OneWay}"/>
   </Grid>
 </Window>

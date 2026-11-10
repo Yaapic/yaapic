@@ -7,7 +7,7 @@ namespace Yaapic.App.WinUI.Presentation;
 /// <summary>Colors a <see cref="TextBlock"/> with the brush of an HTTP method and keeps it in step with the element theme.</summary>
 public static class MethodBrush
 {
-    /// <summary>Identifies the attached <c>Method</c> property: an <see cref="HttpMethodKind"/>, or null for the default.</summary>
+    /// <summary>Identifies the attached <c>Method</c> property: an <see cref="HttpMethodKind"/> or a verb string, or null for the default.</summary>
     public static readonly DependencyProperty MethodProperty =
         DependencyProperty.RegisterAttached("Method", typeof(object), typeof(MethodBrush), new PropertyMetadata(null, OnMethodChanged));
 
@@ -53,5 +53,10 @@ public static class MethodBrush
 
     // A code lookup cannot see the element theme, so the window theme (BrushMap.IsLight) is used and RefreshAll follows changes.
     private static void Apply(TextBlock text) =>
-        text.Foreground = BrushMap.Method(GetMethod(text) is HttpMethodKind kind ? kind : HttpMethodKind.Get);
+        text.Foreground = BrushMap.Method(GetMethod(text) switch
+        {
+            HttpMethodKind kind => kind,
+            string verb when HttpMethodKindExtensions.TryParse(verb, out var parsed) => parsed,
+            _ => HttpMethodKind.Get,
+        });
 }

@@ -1,0 +1,117 @@
+<UserControl x:Class="Yaapic.App.WinUI.Views.ConsolePanelView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ic="using:FluentIcons.WinUI"
+             xmlns:p="using:Yaapic.App.WinUI.Presentation"
+             xmlns:v="using:Yaapic.App.WinUI.Views"
+             xmlns:con="using:Yaapic.ViewModels.Console">
+  <Grid x:Name="PanelRoot" Height="{x:Bind Shell.ConsoleHeight, Mode=OneWay}" Background="{ThemeResource YaapicSurfaceBaseBrush}"
+        Visibility="{x:Bind p:VisibilityMap.WhenTrue(Shell.IsConsoleOpen), Mode=OneWay}">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="34"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+
+    <!-- Resize handle on the top edge: 4 px hit area, 1 px visible line (2 px accent while hovered, focused or dragged). -->
+    <Grid Height="4">
+      <Rectangle x:Name="SplitterLine" Height="1" VerticalAlignment="Top" IsHitTestVisible="False"
+                 Fill="{ThemeResource YaapicBorderDefaultBrush}"/>
+      <v:SplitterHandle x:Name="Splitter" Background="Transparent" IsTabStop="True" UseSystemFocusVisuals="True"
+                        AutomationProperties.Name="Resize the console"
+                        PointerPressed="OnSplitterPointerPressed" PointerMoved="OnSplitterPointerMoved"
+                        PointerReleased="OnSplitterPointerReleased" PointerCanceled="OnSplitterPointerReleased"
+                        PointerCaptureLost="OnSplitterPointerReleased" DoubleTapped="OnSplitterDoubleTapped"
+                        KeyDown="OnSplitterKeyDown" PointerEntered="OnSplitterPointerEntered"
+                        PointerExited="OnSplitterPointerExited" GotFocus="OnSplitterFocusChanged"
+                        LostFocus="OnSplitterFocusChanged">
+        <v:SplitterHandle.Template>
+          <ControlTemplate TargetType="Control">
+            <Border Background="Transparent"/>
+          </ControlTemplate>
+        </v:SplitterHandle.Template>
+      </v:SplitterHandle>
+    </Grid>
+
+    <Grid Grid.Row="1" Padding="12,0,8,0" ColumnSpacing="10"
+          BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="240"/>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBlock Text="Console" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+      <ListView x:Name="FilterChips" Grid.Column="1" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
+                AutomationProperties.Name="Console level filter" SelectionChanged="OnFilterChanged">
+        <x:String>All</x:String>
+        <x:String>Log</x:String>
+        <x:String>Warn</x:String>
+        <x:String>Error</x:String>
+      </ListView>
+      <TextBox x:Name="SearchBox" Grid.Column="2" Height="26" MinHeight="26" Padding="8,2" VerticalAlignment="Center"
+               PlaceholderText="Filter logs" AutomationProperties.Name="Filter logs"
+               Background="{ThemeResource YaapicSurfaceSunkenBrush}" KeyDown="OnSearchKeyDown"
+               Text="{x:Bind ViewModel.Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+        <Button Content="Clear" Style="{StaticResource YaapicSubtleButtonStyle}" AutomationProperties.Name="Clear console"
+                Command="{x:Bind ViewModel.ClearCommand, Mode=OneWay}"/>
+        <Button Content="Copy" Style="{StaticResource YaapicSubtleButtonStyle}" AutomationProperties.Name="Copy console"
+                Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"/>
+        <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="Close console"
+                ToolTipService.ToolTip="Close (Ctrl+`)" Command="{x:Bind Shell.ToggleConsoleCommand, Mode=OneWay}">
+          <ic:FluentIcon Icon="Dismiss" IconVariant="Regular" IconSize="Size16"/>
+        </Button>
+      </StackPanel>
+    </Grid>
+
+    <ListView x:Name="Lines" Grid.Row="2" SelectionMode="None" IsItemClickEnabled="False"
+              AutomationProperties.Name="Console messages"
+              ItemsSource="{x:Bind ViewModel.Lines, Mode=OneWay}">
+      <ListView.ItemContainerStyle>
+        <Style TargetType="ListViewItem" BasedOn="{StaticResource YaapicListRowStyle}">
+          <Setter Property="MinHeight" Value="22"/>
+          <Setter Property="Padding" Value="0"/>
+          <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+          <Setter Property="IsTabStop" Value="False"/>
+        </Style>
+      </ListView.ItemContainerStyle>
+      <ListView.ItemTemplate>
+        <DataTemplate x:DataType="con:ConsoleLineViewModel">
+          <Grid Height="22" Padding="12,0" ColumnSpacing="8"
+                Background="{x:Bind p:BrushMap.ConsoleRow(IsError)}" ToolTipService.ToolTip="{x:Bind Message}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="86"/>
+              <ColumnDefinition Width="14"/>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="{x:Bind TimeText}" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                       Foreground="{ThemeResource YaapicTextDisabledBrush}"/>
+            <TextBlock Grid.Column="1" Text="{x:Bind Symbol}" VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{x:Bind p:BrushMap.ConsoleKind(Kind)}"/>
+            <TextBlock Grid.Column="2" Text="{x:Bind Method}" VerticalAlignment="Center"
+                       Style="{StaticResource YaapicMethodTextStyle}" p:MethodBrush.Method="{x:Bind Method}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenText(Method)}"/>
+            <TextBlock Grid.Column="3" Text="{x:Bind Message}" VerticalAlignment="Center" IsTextSelectionEnabled="True"
+                       TextTrimming="CharacterEllipsis" MaxLines="1" Style="{StaticResource YaapicCodeTextStyle}"
+                       Foreground="{x:Bind p:BrushMap.ConsoleMessage(Kind)}" FontWeight="{x:Bind p:ConsoleMap.Weight(Kind)}"/>
+            <Border Grid.Column="4" Style="{StaticResource YaapicChipBorderStyle}" VerticalAlignment="Center"
+                    Background="{ThemeResource YaapicSurfaceSunkenBrush}"
+                    Visibility="{x:Bind p:VisibilityMap.WhenText(Origin)}">
+              <TextBlock Text="{x:Bind Origin}" Style="{StaticResource YaapicChipTextStyle}"
+                         Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+            </Border>
+          </Grid>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360" TextWrapping="Wrap"
+               TextAlignment="Center" Style="{StaticResource YaapicBodySmallTextStyle}"
+               Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+               Text="No messages yet. Script output and network activity appear here."
+               Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsEmpty), Mode=OneWay}"/>
+  </Grid>
+</UserControl>

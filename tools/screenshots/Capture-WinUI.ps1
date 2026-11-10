@@ -13,6 +13,7 @@ param(
     [int]$Width = 1440,
     [int]$Height = 900,
     [switch]$Send,
+    [switch]$SelectAfterSend,
     [int]$WaitMs = 1500,
     [string]$Keys = '',
     [string]$Select = '',
@@ -66,7 +67,8 @@ try {
               'missing-item' = '11111111-0000-0000-0000-000000000003'; 'server-error' = '11111111-0000-0000-0000-000000000004'
               'slow' = '11111111-0000-0000-0000-000000000005'
               'upload-avatar' = '11111111-0000-0000-0000-000000000006'; 'secure-call' = '11111111-0000-0000-0000-000000000007'
-              'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009' }
+              'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009'
+              'noisy' = '11111111-0000-0000-0000-00000000000a' }
     $session = Join-Path $temp '.yaapic\session.yaml'
     $open = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$open`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))
@@ -108,12 +110,12 @@ try {
     $h = $proc.MainWindowHandle
     [void][Win32]::SetWindowPos($h, [IntPtr]::Zero, 0, 0, $Width, $Height, 0x0044) # SWP_NOZORDER | SWP_SHOWWINDOW
     Start-Sleep -Milliseconds $WaitMs
-    if ($Select -or $FocusElement) {
+    if (($Select -and -not $SelectAfterSend) -or $FocusElement) {
         # UI Automation by element name: Select invokes a button by AutomationId (e.g. BodyTab), FocusElement focuses a field by name.
         $root = [Windows.Automation.AutomationElement]::FromHandle($h)
         $find = { param($prop, $n) $root.FindFirst([Windows.Automation.TreeScope]::Descendants,
             (New-Object Windows.Automation.PropertyCondition($prop, $n))) }
-        if ($Select) {
+        if ($Select -and -not $SelectAfterSend) {
             $el = & $find ([Windows.Automation.AutomationElement]::AutomationIdProperty) $Select; if (-not $el) { throw "Element '$Select' not found." }
             $pat = $null
             if ($el.TryGetCurrentPattern([Windows.Automation.InvokePattern]::Pattern, [ref]$pat)) { $pat.Invoke() }
@@ -134,7 +136,7 @@ try {
         [Windows.Forms.SendKeys]::SendWait($Keys); Start-Sleep -Milliseconds 500
     }
     foreach ($step in ($Steps -split '\|')) { # '|' also separates steps, so they survive `pwsh -File`
-        # Steps: invoke:<AutomationId or name>, toggle:<name>, focus:<name>, keys:<SendKeys>, type:<text>, wait:<ms>.
+        # Steps: invoke:<AutomationId or name>, toggle:<name>, focus:<name>, keys:<SendKeys>, vk:ctrl+<hex virtual key>, type:<text>, wait:<ms>.
         $kind, $arg = $step -split ':', 2
         $root = [Windows.Automation.AutomationElement]::FromHandle($h)
         $byName = { param($n) $root.FindFirst([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::NameProperty, $n))) }
@@ -154,7 +156,7 @@ try {
                 else { throw "Step '$step': element supports no pattern." }
                 Start-Sleep -Milliseconds 500
             }
-            { $_ -in 'keys', 'type', 'click', 'rclick', 'hover' } {
+            { $_ -in 'keys', 'type', 'click', 'rclick', 'hover', 'vk' } {
                 $focused = $false
                 for ($i = 0; $i -lt 10 -and -not $focused; $i++) { $focused = [Win32]::Focus($h); Start-Sleep -Milliseconds 300 }
                 if (-not $focused) { throw "Step '$step': could not bring the Yaapic window to the foreground." }
@@ -166,6 +168,14 @@ try {
                     if ($kind -eq 'click') { [Win32]::mouse_event(2, 0, 0, 0, [UIntPtr]::Zero); [Win32]::mouse_event(4, 0, 0, 0, [UIntPtr]::Zero) }
                     if ($kind -eq 'rclick') { [Win32]::mouse_event(8, 0, 0, 0, [UIntPtr]::Zero); [Win32]::mouse_event(16, 0, 0, 0, [UIntPtr]::Zero) }
                     Start-Sleep -Milliseconds 700; continue
+                }
+                if ($kind -eq 'vk') {
+                    # vk:<mods>+<hex>: a raw virtual-key press independent of the keyboard layout, e.g. vk:ctrl+C0 for Ctrl+` on a US layout.
+                    $mods, $hex = $arg -split '\+', 2; $code = [Convert]::ToByte($hex, 16)
+                    if ($mods -eq 'ctrl') { [Win32]::keybd_event(0x11, 0, 0, [UIntPtr]::Zero) }
+                    [Win32]::keybd_event($code, 0, 0, [UIntPtr]::Zero); [Win32]::keybd_event($code, 0, 2, [UIntPtr]::Zero)
+                    if ($mods -eq 'ctrl') { [Win32]::keybd_event(0x11, 0, 2, [UIntPtr]::Zero) }
+                    Start-Sleep -Milliseconds 500; continue
                 }
                 if ($kind -eq 'type') { $arg = [regex]::Replace($arg, '[+^%~(){}\[\]]', '{$0}') }
                 [Windows.Forms.SendKeys]::SendWait($arg); Start-Sleep -Milliseconds 500
@@ -181,6 +191,16 @@ try {
         if (-not $btn) { throw 'Send button not found.' }
         $btn.GetCurrentPattern([Windows.Automation.InvokePattern]::Pattern).Invoke()
         Start-Sleep -Milliseconds $WaitMs
+    }
+    if ($Send -and $SelectAfterSend -and $Select) {
+        # -Select -SelectAfterSend: invoke the element (e.g. -Select Console) once the send has finished.
+        $root = [Windows.Automation.AutomationElement]::FromHandle($h)
+        $el = $root.FindFirst([Windows.Automation.TreeScope]::Descendants,
+            (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::AutomationIdProperty, $Select)))
+        if (-not $el) { throw "Element '$Select' not found." }
+        $pat = $null
+        if ($el.TryGetCurrentPattern([Windows.Automation.InvokePattern]::Pattern, [ref]$pat)) { $pat.Invoke() } else { throw "Element '$Select' cannot be invoked." }
+        Start-Sleep -Milliseconds 700
     }
 
     $proc.Refresh()

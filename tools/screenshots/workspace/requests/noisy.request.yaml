@@ -1,0 +1,16 @@
+version: 1
+id: 11111111-0000-0000-0000-00000000000a
+name: Noisy
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+scripts:
+  preRequest:
+    language: javascript
+    source: |
+      for (let i = 1; i <= 1500; i++) console.log("noisy line " + i);

@@ -47,4 +47,14 @@ public static class TextMap
     /// <param name="kind">The field kind.</param>
     /// <returns>0 for text, 1 for file.</returns>
     public static int KindIndex(FormFieldKind kind) => kind == FormFieldKind.File ? 1 : 0;
+
+    /// <summary>Gets the first line of a list, or an empty string.</summary>
+    /// <param name="lines">The lines.</param>
+    /// <returns>The first line, or an empty string.</returns>
+    public static string FirstLine(IReadOnlyList<string> lines) => lines.Count > 0 ? lines[0] : "";
+
+    /// <summary>Joins lines with line breaks, as shown in a tooltip.</summary>
+    /// <param name="lines">The lines.</param>
+    /// <returns>The joined text.</returns>
+    public static string JoinLines(IReadOnlyList<string> lines) => string.Join('\n', lines);
 }
