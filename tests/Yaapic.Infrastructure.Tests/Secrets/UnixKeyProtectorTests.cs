@@ -168,6 +168,17 @@ public sealed class UnixKeyProtectorTests
         Assert.IsType<PassphraseKeyProtector>(factory.Create("passphrase", "x"));
     }
 
+    [Fact]
+    public void ProductionFactoryOffersOnlyThePassphraseOnWindows()
+    {
+        if (!OperatingSystem.IsWindows())
+        {
+            return;
+        }
+
+        Assert.Equal(["passphrase"], new UnixKeyProtectorFactory().Available().Select(p => p.Id));
+    }
+
     [Fact(Skip = "The Linux CI runner has no D-Bus session for a real secret-tool; run manually on a desktop session")]
     public void SecretToolRealRoundTrip()
     {

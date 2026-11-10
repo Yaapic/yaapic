@@ -1,6 +1,6 @@
 # M3-63: Avalonia: vault windows, status bar item and platform protector wiring
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M3-45, M3-49, M3-60, M3-62, M3-56
 
@@ -26,13 +26,13 @@ Changing passphrase, switching protector, deleting the vault.
 
 ## Acceptance criteria
 
-- [ ] Build `Yaapic.CrossPlatform.slnf` 0 warnings, tests green, AOT publish 0 new IL2xxx/IL3xxx.
+- [x] Build `Yaapic.CrossPlatform.slnf` 0 warnings, tests green, AOT publish 0 new IL2xxx/IL3xxx.
 - [ ] **Runtime check on the published exe** (host OS only; say which): fresh test workspace -> `No vault`; setup with the
       platform protector when available (macOS Keychain, Linux with a Secret Service session) **or** passphrase; secret variable
       set, sent, console masks it; restart: automatic unlock for platform protectors, passphrase prompt for passphrase vaults
       (wrong then right passphrase); lock; vault file holds no plaintext. On a Windows host only the passphrase path can be
       checked: state it, and list the macOS/Linux checks as `not run` in Notes for the user to run.
-- [ ] No process left running.
+- [x] No process left running.
 
 ## Rules
 
@@ -49,3 +49,16 @@ Changing passphrase, switching protector, deleting the vault.
 ## Suggested commit message
 
 `feat(avalonia): add vault setup and unlock windows and the status bar item`
+
+## Notes
+
+- Protector wiring deviates from the card on Windows: `App.axaml.cs` passes `DpapiKeyProtectorFactory` on Windows (M3-48) and
+  `UnixKeyProtectorFactory` on macOS/Linux (M3-49), so the Windows build offers DPAPI and passphrase. The Unix factory on Windows
+  is covered by `UnixKeyProtectorTests.ProductionFactoryOffersOnlyThePassphraseOnWindows`.
+- Added `--open vault` to the screenshot tooling (`MainWindow.OpenNamed`).
+- AOT exe on Windows (win-x64), throwaway workspace under the session scratchpad: starts, shows `No vault` in the status bar,
+  `--open vault` shows the setup window (DPAPI selected by default, passphrase option), exits cleanly. No vault file was
+  written to `%APPDATA%\Yaapic` (the check was limited to this on purpose).
+- **Runtime check not run** (the acceptance item stays unticked): setup, secret variable sent and masked, restart with automatic
+  unlock / passphrase prompt (wrong then right), lock, vault file content. Also not run: Keychain (macOS) and Secret Service (Linux)
+  paths. To be done by the user on a machine where writing a vault is acceptable.

@@ -41,8 +41,8 @@ public sealed class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    // The Unix factory covers macOS and Linux; Windows keeps the passphrase protector until the Avalonia app offers DPAPI.
-    private static IKeyProtectorFactory? PlatformProtectors() =>
-        OperatingSystem.IsWindows() ? null : new UnixKeyProtectorFactory();
+    // DPAPI on Windows, Keychain / Secret Service (then passphrase) on macOS and Linux.
+    private static IKeyProtectorFactory PlatformProtectors() =>
+        OperatingSystem.IsWindows() ? new DpapiKeyProtectorFactory() : new UnixKeyProtectorFactory();
 }
 

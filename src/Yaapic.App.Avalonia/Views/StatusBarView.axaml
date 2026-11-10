@@ -11,6 +11,12 @@
     <Style Selector="TextBlock.consoleToggle.open">
       <Setter Property="Foreground" Value="{DynamicResource YaapicAccentTextBrush}" />
     </Style>
+    <Style Selector="PathIcon.vaultIcon">
+      <Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
+    </Style>
+    <Style Selector="PathIcon.vaultIcon.unlocked">
+      <Setter Property="Foreground" Value="{DynamicResource YaapicAccentTextBrush}" />
+    </Style>
   </UserControl.Styles>
   <Border Height="24" Padding="10,0" Background="{DynamicResource YaapicSurfaceAppBrush}"
           BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
@@ -20,8 +26,16 @@
                  Text="{Binding ScriptEngineWarnings, Converter={x:Static p:ConsoleMap.FirstLine}}"
                  ToolTip.Tip="{Binding ScriptEngineWarnings, Converter={x:Static p:ConsoleMap.JoinLines}}"
                  IsVisible="{Binding HasScriptEngineWarnings}" />
-      <!-- Slot of the vault item (M3-63). -->
-      <ContentControl x:Name="VaultSlot" Grid.Column="1" VerticalAlignment="Center" />
+      <Button x:Name="VaultButton" Grid.Column="1" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
+              VerticalAlignment="Center" Click="OnVaultClick"
+              AutomationProperties.AutomationId="Vault" AutomationProperties.Name="{Binding Vault.StatusText}"
+              ToolTip.Tip="{Binding Vault.ProtectorLabel, Converter={x:Static p:VaultMap.Tip}}">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <PathIcon Data="{StaticResource YiSecret}" Width="12" Height="12" VerticalAlignment="Center"
+                    Classes="vaultIcon" Classes.unlocked="{Binding Vault.IsUnlocked}" />
+          <TextBlock Text="{Binding Vault.StatusText}" Classes="caption" VerticalAlignment="Center" />
+        </StackPanel>
+      </Button>
       <Button x:Name="ConsoleToggle" Grid.Column="2" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
               VerticalAlignment="Center" Command="{Binding ToggleConsoleCommand}"
               AutomationProperties.AutomationId="Console" AutomationProperties.Name="Console"

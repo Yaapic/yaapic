@@ -18,6 +18,7 @@ public sealed partial class MainWindow : Window
     private bool _settingsOpen;
     private CollectionTreeViewModel? _collectionsSubscribed;
     private ShellViewModel? _shellSubscribed;
+    private bool _vaultOpen;
     private const double ConsoleReservedHeight = 300;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
@@ -154,6 +155,8 @@ public sealed partial class MainWindow : Window
         if (_shellSubscribed is not null)
         {
             _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
+            _shellSubscribed.Vault.SetupRequested -= OnVaultRequested;
+            _shellSubscribed.Vault.UnlockRequested -= OnVaultRequested;
         }
 
         if (_collectionsSubscribed is not null)
@@ -165,8 +168,28 @@ public sealed partial class MainWindow : Window
         if (_shellSubscribed is not null)
         {
             _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
+            _shellSubscribed.Vault.SetupRequested += OnVaultRequested;
+            _shellSubscribed.Vault.UnlockRequested += OnVaultRequested;
             _collectionsSubscribed = _shellSubscribed.Collections;
             _collectionsSubscribed.PropertyChanged += OnCollectionsChanged;
+        }
+    }
+
+    private async void OnVaultRequested(object? sender, EventArgs e)
+    {
+        if (Shell is not { } shell || _vaultOpen)
+        {
+            return;
+        }
+
+        _vaultOpen = true;
+        try
+        {
+            await new Views.VaultWindow(shell.Vault).ShowDialog(this);
+        }
+        finally
+        {
+            _vaultOpen = false;
         }
     }
 
@@ -337,7 +360,7 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
-    /// <param name="name"><c>environments</c>, <c>console</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
+    /// <param name="name"><c>environments</c>, <c>vault</c>, <c>console</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
     /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
     internal void OpenNamed(string name)
     {
@@ -346,6 +369,9 @@ public sealed partial class MainWindow : Window
             case "environments" when Shell is { } shell:
                 shell.Environments.EditedEnvironment ??= shell.Environments.ActiveEnvironment;
                 _ = ManageEnvironmentsAsync();
+                break;
+            case "vault" when Shell is { } vaultShell:
+                vaultShell.Vault.RequestSetupCommand.Execute(null);
                 break;
             case "settings" when Shell is { } settingsShell && settingsShell.Collections.Roots.FirstOrDefault() is { } root:
                 settingsShell.Collections.EditSettingsCommand.Execute(root);
