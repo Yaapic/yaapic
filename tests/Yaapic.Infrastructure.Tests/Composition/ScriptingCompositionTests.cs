@@ -6,6 +6,7 @@ using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Tests.EndToEnd;
 using Yaapic.Scripting.QuickJs;
 using Yaapic.TestDoubles;
+using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using TestResult = Yaapic.Domain.Scripting.TestResult;
 
@@ -138,6 +139,29 @@ public sealed class ScriptingCompositionTests : IDisposable
         await shell.Vault.UnlockCommand.ExecuteAsync(null);
 
         Assert.Equal(Secret, shell.Environments.Environments.Single().Variables.Rows.Single(r => r.Key == "token").Value);
+    }
+
+    [Fact]
+    public async Task SendingWithALockedGlobalSecretWarnsAndSendsItEmpty()
+    {
+        using var server = new LoopbackServer();
+        var shell = Create(Js(i => Result(i)));
+        await shell.InitializeAsync();
+        await SetUpVaultAsync(shell);
+        var row = shell.Globals.Variables.Rows[0];
+        row.Key = "token";
+        row.Value = Secret;
+        row.IsSecret = true;
+        await shell.Globals.SaveCommand.ExecuteAsync(null);
+        Assert.Null(shell.Globals.LastError);
+        await shell.Vault.LockCommand.ExecuteAsync(null);
+        var tab = shell.Tabs.ActiveTab!;
+        tab.Url = server.BaseUrl + "/echo?x={{token}}";
+
+        await tab.SendCommand.ExecuteAsync(null);
+
+        Assert.Contains(shell.Globals.Variables.Rows, r => r is { Key: "token", IsSecret: true });
+        Assert.Equal(RequestEditorViewModel.VaultLockedWarning, tab.Response.UnresolvedWarning);
     }
 
     [Fact]

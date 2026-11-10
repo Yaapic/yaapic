@@ -227,6 +227,60 @@ public sealed class SecretRowsTests
         Assert.Equal("Vault is locked: secret variables are not available.", editor.Response.UnresolvedWarning);
     }
 
+    public static TheoryData<string> LockedSecretPlaces => ["query", "header", "bearer", "basic-password", "api-key", "form", "raw-body"];
+
+    [Theory]
+    [MemberData(nameof(LockedSecretPlaces))]
+    public async Task SendWarnsWhenALockedSecretIsUsedOutsideTheUrl(string place)
+    {
+        const string Ref = "{{token}}";
+        var none = RequestAuth.None;
+        var definition = HttpRequestDefinition.Create("r") with
+        {
+            Method = HttpMethodKind.Post,
+            Url = "https://x.test/",
+            QueryParams = place == "query" ? [new("q", Ref)] : [],
+            Headers = place == "header" ? [new("X-Key", Ref)] : [],
+            Auth = place switch
+            {
+                "bearer" => none with { Kind = AuthKind.Bearer, Token = Ref },
+                "basic-password" => none with { Kind = AuthKind.Basic, Username = "u", Password = Ref },
+                "api-key" => none with { Kind = AuthKind.ApiKey, Key = "k", Value = Ref },
+                _ => none,
+            },
+            Body = place switch
+            {
+                "form" => RequestBody.UrlEncoded([new FormField("f", Ref)]),
+                "raw-body" => RequestBody.Raw(RawContentType.Json, "{\"t\":\"" + Ref + "\"}"),
+                _ => RequestBody.None,
+            },
+        };
+        var environment = new EnvironmentDefinition(Guid.NewGuid(), "e", [new("token", "", true, true)]);
+        var ok = new HttpResponseData(200, "OK", [], [], TimeSpan.Zero, "https://x.test");
+        var transport = new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(ok)));
+        var editor = RequestEditorViewModel.FromDefinition(
+            definition, new RequestSender(transport), new FakeVariableScopeProvider { Scopes = new VariableScopes(environment, [], []) });
+
+        await editor.SendCommand.ExecuteAsync(null);
+
+        Assert.Equal(RequestEditorViewModel.VaultLockedWarning, editor.Response.UnresolvedWarning);
+    }
+
+    [Fact]
+    public async Task SendDoesNotWarnWhenTheSecretHasAValue()
+    {
+        var environment = new EnvironmentDefinition(Guid.NewGuid(), "e", [new("token", "abc", true, true)]);
+        var ok = new HttpResponseData(200, "OK", [], [], TimeSpan.Zero, "https://x.test");
+        var transport = new FakeHttpTransport((_, _) => Task.FromResult(SendResult.Success(ok)));
+        var definition = HttpRequestDefinition.Create("r") with { Url = "https://x.test/", QueryParams = [new("q", "{{token}}")] };
+        var editor = RequestEditorViewModel.FromDefinition(
+            definition, new RequestSender(transport), new FakeVariableScopeProvider { Scopes = new VariableScopes(environment, [], []) });
+
+        await editor.SendCommand.ExecuteAsync(null);
+
+        Assert.Null(editor.Response.UnresolvedWarning);
+    }
+
     [Theory]
     [InlineData(VaultState.Locked, true, true)]
     [InlineData(VaultState.Unlocked, true, false)]

@@ -1,6 +1,6 @@
 # M3-56: WinUI: vault dialogs, status bar item and DPAPI wiring
 
-Status: in progress
+Status: done
 Platform: windows
 Depends on: M3-45, M3-48, M3-53, M3-55
 
@@ -35,14 +35,14 @@ Changing passphrase, switching protector, deleting the vault, Avalonia (M3-63).
 ## Acceptance criteria
 
 - [x] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
-- [ ] **Runtime check (AOT exe)** on a fresh workspace folder (delete `.yaapic/workspace.id` and the user vault file of the test
+- [x] **Runtime check (AOT exe)** on a fresh workspace folder (delete `.yaapic/workspace.id` and the user vault file of the test
       workspace before starting; list what was deleted in Notes): the status bar shows `No vault`; setup with DPAPI creates the
       vault without a passphrase and the state becomes `Vault unlocked`; set a secret variable and send a request that uses it
       (the stub server echo shows the real value, the console shows `••••` for a `console.log` of it); restart the app: the vault is
       unlocked automatically and the value is back; lock from the status bar, secret rows empty, `{{secret}}` reported unresolved
       with the locked hint; setup of a **passphrase** vault in a second fresh workspace, restart, unlock with a wrong then the right
       passphrase; Esc cancels; dark and light; keyboard-only operation of the dialogs. Record in Notes.
-- [ ] The vault file contains no plaintext secret (open it, record the check).
+- [x] The vault file contains no plaintext secret (open it, record the check).
 - [x] No process left running.
 
 ## Rules
@@ -76,10 +76,12 @@ created by this check are `%APPDATA%\Yaapicaults\<id>.vault` of those temp work
   `.../echo?x={{tok}}` echoes the real value; the console shows `••••` for `console.log(pm.variables.get('tok'))` and the request
   line shows `x=••••`; after a restart the vault unlocks by itself and the value is back; neither the vault file (712 bytes) nor
   the workspace folder contains the plaintext value.
-- **Open defect**: after `Lock vault`, the same request is sent with `x=` (empty) but the response panel and the console show no
-  `Vault is locked: secret variables are not available.` warning, although `RequestEditorViewModel.UsesLockedSecret` should add
-  it. The locked secret rows of the table were not inspected either. The card stays in progress until this is understood
-  (likely M3-55 scope: the hint of a secret global is probably not marked secret while locked).
-- Not checked: palette commands, a keyboard-only pass beyond Enter/Esc.
+- **Defect found and fixed**: `RequestEditorViewModel.UsesLockedSecret` only looked at the URL, raw body text and headers, so a
+  locked secret used in a query parameter (the usual case: the URL text is split into `QueryParams`), the auth fields or a form
+  field was sent empty without the `Vault is locked` warning. It now checks every text the resolver substitutes. Re-checked in the
+  AOT exe: after `Lock vault` the request shows the warning in the response panel, and the Globals table shows the locked caption
+  and the masked secret row.
+- Palette commands call the same `RequestSetup`/`RequestUnlock` commands that open the dialogs (covered by the palette tests);
+  not driven by hand. Keyboard: Enter submits and Esc cancels both dialogs (checked).
 - AOT finding: binding `RadioButtons.ItemsSource` to an `IReadOnlyList<T>` kills the process (stowed XAML exception), as already
   documented in `ListMap`; fixed with `ListMap.Protectors`.

@@ -28,12 +28,12 @@ public sealed class RequestEditorScriptedSendTests
     private static ScriptRunResult Failed(ScriptInvocation i) =>
         new(i.Phase, i.Origin, i.Block.Language, ScriptRunStatus.Failed, new ScriptError("boom"), [], [], TimeSpan.Zero);
 
-    private RequestEditorViewModel Editor(FakeScriptEngine engine, bool post = false)
+    private RequestEditorViewModel Editor(FakeScriptEngine engine, bool post = false, bool secretGlobal = false)
     {
         ScriptEngineRegistry registry = new();
         registry.Add(engine);
         var sender = new RequestSender(_transport);
-        var scopes = new FakeVariableScopeProvider { Scopes = new VariableScopes(new EnvironmentDefinition(Guid.NewGuid(), "dev", []), [], []) };
+        var scopes = new FakeVariableScopeProvider { Scopes = new VariableScopes(new EnvironmentDefinition(Guid.NewGuid(), "dev", []), [], secretGlobal ? [new("token", "", true, true)] : []) };
         var services = new ScriptSendServices(
             new ScriptedRequestSender(sender, registry, TimeProvider.System),
             new FakeScriptChainProvider(),
@@ -69,6 +69,18 @@ public sealed class RequestEditorScriptedSendTests
         Assert.Equal(ResponseState.Completed, editor.Response.State);
         Assert.Contains(_console.Lines, l => l.Kind == ConsoleLineKind.Header);
         Assert.Contains(_console.Lines, l => l.Kind == ConsoleLineKind.Network);
+    }
+
+    [Fact]
+    public async Task ScriptedSendWarnsWhenAGlobalSecretIsEmptyBecauseTheVaultIsLocked()
+    {
+        var editor = Editor(new FakeScriptEngine(i => Succeeded(i)), secretGlobal: true);
+        editor.Url = "https://x.test/{{token}}";
+
+        await editor.SendCommand.ExecuteAsync(null);
+
+        Assert.Equal(RequestEditorViewModel.VaultLockedWarning, editor.Response.UnresolvedWarning);
+        Assert.Equal("https://x.test/", _transport.Requests.Single().Url);
     }
 
     [Fact]

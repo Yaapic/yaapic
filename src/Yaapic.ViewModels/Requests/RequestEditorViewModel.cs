@@ -329,10 +329,17 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         }
     }
 
-    private bool UsesLockedSecret(HttpRequestDefinition request) =>
-        new[] { request.Url, request.Body.Text }
-            .Concat(request.Headers.Where(h => h.Enabled).Select(h => h.Value))
+    // Every text the resolver substitutes: a secret used in the query, the auth or a form field is as silent as one in the URL.
+    private bool UsesLockedSecret(HttpRequestDefinition request)
+    {
+        var enabled = request.QueryParams.Concat(request.Headers).Where(e => e.Enabled).SelectMany(e => new[] { e.Key, e.Value });
+        var fields = request.Body.Fields.Where(f => f.Enabled).SelectMany(f => new[] { f.Key, f.Value });
+        var auth = request.Auth;
+        return new[] { request.Url, request.Body.Text, auth.Username, auth.Password, auth.Token, auth.Key, auth.Value }
+            .Concat(enabled)
+            .Concat(fields)
             .Any(text => Variables.Tokenize(text).Any(t => t.Hint is { IsSecret: true, Value.Length: 0 }));
+    }
 
     /// <summary>The warning line added when a request uses a secret variable that is empty because the vault is locked.</summary>
     public const string VaultLockedWarning = "Vault is locked: secret variables are not available.";
