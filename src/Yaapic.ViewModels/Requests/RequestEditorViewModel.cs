@@ -2,8 +2,10 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
+using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Responses;
@@ -19,6 +21,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private readonly RequestSender _sender;
     private readonly IVariableScopeProvider _scopes;
     private readonly IDialogService? _dialogs;
+    private readonly ScriptSendServices? _scripting;
     private HttpRequestDefinition? _baseline;
     private bool _syncingUrl;
 
@@ -58,8 +61,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isActive;
 
-    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs)
+    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs, ScriptSendServices? scripting)
     {
+        _scripting = scripting;
         Id = id;
         _sender = sender;
         _scopes = scopes;
@@ -166,18 +170,20 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="scopes">Provides the variable scopes at send time.</param>
     /// <param name="isNew">Whether the request has never been saved.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
+    /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel FromDefinition(
         HttpRequestDefinition definition,
         RequestSender sender,
         IVariableScopeProvider scopes,
         bool isNew = false,
-        IDialogService? dialogs = null)
+        IDialogService? dialogs = null,
+        ScriptSendServices? scripting = null)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(sender);
         ArgumentNullException.ThrowIfNull(scopes);
-        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs)
+        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs, scripting)
         {
             Name = definition.Name,
             Method = definition.Method,
@@ -210,9 +216,14 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="sender">The use case that sends the request.</param>
     /// <param name="scopes">Provides the variable scopes at send time.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
+    /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
     /// <returns>The editor.</returns>
-    public static RequestEditorViewModel CreateNew(RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs = null) =>
-        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs);
+    public static RequestEditorViewModel CreateNew(
+        RequestSender sender,
+        IVariableScopeProvider scopes,
+        IDialogService? dialogs = null,
+        ScriptSendServices? scripting = null) =>
+        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs, scripting);
 
     /// <summary>Builds the domain request from the current state.</summary>
     /// <returns>The request; a blank name becomes "New Request".</returns>
@@ -256,6 +267,12 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     {
         Response.ShowSending();
         var request = ToDefinition();
+        if (_scripting is not null)
+        {
+            await SendScriptedAsync(_scripting, request, ct);
+            return;
+        }
+
         var report = await _sender.SendAsync(request, _scopes.GetScopes(Id), ct);
         Response.ShowReport(report);
         if (UsesLockedSecret(request))
@@ -266,6 +283,49 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         if (report.Result.Failure?.Kind != SendFailureKind.Canceled)
         {
             Sent?.Invoke(this, new RequestSentEventArgs(request, report));
+        }
+    }
+
+    private async Task SendScriptedAsync(ScriptSendServices services, HttpRequestDefinition request, CancellationToken ct)
+    {
+        var writable = _scopes.GetWritableScopes(Id);
+        var input = new ScriptedSendInput(
+            request,
+            _scopes.GetScopes(Id),
+            services.Chains.GetAncestors(Id).WithRequest(DisplayName, Scripts.ToSet()),
+            writable.Contains(VariableScopeKind.Environment),
+            writable.Contains(VariableScopeKind.Collection));
+        var scripted = await services.Sender.SendAsync(input, ct);
+        services.Console.AppendReport(scripted);
+        if (scripted.AbortedBy is { Status: ScriptRunStatus.Canceled })
+        {
+            // A canceled script is a canceled send, not a script failure.
+            Response.ShowReport(new SendReport(SendResult.Fail(SendFailureKind.Canceled, "Request canceled"), []));
+        }
+        else
+        {
+            Response.ShowScripted(scripted);
+        }
+
+        if (scripted.Changes.Count > 0)
+        {
+            foreach (var error in await services.Variables.ApplyAsync(Id, scripted.Changes))
+            {
+                services.Console.AppendSystem(ConsoleLevel.Warn, $"Could not save variable changes: {error}");
+            }
+        }
+
+        if (scripted.Report is { } report)
+        {
+            if (UsesLockedSecret(request))
+            {
+                Response.AddWarningLine(VaultLockedWarning);
+            }
+
+            if (report.Result.Failure?.Kind != SendFailureKind.Canceled)
+            {
+                Sent?.Invoke(this, new RequestSentEventArgs(scripted.SentDefinition ?? request, report));
+            }
         }
     }
 

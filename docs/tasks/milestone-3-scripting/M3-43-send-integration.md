@@ -1,6 +1,6 @@
 # M3-43: Request editor: send through scripts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-12, M3-39, M3-41, M3-42, M3-10
 
@@ -40,12 +40,12 @@ Persisting variable changes (M3-44), composition wiring (M3-47), views.
 
 ## Acceptance criteria
 
-- [ ] Tests (`FakeScriptEngine`, `FakeHttpTransport`, doubles): no services -> existing tests pass untouched; with services:
+- [x] Tests (`FakeScriptEngine`, `FakeHttpTransport`, doubles): no services -> existing tests pass untouched; with services:
       pre-request header reaches the transport, tests land in `Response.Tests`, console receives header/lines/network lines,
       `Sent` raised once with the mutated definition, aborted pre-request raises no `Sent` and shows the error state, post-response
       error keeps the response, variable changes are handed to the applier, applier errors become console warnings, cancel during
       a slow fake script ends with "Request canceled", `IsSending` true during the whole pipeline.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 

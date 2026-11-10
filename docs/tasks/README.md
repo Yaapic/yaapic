@@ -272,7 +272,7 @@ not run in their Notes.
 | [M3-40](milestone-3-scripting/M3-40-folder-settings-scripts-viewmodel.md) | Folder and collection settings ViewModel: scripts | any | M3-39, M3-06 | done |
 | [M3-41](milestone-3-scripting/M3-41-console-viewmodel.md) | Console ViewModel | any | M3-04 | done |
 | [M3-42](milestone-3-scripting/M3-42-test-results-viewmodel.md) | Test results ViewModel and response panel integration | any | M3-04, M3-12 | done |
-| [M3-43](milestone-3-scripting/M3-43-send-integration.md) | Request editor: send through scripts | any | M3-12, M3-39, M3-41, M3-42, M3-10 | todo |
+| [M3-43](milestone-3-scripting/M3-43-send-integration.md) | Request editor: send through scripts | any | M3-12, M3-39, M3-41, M3-42, M3-10 | done |
 | [M3-44](milestone-3-scripting/M3-44-apply-script-variable-changes.md) | Persist the variable changes made by scripts | any | M3-43, M3-08 | todo |
 | [M3-45](milestone-3-scripting/M3-45-vault-viewmodel.md) | Vault ViewModel | any | M3-34, M3-37 | done |
 | [M3-46](milestone-3-scripting/M3-46-secret-rows-and-masking.md) | Secret rows in the key/value editor and masking in variable hints | any | M3-33, M3-45 | done |

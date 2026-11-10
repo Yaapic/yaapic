@@ -86,6 +86,16 @@ public sealed partial class ConsoleViewModel : ObservableObject
         Rebuild();
     }
 
+    /// <summary>Adds one system line, such as a warning raised outside a script run.</summary>
+    /// <param name="level">The severity of the line.</param>
+    /// <param name="message">The message.</param>
+    public void AppendSystem(ConsoleLevel level, string message)
+    {
+        ArgumentNullException.ThrowIfNull(message);
+        Add(new(DateTimeOffset.Now, KindOf(level), message, "System"));
+        Rebuild();
+    }
+
     [RelayCommand]
     private void Clear()
     {
