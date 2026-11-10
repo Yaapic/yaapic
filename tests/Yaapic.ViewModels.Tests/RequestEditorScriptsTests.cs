@@ -131,6 +131,84 @@ public sealed class RequestEditorScriptsTests
     }
 
     [Fact]
+    public void NewBlockShowsTheTemplateButIsEmpty()
+    {
+        var block = new ScriptBlockEditorViewModel(ScriptPhase.PostResponse);
+
+        Assert.Equal(block.Placeholder, block.Source);
+        Assert.True(block.IsEmpty);
+        Assert.Equal(ScriptBlock.Empty, block.ToBlock());
+    }
+
+    [Theory]
+    [InlineData("")]
+    [InlineData("// Runs after the response arrives.\n// pm.test(\"Status is 200\", () => pm.response.to.have.status(200));")]
+    public void LoadingAnEmptyBlockShowsTheTemplateAndRoundTripsEmpty(string source)
+    {
+        var block = new ScriptBlockEditorViewModel(ScriptPhase.PostResponse);
+        block.Load(new ScriptBlock(ScriptLanguage.JavaScript, source));
+
+        Assert.Equal(block.Placeholder, block.Source);
+        Assert.True(block.IsEmpty);
+        Assert.Equal(ScriptBlock.Empty, block.ToBlock());
+    }
+
+    [Fact]
+    public void TypingReplacesTheTemplateAndCountsAsAScript()
+    {
+        var scripts = new ScriptsEditorViewModel();
+        scripts.PreRequest.Source = "pm.test('x')";
+
+        Assert.False(scripts.PreRequest.IsEmpty);
+        Assert.Equal(1, scripts.FilledCount);
+        Assert.Equal("pm.test('x')", scripts.ToSet().PreRequest.Source);
+    }
+
+    [Fact]
+    public void UntouchedTemplateSwapsWithTheLanguage()
+    {
+        var block = new ScriptBlockEditorViewModel(ScriptPhase.PreRequest);
+
+        block.Language = ScriptLanguage.Lua;
+
+        Assert.StartsWith("-- Runs before", block.Source);
+        Assert.Equal(block.Placeholder, block.Source);
+        Assert.True(block.IsEmpty);
+        Assert.Equal(new ScriptBlock(ScriptLanguage.Lua, ""), block.ToBlock());
+    }
+
+    [Fact]
+    public void ClearedSourceGetsTheNewTemplateOnLanguageChange()
+    {
+        var block = new ScriptBlockEditorViewModel(ScriptPhase.PreRequest) { Source = "" };
+
+        block.Language = ScriptLanguage.Lua;
+
+        Assert.Equal(block.Placeholder, block.Source);
+    }
+
+    [Fact]
+    public void EditedSourceIsKeptOnLanguageChange()
+    {
+        var block = new ScriptBlockEditorViewModel(ScriptPhase.PreRequest) { Source = "// mine" };
+
+        block.Language = ScriptLanguage.Lua;
+
+        Assert.Equal("// mine", block.Source);
+        Assert.Equal("// mine", block.ToBlock().Source);
+    }
+
+    [Fact]
+    public void UntouchedTemplateIsNeverSavedNorDirty()
+    {
+        var editor = Editor();
+
+        Assert.Equal(ScriptSet.Empty, editor.ToDefinition().Scripts);
+        Assert.False(editor.IsDirty);
+        Assert.Equal("", editor.ScriptsBadge);
+    }
+
+    [Fact]
     public void OffersJavaScriptAndLua()
     {
         Assert.Equal(

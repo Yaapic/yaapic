@@ -23,9 +23,8 @@ a count badge, as in the mockup (`Params, Authorization, Headers, Body, Scripts 
   `ScriptBlockEditorViewModel.Languages`, label `Label`), a one-line hint (secondary text colour, `YaapicFontSizeSmall`) that
   reads `"Variables, tests and requests: pm.* (JavaScript and Lua)"` plus a link-like text button `Docs` is **not** added; then
   one `CodeEditorView` (Name `ScriptEditor`, `EditorLanguage` from `TextMap.ScriptLanguage(Scripts.Selected.Language)`,
-  `Text` two-way bound to `Scripts.Selected.Source`, `AutomationProperties.Name` `"Script"`) filling the pane. A placeholder
-  `TextBlock` (`Scripts.Selected.Placeholder`, disabled text colour, monospace, `IsHitTestVisible` false) overlays the editor
-  while the source is empty.
+  `Text` two-way bound to `Scripts.Selected.Source`, `AutomationProperties.Name` `"Script"`) filling the pane. While a block is
+  empty the editor's own text is its commented template (`Scripts.Selected.Placeholder`, see M3-39); there is no overlay.
 - Both phases keep their own text: switching phase swaps the bound block; the editor's undo history is not preserved across
   phases (note it).
 - `x:Bind`/compiled bindings only; reuse existing converters in `Presentation/` (add `TextMap.ScriptLanguage`, `VisibilityMap`
@@ -83,3 +82,5 @@ Console, tests tab (M3-53, M3-54), folder scripts (M3-52), autocomplete, snippet
   the app has `Auth` instead of `Authorization`, no `Tests` tab (by design), no Headers count on this request; the badge,
   underline and spacing match. The hint is trimmed with an ellipsis at 1440 px.
 - No Yaapic process left running.
+- Revision: the first version overlaid a grey placeholder `TextBlock` on the editor; it collided with the gutter and caret.
+  The overlay is gone: an empty block shows its template as real editor text (typing edits it, `ToBlock` never saves it).

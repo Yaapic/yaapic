@@ -61,3 +61,11 @@ Running the scripts (M3-43), folder scripts (M3-40), views.
 ## Suggested commit message
 
 `feat(viewmodels): edit request scripts`
+
+## Notes
+
+- Revision: the placeholder is the block's actual `Source` while the block is empty (views show it as editor text, no overlay).
+  `IsEmpty` is true for a blank source or one equal to the current template; `ToBlock()` returns an empty source for an empty
+  or template-only source, so the template is never persisted and never counts in `FilledCount`. `Load` of an empty block shows
+  the template (no `Changed`); changing the language swaps an untouched (empty or template) source for the new language's
+  template, an edited source is kept. Whitespace-only sources are still saved as typed.

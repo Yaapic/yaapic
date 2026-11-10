@@ -27,16 +27,9 @@
     </Grid>
     <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
             BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
-      <Grid>
-        <v:CodeEditorView x:Name="ScriptEditor" AutomationProperties.Name="Script"
-                          EditorLanguage="{x:Bind p:TextMap.ScriptLanguage(ViewModel.Selected.Language), Mode=OneWay}"
-                          Text="{x:Bind ViewModel.Selected.Source, Mode=TwoWay}"/>
-        <TextBlock Margin="16,0,16,0" VerticalAlignment="Top" IsHitTestVisible="False"
-                   FontFamily="{StaticResource YaapicMonoFont}"
-                   Foreground="{ThemeResource YaapicTextDisabledBrush}"
-                   Text="{x:Bind ViewModel.Selected.Placeholder, Mode=OneWay}"
-                   Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Selected.IsEmpty), Mode=OneWay}"/>
-      </Grid>
+      <v:CodeEditorView x:Name="ScriptEditor" AutomationProperties.Name="Script"
+                        EditorLanguage="{x:Bind p:TextMap.ScriptLanguage(ViewModel.Selected.Language), Mode=OneWay}"
+                        Text="{x:Bind ViewModel.Selected.Source, Mode=TwoWay}"/>
     </Border>
   </Grid>
 </UserControl>
