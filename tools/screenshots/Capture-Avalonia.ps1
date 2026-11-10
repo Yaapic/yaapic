@@ -35,7 +35,7 @@ try {
     Copy-Item (Join-Path $PSScriptRoot 'workspace') $temp -Recurse
     $ids = @{ 'list-users' = '11111111-0000-0000-0000-000000000001'; 'create-user' = '11111111-0000-0000-0000-000000000002'
               'missing-item' = '11111111-0000-0000-0000-000000000003'; 'server-error' = '11111111-0000-0000-0000-000000000004'
-              'slow' = '11111111-0000-0000-0000-000000000005'; 'big' = '11111111-0000-0000-0000-000000000008' }
+              'slow' = '11111111-0000-0000-0000-000000000005'; 'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009' }
     $session = Join-Path $temp '.yaapic\session.yaml'
     $openList = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$openList`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))

@@ -1,6 +1,6 @@
 # M3-58: Avalonia: Scripts tab in the request editor
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M3-39, M3-57, M3-51
 
@@ -31,12 +31,12 @@ Console, tests tab, folder scripts window (M3-59).
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; tests green; AOT publish 0 new IL2xxx/IL3xxx.
-- [ ] **Runtime check on the published exe** (drive the real window): the same steps as M3-51 (badge `2`, type in both phases,
+- [x] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; tests green; AOT publish 0 new IL2xxx/IL3xxx.
+- [x] **Runtime check on the published exe** (drive the real window): the same steps as M3-51 (badge `2`, type in both phases,
       language switch, unsaved marker, Ctrl+S persists to YAML, reopen restores, dark and light, keyboard focus visible).
       Record in Notes; macOS/Linux not run unless the host is that OS.
-- [ ] `Capture-Avalonia.ps1 -Send -Select Scripts` screenshot compared with the mockup; differences in Notes (not committed).
-- [ ] No process left running.
+- [x] `Capture-Avalonia.ps1 -Send -Select Scripts` screenshot compared with the mockup; differences in Notes (not committed).
+- [x] No process left running.
 
 ## Rules
 
@@ -53,3 +53,17 @@ Console, tests tab, folder scripts window (M3-59).
 ## Suggested commit message
 
 `feat(avalonia): add the Scripts tab to the request editor`
+
+## Notes
+
+- Runtime check on the AOT exe (Windows, driven through UI Automation, SendKeys and mouse on a copy of the fixture workspace): `scripted`
+  opens with `Scripts 2`; text typed in both phases is kept when switching phase; Lua and back works from the language picker; the tab
+  and the request header show the unsaved dot; Ctrl+S writes both `scripts.preRequest` and `scripts.postResponse` to the YAML; after a
+  relaunch the scripts and the badge are back. Dark and light screenshots checked; keyboard focus ring seen on the tab and pickers in
+  the screenshots only. macOS and Linux not run (host is Windows).
+- No overlay: an empty block shows its commented template as real editor text (`ScriptBlockEditorViewModel`, see da016b9).
+- Ctrl+Enter inside the script editor is caught by the M2-70 tunnelling handler of `RequestEditorView` (sends), as for the body editor.
+- Undo history is not preserved across phases (one editor, its text is swapped).
+- The pickers are index based (`EditorMap.ScriptPhaseIndex`, `ScriptLanguageIndex`); the pure helpers are unit-tested (4 cases).
+- Screenshot compared with the mockup row (not committed): `Auth` instead of `Authorization`, no `Tests` tab (by design); badge,
+  underline and spacing match.

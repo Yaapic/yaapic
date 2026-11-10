@@ -129,6 +129,16 @@
         </TabItem.Header>
         <v:AuthEditorView DataContext="{Binding Auth}" />
       </TabItem>
+      <TabItem>
+        <TabItem.Header>
+          <StackPanel Orientation="Horizontal" Spacing="6">
+            <TextBlock Text="Scripts" />
+            <TextBlock Classes="badge" Text="{Binding Scripts.BadgeText}"
+                       IsVisible="{Binding Scripts.FilledCount, Converter={x:Static p:EditorMap.IsPositive}}" />
+          </StackPanel>
+        </TabItem.Header>
+        <v:ScriptsEditorView DataContext="{Binding Scripts}" />
+      </TabItem>
       <TabItem Header="Settings">
         <StackPanel Margin="16,12" Spacing="16" HorizontalAlignment="Left">
           <ToggleSwitch OnContent="Follow redirects" OffContent="Follow redirects"

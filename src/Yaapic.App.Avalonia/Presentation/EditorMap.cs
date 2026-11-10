@@ -1,5 +1,6 @@
 using Avalonia.Data.Converters;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 
 namespace Yaapic.App.Avalonia.Presentation;
 
@@ -89,4 +90,13 @@ public static partial class EditorMap
 
     /// <summary>Converts a timeout in seconds to the value of a <c>NumericUpDown</c>.</summary>
     public static FuncValueConverter<int, decimal?> TimeoutValue { get; } = new(n => n);
+
+    /// <summary>Converts a script language to the code editor language.</summary>
+    public static FuncValueConverter<ScriptLanguage, string?> ScriptEditorLanguage { get; } = new(l => ScriptLanguage(l));
+
+    /// <summary>Converts a script phase to its index in the Pre-request / Post-response switch.</summary>
+    public static FuncValueConverter<ScriptPhase, int> PhaseIndex { get; } = new(ScriptPhaseIndex);
+
+    /// <summary>Converts a script language to its index in the language picker.</summary>
+    public static FuncValueConverter<ScriptLanguage, int> LanguageIndex { get; } = new(ScriptLanguageIndex);
 }

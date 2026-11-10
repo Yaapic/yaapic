@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sc="using:Yaapic.ViewModels.Scripting"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             xmlns:v="using:Yaapic.App.Avalonia.Views"
+             x:Class="Yaapic.App.Avalonia.Views.ScriptsEditorView"
+             x:DataType="sc:ScriptsEditorViewModel">
+  <Grid RowDefinitions="Auto,*">
+    <Grid ColumnDefinitions="Auto,Auto,*" Margin="16,8" ColumnSpacing="12">
+      <ListBox x:Name="ScriptPhases" Classes="segmented" VerticalAlignment="Center"
+               AutomationProperties.Name="Script phase"
+               SelectedIndex="{Binding SelectedPhase, Converter={x:Static p:EditorMap.PhaseIndex}, Mode=OneWay}"
+               SelectionChanged="OnScriptPhaseChanged">
+        <ListBoxItem Content="Pre-request" />
+        <ListBoxItem Content="Post-response" />
+      </ListBox>
+      <ComboBox x:Name="ScriptLanguageBox" Grid.Column="1" MinWidth="130" VerticalAlignment="Center"
+                AutomationProperties.Name="Script language"
+                SelectedIndex="{Binding Selected.Language, Converter={x:Static p:EditorMap.LanguageIndex}, Mode=OneWay}"
+                SelectionChanged="OnScriptLanguageChanged" />
+      <TextBlock Grid.Column="2" Classes="bodySmall" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                 Text="Variables, tests and requests: pm.* (JavaScript and Lua)"
+                 Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+    </Grid>
+    <v:CodeEditorView Grid.Row="1" x:Name="ScriptEditor" AutomationProperties.Name="Script"
+                      EditorLanguage="{Binding Selected.Language, Converter={x:Static p:EditorMap.ScriptEditorLanguage}}"
+                      Text="{Binding Selected.Source, Mode=TwoWay}" />
+  </Grid>
+</UserControl>
