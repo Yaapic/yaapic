@@ -13,15 +13,16 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class CommandsPaletteSourceTests
 {
-    private static readonly string[] Always = ["New request", "New collection", "Manage environments", "Show collections", "Show history"];
+    private static readonly string[] Always = ["New request", "New collection", "Manage environments", "Show collections", "Show history", "Toggle console", "Clear console", "Set up the secret vault..."];
 
     private static readonly HttpResponseData Ok = new(200, "OK", [], [], TimeSpan.FromMilliseconds(5), "https://x.test");
 
     private readonly InMemoryHistoryStore _historyStore = new();
     private TaskCompletionSource<SendResult>? _gate;
 
-    private ShellViewModel CreateShell()
+    private ShellViewModel CreateShell(ShellParts? parts = null)
     {
+        parts ??= new ShellParts();
         var requests = new InMemoryRequestStore();
         var dialogs = new FakeDialogService();
         var sender = new RequestSender(new FakeHttpTransport((_, _) => _gate?.Task ?? throw new NotSupportedException()));
@@ -37,7 +38,10 @@ public sealed class CommandsPaletteSourceTests
             new EnvironmentsViewModel(new InMemoryEnvironmentStore(), dialogs),
             new GlobalsViewModel(new InMemoryGlobalsStore()),
             new InMemorySessionStore(),
-            dialogs);
+            dialogs,
+            parts.Console,
+            parts.VaultViewModel,
+            parts.Engines);
     }
 
     private static string[] Titles(ShellViewModel shell) =>
@@ -145,5 +149,39 @@ public sealed class CommandsPaletteSourceTests
         Assert.Same(first, shell.Tabs.ActiveTab);
         shell.Tabs.PreviousTabCommand.Execute(null);
         Assert.Same(second, shell.Tabs.ActiveTab);
+    }
+
+    [Theory]
+    [InlineData(Yaapic.Core.Secrets.VaultState.NotCreated, "Set up the secret vault...")]
+    [InlineData(Yaapic.Core.Secrets.VaultState.Locked, "Unlock the vault...")]
+    [InlineData(Yaapic.Core.Secrets.VaultState.Unlocked, "Lock the vault")]
+    public async Task ExactlyOneVaultCommandMatchesTheVaultState(Yaapic.Core.Secrets.VaultState state, string title)
+    {
+        var parts = new ShellParts();
+        parts.Vault.Arrange(state);
+        await parts.VaultViewModel.InitializeAsync();
+        var shell = CreateShell(parts);
+
+        var vaultTitles = Titles(shell).Where(t => t.Contains("vault", StringComparison.Ordinal)).ToArray();
+
+        Assert.Equal([title], vaultTitles);
+    }
+
+    [Fact]
+    public async Task ConsoleAndVaultCommandsRunTheirActions()
+    {
+        var parts = new ShellParts();
+        var shell = CreateShell(parts);
+        var setup = false;
+        parts.VaultViewModel.SetupRequested += (_, _) => setup = true;
+        var source = new CommandsPaletteSource(shell);
+
+        await Find(source, "command:toggle-console").Execute();
+        Assert.True(shell.IsConsoleOpen);
+        await Find(source, "command:clear-console").Execute();
+        Assert.True(shell.IsConsoleOpen);
+        await Find(source, "command:vault-setup").Execute();
+        Assert.True(setup);
+        Assert.Equal("Ctrl+`", Find(source, "command:toggle-console").Shortcut);
     }
 }

@@ -3,6 +3,9 @@
     <TargetFramework>net11.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Yaapic.Infrastructure.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Yaapic.ViewModels\Yaapic.ViewModels.csproj" />
     <ProjectReference Include="..\Yaapic.Infrastructure\Yaapic.Infrastructure.csproj" />
     <ProjectReference Include="..\Yaapic.Core\Yaapic.Core.csproj" />

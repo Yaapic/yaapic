@@ -1,6 +1,6 @@
 # M3-47: Shell, palette and composition: engines, console, vault
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-17, M3-25, M3-38, M3-43, M3-44, M3-45, M3-46
 
@@ -41,14 +41,14 @@ Views, the OS protectors themselves, the E2E tests.
 
 ## Acceptance criteria
 
-- [ ] Composition tests (`Yaapic.Infrastructure.Tests/Composition`, real files, fake dialogs, `FakeScriptEngine` registered
+- [x] Composition tests (`Yaapic.Infrastructure.Tests/Composition`, real files, fake dialogs, `FakeScriptEngine` registered
       through an internal seam or the real engines when the natives are present — mark the real-engine test with a trait and skip
       it with a clear message when the library is absent): shell creation succeeds with and without natives; a script-bearing
       request sends and fills console and tests; secret variable saved through the environments view model is absent from the
       YAML and present in the vault file as ciphertext; lock -> reload shows empty secret values; console toggle/clear;
       palette commands and their enabled state per vault state; engine warnings when a library is unavailable.
-- [ ] Existing shell, composition and palette tests updated only where the command count changed, otherwise green.
-- [ ] 0 warnings, XML docs, architecture tests green (`Yaapic.ViewModels` still never references `Yaapic.Scripting`).
+- [x] Existing shell, composition and palette tests updated only where the command count changed, otherwise green.
+- [x] 0 warnings, XML docs, architecture tests green (`Yaapic.ViewModels` still never references `Yaapic.Scripting`).
 
 ## Rules
 

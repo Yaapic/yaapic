@@ -276,7 +276,7 @@ not run in their Notes.
 | [M3-44](milestone-3-scripting/M3-44-apply-script-variable-changes.md) | Persist the variable changes made by scripts | any | M3-43, M3-08 | done |
 | [M3-45](milestone-3-scripting/M3-45-vault-viewmodel.md) | Vault ViewModel | any | M3-34, M3-37 | done |
 | [M3-46](milestone-3-scripting/M3-46-secret-rows-and-masking.md) | Secret rows in the key/value editor and masking in variable hints | any | M3-33, M3-45 | done |
-| [M3-47](milestone-3-scripting/M3-47-shell-console-vault-and-composition.md) | Shell, palette and composition: engines, console, vault | any | M3-17, M3-25, M3-38, M3-43, M3-44, M3-45, M3-46 | todo |
+| [M3-47](milestone-3-scripting/M3-47-shell-console-vault-and-composition.md) | Shell, palette and composition: engines, console, vault | any | M3-17, M3-25, M3-38, M3-43, M3-44, M3-45, M3-46 | done |
 | [M3-48](milestone-3-scripting/M3-48-windows-dpapi-key-protector.md) | Windows: DPAPI key protector | windows | M3-36, M3-47 | todo |
 | [M3-49](milestone-3-scripting/M3-49-unix-keychain-and-secret-service-protectors.md) | macOS Keychain and Linux Secret Service key protectors | unix | M3-36, M3-47 | todo |
 | [M3-50](milestone-3-scripting/M3-50-winui-code-editor-javascript-and-lua.md) | WinUI: JavaScript and Lua in `CodeEditorView` | windows | M3-03 | done |
