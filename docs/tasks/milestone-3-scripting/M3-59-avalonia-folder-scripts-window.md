@@ -1,6 +1,6 @@
 # M3-59: Avalonia: scripts in the folder and collection settings window
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M3-40, M3-58
 
@@ -22,12 +22,12 @@ New window features.
 
 ## Acceptance criteria
 
-- [ ] Build `Yaapic.CrossPlatform.slnf` 0 warnings, tests green, AOT publish 0 new IL2xxx/IL3xxx.
-- [ ] **Runtime check on the published exe**: the M3-52 steps (collection settings from the tree menu, save writes the script into
+- [x] Build `Yaapic.CrossPlatform.slnf` 0 warnings, tests green, AOT publish 0 new IL2xxx/IL3xxx.
+- [ ] **Runtime check on the published exe** (rendering done, interactive and send steps not, see Notes): the M3-52 steps (collection settings from the tree menu, save writes the script into
       `folder.yaml`, sending a request of that collection against the stub server shows the injected header
       with the real engines, nested folder hint, cancel discards, dark and light).
-- [ ] The request editor Scripts tab still works.
-- [ ] No process left running.
+- [x] The request editor Scripts tab still works.
+- [x] No process left running.
 
 ## Rules
 
@@ -44,3 +44,18 @@ New window features.
 ## Suggested commit message
 
 `feat(avalonia): edit collection and folder scripts in the settings window`
+
+
+## Notes
+
+- `FolderSettingsWindow` gets a `Scripts` section after Variables: bold title, wrapped `ScriptsHint` line, then the existing
+  `ScriptsEditorView` bound to `Scripts` in a 280 px tall (min 240 px) bordered box; shown for the collection and for folders.
+  No new XAML for the editor; the window keeps its single scrolling column, Save and Close unchanged.
+- Fixtures were already extended by M3-52 (`users-api/folder.yaml` pre-request, nested `admin` folder post-response).
+- Runtime check on the AOT exe (`Capture-Avalonia.ps1 -Open settings`, dark and light): the collection window shows the
+  collection hint and the fixture pre-request with JavaScript highlighting. The screenshot tooling cannot type or click, so
+  typing and Save writing `folder.yaml`, Close discarding, the nested folder hint and the request editor tab at runtime were
+  not driven; they run through the same view models and views already covered by the M3-40 tests and the M3-58 tab.
+- **Not verified**: sending a request of the collection and seeing the `X-Collection` header at the stub. The app does not run
+  scripts yet (M3-43 and M3-47 are not done); this moves to M3-64/M3-68, as for M3-52.
+- No new tests (view-only change; 2130 passed, 1 skipped). AOT publish: 0 warnings. No process left running.

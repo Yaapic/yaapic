@@ -4,7 +4,7 @@ using Yaapic.ViewModels.Collections;
 
 namespace Yaapic.App.Avalonia.Views;
 
-/// <summary>Modal window that edits the name and description of a folder and the variables of a collection through a <see cref="FolderSettingsViewModel"/>.</summary>
+/// <summary>Modal window that edits the name, description and scripts of a folder and the variables and scripts of a collection through a <see cref="FolderSettingsViewModel"/>.</summary>
 public sealed partial class FolderSettingsWindow : Window
 {
     /// <summary>Creates the window.</summary>
