@@ -43,3 +43,10 @@ auth:
 settings:
   followRedirects: false
   timeoutSeconds: 15
+scripts:
+  preRequest:
+    language: javascript
+    source: ""
+  postResponse:
+    language: javascript
+    source: ""

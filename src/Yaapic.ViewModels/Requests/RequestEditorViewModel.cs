@@ -2,11 +2,14 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
+using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Scripting;
 
 namespace Yaapic.ViewModels.Requests;
 
@@ -18,6 +21,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private readonly RequestSender _sender;
     private readonly IVariableScopeProvider _scopes;
     private readonly IDialogService? _dialogs;
+    private readonly ScriptSendServices? _scripting;
     private HttpRequestDefinition? _baseline;
     private bool _syncingUrl;
 
@@ -57,8 +61,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isActive;
 
-    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs)
+    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs, ScriptSendServices? scripting)
     {
+        _scripting = scripting;
         Id = id;
         _sender = sender;
         _scopes = scopes;
@@ -76,6 +81,14 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         QueryParams.Changed += (_, _) => ComposeUrlFromParams();
         Headers.Changed += (_, _) => Refresh();
         Auth.Changed += (_, _) => Refresh();
+        Scripts.Changed += (_, _) => Refresh();
+        Scripts.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(ScriptsEditorViewModel.BadgeText))
+            {
+                OnPropertyChanged(nameof(ScriptsBadge));
+            }
+        };
         UrlEncodedFields.Changed += (_, _) => Refresh();
         FormData.Changed += (_, _) => Refresh();
     }
@@ -118,6 +131,12 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <summary>Gets the authentication editor.</summary>
     public AuthEditorViewModel Auth { get; } = new();
 
+    /// <summary>Gets the pre-request and post-response script editor.</summary>
+    public ScriptsEditorViewModel Scripts { get; } = new();
+
+    /// <summary>Gets the badge of the Scripts tab header: empty, or the number of filled scripts.</summary>
+    public string ScriptsBadge => Scripts.BadgeText;
+
     /// <summary>Gets a value indicating whether the current method carries a body.</summary>
     public bool AllowsBody => Method.AllowsBody();
 
@@ -151,18 +170,20 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="scopes">Provides the variable scopes at send time.</param>
     /// <param name="isNew">Whether the request has never been saved.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
+    /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel FromDefinition(
         HttpRequestDefinition definition,
         RequestSender sender,
         IVariableScopeProvider scopes,
         bool isNew = false,
-        IDialogService? dialogs = null)
+        IDialogService? dialogs = null,
+        ScriptSendServices? scripting = null)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(sender);
         ArgumentNullException.ThrowIfNull(scopes);
-        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs)
+        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs, scripting)
         {
             Name = definition.Name,
             Method = definition.Method,
@@ -174,6 +195,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             TimeoutSeconds = definition.Settings.TimeoutSeconds,
         };
         editor.Auth.Load(definition.Auth);
+        editor.Scripts.Load(definition.Scripts);
         editor.LoadUrlAndParams(definition);
         editor.Headers.Load(definition.Headers);
         if (definition.Body.Kind == BodyKind.UrlEncoded)
@@ -194,9 +216,14 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="sender">The use case that sends the request.</param>
     /// <param name="scopes">Provides the variable scopes at send time.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
+    /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
     /// <returns>The editor.</returns>
-    public static RequestEditorViewModel CreateNew(RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs = null) =>
-        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs);
+    public static RequestEditorViewModel CreateNew(
+        RequestSender sender,
+        IVariableScopeProvider scopes,
+        IDialogService? dialogs = null,
+        ScriptSendServices? scripting = null) =>
+        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs, scripting);
 
     /// <summary>Builds the domain request from the current state.</summary>
     /// <returns>The request; a blank name becomes "New Request".</returns>
@@ -209,7 +236,8 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         Headers.ToEntries(),
         new RequestBody(BodyKind, BodyContentType, BodyText, BodyFields(), BodyKind == BodyKind.Binary ? BinaryFilePath : ""),
         Auth.ToAuth(),
-        new RequestSettings(FollowRedirects, TimeoutSeconds));
+        new RequestSettings(FollowRedirects, TimeoutSeconds),
+        Scripts.ToSet());
 
     /// <summary>Records the current state as saved: the request is no longer new nor dirty.</summary>
     public void MarkSaved()
@@ -239,13 +267,88 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     {
         Response.ShowSending();
         var request = ToDefinition();
+        if (_scripting is not null)
+        {
+            await SendScriptedAsync(_scripting, request, ct);
+            return;
+        }
+
         var report = await _sender.SendAsync(request, _scopes.GetScopes(Id), ct);
         Response.ShowReport(report);
+        if (UsesLockedSecret(request))
+        {
+            Response.AddWarningLine(VaultLockedWarning);
+        }
+
         if (report.Result.Failure?.Kind != SendFailureKind.Canceled)
         {
             Sent?.Invoke(this, new RequestSentEventArgs(request, report));
         }
     }
+
+    private async Task SendScriptedAsync(ScriptSendServices services, HttpRequestDefinition request, CancellationToken ct)
+    {
+        var writable = _scopes.GetWritableScopes(Id);
+        var input = new ScriptedSendInput(
+            request,
+            _scopes.GetScopes(Id),
+            services.Chains.GetAncestors(Id).WithRequest(DisplayName, Scripts.ToSet()),
+            writable.Contains(VariableScopeKind.Environment),
+            writable.Contains(VariableScopeKind.Collection),
+            services.Limits);
+        var scripted = await services.Sender.SendAsync(input, ct);
+        services.Console.AppendReport(scripted);
+        foreach (var warning in scripted.Warnings)
+        {
+            services.Console.AppendSystem(ConsoleLevel.Warn, warning);
+        }
+
+        if (scripted.AbortedBy is { Status: ScriptRunStatus.Canceled })
+        {
+            // A canceled script is a canceled send, not a script failure.
+            Response.ShowReport(new SendReport(SendResult.Fail(SendFailureKind.Canceled, "Request canceled"), []));
+        }
+        else
+        {
+            Response.ShowScripted(scripted);
+        }
+
+        if (scripted.Changes.Count > 0)
+        {
+            foreach (var error in await services.Variables.ApplyAsync(Id, scripted.Changes))
+            {
+                services.Console.AppendSystem(ConsoleLevel.Warn, $"Could not save variable changes: {error}");
+            }
+        }
+
+        if (scripted.Report is { } report)
+        {
+            if (UsesLockedSecret(request))
+            {
+                Response.AddWarningLine(VaultLockedWarning);
+            }
+
+            if (report.Result.Failure?.Kind != SendFailureKind.Canceled)
+            {
+                Sent?.Invoke(this, new RequestSentEventArgs(scripted.SentDefinition ?? request, report));
+            }
+        }
+    }
+
+    // Every text the resolver substitutes: a secret used in the query, the auth or a form field is as silent as one in the URL.
+    private bool UsesLockedSecret(HttpRequestDefinition request)
+    {
+        var enabled = request.QueryParams.Concat(request.Headers).Where(e => e.Enabled).SelectMany(e => new[] { e.Key, e.Value });
+        var fields = request.Body.Fields.Where(f => f.Enabled).SelectMany(f => new[] { f.Key, f.Value });
+        var auth = request.Auth;
+        return new[] { request.Url, request.Body.Text, auth.Username, auth.Password, auth.Token, auth.Key, auth.Value }
+            .Concat(enabled)
+            .Concat(fields)
+            .Any(text => Variables.Tokenize(text).Any(t => t.Hint is { IsSecret: true, Value.Length: 0 }));
+    }
+
+    /// <summary>The warning line added when a request uses a secret variable that is empty because the vault is locked.</summary>
+    public const string VaultLockedWarning = "Vault is locked: secret variables are not available.";
 
     private bool CanSend() => Url.Trim().Length > 0;
 

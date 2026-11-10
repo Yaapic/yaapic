@@ -1,0 +1,28 @@
+version: 1
+id: 11111111-0000-0000-0000-00000000000b
+name: Lua scripted
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+scripts:
+  preRequest:
+    language: lua
+    source: |
+      pm.request.headers.add({ key = "X-Lang", value = "lua" })
+  postResponse:
+    language: lua
+    source: |
+      -- Runs after the response arrives.
+      local users = pm.response.json()
+      pm.test("Has users", function()
+        pm.expect(#users).to.equal(2)
+      end)
+      for i, user in ipairs(users) do
+        console.log("user " .. i .. ": " .. user.name)
+      end
+      pm.environment.set("lastUser", users[#users].name)

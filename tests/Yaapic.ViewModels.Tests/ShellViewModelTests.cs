@@ -22,6 +22,8 @@ public sealed class ShellViewModelTests
     private readonly FakeDialogService _dialogs = new();
     private readonly InMemoryCollectionStore _collections;
 
+    private ShellParts _parts = new();
+
     public ShellViewModelTests() => _collections = new InMemoryCollectionStore(_requests);
 
     private ShellViewModel Create()
@@ -37,7 +39,8 @@ public sealed class ShellViewModelTests
             new RequestListViewModel(_requests, tabs, _dialogs),
             new CollectionTreeViewModel(_collections, _requests, tabs, _dialogs),
             new HistoryViewModel(new InMemoryHistoryStore(), TimeProvider.System, tabs, _dialogs),
-            environments, new GlobalsViewModel(new InMemoryGlobalsStore()), _session, _dialogs);
+            environments, new GlobalsViewModel(new InMemoryGlobalsStore()), _session, _dialogs,
+            _parts.Console, _parts.VaultViewModel, _parts.Engines);
     }
 
     [Fact]
@@ -203,5 +206,88 @@ public sealed class ShellViewModelTests
 
         Assert.Contains(await _requests.ListAsync(CancellationToken.None), r => r.Id == tab.Id);
         Assert.Equal([tab.Id], (await _session.LoadAsync(CancellationToken.None)).OpenRequestIds);
+    }
+
+    [Fact]
+    public void ConsoleStartsClosedAndToggles()
+    {
+        var shell = Create();
+        Assert.False(shell.IsConsoleOpen);
+
+        shell.ToggleConsoleCommand.Execute(null);
+        Assert.True(shell.IsConsoleOpen);
+
+        shell.ToggleConsoleCommand.Execute(null);
+        Assert.False(shell.IsConsoleOpen);
+
+        shell.OpenConsoleCommand.Execute(null);
+        Assert.True(shell.IsConsoleOpen);
+    }
+
+    [Fact]
+    public void ClearConsoleEmptiesTheConsoleAndKeepsItOpen()
+    {
+        var shell = Create();
+        shell.Console.AppendNetwork([new Yaapic.Domain.Scripting.ConsoleEntry(DateTimeOffset.UnixEpoch, Yaapic.Domain.Scripting.ConsoleLevel.Log, Yaapic.Domain.Scripting.ConsoleSource.Network, "GET /")]);
+        Assert.False(shell.Console.IsEmpty);
+
+        shell.ClearConsoleCommand.Execute(null);
+
+        Assert.True(shell.Console.IsEmpty);
+        Assert.True(shell.IsConsoleOpen);
+    }
+
+    [Theory]
+    [InlineData(10, 120)]
+    [InlineData(300, 300)]
+    [InlineData(5000, 600)]
+    public void ConsoleHeightIsClamped(double value, double expected)
+    {
+        var shell = Create();
+        Assert.Equal(250, shell.ConsoleHeight);
+
+        shell.ConsoleHeight = value;
+
+        Assert.Equal(expected, shell.ConsoleHeight);
+    }
+
+    [Fact]
+    public async Task UnavailableEnginesAreReportedByInitialize()
+    {
+        var js = new FakeScriptEngine(_ => throw new NotSupportedException()) { UnavailableReason = "library missing" };
+        var lua = new FakeScriptEngine(_ => throw new NotSupportedException()) { Language = Yaapic.Domain.Scripting.ScriptLanguage.Lua };
+        var registry = new Yaapic.Core.Scripting.ScriptEngineRegistry();
+        registry.Add(js);
+        registry.Add(lua);
+        _parts = new ShellParts(registry);
+        var shell = Create();
+
+        await shell.InitializeAsync();
+
+        Assert.Equal(["JavaScript engine unavailable: library missing"], shell.ScriptEngineWarnings);
+        Assert.True(shell.HasScriptEngineWarnings);
+    }
+
+    [Fact]
+    public async Task AvailableEnginesLeaveNoWarning()
+    {
+        var shell = Create();
+        _parts.Engines.Add(new FakeScriptEngine(_ => throw new NotSupportedException()));
+        _parts.Engines.Add(new FakeScriptEngine(_ => throw new NotSupportedException()) { Language = Yaapic.Domain.Scripting.ScriptLanguage.Lua });
+
+        await shell.InitializeAsync();
+
+        Assert.Empty(shell.ScriptEngineWarnings);
+        Assert.False(shell.HasScriptEngineWarnings);
+    }
+
+    [Fact]
+    public async Task InitializeReadsTheVaultBeforeTheEnvironmentsLoad()
+    {
+        var shell = Create();
+
+        await shell.InitializeAsync();
+
+        Assert.Equal(["InitializeAsync"], _parts.Vault.Calls);
     }
 }

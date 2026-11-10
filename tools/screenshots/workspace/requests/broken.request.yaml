@@ -1,0 +1,19 @@
+version: 1
+id: 11111111-0000-0000-0000-00000000000c
+name: Broken
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+scripts:
+  preRequest:
+    language: javascript
+    source: |
+      const token = pm.environment.get("apiToken");
+      if (!token) {
+        throw new Error("apiToken is not set");
+      }

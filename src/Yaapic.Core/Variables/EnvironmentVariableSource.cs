@@ -6,6 +6,7 @@ namespace Yaapic.Core.Variables;
 public sealed class EnvironmentVariableSource : IVariableSource
 {
     private readonly Dictionary<string, string> _values = new(StringComparer.Ordinal);
+    private readonly HashSet<string> _secrets = new(StringComparer.Ordinal);
 
     /// <summary>Creates a source over an environment.</summary>
     /// <param name="environment">The environment; <see langword="null"/> resolves nothing.</param>
@@ -21,8 +22,27 @@ public sealed class EnvironmentVariableSource : IVariableSource
             if (entry.Enabled && entry.Key.Length > 0)
             {
                 _values[entry.Key] = entry.Value; // the last enabled entry wins
+                if (entry.IsSecret)
+                {
+                    _secrets.Add(entry.Key);
+                }
+                else
+                {
+                    _secrets.Remove(entry.Key);
+                }
             }
         }
+    }
+
+    /// <summary>Looks a variable up and tells whether the winning row is a secret.</summary>
+    /// <param name="name">The exact, case-sensitive variable name.</param>
+    /// <param name="value">The value when found; otherwise an empty string.</param>
+    /// <param name="isSecret">Whether the row is secret; <see langword="false"/> when not found.</param>
+    /// <returns><see langword="true"/> when the variable is defined.</returns>
+    public bool TryGet(string name, out string value, out bool isSecret)
+    {
+        isSecret = _secrets.Contains(name);
+        return TryGet(name, out value);
     }
 
     /// <inheritdoc />

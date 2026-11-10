@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Http;
 using Yaapic.Core.Responses;
+using Yaapic.Core.Scripting;
 using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 
@@ -33,6 +34,9 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     /// <summary>Initializes a new instance of the <see cref="ResponsePanelViewModel"/> class.</summary>
     /// <param name="dialogs">Used to copy and save the body; <see langword="null"/> makes both commands do nothing.</param>
     public ResponsePanelViewModel(IDialogService? dialogs = null) => _dialogs = dialogs;
+
+    /// <summary>Gets the tests and script errors of the last scripted send.</summary>
+    public TestResultsViewModel Tests { get; } = new();
 
     /// <summary>Gets what the panel is showing.</summary>
     public ResponseState State { get => _state; private set => SetProperty(ref _state, value); }
@@ -69,6 +73,11 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
 
     /// <summary>Gets the unresolved-variables warning, or <see langword="null"/> when every variable resolved.</summary>
     public string? UnresolvedWarning { get => _unresolvedWarning; private set => SetProperty(ref _unresolvedWarning, value); }
+
+    /// <summary>Adds a line to the unresolved-variables warning.</summary>
+    /// <param name="line">The line to add.</param>
+    public void AddWarningLine(string line) =>
+        UnresolvedWarning = UnresolvedWarning is null ? line : UnresolvedWarning + Environment.NewLine + line;
 
     /// <summary>Shows that a request is in flight and drops the previous result.</summary>
     public void ShowSending()
@@ -113,6 +122,27 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         ApplyBody();
     }
 
+    /// <summary>Shows the outcome of a send with scripts.</summary>
+    /// <param name="report">The scripted report to display.</param>
+    public void ShowScripted(ScriptedSendReport report)
+    {
+        ArgumentNullException.ThrowIfNull(report);
+        if (report.AbortedBy is { } aborted)
+        {
+            Clear();
+            State = ResponseState.Failed;
+            var message = aborted.Error?.Message;
+            ErrorMessage = $"Pre-request script failed — {aborted.Origin}: "
+                + (string.IsNullOrEmpty(message) ? ScriptErrorItemViewModel.StatusTextFor(aborted.Status) : message);
+        }
+        else
+        {
+            ShowReport(report.Report!);
+        }
+
+        Tests.Show(report.Runs);
+    }
+
     /// <summary>Resets the panel to <see cref="ResponseState.Empty"/>.</summary>
     public void Clear()
     {
@@ -129,6 +159,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         Headers = [];
         ErrorMessage = null;
         UnresolvedWarning = null;
+        Tests.Clear();
         RefreshCommands();
     }
 
@@ -193,18 +224,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         RefreshCommands();
     }
 
-    internal static string FormatDuration(TimeSpan duration)
-    {
-        var ms = duration.TotalMilliseconds;
-        return ms < 1000
-            ? $"{Math.Round(ms).ToString(CultureInfo.InvariantCulture)} ms"
-            : $"{(ms / 1000).ToString("0.00", CultureInfo.InvariantCulture)} s";
-    }
+    internal static string FormatDuration(TimeSpan duration) => ResponseText.FormatDuration(duration);
 
-    private static string FormatSize(long bytes) => bytes switch
-    {
-        < 1024 => $"{bytes.ToString(CultureInfo.InvariantCulture)} B",
-        < 1024 * 1024 => $"{(bytes / 1024.0).ToString("0.0", CultureInfo.InvariantCulture)} KB",
-        _ => $"{(bytes / (1024.0 * 1024)).ToString("0.0", CultureInfo.InvariantCulture)} MB",
-    };
+    private static string FormatSize(long bytes) => ResponseText.FormatSize(bytes);
 }

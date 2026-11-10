@@ -1,3 +1,4 @@
+using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
 
 namespace Yaapic.ViewModels.Requests;
@@ -25,4 +26,17 @@ public interface IVariableScopeProvider
     /// <param name="value">The value.</param>
     /// <returns>An error message, or <see langword="null"/> when the variable was saved.</returns>
     Task<string?> SetVariableAsync(Guid requestId, VariableScopeKind scope, string name, string value);
+
+    /// <summary>Removes the variable of that exact name from a scope; nothing happens when it is absent.</summary>
+    /// <param name="requestId">The request the variable belongs to.</param>
+    /// <param name="scope">The scope to write; it must be one of <see cref="GetWritableScopes"/>.</param>
+    /// <param name="name">The variable name.</param>
+    /// <returns>An error message, or <see langword="null"/> when the scope was saved.</returns>
+    Task<string?> UnsetVariableAsync(Guid requestId, VariableScopeKind scope, string name);
+
+    /// <summary>Applies the variable changes made by scripts, saving each scope once and raising <see cref="ScopesChanged"/> once.</summary>
+    /// <param name="requestId">The request that was sent.</param>
+    /// <param name="changes">The changes, in order; changes to a scope that is not writable are skipped.</param>
+    /// <returns>One error message per scope that could not be saved; empty when all were.</returns>
+    Task<IReadOnlyList<string>> ApplyChangesAsync(Guid requestId, IReadOnlyList<VariableChange> changes);
 }

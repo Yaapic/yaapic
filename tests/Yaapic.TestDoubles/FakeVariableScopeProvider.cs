@@ -1,3 +1,4 @@
+using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
 using Yaapic.ViewModels.Requests;
 
@@ -32,6 +33,26 @@ public sealed class FakeVariableScopeProvider : IVariableScopeProvider
     {
         Writes.Add((scope, name, value));
         return Task.FromResult(WriteError);
+    }
+
+    /// <summary>Gets the unsets received, in order.</summary>
+    public List<(VariableScopeKind Scope, string Name)> Unsets { get; } = [];
+
+    /// <summary>Gets the batches passed to <see cref="ApplyChangesAsync"/>, in order.</summary>
+    public List<IReadOnlyList<VariableChange>> AppliedBatches { get; } = [];
+
+    /// <inheritdoc/>
+    public Task<string?> UnsetVariableAsync(Guid requestId, VariableScopeKind scope, string name)
+    {
+        Unsets.Add((scope, name));
+        return Task.FromResult(WriteError);
+    }
+
+    /// <inheritdoc/>
+    public Task<IReadOnlyList<string>> ApplyChangesAsync(Guid requestId, IReadOnlyList<VariableChange> changes)
+    {
+        AppliedBatches.Add(changes);
+        return Task.FromResult<IReadOnlyList<string>>(WriteError is null ? [] : [WriteError]);
     }
 
     /// <summary>Raises <see cref="ScopesChanged"/>.</summary>

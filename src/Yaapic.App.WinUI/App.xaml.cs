@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Yaapic.App.WinUI.Services;
 using Yaapic.Composition;
+using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
 
 namespace Yaapic.App.WinUI;
@@ -19,12 +20,17 @@ public partial class App : Application
         var window = new MainWindow();
         _window = window;
         var workspace = Workspace.DefaultRoot();
+        string? dataDirectory = null;
         var argv = Environment.GetCommandLineArgs();
         for (var i = 1; i < argv.Length - 1; i++)
         {
             if (argv[i] == "--workspace")
             {
                 workspace = argv[i + 1];
+            }
+            else if (argv[i] == "--data-dir")
+            {
+                dataDirectory = argv[i + 1];
             }
             else if (argv[i] == "--theme")
             {
@@ -44,7 +50,9 @@ public partial class App : Application
 
         var shell = AppComposition.CreateShell(
             workspace,
-            new WinUIDialogService(window, () => window.Content?.XamlRoot));
+            new WinUIDialogService(window, () => window.Content?.XamlRoot),
+            new DpapiKeyProtectorFactory(),
+            dataDirectory);
         window.ViewModel = shell;
         window.Activate();
         await shell.InitializeAsync();

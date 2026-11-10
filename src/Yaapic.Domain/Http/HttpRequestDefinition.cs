@@ -1,3 +1,5 @@
+using Yaapic.Domain.Scripting;
+
 namespace Yaapic.Domain.Http;
 
 /// <summary>An editable, savable description of an HTTP request.</summary>
@@ -10,6 +12,7 @@ namespace Yaapic.Domain.Http;
 /// <param name="Body">The request body.</param>
 /// <param name="Auth">The request authentication.</param>
 /// <param name="Settings">The per-request settings.</param>
+/// <param name="Scripts">The pre-request and post-response scripts.</param>
 public sealed record HttpRequestDefinition(
     Guid Id,
     string Name,
@@ -19,8 +22,12 @@ public sealed record HttpRequestDefinition(
     IReadOnlyList<KeyValueEntry> Headers,
     RequestBody Body,
     RequestAuth Auth,
-    RequestSettings Settings)
+    RequestSettings Settings,
+    ScriptSet Scripts = null!)
 {
+    /// <summary>Gets the scripts; a <see langword="null"/> constructor argument becomes <see cref="ScriptSet.Empty"/>.</summary>
+    public ScriptSet Scripts { get; init; } = Scripts ?? ScriptSet.Empty;
+
     /// <summary>Creates an empty GET request with a new identifier.</summary>
     /// <param name="name">The display name; it is trimmed.</param>
     /// <returns>The new request.</returns>
@@ -28,7 +35,7 @@ public sealed record HttpRequestDefinition(
     public static HttpRequestDefinition Create(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        return new(Guid.NewGuid(), name.Trim(), HttpMethodKind.Get, "", [], [], RequestBody.None, RequestAuth.None, RequestSettings.Default);
+        return new(Guid.NewGuid(), name.Trim(), HttpMethodKind.Get, "", [], [], RequestBody.None, RequestAuth.None, RequestSettings.Default, ScriptSet.Empty);
     }
 
     /// <summary>Compares two requests by value, including the contents of the lists.</summary>
@@ -43,5 +50,6 @@ public sealed record HttpRequestDefinition(
         && Headers.SequenceEqual(other.Headers)
         && Body == other.Body
         && Auth == other.Auth
-        && Settings == other.Settings;
+        && Settings == other.Settings
+        && Scripts == other.Scripts;
 }

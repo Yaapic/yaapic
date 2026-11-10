@@ -1,0 +1,21 @@
+{
+  "quickjs-ng": {
+    "repository": "https://github.com/quickjs-ng/quickjs",
+    "tag": "v0.18.0",
+    "url": "https://github.com/quickjs-ng/quickjs/archive/refs/tags/v0.18.0.tar.gz",
+    "archive": "quickjs-ng-v0.18.0.tar.gz",
+    "sha256": "28bcd89aa3683fd2a946537e5ce3f11cc46b5cbf3383c7561aaef3df5ff9f1dd",
+    "folder": "quickjs-0.18.0",
+    "license": "LICENSE"
+  },
+  "lua": {
+    "repository": "https://www.lua.org",
+    "tag": "5.4.8",
+    "url": "https://www.lua.org/ftp/lua-5.4.8.tar.gz",
+    "mirrors": ["https://sources.buildroot.net/lua/lua-5.4.8.tar.gz"],
+    "archive": "lua-5.4.8.tar.gz",
+    "sha256": "4f18ddae154e793e46eeab727c59ef1c0c0c2b744e7b94219710d76f530629ae",
+    "folder": "lua-5.4.8",
+    "license": "doc/readme.html"
+  }
+}

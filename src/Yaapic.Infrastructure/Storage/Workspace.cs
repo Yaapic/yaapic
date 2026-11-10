@@ -26,10 +26,37 @@ public static class Workspace
             {
                 File.WriteAllText(gitignore, ".yaapic/\n", new UTF8Encoding(false));
             }
+
+            ReadWorkspaceId(root);
         }
         catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
         {
             throw new StorageException($"Cannot create workspace '{root}': {ex.Message}", ex);
+        }
+    }
+
+    /// <summary>Reads the workspace id stored in <c>.yaapic/workspace.id</c>, creating it when missing or invalid.</summary>
+    /// <param name="root">The workspace root directory.</param>
+    /// <returns>The workspace GUID in "D" format.</returns>
+    /// <exception cref="StorageException">The id file cannot be read or written.</exception>
+    public static string ReadWorkspaceId(string root)
+    {
+        var path = Path.Combine(root, ".yaapic", "workspace.id");
+        try
+        {
+            if (File.Exists(path) && Guid.TryParse(File.ReadAllText(path).Trim(), out var existing))
+            {
+                return existing.ToString("D");
+            }
+
+            var id = Guid.NewGuid().ToString("D");
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllText(path, id + "\n", new UTF8Encoding(false));
+            return id;
+        }
+        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException)
+        {
+            throw new StorageException($"Cannot read the workspace id of '{root}': {ex.Message}", ex);
         }
     }
 }

@@ -207,12 +207,131 @@ Deferred (ADR 0008): manual ordering and drag and drop, cookie jar, proxy and TL
 `{{variable}}` autocomplete, request scripts (M3). Still open in M2: M2-67 to M2-70 (visual check, Windows App SDK 2.x,
 code editors).
 
+## Milestone 3: Scripting (JS + Lua), pm.*, console, test results, secret vault
+
+Scope: pre-request and post-response scripts at request, folder and collection level in JavaScript (QuickJS-NG) and Lua 5.4
+behind one `IScriptEngine` port, a Postman-compatible `pm.*` API (variables, request, response, `pm.test`, `pm.expect`,
+`pm.sendRequest`, read-only cookies), a console, test results, and an encrypted secret vault with variable integration. The
+decisions are in [ADR 0009](../adr/0009-scripting.md) and [ADR 0010](../adr/0010-secret-vault.md) (written by M3-01 and M3-02,
+read them first). Build order: `any` cards (Domain, Core, Scripting, Infrastructure, ViewModels), then `windows`, then `unix`
+cards.
+
+Slices: M3-01 to M3-02 ADRs; M3-03 to M3-13 domain, YAML and the scripted send pipeline (fakes only); M3-14 to M3-23 the
+`Yaapic.Scripting` project, the native build pipeline, QuickJS bindings and the JavaScript `pm`; M3-24 to M3-32 the same for
+Lua (including a C shim, because Lua errors use `longjmp`); M3-33 to M3-38 and M3-45 to M3-46 the vault (flag, ports, AES-GCM, file
+vault, decorators, redaction, view models); M3-39 to M3-44 and M3-47 the view models and the composition; M3-48 and M3-49 the
+OS key protectors (DPAPI, Keychain, Secret Service); M3-50 to M3-56 WinUI; M3-57 to M3-63 Avalonia; M3-64 to M3-66 end-to-end
+tests; M3-67 docs; M3-68 the WinUI visual check (the Avalonia cards carry their own runtime checks).
+
+Native code: the engines are built from pinned upstream sources by `native/Build-Natives.ps1` (M3-15) and are **not** committed;
+a C compiler and CMake are required (already needed for Native AOT). Cards from M3-16 on need the libraries for the host RID.
+Cards that touch a platform the host is not on (M3-49 on Windows, the Avalonia runtime checks on a non-matching OS) say what was
+not run in their Notes.
+
+| Card | Title | Platform | Depends on | Status |
+|---|---|---|---|---|
+| [M3-01](milestone-3-scripting/M3-01-adr-scripting-architecture.md) | ADR 0009: scripting architecture, host protocol and file format | any | none | done |
+| [M3-02](milestone-3-scripting/M3-02-adr-secret-vault.md) | ADR 0010: secret vault | any | none | done |
+| [M3-03](milestone-3-scripting/M3-03-domain-script-model.md) | Domain: script model on requests and folders | any | M3-01 | done |
+| [M3-04](milestone-3-scripting/M3-04-domain-console-tests-and-run-result.md) | Domain: console entries, test results and script run result | any | M3-03 | done |
+| [M3-05](milestone-3-scripting/M3-05-yaml-request-scripts.md) | YAML request serializer: scripts | any | M3-03 | done |
+| [M3-06](milestone-3-scripting/M3-06-yaml-folder-scripts.md) | YAML folder serializer: scripts | any | M3-05 | done |
+| [M3-07](milestone-3-scripting/M3-07-core-script-engine-port.md) | Core: script engine port, host contract and registry | any | M3-03, M3-04 | done |
+| [M3-08](milestone-3-scripting/M3-08-core-script-variable-layers.md) | Core: script variable layers and change tracking | any | M3-07 | done |
+| [M3-09](milestone-3-scripting/M3-09-core-script-request-and-response.md) | Core: script request and response snapshots, cookies | any | M3-07 | done |
+| [M3-10](milestone-3-scripting/M3-10-script-chain-provider.md) | Script chain: collection, folders, request | any | M3-03, M3-06 | done |
+| [M3-11](milestone-3-scripting/M3-11-core-scripted-sender-pre-request.md) | Core: scripted request sender, pre-request stage | any | M3-08, M3-09, M3-10 | done |
+| [M3-12](milestone-3-scripting/M3-12-core-scripted-sender-post-response.md) | Core: post-response stage, test results and network console line | any | M3-11 | done |
+| [M3-13](milestone-3-scripting/M3-13-core-script-send-request.md) | Core: host support for `pm.sendRequest` | any | M3-12 | done |
+| [M3-14](milestone-3-scripting/M3-14-scripting-project-and-host-protocol.md) | `Yaapic.Scripting` project, host bridge and JSON protocol | any | M3-07 | done |
+| [M3-15](milestone-3-scripting/M3-15-native-build-pipeline.md) | Native build pipeline for QuickJS-NG and Lua 5.4 | any | M3-14 | done |
+| [M3-16](milestone-3-scripting/M3-16-quickjs-bindings.md) | QuickJS-NG P/Invoke bindings and AOT smoke | any | M3-15 | done |
+| [M3-17](milestone-3-scripting/M3-17-quickjs-engine.md) | `QuickJsEngine`: run a block with console, timeout and the host bridge | any | M3-16, M3-14 | done |
+| [M3-18](milestone-3-scripting/M3-18-js-pm-variables-and-info.md) | JavaScript `pm`: info, variables, environment, collection variables, globals | any | M3-17, M3-08 | done |
+| [M3-19](milestone-3-scripting/M3-19-js-pm-request-and-response.md) | JavaScript `pm`: request and response | any | M3-18, M3-09 | done |
+| [M3-20](milestone-3-scripting/M3-20-js-pm-test-and-expect-core.md) | JavaScript `pm.test` and `pm.expect`, core assertions | any | M3-19 | done |
+| [M3-21](milestone-3-scripting/M3-21-js-pm-expect-collections-and-response-assertions.md) | JavaScript `pm.expect` collections/strings and `pm.response.to.*` | any | M3-20 | done |
+| [M3-22](milestone-3-scripting/M3-22-js-pm-send-request-and-cookies.md) | JavaScript `pm.sendRequest` and `pm.cookies` | any | M3-21, M3-13 | done |
+| [M3-23](milestone-3-scripting/M3-23-js-postman-conformance-suite.md) | JavaScript Postman conformance suite | any | M3-22 | done |
+| [M3-24](milestone-3-scripting/M3-24-lua-bindings.md) | Lua 5.4 native shim, bindings and AOT smoke | any | M3-15 | done |
+| [M3-25](milestone-3-scripting/M3-25-lua-engine.md) | `LuaEngine`: run a block with console, limits and the host bridge | any | M3-24, M3-17 | done |
+| [M3-26](milestone-3-scripting/M3-26-lua-json-codec-and-host-wrapper.md) | Lua prelude: JSON codec and typed host wrapper | any | M3-25, M3-14 | done |
+| [M3-27](milestone-3-scripting/M3-27-lua-pm-variables-and-info.md) | Lua `pm`: info, variables, environment, collection variables, globals | any | M3-26, M3-08 | done |
+| [M3-28](milestone-3-scripting/M3-28-lua-pm-request-and-response.md) | Lua `pm`: request and response | any | M3-27, M3-09 | done |
+| [M3-29](milestone-3-scripting/M3-29-lua-pm-test-and-expect-core.md) | Lua `pm.test` and `pm.expect`, core assertions | any | M3-28 | done |
+| [M3-30](milestone-3-scripting/M3-30-lua-pm-expect-collections-and-response-assertions.md) | Lua `pm.expect` collections/strings and `pm.response.to` | any | M3-29 | done |
+| [M3-31](milestone-3-scripting/M3-31-lua-pm-send-request-and-cookies.md) | Lua `pm.sendRequest` and `pm.cookies` | any | M3-30, M3-13 | done |
+| [M3-32](milestone-3-scripting/M3-32-lua-conformance-suite.md) | Lua conformance suite and compatibility doc | any | M3-31, M3-23 | done |
+| [M3-33](milestone-3-scripting/M3-33-domain-secret-flag-and-serializers.md) | Domain and YAML: secret flag on variable rows | any | M3-02 | done |
+| [M3-34](milestone-3-scripting/M3-34-core-vault-ports-and-doubles.md) | Core: vault ports and test doubles | any | M3-33 | done |
+| [M3-35](milestone-3-scripting/M3-35-infra-aes-gcm-secret-cipher.md) | Infrastructure: AES-GCM secret cipher and key derivation | any | M3-34 | done |
+| [M3-36](milestone-3-scripting/M3-36-infra-file-secret-vault.md) | Infrastructure: file secret vault, passphrase protector and workspace id | any | M3-35 | done |
+| [M3-37](milestone-3-scripting/M3-37-secret-aware-environment-and-globals-stores.md) | Core: secret-aware environment and globals stores | any | M3-34, M3-33 | done |
+| [M3-38](milestone-3-scripting/M3-38-secret-aware-collection-store-and-redactor.md) | Core: secret-aware collection store and secret redaction | any | M3-37, M3-12 | done |
+| [M3-39](milestone-3-scripting/M3-39-request-editor-scripts-viewmodel.md) | Request editor ViewModel: scripts | any | M3-03, M3-05 | done |
+| [M3-40](milestone-3-scripting/M3-40-folder-settings-scripts-viewmodel.md) | Folder and collection settings ViewModel: scripts | any | M3-39, M3-06 | done |
+| [M3-41](milestone-3-scripting/M3-41-console-viewmodel.md) | Console ViewModel | any | M3-04 | done |
+| [M3-42](milestone-3-scripting/M3-42-test-results-viewmodel.md) | Test results ViewModel and response panel integration | any | M3-04, M3-12 | done |
+| [M3-43](milestone-3-scripting/M3-43-send-integration.md) | Request editor: send through scripts | any | M3-12, M3-39, M3-41, M3-42, M3-10 | done |
+| [M3-44](milestone-3-scripting/M3-44-apply-script-variable-changes.md) | Persist the variable changes made by scripts | any | M3-43, M3-08 | done |
+| [M3-45](milestone-3-scripting/M3-45-vault-viewmodel.md) | Vault ViewModel | any | M3-34, M3-37 | done |
+| [M3-46](milestone-3-scripting/M3-46-secret-rows-and-masking.md) | Secret rows in the key/value editor and masking in variable hints | any | M3-33, M3-45 | done |
+| [M3-47](milestone-3-scripting/M3-47-shell-console-vault-and-composition.md) | Shell, palette and composition: engines, console, vault | any | M3-17, M3-25, M3-38, M3-43, M3-44, M3-45, M3-46 | done |
+| [M3-48](milestone-3-scripting/M3-48-windows-dpapi-key-protector.md) | Windows: DPAPI key protector | windows | M3-36, M3-47 | done |
+| [M3-49](milestone-3-scripting/M3-49-unix-keychain-and-secret-service-protectors.md) | macOS Keychain and Linux Secret Service key protectors | unix | M3-36, M3-47 | done |
+| [M3-50](milestone-3-scripting/M3-50-winui-code-editor-javascript-and-lua.md) | WinUI: JavaScript and Lua in `CodeEditorView` | windows | M3-03 | done |
+| [M3-51](milestone-3-scripting/M3-51-winui-scripts-tab.md) | WinUI: Scripts tab in the request editor | windows | M3-39, M3-50 | done |
+| [M3-52](milestone-3-scripting/M3-52-winui-folder-scripts-dialog.md) | WinUI: scripts in the folder and collection settings dialog | windows | M3-40, M3-50, M3-51 | done |
+| [M3-53](milestone-3-scripting/M3-53-winui-console-panel-and-status-bar.md) | WinUI: status bar and console panel | windows | M3-47 | done |
+| [M3-54](milestone-3-scripting/M3-54-winui-tests-tab-in-response.md) | WinUI: Tests tab and script errors in the response panel | windows | M3-42, M3-47 | done |
+| [M3-55](milestone-3-scripting/M3-55-winui-secret-variables-in-tables.md) | WinUI: secret variables in the variable tables and popup | windows | M3-46, M3-47 | done |
+| [M3-56](milestone-3-scripting/M3-56-winui-vault-dialogs-and-status.md) | WinUI: vault dialogs, status bar item and DPAPI wiring | windows | M3-45, M3-48, M3-53, M3-55 | done |
+| [M3-57](milestone-3-scripting/M3-57-avalonia-code-editor-javascript-and-lua.md) | Avalonia: JavaScript and Lua in `CodeEditorView` | unix | M3-03, M3-50 | done |
+| [M3-58](milestone-3-scripting/M3-58-avalonia-scripts-tab.md) | Avalonia: Scripts tab in the request editor | unix | M3-39, M3-57, M3-51 | done |
+| [M3-59](milestone-3-scripting/M3-59-avalonia-folder-scripts-window.md) | Avalonia: scripts in the folder and collection settings window | unix | M3-40, M3-58 | done |
+| [M3-60](milestone-3-scripting/M3-60-avalonia-console-panel-and-status-bar.md) | Avalonia: status bar and console panel | unix | M3-47, M3-53 | done |
+| [M3-61](milestone-3-scripting/M3-61-avalonia-tests-tab-in-response.md) | Avalonia: Tests tab and script errors in the response panel | unix | M3-42, M3-47, M3-54 | done |
+| [M3-62](milestone-3-scripting/M3-62-avalonia-secret-variables-in-tables.md) | Avalonia: secret variables in the variable tables and popup | unix | M3-46, M3-47, M3-55 | done |
+| [M3-63](milestone-3-scripting/M3-63-avalonia-vault-windows-and-status.md) | Avalonia: vault windows, status bar item and platform protector wiring | unix | M3-45, M3-49, M3-60, M3-62, M3-56 | done |
+| [M3-64](milestone-3-scripting/M3-64-end-to-end-javascript-scripting.md) | End-to-end tests: JavaScript scripting | any | M3-47, M3-44, M3-23 | done |
+| [M3-65](milestone-3-scripting/M3-65-end-to-end-lua-scripting.md) | End-to-end tests: Lua scripting and mixed languages | any | M3-64, M3-32 | done |
+| [M3-66](milestone-3-scripting/M3-66-end-to-end-secret-vault.md) | End-to-end tests: secret vault | any | M3-47, M3-64 | done |
+| [M3-67](milestone-3-scripting/M3-67-milestone-docs.md) | Milestone 3 docs | any | M3-64, M3-65, M3-66, M3-32, M3-49 | done |
+| [M3-68](milestone-3-scripting/M3-68-winui-visual-verification.md) | WinUI visual verification of the milestone 3 views | windows | M3-51, M3-52, M3-53, M3-54, M3-55, M3-56 | done |
+
+### Milestone 3 summary
+
+Delivered: pre-request and post-response scripts on requests, folders and collections (collection first, then folders, then the
+request) in JavaScript (QuickJS-NG) and Lua 5.4 behind one `IScriptEngine` port, a Postman-style `pm.*` API (`pm.info`,
+`pm.variables`, `pm.environment`, `pm.collectionVariables`, `pm.globals`, `pm.request`, `pm.response`, `pm.test`, `pm.expect`,
+`pm.sendRequest`, read-only `pm.cookies`, `console`), limits (5 s, 64 MiB, 20 `pm.sendRequest` calls, 1 000 console entries per
+send), the console panel and status bar, the response Tests tab, scripts persisted in the YAML files, and variable changes made
+by scripts persisted through the stores. The engines are native libraries built from pinned sources by `native/Build-Natives.ps1`.
+The secret vault: a `secret` flag on variable rows, an AES-256-GCM vault file per user and workspace outside the workspace,
+key protectors (passphrase, DPAPI, macOS Keychain, Linux Secret Service), secret-aware stores, redaction of script output,
+masking in the variable tables and popup, and the vault dialogs and status bar item on both front-ends. Both code editors
+highlight JavaScript and Lua (LoomEditor 0.5.0 had no Lua grammar, so Lua was plain text until 0.6.0). End-to-end tests:
+`Milestone3ScriptingEndToEndTests`, `Milestone3LuaEndToEndTests`, `Milestone3VaultEndToEndTests`; compatibility is documented
+in [scripting-compatibility.md](../scripting-compatibility.md) and checked by the conformance suites. New dependencies:
+QuickJS-NG, Lua, the Lua shim and `System.Security.Cryptography.ProtectedData` (see [dependencies.md](../dependencies.md)).
+
+Deferred (ADRs 0009 and 0010): C# and Python scripting, npm modules and `require`, a script debugger, a snippets sidebar,
+timers, `pm.vault`, `pm.execution.setNextRequest` and `pm.iterationData` (Runner, M6), JSON schema assertions, the cookie jar and
+a Cookies tab (milestone 4 or later), `pm.request.auth`, creating a secret from the variable popup, a helper that moves auth
+fields to secret variables, changing the vault passphrase or protector, sharing secrets between machines, request-level
+variables, importing Postman scripts (M5).
+
+Nothing is open in M3. Runtime checks not run by hand: the real macOS Keychain and Linux
+`secret-tool` protectors (M3-49), the Avalonia vault windows end to end (M3-63), and the interactive and send steps of the folder
+scripts dialogs (M3-52, M3-59; the send itself is covered by the end-to-end tests). The Linux and macOS native builds are built by
+CI only (M3-15). M3-68 is done, so M3 is closed.
+
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |
 |---|---|---|
 | M2 | Full request editor, collections, environments, history, command palette | detailed (77 cards, see above) |
-| M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | planned |
+| M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above) |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | planned |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | planned |
 | M6 | Automation (Runner, load tests, mock servers, monitors) | planned |

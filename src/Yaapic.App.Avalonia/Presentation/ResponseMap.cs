@@ -49,6 +49,15 @@ public static class ResponseMap
     /// <summary>Converts a body view mode to the index of its option in the Pretty / Raw control.</summary>
     public static FuncValueConverter<BodyViewMode, int> ViewModeIndex { get; } = new(m => m == BodyViewMode.Raw ? 1 : 0);
 
+    /// <summary>Converts a test outcome (<see langword="true"/> when passed) to the success or danger brush.</summary>
+    public static FuncValueConverter<bool, IBrush?> TestOutcome { get; } = new(passed => BrushMap.Get(passed ? "YaapicSuccessBrush" : "YaapicDangerBrush"));
+
+    /// <summary>Converts a test filter to the index of its option in the All / Failed control.</summary>
+    public static FuncValueConverter<TestFilter, int> FilterIndex { get; } = new(f => f == TestFilter.Failed ? 1 : 0);
+
+    /// <summary>Converts two flags to <see langword="true"/> when neither is set.</summary>
+    public static FuncMultiValueConverter<bool, bool> NeitherFlag { get; } = new(values => !values.Any(v => v));
+
     /// <summary>Converts a status category to <see langword="true"/> for the success icon (2xx).</summary>
     public static FuncValueConverter<StatusCategory, bool> IsSuccess { get; } = new(c => c == StatusCategory.Success);
 

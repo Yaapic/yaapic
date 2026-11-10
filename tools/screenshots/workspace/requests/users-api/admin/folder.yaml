@@ -3,3 +3,11 @@ id: 33333333-0000-0000-0000-000000000002
 name: Admin
 description: ""
 variables: []
+scripts:
+  preRequest:
+    language: javascript
+    source: ""
+  postResponse:
+    language: javascript
+    source: |
+      pm.test("Admin call succeeds", () => pm.response.to.have.status(200));

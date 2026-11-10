@@ -30,6 +30,7 @@ public sealed partial class ResponsePanelView : UserControl
         {
             // Index based: boxed managed enums cannot cross into XAML under Native AOT.
             ViewModes.SelectedIndex = vm.ViewMode == BodyViewMode.Raw ? 1 : 0;
+            TestFilters.SelectedIndex = vm.Tests.Filter == TestFilter.Failed ? 1 : 0;
         }
     }
 
@@ -41,13 +42,24 @@ public sealed partial class ResponsePanelView : UserControl
         }
     }
 
+    private void OnTestFilterChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (ViewModel is not null && TestFilters.SelectedIndex >= 0)
+        {
+            ViewModel.Tests.Filter = TestFilters.SelectedIndex == 1 ? TestFilter.Failed : TestFilter.All;
+        }
+    }
+
     private void OnTabClick(object sender, RoutedEventArgs e)
     {
         var headers = ReferenceEquals(sender, HeadersTab);
-        BodyTab.IsChecked = !headers;
+        var tests = ReferenceEquals(sender, TestsTab);
+        BodyTab.IsChecked = !headers && !tests;
         HeadersTab.IsChecked = headers;
-        BodyPane.Visibility = headers ? Visibility.Collapsed : Visibility.Visible;
+        TestsTab.IsChecked = tests;
+        BodyPane.Visibility = headers || tests ? Visibility.Collapsed : Visibility.Visible;
         HeadersPane.Visibility = headers ? Visibility.Visible : Visibility.Collapsed;
+        TestsPane.Visibility = tests ? Visibility.Visible : Visibility.Collapsed;
         HeadersBadge.Style = (Style)Application.Current.Resources[headers ? "YaapicCountBadgeActiveTextStyle" : "YaapicCountBadgeTextStyle"];
     }
 }

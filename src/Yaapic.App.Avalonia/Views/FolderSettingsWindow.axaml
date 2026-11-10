@@ -32,6 +32,13 @@
           <TextBlock Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="Override globals; the active environment overrides them." />
           <views:KeyValueEditorView Height="220" KeyHeader="VARIABLE" DataContext="{Binding Variables}" />
         </StackPanel>
+        <StackPanel Spacing="8" IsVisible="{Binding ShowScripts}">
+          <TextBlock Text="Scripts" Classes="bodyStrong" />
+          <TextBlock Classes="bodySmall" TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding ScriptsHint}" />
+          <Border Height="280" MinHeight="240" BorderThickness="1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+            <views:ScriptsEditorView DataContext="{Binding Scripts}" />
+          </Border>
+        </StackPanel>
       </StackPanel>
     </ScrollViewer>
     <Border Grid.Row="2" Classes="dialogCommands">

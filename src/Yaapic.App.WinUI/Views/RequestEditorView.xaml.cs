@@ -186,6 +186,9 @@ public sealed partial class RequestEditorView : UserControl
         BodyTab.IsChecked = ReferenceEquals(sender, BodyTab);
         AuthTab.IsChecked = ReferenceEquals(sender, AuthTab);
         SettingsTab.IsChecked = ReferenceEquals(sender, SettingsTab);
+        ScriptsTab.IsChecked = ReferenceEquals(sender, ScriptsTab);
+        ScriptsPane.Visibility = ScriptsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
+        ScriptsBadge.Style = BadgeStyle(ScriptsTab);
         AuthPane.Visibility = AuthTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         SettingsPane.Visibility = SettingsTab.IsChecked == true ? Visibility.Visible : Visibility.Collapsed;
         AuthBadge.Style = BadgeStyle(AuthTab);

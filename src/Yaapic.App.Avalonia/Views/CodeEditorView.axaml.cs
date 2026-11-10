@@ -56,7 +56,7 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         set => SetValue(IsReadOnlyProperty, value);
     }
 
-    /// <summary>Gets or sets the language: <c>json</c>, <c>xml</c>; anything else is plain text.</summary>
+    /// <summary>Gets or sets the language: <c>json</c>, <c>xml</c>, <c>javascript</c>; anything else is plain text.</summary>
     public string EditorLanguage
     {
         get => GetValue(EditorLanguageProperty);
@@ -135,6 +135,8 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
     {
         "json" => "json",
         "xml" => "xml",
+        "javascript" => "javascript",
+        "lua" => "lua",
         _ => "plaintext",
     };
 
@@ -156,13 +158,13 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
               "editor.selectionBackground":"{{selection}}",
               "editor.lineHighlightBackground":"{{selection}}"},
              "tokenColors":[
-              {{Rule("YaapicSyntaxPunctuationBrush", "punctuation", "meta.brace", "meta.structure.dictionary.json")}},
+              {{Rule("YaapicSyntaxPunctuationBrush", "punctuation", "meta.brace", "meta.structure.dictionary.json", "keyword.operator")}},
               {{Rule("YaapicSyntaxStringBrush", "string", "string.quoted.double.json")}},
               {{Rule("YaapicSyntaxKeyBrush", "support.type.property-name", "support.type.property-name.json")}},
               {{Rule("YaapicSyntaxNumberBrush", "constant.numeric")}},
               {{Rule("YaapicSyntaxBooleanBrush", "constant.language")}},
-              {{Rule("YaapicSyntaxTagBrush", "entity.name.tag")}},
-              {{Rule("YaapicSyntaxAttributeBrush", "entity.other.attribute-name")}},
+              {{Rule("YaapicSyntaxTagBrush", "entity.name.tag", "keyword", "storage")}},
+              {{Rule("YaapicSyntaxAttributeBrush", "entity.other.attribute-name", "entity.name.function", "support.function")}},
               {{Rule("YaapicSyntaxCommentBrush", "comment")}}]}
             """;
         Editor.Theme = EditorTheme.Load(json, light ? "vs" : "vs-dark", "Yaapic", _ => null);

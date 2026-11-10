@@ -8,11 +8,45 @@ Every third-party dependency needs a written justification here before it is add
 | VYaml | 1.5.0 | Yaapic.Infrastructure | YAML serialisation for the workspace file format (ADR 0005). MIT, source-generated `[YamlObject]` formatters, no reflection, Native AOT. Verified in M1-10, see below. |
 | CommunityToolkit.Mvvm | 8.4.2 | Yaapic.ViewModels | `ObservableObject`, `[ObservableProperty]` and `[RelayCommand]` source generators for ViewModels. MIT, first-party .NET Foundation; generated code is reflection-free on the paths we use (`ObservableValidator` and `Messenger.RegisterAll` are forbidden). |
 | Microsoft.WindowsAppSDK | 2.6.5 | Yaapic.App.WinUI | WinUI 3 runtime and XAML compiler; first-party, Native AOT supported. Target `net11.0-windows10.0.26100` (M2-68); verified with `LoomEditor.WinUI` 0.4.0 and `FluentIcons.WinUI` 2.2.344 (restore, build, AOT publish without IL2xxx/IL3xxx). Minimum OS stays Windows 10 2004 (`10.0.19041.0`). |
-| LoomEditor.WinUI | 0.5.0 | Yaapic.App.WinUI | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002): syntax colours from the Yaapic tokens, line numbers and large text on WinUI, where no other mature editor exists. MIT. Restore, build and Native AOT publish with Windows App SDK 2.6.5 give 0 warnings and 0 IL2xxx/IL3xxx; the AOT exe renders, edits and recolours on theme change (M2-69). |
-| LoomEditor.Avalonia | 0.5.0 | Yaapic.App.Avalonia | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002), the Avalonia twin of LoomEditor.WinUI: syntax colours from the Yaapic tokens, line numbers, folding and large text, with no TextMate registry or grammar files to bundle. MIT. Requires `Avalonia >= 12.1.5` (the Avalonia packages moved from 12.1.4 to 12.1.5 for it). Restore, build and Native AOT publish give 0 new IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages); the publish ships `onig.dll` (native regex engine of the grammars). The AOT exe renders, edits, folds and recolours on theme change (M2-70). |
+| LoomEditor.WinUI | 0.6.0 | Yaapic.App.WinUI | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002): syntax colours from the Yaapic tokens, line numbers and large text on WinUI, where no other mature editor exists. MIT. Restore, build and Native AOT publish with Windows App SDK 2.6.5 give 0 warnings and 0 IL2xxx/IL3xxx; the AOT exe renders, edits and recolours on theme change (M2-69). |
+| LoomEditor.Avalonia | 0.6.0 | Yaapic.App.Avalonia | Code editor of the request and response bodies behind `ICodeEditor` (ADR 0002), the Avalonia twin of LoomEditor.WinUI: syntax colours from the Yaapic tokens, line numbers, folding and large text, with no TextMate registry or grammar files to bundle. MIT. Requires `Avalonia >= 12.1.5` (the Avalonia packages moved from 12.1.4 to 12.1.5 for it). Restore, build and Native AOT publish give 0 new IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages); the publish ships `onig.dll` (native regex engine of the grammars). The AOT exe renders, edits, folds and recolours on theme change (M2-70). |
 | Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
+| QuickJS-NG | v0.18.0 | Yaapic.Scripting | JavaScript engine (ADR 0001, ADR 0009). MIT. Native library built from source by `native/Build-Natives.ps1`, shipped next to the exe, loaded with `LibraryImport`. |
+| Lua | 5.4.8 | Yaapic.Scripting | Lua engine (ADR 0001, ADR 0009). MIT. Native library built from source by `native/Build-Natives.ps1`, shipped next to the exe, loaded with `LibraryImport`. |
+| Lua shim (`native/lua/yaapic_lua.c`) | in repo | Yaapic.Scripting | Not a package: our own C file compiled into the `lua54` library (M3-24). A Lua error is a `longjmp`, which must not cross a managed frame under Native AOT, so the bindings call only its non-raising `yl_*` functions. |
+| System.Security.Cryptography.ProtectedData | 10.0.14 | Yaapic.Infrastructure | Windows DPAPI key protector of the secret vault (ADR 0010, M3-48). MIT, first-party. See "Secret vault" below. |
 
-Milestone 2 (editor, collections, environments, history, command palette) added the two code editor packages above (`LoomEditor.WinUI`, `LoomEditor.Avalonia`).
+Milestone 2 (editor, collections, environments, history, command palette) added the two code editor packages above (`LoomEditor.WinUI`, `LoomEditor.Avalonia`). Both moved to 0.6.0 after milestone 3 for the bundled Lua grammar (script editors highlight JavaScript and Lua).
+
+Milestone 3 (scripting, secret vault): added QuickJS-NG v0.18.0, Lua 5.4.8 (native libraries built from pinned sources, plus the Lua shim) and `System.Security.Cryptography.ProtectedData` 10.0.14. AES-GCM, PBKDF2 and `System.Text.Json` come from the framework. `LoomEditor.*` 0.6.0 is the Milestone 2 package at a newer version (bundled Lua grammar).
+
+## Native libraries (M3-15)
+
+`native/versions.json` pins, for QuickJS-NG and Lua, the source URL, the tag, the SHA-256 of the source archive and the
+licence file. `native/Build-Natives.ps1` (PowerShell 7, Windows, Linux and macOS) downloads the archives into
+`artifacts/native/_src` (the primary `url`, then the optional `mirrors`, a few attempts each: lua.org often times out
+from hosted runners; a mirror can only serve the pinned archive), fails on a hash mismatch, builds them with CMake (MSVC on Windows, clang elsewhere) and writes
+`quickjs-ng` and `lua54` to `artifacts/native/<rid>/` (`win-x64`, `linux-x64`, `osx-arm64`). A second run does nothing.
+`Yaapic.Scripting` runs the script when that folder is missing and copies the libraries and
+`native/THIRD-PARTY-NOTICES.md` next to every app build and publish. No binary is committed.
+
+`native/lua/yaapic_lua.c` (M3-24) is compiled into the `lua54` library. A Lua error is a `longjmp`, which must never cross a managed frame under Native AOT, so the bindings call only the non-raising `yl_*` shim (`yl_new`, `yl_close`, `yl_open_libs`, `yl_set_host`, `yl_set_limits`, `yl_last_abort`, `yl_run`, `yl_alloc`, `yl_free`, `yl_now_ms`), never the Lua API itself. The shim owns the memory-limited allocator, the restricted library set, the deadline and cancel hook and the traceback handler. `Build-Natives.ps1` rebuilds when the shim changes.
+
+Native AOT: `tools/NativeSmoke` and `Yaapic.App.WinUI` publish with 0 IL2xxx/IL3xxx and run the engines (M3-16, M3-24).
+Only `win-x64` was built and run locally; the `linux-x64` and `osx-arm64` builds (clang, `libqjs.so`/`libqjs.dylib`,
+`install_name_tool`) are covered by CI but were not verified by hand (M3-15 Notes).
+
+To update a version: change `tag`, `url`, `archive`, `folder` and `sha256` in `native/versions.json` (compute the hash
+with `Get-FileHash`), update `native/THIRD-PARTY-NOTICES.md` and the rows above, then run
+`pwsh native/Build-Natives.ps1 -Force`. Delete `artifacts/native/<rid>` to make the next MSBuild build rebuild it.
+
+## Secret vault (ADR 0010)
+
+The vault adds one package, for Windows DPAPI; AES-GCM, PBKDF2 and `System.Text.Json` are part of the framework.
+
+| Package | Version | License | Why | Native AOT |
+|---|---|---|---|---|
+| `System.Security.Cryptography.ProtectedData` | 10.0.14 | MIT (first-party) | DPAPI key protector (M3-48); referenced by `Yaapic.Infrastructure` on every OS, throws `PlatformNotSupportedException` off Windows, which the protector reports as unavailable | `Yaapic.App.WinUI` publishes with 0 IL2xxx/IL3xxx |
 
 ## Architecture tests: NetArchTest
 

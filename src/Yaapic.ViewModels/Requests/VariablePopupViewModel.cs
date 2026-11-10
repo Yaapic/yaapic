@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Variables;
+using Yaapic.ViewModels.Editing;
 
 namespace Yaapic.ViewModels.Requests;
 
@@ -36,6 +37,10 @@ public sealed partial class VariablePopupViewModel : ObservableObject
     private bool _isEditing;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(DisplayValue))]
+    private bool _isRevealed;
+
+    [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(SubmitCommand))]
     private bool _isBusy;
 
@@ -49,6 +54,7 @@ public sealed partial class VariablePopupViewModel : ObservableObject
         IsResolved = hint.IsResolved;
         IsDynamic = hint.Scope == VariableScopeKind.Dynamic;
         Value = hint.Value;
+        IsSecret = hint.IsSecret;
         Scope = hint.Scope;
         ScopeChoices =
         [
@@ -58,7 +64,7 @@ public sealed partial class VariablePopupViewModel : ObservableObject
         ];
         var first = ScopeChoices.FirstOrDefault(c => c.IsEnabled)?.Kind ?? VariableScopeKind.Globals;
         _selectedScope = hint.Scope is { } own && ScopeChoices.Any(c => c.Kind == own && c.IsEnabled) ? own : first;
-        _editableValue = hint.Value ?? "";
+        _editableValue = hint.IsSecret ? "" : hint.Value ?? ""; // a secret never lands in the form
         _isEditing = !IsResolved;
     }
 
@@ -77,6 +83,12 @@ public sealed partial class VariablePopupViewModel : ObservableObject
     /// <summary>Gets the stored value; <see langword="null"/> when unresolved or dynamic.</summary>
     public string? Value { get; }
 
+    /// <summary>Gets a value indicating whether the value comes from a secret row.</summary>
+    public bool IsSecret { get; }
+
+    /// <summary>Gets the value as displayed: masked when secret and not revealed; <see langword="null"/> when there is no value.</summary>
+    public string? DisplayValue => IsSecret && !IsRevealed && !string.IsNullOrEmpty(Value) ? KeyValueRowViewModel.Mask : Value;
+
     /// <summary>Gets the scope the value comes from; <see langword="null"/> when unresolved.</summary>
     public VariableScopeKind? Scope { get; }
 
@@ -87,6 +99,7 @@ public sealed partial class VariablePopupViewModel : ObservableObject
         VariableScopeKind.Collection => "Collection",
         VariableScopeKind.Globals => "Globals",
         VariableScopeKind.Dynamic => "Dynamic",
+        VariableScopeKind.Local => "Local",
         _ => "",
     };
 
@@ -100,7 +113,7 @@ public sealed partial class VariablePopupViewModel : ObservableObject
     public IReadOnlyList<VariableScopeChoice> ScopeChoices { get; }
 
     /// <summary>Gets a value indicating whether the Edit toggle is offered.</summary>
-    public bool CanEdit => IsResolved && !IsDynamic;
+    public bool CanEdit => IsResolved && !IsDynamic && !IsSecret;
 
     /// <summary>Gets the label of the submit button.</summary>
     public string SubmitLabel => IsResolved ? "Save" : "Create";
@@ -114,6 +127,9 @@ public sealed partial class VariablePopupViewModel : ObservableObject
         var enabled = writable.Contains(kind);
         return new(kind, label, enabled, enabled ? null : reason);
     }
+
+    [RelayCommand]
+    private void Reveal() => IsRevealed = !IsRevealed;
 
     [RelayCommand]
     private void ToggleEdit()

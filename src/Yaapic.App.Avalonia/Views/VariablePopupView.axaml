@@ -15,7 +15,15 @@
         <Border Grid.Column="1" Background="{DynamicResource YaapicSurfaceRaisedBrush}"
                 CornerRadius="{DynamicResource YaapicRadiusSm}" Padding="6,2"
                 AutomationProperties.Name="{Binding ScopeLabel}">
-          <TextBlock Text="{Binding ScopeLabel}" FontSize="11" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <StackPanel Orientation="Horizontal" Spacing="4">
+            <Viewbox x:Name="SecretGlyph" Width="12" Height="12" AutomationProperties.Name="Secret">
+              <Canvas Width="24" Height="24">
+                <Path Data="{StaticResource YaapicGlyphLock}" Stroke="{DynamicResource YaapicTextSecondaryBrush}"
+                      StrokeThickness="2" StrokeLineCap="Round" StrokeJoin="Round" />
+              </Canvas>
+            </Viewbox>
+            <TextBlock Text="{Binding ScopeLabel}" FontSize="11" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          </StackPanel>
         </Border>
       </Grid>
 
@@ -32,7 +40,7 @@
 
       <!-- Resolved: value, Edit, Open. -->
       <StackPanel x:Name="ResolvedPanel" Spacing="8">
-        <TextBlock Text="{Binding Value}" TextWrapping="Wrap" FontFamily="{DynamicResource YaapicMonoFont}"
+        <TextBlock Text="{Binding DisplayValue}" TextWrapping="Wrap" FontFamily="{DynamicResource YaapicMonoFont}"
                    Foreground="{DynamicResource YaapicTextPrimaryBrush}" IsVisible="{Binding !IsEditing}" />
         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" IsVisible="{Binding IsEditing}">
           <TextBox x:Name="EditBox" MinHeight="0" Padding="8,5" AutomationProperties.Name="Value"
@@ -42,6 +50,8 @@
                   Command="{Binding SubmitCommand}" />
         </Grid>
         <StackPanel Orientation="Horizontal" Spacing="4">
+          <Button x:Name="RevealLink" Classes="subtle" MinHeight="24" Padding="8,0" AutomationProperties.Name="Reveal"
+                  Content="Reveal" Command="{Binding RevealCommand}" />
           <Button x:Name="EditLink" Classes="subtle" Content="Edit" MinHeight="24" Padding="8,0"
                   AutomationProperties.Name="Edit" Command="{Binding ToggleEditCommand}" />
           <Button x:Name="OpenLink" Classes="subtle" Content="Open" MinHeight="24" Padding="8,0"

@@ -12,7 +12,7 @@ pwsh tools/screenshots/Capture-WinUI.ps1 -Theme light -Send -Out docs/screenshot
 
 Parameters: `-Exe`, `-Theme dark|light`, `-Out`, `-Width 1440 -Height 900`, `-Send` (invokes the Send button through UI Automation, then waits),
 `-WaitMs 1500`, `-Keys` (`SendKeys` syntax, sent before `-Send`), `-Request <slug>` (open and active request,
-default `create-user`), `-Select <AutomationId>` (invoke a button before the keys, e.g. `BodyTab`), `-FocusElement <name>` (focus a field by its automation name), `-NoTabs` (no open request), `-NoStub` (no stub server, to capture a connection failure).
+default `create-user`), `-Select <AutomationId>` (invoke a button before the keys, e.g. `BodyTab`; with `-Send -SelectAfterSend` it is invoked after the send, e.g. `-Select Console` to open the console), `-FocusElement <name>` (focus a field by its automation name), `-NoTabs` (no open request), `-NoStub` (no stub server, to capture a connection failure).
 
 Milestone 2 additions: `-Steps` (`|`-separated UI steps run before `-Send`: `invoke:`/`toggle:`/`select:`/`focus:` by AutomationId or name, `keys:`, `type:`, `click:`/`rclick:`/`hover:x,y` in window pixels, `wait:ms`) and `-Screen` (copy the screen instead of `PrintWindow`, required to capture menu and combo-box popups). The fixture has a `Users API` collection with a nested `Admin` folder, `globals.yaml`, and generated history entries; see `docs/screenshots/m2/README.md` for the commands.
 
@@ -44,3 +44,7 @@ They map to the app options `--workspace`, `--theme dark|light|system`, `--size 
 `--open`, `--screenshot <png>` and `--wait-ms`; all are inert unless given. The script always cleans up the app, the stub
 server and the temp folder. On Linux it needs a display (`xvfb-run pwsh ...` on a headless box). Run one capture per
 `pwsh` process, as for WinUI.
+
+Milestone 3 additions: `--data-dir <dir>` on the WinUI app (the per-user data directory that holds the vault; the script passes a
+throw-away one, so `%APPDATA%\Yaapic` is never touched), `-Crop x,y,w,h`, the `wheel:x,y,ticks` step, and `Capture-M3.ps1`, which takes the 18
+M3 screenshots (see `docs/screenshots/m3/README.md`).

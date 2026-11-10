@@ -1,22 +1,36 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Yaapic.Core.Scripting;
 using Yaapic.Core.Storage;
+using Yaapic.Domain.Scripting;
 using Yaapic.Domain.Workspace;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
+using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.ViewModels.Shell;
 
 /// <summary>The root view model of the application window: owns the sidebar, tabs and environments and restores the session.</summary>
-public sealed partial class ShellViewModel : ObservableObject
+public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
 {
+    /// <summary>The default height of the console panel.</summary>
+    public const double DefaultConsoleHeight = 250;
+
+    /// <summary>The smallest height of the console panel.</summary>
+    public const double MinConsoleHeight = 120;
+
+    /// <summary>The largest height of the console panel.</summary>
+    public const double MaxConsoleHeight = 600;
+
     private readonly ISessionStore _session;
     private readonly IDialogService _dialogs;
+    private readonly ScriptEngineRegistry _engines;
     private CommandPaletteViewModel? _palette;
     private bool _initialized;
     private bool _saving;
@@ -25,6 +39,16 @@ public sealed partial class ShellViewModel : ObservableObject
 
     [ObservableProperty]
     private SidebarMode _mode = SidebarMode.Collections;
+
+    [ObservableProperty]
+    private bool _isConsoleOpen;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasScriptEngineWarnings))]
+    private IReadOnlyList<string> _scriptEngineWarnings = [];
+
+    private double _consoleHeight = DefaultConsoleHeight;
+    private bool _vaultInitializing;
 
     /// <summary>Creates the shell.</summary>
     /// <param name="tabs">The open tabs.</param>
@@ -35,6 +59,9 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <param name="globals">The global variables editing.</param>
     /// <param name="session">Where the session is saved.</param>
     /// <param name="dialogs">Asks the user about unsaved changes when the window closes.</param>
+    /// <param name="console">The application-wide console.</param>
+    /// <param name="vault">The secret vault view model.</param>
+    /// <param name="engines">The script engines, checked for availability at start-up.</param>
     public ShellViewModel(
         TabsViewModel tabs,
         RequestListViewModel requests,
@@ -43,7 +70,10 @@ public sealed partial class ShellViewModel : ObservableObject
         EnvironmentsViewModel environments,
         GlobalsViewModel globals,
         ISessionStore session,
-        IDialogService dialogs)
+        IDialogService dialogs,
+        ConsoleViewModel console,
+        VaultViewModel vault,
+        ScriptEngineRegistry engines)
     {
         ArgumentNullException.ThrowIfNull(tabs);
         ArgumentNullException.ThrowIfNull(requests);
@@ -53,14 +83,20 @@ public sealed partial class ShellViewModel : ObservableObject
         ArgumentNullException.ThrowIfNull(globals);
         ArgumentNullException.ThrowIfNull(session);
         ArgumentNullException.ThrowIfNull(dialogs);
+        ArgumentNullException.ThrowIfNull(console);
+        ArgumentNullException.ThrowIfNull(vault);
+        ArgumentNullException.ThrowIfNull(engines);
         Tabs = tabs;
         Requests = requests;
         Collections = collections;
         History = history;
         Environments = environments;
         Globals = globals;
+        Console = console;
+        Vault = vault;
         _session = session;
         _dialogs = dialogs;
+        _engines = engines;
         tabs.SessionChanged += (_, _) => QueueSave();
         tabs.RequestSaved += (_, _) => QueueSave();
         environments.ActiveEnvironmentChanged += (_, _) => QueueSave();
@@ -83,6 +119,22 @@ public sealed partial class ShellViewModel : ObservableObject
 
     /// <summary>Gets the global variables view model.</summary>
     public GlobalsViewModel Globals { get; }
+
+    /// <summary>Gets the application-wide console.</summary>
+    public ConsoleViewModel Console { get; }
+
+    /// <summary>Gets the secret vault view model.</summary>
+    public VaultViewModel Vault { get; }
+
+    /// <summary>Gets or sets the height of the console panel, clamped to <see cref="MinConsoleHeight"/>..<see cref="MaxConsoleHeight"/>.</summary>
+    public double ConsoleHeight
+    {
+        get => _consoleHeight;
+        set => SetProperty(ref _consoleHeight, Math.Clamp(value, MinConsoleHeight, MaxConsoleHeight));
+    }
+
+    /// <summary>Gets a value indicating whether a script engine is unavailable.</summary>
+    public bool HasScriptEngineWarnings => ScriptEngineWarnings.Count > 0;
 
     /// <summary>Gets the command palette.</summary>
     /// <exception cref="InvalidOperationException">Read before <see cref="AttachPalette"/>.</exception>
@@ -113,6 +165,22 @@ public sealed partial class ShellViewModel : ObservableObject
     /// <returns>A task that completes when the shell is ready.</returns>
     public async Task InitializeAsync()
     {
+        ScriptEngineWarnings =
+        [
+            .. Enum.GetValues<ScriptLanguage>()
+                .Select(l => _engines.IsAvailable(l, out var reason) ? null : $"{l} engine unavailable: {reason}")
+                .OfType<string>(),
+        ];
+        _vaultInitializing = true;
+        try
+        {
+            await Vault.InitializeAsync();
+        }
+        finally
+        {
+            _vaultInitializing = false;
+        }
+
         var state = await _session.LoadAsync(CancellationToken.None);
         await Environments.LoadAsync(state.ActiveEnvironmentId);
         await Globals.LoadAsync();
@@ -169,6 +237,33 @@ public sealed partial class ShellViewModel : ObservableObject
         QueueSave();
         await _drain;
         return true;
+    }
+
+    /// <summary>Reloads the environments, globals and collection tree after the vault state changed.</summary>
+    /// <returns>A task that completes when the reload is done.</returns>
+    public async Task ReloadAsync()
+    {
+        if (_vaultInitializing)
+        {
+            return; // InitializeAsync loads everything right after the vault.
+        }
+
+        await Environments.LoadAsync(Environments.ActiveEnvironment?.Id);
+        await Globals.LoadAsync();
+        await Collections.RefreshAsync();
+    }
+
+    [RelayCommand]
+    private void ToggleConsole() => IsConsoleOpen = !IsConsoleOpen;
+
+    [RelayCommand]
+    private void OpenConsole() => IsConsoleOpen = true;
+
+    [RelayCommand]
+    private void ClearConsole()
+    {
+        Console.ClearCommand.Execute(null);
+        IsConsoleOpen = true;
     }
 
     [RelayCommand]

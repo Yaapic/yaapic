@@ -14,6 +14,9 @@ public sealed class InMemoryEnvironmentStore : IEnvironmentStore
     /// <summary>Gets the number of <see cref="SaveAsync"/> calls.</summary>
     public int SaveCount { get; private set; }
 
+    /// <summary>Sets <see cref="SaveCount"/> back to zero.</summary>
+    public void ResetSaveCount() => SaveCount = 0;
+
     /// <inheritdoc/>
     public Task<IReadOnlyList<EnvironmentDefinition>> ListAsync(CancellationToken ct) =>
         Task.FromResult<IReadOnlyList<EnvironmentDefinition>>(

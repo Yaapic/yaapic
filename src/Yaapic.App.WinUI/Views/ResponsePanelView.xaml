@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
              xmlns:d="using:Yaapic.Domain.Http"
+             xmlns:r="using:Yaapic.ViewModels.Responses"
              xmlns:v="using:Yaapic.App.WinUI.Views"
              xmlns:ic="using:FluentIcons.WinUI">
   <Grid Background="{ThemeResource YaapicSurfaceBaseBrush}">
@@ -106,6 +107,16 @@
                            Style="{StaticResource YaapicCountBadgeTextStyle}"
                            Text="{x:Bind ViewModel.Headers.Count, Mode=OneWay}"
                            Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Headers.Count), Mode=OneWay}"/>
+              </StackPanel>
+            </ToggleButton>
+            <ToggleButton x:Name="TestsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
+                          Click="OnTabClick"
+                          Visibility="{x:Bind p:VisibilityMap.WhenEither(ViewModel.Tests.HasTests, ViewModel.Tests.HasErrors), Mode=OneWay}">
+              <StackPanel Orientation="Horizontal" Spacing="5">
+                <TextBlock Text="Tests" VerticalAlignment="Center"/>
+                <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicCountBadgeTextStyle}"
+                           Text="{x:Bind ViewModel.Tests.BadgeText, Mode=OneWay}"
+                           Foreground="{x:Bind p:BrushMap.TestOutcome(ViewModel.Tests.AllPassed), Mode=OneWay}"/>
               </StackPanel>
             </ToggleButton>
           </StackPanel>
@@ -225,6 +236,93 @@
               </DataTemplate>
             </ListView.ItemTemplate>
           </ListView>
+          <Grid x:Name="TestsPane" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Orientation="Horizontal" Margin="16,8,12,8" Spacing="12" VerticalAlignment="Center"
+                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Tests.HasTests), Mode=OneWay}">
+              <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"
+                         Text="{x:Bind ViewModel.Tests.SummaryText, Mode=OneWay}"/>
+              <ListView x:Name="TestFilters" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
+                        AutomationProperties.Name="Test filter" SelectionChanged="OnTestFilterChanged">
+                <x:String>All</x:String>
+                <x:String>Failed</x:String>
+              </ListView>
+            </StackPanel>
+            <ItemsControl Grid.Row="1" Margin="16,0,16,8"
+                          ItemsSource="{x:Bind p:ListMap.ScriptErrors(ViewModel.Tests.Errors), Mode=OneWay}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="r:ScriptErrorItemViewModel">
+                  <StackPanel Margin="0,0,0,8" Padding="12,8" Spacing="4"
+                              Background="{ThemeResource YaapicDangerBackgroundBrush}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                      <TextBlock Text="{x:Bind StatusText}" Style="{StaticResource YaapicBodyStrongTextStyle}"
+                                 Foreground="{ThemeResource YaapicDangerBrush}"/>
+                      <TextBlock Text="{x:Bind Origin}" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                                 Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                      <TextBlock Text="{x:Bind Location}" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                                 Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                    </StackPanel>
+                    <TextBlock Text="{x:Bind Message}" IsTextSelectionEnabled="True" TextWrapping="Wrap"
+                               Style="{StaticResource YaapicCodeSmallTextStyle}"
+                               Foreground="{ThemeResource YaapicDangerBrush}"/>
+                  </StackPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <ListView Grid.Row="2" SelectionMode="None"
+                      ItemsSource="{x:Bind p:ListMap.TestItems(ViewModel.Tests.Items), Mode=OneWay}">
+              <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                  <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                  <Setter Property="MinHeight" Value="0"/>
+                  <Setter Property="Padding" Value="0"/>
+                </Style>
+              </ListView.ItemContainerStyle>
+              <ListView.ItemTemplate>
+                <DataTemplate x:DataType="r:TestResultItemViewModel">
+                  <Border Padding="14,6" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+                    <Grid ColumnSpacing="10" RowSpacing="2">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+                      <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                      </Grid.RowDefinitions>
+                      <TextBlock Text="{x:Bind Symbol}" AutomationProperties.Name="{x:Bind StatusText}"
+                                 Style="{StaticResource YaapicBodyStrongTextStyle}"
+                                 Foreground="{x:Bind p:BrushMap.TestOutcome(Passed)}"/>
+                      <TextBlock Grid.Column="1" Text="{x:Bind Name}" TextTrimming="CharacterEllipsis"
+                                 Style="{StaticResource YaapicBodyTextStyle}"/>
+                      <TextBlock Grid.Column="2" Text="{x:Bind DurationText}" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                                 Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                      <Border Grid.Column="3" Style="{StaticResource YaapicChipBorderStyle}"
+                              Background="{ThemeResource YaapicSurfaceSunkenBrush}">
+                        <TextBlock Text="{x:Bind Origin}" Style="{StaticResource YaapicChipTextStyle}"
+                                   Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                      </Border>
+                      <TextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{x:Bind Message}"
+                                 IsTextSelectionEnabled="True" TextWrapping="Wrap"
+                                 Style="{StaticResource YaapicCodeSmallTextStyle}"
+                                 Foreground="{ThemeResource YaapicDangerBrush}"
+                                 Visibility="{x:Bind p:VisibilityMap.WhenText(Message)}"/>
+                    </Grid>
+                  </Border>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+            <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap" Style="{StaticResource YaapicBodyTextStyle}"
+                       Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="No tests ran. Add pm.test(...) to the post-response script."
+                       Visibility="{x:Bind p:VisibilityMap.WhenNeitherFlag(ViewModel.Tests.HasTests, ViewModel.Tests.HasErrors), Mode=OneWay}"/>
+          </Grid>
         </Grid>
       </Grid>
     </Grid>

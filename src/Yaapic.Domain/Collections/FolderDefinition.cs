@@ -1,4 +1,5 @@
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 
 namespace Yaapic.Domain.Collections;
 
@@ -7,8 +8,13 @@ namespace Yaapic.Domain.Collections;
 /// <param name="Name">The display name.</param>
 /// <param name="Description">The free-text description.</param>
 /// <param name="Variables">The folder variables, in order.</param>
-public sealed record FolderDefinition(Guid Id, string Name, string Description, IReadOnlyList<KeyValueEntry> Variables)
+/// <param name="Scripts">The folder scripts.</param>
+public sealed record FolderDefinition(Guid Id, string Name, string Description, IReadOnlyList<KeyValueEntry> Variables,
+    ScriptSet Scripts = null!)
 {
+    /// <summary>Gets the scripts; a <see langword="null"/> constructor argument becomes <see cref="ScriptSet.Empty"/>.</summary>
+    public ScriptSet Scripts { get; init; } = Scripts ?? ScriptSet.Empty;
+
     /// <summary>Creates an empty folder with a new identifier.</summary>
     /// <param name="name">The display name; it is trimmed.</param>
     /// <returns>The new folder.</returns>
@@ -16,7 +22,7 @@ public sealed record FolderDefinition(Guid Id, string Name, string Description, 
     public static FolderDefinition Create(string name)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(name);
-        return new(Guid.NewGuid(), name.Trim(), "", []);
+        return new(Guid.NewGuid(), name.Trim(), "", [], ScriptSet.Empty);
     }
 
     /// <summary>Compares two folders by value, including the contents of the variable list.</summary>
@@ -24,5 +30,5 @@ public sealed record FolderDefinition(Guid Id, string Name, string Description, 
     /// <returns><see langword="true"/> when every member is equal.</returns>
     public bool IsEquivalentTo(FolderDefinition other) =>
         Id == other.Id && Name == other.Name && Description == other.Description
-        && Variables.SequenceEqual(other.Variables);
+        && Variables.SequenceEqual(other.Variables) && Scripts == other.Scripts;
 }

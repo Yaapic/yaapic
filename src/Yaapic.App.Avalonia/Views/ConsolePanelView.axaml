@@ -1,0 +1,116 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Yaapic.ViewModels.Shell"
+             xmlns:con="using:Yaapic.ViewModels.Console"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             x:Class="Yaapic.App.Avalonia.Views.ConsolePanelView"
+             x:DataType="vm:ShellViewModel"
+             IsVisible="{Binding IsConsoleOpen}" Height="{Binding ConsoleHeight}">
+  <UserControl.Styles>
+    <!-- Resize handle: 4 px hit area, 1 px line; accent while hovered, focused or dragged. -->
+    <Style Selector="Thumb.consoleSplitter">
+      <Setter Property="Height" Value="4" />
+      <Setter Property="Cursor" Value="SizeNorthSouth" />
+      <Setter Property="Focusable" Value="True" />
+      <Setter Property="Background" Value="Transparent" />
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+      </Setter>
+    </Style>
+    <Style Selector="Thumb.consoleSplitter:pointerover, Thumb.consoleSplitter:focus-visible">
+      <Setter Property="Background" Value="{DynamicResource YaapicAccentFillBrush}" />
+    </Style>
+    <!-- Rows are not selectable: only their message text is. -->
+    <Style Selector="ListBox.consoleLines > ListBoxItem">
+      <Setter Property="MinHeight" Value="22" />
+      <Setter Property="Padding" Value="0" />
+      <Setter Property="Focusable" Value="False" />
+    </Style>
+    <Style Selector="ListBox.consoleLines > ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="Background" Value="Transparent" />
+    </Style>
+    <Style Selector="Border.consoleRow.err">
+      <Setter Property="Background" Value="{DynamicResource YaapicDangerBackgroundBrush}" />
+    </Style>
+    <Style Selector="TextBlock.consoleSymbol">
+      <Setter Property="Foreground" Value="{DynamicResource YaapicTextTertiaryBrush}" />
+    </Style>
+    <Style Selector="TextBlock.consoleSymbol.info"><Setter Property="Foreground" Value="{DynamicResource YaapicInfoBrush}" /></Style>
+    <Style Selector="TextBlock.consoleSymbol.warn"><Setter Property="Foreground" Value="{DynamicResource YaapicWarningBrush}" /></Style>
+    <Style Selector="TextBlock.consoleSymbol.pass"><Setter Property="Foreground" Value="{DynamicResource YaapicSuccessBrush}" /></Style>
+    <Style Selector="TextBlock.consoleSymbol.err"><Setter Property="Foreground" Value="{DynamicResource YaapicDangerBrush}" /></Style>
+    <Style Selector="TextBlock.consoleSymbol.header"><Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" /></Style>
+    <Style Selector="SelectableTextBlock.consoleMessage.header">
+      <Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
+      <Setter Property="FontWeight" Value="SemiBold" />
+    </Style>
+  </UserControl.Styles>
+  <Grid RowDefinitions="Auto,34,*" Background="{DynamicResource YaapicSurfaceBaseBrush}">
+    <Panel Height="4">
+      <Border Height="1" VerticalAlignment="Top" IsHitTestVisible="False" Background="{DynamicResource YaapicBorderDefaultBrush}" />
+      <Thumb x:Name="Splitter" Classes="consoleSplitter" AutomationProperties.Name="Resize the console"
+             DragDelta="OnSplitterDrag" KeyDown="OnSplitterKeyDown" DoubleTapped="OnSplitterDoubleTapped" />
+    </Panel>
+
+    <Border Grid.Row="1" Padding="12,0,8,0" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+      <Grid ColumnDefinitions="Auto,Auto,240,*,Auto" ColumnSpacing="10">
+        <TextBlock Text="Console" Classes="bodyStrong" VerticalAlignment="Center" />
+        <ListBox x:Name="FilterChips" Grid.Column="1" Classes="segmented" VerticalAlignment="Center" SelectedIndex="0"
+                 AutomationProperties.Name="Console level filter" SelectionChanged="OnFilterChanged">
+          <ListBoxItem>All</ListBoxItem>
+          <ListBoxItem>Log</ListBoxItem>
+          <ListBoxItem>Warn</ListBoxItem>
+          <ListBoxItem>Error</ListBoxItem>
+        </ListBox>
+        <TextBox x:Name="SearchBox" Grid.Column="2" Height="26" MinHeight="26" Padding="8,2" VerticalAlignment="Center"
+                 VerticalContentAlignment="Center" PlaceholderText="Filter logs" AutomationProperties.Name="Filter logs"
+                 KeyDown="OnSearchKeyDown" Text="{Binding Console.Search, Mode=TwoWay}" />
+        <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
+          <Button Content="Clear" Classes="subtle" AutomationProperties.Name="Clear console" Command="{Binding Console.ClearCommand}" />
+          <Button Content="Copy" Classes="subtle" AutomationProperties.Name="Copy console" Command="{Binding Console.CopyCommand}" />
+          <Button Classes="icon" AutomationProperties.Name="Close console" ToolTip.Tip="Close (Ctrl+`)" Command="{Binding ToggleConsoleCommand}">
+            <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="10" Height="10" />
+          </Button>
+        </StackPanel>
+      </Grid>
+    </Border>
+
+    <ListBox x:Name="Lines" Grid.Row="2" Classes="consoleLines" Background="Transparent" BorderThickness="0" Padding="0"
+             AutomationProperties.Name="Console messages" ItemsSource="{Binding Console.Lines}">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="con:ConsoleLineViewModel">
+          <Border Classes="consoleRow" Classes.err="{Binding IsError}" Height="22" Padding="12,0"
+                  ToolTip.Tip="{Binding Message}">
+            <Grid ColumnDefinitions="86,14,Auto,*,Auto" ColumnSpacing="8">
+              <TextBlock Text="{Binding TimeText}" Classes="codeSmall" VerticalAlignment="Center"
+                         Foreground="{DynamicResource YaapicTextDisabledBrush}" />
+              <TextBlock Grid.Column="1" Text="{Binding Symbol}" Classes="codeSmall consoleSymbol" VerticalAlignment="Center"
+                         HorizontalAlignment="Center"
+                         Classes.info="{Binding Kind, Converter={x:Static p:ConsoleMap.IsInfo}}"
+                         Classes.warn="{Binding Kind, Converter={x:Static p:ConsoleMap.IsWarn}}"
+                         Classes.pass="{Binding Kind, Converter={x:Static p:ConsoleMap.IsPassed}}"
+                         Classes.err="{Binding Kind, Converter={x:Static p:ConsoleMap.IsErrorKind}}"
+                         Classes.header="{Binding Kind, Converter={x:Static p:ConsoleMap.IsHeader}}" />
+              <TextBlock Grid.Column="2" Text="{Binding Method}" Classes="method" VerticalAlignment="Center"
+                         Foreground="{Binding Method, Converter={x:Static p:ConsoleMap.VerbBrush}}"
+                         IsVisible="{Binding Method, Converter={x:Static p:ConsoleMap.HasText}}" />
+              <SelectableTextBlock Grid.Column="3" Text="{Binding Message}" Classes="code consoleMessage" VerticalAlignment="Center"
+                                   TextTrimming="CharacterEllipsis" MaxLines="1"
+                                   Classes.header="{Binding Kind, Converter={x:Static p:ConsoleMap.IsHeader}}" />
+              <Border Grid.Column="4" Classes="chip" VerticalAlignment="Center" Background="{DynamicResource YaapicSurfaceSunkenBrush}"
+                      IsVisible="{Binding Origin, Converter={x:Static p:ConsoleMap.HasText}}">
+                <TextBlock Text="{Binding Origin}" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+              </Border>
+            </Grid>
+          </Border>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+    <TextBlock Grid.Row="2" Classes="bodySmall" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360"
+               TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+               Text="No messages yet. Script output and network activity appear here."
+               IsVisible="{Binding Console.IsEmpty}" />
+  </Grid>
+</UserControl>

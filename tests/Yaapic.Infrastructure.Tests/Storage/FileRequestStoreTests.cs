@@ -1,6 +1,7 @@
 using System.Text;
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.Infrastructure.Storage;
 
 namespace Yaapic.Infrastructure.Tests.Storage;
@@ -31,6 +32,22 @@ public sealed class FileRequestStoreTests : IDisposable
         var list = await new FileRequestStore(_root).ListAsync(CancellationToken.None);
         Assert.Equal(["get-users.request.yaml"], FileNames());
         Assert.True(request.IsEquivalentTo(Assert.Single(list)));
+    }
+
+    [Fact]
+    public async Task ScriptsRoundTripThroughDisk()
+    {
+        var store = new FileRequestStore(_root);
+        var request = HttpRequestDefinition.Create("Scripted") with
+        {
+            Scripts = new ScriptSet(
+                new ScriptBlock(ScriptLanguage.JavaScript, "pm.environment.set(\"a\", \"1\");\n"),
+                new ScriptBlock(ScriptLanguage.Lua, "print(\"é\")\n")),
+        };
+        await store.SaveAsync(request, CancellationToken.None);
+
+        var loaded = Assert.Single(await new FileRequestStore(_root).ListAsync(CancellationToken.None));
+        Assert.Equal(request.Scripts, loaded.Scripts);
     }
 
     [Fact]

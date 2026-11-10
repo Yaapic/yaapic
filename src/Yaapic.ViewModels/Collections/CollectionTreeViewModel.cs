@@ -6,6 +6,7 @@ using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.ViewModels.Collections;
 
@@ -30,12 +31,15 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     [ObservableProperty]
     private FolderSettingsViewModel? _settingsEditor;
 
+    private readonly IVaultStateSource? _vaultState;
+
     /// <summary>Creates the tree.</summary>
     /// <param name="collections">Where the tree is loaded from.</param>
     /// <param name="requests">Where requests are saved; used by the request commands.</param>
     /// <param name="tabs">The open tabs; a save there refreshes this tree and requests open in it.</param>
     /// <param name="dialogs">Asks the user to confirm deletions; used by the folder and request commands.</param>
-    public CollectionTreeViewModel(ICollectionStore collections, IRequestStore requests, TabsViewModel tabs, IDialogService dialogs)
+    /// <param name="vaultState">The vault state, handed to the settings editors so secret rows follow it.</param>
+    public CollectionTreeViewModel(ICollectionStore collections, IRequestStore requests, TabsViewModel tabs, IDialogService dialogs, IVaultStateSource? vaultState = null)
     {
         ArgumentNullException.ThrowIfNull(collections);
         ArgumentNullException.ThrowIfNull(requests);
@@ -45,6 +49,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         Requests = requests;
         _tabs = tabs;
         Dialogs = dialogs;
+        _vaultState = vaultState;
         tabs.RequestSaved += (_, _) => _ = RefreshAsync();
     }
 
@@ -120,7 +125,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     {
         ArgumentNullException.ThrowIfNull(folder);
         if (!folder.IsFolder) return;
-        var editor = new FolderSettingsViewModel(folder.Node.Folder!, folder.IsCollection, _collections);
+        var editor = new FolderSettingsViewModel(folder.Node.Folder!, folder.IsCollection, _collections, _vaultState);
         editor.Saved += (_, _) => _ = RefreshAsync();
         SettingsEditor = editor;
     }
@@ -136,7 +141,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
             return false;
         }
 
-        var editor = new FolderSettingsViewModel(folder, true, _collections);
+        var editor = new FolderSettingsViewModel(folder, true, _collections, _vaultState);
         editor.Saved += (_, _) => _ = RefreshAsync();
         SettingsEditor = editor;
         return true;
@@ -169,6 +174,33 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     public FolderDefinition? FindCollection(Guid requestId) =>
         _tree.FirstOrDefault(root => root.Kind == CollectionNodeKind.Folder && root.Descendants().Any(n => n.Id == requestId && n.Kind == CollectionNodeKind.Request))
             ?.Folder;
+
+    /// <summary>Gets the folders that contain a request, outermost (the collection) first.</summary>
+    /// <param name="requestId">The request identifier.</param>
+    /// <returns>The saved folders in the loaded tree; empty for an unfiled or unknown request.</returns>
+    public IReadOnlyList<FolderDefinition> FindFolderPath(Guid requestId)
+    {
+        foreach (var root in _tree)
+        {
+            if (FindPath(root, requestId) is { } path) return path;
+        }
+
+        return [];
+    }
+
+    private static List<FolderDefinition>? FindPath(CollectionNode node, Guid requestId)
+    {
+        if (node.Kind != CollectionNodeKind.Folder) return null;
+        if (node.Children.Any(c => c.Kind == CollectionNodeKind.Request && c.Id == requestId)) return [node.Folder!];
+        foreach (var child in node.Children)
+        {
+            if (FindPath(child, requestId) is not { } path) continue;
+            path.Insert(0, node.Folder!);
+            return path;
+        }
+
+        return null;
+    }
 
     /// <summary>Gets the store the collections are saved to, for view models that edit a collection outside the tree.</summary>
     internal ICollectionStore Store => _collections;

@@ -1,0 +1,442 @@
+[
+  {
+    "javascript": "pm.expect(409).to.equal(204)",
+    "lua": "pm.expect(409).to.equal(204)",
+    "message": "AssertionError: expected 409 to equal 204"
+  },
+  {
+    "javascript": "pm.expect(200).to.not.equal(200)",
+    "lua": "pm.expect(200).to.is_not.equal(200)",
+    "message": "AssertionError: expected 200 to not equal 200"
+  },
+  {
+    "javascript": "pm.expect(NaN).to.equal(NaN)",
+    "lua": "pm.expect(0/0).to.equal(0/0)",
+    "message": "AssertionError: expected NaN to equal NaN"
+  },
+  {
+    "javascript": "pm.expect(1).to.eq(2)",
+    "lua": "pm.expect(1).to.eq(2)",
+    "message": "AssertionError: expected 1 to equal 2"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.eql([1, 3])",
+    "lua": "pm.expect({1, 2}).to.eql({1, 3})",
+    "message": "AssertionError: expected [ 1, 2 ] to deeply equal [ 1, 3 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.deep.equal([1, 3])",
+    "lua": "pm.expect({1, 2}).to.deep.equal({1, 3})",
+    "message": "AssertionError: expected [ 1, 2 ] to deeply equal [ 1, 3 ]"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.not.eql({ a: 1 })",
+    "lua": "pm.expect({ a = 1 }).to.is_not.eql({ a = 1 })",
+    "message": "AssertionError: expected { a: 1 } to not deeply equal { a: 1 }"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.equal({ a: 1 })",
+    "lua": "pm.expect({ a = 1 }).to.equal({ a = 1 })",
+    "message": "AssertionError: expected { a: 1 } to equal { a: 1 }"
+  },
+  {
+    "javascript": "pm.expect(false).to.be.ok",
+    "lua": "pm.expect(false).to.be.ok()",
+    "message": "AssertionError: expected false to be truthy"
+  },
+  {
+    "javascript": "pm.expect(1).to.not.be.ok",
+    "lua": "pm.expect(1).to.be.is_not.ok()",
+    "message": "AssertionError: expected 1 to be falsy"
+  },
+  {
+    "javascript": "pm.expect(1).to.be.true",
+    "lua": "pm.expect(1).to.be.is_true()",
+    "message": "AssertionError: expected 1 to be true"
+  },
+  {
+    "javascript": "pm.expect(true).to.not.be.true",
+    "lua": "pm.expect(true).to.be.is_not.is_true()",
+    "message": "AssertionError: expected true to be false"
+  },
+  {
+    "javascript": "pm.expect(0).to.be.false",
+    "lua": "pm.expect(0).to.be.is_false()",
+    "message": "AssertionError: expected 0 to be false"
+  },
+  {
+    "javascript": "pm.expect(false).to.not.be.false",
+    "lua": "pm.expect(false).to.be.is_not.is_false()",
+    "message": "AssertionError: expected false to be true"
+  },
+  {
+    "javascript": "pm.expect(1).to.be.null",
+    "lua": "pm.expect(1).to.be.is_null()",
+    "message": "AssertionError: expected 1 to be null"
+  },
+  {
+    "javascript": "pm.expect(null).to.not.be.null",
+    "lua": "pm.expect(pm.null).to.be.is_not.is_null()",
+    "message": "AssertionError: expected null not to be null"
+  },
+  {
+    "javascript": "pm.expect(1).to.be.undefined",
+    "lua": "pm.expect(1).to.be.is_nil()",
+    "message": "AssertionError: expected 1 to be undefined"
+  },
+  {
+    "javascript": "pm.expect(undefined).to.not.be.undefined",
+    "lua": "pm.expect(nil).to.be.is_not.is_nil()",
+    "message": "AssertionError: expected undefined not to be undefined"
+  },
+  {
+    "javascript": "pm.expect(1).to.be.NaN",
+    "lua": "pm.expect(1).to.be.is_nan()",
+    "message": "AssertionError: expected 1 to be NaN"
+  },
+  {
+    "javascript": "pm.expect(NaN).to.not.be.NaN",
+    "lua": "pm.expect(0/0).to.be.is_not.is_nan()",
+    "message": "AssertionError: expected NaN not to be NaN"
+  },
+  {
+    "javascript": "pm.expect(undefined).to.exist",
+    "lua": "pm.expect(nil).to.exist()",
+    "message": "AssertionError: expected undefined to exist"
+  },
+  {
+    "javascript": "pm.expect(1).to.not.exist",
+    "lua": "pm.expect(1).to.is_not.exist()",
+    "message": "AssertionError: expected 1 to not exist"
+  },
+  {
+    "javascript": "pm.expect([1]).to.be.empty",
+    "lua": "pm.expect({1}).to.be.empty()",
+    "message": "AssertionError: expected [ 1 ] to be empty"
+  },
+  {
+    "javascript": "pm.expect('').to.not.be.empty",
+    "lua": "pm.expect('').to.be.is_not.empty()",
+    "message": "AssertionError: expected '' not to be empty"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.be.empty",
+    "lua": "pm.expect({ a = 1 }).to.be.empty()",
+    "message": "AssertionError: expected { a: 1 } to be empty"
+  },
+  {
+    "javascript": "pm.expect('abc').to.be.a('number')",
+    "lua": "pm.expect('abc').to.be.a('number')",
+    "message": "AssertionError: expected 'abc' to be a number"
+  },
+  {
+    "javascript": "pm.expect({}).to.be.an('Array')",
+    "lua": "pm.expect({}).to.be.an('Array')",
+    "message": "AssertionError: expected {} to be an array"
+  },
+  {
+    "javascript": "pm.expect([]).to.not.be.an('array')",
+    "lua": "pm.expect(pm.json.array({})).to.is_not.be.an('array')",
+    "message": "AssertionError: expected [] not to be an array"
+  },
+  {
+    "javascript": "pm.expect(3).to.be.above(5)",
+    "lua": "pm.expect(3).to.be.above(5)",
+    "message": "AssertionError: expected 3 to be above 5"
+  },
+  {
+    "javascript": "pm.expect(7).to.not.be.above(5)",
+    "lua": "pm.expect(7).to.is_not.be.above(5)",
+    "message": "AssertionError: expected 7 to be at most 5"
+  },
+  {
+    "javascript": "pm.expect(1).to.be.at.least(5)",
+    "lua": "pm.expect(1).to.be.at.least(5)",
+    "message": "AssertionError: expected 1 to be at least 5"
+  },
+  {
+    "javascript": "pm.expect(5).to.not.be.at.least(1)",
+    "lua": "pm.expect(5).to.is_not.be.at.least(1)",
+    "message": "AssertionError: expected 5 to be below 1"
+  },
+  {
+    "javascript": "pm.expect(3).to.be.below(1)",
+    "lua": "pm.expect(3).to.be.below(1)",
+    "message": "AssertionError: expected 3 to be below 1"
+  },
+  {
+    "javascript": "pm.expect(1).to.not.be.below(3)",
+    "lua": "pm.expect(1).to.is_not.be.below(3)",
+    "message": "AssertionError: expected 1 to be at least 3"
+  },
+  {
+    "javascript": "pm.expect(9).to.be.at.most(5)",
+    "lua": "pm.expect(9).to.be.at.most(5)",
+    "message": "AssertionError: expected 9 to be at most 5"
+  },
+  {
+    "javascript": "pm.expect(1).to.not.be.at.most(5)",
+    "lua": "pm.expect(1).to.is_not.be.at.most(5)",
+    "message": "AssertionError: expected 1 to be above 5"
+  },
+  {
+    "javascript": "pm.expect(9).to.be.within(1, 5)",
+    "lua": "pm.expect(9).to.be.within(1, 5)",
+    "message": "AssertionError: expected 9 to be within 1..5"
+  },
+  {
+    "javascript": "pm.expect(3).to.not.be.within(1, 5)",
+    "lua": "pm.expect(3).to.is_not.be.within(1, 5)",
+    "message": "AssertionError: expected 3 to not be within 1..5"
+  },
+  {
+    "javascript": "pm.expect(1).to.be.closeTo(5, 0.5)",
+    "lua": "pm.expect(1).to.be.close_to(5, 0.5)",
+    "message": "AssertionError: expected 1 to be close to 5 +/- 0.5"
+  },
+  {
+    "javascript": "pm.expect(5).to.not.be.approximately(5.2, 0.5)",
+    "lua": "pm.expect(5).to.is_not.be.close_to(5.2, 0.5)",
+    "message": "AssertionError: expected 5 not to be close to 5.2 +/- 0.5"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.have.length(3)",
+    "lua": "pm.expect({1, 2}).to.have.length(3)",
+    "message": "AssertionError: expected [ 1, 2 ] to have a length of 3 but got 2"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.not.have.lengthOf(2)",
+    "lua": "pm.expect({1, 2}).to.is_not.have.length_of(2)",
+    "message": "AssertionError: expected [ 1, 2 ] to not have a length of 2"
+  },
+  {
+    "javascript": "pm.expect('abc').to.be.above(1)",
+    "lua": "pm.expect('abc').to.be.above(1)",
+    "message": "AssertionError: expected 'abc' to be a number or a date"
+  },
+  {
+    "javascript": "pm.expect(1, 'boom').to.equal(2)",
+    "lua": "pm.expect(1, 'boom').to.equal(2)",
+    "message": "AssertionError: boom: expected 1 to equal 2"
+  },
+  {
+    "javascript": "pm.expect(1, 'boom').to.not.exist",
+    "lua": "pm.expect(1, 'boom').to.is_not.exist()",
+    "message": "AssertionError: boom: expected 1 to not exist"
+  },
+  {
+    "javascript": "pm.expect.fail('nope')",
+    "lua": "pm.expect.fail('nope')",
+    "message": "AssertionError: nope"
+  },
+  {
+    "javascript": "pm.expect.fail()",
+    "lua": "pm.expect.fail()",
+    "message": "AssertionError: expect.fail()"
+  },
+  {
+    "javascript": "pm.expect(Array.from({ length: 40 }, (_, i) => i)).to.equal(1)",
+    "lua": "local t = {} for i = 0, 39 do t[#t + 1] = i end pm.expect(t).to.equal(1)",
+    "message": "AssertionError: expected [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, ... to equal 1"
+  },
+  {
+    "javascript": "pm.expect({ a: { b: { c: { d: 1 } } } }).to.equal(1)",
+    "lua": "pm.expect({ a = { b = { c = { d = 1 } } } }).to.equal(1)",
+    "message": "AssertionError: expected { a: { b: { c: [Object] } } } to equal 1"
+  },
+  {
+    "javascript": "pm.expect([[[[1]]]]).to.equal(1)",
+    "lua": "pm.expect({{{{1}}}}).to.equal(1)",
+    "message": "AssertionError: expected [ [ [ [Array] ] ] ] to equal 1"
+  },
+  {
+    "javascript": "pm.expect(\"it's\").to.equal(1)",
+    "lua": "pm.expect(\"it's\").to.equal(1)",
+    "message": "AssertionError: expected 'it\\'s' to equal 1"
+  },
+  {
+    "javascript": "pm.expect(-0).to.equal(1)",
+    "lua": "pm.expect(-0.0).to.equal(1)",
+    "message": "AssertionError: expected -0 to equal 1"
+  },
+  {
+    "javascript": "pm.expect('hello').to.include('xyz')",
+    "lua": "pm.expect('hello').to.include('xyz')",
+    "message": "AssertionError: expected 'hello' to include 'xyz'"
+  },
+  {
+    "javascript": "pm.expect('hello').to.not.include('ell')",
+    "lua": "pm.expect('hello').to.is_not.include('ell')",
+    "message": "AssertionError: expected 'hello' to not include 'ell'"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.include(3)",
+    "lua": "pm.expect({1, 2}).to.include(3)",
+    "message": "AssertionError: expected [ 1, 2 ] to include 3"
+  },
+  {
+    "javascript": "pm.expect([{ a: 1 }]).to.deep.include({ a: 2 })",
+    "lua": "pm.expect({{ a = 1 }}).to.deep.include({ a = 2 })",
+    "message": "AssertionError: expected [ { a: 1 } ] to include { a: 2 }"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.include({ a: 2 })",
+    "lua": "pm.expect({ a = 1 }).to.include({ a = 2 })",
+    "message": "AssertionError: expected { a: 1 } to have property 'a' of 2, but got 1"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.include({ b: 2 })",
+    "lua": "pm.expect({ a = 1 }).to.include({ b = 2 })",
+    "message": "AssertionError: expected { a: 1 } to have property 'b'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1, b: 2 }).to.not.include({ a: 1 })",
+    "lua": "pm.expect({ a = 1, b = 2 }).to.is_not.include({ a = 1 })",
+    "message": "AssertionError: expected { a: 1, b: 2 } to not have property 'a' of 1"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.include.members([1, 5])",
+    "lua": "pm.expect({1, 2}).to.include.members({1, 5})",
+    "message": "AssertionError: expected [ 1, 2 ] to be a superset of [ 1, 5 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.have.members([1])",
+    "lua": "pm.expect({1, 2}).to.have.members({1})",
+    "message": "AssertionError: expected [ 1, 2 ] to have the same members as [ 1 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.have.ordered.members([2, 1])",
+    "lua": "pm.expect({1, 2}).to.have.ordered.members({2, 1})",
+    "message": "AssertionError: expected [ 1, 2 ] to have the same ordered members as [ 2, 1 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.include.ordered.members([2])",
+    "lua": "pm.expect({1, 2}).to.include.ordered.members({2})",
+    "message": "AssertionError: expected [ 1, 2 ] to be an ordered superset of [ 2 ]"
+  },
+  {
+    "javascript": "pm.expect([1, 2]).to.not.have.members([2, 1])",
+    "lua": "pm.expect({1, 2}).to.is_not.have.members({2, 1})",
+    "message": "AssertionError: expected [ 1, 2 ] to not have the same members as [ 2, 1 ]"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.property('b')",
+    "lua": "pm.expect({ a = 1 }).to.have.property('b')",
+    "message": "AssertionError: expected { a: 1 } to have property 'b'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.property('a', 2)",
+    "lua": "pm.expect({ a = 1 }).to.have.property('a', 2)",
+    "message": "AssertionError: expected { a: 1 } to have property 'a' of 2, but got 1"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.not.have.property('a')",
+    "lua": "pm.expect({ a = 1 }).to.is_not.have.property('a')",
+    "message": "AssertionError: expected { a: 1 } to not have property 'a'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.not.have.property('a', 1)",
+    "lua": "pm.expect({ a = 1 }).to.is_not.have.property('a', 1)",
+    "message": "AssertionError: expected { a: 1 } to not have property 'a' of 1"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.property('a').that.equals(2)",
+    "lua": "pm.expect({ a = 1 }).to.have.property('a').that.equals(2)",
+    "message": "AssertionError: expected 1 to equal 2"
+  },
+  {
+    "javascript": "pm.expect({ a: { b: [{ c: 3 }] } }).to.have.nested.property('a.b[0].d')",
+    "lua": "pm.expect({ a = { b = { { c = 3 } } } }).to.have.nested.property('a.b[0].d')",
+    "message": "AssertionError: expected { a: { b: [ [Object] ] } } to have nested property 'a.b[0].d'"
+  },
+  {
+    "javascript": "pm.expect({ a: { b: 1 } }).to.have.deep.property('a', { b: 2 })",
+    "lua": "pm.expect({ a = { b = 1 } }).to.have.deep.property('a', { b = 2 })",
+    "message": "AssertionError: expected { a: { b: 1 } } to have deep property 'a' of { b: 2 }, but got { b: 1 }"
+  },
+  {
+    "javascript": "pm.expect(null).to.have.property('a')",
+    "lua": "pm.expect(pm.null).to.have.property('a')",
+    "message": "AssertionError: Target cannot be null or undefined."
+  },
+  {
+    "javascript": "pm.expect({ a: 1, b: 2 }).to.have.keys('a')",
+    "lua": "pm.expect({ a = 1, b = 2 }).to.have.keys('a')",
+    "message": "AssertionError: expected { a: 1, b: 2 } to have key 'a'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.all.keys('a', 'b')",
+    "lua": "pm.expect({ a = 1 }).to.have.all.keys('a', 'b')",
+    "message": "AssertionError: expected { a: 1 } to have keys 'a', and 'b'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.any.keys('x', 'y')",
+    "lua": "pm.expect({ a = 1 }).to.have.any.keys('x', 'y')",
+    "message": "AssertionError: expected { a: 1 } to have keys 'x', or 'y'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.contain.keys('x')",
+    "lua": "pm.expect({ a = 1 }).to.contain.keys('x')",
+    "message": "AssertionError: expected { a: 1 } to contain key 'x'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.not.have.keys('a')",
+    "lua": "pm.expect({ a = 1 }).to.is_not.have.keys('a')",
+    "message": "AssertionError: expected { a: 1 } to not have key 'a'"
+  },
+  {
+    "javascript": "pm.expect({ a: 1 }).to.have.keys()",
+    "lua": "pm.expect({ a = 1 }).to.have.keys()",
+    "message": "AssertionError: keys required"
+  },
+  {
+    "javascript": "pm.expect('abc').to.have.string('z')",
+    "lua": "pm.expect('abc').to.have.string('z')",
+    "message": "AssertionError: expected 'abc' to contain 'z'"
+  },
+  {
+    "javascript": "pm.expect('abc').to.not.have.string('b')",
+    "lua": "pm.expect('abc').to.is_not.have.string('b')",
+    "message": "AssertionError: expected 'abc' to not contain 'b'"
+  },
+  {
+    "javascript": "pm.expect(404).to.be.oneOf([200, 201])",
+    "lua": "pm.expect(404).to.be.one_of({200, 201})",
+    "message": "AssertionError: expected 404 to be one of [ 200, 201 ]"
+  },
+  {
+    "javascript": "pm.expect(200).to.not.be.oneOf([200])",
+    "lua": "pm.expect(200).to.is_not.be.one_of({200})",
+    "message": "AssertionError: expected 200 to not be one of [ 200 ]"
+  },
+  {
+    "javascript": "pm.expect(200).to.be.oneOf(5)",
+    "lua": "pm.expect(200).to.be.one_of(5)",
+    "message": "AssertionError: expected 5 to be an array"
+  },
+  {
+    "javascript": "pm.expect(3).to.satisfy((n) => n % 2 === 0)",
+    "lua": "pm.expect(3).to.satisfy(function(n) return n % 2 == 0 end)",
+    "message": "AssertionError: expected 3 to satisfy [Function (anonymous)]"
+  },
+  {
+    "javascript": "pm.expect(() => 1).to.throw()",
+    "lua": "pm.expect(function() return 1 end).to.throw()",
+    "message": "AssertionError: expected [Function (anonymous)] to throw an error"
+  },
+  {
+    "javascript": "pm.expect(() => { throw new TypeError('boom'); }).to.throw('zzz')",
+    "lua": "pm.expect(function() error('boom', 0) end).to.throw('zzz')",
+    "message": "AssertionError: expected [Function (anonymous)] to throw error including 'zzz' but got 'boom'"
+  },
+  {
+    "javascript": "pm.expect(() => { throw new TypeError('boom'); }).to.not.throw('boom')",
+    "lua": "pm.expect(function() error('boom', 0) end).to.is_not.throw('boom')",
+    "message": "AssertionError: expected [Function (anonymous)] to throw error not including 'boom'"
+  },
+  {
+    "javascript": "pm.expect(1, 'custom').to.include.members([1])",
+    "lua": "pm.expect(1, 'custom').to.include.members({1})",
+    "message": "AssertionError: custom: expected 1 to be an array"
+  }
+]

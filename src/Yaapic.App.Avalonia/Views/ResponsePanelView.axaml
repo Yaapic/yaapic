@@ -136,6 +136,89 @@
               </ItemsControl>
             </ScrollViewer>
           </TabItem>
+          <TabItem AutomationProperties.Name="Tests">
+            <TabItem.IsVisible>
+              <MultiBinding Converter="{x:Static BoolConverters.Or}">
+                <Binding Path="Tests.HasTests" />
+                <Binding Path="Tests.HasErrors" />
+              </MultiBinding>
+            </TabItem.IsVisible>
+            <TabItem.Header>
+              <StackPanel Orientation="Horizontal" Spacing="6">
+                <TextBlock Text="Tests" />
+                <TextBlock Classes="badge" Text="{Binding Tests.BadgeText}"
+                           Foreground="{Binding Tests.AllPassed, Converter={x:Static p:ResponseMap.TestOutcome}}" />
+              </StackPanel>
+            </TabItem.Header>
+            <Grid RowDefinitions="Auto,Auto,*">
+              <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="16,8,12,8"
+                          IsVisible="{Binding Tests.HasTests}">
+                <TextBlock Text="{Binding Tests.SummaryText}" Classes="bodyStrong" VerticalAlignment="Center" />
+                <ListBox Classes="segmented" VerticalAlignment="Center" AutomationProperties.Name="Test filter"
+                         SelectedIndex="{Binding Tests.Filter, Converter={x:Static p:ResponseMap.FilterIndex}, Mode=OneWay}"
+                         SelectionChanged="OnTestFilterChanged">
+                  <ListBoxItem Content="All" />
+                  <ListBoxItem Content="Failed" />
+                </ListBox>
+              </StackPanel>
+              <ItemsControl Grid.Row="1" Margin="16,0,16,8" ItemsSource="{Binding Tests.Errors}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="rsp:ScriptErrorItemViewModel">
+                    <StackPanel Margin="0,0,0,8" Spacing="4"
+                                Background="{DynamicResource YaapicDangerBackgroundBrush}">
+                      <StackPanel Orientation="Horizontal" Spacing="8" Margin="12,8,12,0">
+                        <TextBlock Text="{Binding StatusText}" Classes="bodyStrong"
+                                   Foreground="{DynamicResource YaapicDangerBrush}" />
+                        <TextBlock Text="{Binding Origin}" Classes="codeSmall"
+                                   Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                        <TextBlock Text="{Binding Location}" Classes="codeSmall"
+                                   Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                      </StackPanel>
+                      <SelectableTextBlock Text="{Binding Message}" TextWrapping="Wrap" Classes="codeSmall"
+                                           Margin="12,0,12,8" Foreground="{DynamicResource YaapicDangerBrush}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <ScrollViewer Grid.Row="2">
+                <ItemsControl ItemsSource="{Binding Tests.Items}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="rsp:TestResultItemViewModel">
+                      <Border Padding="14,6" BorderThickness="0,0,0,1"
+                              BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" RowDefinitions="Auto,Auto"
+                              ColumnSpacing="10" RowSpacing="2">
+                          <TextBlock Grid.Column="0" Text="{Binding Symbol}" Classes="bodyStrong"
+                                     AutomationProperties.Name="{Binding StatusText}"
+                                     Foreground="{Binding Passed, Converter={x:Static p:ResponseMap.TestOutcome}}" />
+                          <TextBlock Grid.Column="1" Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                          <TextBlock Grid.Column="2" Text="{Binding DurationText}" Classes="codeSmall"
+                                     Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                          <Border Grid.Column="3" Classes="chip" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
+                            <TextBlock Text="{Binding Origin}" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                          </Border>
+                          <SelectableTextBlock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3"
+                                               Text="{Binding Message}" TextWrapping="Wrap" Classes="codeSmall"
+                                               Foreground="{DynamicResource YaapicDangerBrush}"
+                                               IsVisible="{Binding Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </Grid>
+                      </Border>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </ScrollViewer>
+              <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap"
+                         Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                         Text="No tests ran. Add pm.test(...) to the post-response script.">
+                <TextBlock.IsVisible>
+                  <MultiBinding Converter="{x:Static p:ResponseMap.NeitherFlag}">
+                    <Binding Path="Tests.HasTests" />
+                    <Binding Path="Tests.HasErrors" />
+                  </MultiBinding>
+                </TextBlock.IsVisible>
+              </TextBlock>
+            </Grid>
+          </TabItem>
         </TabControl>
 
         <!-- Status block, in the header row at the right of the panel tabs. -->

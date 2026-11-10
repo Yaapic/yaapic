@@ -18,6 +18,8 @@ public sealed partial class MainWindow : Window
     private bool _settingsOpen;
     private CollectionTreeViewModel? _collectionsSubscribed;
     private ShellViewModel? _shellSubscribed;
+    private bool _vaultOpen;
+    private const double ConsoleReservedHeight = 300;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
     public MainWindow()
@@ -26,6 +28,10 @@ public sealed partial class MainWindow : Window
         // The system caption buttons overlay the right of the bar on Windows; macOS puts the traffic lights on the left.
         TitleBar.Padding = new Thickness(OperatingSystem.IsMacOS() ? 80 : 12, 0, OperatingSystem.IsWindows() ? 140 : 12, 0);
         var modifier = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+        // Ctrl+` is handled while tunnelling so that the code editors cannot swallow it.
+        AddHandler(KeyDownEvent, OnConsoleKey, global::Avalonia.Interactivity.RoutingStrategies.Tunnel);
+        // The console never takes the whole window: the request area keeps at least 300 dips (title bar, tabs and status bar included).
+        SizeChanged += (_, e) => ConsolePanel.MaxHeight = Math.Max(ShellViewModel.MinConsoleHeight, e.NewSize.Height - ConsoleReservedHeight);
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.T, modifier), Command = new Relay(() => Shell?.Tabs.NewTab()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => Shell?.Tabs.CloseActiveCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => Shell?.Tabs.SaveActiveCommand.Execute(null)) });
@@ -36,6 +42,16 @@ public sealed partial class MainWindow : Window
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.P, modifier | KeyModifiers.Shift), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.Down, KeyModifiers.Alt), Command = new Relay(() => Shell?.Tabs.NextTabCommand.Execute(null)) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.Up, KeyModifiers.Alt), Command = new Relay(() => Shell?.Tabs.PreviousTabCommand.Execute(null)) });
+    }
+
+    private void OnConsoleKey(object? sender, KeyEventArgs e)
+    {
+        var modifier = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;
+        if (e.Key == Key.OemTilde && e.KeyModifiers == modifier)
+        {
+            Shell?.ToggleConsoleCommand.Execute(null);
+            e.Handled = true;
+        }
     }
 
     private async void OnManageEnvironments(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => await ManageEnvironmentsAsync();
@@ -139,6 +155,8 @@ public sealed partial class MainWindow : Window
         if (_shellSubscribed is not null)
         {
             _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
+            _shellSubscribed.Vault.SetupRequested -= OnVaultRequested;
+            _shellSubscribed.Vault.UnlockRequested -= OnVaultRequested;
         }
 
         if (_collectionsSubscribed is not null)
@@ -150,8 +168,28 @@ public sealed partial class MainWindow : Window
         if (_shellSubscribed is not null)
         {
             _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
+            _shellSubscribed.Vault.SetupRequested += OnVaultRequested;
+            _shellSubscribed.Vault.UnlockRequested += OnVaultRequested;
             _collectionsSubscribed = _shellSubscribed.Collections;
             _collectionsSubscribed.PropertyChanged += OnCollectionsChanged;
+        }
+    }
+
+    private async void OnVaultRequested(object? sender, EventArgs e)
+    {
+        if (Shell is not { } shell || _vaultOpen)
+        {
+            return;
+        }
+
+        _vaultOpen = true;
+        try
+        {
+            await new Views.VaultWindow(shell.Vault).ShowDialog(this);
+        }
+        finally
+        {
+            _vaultOpen = false;
         }
     }
 
@@ -322,7 +360,7 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
-    /// <param name="name"><c>environments</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
+    /// <param name="name"><c>environments</c>, <c>vault</c>, <c>console</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
     /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
     internal void OpenNamed(string name)
     {
@@ -332,12 +370,18 @@ public sealed partial class MainWindow : Window
                 shell.Environments.EditedEnvironment ??= shell.Environments.ActiveEnvironment;
                 _ = ManageEnvironmentsAsync();
                 break;
+            case "vault" when Shell is { } vaultShell:
+                vaultShell.Vault.RequestSetupCommand.Execute(null);
+                break;
             case "settings" when Shell is { } settingsShell && settingsShell.Collections.Roots.FirstOrDefault() is { } root:
                 settingsShell.Collections.EditSettingsCommand.Execute(root);
                 break;
             case "unsaved" when Shell?.Tabs.ActiveTab is { } tab:
                 tab.Name += "x";
                 _ = Shell.Tabs.CloseAsync(tab);
+                break;
+            case "console" when Shell is { } consoleShell:
+                consoleShell.IsConsoleOpen = true;
                 break;
             case "history" when Shell is { } historyShell:
                 historyShell.ShowHistoryCommand.Execute(null);

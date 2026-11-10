@@ -5,6 +5,7 @@ using Yaapic.Core.Storage;
 using Yaapic.Domain.Environments;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.ViewModels.Environments;
 
@@ -13,6 +14,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
 {
     private readonly IEnvironmentStore _store;
     private readonly IDialogService _dialogs;
+    private readonly IVaultStateSource? _vaultState;
 
     [ObservableProperty]
     private EnvironmentItemViewModel? _activeEnvironment;
@@ -29,12 +31,24 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     /// <summary>Creates the view model.</summary>
     /// <param name="store">Where environments are saved.</param>
     /// <param name="dialogs">Asks the user to confirm deletions.</param>
-    public EnvironmentsViewModel(IEnvironmentStore store, IDialogService dialogs)
+    /// <param name="vaultState">Tells whether secret rows can be edited; <see langword="null"/> means they never can.</param>
+    public EnvironmentsViewModel(IEnvironmentStore store, IDialogService dialogs, IVaultStateSource? vaultState = null)
     {
         ArgumentNullException.ThrowIfNull(store);
         ArgumentNullException.ThrowIfNull(dialogs);
         _store = store;
         _dialogs = dialogs;
+        _vaultState = vaultState;
+        if (vaultState is not null)
+        {
+            vaultState.StateChanged += (_, _) =>
+            {
+                foreach (var item in Environments)
+                {
+                    item.Variables.SetVaultState(vaultState.State);
+                }
+            };
+        }
     }
 
     /// <summary>Raised when <see cref="ActiveEnvironment"/> changes.</summary>
@@ -66,7 +80,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
         Environments.Clear();
         foreach (var definition in all)
         {
-            Environments.Add(EnvironmentItemViewModel.FromSaved(definition));
+            AddItem(EnvironmentItemViewModel.FromSaved(definition));
         }
 
         EditedEnvironment = null;
@@ -134,7 +148,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
         ArgumentNullException.ThrowIfNull(item);
         var source = item.ToDefinition();
         var copy = EnvironmentItemViewModel.FromNew(new(Guid.NewGuid(), $"{source.Name} copy", source.Variables));
-        Environments.Add(copy);
+        AddItem(copy);
         EditedEnvironment = copy;
     }
 
@@ -142,8 +156,19 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     private void Add()
     {
         var item = EnvironmentItemViewModel.FromNew(EnvironmentDefinition.Create("New Environment"));
-        Environments.Add(item);
+        AddItem(item);
         EditedEnvironment = item;
+    }
+
+    private void AddItem(EnvironmentItemViewModel item)
+    {
+        if (_vaultState is not null)
+        {
+            item.Variables.UnlockCommand = _vaultState.RequestUnlockCommand;
+            item.Variables.SetVaultState(_vaultState.State);
+        }
+
+        Environments.Add(item);
     }
 
     [RelayCommand]

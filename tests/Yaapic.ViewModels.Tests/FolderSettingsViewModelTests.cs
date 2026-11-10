@@ -3,6 +3,7 @@ using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 using Yaapic.TestDoubles;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
@@ -165,5 +166,106 @@ public sealed class FolderSettingsViewModelTests
         Assert.Equal("host", Assert.Single(_tree.FindCollectionVariables(nested.Id)).Key);
         Assert.Empty(_tree.FindCollectionVariables(unfiled.Id));
         Assert.Empty(_tree.FindCollectionVariables(Guid.NewGuid()));
+    }
+
+    private static ScriptSet Pre(string source, ScriptLanguage language = ScriptLanguage.JavaScript) =>
+        ScriptSet.Empty.With(ScriptPhase.PreRequest, new ScriptBlock(language, source));
+
+    [Fact]
+    public void ScriptEditsMakeItDirtyForSourceAndLanguage()
+    {
+        var vm = new FolderSettingsViewModel(FolderDefinition.Create("c") with { Scripts = Pre("a") }, false, _store);
+        Assert.False(vm.IsDirty);
+
+        vm.Scripts.PreRequest.Source = "b";
+        Assert.True(vm.IsDirty);
+        vm.Scripts.PreRequest.Source = "a";
+        Assert.False(vm.IsDirty);
+
+        vm.Scripts.PreRequest.Language = ScriptLanguage.Lua;
+        Assert.True(vm.IsDirty);
+    }
+
+    [Fact]
+    public void ScriptsAreAlwaysShownAndHintFollowsTheLevel()
+    {
+        var folder = new FolderSettingsViewModel(FolderDefinition.Create("f"), false, _store);
+        var collection = new FolderSettingsViewModel(FolderDefinition.Create("c"), true, _store);
+
+        Assert.True(folder.ShowScripts);
+        Assert.True(collection.ShowScripts);
+        Assert.Equal("Runs for every request in this folder, before the request's own script.", folder.ScriptsHint);
+        Assert.Equal("Runs for every request in this collection, before the folder and request scripts.", collection.ScriptsHint);
+    }
+
+    [Fact]
+    public async Task SaveWritesTheScriptsAndTheStoreReloadsThem()
+    {
+        await _store.SaveFolderAsync(FolderDefinition.Create("c"), null, CancellationToken.None);
+        await _tree.RefreshAsync();
+        _tree.EditSettingsCommand.Execute(_tree.Roots[0]);
+        var editor = _tree.SettingsEditor!;
+        editor.Scripts.PreRequest.Language = ScriptLanguage.Lua;
+        editor.Scripts.PreRequest.Source = "print(1)";
+
+        await editor.SaveCommand.ExecuteAsync(null);
+        await _tree.RefreshAsync();
+
+        Assert.False(editor.IsDirty);
+        var block = _tree.Roots[0].Node.Folder!.Scripts.PreRequest;
+        Assert.Equal(ScriptLanguage.Lua, block.Language);
+        Assert.Equal("print(1)", block.Source);
+    }
+
+    [Fact]
+    public async Task NestedFolderScriptsDoNotAffectTheCollection()
+    {
+        var parent = FolderDefinition.Create("p") with { Scripts = Pre("outer") };
+        var child = FolderDefinition.Create("child");
+        await _store.SaveFolderAsync(parent, null, CancellationToken.None);
+        await _store.SaveFolderAsync(child, parent.Id, CancellationToken.None);
+        var vm = new FolderSettingsViewModel(child, false, _store);
+        vm.Scripts.PreRequest.Source = "inner";
+
+        await vm.SaveCommand.ExecuteAsync(null);
+
+        var nodes = CollectionNode.Flatten(await _store.LoadTreeAsync(CancellationToken.None));
+        Assert.Equal("outer", nodes.Single(n => n.Id == parent.Id).Folder!.Scripts.PreRequest.Source);
+        Assert.Equal("inner", nodes.Single(n => n.Id == child.Id).Folder!.Scripts.PreRequest.Source);
+    }
+
+    [Fact]
+    public async Task ClosingWithoutSavingDiscardsScriptEdits()
+    {
+        await _store.SaveFolderAsync(FolderDefinition.Create("c") with { Scripts = Pre("saved") }, null, CancellationToken.None);
+        await _tree.RefreshAsync();
+        _tree.EditSettingsCommand.Execute(_tree.Roots[0]);
+        _tree.SettingsEditor!.Scripts.PreRequest.Source = "unsaved";
+
+        _tree.CloseSettingsCommand.Execute(null);
+        _tree.EditSettingsCommand.Execute(_tree.Roots[0]);
+
+        Assert.Equal("saved", _tree.SettingsEditor!.Scripts.PreRequest.Source);
+        Assert.False(_tree.SettingsEditor.IsDirty);
+    }
+
+    [Fact]
+    public async Task ChainProviderReturnsTheSavedScriptsAfterTheSave()
+    {
+        var c = FolderDefinition.Create("c");
+        await _store.SaveFolderAsync(c, null, CancellationToken.None);
+        var request = HttpRequestDefinition.Create("r");
+        await _requests.SaveAsync(request, CancellationToken.None);
+        await _store.MoveAsync(request.Id, c.Id, CancellationToken.None);
+        await _tree.RefreshAsync();
+        var provider = new CollectionTreeScriptChainProvider(_tree);
+        Assert.Equal("", provider.GetAncestors(request.Id).Steps.Single().Scripts.PreRequest.Source);
+        _tree.EditSettingsCommand.Execute(_tree.Roots[0]);
+        _tree.SettingsEditor!.Scripts.PreRequest.Source = "pm.test()";
+
+        await _tree.SettingsEditor.SaveCommand.ExecuteAsync(null);
+        await _tree.RefreshAsync();
+
+        Assert.Equal("pm.test()", provider.GetAncestors(request.Id).Steps.Single().Scripts.PreRequest.Source);
     }
 }

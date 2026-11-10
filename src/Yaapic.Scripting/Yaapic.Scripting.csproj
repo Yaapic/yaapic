@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+    <NativeBuildScript>$(MSBuildThisFileDirectory)..\..\native\Build-Natives.ps1</NativeBuildScript>
+    <NativeRid>$(RuntimeIdentifier)</NativeRid>
+    <NativeRid Condition="'$(NativeRid)' == ''">$(NETCoreSdkRuntimeIdentifier)</NativeRid>
+    <NativeOutputDir>$(MSBuildThisFileDirectory)..\..\artifacts\native\$(NativeRid)\</NativeOutputDir>
+  </PropertyGroup>
+  <!-- Builds QuickJS-NG and Lua from pinned sources when artifacts/native/<rid> is missing (re-run the script after changing native/versions.json). -->
+  <Target Name="EnsureNativeScriptingLibraries" BeforeTargets="BeforeBuild;AssignTargetPaths" Condition="Exists('$(NativeBuildScript)')">
+    <Exec Condition="!Exists('$(NativeOutputDir).built')" Command="pwsh -NoProfile -File &quot;$(NativeBuildScript)&quot; -Rid $(NativeRid)" IgnoreExitCode="true">
+      <Output TaskParameter="ExitCode" PropertyName="NativeBuildExitCode" />
+    </Exec>
+    <Error Condition="'$(NativeBuildExitCode)' != '' and '$(NativeBuildExitCode)' != '0'" Text="Building the native script engines failed. Run 'pwsh native/Build-Natives.ps1 -Rid $(NativeRid)' to see the error (it needs pwsh 7, CMake and a C compiler)." />
+    <ItemGroup>
+      <Content Include="$(NativeOutputDir)*" Exclude="$(NativeOutputDir).built" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+    </ItemGroup>
+  </Target>
+  <ItemGroup>
+    <Content Include="..\..\native\THIRD-PARTY-NOTICES.md" Link="THIRD-PARTY-NOTICES.md" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" Visible="false" />
+  </ItemGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="Yaapic.Scripting.Tests" />
+    <InternalsVisibleTo Include="NativeSmoke" />
+    <ProjectReference Include="..\Yaapic.Core\Yaapic.Core.csproj" />
+    <ProjectReference Include="..\Yaapic.Domain\Yaapic.Domain.csproj" />
+  </ItemGroup>
+</Project>

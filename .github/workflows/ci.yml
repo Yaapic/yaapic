@@ -44,6 +44,26 @@ jobs:
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev xvfb
 
+      - name: Cache native script engine sources
+        uses: actions/cache@v4
+        with:
+          path: artifacts/native/_src
+          key: native-src-${{ hashFiles('native/versions.json') }}
+
+      - name: Build native script engines (QuickJS-NG, Lua)
+        shell: pwsh
+        run: ./native/Build-Natives.ps1 -Rid ${{ matrix.rid }}
+
+      - name: Upload native libraries
+        uses: actions/upload-artifact@v4
+        with:
+          name: native-${{ matrix.rid }}
+          path: |
+            artifacts/native/${{ matrix.rid }}
+            !artifacts/native/${{ matrix.rid }}/.built
+          include-hidden-files: false
+          if-no-files-found: error
+
       - name: Check formatting
         if: runner.os == 'Linux'
         run: dotnet format ${{ matrix.solution }} --verify-no-changes
@@ -56,6 +76,16 @@ jobs:
 
       - name: Publish with Native AOT
         run: dotnet publish ${{ matrix.app }} -c Release -r ${{ matrix.rid }} -p:PublishAot=true -o publish
+
+      - name: Publish and run the native engine smoke test (Native AOT)
+        shell: pwsh
+        run: |
+          dotnet publish tools/NativeSmoke -c Release -r ${{ matrix.rid }} -o smoke
+          if ($LASTEXITCODE -ne 0) { throw 'The NativeSmoke publish failed.' }
+          $smoke = Join-Path smoke ($IsWindows ? 'NativeSmoke.exe' : 'NativeSmoke')
+          if (-not $IsWindows) { chmod +x $smoke }
+          $out = & $smoke
+          if ($LASTEXITCODE -ne 0 -or ($out -join '') -ne 'OK') { throw "NativeSmoke failed (exit $LASTEXITCODE): $out" }
 
       - name: Smoke test the published binary
         shell: pwsh

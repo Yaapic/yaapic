@@ -1,0 +1,29 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="Yaapic.App.Avalonia.Views.VaultWindow"
+        Classes="dialog">
+  <StackPanel>
+    <StackPanel Margin="24,24,24,20" Spacing="12" Width="400">
+      <TextBlock x:Name="ErrorText" Foreground="{DynamicResource YaapicDangerBrush}" TextWrapping="Wrap" IsVisible="False"
+                 AutomationProperties.Name="Error" />
+      <StackPanel x:Name="SetupPanel" Spacing="12">
+        <TextBlock Classes="dialogBody"
+                   Text="Secret variables are encrypted and stored outside the workspace, on this computer only." />
+        <TextBlock Text="Protect the vault with" />
+        <StackPanel x:Name="Protectors" Spacing="6" AutomationProperties.Name="Protector" />
+        <StackPanel x:Name="PassphrasePanel" Spacing="8">
+          <TextBox x:Name="Passphrase" PasswordChar="●" PlaceholderText="Passphrase" AutomationProperties.Name="Passphrase" />
+          <TextBox x:Name="Confirm" PasswordChar="●" PlaceholderText="Confirm passphrase" AutomationProperties.Name="Confirm passphrase" />
+          <TextBlock x:Name="HintText" Classes="caption" Foreground="{DynamicResource YaapicDangerBrush}" IsVisible="False" />
+        </StackPanel>
+      </StackPanel>
+      <TextBox x:Name="Unlock" PasswordChar="●" PlaceholderText="Passphrase" AutomationProperties.Name="Passphrase" />
+    </StackPanel>
+    <Border Classes="dialogCommands">
+      <UniformGrid Rows="1">
+        <Button x:Name="SubmitButton" Classes="accent" IsDefault="True" Click="OnSubmit" />
+        <Button Content="Cancel" IsCancel="True" Click="OnCancel" />
+      </UniformGrid>
+    </Border>
+  </StackPanel>
+</Window>

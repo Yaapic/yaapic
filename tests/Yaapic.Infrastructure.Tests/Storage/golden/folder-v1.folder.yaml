@@ -11,3 +11,10 @@ variables:
 - key: token
   value: "{{secret}}"
   enabled: false
+scripts:
+  preRequest:
+    language: javascript
+    source: ""
+  postResponse:
+    language: javascript
+    source: ""

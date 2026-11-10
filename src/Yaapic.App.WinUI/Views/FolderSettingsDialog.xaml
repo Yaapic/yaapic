@@ -35,6 +35,14 @@
                    Text="Override globals; the active environment overrides them."/>
         <v:KeyValueEditorView x:Name="Variables" KeyHeader="Variable" Height="220" MinHeight="120"/>
       </StackPanel>
+      <StackPanel Spacing="8" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.ShowScripts)}">
+        <TextBlock Text="Scripts" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+        <TextBlock x:Name="ScriptsHint" Style="{StaticResource YaapicBodySmallTextStyle}" TextWrapping="Wrap"
+                   Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind ViewModel.ScriptsHint}"/>
+        <Border Height="280" MinHeight="240" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="1">
+          <v:ScriptsEditorView x:Name="ScriptsEditor" HintText=""/>
+        </Border>
+      </StackPanel>
     </StackPanel>
     </ScrollViewer>
   </Grid>

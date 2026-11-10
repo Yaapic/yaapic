@@ -13,6 +13,9 @@
   <ItemGroup>
     <!-- The Avalonia launch-option parser is plain BCL code: compile it here instead of referencing the UI project. -->
     <Compile Include="..\..\src\Yaapic.App.Avalonia\Services\CaptureOptions.cs" Link="CaptureOptions.cs" />
+    <!-- Likewise the WinUI text helpers: plain C# over the Domain enums. -->
+    <Compile Include="..\..\src\Yaapic.App.WinUI\Presentation\TextMap.cs" Link="TextMap.cs" />
+    <Compile Include="..\..\src\Yaapic.App.Avalonia\Presentation\EditorMap.Script.cs" Link="EditorMap.Script.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Yaapic.Domain\Yaapic.Domain.csproj" />

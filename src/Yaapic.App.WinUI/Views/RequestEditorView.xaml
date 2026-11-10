@@ -160,6 +160,15 @@
                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Auth.IsActive), Mode=OneWay}"/>
           </StackPanel>
         </ToggleButton>
+        <ToggleButton x:Name="ScriptsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
+          <StackPanel Orientation="Horizontal" Spacing="5">
+            <TextBlock Text="Scripts" VerticalAlignment="Center"/>
+            <TextBlock x:Name="ScriptsBadge" VerticalAlignment="Center"
+                       Style="{StaticResource YaapicCountBadgeTextStyle}"
+                       Text="{x:Bind ViewModel.Scripts.BadgeText, Mode=OneWay}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Scripts.BadgeText), Mode=OneWay}"/>
+          </StackPanel>
+        </ToggleButton>
         <ToggleButton x:Name="SettingsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
           <TextBlock Text="Settings" VerticalAlignment="Center"/>
         </ToggleButton>
@@ -181,6 +190,7 @@
                    HorizontalAlignment="Left" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="10"
                    ValueChanged="OnTimeoutChanged"/>
       </StackPanel>
+      <v:ScriptsEditorView x:Name="ScriptsPane" Visibility="Collapsed" ViewModel="{x:Bind ViewModel.Scripts, Mode=OneWay}"/>
       <Grid x:Name="BodyPane" Visibility="Collapsed">
         <TextBlock Text="{x:Bind p:TextMap.NoBodyHint(ViewModel.MethodText), Mode=OneWay}" Margin="16,12"
                    Style="{StaticResource YaapicBodySmallTextStyle}"

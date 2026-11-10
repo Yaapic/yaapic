@@ -55,6 +55,18 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenPositive(int count) => count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> when either flag is <see langword="true"/>.</summary>
+    /// <param name="first">The first flag.</param>
+    /// <param name="second">The second flag.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenEither(bool first, bool second) => first || second ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> when neither flag is <see langword="true"/>.</summary>
+    /// <param name="first">The first flag.</param>
+    /// <param name="second">The second flag.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenNeitherFlag(bool first, bool second) => first || second ? Visibility.Collapsed : Visibility.Visible;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when the body is raw text.</summary>
     /// <param name="kind">The body kind.</param>
     /// <returns>The visibility.</returns>

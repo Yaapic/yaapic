@@ -34,7 +34,7 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
     // IsActive: the environment used to resolve requests. IsEdited: the one shown in the editor. Both are set by the list.
 
     /// <summary>Gets the variables editor.</summary>
-    public KeyValueEditorViewModel Variables { get; } = new();
+    public KeyValueEditorViewModel Variables { get; } = new() { AllowSecrets = true };
 
     /// <summary>Gets a value indicating whether the environment was never saved or differs from its last saved state.</summary>
     public bool IsDirty => _baseline is null || !ToDefinition().IsEquivalentTo(_baseline);

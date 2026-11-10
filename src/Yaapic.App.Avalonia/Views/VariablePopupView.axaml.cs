@@ -29,6 +29,16 @@ public sealed partial class VariablePopupView : UserControl
         UnresolvedPanel.IsVisible = unresolved;
         MessageText.IsVisible = viewModel.Message.Length > 0;
         OpenLink.IsVisible = canOpen;
+        SecretGlyph.IsVisible = viewModel.IsSecret;
+        RevealLink.IsVisible = viewModel.IsSecret;
+        EditLink.IsVisible = !viewModel.IsSecret;
+        viewModel.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(VariablePopupViewModel.IsRevealed))
+            {
+                RevealLink.Content = viewModel.IsRevealed ? "Hide" : "Reveal";
+            }
+        };
         LoadScopes();
     }
 
@@ -44,7 +54,7 @@ public sealed partial class VariablePopupView : UserControl
     private VariablePopupViewModel ViewModel => (VariablePopupViewModel)DataContext!;
 
     /// <summary>Moves the keyboard focus to the first control of the card.</summary>
-    public void FocusFirst() => (State == VariableTokenState.Unresolved ? (Control)ScopeBox : EditLink).Focus(NavigationMethod.Tab);
+    public void FocusFirst() => (State == VariableTokenState.Unresolved ? (Control)ScopeBox : ViewModel.IsSecret ? RevealLink : EditLink).Focus(NavigationMethod.Tab);
 
     /// <inheritdoc />
     protected override void OnAttachedToVisualTree(global::Avalonia.VisualTreeAttachmentEventArgs e)

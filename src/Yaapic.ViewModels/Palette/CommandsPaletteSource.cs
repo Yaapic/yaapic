@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using Yaapic.Core.Secrets;
 using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.ViewModels.Palette;
@@ -53,6 +54,22 @@ public sealed class CommandsPaletteSource : IPaletteSource
         if (!_shell.History.IsEmpty)
         {
             items.Add(Item("clear-history", "Clear history", null, _shell.History.ClearCommand));
+        }
+
+        items.Add(Item("toggle-console", "Toggle console", "Ctrl+`", _shell.ToggleConsoleCommand));
+        items.Add(Item("clear-console", "Clear console", null, _shell.ClearConsoleCommand));
+        var vault = _shell.Vault;
+        switch (vault.State)
+        {
+            case VaultState.NotCreated:
+                items.Add(Item("vault-setup", "Set up the secret vault...", null, vault.RequestSetupCommand));
+                break;
+            case VaultState.Locked:
+                items.Add(Item("vault-unlock", "Unlock the vault...", null, vault.RequestUnlockCommand));
+                break;
+            default:
+                items.Add(Item("vault-lock", "Lock the vault", null, vault.LockCommand));
+                break;
         }
 
         return items;

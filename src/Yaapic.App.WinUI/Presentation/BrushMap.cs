@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using Yaapic.Domain.Http;
+using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Shell;
 
@@ -60,6 +61,41 @@ public static class BrushMap
     /// <returns>The danger brush for a failed send, else the status brush.</returns>
     public static Brush HistoryStatus(StatusCategory category, bool isFailed) =>
         isFailed ? Get("YaapicDangerBrush") : StatusForeground(category);
+
+    /// <summary>Gets the symbol brush of a console line.</summary>
+    /// <param name="kind">The kind of line.</param>
+    /// <returns>The brush from the application resources.</returns>
+    public static Brush ConsoleKind(ConsoleLineKind kind) => Get(kind switch
+    {
+        ConsoleLineKind.Warn => "YaapicWarningBrush",
+        ConsoleLineKind.Error or ConsoleLineKind.TestFailed => "YaapicDangerBrush",
+        ConsoleLineKind.TestPassed => "YaapicSuccessBrush",
+        ConsoleLineKind.Info => "YaapicInfoBrush",
+        ConsoleLineKind.Header => "YaapicTextSecondaryBrush",
+        _ => "YaapicTextTertiaryBrush",
+    });
+
+    /// <summary>Gets the message brush of a console line; group headers are secondary.</summary>
+    /// <param name="kind">The kind of line.</param>
+    /// <returns>The brush from the application resources.</returns>
+    public static Brush ConsoleMessage(ConsoleLineKind kind) =>
+        Get(kind == ConsoleLineKind.Header ? "YaapicTextSecondaryBrush" : "YaapicTextPrimaryBrush");
+
+    /// <summary>Gets the row background of a console line.</summary>
+    /// <param name="isError">Whether the line counts as an error.</param>
+    /// <returns>The error background brush, or a transparent brush.</returns>
+    public static Brush ConsoleRow(bool isError) =>
+        isError ? Get("YaapicDangerBackgroundBrush") : new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+
+    /// <summary>Gets the text brush of the status bar Console toggle.</summary>
+    /// <param name="isOpen">Whether the console panel is open.</param>
+    /// <returns>The accent text brush when open, else the secondary text brush.</returns>
+    public static Brush ConsoleToggle(bool isOpen) => Get(isOpen ? "YaapicAccentTextBrush" : "YaapicTextSecondaryBrush");
+
+    /// <summary>Gets the brush of a test badge or test row symbol.</summary>
+    /// <param name="passed">Whether the tests passed.</param>
+    /// <returns>The success brush when passed, else the danger brush.</returns>
+    public static Brush TestOutcome(bool passed) => Get(passed ? "YaapicSuccessBrush" : "YaapicDangerBrush");
 
     /// <summary>Gets the icon brush of the collections rail entry.</summary>
     /// <param name="mode">The sidebar mode.</param>

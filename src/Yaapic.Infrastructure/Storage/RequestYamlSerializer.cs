@@ -3,6 +3,7 @@ using VYaml.Parser;
 using VYaml.Serialization;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 
 namespace Yaapic.Infrastructure.Storage;
 
@@ -24,8 +25,8 @@ public static class RequestYamlSerializer
             Name = request.Name,
             Method = request.Method.ToText(),
             Url = request.Url,
-            Params = [.. request.QueryParams.Select(ToDto)],
-            Headers = [.. request.Headers.Select(ToDto)],
+            Params = [.. request.QueryParams.Select(e => KeyValueMapper.ToDto(e, false))],
+            Headers = [.. request.Headers.Select(e => KeyValueMapper.ToDto(e, false))],
             Body = new BodyDto
             {
                 Type = BodyTypeText(request.Body.Kind),
@@ -55,9 +56,10 @@ public static class RequestYamlSerializer
                 FollowRedirects = request.Settings.FollowRedirects,
                 TimeoutSeconds = request.Settings.TimeoutSeconds,
             },
+            Scripts = ScriptsMapper.ToDto(request.Scripts),
         };
-        var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n");
-        return yaml.TrimEnd('\n') + "\n";
+        var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
+        return KeyValueMapper.StripNullSecret(yaml).TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses a request file.</summary>
@@ -70,7 +72,7 @@ public static class RequestYamlSerializer
         RequestFileDto? dto;
         try
         {
-            dto = YamlSerializer.Deserialize<RequestFileDto>(Encoding.UTF8.GetBytes(yaml));
+            dto = YamlSerializer.Deserialize<RequestFileDto>(Encoding.UTF8.GetBytes(yaml), ScriptSourceFormatter.Options);
         }
         catch (Exception ex) when (ex is YamlSerializerException or YamlParserException or YamlTokenizerException)
         {
@@ -102,11 +104,12 @@ public static class RequestYamlSerializer
             string.IsNullOrWhiteSpace(dto.Name) ? "Untitled" : dto.Name,
             method,
             dto.Url ?? "",
-            [.. (dto.Params ?? []).Select(FromDto)],
-            [.. (dto.Headers ?? []).Select(FromDto)],
+            [.. (dto.Params ?? []).Select(d => KeyValueMapper.FromDto(d, false))],
+            [.. (dto.Headers ?? []).Select(d => KeyValueMapper.FromDto(d, false))],
             ReadBody(dto.Body),
             ReadAuth(dto.Auth),
-            ReadSettings(dto.Settings));
+            ReadSettings(dto.Settings),
+            ScriptsMapper.FromDto(dto.Scripts));
     }
 
     private static string BodyTypeText(BodyKind kind) => kind switch
@@ -134,11 +137,6 @@ public static class RequestYamlSerializer
         AuthKind.ApiKey => "apikey",
         _ => "none",
     };
-
-    private static KeyValueDto ToDto(KeyValueEntry entry) =>
-        new() { Key = entry.Key, Value = entry.Value, Enabled = entry.Enabled };
-
-    private static KeyValueEntry FromDto(KeyValueDto dto) => new(dto.Key ?? "", dto.Value ?? "", dto.Enabled ?? true);
 
     private static RequestBody ReadBody(BodyDto? dto)
     {
