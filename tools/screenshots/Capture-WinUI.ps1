@@ -199,7 +199,9 @@ try {
             (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::AutomationIdProperty, $Select)))
         if (-not $el) { throw "Element '$Select' not found." }
         $pat = $null
-        if ($el.TryGetCurrentPattern([Windows.Automation.InvokePattern]::Pattern, [ref]$pat)) { $pat.Invoke() } else { throw "Element '$Select' cannot be invoked." }
+        if ($el.TryGetCurrentPattern([Windows.Automation.InvokePattern]::Pattern, [ref]$pat)) { $pat.Invoke() }
+        elseif ($el.TryGetCurrentPattern([Windows.Automation.TogglePattern]::Pattern, [ref]$pat)) { $pat.Toggle() }
+        else { throw "Element '$Select' cannot be invoked." }
         Start-Sleep -Milliseconds 700
     }
 

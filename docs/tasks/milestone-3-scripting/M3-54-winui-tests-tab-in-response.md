@@ -1,6 +1,6 @@
 # M3-54: WinUI: Tests tab and script errors in the response panel
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M3-42, M3-47
 
@@ -34,14 +34,14 @@ Cookies tab, timeline, test history, re-running tests.
 
 ## Acceptance criteria
 
-- [ ] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
-- [ ] **Runtime check (AOT exe)**, `scripted` fixture: after Send the Tests tab shows the badge, the list with the failing test and
+- [x] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
+- [x] **Runtime check (AOT exe)**, `scripted` fixture: after Send the Tests tab shows the badge, the list with the failing test and
       its message, filter `Failed` works; a post-response script that throws shows an error block and keeps the Body tab
       working; a pre-request script that throws shows the failed-state block and sends nothing (the stub server's request log shows
       no hit); a request without tests shows no Tests tab; dark and light; keyboard focus visible on the tab and filter. Record
       in Notes.
-- [ ] `Capture-WinUI.ps1 -Select Tests` screenshot compared with the mockup; differences in Notes.
-- [ ] No process left running.
+- [x] `Capture-WinUI.ps1 -Select Tests` screenshot compared with the mockup; differences in Notes.
+- [x] No process left running.
 
 ## Rules
 
@@ -58,3 +58,18 @@ Cookies tab, timeline, test history, re-running tests.
 ## Suggested commit message
 
 `feat(winui): show test results and script errors in the response panel`
+
+## Notes
+
+- Added: `TestsTab` toggle and `TestsPane` in `ResponsePanelView` (summary sentence, All/Failed filter, script-error blocks, test rows
+  with symbol, duration, origin chip and failure message, empty text); `TestResultsViewModel.SummaryText` (`4 of 6 passed`, the
+  existing `Summary` stays `4/6` for the badge); `ListMap.TestItems/ScriptErrors`, `VisibilityMap.WhenEither/WhenNeitherFlag`,
+  `BrushMap.TestOutcome`. `Capture-WinUI.ps1 -Select ... -SelectAfterSend` now also toggles `ToggleButton`s.
+- Runtime check (AOT exe, dark and light), `scripted` fixture: badge `2/3` in the error colour, list with the failing test and its
+  `AssertionError` message, `Failed` filter leaves only that row; the Tests tab does not take the selection after a send; a throwing
+  post-response script gives badge `!` and a `Script error` block, Body tab still works; a throwing pre-request script gives the
+  failed-state block (`Pre-request script failed — pre-request · Scripted: pre boom`) and a logging stub on 5199 recorded no hit;
+  `list-users` (no tests) shows no Tests tab; keyboard focus ring visible on the `Failed` segment and on the response tabs.
+- Differences from the mockup: no Cookies and Timeline tabs (out of scope); test rows are a little taller than the mockup because of
+  the default list item metrics; the empty text only shows while the Tests tab stays selected across a send without tests.
+- Build 0 warnings; AOT publish 0 IL2xxx/IL3xxx; tests 2201 passed, 3 skipped (platform), 0 failed.

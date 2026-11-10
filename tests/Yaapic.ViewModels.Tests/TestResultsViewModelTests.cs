@@ -49,6 +49,17 @@ public sealed class TestResultsViewModelTests
     }
 
     [Fact]
+    public void Summary_text_reads_as_a_sentence_and_is_empty_without_tests()
+    {
+        var vm = new TestResultsViewModel();
+        Assert.Equal("", vm.SummaryText);
+
+        vm.Show([Run(tests: [T("a", true), T("b", false, "boom", 7)])]);
+
+        Assert.Equal("1 of 2 passed", vm.SummaryText);
+    }
+
+    [Fact]
     public void All_passed()
     {
         var vm = new TestResultsViewModel();

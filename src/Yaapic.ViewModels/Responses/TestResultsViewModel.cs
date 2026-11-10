@@ -38,6 +38,9 @@ public sealed partial class TestResultsViewModel : ObservableObject
     /// <summary>Gets the summary, such as <c>6/6</c>; empty without tests.</summary>
     public string Summary { get; private set; } = "";
 
+    /// <summary>Gets the summary sentence, such as <c>4 of 6 passed</c>; empty without tests.</summary>
+    public string SummaryText => HasTests ? $"{PassedCount} of {TotalCount} passed" : "";
+
     /// <summary>Gets the tab badge: the summary, or <c>!</c> when there are script errors and no tests.</summary>
     public string BadgeText => HasTests ? Summary : HasErrors ? "!" : "";
 

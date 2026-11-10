@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Responses;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -15,4 +16,13 @@ public static class ListMap
     /// stowed XAML exception once the list is not empty.
     /// </returns>
     public static ObservableCollection<KeyValueEntry> Entries(IReadOnlyList<KeyValueEntry> entries) => new(entries);
+    /// <summary>Copies test results into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The test rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<TestResultItemViewModel> TestItems(IReadOnlyList<TestResultItemViewModel> items) => new(items);
+
+    /// <summary>Copies script errors into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The error blocks to show.</param>
+    /// <returns>An observable collection of the errors.</returns>
+    public static ObservableCollection<ScriptErrorItemViewModel> ScriptErrors(IReadOnlyList<ScriptErrorItemViewModel> items) => new(items);
 }

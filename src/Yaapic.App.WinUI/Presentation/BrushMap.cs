@@ -92,6 +92,11 @@ public static class BrushMap
     /// <returns>The accent text brush when open, else the secondary text brush.</returns>
     public static Brush ConsoleToggle(bool isOpen) => Get(isOpen ? "YaapicAccentTextBrush" : "YaapicTextSecondaryBrush");
 
+    /// <summary>Gets the brush of a test badge or test row symbol.</summary>
+    /// <param name="passed">Whether the tests passed.</param>
+    /// <returns>The success brush when passed, else the danger brush.</returns>
+    public static Brush TestOutcome(bool passed) => Get(passed ? "YaapicSuccessBrush" : "YaapicDangerBrush");
+
     /// <summary>Gets the icon brush of the collections rail entry.</summary>
     /// <param name="mode">The sidebar mode.</param>
     /// <returns>The on-accent brush when selected, else the secondary text brush.</returns>
