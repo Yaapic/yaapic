@@ -30,12 +30,13 @@ if ($IsLinux -and -not $env:DISPLAY -and -not $env:WAYLAND_DISPLAY) { throw 'No 
 $Exe = (Resolve-Path $Exe).Path
 $Out = [IO.Path]::GetFullPath($Out, (Get-Location).Path)
 $temp = Join-Path ([IO.Path]::GetTempPath()) ("yaapic-shot-" + [Guid]::NewGuid().ToString('N'))
-$proc = $null; $stub = $null; $ps = $null; $errFile = $null
+$proc = $null; $stub = $null; $ps = $null; $errFile = $null; $ok = $false
 try {
     Copy-Item (Join-Path $PSScriptRoot 'workspace') $temp -Recurse
     $ids = @{ 'list-users' = '11111111-0000-0000-0000-000000000001'; 'create-user' = '11111111-0000-0000-0000-000000000002'
               'missing-item' = '11111111-0000-0000-0000-000000000003'; 'server-error' = '11111111-0000-0000-0000-000000000004'
-              'slow' = '11111111-0000-0000-0000-000000000005'; 'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009' }
+              'slow' = '11111111-0000-0000-0000-000000000005'; 'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009'
+              'noisy' = '11111111-0000-0000-0000-00000000000a' }
     $session = Join-Path $temp '.yaapic\session.yaml'
     $openList = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$openList`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))
@@ -65,7 +66,8 @@ try {
     if (Test-Path $Out) { Remove-Item $Out -Force }
     $argv = @('--workspace', $temp, '--theme', $Theme, '--size', "${Width}x${Height}", '--screenshot', $Out, '--wait-ms', $WaitMs)
     if ($Send) { $argv += '--send' }
-    if ($Select) { $argv += '--select', $Select }
+    # -Select Console opens the console panel (after the send); any other value selects a request section tab.
+    if ($Select -eq 'Console') { $argv += '--open', 'console' } elseif ($Select) { $argv += '--select', $Select }
     if ($Open) { $argv += '--open', $Open }
     $errFile = Join-Path ([IO.Path]::GetTempPath()) "$([IO.Path]::GetFileName($temp)).err"
     $proc = Start-Process $Exe -ArgumentList $argv -PassThru -RedirectStandardError $errFile
@@ -73,6 +75,7 @@ try {
     if ($proc.ExitCode -ne 0) { throw "Yaapic exited with code $($proc.ExitCode): $(Get-Content $errFile -Raw)" }
     if (-not (Test-Path $Out) -or (Get-Item $Out).Length -eq 0) { throw "No screenshot was written to $Out." }
     Write-Host "Saved $Out"
+    $ok = $true
 }
 finally {
     if ($proc -and -not $proc.HasExited) { Stop-Process -Id $proc.Id -Force }
@@ -80,4 +83,6 @@ finally {
     if ($ps) { [void]$ps.BeginStop($null, $null) }
     if (Test-Path $temp) { Remove-Item $temp -Recurse -Force }
     if ($errFile -and (Test-Path $errFile)) { Remove-Item $errFile -Force }
+    # The stub runspace is blocked in GetContext and keeps pwsh -File alive: end the process explicitly.
+    if ($ps) { [Environment]::Exit([int](-not $ok)) }
 }

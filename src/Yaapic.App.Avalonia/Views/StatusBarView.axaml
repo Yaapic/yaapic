@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:Yaapic.ViewModels.Shell"
+             xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             x:Class="Yaapic.App.Avalonia.Views.StatusBarView"
+             x:DataType="vm:ShellViewModel">
+  <UserControl.Styles>
+    <Style Selector="TextBlock.consoleToggle">
+      <Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
+    </Style>
+    <Style Selector="TextBlock.consoleToggle.open">
+      <Setter Property="Foreground" Value="{DynamicResource YaapicAccentTextBrush}" />
+    </Style>
+  </UserControl.Styles>
+  <Border Height="24" Padding="10,0" Background="{DynamicResource YaapicSurfaceAppBrush}"
+          BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+    <Grid ColumnDefinitions="*,Auto,Auto">
+      <TextBlock Grid.Column="0" Classes="caption" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                 Foreground="{DynamicResource YaapicWarningBrush}"
+                 Text="{Binding ScriptEngineWarnings, Converter={x:Static p:ConsoleMap.FirstLine}}"
+                 ToolTip.Tip="{Binding ScriptEngineWarnings, Converter={x:Static p:ConsoleMap.JoinLines}}"
+                 IsVisible="{Binding HasScriptEngineWarnings}" />
+      <!-- Slot of the vault item (M3-63). -->
+      <ContentControl x:Name="VaultSlot" Grid.Column="1" VerticalAlignment="Center" />
+      <Button x:Name="ConsoleToggle" Grid.Column="2" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
+              VerticalAlignment="Center" Command="{Binding ToggleConsoleCommand}"
+              AutomationProperties.AutomationId="Console" AutomationProperties.Name="Console"
+              ToolTip.Tip="Toggle the console (Ctrl+`)">
+        <StackPanel Orientation="Horizontal" Spacing="6">
+          <TextBlock Text="Console" Classes="caption consoleToggle" Classes.open="{Binding IsConsoleOpen}" VerticalAlignment="Center" />
+          <Border CornerRadius="8" Padding="5,0" Background="{DynamicResource YaapicWarningBackgroundBrush}"
+                  IsVisible="{Binding Console.WarnCount, Converter={x:Static p:ConsoleMap.IsPositive}}">
+            <TextBlock Text="{Binding Console.WarnCount}" Classes="badge" Foreground="{DynamicResource YaapicWarningBrush}"
+                       AutomationProperties.Name="Warnings" />
+          </Border>
+          <Border CornerRadius="8" Padding="5,0" Background="{DynamicResource YaapicDangerBackgroundBrush}"
+                  IsVisible="{Binding Console.ErrorCount, Converter={x:Static p:ConsoleMap.IsPositive}}">
+            <TextBlock Text="{Binding Console.ErrorCount}" Classes="badge" Foreground="{DynamicResource YaapicDangerBrush}"
+                       AutomationProperties.Name="Errors" />
+          </Border>
+        </StackPanel>
+      </Button>
+    </Grid>
+  </Border>
+</UserControl>

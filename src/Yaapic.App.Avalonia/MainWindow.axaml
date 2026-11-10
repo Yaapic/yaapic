@@ -41,7 +41,7 @@
       <Setter Property="TextElement.Foreground" Value="{DynamicResource YaapicAccentTextBrush}" />
     </Style>
   </Window.Styles>
-  <Grid RowDefinitions="40,Auto,*">
+  <Grid RowDefinitions="40,Auto,*,Auto,24">
     <!-- Title bar: the OS caption buttons stay (PreferSystemChrome); the right padding clears them, set in code-behind. -->
     <Border x:Name="TitleBar" Grid.Row="0" Padding="12,0" Background="{DynamicResource YaapicSurfaceAppBrush}"
             BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
@@ -297,6 +297,8 @@
         </StackPanel>
       </Grid>
     </Grid>
-    <views:CommandPaletteView Grid.RowSpan="3" DataContext="{Binding Palette}" />
+    <views:ConsolePanelView x:Name="ConsolePanel" Grid.Row="3" />
+    <views:StatusBarView Grid.Row="4" />
+    <views:CommandPaletteView Grid.RowSpan="5" DataContext="{Binding Palette}" />
   </Grid>
 </Window>
