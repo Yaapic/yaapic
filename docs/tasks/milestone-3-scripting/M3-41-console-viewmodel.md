@@ -1,6 +1,6 @@
 # M3-41: Console ViewModel
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-04
 
@@ -40,11 +40,11 @@ Views, the panel open/closed state (Shell, M3-47), exporting logs, per-tab conso
 
 ## Acceptance criteria
 
-- [ ] Tests: lines produced for a run with logs, tests (pass/fail), an error and a timeout; header lines; ordering of an
+- [x] Tests: lines produced for a run with logs, tests (pass/fail), an error and a timeout; header lines; ordering of an
       interleaved report; filter and search combinations and their counts; capacity drop; clear; copy text through
       `FakeDialogService`; `TimeText` format with a fixed `TimeZoneInfo`-independent test (inject the time zone offset through the
       entry's `DateTimeOffset`, assert the local conversion with `ToLocalTime`).
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 
