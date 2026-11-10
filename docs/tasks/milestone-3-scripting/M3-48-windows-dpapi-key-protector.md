@@ -1,6 +1,6 @@
 # M3-48: Windows: DPAPI key protector
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M3-36, M3-47
 
@@ -34,14 +34,14 @@ The WinUI dialogs (M3-56), macOS and Linux (M3-49), enterprise DPAPI scopes.
 
 ## Acceptance criteria
 
-- [ ] Tests (Windows only, `[Fact]` skipped elsewhere with a reason): wrap/unwrap round trip, a blob for workspace A fails for
+- [x] Tests (Windows only, `[Fact]` skipped elsewhere with a reason): wrap/unwrap round trip, a blob for workspace A fails for
       workspace B, tampered blob fails with `VaultException`; `FileSecretVault` full cycle with the real DPAPI protector
       (create, set, restart instance -> auto `Unlocked` with the value back, `Lock`/`Unlock` is passphrase-only so `UnlockAsync` is
       not used here); factory lists `dpapi` first.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; AOT publish of `Yaapic.App.WinUI` 0 IL2xxx/IL3xxx; launch the published
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; AOT publish of `Yaapic.App.WinUI` 0 IL2xxx/IL3xxx; launch the published
       exe, create a secret variable (the UI lands in M3-55/M3-56: until then check with the composition test) — runtime check
       deferred to M3-56, say so in Notes.
-- [ ] `docs/dependencies.md` row added; no process left running.
+- [x] `docs/dependencies.md` row added; no process left running.
 
 ## Rules
 
@@ -58,3 +58,10 @@ The WinUI dialogs (M3-56), macOS and Linux (M3-49), enterprise DPAPI scopes.
 ## Suggested commit message
 
 `feat(infrastructure): protect the vault key with DPAPI on Windows`
+
+## Notes
+
+- `System.Security.Cryptography.ProtectedData` 10.0.14 (latest stable; the package ships a `net10.0` asset that `net11.0` consumes).
+- `Wrap`/`Unwrap` guard with `OperatingSystem.IsWindows()` (CA1416) and raise `VaultException` elsewhere; `IsAvailable` is false off Windows.
+- AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx. Launching the published exe and creating a secret variable is deferred to M3-56 (the
+  UI lands there); the composition-level behaviour is covered by `VaultAutoUnlocksAfterRestart`.

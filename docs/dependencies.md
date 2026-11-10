@@ -33,8 +33,11 @@ with `Get-FileHash`), update `native/THIRD-PARTY-NOTICES.md` and the rows above,
 
 ## Secret vault (ADR 0010)
 
-The vault adds **no package**: `System.Security.Cryptography` (AES-GCM, PBKDF2, random) and `System.Text.Json` are part of
-the framework. The only exception is `System.Security.Cryptography.ProtectedData` (DPAPI), which M3-48 adds for Windows.
+The vault adds one package, for Windows DPAPI; AES-GCM, PBKDF2 and `System.Text.Json` are part of the framework.
+
+| Package | Version | License | Why | Native AOT |
+|---|---|---|---|---|
+| `System.Security.Cryptography.ProtectedData` | 10.0.14 | MIT (first-party) | DPAPI key protector (M3-48); referenced by `Yaapic.Infrastructure` on every OS, throws `PlatformNotSupportedException` off Windows, which the protector reports as unavailable | `Yaapic.App.WinUI` publishes with 0 IL2xxx/IL3xxx |
 
 ## Architecture tests: NetArchTest
 

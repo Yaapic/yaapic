@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Yaapic.App.WinUI.Services;
 using Yaapic.Composition;
+using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
 
 namespace Yaapic.App.WinUI;
@@ -44,7 +45,8 @@ public partial class App : Application
 
         var shell = AppComposition.CreateShell(
             workspace,
-            new WinUIDialogService(window, () => window.Content?.XamlRoot));
+            new WinUIDialogService(window, () => window.Content?.XamlRoot),
+            new DpapiKeyProtectorFactory());
         window.ViewModel = shell;
         window.Activate();
         await shell.InitializeAsync();
