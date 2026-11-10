@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
 using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.App.WinUI.Views;
@@ -20,5 +21,27 @@ public sealed partial class StatusBarView : UserControl
     {
         get => (ShellViewModel?)GetValue(ViewModelProperty);
         set => SetValue(ViewModelProperty, value);
+    }
+
+    // Unlocked: a flyout offers Lock; otherwise the click opens the matching dialog.
+    private void OnVaultClick(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel?.Vault is not { } vault)
+        {
+            return;
+        }
+
+        if (vault.IsUnlocked)
+        {
+            FlyoutBase.ShowAttachedFlyout(VaultButton);
+        }
+        else if (vault.CanSetUp)
+        {
+            vault.RequestSetupCommand.Execute(null);
+        }
+        else
+        {
+            vault.RequestUnlockCommand.Execute(null);
+        }
     }
 }

@@ -17,16 +17,19 @@ public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanSubmitSetup))]
+    [NotifyPropertyChangedFor(nameof(SetupHint))]
     [NotifyCanExecuteChangedFor(nameof(SetupCommand))]
     private VaultProtectorChoice? _selectedProtector;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanSubmitSetup))]
+    [NotifyPropertyChangedFor(nameof(SetupHint))]
     [NotifyCanExecuteChangedFor(nameof(SetupCommand))]
     private string _passphrase = "";
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(CanSubmitSetup))]
+    [NotifyPropertyChangedFor(nameof(SetupHint))]
     [NotifyCanExecuteChangedFor(nameof(SetupCommand))]
     private string _confirmPassphrase = "";
 
@@ -100,6 +103,13 @@ public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
     /// <summary>Gets a value indicating whether the setup form is valid.</summary>
     public bool CanSubmitSetup => !IsBusy && SelectedProtector is { } p
         && (!p.RequiresPassphrase || (Passphrase.Length >= MinPassphraseLength && Passphrase == ConfirmPassphrase));
+
+    /// <summary>Gets the inline validation message of the setup form; empty when there is nothing to report.</summary>
+    public string SetupHint => SelectedProtector is { RequiresPassphrase: true } && Passphrase.Length > 0
+        ? Passphrase.Length < MinPassphraseLength
+            ? $"Use at least {MinPassphraseLength} characters"
+            : ConfirmPassphrase.Length > 0 && Passphrase != ConfirmPassphrase ? "Passphrases do not match" : ""
+        : "";
 
     /// <summary>Reads the vault and raises the first reload.</summary>
     /// <returns>A task that completes when the vault is read and the reload is done.</returns>

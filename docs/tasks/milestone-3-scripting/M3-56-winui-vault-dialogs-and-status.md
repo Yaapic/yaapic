@@ -1,6 +1,6 @@
 # M3-56: WinUI: vault dialogs, status bar item and DPAPI wiring
 
-Status: todo
+Status: in progress
 Platform: windows
 Depends on: M3-45, M3-48, M3-53, M3-55
 
@@ -34,7 +34,7 @@ Changing passphrase, switching protector, deleting the vault, Avalonia (M3-63).
 
 ## Acceptance criteria
 
-- [ ] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
+- [x] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
 - [ ] **Runtime check (AOT exe)** on a fresh workspace folder (delete `.yaapic/workspace.id` and the user vault file of the test
       workspace before starting; list what was deleted in Notes): the status bar shows `No vault`; setup with DPAPI creates the
       vault without a passphrase and the state becomes `Vault unlocked`; set a secret variable and send a request that uses it
@@ -43,7 +43,7 @@ Changing passphrase, switching protector, deleting the vault, Avalonia (M3-63).
       with the locked hint; setup of a **passphrase** vault in a second fresh workspace, restart, unlock with a wrong then the right
       passphrase; Esc cancels; dark and light; keyboard-only operation of the dialogs. Record in Notes.
 - [ ] The vault file contains no plaintext secret (open it, record the check).
-- [ ] No process left running.
+- [x] No process left running.
 
 ## Rules
 
@@ -60,3 +60,19 @@ Changing passphrase, switching protector, deleting the vault, Avalonia (M3-63).
 ## Suggested commit message
 
 `feat(winui): add vault setup and unlock dialogs and the status bar item`
+
+## Notes
+
+Runtime check, AOT exe, driven through UI Automation on throwaway workspaces under `%TEMP%` (nothing deleted; the vault files
+created by this check are `%APPDATA%\Yaapicaults\<id>.vault` of those temp workspaces):
+
+- Verified: status bar `No vault`; DPAPI setup creates the vault without a passphrase and the state becomes `Vault unlocked`;
+  restart: unlocked automatically; status bar click on an unlocked vault opens the `Lock vault` flyout and locks it; passphrase
+  setup (hint `Use at least 8 characters`, `Passphrases do not match`, Enter submits), restart locked, wrong passphrase shows
+  `Wrong passphrase` and stays open, right passphrase unlocks, Esc cancels; dark and light screenshots of the setup dialog.
+- The vault file holds only the protector id and wrapped/encrypted data (`"protector": "dpapi"`, `wrappedKey`, 462 bytes);
+  no secret variable was stored, so the no-plaintext check is only structural.
+- **Not done**: secret variable + request echo + console `••••`, `{{secret}}` unresolved hint while locked, palette commands,
+  keyboard-only pass beyond Enter/Esc. The item stays open: the card is not `done`.
+- AOT finding: binding `RadioButtons.ItemsSource` to an `IReadOnlyList<T>` kills the process (stowed XAML exception), as already
+  documented in `ListMap`; fixed with `ListMap.Protectors`.

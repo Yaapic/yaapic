@@ -57,4 +57,14 @@ public static class TextMap
     /// <param name="lines">The lines.</param>
     /// <returns>The joined text.</returns>
     public static string JoinLines(IReadOnlyList<string> lines) => string.Join('\n', lines);
+
+    /// <summary>Gets the tooltip of the vault status item.</summary>
+    /// <param name="protectorLabel">The protector label; <see langword="null"/> when no vault exists.</param>
+    /// <returns>The tooltip text.</returns>
+    public static string VaultTip(string? protectorLabel) => protectorLabel ?? "Secret variables are not protected yet";
+
+    /// <summary>Gets the Segoe Fluent glyph of the vault status item.</summary>
+    /// <param name="isUnlocked">Whether the vault is unlocked.</param>
+    /// <returns>The lock or unlock glyph.</returns>
+    public static string VaultGlyph(bool isUnlocked) => isUnlocked ? "" : "";
 }

@@ -14,8 +14,23 @@
                Text="{x:Bind p:TextMap.FirstLine(ViewModel.ScriptEngineWarnings), Mode=OneWay}"
                ToolTipService.ToolTip="{x:Bind p:TextMap.JoinLines(ViewModel.ScriptEngineWarnings), Mode=OneWay}"
                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasScriptEngineWarnings), Mode=OneWay}"/>
-    <!-- Reserved for the secret vault item (M3-56). -->
-    <StackPanel x:Name="VaultSlot" Grid.Column="1" Orientation="Horizontal"/>
+    <Button x:Name="VaultButton" Grid.Column="1" Style="{StaticResource YaapicSubtleButtonStyle}"
+            AutomationProperties.AutomationId="Vault" AutomationProperties.Name="{x:Bind ViewModel.Vault.StatusText, Mode=OneWay}"
+            ToolTipService.ToolTip="{x:Bind p:TextMap.VaultTip(ViewModel.Vault.ProtectorLabel), Mode=OneWay}"
+            MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center" Click="OnVaultClick">
+      <StackPanel Orientation="Horizontal" Spacing="6">
+        <FontIcon FontSize="12" VerticalAlignment="Center"
+                  Glyph="{x:Bind p:TextMap.VaultGlyph(ViewModel.Vault.IsUnlocked), Mode=OneWay}"
+                  Foreground="{x:Bind p:BrushMap.ConsoleToggle(ViewModel.Vault.IsUnlocked), Mode=OneWay}"/>
+        <TextBlock Text="{x:Bind ViewModel.Vault.StatusText, Mode=OneWay}" VerticalAlignment="Center"
+                   Style="{StaticResource YaapicCaptionTextStyle}"/>
+      </StackPanel>
+      <FlyoutBase.AttachedFlyout>
+        <MenuFlyout x:Name="VaultFlyout">
+          <MenuFlyoutItem Text="Lock vault" Command="{x:Bind ViewModel.Vault.LockCommand, Mode=OneWay}"/>
+        </MenuFlyout>
+      </FlyoutBase.AttachedFlyout>
+    </Button>
     <Button x:Name="ConsoleToggle" Grid.Column="2" Style="{StaticResource YaapicSubtleButtonStyle}"
             AutomationProperties.AutomationId="Console" AutomationProperties.Name="Console"
             ToolTipService.ToolTip="Toggle the console (Ctrl+`)"

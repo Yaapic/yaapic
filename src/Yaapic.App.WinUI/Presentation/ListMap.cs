@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -25,4 +26,9 @@ public static class ListMap
     /// <param name="items">The error blocks to show.</param>
     /// <returns>An observable collection of the errors.</returns>
     public static ObservableCollection<ScriptErrorItemViewModel> ScriptErrors(IReadOnlyList<ScriptErrorItemViewModel> items) => new(items);
+
+    /// <summary>Copies vault protector choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The protectors to offer.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<VaultProtectorChoice> Protectors(IReadOnlyList<VaultProtectorChoice> items) => new(items);
 }

@@ -50,6 +50,23 @@ public sealed class VaultViewModelTests
     }
 
     [Theory]
+    [InlineData("passphrase", "", "", "")]
+    [InlineData("passphrase", "short", "", "Use at least 8 characters")]
+    [InlineData("passphrase", "long-enough", "", "")]
+    [InlineData("passphrase", "long-enough", "different", "Passphrases do not match")]
+    [InlineData("passphrase", "long-enough", "long-enough", "")]
+    [InlineData("dpapi", "short", "other", "")]
+    public void SetupHintExplainsWhyTheFormIsInvalid(string protector, string passphrase, string confirm, string hint)
+    {
+        var vm = Create();
+        vm.SelectedProtector = vm.Protectors.Single(p => p.Id == protector);
+        vm.Passphrase = passphrase;
+        vm.ConfirmPassphrase = confirm;
+
+        Assert.Equal(hint, vm.SetupHint);
+    }
+
+    [Theory]
     [InlineData("passphrase", "short", "short", false)]
     [InlineData("passphrase", "long-enough", "different", false)]
     [InlineData("passphrase", "long-enough", "long-enough", true)]
