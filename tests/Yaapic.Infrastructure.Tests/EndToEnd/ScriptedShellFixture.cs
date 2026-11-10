@@ -4,6 +4,7 @@ using Yaapic.Composition;
 using Yaapic.Core.Scripting;
 using Yaapic.Domain.Scripting;
 using Yaapic.Infrastructure.Secrets;
+using Yaapic.Scripting.Lua;
 using Yaapic.Scripting.QuickJs;
 using Yaapic.TestDoubles;
 using Yaapic.ViewModels.Console;
@@ -35,20 +36,20 @@ internal sealed class ScriptedShellFixture : IDisposable
     public string PathOf(params string[] parts) => Path.Combine([Root, .. parts]);
 
     /// <summary>Writes a folder file; <paramref name="folderPath"/> is relative to <c>requests</c>.</summary>
-    public void WriteFolder(string folderPath, string name, string? pre = null, string? post = null, string variables = "[]")
+    public void WriteFolder(string folderPath, string name, string? pre = null, string? post = null, string variables = "[]", string preLanguage = "javascript", string postLanguage = "javascript")
     {
-        var yaml = $"version: 1\nid: {Guid.NewGuid():D}\nname: {name}\ndescription: \"\"\nvariables: {variables}\n{ScriptsYaml(pre, post)}";
+        var yaml = $"version: 1\nid: {Guid.NewGuid():D}\nname: {name}\ndescription: \"\"\nvariables: {variables}\n{ScriptsYaml(pre, post, preLanguage, postLanguage)}";
         Write(PathOf("requests", folderPath, "folder.yaml"), yaml);
     }
 
     /// <summary>Writes a request file and returns its id.</summary>
-    public Guid WriteRequest(string folderPath, string name, string url, string? pre = null, string? post = null, params (string Key, string Value)[] headers)
+    public Guid WriteRequest(string folderPath, string name, string url, string? pre = null, string? post = null, (string Key, string Value)? headers = null, string preLanguage = "javascript", string postLanguage = "javascript")
     {
         var id = Guid.NewGuid();
-        var headerYaml = headers.Length == 0
+        var headerYaml = headers is not { } h
             ? "headers: []\n"
-            : "headers:\n" + string.Concat(headers.Select(h => $"- key: {Quote(h.Key)}\n  value: {Quote(h.Value)}\n  enabled: true\n"));
-        var yaml = $"version: 1\nid: {id:D}\nname: {name}\nmethod: GET\nurl: {Quote(url)}\nparams: []\n{headerYaml}{ScriptsYaml(pre, post)}";
+            : $"headers:\n- key: {Quote(h.Key)}\n  value: {Quote(h.Value)}\n  enabled: true\n";
+        var yaml = $"version: 1\nid: {id:D}\nname: {name}\nmethod: GET\nurl: {Quote(url)}\nparams: []\n{headerYaml}{ScriptsYaml(pre, post, preLanguage, postLanguage)}";
         Write(PathOf("requests", folderPath, name.ToLowerInvariant().Replace(' ', '-') + ".request.yaml"), yaml);
         return id;
     }
@@ -63,14 +64,15 @@ internal sealed class ScriptedShellFixture : IDisposable
     }
 
     /// <summary>Composes a shell with the real QuickJS engine and initializes it.</summary>
-    public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null)
+    public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null, bool withLua = false)
     {
-        var shell = AppComposition.CreateShell(Root, new FakeDialogService(), null, new TempVaultLocation(_vaults), [new QuickJsEngine()], limits);
+        IScriptEngine[] engines = withLua ? [new QuickJsEngine(), new LuaEngine()] : [new QuickJsEngine()];
+        var shell = AppComposition.CreateShell(Root, new FakeDialogService(), null, new TempVaultLocation(_vaults), engines, limits);
         await shell.InitializeAsync();
-        var unavailable = shell.ScriptEngineWarnings.FirstOrDefault(w => w.StartsWith("JavaScript", StringComparison.Ordinal));
+        var unavailable = shell.ScriptEngineWarnings.FirstOrDefault(w => w.StartsWith("JavaScript", StringComparison.Ordinal) || (withLua && w.StartsWith("Lua", StringComparison.Ordinal)));
         Assert.True(
             unavailable is null,
-            "The QuickJS-NG native library is missing (" + unavailable + "). Run 'pwsh native/Build-Natives.ps1 -Rid <rid>' to build it.");
+            "A native script library is missing (" + unavailable + "). Run 'pwsh native/Build-Natives.ps1 -Rid <rid>' to build it.");
         return shell;
     }
 
@@ -92,8 +94,8 @@ internal sealed class ScriptedShellFixture : IDisposable
     public static string[] Messages(ShellViewModel shell, ConsoleLineKind kind) =>
         [.. shell.Console.Lines.Where(l => l.Kind == kind).Select(l => l.Message)];
 
-    private static string ScriptsYaml(string? pre, string? post) =>
-        "scripts:\n  preRequest:\n    language: javascript\n" + Block(pre) + "  postResponse:\n    language: javascript\n" + Block(post);
+    private static string ScriptsYaml(string? pre, string? post, string preLanguage, string postLanguage) =>
+        $"scripts:\n  preRequest:\n    language: {preLanguage}\n" + Block(pre) + $"  postResponse:\n    language: {postLanguage}\n" + Block(post);
 
     private static string Block(string? source)
     {

@@ -1,6 +1,6 @@
 # M3-65: End-to-end tests: Lua scripting and mixed languages
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-64, M3-32
 
@@ -27,8 +27,8 @@ Vault (M3-66), UI.
 
 ## Acceptance criteria
 
-- [ ] All Lua scenarios, the mixed chain and the unavailable-engine case pass on Windows and Linux runners.
-- [ ] Existing tests untouched and green; 0 warnings; no leaked `yaapic-lua` threads.
+- [x] All Lua scenarios, the mixed chain and the unavailable-engine case pass on Windows and Linux runners.
+- [x] Existing tests untouched and green; 0 warnings; no leaked `yaapic-lua` threads.
 
 ## Rules
 
