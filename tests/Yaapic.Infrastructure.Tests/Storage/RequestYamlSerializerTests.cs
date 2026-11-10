@@ -217,14 +217,14 @@ public sealed class RequestYamlSerializerTests
     {
         Assert.Equal(ScriptSet.Empty, RequestYamlSerializer.Deserialize(Golden("request-m1-legacy.request.yaml")).Scripts);
         var dir = Path.Combine(FindRepoRoot(), "tools", "screenshots", "workspace", "requests");
-        var files = Directory.GetFiles(dir, "*.request.yaml").Where(f => Path.GetFileName(f) is not ("scripted.request.yaml" or "noisy.request.yaml")).ToArray();
+        var files = Directory.GetFiles(dir, "*.request.yaml").Where(f => Path.GetFileName(f) is not ("scripted.request.yaml" or "noisy.request.yaml" or "lua-scripted.request.yaml" or "broken.request.yaml")).ToArray();
         Assert.NotEmpty(files);
         foreach (var file in files)
         {
             Assert.Equal(ScriptSet.Empty, RequestYamlSerializer.Deserialize(File.ReadAllText(file)).Scripts);
         }
 
-        // The scripted (M3-51) and noisy (M3-53) fixtures are the screenshot requests that carry scripts.
+        // The scripted (M3-51), noisy (M3-53), lua-scripted and broken (M3-68) fixtures are the screenshot requests that carry scripts.
         var scripted = RequestYamlSerializer.Deserialize(File.ReadAllText(Path.Combine(dir, "scripted.request.yaml"))).Scripts;
         Assert.False(string.IsNullOrWhiteSpace(scripted.PreRequest.Source));
         Assert.False(string.IsNullOrWhiteSpace(scripted.PostResponse.Source));

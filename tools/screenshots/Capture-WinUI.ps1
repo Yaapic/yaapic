@@ -3,7 +3,7 @@
 Captures the Yaapic WinUI window to a PNG, on a throw-away copy of the fixture workspace.
 .DESCRIPTION
 Publish the app with Native AOT first (see README.md). The script copies tools/screenshots/workspace to a temp folder,
-starts a loopback stub server on 127.0.0.1:5199, launches the exe with --workspace/--theme, resizes the window,
+uses a throw-away data dir (`--data-dir`, so the vault never lands in %APPDATA%), starts a loopback stub server on 127.0.0.1:5199, launches the exe with --workspace/--theme, resizes the window,
 optionally sends keys and Ctrl+Enter, captures it with PrintWindow, then cleans up (also on failure).
 #>
 param(
@@ -22,7 +22,8 @@ param(
     [string[]]$Steps = @(),
     [switch]$Screen,
     [switch]$NoTabs,
-    [switch]$NoStub
+    [switch]$NoStub,
+    [string]$Crop = ''
 )
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Windows.Forms, System.Drawing, UIAutomationClient, UIAutomationTypes
@@ -68,7 +69,7 @@ try {
               'slow' = '11111111-0000-0000-0000-000000000005'
               'upload-avatar' = '11111111-0000-0000-0000-000000000006'; 'secure-call' = '11111111-0000-0000-0000-000000000007'
               'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009'
-              'noisy' = '11111111-0000-0000-0000-00000000000a' }
+              'noisy' = '11111111-0000-0000-0000-00000000000a'; 'lua-scripted' = '11111111-0000-0000-0000-00000000000b'; 'broken' = '11111111-0000-0000-0000-00000000000c' }
     $session = Join-Path $temp '.yaapic\session.yaml'
     $open = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$open`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))
@@ -103,7 +104,7 @@ try {
         Start-Sleep -Milliseconds 300
     }
 
-    $proc = Start-Process $Exe -ArgumentList '--workspace', "`"$temp`"", '--theme', $Theme -PassThru
+    $proc = Start-Process $Exe -ArgumentList '--workspace', "`"$temp`"", '--data-dir', "`"$temp-data`"", '--theme', $Theme -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds(30)
     while ($proc.MainWindowHandle -eq [IntPtr]::Zero -and [DateTime]::UtcNow -lt $deadline) { Start-Sleep -Milliseconds 200; $proc.Refresh() }
     if ($proc.MainWindowHandle -eq [IntPtr]::Zero) { throw 'Main window did not appear.' }
@@ -156,7 +157,7 @@ try {
                 else { throw "Step '$step': element supports no pattern." }
                 Start-Sleep -Milliseconds 500
             }
-            { $_ -in 'keys', 'type', 'click', 'rclick', 'hover', 'vk' } {
+            { $_ -in 'keys', 'type', 'click', 'rclick', 'hover', 'vk', 'wheel' } {
                 $focused = $false
                 for ($i = 0; $i -lt 10 -and -not $focused; $i++) { $focused = [Win32]::Focus($h); Start-Sleep -Milliseconds 300 }
                 if (-not $focused) { throw "Step '$step': could not bring the Yaapic window to the foreground." }
@@ -168,6 +169,12 @@ try {
                     if ($kind -eq 'click') { [Win32]::mouse_event(2, 0, 0, 0, [UIntPtr]::Zero); [Win32]::mouse_event(4, 0, 0, 0, [UIntPtr]::Zero) }
                     if ($kind -eq 'rclick') { [Win32]::mouse_event(8, 0, 0, 0, [UIntPtr]::Zero); [Win32]::mouse_event(16, 0, 0, 0, [UIntPtr]::Zero) }
                     Start-Sleep -Milliseconds 700; continue
+                }
+                if ($kind -eq 'wheel') {
+                    # wheel:x,y,ticks: scrolls down by that many notches at a window pixel (negative: up), e.g. inside a dialog's ScrollViewer.
+                    $p = $arg -split ','; [void][Win32]::SetCursorPos([int]$p[0], [int]$p[1]); Start-Sleep -Milliseconds 200
+                    [Win32]::mouse_event(0x0800, 0, 0, [uint32][BitConverter]::ToUInt32([BitConverter]::GetBytes([int](-120 * [int]$p[2])), 0), [UIntPtr]::Zero)
+                    Start-Sleep -Milliseconds 600; continue
                 }
                 if ($kind -eq 'vk') {
                     # vk:<mods>+<hex>: a raw virtual-key press independent of the keyboard layout, e.g. vk:ctrl+C0 for Ctrl+` on a US layout.
@@ -224,6 +231,9 @@ try {
         $g.ReleaseHdc($dc); $g.Dispose()
     }
     New-Item -ItemType Directory -Force (Split-Path $Out) | Out-Null
+    if ($Crop) { # -Crop x,y,w,h: keep only that window rectangle (e.g. the status bar)
+        $c = [int[]]($Crop -split ','); $part = $bmp.Clone([Drawing.Rectangle]::new($c[0], $c[1], $c[2], $c[3]), $bmp.PixelFormat); $bmp.Dispose(); $bmp = $part
+    }
     $bmp.Save($Out, [Drawing.Imaging.ImageFormat]::Png); $bmp.Dispose()
     Write-Host "Saved $Out"
 }
@@ -232,7 +242,7 @@ finally {
     if ($proc -and -not $proc.HasExited) { Stop-Process -Id $proc.Id -Force }
     # GetContext blocks inside the runspace: do not wait for it, the process exit ends it.
     if ($ps) { [void]$ps.BeginStop($null, $null) }
-    if (Test-Path $temp) { Remove-Item $temp -Recurse -Force }
+    foreach ($d in $temp, "$temp-data") { if (Test-Path $d) { Remove-Item $d -Recurse -Force } } # the data dir holds the throw-away vault: the real %APPDATA%\Yaapic is never touched
 }
 # The blocked stub-server runspace would keep the host alive for minutes: leave explicitly.
 [Environment]::Exit([int]$failed)

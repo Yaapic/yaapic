@@ -20,4 +20,6 @@ scripts:
     source: |
       pm.test("Status is 200", () => pm.response.to.have.status(200));
       pm.test("Responds with JSON", () => pm.response.to.be.json);
+      pm.test("Has two users", () => pm.expect(pm.response.json().length).to.equal(2));
       pm.test("Fails on purpose", () => pm.expect(1).to.equal(2));
+      pm.test("Fails on a header", () => pm.response.to.have.header("X-Missing"));

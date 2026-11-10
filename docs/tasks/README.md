@@ -297,7 +297,7 @@ not run in their Notes.
 | [M3-65](milestone-3-scripting/M3-65-end-to-end-lua-scripting.md) | End-to-end tests: Lua scripting and mixed languages | any | M3-64, M3-32 | done |
 | [M3-66](milestone-3-scripting/M3-66-end-to-end-secret-vault.md) | End-to-end tests: secret vault | any | M3-47, M3-64 | done |
 | [M3-67](milestone-3-scripting/M3-67-milestone-docs.md) | Milestone 3 docs | any | M3-64, M3-65, M3-66, M3-32, M3-49 | done |
-| [M3-68](milestone-3-scripting/M3-68-winui-visual-verification.md) | WinUI visual verification of the milestone 3 views | windows | M3-51, M3-52, M3-53, M3-54, M3-55, M3-56 | todo |
+| [M3-68](milestone-3-scripting/M3-68-winui-visual-verification.md) | WinUI visual verification of the milestone 3 views | windows | M3-51, M3-52, M3-53, M3-54, M3-55, M3-56 | done |
 
 ### Milestone 3 summary
 
@@ -321,10 +321,10 @@ a Cookies tab (milestone 4 or later), `pm.request.auth`, creating a secret from 
 fields to secret variables, changing the vault passphrase or protector, sharing secrets between machines, request-level
 variables, importing Postman scripts (M5).
 
-Still open in M3: M3-68 (WinUI visual verification). Runtime checks not run by hand: the real macOS Keychain and Linux
+Nothing is open in M3. Runtime checks not run by hand: the real macOS Keychain and Linux
 `secret-tool` protectors (M3-49), the Avalonia vault windows end to end (M3-63), and the interactive and send steps of the folder
 scripts dialogs (M3-52, M3-59; the send itself is covered by the end-to-end tests). The Linux and macOS native builds are built by
-CI only (M3-15). M3 is closed when M3-68 is done.
+CI only (M3-15). M3-68 is done, so M3 is closed.
 
 ## Milestones 2 to 10
 

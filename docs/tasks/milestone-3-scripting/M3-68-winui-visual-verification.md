@@ -1,6 +1,6 @@
 # M3-68: WinUI visual verification of the milestone 3 views
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M3-51, M3-52, M3-53, M3-54, M3-55, M3-56
 
@@ -44,10 +44,10 @@ New features, Avalonia screenshots (the Avalonia cards carry their own runtime c
 
 ## Acceptance criteria
 
-- [ ] 18 screenshots committed under `docs/screenshots/m3/`, 1440 x 900, from the AOT build, no real secret visible.
-- [ ] `docs/screenshots/m3/README.md` lists every screen with deviations, classification and follow-up proposals.
-- [ ] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
-- [ ] No Yaapic or stub-server process left running.
+- [x] 18 screenshots committed under `docs/screenshots/m3/`, 1440 x 900, from the AOT build, no real secret visible.
+- [x] `docs/screenshots/m3/README.md` lists every screen with deviations, classification and follow-up proposals.
+- [x] `dotnet build Yaapic.sln -c Release` 0 warnings; all tests green; AOT publish 0 IL2xxx/IL3xxx warnings.
+- [x] No Yaapic or stub-server process left running.
 
 ## Rules
 
