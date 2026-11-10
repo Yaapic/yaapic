@@ -66,9 +66,24 @@ function Get-Source {
     $archive = Join-Path $srcDir $Entry.archive
     if (-not (Test-Path $archive)) {
         New-Item -ItemType Directory -Force $srcDir | Out-Null
-        Write-Host "Downloading $($Entry.url)"
-        # Hosted runners sometimes time out on lua.org: retry before failing (the SHA-256 check below still guards the content).
-        Invoke-WebRequest -Uri $Entry.url -OutFile $archive -TimeoutSec 120 -MaximumRetryCount 5 -RetryIntervalSec 10
+        # lua.org often times out from hosted runners: try the primary URL, then the mirrors, a few times each. The SHA-256
+        # check below still guards the content, so a mirror can only serve the exact pinned archive.
+        $urls = @($Entry.url) + @($Entry.mirrors | Where-Object { $_ })
+        $downloaded = $false
+        foreach ($attempt in 1..3) {
+            foreach ($url in $urls) {
+                Write-Host "Downloading $url (attempt $attempt)"
+                try {
+                    Invoke-WebRequest -Uri $url -OutFile $archive -TimeoutSec 30
+                    $downloaded = $true
+                    break
+                }
+                catch { Write-Host "Download failed: $($_.Exception.Message)" }
+            }
+            if ($downloaded) { break }
+            Start-Sleep -Seconds 5
+        }
+        if (-not $downloaded) { throw "Could not download $($Entry.archive) from any of: $($urls -join ', ')." }
     }
     $actual = (Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actual -ne $Entry.sha256.ToLowerInvariant()) {

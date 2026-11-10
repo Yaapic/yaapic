@@ -24,7 +24,8 @@ Milestone 3 (scripting, secret vault): added QuickJS-NG v0.18.0, Lua 5.4.8 (nati
 
 `native/versions.json` pins, for QuickJS-NG and Lua, the source URL, the tag, the SHA-256 of the source archive and the
 licence file. `native/Build-Natives.ps1` (PowerShell 7, Windows, Linux and macOS) downloads the archives into
-`artifacts/native/_src`, fails on a hash mismatch, builds them with CMake (MSVC on Windows, clang elsewhere) and writes
+`artifacts/native/_src` (the primary `url`, then the optional `mirrors`, a few attempts each: lua.org often times out
+from hosted runners; a mirror can only serve the pinned archive), fails on a hash mismatch, builds them with CMake (MSVC on Windows, clang elsewhere) and writes
 `quickjs-ng` and `lua54` to `artifacts/native/<rid>/` (`win-x64`, `linux-x64`, `osx-arm64`). A second run does nothing.
 `Yaapic.Scripting` runs the script when that folder is missing and copies the libraries and
 `native/THIRD-PARTY-NOTICES.md` next to every app build and publish. No binary is committed.
