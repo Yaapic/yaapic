@@ -17,7 +17,7 @@ what is supported and what differs. It is kept in step with the conformance suit
 | `pm.request.auth` | unsupported | Use a header in a pre-request script. |
 | `pm.variables`, `pm.environment`, `pm.collectionVariables`, `pm.globals` | supported | `get`, `set`, `unset`, `has`, `clear`, `toObject`; `replaceIn` on `pm.variables` (dynamic variables such as `{{$guid}}`, `{{$timestamp}}`, `{{$randomInt}}` work). |
 | `pm.environment.name` | unsupported | |
-| `pm.info` | partial | `eventName`, `requestName`, `requestId`; `iteration` is always `0`. |
+| `pm.info` | partial | `eventName`, `requestName`, `requestId`; `iteration` is always `0` and `iterationCount` `1`. |
 | `pm.sendRequest` | supported | String and options forms; callback and promise (`await`) styles; raw and urlencoded bodies. Limited to 20 calls per run. |
 | `pm.cookies` | partial | Read-only view of the `Set-Cookie` headers of the current response. `pm.cookies.jar()` throws `The cookie jar is not available in Yaapic yet`. |
 | `console.*` | supported | Objects are printed as JSON. |
@@ -34,7 +34,8 @@ Postman never fails silently.
 
 The language itself is QuickJS: ES2023 syntax (template literals, destructuring, classes with private fields, optional
 chaining, `Array.prototype.flat`, `Object.entries`, `async`/`await` at the top level, `toFixed`) works. There is no `Intl`,
-no timers (`setTimeout`) and no host module.
+no timers (`setTimeout`), no `BigInt`, `WeakRef` or `DOMException`, and no host module (`std`, `os` and `require` are
+undefined or throw as above).
 
 ## Differences from Postman
 
@@ -64,6 +65,9 @@ scripts, JavaScript request test) and shows that variables and the response are 
   `nested.property` and `have.json_body` stay 0-based (`data[0].id`). JSON arrays carry their length in `n`, `null` is `pm.null`.
 - **Synchronous `pm.sendRequest`.** It returns `res, err`; with a callback, the callback runs before it returns.
 - **No `done`, no promises, no `postman.*`.** Use `pm.*` only.
+- **Reduced standard library.** Only `base` (without `dofile`, `loadfile`, `require`, `print`, `warn`), `string`, `table`,
+  `math` and `utf8` are loaded; `collectgarbage` accepts only `"count"` and chunks load in text mode only. Use `console.*`
+  for output.
 - **Unsupported.** `pm.execution`, `pm.iterationData`, `pm.vault`, `pm.visualizer`, `pm.require`, `pm.request.auth`,
   `pm.response.to.have.json_schema`, `pm.cookies.jar()` and `instance_of` raise `... is not supported in Yaapic`; `require`, `os`
   and `io` are not available (indexing them fails with a standard Lua `nil` error).

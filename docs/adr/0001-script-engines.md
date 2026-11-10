@@ -2,7 +2,9 @@
 
 Status: Accepted
 
-See also: [ADR 0009](0009-scripting.md) (scripting architecture, host protocol and file format; decision unchanged).
+See also: [ADR 0009](0009-scripting.md) (scripting architecture, host protocol and file format; decision unchanged, with its
+"Implementation notes (M3)" for what the engines turned out to need), [ADR 0010](0010-secret-vault.md) (secret vault; scripts read
+and write secret variables).
 
 ## Context
 
@@ -24,4 +26,4 @@ supported RID and kept up to date.
 ## Decision
 
 Option 1. JavaScript (QuickJS-NG, Postman-compatible `pm.*` API) and Lua 5.4, both behind one `IScriptEngine` port in
-`Yaapic.Core`. No C# and no Python scripting. Engines are wired in milestone 3.
+`Yaapic.Core`. No C# and no Python scripting. Engines were wired in milestone 3 (`Yaapic.Scripting`).

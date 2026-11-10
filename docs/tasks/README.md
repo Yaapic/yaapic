@@ -296,15 +296,42 @@ not run in their Notes.
 | [M3-64](milestone-3-scripting/M3-64-end-to-end-javascript-scripting.md) | End-to-end tests: JavaScript scripting | any | M3-47, M3-44, M3-23 | done |
 | [M3-65](milestone-3-scripting/M3-65-end-to-end-lua-scripting.md) | End-to-end tests: Lua scripting and mixed languages | any | M3-64, M3-32 | done |
 | [M3-66](milestone-3-scripting/M3-66-end-to-end-secret-vault.md) | End-to-end tests: secret vault | any | M3-47, M3-64 | done |
-| [M3-67](milestone-3-scripting/M3-67-milestone-docs.md) | Milestone 3 docs | any | M3-64, M3-65, M3-66, M3-32, M3-49 | todo |
+| [M3-67](milestone-3-scripting/M3-67-milestone-docs.md) | Milestone 3 docs | any | M3-64, M3-65, M3-66, M3-32, M3-49 | done |
 | [M3-68](milestone-3-scripting/M3-68-winui-visual-verification.md) | WinUI visual verification of the milestone 3 views | windows | M3-51, M3-52, M3-53, M3-54, M3-55, M3-56 | todo |
+
+### Milestone 3 summary
+
+Delivered: pre-request and post-response scripts on requests, folders and collections (collection first, then folders, then the
+request) in JavaScript (QuickJS-NG) and Lua 5.4 behind one `IScriptEngine` port, a Postman-style `pm.*` API (`pm.info`,
+`pm.variables`, `pm.environment`, `pm.collectionVariables`, `pm.globals`, `pm.request`, `pm.response`, `pm.test`, `pm.expect`,
+`pm.sendRequest`, read-only `pm.cookies`, `console`), limits (5 s, 64 MiB, 20 `pm.sendRequest` calls, 1 000 console entries per
+send), the console panel and status bar, the response Tests tab, scripts persisted in the YAML files, and variable changes made
+by scripts persisted through the stores. The engines are native libraries built from pinned sources by `native/Build-Natives.ps1`.
+The secret vault: a `secret` flag on variable rows, an AES-256-GCM vault file per user and workspace outside the workspace,
+key protectors (passphrase, DPAPI, macOS Keychain, Linux Secret Service), secret-aware stores, redaction of script output,
+masking in the variable tables and popup, and the vault dialogs and status bar item on both front-ends. Both code editors
+highlight JavaScript and Lua (LoomEditor 0.5.0 had no Lua grammar, so Lua was plain text until 0.6.0). End-to-end tests:
+`Milestone3ScriptingEndToEndTests`, `Milestone3LuaEndToEndTests`, `Milestone3VaultEndToEndTests`; compatibility is documented
+in [scripting-compatibility.md](../scripting-compatibility.md) and checked by the conformance suites. New dependencies:
+QuickJS-NG, Lua, the Lua shim and `System.Security.Cryptography.ProtectedData` (see [dependencies.md](../dependencies.md)).
+
+Deferred (ADRs 0009 and 0010): C# and Python scripting, npm modules and `require`, a script debugger, a snippets sidebar,
+timers, `pm.vault`, `pm.execution.setNextRequest` and `pm.iterationData` (Runner, M6), JSON schema assertions, the cookie jar and
+a Cookies tab (milestone 4 or later), `pm.request.auth`, creating a secret from the variable popup, a helper that moves auth
+fields to secret variables, changing the vault passphrase or protector, sharing secrets between machines, request-level
+variables, importing Postman scripts (M5).
+
+Still open in M3: M3-68 (WinUI visual verification). Runtime checks not run by hand: the real macOS Keychain and Linux
+`secret-tool` protectors (M3-49), the Avalonia vault windows end to end (M3-63), and the interactive and send steps of the folder
+scripts dialogs (M3-52, M3-59; the send itself is covered by the end-to-end tests). The Linux and macOS native builds are built by
+CI only (M3-15). M3 is closed when M3-68 is done.
 
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |
 |---|---|---|
 | M2 | Full request editor, collections, environments, history, command palette | detailed (77 cards, see above) |
-| M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above; summary written by M3-67) |
+| M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above) |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | planned |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | planned |
 | M6 | Automation (Runner, load tests, mock servers, monitors) | planned |

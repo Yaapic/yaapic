@@ -97,3 +97,32 @@ values are written to the vault and blanked in the YAML. Scripts read and write 
 Only `System.Security.Cryptography` (AES-GCM, PBKDF2, `ProtectedData` on Windows), `System.Text.Json` source generators
 and `Process` (for `secret-tool`) are used: no reflection, no new package except `System.Security.Cryptography.ProtectedData`
 on Windows (M3-48).
+
+## Implementation notes (M3)
+
+Deviations and details found while building milestone 3 (read from the notes of the M3 cards and checked against the code):
+
+- **`IKeyProtector`.** The port is `Id`, `RequiresPassphrase`, `IsAvailable(out reason)`, `Wrap(ReadOnlySpan<byte> dataKey,
+  string workspaceId)` returning a `WrappedKey(Bytes, Kdf)` and `Unwrap(WrappedKey, string workspaceId)`, not `byte[]` in and out;
+  the KDF parameters travel with the wrapped key. `IKeyProtectorFactory` lists the available protectors (platform first,
+  passphrase last) and creates one by id.
+- **File.** The `kdf` object is `{ "algorithm": "pbkdf2-sha512", "iterations": 600000, "salt": "<base64>" }` (16-byte salt) and is
+  `null` for the other protectors; `kind` is the enum name and `owner` a "D" GUID. Reading refuses a different `version`.
+- **DPAPI** (M3-48). `ProtectedData` with `DataProtectionScope.CurrentUser`; off Windows `IsAvailable` is false and `Wrap`/`Unwrap`
+  throw `VaultException`. A Windows build of either app offers DPAPI and the passphrase.
+- **Keychain** (M3-49). The legacy `SecKeychainAddGenericPassword`, `SecKeychainFindGenericPassword`, `SecKeychainItemDelete` and
+  `SecKeychainItemFreeContent` functions (plus `CFRelease`) are used instead of the CFDictionary-based `SecItem*` API, which
+  needs far more CoreFoundation P/Invokes. The wrapped key bytes are the markers `keychain-v1` and `secret-service-v1`.
+  `ProcessSecretTool` runs `secret-tool` with `ArgumentList` (key on stdin only, 5 s timeout). `Yaapic.Infrastructure` has
+  `AllowUnsafeBlocks` for the `LibraryImport` generator.
+- **Wiring.** `AppComposition.CreateShell` takes the platform `IKeyProtectorFactory`: the WinUI app and the Avalonia app on
+  Windows pass `DpapiKeyProtectorFactory`, the Avalonia app elsewhere passes `UnixKeyProtectorFactory`; with none the
+  passphrase protector is the only choice. The Secret Service fallback to `passphrase` is the factory's job.
+- **Redaction.** `SecretRedactor` matches values as written, case-sensitive, longest first, for values of at least 4
+  characters; it is applied to console entries, test names and messages and script errors by `ScriptedRequestSender`.
+- **Defect fixed in M3-56.** `RequestEditorViewModel.UsesLockedSecret` only looked at the URL, raw body and headers, so a
+  locked secret used in a query parameter, an auth field or a form field was sent empty without the "Vault is locked"
+  warning. It now checks every text the resolver substitutes.
+- **Not run on the target OS.** The real macOS Keychain path and the real Linux `secret-tool` path (both need a manual run), and
+  the Avalonia vault runtime check of M3-63 (setup, masking, restart, lock, wrong passphrase).
+- **Auth fields.** Auth fields stay plain text (as decided); a secret variable referenced as `{{name}}` is the supported way.

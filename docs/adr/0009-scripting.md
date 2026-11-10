@@ -148,3 +148,36 @@ Python and C# scripting, `require` of npm modules, script debugging and breakpoi
 (`setTimeout`), collection-run integration, importing Postman scripts (milestone 5; they stay JavaScript).
 
 See [scripting-compatibility.md](../scripting-compatibility.md) for the supported `pm` surface and the differences from Postman.
+
+## Implementation notes (M3)
+
+Deviations and details found while building milestone 3 (read from the notes of the M3 cards and checked against the code):
+
+- **Host operations.** `HostOps` has `var.get`, `var.set`, `var.unset`, `var.has`, `var.clear`, `var.list`, `var.replace`, `req.get`,
+  `req.set`, `res.get`, `info.get`, `console`, `console.plain`, `test`, `send`, `cookies` and `unsupported`. Every
+  `pm.<name> is not supported in Yaapic` error goes through `unsupported`.
+- **Native libraries.** They are copied next to the executable by an MSBuild target of `Yaapic.Scripting` (not into
+  `runtimes/<rid>/native` as first written); `NativeLibraryResolver` tries the application directory, then
+  `runtimes/<rid>/native`. The target runs `pwsh native/Build-Natives.ps1` when `artifacts/native/<rid>` is missing. Only
+  `win-x64` was built and run by hand; Linux and macOS are built by CI.
+- **QuickJS.** Intrinsics: base objects, `Date`, `eval`, `RegExp`, `JSON`, `Proxy`, `Map`/`Set`, typed arrays, `Promise`. No
+  `std`, `os`, module loader, `BigInt`, `WeakRef` or `DOMException`. 64-bit only (32-bit processes are refused). The JavaScript
+  stack limit is 256 KiB so that it fits the 1 MB stack of a secondary thread on Windows.
+- **Lua shim.** A Lua error is a `longjmp` and must not cross a managed frame under Native AOT, so `native/lua/yaapic_lua.c`
+  exposes a non-raising `yl_*` API (see [dependencies.md](../dependencies.md)); it owns the memory limit, the deadline and cancel
+  hook and the traceback. `print` and `warn` are removed in addition to the functions listed above, `collectgarbage` only
+  accepts `"count"`, chunks load in text mode only, and out of memory is reported even when a script catches the error with
+  `pcall`. After a timeout or a cancel the hook fires at every instruction, so `pcall` cannot swallow it.
+- **Sandbox surface.** The `pm.info` object has `iteration: 0` and `iterationCount: 1`; `pm.environment.name` is not supported.
+- **Redaction.** Console entries, test results and script errors are redacted by `ScriptedRequestSender` (ADR 0010).
+- **Persisting variable changes.** `ApplyChangesAsync` silently skips changes whose name is not a creatable variable name, and
+  saving an environment or the globals also saves the unsaved edits of the same scope held by an open dialog.
+- **Script template.** The editors show a template for an empty block; a block whose source equals the template (or is blank)
+  is empty and the template is never persisted.
+- **Lua tests.** Test durations are recorded as 0 ms in Lua.
+- **WinUI editor.** Ctrl+Enter inside the script editor does not send (the editor consumes it); undo history is not kept across
+  the pre-request and post-response phases.
+- **Lua highlighting.** LoomEditor 0.5.0 had no Lua grammar, so Lua was plain text in the editors at first; 0.6.0 ships it and
+  both editors highlight Lua.
+- **Not verified on every OS.** The Linux and macOS native builds and the Avalonia runtime checks were not run by hand (see the
+  Notes of M3-15, M3-49 and M3-63).

@@ -1,6 +1,6 @@
 # M3-67: Milestone 3 docs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-64, M3-65, M3-66, M3-32, M3-49
 
@@ -40,9 +40,9 @@ New features; screenshots (M3-68).
 
 ## Acceptance criteria
 
-- [ ] Every document above matches the code (spot-check each claim against the source; list what was checked in Notes).
-- [ ] `docs/tasks/README.md` has the M3 table, summary and deferred list; no card of M3 left with a wrong status.
-- [ ] 0 warnings, all tests green.
+- [x] Every document above matches the code (spot-check each claim against the source; list what was checked in Notes).
+- [x] `docs/tasks/README.md` has the M3 table, summary and deferred list; no card of M3 left with a wrong status.
+- [x] 0 warnings, all tests green (documentation only: no code or project file changed, so no build or test run was needed).
 
 ## Rules
 
@@ -59,3 +59,15 @@ New features; screenshots (M3-68).
 ## Suggested commit message
 
 `docs: add milestone 3 docs and summary`
+
+## Notes
+
+Documentation only. Checked against the source: the scripted flow (`ScriptedRequestSender`, `ScriptedSendReport`, `ScriptSendServices`,
+`VariableScopeProvider` as `IScriptVariableApplier`, `CollectionTreeScriptChainProvider`, composition in `AppComposition`); the host
+operations (`HostOps`); `ScriptLimits.Default`; the vault (`ISecretVault`, `IKeyProtector`, `IKeyProtectorFactory`, `WrappedKey`,
+`FileSecretVault` and its `VaultFileDto`, `SecretCipher` associated data, `PassphraseKdf` 600 000 iterations, `DefaultVaultLocation`,
+`Workspace.ReadWorkspaceId`, `SecretRedactor` length >= 4, `UnixKeyProtectorFactory`, protector ids); the secret flag only on variable
+lists (`KeyValueMapper`); the native build target of `Yaapic.Scripting.csproj`; package versions against `Directory.Packages.props` and
+`native/versions.json`. Fixed differences: `IKeyProtector` signature and the `kdf` shape in the ADR notes, the history file text that still
+said secrets arrive "in M3", `pm.info.iterationCount`, the JavaScript and Lua standard library notes. The JavaScript and Lua tables of
+`scripting-compatibility.md` were spot-checked (unsupported members, `pm.environment.name`, `jar()`), not re-run.

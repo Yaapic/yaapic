@@ -106,6 +106,33 @@ variables:
     secret: true
 ```
 
+Only variable lists carry the flag: it is ignored on read and never written for request params, headers or form fields.
+Auth fields (`password`, `token`, API key value) are not secret-aware: they stay plain text. Write `{{name}}` in the
+field and define `name` as a secret variable instead.
+
+## Vault file (per user, not part of the workspace)
+
+`<user data dir>/Yaapic/vaults/<workspaceId>.vault` (`%APPDATA%` on Windows, `~/Library/Application Support` on macOS,
+`$XDG_DATA_HOME` or `~/.local/share` on Linux). It is written by the application only, never hand-edited and never
+committed; the file is replaced atomically (temp file, then move) and is `0600` on Unix. It is indented JSON
+(`System.Text.Json` source generators, camelCase keys), see [ADR 0010](adr/0010-secret-vault.md):
+
+```json
+{
+  "version": 1,
+  "protector": "passphrase",
+  "wrappedKey": "<base64>",
+  "kdf": { "algorithm": "pbkdf2-sha512", "iterations": 600000, "salt": "<base64>" },
+  "entries": [
+    { "kind": "Environment", "owner": "6f1c...", "name": "token", "nonce": "<base64>", "ciphertext": "<base64>", "tag": "<base64>" }
+  ]
+}
+```
+
+`protector` is `passphrase`, `dpapi`, `keychain` or `secret-service`; `kdf` is `null` unless the protector is
+`passphrase`. `kind` is `Environment`, `Collection` (top-level folder id) or `Globals` (owner is the empty GUID).
+A different `version` is refused.
+
 ## Variable precedence
 
 Highest first: active environment, collection variables, globals, dynamic variables.
@@ -122,8 +149,8 @@ committed, not hand-edited:
 `id` is a GUID ("D"), `at` a UTC ISO 8601 round-trip timestamp, `request` the request as a YAML string written by
 `RequestYamlSerializer`, `failureKind` an enum name or null. Response bodies are not stored. Retention: the last 500
 entries; the file is rewritten when it exceeds 550 lines. It keeps the request as sent and may hold credentials, which
-is why `.yaapic/` is git-ignored. Auth values and variables are stored in clear in the workspace until the secret vault
-(M3).
+is why `.yaapic/` is git-ignored. Requests keep their `{{templates}}`, so the value of a secret variable is never
+stored; an auth value or other field typed literally is stored in clear (see "Secret variables").
 
 ## Environment file
 

@@ -13,8 +13,12 @@ Every third-party dependency needs a written justification here before it is add
 | Microsoft.Windows.SDK.BuildTools | 10.0.26100.7463 | Yaapic.App.WinUI | Build-time tooling required by Windows App SDK projects. Not shipped. |
 | QuickJS-NG | v0.18.0 | Yaapic.Scripting | JavaScript engine (ADR 0001, ADR 0009). MIT. Native library built from source by `native/Build-Natives.ps1`, shipped next to the exe, loaded with `LibraryImport`. |
 | Lua | 5.4.8 | Yaapic.Scripting | Lua engine (ADR 0001, ADR 0009). MIT. Native library built from source by `native/Build-Natives.ps1`, shipped next to the exe, loaded with `LibraryImport`. |
+| Lua shim (`native/lua/yaapic_lua.c`) | in repo | Yaapic.Scripting | Not a package: our own C file compiled into the `lua54` library (M3-24). A Lua error is a `longjmp`, which must not cross a managed frame under Native AOT, so the bindings call only its non-raising `yl_*` functions. |
+| System.Security.Cryptography.ProtectedData | 10.0.14 | Yaapic.Infrastructure | Windows DPAPI key protector of the secret vault (ADR 0010, M3-48). MIT, first-party. See "Secret vault" below. |
 
 Milestone 2 (editor, collections, environments, history, command palette) added the two code editor packages above (`LoomEditor.WinUI`, `LoomEditor.Avalonia`). Both moved to 0.6.0 after milestone 3 for the bundled Lua grammar (script editors highlight JavaScript and Lua).
+
+Milestone 3 (scripting, secret vault): added QuickJS-NG v0.18.0, Lua 5.4.8 (native libraries built from pinned sources, plus the Lua shim) and `System.Security.Cryptography.ProtectedData` 10.0.14. AES-GCM, PBKDF2 and `System.Text.Json` come from the framework. `LoomEditor.*` 0.6.0 is the Milestone 2 package at a newer version (bundled Lua grammar).
 
 ## Native libraries (M3-15)
 
@@ -26,6 +30,10 @@ licence file. `native/Build-Natives.ps1` (PowerShell 7, Windows, Linux and macOS
 `native/THIRD-PARTY-NOTICES.md` next to every app build and publish. No binary is committed.
 
 `native/lua/yaapic_lua.c` (M3-24) is compiled into the `lua54` library. A Lua error is a `longjmp`, which must never cross a managed frame under Native AOT, so the bindings call only the non-raising `yl_*` shim (`yl_new`, `yl_close`, `yl_open_libs`, `yl_set_host`, `yl_set_limits`, `yl_last_abort`, `yl_run`, `yl_alloc`, `yl_free`, `yl_now_ms`), never the Lua API itself. The shim owns the memory-limited allocator, the restricted library set, the deadline and cancel hook and the traceback handler. `Build-Natives.ps1` rebuilds when the shim changes.
+
+Native AOT: `tools/NativeSmoke` and `Yaapic.App.WinUI` publish with 0 IL2xxx/IL3xxx and run the engines (M3-16, M3-24).
+Only `win-x64` was built and run locally; the `linux-x64` and `osx-arm64` builds (clang, `libqjs.so`/`libqjs.dylib`,
+`install_name_tool`) are covered by CI but were not verified by hand (M3-15 Notes).
 
 To update a version: change `tag`, `url`, `archive`, `folder` and `sha256` in `native/versions.json` (compute the hash
 with `Get-FileHash`), update `native/THIRD-PARTY-NOTICES.md` and the rows above, then run
