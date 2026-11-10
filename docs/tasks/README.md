@@ -291,7 +291,7 @@ not run in their Notes.
 | [M3-59](milestone-3-scripting/M3-59-avalonia-folder-scripts-window.md) | Avalonia: scripts in the folder and collection settings window | unix | M3-40, M3-58 | done |
 | [M3-60](milestone-3-scripting/M3-60-avalonia-console-panel-and-status-bar.md) | Avalonia: status bar and console panel | unix | M3-47, M3-53 | done |
 | [M3-61](milestone-3-scripting/M3-61-avalonia-tests-tab-in-response.md) | Avalonia: Tests tab and script errors in the response panel | unix | M3-42, M3-47, M3-54 | done |
-| [M3-62](milestone-3-scripting/M3-62-avalonia-secret-variables-in-tables.md) | Avalonia: secret variables in the variable tables and popup | unix | M3-46, M3-47, M3-55 | todo |
+| [M3-62](milestone-3-scripting/M3-62-avalonia-secret-variables-in-tables.md) | Avalonia: secret variables in the variable tables and popup | unix | M3-46, M3-47, M3-55 | done |
 | [M3-63](milestone-3-scripting/M3-63-avalonia-vault-windows-and-status.md) | Avalonia: vault windows, status bar item and platform protector wiring | unix | M3-45, M3-49, M3-60, M3-62, M3-56 | todo |
 | [M3-64](milestone-3-scripting/M3-64-end-to-end-javascript-scripting.md) | End-to-end tests: JavaScript scripting | any | M3-47, M3-44, M3-23 | todo |
 | [M3-65](milestone-3-scripting/M3-65-end-to-end-lua-scripting.md) | End-to-end tests: Lua scripting and mixed languages | any | M3-64, M3-32 | todo |
