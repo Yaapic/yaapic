@@ -25,9 +25,16 @@ public sealed class InMemoryCollectionStore(InMemoryRequestStore requests) : ICo
                     .Concat(all.Where(r => ParentOfRequest(r.Id) == parent).Select(CollectionNode.ForRequest)));
     }
 
+    /// <summary>Gets the number of <see cref="SaveFolderAsync"/> calls.</summary>
+    public int SaveFolderCount { get; private set; }
+
+    /// <summary>Sets <see cref="SaveFolderCount"/> back to zero.</summary>
+    public void ResetSaveCount() => SaveFolderCount = 0;
+
     /// <inheritdoc/>
     public Task SaveFolderAsync(FolderDefinition folder, Guid? parentId, CancellationToken ct)
     {
+        SaveFolderCount++;
         if (_folders.ContainsKey(folder.Id))
             _folders[folder.Id] = folder;
         else

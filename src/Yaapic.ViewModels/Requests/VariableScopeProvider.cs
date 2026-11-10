@@ -1,3 +1,4 @@
+using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Editing;
@@ -6,12 +7,13 @@ using Yaapic.ViewModels.Environments;
 namespace Yaapic.ViewModels.Requests;
 
 /// <summary>Combines the active environment, the request's collection and the globals.</summary>
-public sealed class VariableScopeProvider : IVariableScopeProvider
+public sealed class VariableScopeProvider : IVariableScopeProvider, IScriptVariableApplier
 {
     private readonly EnvironmentsViewModel _environments;
     private readonly GlobalsViewModel _globals;
     private readonly CollectionTreeViewModel _collections;
     private EnvironmentItemViewModel? _watched;
+    private bool _batching;
 
     /// <summary>Creates the provider.</summary>
     /// <param name="environments">Provides the active environment.</param>
@@ -76,11 +78,66 @@ public sealed class VariableScopeProvider : IVariableScopeProvider
             return "This scope is not available for the request.";
         }
 
+        return await ApplyScopeAsync(requestId, scope, [new VariableChange(scope, name, value)]);
+    }
+
+    /// <inheritdoc/>
+    public async Task<string?> UnsetVariableAsync(Guid requestId, VariableScopeKind scope, string name)
+    {
+        ArgumentNullException.ThrowIfNull(name);
+        name = name.Trim();
+        if (!VariableContext.IsCreatableName(name))
+        {
+            return "The variable name is not valid.";
+        }
+
+        if (!GetWritableScopes(requestId).Contains(scope))
+        {
+            return "This scope is not available for the request.";
+        }
+
+        return await ApplyScopeAsync(requestId, scope, [new VariableChange(scope, name, null)]);
+    }
+
+    /// <inheritdoc/>
+    public async Task<IReadOnlyList<string>> ApplyChangesAsync(Guid requestId, IReadOnlyList<VariableChange> changes)
+    {
+        ArgumentNullException.ThrowIfNull(changes);
+        var writable = GetWritableScopes(requestId);
+        List<string> errors = [];
+        _batching = true;
+        try
+        {
+            foreach (var group in changes.Where(c => writable.Contains(c.Scope)).GroupBy(c => c.Scope))
+            {
+                var valid = group.Where(c => VariableContext.IsCreatableName(c.Name.Trim())).ToList();
+                if (valid.Count > 0 && await ApplyScopeAsync(requestId, group.Key, valid) is { } error)
+                {
+                    errors.Add(error);
+                }
+            }
+        }
+        finally
+        {
+            _batching = false;
+        }
+
+        Raise();
+        return errors;
+    }
+
+    /// <inheritdoc/>
+    Task<IReadOnlyList<string>> IScriptVariableApplier.ApplyAsync(Guid requestId, IReadOnlyList<VariableChange> changes) =>
+        ApplyChangesAsync(requestId, changes);
+
+    // Applies every change to the scope's editor first, then saves once.
+    private async Task<string?> ApplyScopeAsync(Guid requestId, VariableScopeKind scope, IReadOnlyList<VariableChange> changes)
+    {
         switch (scope)
         {
             case VariableScopeKind.Environment:
                 var item = _environments.ActiveEnvironment!;
-                Upsert(item.Variables, name, value);
+                Apply(item.Variables, changes);
                 await _environments.SaveCommand.ExecuteAsync(item);
                 return _environments.LastError;
             case VariableScopeKind.Globals:
@@ -89,21 +146,39 @@ public sealed class VariableScopeProvider : IVariableScopeProvider
                     return _globals.LastError ?? "The global variables cannot be saved.";
                 }
 
-                Upsert(_globals.Variables, name, value);
+                Apply(_globals.Variables, changes);
                 await _globals.SaveCommand.ExecuteAsync(null);
                 return _globals.LastError;
             default:
-                return await SetCollectionVariableAsync(requestId, name, value);
+                return await SaveCollectionAsync(requestId, changes);
+        }
+    }
+
+    private static void Apply(KeyValueEditorViewModel editor, IReadOnlyList<VariableChange> changes)
+    {
+        foreach (var change in changes)
+        {
+            var name = change.Name.Trim();
+            if (change.Value is { } value)
+            {
+                Upsert(editor, name, value);
+                continue;
+            }
+
+            foreach (var row in editor.Rows.Where(r => !r.IsEmpty && r.Key == name).ToList())
+            {
+                editor.RemoveRowCommand.Execute(row);
+            }
         }
     }
 
     // The collection is written through a FolderSettingsViewModel (as the settings dialog does), then the tree is
     // reloaded so ScopesChanged fires with the saved value.
-    private async Task<string?> SetCollectionVariableAsync(Guid requestId, string name, string value)
+    private async Task<string?> SaveCollectionAsync(Guid requestId, IReadOnlyList<VariableChange> changes)
     {
         var folder = _collections.FindCollection(requestId)!;
         var editor = new FolderSettingsViewModel(folder, isCollection: true, _collections.Store);
-        Upsert(editor.Variables, name, value);
+        Apply(editor.Variables, changes);
         await editor.SaveCommand.ExecuteAsync(null);
         if (editor.LastError is { } error)
         {
@@ -132,5 +207,11 @@ public sealed class VariableScopeProvider : IVariableScopeProvider
 
     private void OnEnvironmentVariablesChanged(object? sender, EventArgs e) => Raise();
 
-    private void Raise() => ScopesChanged?.Invoke(this, EventArgs.Empty);
+    private void Raise()
+    {
+        if (!_batching)
+        {
+            ScopesChanged?.Invoke(this, EventArgs.Empty);
+        }
+    }
 }

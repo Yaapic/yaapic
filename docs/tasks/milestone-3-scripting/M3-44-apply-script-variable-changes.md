@@ -1,6 +1,6 @@
 # M3-44: Persist the variable changes made by scripts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-43, M3-08
 
@@ -35,12 +35,12 @@ Conflict handling with a dialog open, undo of script writes, a "variables change
 
 ## Acceptance criteria
 
-- [ ] Tests with the real view models and in-memory stores: set then read back through `GetScopes` for each scope; unset
+- [x] Tests with the real view models and in-memory stores: set then read back through `GetScopes` for each scope; unset
       removes the row; 5 changes to the environment save once (count store writes); mixed scopes save once each; non-writable
       scope skipped; store failure returns a message for that scope only and the other scopes still save; existing secret row
       keeps `IsSecret`; `ScopesChanged` raised exactly once per `ApplyChangesAsync`; the end-to-end case: a pre-request script
       (fake engine calling the host) sets an environment variable and the next `Tokenize` of the URL shows it resolved.
-- [ ] 0 warnings, XML docs, all tests green.
+- [x] 0 warnings, XML docs, all tests green.
 
 ## Rules
 
@@ -57,3 +57,8 @@ Conflict handling with a dialog open, undo of script writes, a "variables change
 ## Suggested commit message
 
 `feat(viewmodels): persist variable changes made by scripts`
+
+## Notes
+
+- Saving the environment or globals also saves unsaved edits of the same scope held by an open dialog (same limitation as M2-71).
+- `ApplyChangesAsync` silently skips changes whose name is not a creatable variable name.
