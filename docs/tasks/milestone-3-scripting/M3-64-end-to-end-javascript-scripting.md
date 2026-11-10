@@ -1,6 +1,6 @@
 # M3-64: End-to-end tests: JavaScript scripting
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M3-47, M3-44, M3-23
 
@@ -50,9 +50,9 @@ Lua (M3-65), vault (M3-66), UI automation, performance tests.
 
 ## Acceptance criteria
 
-- [ ] The ten scenarios pass on Windows and Linux runners (macOS too when its CI job runs the suite).
-- [ ] Existing end-to-end tests untouched and green; 0 warnings.
-- [ ] No leaked `yaapic-js` threads after the suite (assert thread count with a small tolerance in one test).
+- [x] The ten scenarios pass on Windows and Linux runners (macOS too when its CI job runs the suite).
+- [x] Existing end-to-end tests untouched and green; 0 warnings.
+- [x] No leaked `yaapic-js` threads after the suite (assert thread count with a small tolerance in one test).
 
 ## Rules
 

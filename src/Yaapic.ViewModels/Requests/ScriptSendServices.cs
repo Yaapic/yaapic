@@ -8,8 +8,10 @@ namespace Yaapic.ViewModels.Requests;
 /// <param name="Chains">Gives the scripts inherited from the collection and folders.</param>
 /// <param name="Console">Receives the script output and network lines.</param>
 /// <param name="Variables">Persists the variable changes made by scripts.</param>
+/// <param name="Limits">The script limits; <see langword="null"/> means the defaults.</param>
 public sealed record ScriptSendServices(
     ScriptedRequestSender Sender,
     IScriptChainProvider Chains,
     ConsoleViewModel Console,
-    IScriptVariableApplier Variables);
+    IScriptVariableApplier Variables,
+    ScriptLimits? Limits = null);

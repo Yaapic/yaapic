@@ -31,13 +31,14 @@ public static class AppComposition
     public static ShellViewModel CreateShell(string workspaceRoot, IDialogService dialogs, IKeyProtectorFactory? platformProtectors = null) =>
         CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(), [new QuickJsEngine(), new LuaEngine()]);
 
-    // The seam of the tests: another vault location and other engines.
+    // The seam of the tests: another vault location, other engines and other script limits.
     internal static ShellViewModel CreateShell(
         string workspaceRoot,
         IDialogService dialogs,
         IKeyProtectorFactory? platformProtectors,
         IVaultLocation vaultLocation,
-        IEnumerable<IScriptEngine> scriptEngines)
+        IEnumerable<IScriptEngine> scriptEngines,
+        ScriptLimits? limits = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workspaceRoot);
         ArgumentNullException.ThrowIfNull(dialogs);
@@ -79,7 +80,7 @@ public static class AppComposition
         var collections = new CollectionTreeViewModel(
             new SecretAwareCollectionStore(new FileCollectionStore(workspaceRoot), vault), requestStore, tabs, dialogs, vaultViewModel);
         scopes = new VariableScopeProvider(environments, globals, collections);
-        scripting = new ScriptSendServices(scriptedSender, new CollectionTreeScriptChainProvider(collections), console, scopes);
+        scripting = new ScriptSendServices(scriptedSender, new CollectionTreeScriptChainProvider(collections), console, scopes, limits);
         var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines);
         reloader.Target = shell;
         shell.AttachPalette(new CommandPaletteViewModel(

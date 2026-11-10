@@ -1,0 +1,125 @@
+using System.Text;
+using System.Text.Json;
+using Yaapic.Composition;
+using Yaapic.Core.Scripting;
+using Yaapic.Domain.Scripting;
+using Yaapic.Infrastructure.Secrets;
+using Yaapic.Scripting.QuickJs;
+using Yaapic.TestDoubles;
+using Yaapic.ViewModels.Console;
+using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Shell;
+
+namespace Yaapic.Infrastructure.Tests.EndToEnd;
+
+/// <summary>
+/// A temporary workspace written as YAML files (so the file format is exercised), a vault location outside the real user
+/// data, and shells composed with the real QuickJS engine.
+/// </summary>
+internal sealed class ScriptedShellFixture : IDisposable
+{
+    private readonly string _vaults = Path.Combine(Path.GetTempPath(), "yaapic-e2e3-vaults-" + Guid.NewGuid().ToString("N"));
+
+    public ScriptedShellFixture() => Root = Path.Combine(Path.GetTempPath(), "yaapic-e2e3-" + Guid.NewGuid().ToString("N"));
+
+    public string Root { get; }
+
+    public void Dispose()
+    {
+        TempWorkspace.Delete(Root);
+        TempWorkspace.Delete(_vaults);
+    }
+
+    /// <summary>Gets a path under the workspace root.</summary>
+    public string PathOf(params string[] parts) => Path.Combine([Root, .. parts]);
+
+    /// <summary>Writes a folder file; <paramref name="folderPath"/> is relative to <c>requests</c>.</summary>
+    public void WriteFolder(string folderPath, string name, string? pre = null, string? post = null, string variables = "[]")
+    {
+        var yaml = $"version: 1\nid: {Guid.NewGuid():D}\nname: {name}\ndescription: \"\"\nvariables: {variables}\n{ScriptsYaml(pre, post)}";
+        Write(PathOf("requests", folderPath, "folder.yaml"), yaml);
+    }
+
+    /// <summary>Writes a request file and returns its id.</summary>
+    public Guid WriteRequest(string folderPath, string name, string url, string? pre = null, string? post = null, params (string Key, string Value)[] headers)
+    {
+        var id = Guid.NewGuid();
+        var headerYaml = headers.Length == 0
+            ? "headers: []\n"
+            : "headers:\n" + string.Concat(headers.Select(h => $"- key: {Quote(h.Key)}\n  value: {Quote(h.Value)}\n  enabled: true\n"));
+        var yaml = $"version: 1\nid: {id:D}\nname: {name}\nmethod: GET\nurl: {Quote(url)}\nparams: []\n{headerYaml}{ScriptsYaml(pre, post)}";
+        Write(PathOf("requests", folderPath, name.ToLowerInvariant().Replace(' ', '-') + ".request.yaml"), yaml);
+        return id;
+    }
+
+    /// <summary>Writes an environment file.</summary>
+    public void WriteEnvironment(string name, params (string Key, string Value)[] variables)
+    {
+        var rows = variables.Length == 0
+            ? "variables: []\n"
+            : "variables:\n" + string.Concat(variables.Select(v => $"- key: {Quote(v.Key)}\n  value: {Quote(v.Value)}\n  enabled: true\n"));
+        Write(PathOf("environments", name.ToLowerInvariant() + ".env.yaml"), $"version: 1\nid: {Guid.NewGuid():D}\nname: {name}\n{rows}");
+    }
+
+    /// <summary>Composes a shell with the real QuickJS engine and initializes it.</summary>
+    public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null)
+    {
+        var shell = AppComposition.CreateShell(Root, new FakeDialogService(), null, new TempVaultLocation(_vaults), [new QuickJsEngine()], limits);
+        await shell.InitializeAsync();
+        var unavailable = shell.ScriptEngineWarnings.FirstOrDefault(w => w.StartsWith("JavaScript", StringComparison.Ordinal));
+        Assert.True(
+            unavailable is null,
+            "The QuickJS-NG native library is missing (" + unavailable + "). Run 'pwsh native/Build-Natives.ps1 -Rid <rid>' to build it.");
+        return shell;
+    }
+
+    /// <summary>Opens a saved request in a tab and returns the tab.</summary>
+    public static RequestEditorViewModel Open(ShellViewModel shell, Guid id)
+    {
+        shell.Collections.OpenRequest(id);
+        return shell.Tabs.Tabs.Single(t => t.Id == id);
+    }
+
+    /// <summary>Parses the echoed JSON body of a completed response.</summary>
+    public static JsonElement Json(RequestEditorViewModel tab)
+    {
+        Assert.Equal(ResponseState.Completed, tab.Response.State);
+        return JsonDocument.Parse(tab.Response.BodyText).RootElement;
+    }
+
+    /// <summary>Gets the messages of the console lines of the given kind, in order.</summary>
+    public static string[] Messages(ShellViewModel shell, ConsoleLineKind kind) =>
+        [.. shell.Console.Lines.Where(l => l.Kind == kind).Select(l => l.Message)];
+
+    private static string ScriptsYaml(string? pre, string? post) =>
+        "scripts:\n  preRequest:\n    language: javascript\n" + Block(pre) + "  postResponse:\n    language: javascript\n" + Block(post);
+
+    private static string Block(string? source)
+    {
+        if (string.IsNullOrEmpty(source))
+        {
+            return "    source: \"\"\n";
+        }
+
+        var lines = source.Replace("\r\n", "\n").TrimEnd('\n').Split('\n');
+        return "    source: |\n" + string.Concat(lines.Select(l => "      " + l + "\n"));
+    }
+
+    private static string Quote(string value) => "\"" + value.Replace("\\", "\\\\", StringComparison.Ordinal).Replace("\"", "\\\"", StringComparison.Ordinal) + "\"";
+
+    private static void Write(string path, string content)
+    {
+        Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+        File.WriteAllText(path, content, new UTF8Encoding(false));
+    }
+
+    private sealed class TempVaultLocation(string directory) : IVaultLocation
+    {
+        public string GetVaultPath(string workspaceId)
+        {
+            Directory.CreateDirectory(directory);
+            return Path.Combine(directory, workspaceId + ".vault");
+        }
+    }
+}

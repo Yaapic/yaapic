@@ -294,9 +294,15 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             _scopes.GetScopes(Id),
             services.Chains.GetAncestors(Id).WithRequest(DisplayName, Scripts.ToSet()),
             writable.Contains(VariableScopeKind.Environment),
-            writable.Contains(VariableScopeKind.Collection));
+            writable.Contains(VariableScopeKind.Collection),
+            services.Limits);
         var scripted = await services.Sender.SendAsync(input, ct);
         services.Console.AppendReport(scripted);
+        foreach (var warning in scripted.Warnings)
+        {
+            services.Console.AppendSystem(ConsoleLevel.Warn, warning);
+        }
+
         if (scripted.AbortedBy is { Status: ScriptRunStatus.Canceled })
         {
             // A canceled script is a canceled send, not a script failure.
