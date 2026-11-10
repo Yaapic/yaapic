@@ -1,6 +1,6 @@
 # M3-49: macOS Keychain and Linux Secret Service key protectors
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M3-36, M3-47
 
@@ -40,12 +40,12 @@ Windows, Avalonia dialogs (M3-63), keyring other than Secret Service (KWallet wi
 
 ## Acceptance criteria
 
-- [ ] Tests with the seams: wrap/unwrap logic, error mapping, unavailable reasons (no `secret-tool`, probe failure, non-macOS),
+- [x] Tests with the seams: wrap/unwrap logic, error mapping, unavailable reasons (no `secret-tool`, probe failure, non-macOS),
       factory ordering; on Linux CI a real `secret-tool` test is **skipped** (no D-Bus session on the runner) with a clear reason;
       on macOS CI the real round trip test runs.
-- [ ] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; AOT publish of `Yaapic.App.Avalonia` on the host RID without
+- [x] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; AOT publish of `Yaapic.App.Avalonia` on the host RID without
       new IL2xxx/IL3xxx (on Windows host the Unix code compiles but is unused: run the analyzers anyway).
-- [ ] Notes list what was verified on which OS and what still needs a macOS/Linux run.
+- [x] Notes list what was verified on which OS and what still needs a macOS/Linux run.
 
 ## Rules
 
@@ -62,3 +62,19 @@ Windows, Avalonia dialogs (M3-63), keyring other than Secret Service (KWallet wi
 ## Suggested commit message
 
 `feat(infrastructure): protect the vault key with Keychain and Secret Service`
+
+## Notes
+
+- Choice: the legacy `SecKeychainAddGenericPassword` / `SecKeychainFindGenericPassword` / `SecKeychainItemDelete` /
+  `SecKeychainItemFreeContent` functions (+ `CFRelease`), 5 blittable `LibraryImport` declarations, instead of the
+  CFDictionary-based `SecItem*` API (which needs far more CoreFoundation P/Invokes). `Infrastructure` now has
+  `AllowUnsafeBlocks` for the `LibraryImport` generator.
+- Seams: `IKeychainApi` (fake in tests) and `ISecretTool` (fake in tests; `ProcessSecretTool` runs `secret-tool` with
+  `ArgumentList`, 5 s timeout, key on stdin only). Wrapped key bytes are the markers `keychain-v1` / `secret-service-v1`.
+- Wiring: `App.axaml.cs` passes `UnixKeyProtectorFactory` to `AppComposition.CreateShell` off Windows (there is no
+  separate Avalonia `Program` composition point).
+- Verified on Windows only: build 0 warnings, 11 new tests with the fakes pass, AOT publish of `Yaapic.App.Avalonia`
+  (win-x64) with no new IL2xxx/IL3xxx and a clean start/stop smoke.
+- NOT run anywhere yet: the real macOS Keychain path (`SecKeychainApi`, `KeychainRealRoundTrip`, runs on macOS only) and
+  the real Linux `secret-tool` path (`ProcessSecretTool`, `SecretToolRealRoundTrip`, skipped on CI, needs a desktop
+  D-Bus session). Both need a manual run on the target OS.

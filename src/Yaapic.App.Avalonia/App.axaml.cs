@@ -3,6 +3,8 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Yaapic.App.Avalonia.Services;
 using Yaapic.Composition;
+using Yaapic.Core.Secrets;
+using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
 
 namespace Yaapic.App.Avalonia;
@@ -20,7 +22,7 @@ public sealed class App : Application
         {
             var options = CaptureOptions.Parse(desktop.Args ?? []);
             var window = new MainWindow();
-            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window));
+            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window), PlatformProtectors());
             window.DataContext = shell;
             if (options.Theme is { } theme)
             {
@@ -38,5 +40,9 @@ public sealed class App : Application
         }
         base.OnFrameworkInitializationCompleted();
     }
+
+    // The Unix factory covers macOS and Linux; Windows keeps the passphrase protector until the Avalonia app offers DPAPI.
+    private static IKeyProtectorFactory? PlatformProtectors() =>
+        OperatingSystem.IsWindows() ? null : new UnixKeyProtectorFactory();
 }
 
