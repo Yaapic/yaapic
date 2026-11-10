@@ -110,7 +110,7 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         "json" => "json",
         "xml" => "xml",
         "javascript" => "javascript",
-        // LoomEditor 0.5.0 bundles no Lua grammar (M3-50): Lua stays plain text until the package ships one.
+        "lua" => "lua",
         _ => "plaintext",
     };
 

@@ -45,9 +45,8 @@ The Scripts tab (M3-51), autocomplete of `pm.*`, linting, new colours, Avalonia 
 ## Notes
 
 - LoomEditor.WinUI 0.5.0 bundles csharp, css, html, javascript, json, markdown, python, typescript, xml and yaml: **no Lua grammar**.
-  `lua` therefore falls back to plain text (product decision to report: Lua scripts are uncoloured until the package ships a
-  grammar). `"javascript"` maps to the `javascript` grammar. `TextMap.ScriptLanguage` still returns `"lua"` so nothing changes in the
-  views once the package gains it (add one `"lua" => "lua"` arm in `ApplyLanguage`).
+  `lua` therefore fell back to plain text at the time. Update: LoomEditor.WinUI 0.6.0 ships the `lua` grammar and `ApplyLanguage`
+  now maps `"lua" => "lua"`, so Lua is highlighted with the existing syntax tokens. `"javascript"` maps to the `javascript` grammar.
 - Theme scope table added (existing tokens only): `keyword`, `storage` -> tag colour; `entity.name.function`, `support.function` ->
   attribute colour; `keyword.operator` -> punctuation colour (more specific than `keyword`). `constant.numeric`, `constant.language`,
   `string`, `comment`, `punctuation` were already mapped; `variable.*` keeps the primary text colour. Difference from the mockup: a

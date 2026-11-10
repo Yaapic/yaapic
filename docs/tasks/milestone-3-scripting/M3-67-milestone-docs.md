@@ -31,8 +31,8 @@ Bring every document in line with the code and close the milestone summary.
   `pm.vault`, `pm.execution.setNextRequest` (Runner, M6), JSON schema assertions, cookie jar and Cookies tab (milestone 4 or later),
   `pm.request.auth`, secret creation from the variable popup, auth-field secrets helper, changing the vault passphrase or protector,
   secret sharing between machines, request-level variables, Postman script import (M5).
-- Open item (M3-50): LoomEditor.WinUI 0.5.0 ships no Lua grammar, so Lua scripts are plain text in the WinUI editor; list it in the
-  summary and revisit when the package adds one.
+- Resolved (M3-50, M3-57): LoomEditor 0.5.0 shipped no Lua grammar, so Lua was plain text in the editors; 0.6.0 ships it and both
+  editors now highlight Lua (no open item, mention it only as history in the summary).
 
 ## Out of scope
 

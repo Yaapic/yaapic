@@ -34,7 +34,7 @@ The Scripts tab (M3-58), new colours, autocomplete.
 
 ## Notes
 
-- LoomEditor.Avalonia 0.5.0 (LoomEditor.TextMate) bundles no Lua grammar, same as WinUI: `"lua"` falls back to plain text (add one `"lua" => "lua"` arm in `ApplyLanguage` when the package ships it). `"javascript"` maps to the `javascript` grammar.
+- LoomEditor.Avalonia 0.5.0 (LoomEditor.TextMate) bundled no Lua grammar, same as WinUI, so `"lua"` was plain text. Update: 0.6.0 ships it and `ApplyLanguage` now has the `"lua" => "lua"` arm. `"javascript"` maps to the `javascript` grammar.
 - Theme scopes: the same additions as M3-50 (`keyword`, `storage` -> tag colour; `entity.name.function`, `support.function` -> attribute colour; `keyword.operator` -> punctuation colour).
 - `EditorMap` is now `partial`; `EditorMap.ScriptLanguage` lives in `EditorMap.Script.cs`, compiled into `Yaapic.ViewModels.Tests` (it needs no Avalonia type) for `EditorMapTests` (2 cases).
 - Runtime on Windows only (macOS/Linux not run): AOT publish `win-x64` 0 IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages). With a throwaway local hack (not committed: response editor forced to `javascript`, stub returning a JS sample) comments, keywords, strings, numbers and function names are coloured in dark and light. Real build: JSON response still coloured in light and unchanged. Lua not capturable (plain text). Exe and stub server stopped, nothing left running.
