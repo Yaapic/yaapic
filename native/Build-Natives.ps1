@@ -67,7 +67,8 @@ function Get-Source {
     if (-not (Test-Path $archive)) {
         New-Item -ItemType Directory -Force $srcDir | Out-Null
         Write-Host "Downloading $($Entry.url)"
-        Invoke-WebRequest -Uri $Entry.url -OutFile $archive
+        # Hosted runners sometimes time out on lua.org: retry before failing (the SHA-256 check below still guards the content).
+        Invoke-WebRequest -Uri $Entry.url -OutFile $archive -TimeoutSec 120 -MaximumRetryCount 5 -RetryIntervalSec 10
     }
     $actual = (Get-FileHash $archive -Algorithm SHA256).Hash.ToLowerInvariant()
     if ($actual -ne $Entry.sha256.ToLowerInvariant()) {

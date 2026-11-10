@@ -37,29 +37,29 @@ internal sealed class HostBridge(IScriptHost host, RunCollector collector)
         switch (op)
         {
             case HostOps.VarGet:
-            {
-                var a = Args(argsJson, HostJsonContext.Default.VarArgs);
-                return host.TryGetVariable(Scope(a), Name(a), out var v) ? Json(v, HostJsonContext.Default.String) : "null";
-            }
+                {
+                    var a = Args(argsJson, HostJsonContext.Default.VarArgs);
+                    return host.TryGetVariable(Scope(a), Name(a), out var v) ? Json(v, HostJsonContext.Default.String) : "null";
+                }
 
             case HostOps.VarHas:
-            {
-                var a = Args(argsJson, HostJsonContext.Default.VarArgs);
-                return Json(host.TryGetVariable(Scope(a), Name(a), out _), HostJsonContext.Default.Boolean);
-            }
+                {
+                    var a = Args(argsJson, HostJsonContext.Default.VarArgs);
+                    return Json(host.TryGetVariable(Scope(a), Name(a), out _), HostJsonContext.Default.Boolean);
+                }
 
             case HostOps.VarSet:
-            {
-                var a = Args(argsJson, HostJsonContext.Default.VarArgs);
-                host.SetVariable(Scope(a), Name(a), a.Value ?? "");
-                return "null";
-            }
+                {
+                    var a = Args(argsJson, HostJsonContext.Default.VarArgs);
+                    host.SetVariable(Scope(a), Name(a), a.Value ?? "");
+                    return "null";
+                }
 
             case HostOps.VarUnset:
-            {
-                var a = Args(argsJson, HostJsonContext.Default.VarArgs);
-                return Json(host.UnsetVariable(Scope(a), Name(a)), HostJsonContext.Default.Boolean);
-            }
+                {
+                    var a = Args(argsJson, HostJsonContext.Default.VarArgs);
+                    return Json(host.UnsetVariable(Scope(a), Name(a)), HostJsonContext.Default.Boolean);
+                }
 
             case HostOps.VarClear:
                 host.ClearVariables(Scope(Args(argsJson, HostJsonContext.Default.VarArgs)));
@@ -76,33 +76,33 @@ internal sealed class HostBridge(IScriptHost host, RunCollector collector)
             case HostOps.ResGet:
                 return host.Response is { } r ? Json(ToDto(r), HostJsonContext.Default.ResponseDto) : "null";
             case HostOps.InfoGet:
-            {
-                var i = host.Info;
-                return Json(new InfoDto(i.EventName, i.RequestName, i.RequestId.ToString(), i.Origin), HostJsonContext.Default.InfoDto);
-            }
+                {
+                    var i = host.Info;
+                    return Json(new InfoDto(i.EventName, i.RequestName, i.RequestId.ToString(), i.Origin), HostJsonContext.Default.InfoDto);
+                }
 
             case HostOps.Console:
-            {
-                var c = Args(argsJson, HostJsonContext.Default.ConsoleArgs);
-                collector.AddConsole(Enum.TryParse<ConsoleLevel>(c.Level, true, out var level) ? level : ConsoleLevel.Log, c.Text);
-                return "null";
-            }
+                {
+                    var c = Args(argsJson, HostJsonContext.Default.ConsoleArgs);
+                    collector.AddConsole(Enum.TryParse<ConsoleLevel>(c.Level, true, out var level) ? level : ConsoleLevel.Log, c.Text);
+                    return "null";
+                }
 
             case HostOps.ConsolePlain:
-            {
-                // "level\ntext": the Lua prelude has no JSON codec yet.
-                var split = argsJson.IndexOf('\n');
-                var level = split < 0 ? "" : argsJson[..split];
-                collector.AddConsole(Enum.TryParse<ConsoleLevel>(level, true, out var l) ? l : ConsoleLevel.Log, split < 0 ? argsJson : argsJson[(split + 1)..]);
-                return "null";
-            }
+                {
+                    // "level\ntext": the Lua prelude has no JSON codec yet.
+                    var split = argsJson.IndexOf('\n');
+                    var level = split < 0 ? "" : argsJson[..split];
+                    collector.AddConsole(Enum.TryParse<ConsoleLevel>(level, true, out var l) ? l : ConsoleLevel.Log, split < 0 ? argsJson : argsJson[(split + 1)..]);
+                    return "null";
+                }
 
             case HostOps.Test:
-            {
-                var t = Args(argsJson, HostJsonContext.Default.TestArgs);
-                collector.AddTest(t.Name, t.Passed, t.Message, t.Ms);
-                return "null";
-            }
+                {
+                    var t = Args(argsJson, HostJsonContext.Default.TestArgs);
+                    collector.AddTest(t.Name, t.Passed, t.Message, t.Ms);
+                    return "null";
+                }
 
             case HostOps.Send:
                 return Json(Send(Args(argsJson, HostJsonContext.Default.RequestDto)), HostJsonContext.Default.SendResultDto);

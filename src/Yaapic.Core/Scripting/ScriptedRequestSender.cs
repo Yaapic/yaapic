@@ -127,7 +127,8 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
                 ScriptRequest.FromDefinition(definition, readOnly: true),
                 scriptResponse,
                 new ScriptInfo("test", input.Request.Name, input.Request.Id, origin),
-                sends.Send) { CancellationToken = ct };
+                sends.Send)
+            { CancellationToken = ct };
             var logged = sends.NetworkLog.Count;
             runs.Add(await engines.Get(block.Language)
                 .RunAsync(new ScriptInvocation(block, ScriptPhase.PostResponse, origin, host, limits), ct).ConfigureAwait(false));
