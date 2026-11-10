@@ -1,6 +1,6 @@
 # M3-57: Avalonia: JavaScript and Lua in `CodeEditorView`
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M3-03, M3-50
 
@@ -25,12 +25,19 @@ The Scripts tab (M3-58), new colours, autocomplete.
 
 ## Acceptance criteria
 
-- [ ] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; `dotnet test --solution Yaapic.CrossPlatform.slnf -c Release`
+- [x] `dotnet build Yaapic.CrossPlatform.slnf -c Release` 0 warnings; `dotnet test --solution Yaapic.CrossPlatform.slnf -c Release`
       green (add a unit test for `EditorMap.ScriptLanguage`).
-- [ ] AOT publish of `Yaapic.App.Avalonia` 0 new IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages on Windows).
+- [x] AOT publish of `Yaapic.App.Avalonia` 0 new IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages on Windows).
       Runtime (published exe, throwaway fixture not committed): both languages coloured in dark and light, JSON/XML unchanged.
       Record in Notes; if the host is Windows, say that macOS/Linux were not run.
-- [ ] No Yaapic or stub-server process left running.
+- [x] No Yaapic or stub-server process left running.
+
+## Notes
+
+- LoomEditor.Avalonia 0.5.0 (LoomEditor.TextMate) bundles no Lua grammar, same as WinUI: `"lua"` falls back to plain text (add one `"lua" => "lua"` arm in `ApplyLanguage` when the package ships it). `"javascript"` maps to the `javascript` grammar.
+- Theme scopes: the same additions as M3-50 (`keyword`, `storage` -> tag colour; `entity.name.function`, `support.function` -> attribute colour; `keyword.operator` -> punctuation colour).
+- `EditorMap` is now `partial`; `EditorMap.ScriptLanguage` lives in `EditorMap.Script.cs`, compiled into `Yaapic.ViewModels.Tests` (it needs no Avalonia type) for `EditorMapTests` (2 cases).
+- Runtime on Windows only (macOS/Linux not run): AOT publish `win-x64` 0 IL2xxx/IL3xxx (only the two existing `Avalonia.Win32` ILC messages). With a throwaway local hack (not committed: response editor forced to `javascript`, stub returning a JS sample) comments, keywords, strings, numbers and function names are coloured in dark and light. Real build: JSON response still coloured in light and unchanged. Lua not capturable (plain text). Exe and stub server stopped, nothing left running.
 
 ## Rules
 

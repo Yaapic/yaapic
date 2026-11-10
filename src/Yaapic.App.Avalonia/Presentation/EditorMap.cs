@@ -4,7 +4,7 @@ using Yaapic.Domain.Http;
 namespace Yaapic.App.Avalonia.Presentation;
 
 /// <summary>Converters that map request editor values to control state, without reflection.</summary>
-public static class EditorMap
+public static partial class EditorMap
 {
     /// <summary>Converts an HTTP method to its index in the method picker (the order of <c>RequestEditorViewModel.Methods</c>).</summary>
     public static FuncValueConverter<HttpMethodKind, int> MethodIndex { get; } = new(m => (int)m);

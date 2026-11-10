@@ -286,7 +286,7 @@ not run in their Notes.
 | [M3-54](milestone-3-scripting/M3-54-winui-tests-tab-in-response.md) | WinUI: Tests tab and script errors in the response panel | windows | M3-42, M3-47 | todo |
 | [M3-55](milestone-3-scripting/M3-55-winui-secret-variables-in-tables.md) | WinUI: secret variables in the variable tables and popup | windows | M3-46, M3-47 | todo |
 | [M3-56](milestone-3-scripting/M3-56-winui-vault-dialogs-and-status.md) | WinUI: vault dialogs, status bar item and DPAPI wiring | windows | M3-45, M3-48, M3-53, M3-55 | todo |
-| [M3-57](milestone-3-scripting/M3-57-avalonia-code-editor-javascript-and-lua.md) | Avalonia: JavaScript and Lua in `CodeEditorView` | unix | M3-03, M3-50 | todo |
+| [M3-57](milestone-3-scripting/M3-57-avalonia-code-editor-javascript-and-lua.md) | Avalonia: JavaScript and Lua in `CodeEditorView` | unix | M3-03, M3-50 | done |
 | [M3-58](milestone-3-scripting/M3-58-avalonia-scripts-tab.md) | Avalonia: Scripts tab in the request editor | unix | M3-39, M3-57, M3-51 | todo |
 | [M3-59](milestone-3-scripting/M3-59-avalonia-folder-scripts-window.md) | Avalonia: scripts in the folder and collection settings window | unix | M3-40, M3-58 | todo |
 | [M3-60](milestone-3-scripting/M3-60-avalonia-console-panel-and-status-bar.md) | Avalonia: status bar and console panel | unix | M3-47, M3-53 | todo |
