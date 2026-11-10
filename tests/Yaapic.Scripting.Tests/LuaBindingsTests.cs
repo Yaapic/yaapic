@@ -238,7 +238,10 @@ public sealed class LuaBindingsTests
     [Fact]
     public void ThousandSequentialStates_DoNotGrowMemory()
     {
+        // A leak grows with every batch, whereas the allocator keeping freed memory in reserve (glibc arenas) settles
+        // after the first batch: so the growth of the second batch is what is bounded, not the first.
         RunStates(50);
+        RunStates(1000);
         GC.Collect();
         var before = Process.GetCurrentProcess().PrivateMemorySize64;
 
@@ -246,7 +249,7 @@ public sealed class LuaBindingsTests
         GC.Collect();
         var growth = Process.GetCurrentProcess().PrivateMemorySize64 - before;
 
-        Assert.True(growth < 40 * 1024 * 1024, $"Private memory grew by {growth} bytes.");
+        Assert.True(growth < 20 * 1024 * 1024, $"Private memory grew by {growth} bytes.");
 
         static void RunStates(int count)
         {
