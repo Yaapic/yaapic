@@ -150,7 +150,7 @@ public sealed class LuaJsonTests
     }
 
     [Fact]
-    public async Task A_one_megabyte_document_decodes_within_a_second()
+    public async Task A_one_megabyte_document_decodes_in_a_few_seconds()
     {
         StringBuilder sb = new("[");
         for (var i = 0; sb.Length < 1_000_000; i++)
@@ -165,7 +165,9 @@ public sealed class LuaJsonTests
         var result = await Run(script);
         sw.Stop();
 
-        Assert.True(sw.Elapsed < TimeSpan.FromSeconds(1), $"took {sw.Elapsed}");
+        // About 0.2 s on a developer machine; the bound is loose because the shared Ubuntu runner took 1.2 s while other
+        // test projects ran in parallel. It still catches a quadratic decoder, which needs minutes for 1 MB.
+        Assert.True(sw.Elapsed < TimeSpan.FromSeconds(5), $"took {sw.Elapsed}");
         Assert.Matches(@"^\d+ \d+$", Assert.Single(result.Console).Message);
     }
 
