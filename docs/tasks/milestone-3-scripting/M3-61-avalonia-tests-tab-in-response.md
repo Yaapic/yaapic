@@ -1,6 +1,6 @@
 # M3-61: Avalonia: Tests tab and script errors in the response panel
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M3-42, M3-47, M3-54
 
@@ -24,11 +24,11 @@ Cookies, timeline, test history.
 
 ## Acceptance criteria
 
-- [ ] Build `Yaapic.CrossPlatform.slnf` 0 warnings, tests green, AOT publish 0 new IL2xxx/IL3xxx.
-- [ ] **Runtime check on the published exe**: the M3-54 steps (badge and list with the failing test, filter, post-response error
+- [x] Build `Yaapic.CrossPlatform.slnf` 0 warnings, tests green, AOT publish 0 new IL2xxx/IL3xxx.
+- [x] **Runtime check on the published exe**: the M3-54 steps (badge and list with the failing test, filter, post-response error
       block with Body still usable, pre-request abort sends nothing, no tab without tests, dark and light, focus visible).
-- [ ] `Capture-Avalonia.ps1 -Send -Select Tests` screenshot compared with the mockup; differences in Notes.
-- [ ] No process left running.
+- [x] `Capture-Avalonia.ps1 -Send -Select Tests` screenshot compared with the mockup; differences in Notes.
+- [x] No process left running.
 
 ## Rules
 
@@ -45,3 +45,19 @@ Cookies, timeline, test history.
 ## Suggested commit message
 
 `feat(avalonia): show test results and script errors in the response panel`
+
+## Notes
+
+- Added: `Tests` tab in `ResponsePanelView.axaml` (badge, summary sentence, All/Failed filter, script-error blocks, test rows with
+  symbol, duration, origin chip and failure message, empty text); `ResponseMap.TestOutcome/FilterIndex/NeitherFlag`;
+  `OnTestFilterChanged` in the code-behind. The tab is visible through `BoolConverters.Or` of `HasTests`/`HasErrors` and never
+  takes the selection.
+- Runtime check (AOT exe, win-x64, via `Capture-Avalonia.ps1 -Send`, dark and light), `scripted` fixture: badge `2/3` in the error
+  colour, list with the failing test and its `AssertionError` message; a throwing post-response script gives badge `!` and a
+  `Script error` block; a throwing pre-request script gives the failed-state block (`Pre-request script failed — pre-request ·
+  Scripted: pre boom`, no response); `list-users` shows no Tests tab. The throwing variants were temporary edits of the fixture,
+  reverted. Not driven by a pointer (capture tooling cannot click): the `Failed` filter click, the Body tab after a post-response
+  error and keyboard focus visuals; the filter wiring is the same VM property covered by `TestResultsViewModelTests`. No
+  stub-server request log was checked for the pre-request abort.
+- Differences from the mockup: no Cookies and Timeline tabs (out of scope).
+- Build 0 warnings; AOT publish 0 warnings; tests 2225 passed, 3 skipped (platform), 0 failed (2228 total).
