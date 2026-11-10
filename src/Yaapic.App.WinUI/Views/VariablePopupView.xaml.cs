@@ -44,6 +44,17 @@ public sealed partial class VariablePopupView : UserControl
     /// <summary>Gets the visibility of the parts of an undefined variable.</summary>
     public Visibility IsUnresolvedState => State == VariableTokenState.Unresolved ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets the visibility of the lock glyph and the Reveal button of a secret variable.</summary>
+    public Visibility IsSecretState => ViewModel.IsSecret ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets the visibility of the Edit button, hidden for a secret value.</summary>
+    public Visibility IsEditable => ViewModel.IsSecret ? Visibility.Collapsed : Visibility.Visible;
+
+    /// <summary>Gets the label of the Reveal button.</summary>
+    /// <param name="isRevealed">Whether the value is shown.</param>
+    /// <returns><c>Hide</c> while revealed, <c>Reveal</c> otherwise.</returns>
+    public string RevealLabel(bool isRevealed) => isRevealed ? "Hide" : "Reveal";
+
     /// <summary>Gets the visibility of the explanation under the title.</summary>
     public Visibility HasMessage => ViewModel.Message.Length > 0 ? Visibility.Visible : Visibility.Collapsed;
 
@@ -65,7 +76,7 @@ public sealed partial class VariablePopupView : UserControl
     /// <summary>Moves the keyboard focus to the first control of the card.</summary>
     public void FocusFirst()
     {
-        var target = State == VariableTokenState.Unresolved ? (Control)ScopeBox : EditLink;
+        var target = State == VariableTokenState.Unresolved ? (Control)ScopeBox : ViewModel.IsSecret ? RevealLink : EditLink;
         target.Focus(FocusState.Keyboard);
     }
 

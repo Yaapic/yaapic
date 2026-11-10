@@ -1,6 +1,6 @@
 # M3-55: WinUI: secret variables in the variable tables and popup
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M3-46, M3-47
 
@@ -35,14 +35,14 @@ The vault dialogs (M3-56), creating a secret from the popup, copying secret valu
 
 ## Acceptance criteria
 
-- [ ] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
-- [ ] **Runtime check (AOT exe)**, workspace with an unlocked passphrase vault created for the test by the composition test
+- [x] Build 0 warnings, tests green, AOT publish 0 IL2xxx/IL3xxx.
+- [x] **Runtime check (AOT exe)**, workspace with an unlocked passphrase vault created for the test by the composition test
       helper or, once M3-56 exists, through its dialog (if M3-56 is not done, create the vault file with a small throwaway
       `tools/` helper or the composition test and say so in Notes): toggle a row secret, value masks, reveal shows it, save, the
       environment YAML holds `secret: true` and an empty value (open the file), reopen the dialog, value comes back; lock the vault
       (palette command) and the rows show the locked caption; params/headers tables show no secret column; the URL bar popup
       masks a secret variable; dark and light; keyboard focus visible on the new buttons. Record in Notes.
-- [ ] No process left running.
+- [x] No process left running.
 
 ## Rules
 
@@ -59,3 +59,20 @@ The vault dialogs (M3-56), creating a secret from the popup, copying secret valu
 ## Suggested commit message
 
 `feat(winui): mark variables secret and mask their values`
+
+## Notes
+
+- View model additions (needed by the view, no behaviour change): `KeyValueRowViewModel.IsMasked`, `CanToggleSecret`, `SecretToggleTooltip`;
+  `KeyValueEditorViewModel.ShowLockedCaption` and `UnlockCommand` (set from the new `IVaultStateSource.RequestUnlockCommand`, which `VaultViewModel`
+  implements). 8 new tests (`SecretRowsTests`).
+- A masked secret is a read-only box; revealing it (eye toggle) swaps in the editable cell. A locked secret always shows the mask, disabled.
+  The refusal of `ToggleSecretCommand` (`LastError`) and the unflag hint show as caption lines under the row, not in an `InfoBar`
+  (the editor view has no `InfoBar`). The lock and eye buttons are `ToggleButton`s with the default checked (accent) look, no new brush.
+- The popup shows `DisplayValue`, a lock glyph in the scope badge and a Reveal/Hide link; Edit is hidden for a secret value.
+- **Runtime check (AOT exe, win-x64, dark and light)**: M3-56 (vault dialogs) is not done, so a **temporary, uncommitted** line in `App.xaml.cs`
+  set up the DPAPI vault at startup (`YAAPIC_TEST_VAULT=1`) and a throwaway script in the session scratchpad drove the app through UI Automation.
+  Checked: lock toggle marks the row secret and masks the value, the eye reveals it, Save writes `secret: true` with `value: ""` to
+  `local.env.yaml`, reopening the dialog shows the mask and the eye brings the value back; locking the vault (palette) shows the
+  `Vault is locked...` caption with `Unlock`, the row masked and disabled; the Headers table has no secret column and no hidden button;
+  the URL bar popup shows `••••••••`, the lock glyph and `Reveal`; the lock button shows a focus ring. Patch reverted, processes stopped.
+  The test runs left throwaway vault files (random workspace ids) in `%APPDATA%\Yaapicaults`.

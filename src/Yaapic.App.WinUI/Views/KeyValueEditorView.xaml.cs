@@ -60,12 +60,34 @@ public sealed partial class KeyValueEditorView : UserControl
     // Rebinding recreates the rows, so every realised cell picks up the new context.
     private void OnViewModelChanged()
     {
+        HeaderSecretColumn.Width = SecretColumnWidth;
         RowList.ItemsSource = null;
         RowList.ItemsSource = ViewModel?.Rows;
     }
 
-    private void OnRowPrepared(ItemsRepeater sender, ItemsRepeaterElementPreparedEventArgs args) =>
+    // Only the variable editors carry the lock column; the others keep their layout.
+    private GridLength SecretColumnWidth => ViewModel is { AllowSecrets: true } ? new GridLength(36) : new GridLength(0);
+
+    private void OnRowPrepared(ItemsRepeater sender, ItemsRepeaterElementPreparedEventArgs args)
+    {
         VariableTextBox.ApplyContext(args.Element, VariableContext);
+        if (args.Element is StackPanel { Children: [Grid grid, ..] })
+        {
+            grid.ColumnDefinitions[3].Width = SecretColumnWidth;
+            grid.Children[3].Visibility = ViewModel is { AllowSecrets: true } ? Visibility.Visible : Visibility.Collapsed;
+        }
+    }
+
+    // The command can refuse (locked vault): the button follows the row, not the click.
+    private void OnToggleSecret(object sender, RoutedEventArgs e)
+    {
+        var button = (Microsoft.UI.Xaml.Controls.Primitives.ToggleButton)sender;
+        if (button.Tag is KeyValueRowViewModel row)
+        {
+            row.ToggleSecretCommand.Execute(null);
+            button.IsChecked = row.IsSecret;
+        }
+    }
 
     private void OnRemove(object sender, RoutedEventArgs e)
     {

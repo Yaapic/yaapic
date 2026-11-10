@@ -1,3 +1,4 @@
+using System.Windows.Input;
 using Yaapic.Core.Secrets;
 
 namespace Yaapic.ViewModels.Vault;
@@ -10,4 +11,7 @@ public interface IVaultStateSource
 
     /// <summary>Gets the current vault state.</summary>
     VaultState State { get; }
+
+    /// <summary>Gets the command that asks the user to unlock the vault.</summary>
+    ICommand RequestUnlockCommand { get; }
 }

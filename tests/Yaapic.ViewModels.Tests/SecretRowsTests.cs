@@ -227,11 +227,81 @@ public sealed class SecretRowsTests
         Assert.Equal("Vault is locked: secret variables are not available.", editor.Response.UnresolvedWarning);
     }
 
+    [Theory]
+    [InlineData(VaultState.Locked, true, true)]
+    [InlineData(VaultState.Unlocked, true, false)]
+    [InlineData(VaultState.NotCreated, true, false)]
+    [InlineData(VaultState.Locked, false, false)]
+    public void LockedCaptionShowsOnlyForSecretRowsOfALockedVault(VaultState state, bool secretRow, bool expected)
+    {
+        var editor = Editor(state, [new("token", "abc", true, secretRow)]);
+
+        Assert.Equal(expected, editor.ShowLockedCaption);
+    }
+
+    [Fact]
+    public void LockedCaptionFollowsTheSecretFlagAndTheVaultState()
+    {
+        var editor = Editor(VaultState.Unlocked, [new("token", "abc", true, true)]);
+        var raised = new List<string?>();
+        editor.PropertyChanged += (_, e) => raised.Add(e.PropertyName);
+
+        editor.SetVaultState(VaultState.Locked);
+        Assert.True(editor.ShowLockedCaption);
+
+        editor.SetVaultState(VaultState.Unlocked);
+        editor.Rows[0].ToggleSecretCommand.Execute(null);
+
+        Assert.False(editor.ShowLockedCaption);
+        Assert.Contains(nameof(KeyValueEditorViewModel.ShowLockedCaption), raised);
+    }
+
+    [Fact]
+    public void LockedSecretRowsAreMaskedEvenWithoutAValue()
+    {
+        var editor = Editor(VaultState.Locked, [new("token", "", true, true)]);
+        var row = editor.Rows[0];
+
+        Assert.True(row.IsMasked);
+        Assert.Equal(KeyValueRowViewModel.Mask, row.DisplayValue);
+
+        editor.SetVaultState(VaultState.Unlocked);
+
+        Assert.False(row.IsMasked);
+        Assert.Equal("", row.DisplayValue);
+    }
+
+    [Fact]
+    public void SecretToggleIsOfferedToSecretRowsAndToUnlockedVaultsOnly()
+    {
+        var editor = Editor(VaultState.Locked, [new("a", "1"), new("b", "2", true, true)]);
+
+        Assert.False(editor.Rows[0].CanToggleSecret);
+        Assert.Equal("Unlock the vault to use secrets", editor.Rows[0].SecretToggleTooltip);
+        Assert.True(editor.Rows[1].CanToggleSecret);
+
+        editor.SetVaultState(VaultState.Unlocked);
+
+        Assert.True(editor.Rows[0].CanToggleSecret);
+        Assert.Equal("Store this value in the vault", editor.Rows[0].SecretToggleTooltip);
+    }
+
+    [Fact]
+    public void VariableEditorsGetTheUnlockCommandOfTheVault()
+    {
+        var vaultState = new FakeVaultState(VaultState.Locked);
+        var globals = new GlobalsViewModel(new InMemoryGlobalsStore(), vaultState);
+
+        Assert.Same(vaultState.RequestUnlockCommand, globals.Variables.UnlockCommand);
+    }
+
     private sealed class FakeVaultState(VaultState state) : IVaultStateSource
     {
         public event EventHandler? StateChanged;
 
         public VaultState State { get; private set; } = state;
+
+        public System.Windows.Input.ICommand RequestUnlockCommand { get; } = new CommunityToolkit.Mvvm.Input.RelayCommand(() => { });
 
         public void Set(VaultState value)
         {

@@ -164,6 +164,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     {
         if (_vaultState is not null)
         {
+            item.Variables.UnlockCommand = _vaultState.RequestUnlockCommand;
             item.Variables.SetVaultState(_vaultState.State);
         }
 

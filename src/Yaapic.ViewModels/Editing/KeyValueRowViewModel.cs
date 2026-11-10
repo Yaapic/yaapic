@@ -24,6 +24,7 @@ public sealed partial class KeyValueRowViewModel : ObservableObject
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsEmpty))]
     [NotifyPropertyChangedFor(nameof(DisplayValue))]
+    [NotifyPropertyChangedFor(nameof(IsMasked))]
     private string _value = "";
 
     [ObservableProperty]
@@ -31,11 +32,15 @@ public sealed partial class KeyValueRowViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DisplayValue))]
+    [NotifyPropertyChangedFor(nameof(IsMasked))]
     [NotifyPropertyChangedFor(nameof(CanEditValue))]
+    [NotifyPropertyChangedFor(nameof(CanToggleSecret))]
+    [NotifyPropertyChangedFor(nameof(SecretToggleTooltip))]
     private bool _isSecret;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(DisplayValue))]
+    [NotifyPropertyChangedFor(nameof(IsMasked))]
     private bool _isRevealed;
 
     [ObservableProperty]
@@ -47,11 +52,20 @@ public sealed partial class KeyValueRowViewModel : ObservableObject
     /// <summary>Gets a value indicating whether both key and value are empty.</summary>
     public bool IsEmpty => Key.Length == 0 && Value.Length == 0;
 
-    /// <summary>Gets the value as displayed: masked when secret, not revealed and not empty.</summary>
-    public string DisplayValue => IsSecret && !IsRevealed && Value.Length > 0 ? Mask : Value;
+    /// <summary>Gets a value indicating whether the mask replaces the value: a secret that is not revealed and either has a value or cannot be read because the vault is locked.</summary>
+    public bool IsMasked => IsSecret && !IsRevealed && (Value.Length > 0 || !_secretsUnlocked);
+
+    /// <summary>Gets the value as displayed: <see cref="Mask"/> when <see cref="IsMasked"/>.</summary>
+    public string DisplayValue => IsMasked ? Mask : Value;
 
     /// <summary>Gets a value indicating whether the value can be edited; secret rows are read-only while the vault is locked.</summary>
     public bool CanEditValue => !IsSecret || _secretsUnlocked;
+
+    /// <summary>Gets a value indicating whether the secret flag can be toggled: a secret row can always be unflagged, a plain one only while the vault is unlocked.</summary>
+    public bool CanToggleSecret => IsSecret || _secretsUnlocked;
+
+    /// <summary>Gets the tooltip of the secret toggle.</summary>
+    public string SecretToggleTooltip => CanToggleSecret ? "Store this value in the vault" : "Unlock the vault to use secrets";
 
     internal bool SecretsUnlocked
     {
@@ -70,6 +84,10 @@ public sealed partial class KeyValueRowViewModel : ObservableObject
             }
 
             OnPropertyChanged(nameof(CanEditValue));
+            OnPropertyChanged(nameof(IsMasked));
+            OnPropertyChanged(nameof(DisplayValue));
+            OnPropertyChanged(nameof(CanToggleSecret));
+            OnPropertyChanged(nameof(SecretToggleTooltip));
         }
     }
 

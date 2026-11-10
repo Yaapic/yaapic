@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Secrets;
@@ -11,6 +12,7 @@ namespace Yaapic.ViewModels.Editing;
 public sealed partial class KeyValueEditorViewModel : ObservableObject
 {
     private bool _loading;
+    private bool _vaultLocked;
 
     /// <summary>Initializes the editor with a single placeholder row.</summary>
     public KeyValueEditorViewModel() => AddRow();
@@ -23,6 +25,12 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
 
     /// <summary>Gets a value indicating whether the vault is unlocked, so rows can be marked secret and secret values edited.</summary>
     public bool SecretsAvailable { get; private set; }
+
+    /// <summary>Gets or sets the command that asks the user to unlock the vault; the locked caption raises it.</summary>
+    public ICommand? UnlockCommand { get; set; }
+
+    /// <summary>Gets a value indicating whether the table must tell that secret rows are unreadable: secrets are allowed, some row is secret and the vault is locked.</summary>
+    public bool ShowLockedCaption => AllowSecrets && _vaultLocked && Rows.Any(r => r.IsSecret);
 
     /// <summary>Gets the rows; the last one is always the empty placeholder.</summary>
     public ObservableCollection<KeyValueRowViewModel> Rows { get; } = [];
@@ -55,6 +63,7 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
         {
             _loading = false;
             OnPropertyChanged(nameof(ActiveCount));
+            OnPropertyChanged(nameof(ShowLockedCaption));
         }
     }
 
@@ -64,6 +73,8 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
     {
         SecretsAvailable = state == VaultState.Unlocked;
         OnPropertyChanged(nameof(SecretsAvailable));
+        _vaultLocked = state == VaultState.Locked;
+        OnPropertyChanged(nameof(ShowLockedCaption));
         foreach (var row in Rows)
         {
             row.SecretsUnlocked = SecretsAvailable;
@@ -108,6 +119,11 @@ public sealed partial class KeyValueEditorViewModel : ObservableObject
 
     private void OnRowPropertyChanged(object? sender, PropertyChangedEventArgs e)
     {
+        if (e.PropertyName == nameof(KeyValueRowViewModel.IsSecret))
+        {
+            OnPropertyChanged(nameof(ShowLockedCaption));
+        }
+
         if (_loading || e.PropertyName is not (nameof(KeyValueRowViewModel.Key) or nameof(KeyValueRowViewModel.Value)
             or nameof(KeyValueRowViewModel.Enabled) or nameof(KeyValueRowViewModel.IsSecret)))
         {

@@ -164,6 +164,8 @@ public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
     [RelayCommand(CanExecute = nameof(NeedsPassphrase))]
     private void RequestUnlock() => UnlockRequested?.Invoke(this, EventArgs.Empty);
 
+    System.Windows.Input.ICommand IVaultStateSource.RequestUnlockCommand => RequestUnlockCommand;
+
     private static string LabelOf(string id) => id switch
     {
         "dpapi" => "Windows account (DPAPI)",

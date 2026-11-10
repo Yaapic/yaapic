@@ -29,6 +29,7 @@ public sealed partial class GlobalsViewModel : ObservableObject
         _store = store;
         if (vaultState is not null)
         {
+            Variables.UnlockCommand = vaultState.RequestUnlockCommand;
             Variables.SetVaultState(vaultState.State);
             vaultState.StateChanged += (_, _) => Variables.SetVaultState(vaultState.State);
         }

@@ -24,6 +24,7 @@
     <Grid>
       <Grid.RowDefinitions>
         <RowDefinition Height="28"/>
+        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
       </Grid.RowDefinitions>
       <Grid Background="{ThemeResource YaapicSurfaceSidebarBrush}">
@@ -31,6 +32,7 @@
           <ColumnDefinition Width="36"/>
           <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
           <ColumnDefinition Width="2*"/>
+          <ColumnDefinition x:Name="HeaderSecretColumn" Width="0"/>
           <ColumnDefinition Width="36"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="1" Padding="10,0" VerticalAlignment="Center" CharacterSpacing="30"
@@ -42,33 +44,84 @@
                      Text="{x:Bind p:TextMap.Upper(ValueHeader), Mode=OneWay}"/>
         </Border>
       </Grid>
-      <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+      <!-- Locked vault: secret rows are unreadable until it is unlocked. -->
+      <Grid Grid.Row="1" ColumnSpacing="8" Padding="10,4" Background="{ThemeResource YaapicSurfaceRaisedBrush}"
+            Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.ShowLockedCaption), Mode=OneWay}">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="Vault is locked. Unlock it to view or edit secret values." TextWrapping="Wrap" VerticalAlignment="Center"
+                   Style="{StaticResource YaapicCaptionTextStyle}"/>
+        <HyperlinkButton Grid.Column="1" Content="Unlock" Padding="4,2" AutomationProperties.Name="Unlock"
+                         Command="{x:Bind ViewModel.UnlockCommand, Mode=OneWay}"/>
+      </Grid>
+      <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
         <ItemsRepeater x:Name="RowList" ElementPrepared="OnRowPrepared">
           <ItemsRepeater.ItemTemplate>
             <DataTemplate x:DataType="ed:KeyValueRowViewModel">
-              <Grid Height="30" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0"
-                    Opacity="{x:Bind p:OpacityMap.KeyValueRow(IsEmpty, Enabled), Mode=OneWay}">
-                <Grid.ColumnDefinitions>
-                  <ColumnDefinition Width="36"/>
-                  <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
-                  <ColumnDefinition Width="2*"/>
-                  <ColumnDefinition Width="36"/>
-                </Grid.ColumnDefinitions>
-                <CheckBox MinWidth="0" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"
-                          AutomationProperties.Name="Enabled"
-                          IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
-                <v:VariableTextBox Grid.Column="1" PlaceholderText="Key" InputName="Key" CodeFontSize="{StaticResource YaapicFontSizeCode}"
-                                   InputPadding="10,7,10,3" Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                <Border Grid.Column="2" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="1,0,0,0">
-                  <v:VariableTextBox PlaceholderText="Value" InputName="Value" CodeFontSize="{StaticResource YaapicFontSizeCode}"
-                                     InputPadding="10,7,10,3" Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-                </Border>
-                <Button Grid.Column="3" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnRemove"
-                        HorizontalAlignment="Center" AutomationProperties.Name="Remove row"
-                        Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
-                  <ic:FluentIcon Icon="Dismiss" IconVariant="Regular" IconSize="Size16"/>
-                </Button>
-              </Grid>
+              <StackPanel BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0"
+                          Opacity="{x:Bind p:OpacityMap.KeyValueRow(IsEmpty, Enabled), Mode=OneWay}">
+                <Grid Height="30">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="36"/>
+                    <ColumnDefinition Width="*" MinWidth="140" MaxWidth="280"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="0"/>
+                    <ColumnDefinition Width="36"/>
+                  </Grid.ColumnDefinitions>
+                  <CheckBox MinWidth="0" Width="20" HorizontalAlignment="Center" VerticalAlignment="Center"
+                            AutomationProperties.Name="Enabled"
+                            IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
+                  <v:VariableTextBox Grid.Column="1" PlaceholderText="Key" InputName="Key" CodeFontSize="{StaticResource YaapicFontSizeCode}"
+                                     InputPadding="10,7,10,3" Text="{x:Bind Key, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                  <Border Grid.Column="2" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="1,0,0,0">
+                    <Grid>
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                      </Grid.ColumnDefinitions>
+                      <v:VariableTextBox PlaceholderText="Value" InputName="Value" CodeFontSize="{StaticResource YaapicFontSizeCode}"
+                                         InputPadding="10,7,10,3" IsEnabled="{x:Bind CanEditValue, Mode=OneWay}"
+                                         Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsMasked), Mode=OneWay}"
+                                         Text="{x:Bind Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                      <!-- A masked secret is shown, never edited: reveal it first. -->
+                      <TextBox IsReadOnly="True" MinHeight="0" Padding="10,5" AutomationProperties.Name="Value (secret)"
+                               FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeCode}"
+                               IsEnabled="{x:Bind CanEditValue, Mode=OneWay}" Text="{x:Bind DisplayValue, Mode=OneWay}"
+                               Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsMasked), Mode=OneWay}"/>
+                      <ToggleButton Grid.Column="1" Width="28" Height="28" MinHeight="0" Padding="0" Background="Transparent"
+                                    BorderThickness="0" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                                    AutomationProperties.Name="Reveal" ToolTipService.ToolTip="Show or hide the value"
+                                    IsEnabled="{x:Bind CanEditValue, Mode=OneWay}"
+                                    IsChecked="{x:Bind IsRevealed, Mode=TwoWay}"
+                                    Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsSecret), Mode=OneWay}">
+                        <ic:FluentIcon Icon="Eye" IconVariant="Regular" IconSize="Size16"/>
+                      </ToggleButton>
+                    </Grid>
+                  </Border>
+                  <Border Grid.Column="3">
+                    <ToggleButton Tag="{x:Bind}" Click="OnToggleSecret" Width="28" Height="28" MinHeight="0" Padding="0"
+                                  Background="Transparent" BorderThickness="0" HorizontalAlignment="Center"
+                                  Foreground="{ThemeResource YaapicTextSecondaryBrush}" AutomationProperties.Name="Secret"
+                                  ToolTipService.ToolTip="{x:Bind SecretToggleTooltip, Mode=OneWay}"
+                                  IsEnabled="{x:Bind CanToggleSecret, Mode=OneWay}" IsChecked="{x:Bind IsSecret, Mode=OneWay}"
+                                  Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
+                      <ic:FluentIcon Icon="LockClosed" IconVariant="Regular" IconSize="Size16"/>
+                    </ToggleButton>
+                  </Border>
+                  <Button Grid.Column="4" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnRemove"
+                          HorizontalAlignment="Center" AutomationProperties.Name="Remove row"
+                          Visibility="{x:Bind p:VisibilityMap.WhenFalse(IsEmpty), Mode=OneWay}">
+                    <ic:FluentIcon Icon="Dismiss" IconVariant="Regular" IconSize="Size16"/>
+                  </Button>
+                </Grid>
+                <TextBlock Padding="46,0,10,4" TextWrapping="Wrap" Style="{StaticResource YaapicCaptionTextStyle}"
+                           Text="{x:Bind Hint, Mode=OneWay}" Visibility="{x:Bind p:VisibilityMap.WhenText(Hint), Mode=OneWay}"/>
+                <TextBlock Padding="46,0,10,4" TextWrapping="Wrap" Style="{StaticResource YaapicCaptionTextStyle}"
+                           Foreground="{ThemeResource YaapicDangerBrush}"
+                           Text="{x:Bind LastError, Mode=OneWay}" Visibility="{x:Bind p:VisibilityMap.WhenText(LastError), Mode=OneWay}"/>
+              </StackPanel>
             </DataTemplate>
           </ItemsRepeater.ItemTemplate>
         </ItemsRepeater>

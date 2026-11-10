@@ -51,6 +51,7 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
         Variables.Load(folder.Variables);
         if (vaultState is not null)
         {
+            Variables.UnlockCommand = vaultState.RequestUnlockCommand;
             Variables.SetVaultState(vaultState.State);
             // shortcut: never unsubscribed, fine while the vault outlives few editors; dispose the editor when many are opened.
             vaultState.StateChanged += (_, _) => Variables.SetVaultState(vaultState.State);
