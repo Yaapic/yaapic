@@ -355,6 +355,24 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 |---|---|---|---|---|
 | [U-01](milestone-ux-improvements/U-01-request-response-layout.md) | Request / response layout toggle (stacked or side by side) | any | none | done |
 
+## Personalization: language and accent colour
+
+| Card | Title | Platform | Depends on | Status |
+|---|---|---|---|---|
+| [P-01](milestone-personalization/P-01-adr-localization-and-accent.md) | ADR: localization (FR/EN) and accent colour | any | none | todo |
+| [P-02](milestone-personalization/P-02-preferences-model-and-store.md) | Preferences model and store | any | P-01 | todo |
+| [P-03](milestone-personalization/P-03-string-catalogue-and-localizer.md) | String catalogue, generator and localizer | any | P-01, P-02 | todo |
+| [P-04](milestone-personalization/P-04-localize-viewmodels-and-core.md) | Localize the view model and Core texts | any | P-03 | todo |
+| [P-05](milestone-personalization/P-05-winui-localization.md) | WinUI: localize the views | windows | P-04 | todo |
+| [P-06](milestone-personalization/P-06-avalonia-localization.md) | Avalonia: localize the views | unix | P-04, P-05 | todo |
+| [P-07](milestone-personalization/P-07-accent-derivation.md) | Accent colour derivation | any | P-02 | todo |
+| [P-08](milestone-personalization/P-08-winui-accent-at-runtime.md) | WinUI: apply the accent at runtime | windows | P-07 | todo |
+| [P-09](milestone-personalization/P-09-avalonia-accent-at-runtime.md) | Avalonia: apply the accent at runtime | unix | P-07, P-08 | todo |
+| [P-10](milestone-personalization/P-10-settings-viewmodel.md) | Settings ViewModel | any | P-02, P-03, P-07 | todo |
+| [P-11](milestone-personalization/P-11-winui-settings-dialog.md) | WinUI: Settings dialog | windows | P-08, P-10 | todo |
+| [P-12](milestone-personalization/P-12-avalonia-settings-window.md) | Avalonia: Settings window | unix | P-09, P-10, P-11 | todo |
+| [P-13](milestone-personalization/P-13-end-to-end-and-docs.md) | End-to-end tests and docs | any | P-05, P-06, P-11, P-12 | todo |
+
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |
