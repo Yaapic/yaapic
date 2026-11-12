@@ -1,6 +1,6 @@
 # P-09: Avalonia: apply the accent at runtime
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: P-07, P-08
 
@@ -11,7 +11,7 @@ start-up and on change.
 
 ## Acceptance criteria
 
-- [ ] The same controls as in P-08 follow the accent in both themes; screenshots next to the WinUI ones.
+- [x] The same controls as in P-08 follow the accent in both themes; screenshots next to the WinUI ones.
 
 ## Suggested commit message
 

@@ -369,8 +369,8 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 | [P-05](milestone-personalization/P-05-winui-localization.md) | WinUI: localize the views | windows | P-04 | todo |
 | [P-06](milestone-personalization/P-06-avalonia-localization.md) | Avalonia: localize the views | unix | P-04, P-05 | todo |
 | [P-07](milestone-personalization/P-07-accent-derivation.md) | Accent colour derivation | any | P-02 | done |
-| [P-08](milestone-personalization/P-08-winui-accent-at-runtime.md) | WinUI: apply the accent at runtime | windows | P-07 | todo |
-| [P-09](milestone-personalization/P-09-avalonia-accent-at-runtime.md) | Avalonia: apply the accent at runtime | unix | P-07, P-08 | todo |
+| [P-08](milestone-personalization/P-08-winui-accent-at-runtime.md) | WinUI: apply the accent at runtime | windows | P-07 | done |
+| [P-09](milestone-personalization/P-09-avalonia-accent-at-runtime.md) | Avalonia: apply the accent at runtime | unix | P-07, P-08 | done |
 | [P-10](milestone-personalization/P-10-settings-viewmodel.md) | Settings ViewModel | any | P-02, P-03, P-07 | todo |
 | [P-11](milestone-personalization/P-11-winui-settings-dialog.md) | WinUI: Settings dialog | windows | P-08, P-10 | todo |
 | [P-12](milestone-personalization/P-12-avalonia-settings-window.md) | Avalonia: Settings window | unix | P-09, P-10, P-11 | todo |
