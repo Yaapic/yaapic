@@ -7,13 +7,404 @@ namespace Yaapic.Localization;
 /// <summary>Every user-visible text of the app, in the current language.</summary>
 public static class Strings
 {
+    /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
+    public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");
+
+    /// <summary>{0} and its {1} requests</summary>
+    public static string CollectionsFolderAndRequests(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} and its {1} requests", "{0} et ses {1} requêtes"), a0, a1);
+
+    /// <summary>Runs for every request in this folder, before the request's own script.</summary>
+    public static string CollectionsFolderScriptsHint => Localizer.Pick("Runs for every request in this folder, before the request's own script.", "S'exécute pour chaque requête de ce dossier, avant le script propre à la requête.");
+
+    /// <summary>New collection</summary>
+    public static string CollectionsNewCollection => Localizer.Pick("New collection", "Nouvelle collection");
+
+    /// <summary>New Collection</summary>
+    public static string CollectionsNewCollectionName => Localizer.Pick("New Collection", "Nouvelle collection");
+
+    /// <summary>New folder</summary>
+    public static string CollectionsNewFolder => Localizer.Pick("New folder", "Nouveau dossier");
+
+    /// <summary>New Folder</summary>
+    public static string CollectionsNewFolderName => Localizer.Pick("New Folder", "Nouveau dossier");
+
+    /// <summary>Top level</summary>
+    public static string CollectionsTopLevel => Localizer.Pick("Top level", "Racine");
+
+    /// <summary>{0} copy</summary>
+    public static string CommonCopyName(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} copy", "{0} (copie)"), a0);
+
+    /// <summary>Create</summary>
+    public static string CommonCreate => Localizer.Pick("Create", "Créer");
+
+    /// <summary>Name</summary>
+    public static string CommonName => Localizer.Pick("Name", "Nom");
+
+    /// <summary>Rename</summary>
+    public static string CommonRename => Localizer.Pick("Rename", "Renommer");
+
+    /// <summary>Save</summary>
+    public static string CommonSave => Localizer.Pick("Save", "Enregistrer");
+
+    /// <summary>Select a file</summary>
+    public static string CommonSelectFile => Localizer.Pick("Select a file", "Sélectionner un fichier");
+
     /// <summary>Version {0}</summary>
     public static string CommonVersion(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Version {0}", "Version {0}"), a0);
+
+    /// <summary>System</summary>
+    public static string ConsoleOriginSystem => Localizer.Pick("System", "Système");
+
+    /// <summary>Post-response</summary>
+    public static string ConsolePhasePostResponse => Localizer.Pick("Post-response", "Post-réponse");
+
+    /// <summary>Pre-request</summary>
+    public static string ConsolePhasePreRequest => Localizer.Pick("Pre-request", "Pré-requête");
+
+    /// <summary>Tests: {0} passed, {1} failed</summary>
+    public static string ConsoleTestsSummary(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Tests: {0} passed, {1} failed", "Tests : {0} réussis, {1} échoués"), a0, a1);
+
+    /// <summary>Unlock the vault to use secrets</summary>
+    public static string EditingSecretToggleLocked => Localizer.Pick("Unlock the vault to use secrets", "Déverrouillez le coffre pour utiliser les secrets");
+
+    /// <summary>Store this value in the vault</summary>
+    public static string EditingSecretToggleStore => Localizer.Pick("Store this value in the vault", "Stocker cette valeur dans le coffre");
+
+    /// <summary>This value will be stored in the workspace file.</summary>
+    public static string EditingStoredInWorkspaceHint => Localizer.Pick("This value will be stored in the workspace file.", "Cette valeur sera enregistrée dans le fichier de l'espace de travail.");
+
+    /// <summary>Unlock the vault to mark a variable as secret</summary>
+    public static string EditingVaultLockedError => Localizer.Pick("Unlock the vault to mark a variable as secret", "Déverrouillez le coffre pour marquer une variable comme secrète");
+
+    /// <summary>New Environment</summary>
+    public static string EnvironmentsNewName => Localizer.Pick("New Environment", "Nouvel environnement");
+
+    /// <summary>the whole history</summary>
+    public static string HistoryDeleteAllTarget => Localizer.Pick("the whole history", "tout l'historique");
+
+    /// <summary>Today</summary>
+    public static string HistoryToday => Localizer.Pick("Today", "Aujourd'hui");
+
+    /// <summary>Yesterday</summary>
+    public static string HistoryYesterday => Localizer.Pick("Yesterday", "Hier");
 
     /// <summary>English</summary>
     public static string LanguageEnglish => Localizer.Pick("English", "Anglais");
 
     /// <summary>French</summary>
     public static string LanguageFrench => Localizer.Pick("French", "Français");
+
+    /// <summary>Active</summary>
+    public static string PaletteActive => Localizer.Pick("Active", "Actif");
+
+    /// <summary>Cancel request</summary>
+    public static string PaletteCancelRequest => Localizer.Pick("Cancel request", "Annuler la requête");
+
+    /// <summary>Command</summary>
+    public static string PaletteCategoryCommand => Localizer.Pick("Command", "Commande");
+
+    /// <summary>Environment</summary>
+    public static string PaletteCategoryEnvironment => Localizer.Pick("Environment", "Environnement");
+
+    /// <summary>Request</summary>
+    public static string PaletteCategoryRequest => Localizer.Pick("Request", "Requête");
+
+    /// <summary>Tab</summary>
+    public static string PaletteCategoryTab => Localizer.Pick("Tab", "Onglet");
+
+    /// <summary>Check for updates</summary>
+    public static string PaletteCheckUpdates => Localizer.Pick("Check for updates", "Rechercher des mises à jour");
+
+    /// <summary>Clear console</summary>
+    public static string PaletteClearConsole => Localizer.Pick("Clear console", "Effacer la console");
+
+    /// <summary>Clear history</summary>
+    public static string PaletteClearHistory => Localizer.Pick("Clear history", "Effacer l'historique");
+
+    /// <summary>Close tab</summary>
+    public static string PaletteCloseTab => Localizer.Pick("Close tab", "Fermer l'onglet");
+
+    /// <summary>Go to tab: {0}</summary>
+    public static string PaletteGoToTab(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Go to tab: {0}", "Aller à l'onglet : {0}"), a0);
+
+    /// <summary>Manage environments</summary>
+    public static string PaletteManageEnvironments => Localizer.Pick("Manage environments", "Gérer les environnements");
+
+    /// <summary>New collection</summary>
+    public static string PaletteNewCollection => Localizer.Pick("New collection", "Nouvelle collection");
+
+    /// <summary>New request</summary>
+    public static string PaletteNewRequest => Localizer.Pick("New request", "Nouvelle requête");
+
+    /// <summary>Next tab</summary>
+    public static string PaletteNextTab => Localizer.Pick("Next tab", "Onglet suivant");
+
+    /// <summary>No environment</summary>
+    public static string PaletteNoEnvironment => Localizer.Pick("No environment", "Aucun environnement");
+
+    /// <summary>Previous tab</summary>
+    public static string PalettePreviousTab => Localizer.Pick("Previous tab", "Onglet précédent");
+
+    /// <summary>Restart to update</summary>
+    public static string PaletteRestartToUpdate => Localizer.Pick("Restart to update", "Redémarrer pour mettre à jour");
+
+    /// <summary>Save request</summary>
+    public static string PaletteSaveRequest => Localizer.Pick("Save request", "Enregistrer la requête");
+
+    /// <summary>Send request</summary>
+    public static string PaletteSendRequest => Localizer.Pick("Send request", "Envoyer la requête");
+
+    /// <summary>Show collections</summary>
+    public static string PaletteShowCollections => Localizer.Pick("Show collections", "Afficher les collections");
+
+    /// <summary>Show history</summary>
+    public static string PaletteShowHistory => Localizer.Pick("Show history", "Afficher l'historique");
+
+    /// <summary>Toggle console</summary>
+    public static string PaletteToggleConsole => Localizer.Pick("Toggle console", "Afficher ou masquer la console");
+
+    /// <summary>Toggle request layout (side by side or stacked)</summary>
+    public static string PaletteToggleLayout => Localizer.Pick("Toggle request layout (side by side or stacked)", "Changer la disposition de la requête (côte à côte ou empilée)");
+
+    /// <summary>Use environment: {0}</summary>
+    public static string PaletteUseEnvironment(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Use environment: {0}", "Utiliser l'environnement : {0}"), a0);
+
+    /// <summary>Lock the vault</summary>
+    public static string PaletteVaultLock => Localizer.Pick("Lock the vault", "Verrouiller le coffre");
+
+    /// <summary>Set up the secret vault...</summary>
+    public static string PaletteVaultSetup => Localizer.Pick("Set up the secret vault...", "Configurer le coffre des secrets...");
+
+    /// <summary>Unlock the vault...</summary>
+    public static string PaletteVaultUnlock => Localizer.Pick("Unlock the vault...", "Déverrouiller le coffre...");
+
+    /// <summary>Request canceled</summary>
+    public static string RequestCanceled => Localizer.Pick("Request canceled", "Requête annulée");
+
+    /// <summary>The request failed.</summary>
+    public static string RequestFailed => Localizer.Pick("The request failed.", "La requête a échoué.");
+
+    /// <summary>New Request</summary>
+    public static string RequestNewName => Localizer.Pick("New Request", "Nouvelle requête");
+
+    /// <summary>Could not save variable changes: {0}</summary>
+    public static string RequestVariableChangesNotSaved(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Could not save variable changes: {0}", "Impossible d'enregistrer les modifications des variables : {0}"), a0);
+
+    /// <summary>Vault is locked: secret variables are not available.</summary>
+    public static string RequestVaultLockedWarning => Localizer.Pick("Vault is locked: secret variables are not available.", "Le coffre est verrouillé : les variables secrètes ne sont pas disponibles.");
+
+    /// <summary>Binary content, {0}</summary>
+    public static string ResponseBinaryContent(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Binary content, {0}", "Contenu binaire, {0}"), a0);
+
+    /// <summary>Pre-request script failed — {0}: {1}</summary>
+    public static string ResponsePreRequestFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Pre-request script failed — {0}: {1}", "Le script de pré-requête a échoué — {0} : {1}"), a0, a1);
+
+    /// <summary>line {0}</summary>
+    public static string ScriptLine(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("line {0}", "ligne {0}"), a0);
+
+    /// <summary>post-response · {0}</summary>
+    public static string ScriptOriginPostResponse(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("post-response · {0}", "post-réponse · {0}"), a0);
+
+    /// <summary>pre-request · {0}</summary>
+    public static string ScriptOriginPreRequest(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("pre-request · {0}", "pré-requête · {0}"), a0);
+
+    /// <summary>Canceled</summary>
+    public static string ScriptStatusCanceled => Localizer.Pick("Canceled", "Annulé");
+
+    /// <summary>Script error</summary>
+    public static string ScriptStatusError => Localizer.Pick("Script error", "Erreur de script");
+
+    /// <summary>Memory limit</summary>
+    public static string ScriptStatusMemoryLimit => Localizer.Pick("Memory limit", "Limite de mémoire atteinte");
+
+    /// <summary>Timed out</summary>
+    public static string ScriptStatusTimedOut => Localizer.Pick("Timed out", "Délai dépassé");
+
+    /// <summary>Engine unavailable</summary>
+    public static string ScriptStatusUnavailable => Localizer.Pick("Engine unavailable", "Moteur indisponible");
+
+    /// <summary>Runs after the response arrives.</summary>
+    public static string ScriptTemplatePostResponse => Localizer.Pick("Runs after the response arrives.", "S'exécute après la réception de la réponse.");
+
+    /// <summary>Runs before the request is sent.</summary>
+    public static string ScriptTemplatePreRequest => Localizer.Pick("Runs before the request is sent.", "S'exécute avant l'envoi de la requête.");
+
+    /// <summary>No {0} engine is installed</summary>
+    public static string ScriptingEngineMissing(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No {0} engine is installed", "Aucun moteur {0} n'est installé"), a0);
+
+    /// <summary>No collection: the value of '{0}' only lives for this send</summary>
+    public static string ScriptingWarningNoCollection(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No collection: the value of '{0}' only lives for this send", "Aucune collection : la valeur de '{0}' ne dure que pour cet envoi"), a0);
+
+    /// <summary>No active environment: the value of '{0}' only lives for this send</summary>
+    public static string ScriptingWarningNoEnvironment(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No active environment: the value of '{0}' only lives for this send", "Aucun environnement actif : la valeur de '{0}' ne dure que pour cet envoi"), a0);
+
+    /// <summary>Cannot move a collection that has secret variables</summary>
+    public static string SecretsMoveCollectionBlocked => Localizer.Pick("Cannot move a collection that has secret variables", "Impossible de déplacer une collection qui contient des variables secrètes");
+
+    /// <summary>Cannot remove the secrets of the collection: {0}</summary>
+    public static string SecretsRemoveCollectionFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot remove the secrets of the collection: {0}", "Impossible de supprimer les secrets de la collection : {0}"), a0);
+
+    /// <summary>Cannot remove the secrets of the environment: {0}</summary>
+    public static string SecretsRemoveEnvironmentFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot remove the secrets of the environment: {0}", "Impossible de supprimer les secrets de l'environnement : {0}"), a0);
+
+    /// <summary>Cannot save secret '{0}': {1}</summary>
+    public static string SecretsSaveFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot save secret '{0}': {1}", "Impossible d'enregistrer le secret '{0}' : {1}"), a0, a1);
+
+    /// <summary>Unlock the vault to mark '{0}' as secret</summary>
+    public static string SecretsVaultLocked(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unlock the vault to mark '{0}' as secret", "Déverrouillez le coffre pour marquer '{0}' comme secret"), a0);
+
+    /// <summary>{0} engine unavailable: {1}</summary>
+    public static string ShellEngineUnavailable(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} engine unavailable: {1}", "Moteur {0} indisponible : {1}"), a0, a1);
+
+    /// <summary>Failed</summary>
+    public static string TestsFailed => Localizer.Pick("Failed", "Échoué");
+
+    /// <summary>Passed</summary>
+    public static string TestsPassed => Localizer.Pick("Passed", "Réussi");
+
+    /// <summary>{0} of {1} passed</summary>
+    public static string TestsSummary(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} of {1} passed", "{0} sur {1} réussis"), a0, a1);
+
+    /// <summary>Version {0} is available.</summary>
+    public static string UpdateBannerAvailable(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Version {0} is available.", "La version {0} est disponible."), a0);
+
+    /// <summary>Downloading version {0}... {1}%</summary>
+    public static string UpdateBannerDownloading(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Downloading version {0}... {1}%", "Téléchargement de la version {0}... {1} %"), a0, a1);
+
+    /// <summary>Version {0} is ready. Restart to update.</summary>
+    public static string UpdateBannerReady(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Version {0} is ready. Restart to update.", "La version {0} est prête. Redémarrez pour mettre à jour."), a0);
+
+    /// <summary>Update check failed: {0}</summary>
+    public static string UpdateCheckFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Update check failed: {0}", "Échec de la recherche de mises à jour : {0}"), a0);
+
+    /// <summary>Update download failed: {0}</summary>
+    public static string UpdateDownloadFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Update download failed: {0}", "Échec du téléchargement de la mise à jour : {0}"), a0);
+
+    /// <summary>Checking for updates...</summary>
+    public static string UpdateStatusChecking => Localizer.Pick("Checking for updates...", "Recherche de mises à jour...");
+
+    /// <summary>The update failed.</summary>
+    public static string UpdateStatusFailed => Localizer.Pick("The update failed.", "La mise à jour a échoué.");
+
+    /// <summary>Last checked {0}.</summary>
+    public static string UpdateStatusLastChecked(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Last checked {0}.", "Dernière vérification : {0}."), a0);
+
+    /// <summary>Not checked yet.</summary>
+    public static string UpdateStatusNeverChecked => Localizer.Pick("Not checked yet.", "Aucune vérification effectuée.");
+
+    /// <summary>Updates are only available in the installed app.</summary>
+    public static string UpdateStatusUnsupported => Localizer.Pick("Updates are only available in the installed app.", "Les mises à jour ne sont disponibles que dans l'application installée.");
+
+    /// <summary>Yaapic is up to date.</summary>
+    public static string UpdateStatusUpToDate => Localizer.Pick("Yaapic is up to date.", "Yaapic est à jour.");
+
+    /// <summary>Updates are not available in this build.</summary>
+    public static string UpdateUnavailable => Localizer.Pick("Updates are not available in this build.", "Les mises à jour ne sont pas disponibles dans cette version.");
+
+    /// <summary>Changes every time the request is sent.</summary>
+    public static string VariablesDynamicMessage => Localizer.Pick("Changes every time the request is sent.", "Change à chaque envoi de la requête.");
+
+    /// <summary>The global variables cannot be saved.</summary>
+    public static string VariablesErrorGlobalsNotSaved => Localizer.Pick("The global variables cannot be saved.", "Impossible d'enregistrer les variables globales.");
+
+    /// <summary>The variable name is not valid.</summary>
+    public static string VariablesErrorInvalidName => Localizer.Pick("The variable name is not valid.", "Le nom de la variable n'est pas valide.");
+
+    /// <summary>This scope is not available for the request.</summary>
+    public static string VariablesErrorScopeUnavailable => Localizer.Pick("This scope is not available for the request.", "Cette portée n'est pas disponible pour la requête.");
+
+    /// <summary>Request is not in a collection</summary>
+    public static string VariablesReasonNoCollection => Localizer.Pick("Request is not in a collection", "La requête n'est dans aucune collection");
+
+    /// <summary>No environment is active</summary>
+    public static string VariablesReasonNoEnvironment => Localizer.Pick("No environment is active", "Aucun environnement n'est actif");
+
+    /// <summary>Globals are not available</summary>
+    public static string VariablesReasonNoGlobals => Localizer.Pick("Globals are not available", "Les variables globales ne sont pas disponibles");
+
+    /// <summary>Active environment</summary>
+    public static string VariablesScopeActiveEnvironment => Localizer.Pick("Active environment", "Environnement actif");
+
+    /// <summary>Collection</summary>
+    public static string VariablesScopeCollection => Localizer.Pick("Collection", "Collection");
+
+    /// <summary>Dynamic</summary>
+    public static string VariablesScopeDynamic => Localizer.Pick("Dynamic", "Dynamique");
+
+    /// <summary>Environment</summary>
+    public static string VariablesScopeEnvironment => Localizer.Pick("Environment", "Environnement");
+
+    /// <summary>Globals</summary>
+    public static string VariablesScopeGlobals => Localizer.Pick("Globals", "Globales");
+
+    /// <summary>Local</summary>
+    public static string VariablesScopeLocal => Localizer.Pick("Local", "Locale");
+
+    /// <summary>Unresolved variables: {0}</summary>
+    public static string VariablesUnresolved(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unresolved variables: {0}", "Variables non résolues : {0}"), a0);
+
+    /// <summary>This variable is not defined in the active collection, environment or globals.</summary>
+    public static string VariablesUnresolvedMessage => Localizer.Pick("This variable is not defined in the active collection, environment or globals.", "Cette variable n'est définie ni dans la collection active, ni dans l'environnement, ni dans les variables globales.");
+
+    /// <summary>Unresolved variable</summary>
+    public static string VariablesUnresolvedTitle => Localizer.Pick("Unresolved variable", "Variable non résolue");
+
+    /// <summary>Wrong passphrase</summary>
+    public static string VaultErrorWrongPassphrase => Localizer.Pick("Wrong passphrase", "Phrase secrète incorrecte");
+
+    /// <summary>Use at least {0} characters</summary>
+    public static string VaultHintMinLength(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Use at least {0} characters", "Utilisez au moins {0} caractères"), a0);
+
+    /// <summary>Passphrases do not match</summary>
+    public static string VaultHintMismatch => Localizer.Pick("Passphrases do not match", "Les phrases secrètes ne correspondent pas");
+
+    /// <summary>Windows account (DPAPI)</summary>
+    public static string VaultProtectorDpapi => Localizer.Pick("Windows account (DPAPI)", "Compte Windows (DPAPI)");
+
+    /// <summary>macOS Keychain</summary>
+    public static string VaultProtectorKeychain => Localizer.Pick("macOS Keychain", "Trousseau macOS");
+
+    /// <summary>Passphrase</summary>
+    public static string VaultProtectorPassphrase => Localizer.Pick("Passphrase", "Phrase secrète");
+
+    /// <summary>Secret Service</summary>
+    public static string VaultProtectorSecretService => Localizer.Pick("Secret Service", "Secret Service");
+
+    /// <summary>Vault locked</summary>
+    public static string VaultStatusLocked => Localizer.Pick("Vault locked", "Coffre verrouillé");
+
+    /// <summary>No vault</summary>
+    public static string VaultStatusNone => Localizer.Pick("No vault", "Aucun coffre");
+
+    /// <summary>Vault unlocked</summary>
+    public static string VaultStatusUnlocked => Localizer.Pick("Vault unlocked", "Coffre déverrouillé");
 }

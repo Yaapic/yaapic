@@ -16,7 +16,7 @@ public class DependencyRulesTests
         ["Yaapic.Scripting"] = ["Yaapic.Core", "Yaapic.Domain"],
         ["Yaapic.UI.Abstractions"] = [],
         ["Yaapic.Design.Tokens"] = [],
-        ["Yaapic.ViewModels"] = ["Yaapic.Core", "Yaapic.UI.Abstractions"],
+        ["Yaapic.ViewModels"] = ["Yaapic.Core", "Yaapic.Localization", "Yaapic.UI.Abstractions"],
         ["Yaapic.Composition"] = ["Yaapic.Core", "Yaapic.Domain", "Yaapic.Infrastructure", "Yaapic.Scripting", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
         ["Yaapic.App.WinUI"] = ["Yaapic.Composition", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],
         ["Yaapic.App.Avalonia"] = ["Yaapic.Composition", "Yaapic.UI.Abstractions", "Yaapic.ViewModels"],

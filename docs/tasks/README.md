@@ -365,7 +365,7 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 | [P-01](milestone-personalization/P-01-adr-localization-and-accent.md) | ADR: localization (FR/EN) and accent colour | any | none | done |
 | [P-02](milestone-personalization/P-02-preferences-model-and-store.md) | Preferences model and store | any | P-01 | done |
 | [P-03](milestone-personalization/P-03-string-catalogue-and-localizer.md) | String catalogue, generator and localizer | any | P-01, P-02 | done |
-| [P-04](milestone-personalization/P-04-localize-viewmodels-and-core.md) | Localize the view model and Core texts | any | P-03 | todo |
+| [P-04](milestone-personalization/P-04-localize-viewmodels-and-core.md) | Localize the view model and Core texts | any | P-03 | done |
 | [P-05](milestone-personalization/P-05-winui-localization.md) | WinUI: localize the views | windows | P-04 | todo |
 | [P-06](milestone-personalization/P-06-avalonia-localization.md) | Avalonia: localize the views | unix | P-04, P-05 | todo |
 | [P-07](milestone-personalization/P-07-accent-derivation.md) | Accent colour derivation | any | P-02 | done |

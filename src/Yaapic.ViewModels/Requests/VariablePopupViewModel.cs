@@ -2,6 +2,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Variables;
 using Yaapic.ViewModels.Editing;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Requests;
 
@@ -16,13 +17,13 @@ public sealed record VariableScopeChoice(VariableScopeKind Kind, string Label, b
 public sealed partial class VariablePopupViewModel : ObservableObject
 {
     /// <summary>The message shown for an unresolved variable.</summary>
-    public const string UnresolvedMessage = "This variable is not defined in the active collection, environment or globals.";
+    public static string UnresolvedMessage => Strings.VariablesUnresolvedMessage;
 
     /// <summary>The message shown for a dynamic variable.</summary>
-    public const string DynamicMessage = "Changes every time the request is sent.";
+    public static string DynamicMessage => Strings.VariablesDynamicMessage;
 
     /// <summary>The title shown for an unresolved variable.</summary>
-    public const string UnresolvedTitle = "Unresolved variable";
+    public static string UnresolvedTitle => Strings.VariablesUnresolvedTitle;
 
     private readonly VariableContext _context;
 
@@ -58,9 +59,9 @@ public sealed partial class VariablePopupViewModel : ObservableObject
         Scope = hint.Scope;
         ScopeChoices =
         [
-            Choice(VariableScopeKind.Environment, "Active environment", writable, "No environment is active"),
-            Choice(VariableScopeKind.Collection, "Collection", writable, "Request is not in a collection"),
-            Choice(VariableScopeKind.Globals, "Globals", writable, "Globals are not available"),
+            Choice(VariableScopeKind.Environment, Strings.VariablesScopeActiveEnvironment, writable, Strings.VariablesReasonNoEnvironment),
+            Choice(VariableScopeKind.Collection, Strings.VariablesScopeCollection, writable, Strings.VariablesReasonNoCollection),
+            Choice(VariableScopeKind.Globals, Strings.VariablesScopeGlobals, writable, Strings.VariablesReasonNoGlobals),
         ];
         var first = ScopeChoices.FirstOrDefault(c => c.IsEnabled)?.Kind ?? VariableScopeKind.Globals;
         _selectedScope = hint.Scope is { } own && ScopeChoices.Any(c => c.Kind == own && c.IsEnabled) ? own : first;
@@ -95,11 +96,11 @@ public sealed partial class VariablePopupViewModel : ObservableObject
     /// <summary>Gets the label of <see cref="Scope"/>; empty when unresolved.</summary>
     public string ScopeLabel => Scope switch
     {
-        VariableScopeKind.Environment => "Environment",
-        VariableScopeKind.Collection => "Collection",
-        VariableScopeKind.Globals => "Globals",
-        VariableScopeKind.Dynamic => "Dynamic",
-        VariableScopeKind.Local => "Local",
+        VariableScopeKind.Environment => Strings.VariablesScopeEnvironment,
+        VariableScopeKind.Collection => Strings.VariablesScopeCollection,
+        VariableScopeKind.Globals => Strings.VariablesScopeGlobals,
+        VariableScopeKind.Dynamic => Strings.VariablesScopeDynamic,
+        VariableScopeKind.Local => Strings.VariablesScopeLocal,
         _ => "",
     };
 
@@ -116,7 +117,7 @@ public sealed partial class VariablePopupViewModel : ObservableObject
     public bool CanEdit => IsResolved && !IsDynamic && !IsSecret;
 
     /// <summary>Gets the label of the submit button.</summary>
-    public string SubmitLabel => IsResolved ? "Save" : "Create";
+    public string SubmitLabel => IsResolved ? Strings.CommonSave : Strings.CommonCreate;
 
     /// <summary>Gets a value indicating whether the form can be submitted.</summary>
     public bool CanSubmit => !IsDynamic && !IsBusy && VariableContext.IsCreatableName(Name)

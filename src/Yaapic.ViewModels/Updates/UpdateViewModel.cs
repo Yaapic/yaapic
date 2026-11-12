@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Updates;
 using Yaapic.Domain.Scripting;
 using Yaapic.ViewModels.Console;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Updates;
 
@@ -142,21 +143,21 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     /// <summary>Gets the one-line banner text, empty when there is nothing to announce.</summary>
     public string BannerText => State switch
     {
-        UpdateState.Available => $"Version {_update?.Version} is available.",
-        UpdateState.Downloading => $"Downloading version {_update?.Version}... {DownloadPercent}%",
-        UpdateState.ReadyToRestart => $"Version {_update?.Version} is ready. Restart to update.",
+        UpdateState.Available => Strings.UpdateBannerAvailable(_update?.Version),
+        UpdateState.Downloading => Strings.UpdateBannerDownloading(_update?.Version, DownloadPercent),
+        UpdateState.ReadyToRestart => Strings.UpdateBannerReady(_update?.Version),
         _ => "",
     };
 
     /// <summary>Gets the status line of the settings section.</summary>
     public string StatusText => State switch
     {
-        UpdateState.Unsupported => "Updates are only available in the installed app.",
-        UpdateState.Checking => "Checking for updates...",
-        UpdateState.UpToDate => "Yaapic is up to date.",
-        UpdateState.Failed => ErrorMessage ?? "The update failed.",
+        UpdateState.Unsupported => Strings.UpdateStatusUnsupported,
+        UpdateState.Checking => Strings.UpdateStatusChecking,
+        UpdateState.UpToDate => Strings.UpdateStatusUpToDate,
+        UpdateState.Failed => ErrorMessage ?? Strings.UpdateStatusFailed,
         UpdateState.Available or UpdateState.Downloading or UpdateState.ReadyToRestart => BannerText,
-        _ => LastCheckUtc is { } last ? $"Last checked {last.ToLocalTime():g}." : "Not checked yet.",
+        _ => LastCheckUtc is { } last ? Strings.UpdateStatusLastChecked($"{last.ToLocalTime():g}") : Strings.UpdateStatusNeverChecked,
     };
 
     /// <summary>Gets a value indicating whether the banner shows: an update is found and the user did not dismiss that version.</summary>
@@ -220,7 +221,7 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
         }
         catch (Exception ex) when (ex is IOException or InvalidOperationException)
         {
-            Fail($"Update download failed: {ex.Message}");
+            Fail(Strings.UpdateDownloadFailed(ex.Message));
         }
         finally
         {
@@ -327,10 +328,10 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
                 OnPropertyChanged(nameof(IsBannerVisible));
                 break;
             case UpdateCheckResult.Failed failed:
-                _console?.AppendSystem(ConsoleLevel.Warn, $"Update check failed: {failed.Reason}");
+                _console?.AppendSystem(ConsoleLevel.Warn, Strings.UpdateCheckFailed(failed.Reason));
                 if (manual)
                 {
-                    Fail($"Update check failed: {failed.Reason}", log: false);
+                    Fail(Strings.UpdateCheckFailed(failed.Reason), log: false);
                 }
                 else
                 {

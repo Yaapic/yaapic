@@ -6,6 +6,7 @@ using Yaapic.Domain.Environments;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Vault;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Environments;
 
@@ -147,7 +148,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     {
         ArgumentNullException.ThrowIfNull(item);
         var source = item.ToDefinition();
-        var copy = EnvironmentItemViewModel.FromNew(new(Guid.NewGuid(), $"{source.Name} copy", source.Variables));
+        var copy = EnvironmentItemViewModel.FromNew(new(Guid.NewGuid(), Strings.CommonCopyName(source.Name), source.Variables));
         AddItem(copy);
         EditedEnvironment = copy;
     }
@@ -155,7 +156,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     [RelayCommand]
     private void Add()
     {
-        var item = EnvironmentItemViewModel.FromNew(EnvironmentDefinition.Create("New Environment"));
+        var item = EnvironmentItemViewModel.FromNew(EnvironmentDefinition.Create(Strings.EnvironmentsNewName));
         AddItem(item);
         EditedEnvironment = item;
     }

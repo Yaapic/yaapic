@@ -1,5 +1,6 @@
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Secrets;
 
@@ -48,7 +49,7 @@ public sealed class SecretAwareCollectionStore(ICollectionStore inner, ISecretVa
         }
         catch (VaultException ex)
         {
-            throw new StorageException($"Cannot remove the secrets of the collection: {ex.Message}", ex);
+            throw new StorageException(Strings.SecretsRemoveCollectionFailed(ex.Message), ex);
         }
     }
 
@@ -62,7 +63,7 @@ public sealed class SecretAwareCollectionStore(ICollectionStore inner, ISecretVa
             && roots.Any(r => r.Id == id) != (newParentId is null)
             && node.Folder!.Variables.Any(v => v.IsSecret))
         {
-            throw new StorageException("Cannot move a collection that has secret variables");
+            throw new StorageException(Strings.SecretsMoveCollectionBlocked);
         }
 
         await inner.MoveAsync(id, newParentId, ct);

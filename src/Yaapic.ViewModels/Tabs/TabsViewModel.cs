@@ -5,13 +5,14 @@ using Yaapic.Core.Storage;
 using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Requests;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Tabs;
 
 /// <summary>The open request tabs: opening, switching, saving and closing with an unsaved-changes prompt.</summary>
 public sealed partial class TabsViewModel : ObservableObject
 {
-    private const string DefaultName = "New Request";
+    private static string DefaultName => Strings.RequestNewName;
 
     private readonly IRequestStore _store;
     private readonly IDialogService _dialogs;

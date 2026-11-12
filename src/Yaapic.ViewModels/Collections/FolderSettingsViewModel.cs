@@ -5,6 +5,7 @@ using Yaapic.Domain.Collections;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Scripting;
 using Yaapic.ViewModels.Vault;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Collections;
 
@@ -26,10 +27,10 @@ public sealed partial class FolderSettingsViewModel : ObservableObject
     private string? _lastError;
 
     /// <summary>Hint shown above the scripts of a folder.</summary>
-    public const string FolderScriptsHint = "Runs for every request in this folder, before the request's own script.";
+    public static string FolderScriptsHint => Strings.CollectionsFolderScriptsHint;
 
     /// <summary>Hint shown above the scripts of a collection.</summary>
-    public const string CollectionScriptsHint = "Runs for every request in this collection, before the folder and request scripts.";
+    public static string CollectionScriptsHint => Strings.CollectionsCollectionScriptsHint;
 
     /// <summary>Creates the view model.</summary>
     /// <param name="folder">The folder to edit; its current state is the saved baseline.</param>

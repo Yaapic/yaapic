@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Editing;
 
@@ -10,10 +11,10 @@ public sealed partial class KeyValueRowViewModel : ObservableObject
     public const string Mask = "••••••••";
 
     /// <summary>The error shown when a row is marked secret while the vault is not unlocked.</summary>
-    public const string VaultLockedError = "Unlock the vault to mark a variable as secret";
+    public static string VaultLockedError => Strings.EditingVaultLockedError;
 
     /// <summary>The hint shown once a row stops being secret.</summary>
-    public const string StoredInWorkspaceHint = "This value will be stored in the workspace file.";
+    public static string StoredInWorkspaceHint => Strings.EditingStoredInWorkspaceHint;
 
     private bool _secretsUnlocked;
 
@@ -65,7 +66,7 @@ public sealed partial class KeyValueRowViewModel : ObservableObject
     public bool CanToggleSecret => IsSecret || _secretsUnlocked;
 
     /// <summary>Gets the tooltip of the secret toggle.</summary>
-    public string SecretToggleTooltip => CanToggleSecret ? "Store this value in the vault" : "Unlock the vault to use secrets";
+    public string SecretToggleTooltip => CanToggleSecret ? Strings.EditingSecretToggleStore : Strings.EditingSecretToggleLocked;
 
     internal bool SecretsUnlocked
     {

@@ -8,6 +8,7 @@ using Yaapic.Domain.History;
 using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.History;
 
@@ -125,7 +126,7 @@ public sealed partial class HistoryViewModel : ObservableObject
     [RelayCommand]
     private async Task ClearAsync()
     {
-        if (!await _dialogs.ConfirmDeleteAsync("the whole history"))
+        if (!await _dialogs.ConfirmDeleteAsync(Strings.HistoryDeleteAllTarget))
         {
             return;
         }
@@ -155,8 +156,8 @@ public sealed partial class HistoryViewModel : ObservableObject
 
     private static string Title(DateTime day, DateTime today) => (today - day).Days switch
     {
-        0 => "Today",
-        1 => "Yesterday",
+        0 => Strings.HistoryToday,
+        1 => Strings.HistoryYesterday,
         _ => day.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
     };
 

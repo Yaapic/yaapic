@@ -1,6 +1,6 @@
 # P-04: Localize the view model and Core texts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: P-03
 
@@ -20,8 +20,8 @@ The XAML views (P-05, P-06).
 
 ## Acceptance criteria
 
-- [ ] No user-visible literal left in the view models and Core texts; all tests green.
-- [ ] French wording reviewed by the maintainer.
+- [x] No user-visible literal left in the view models and Core texts; all tests green. (An architecture source scan guards new hard-coded sentences; the pm.sendRequest texts returned to scripts and developer-facing exception messages stay English.)
+- [ ] French wording reviewed by the maintainer (pending: the French values in strings.fr.json were written by the agent).
 
 ## Suggested commit message
 

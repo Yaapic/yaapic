@@ -7,6 +7,7 @@ using Yaapic.Domain.Http;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Tabs;
 using Yaapic.ViewModels.Vault;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Collections;
 
@@ -99,7 +100,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     [RelayCommand]
     private async Task NewCollectionAsync()
     {
-        if (await PromptNameAsync("New collection", "New Collection") is not { } name) return;
+        if (await PromptNameAsync(Strings.CollectionsNewCollection, Strings.CollectionsNewCollectionName) is not { } name) return;
         await RunAsync(() => _collections.SaveFolderAsync(FolderDefinition.Create(name), null, CancellationToken.None));
     }
 
@@ -107,7 +108,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     private async Task NewFolderAsync(CollectionNodeViewModel parent)
     {
         ArgumentNullException.ThrowIfNull(parent);
-        if (!parent.IsFolder || await PromptNameAsync("New folder", "New Folder") is not { } name) return;
+        if (!parent.IsFolder || await PromptNameAsync(Strings.CollectionsNewFolder, Strings.CollectionsNewFolderName) is not { } name) return;
         await RunAsync(() => _collections.SaveFolderAsync(FolderDefinition.Create(name), parent.Id, CancellationToken.None),
             () => _expanded.Add(parent.Id));
     }
@@ -116,7 +117,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     private async Task RenameFolderAsync(CollectionNodeViewModel folder)
     {
         ArgumentNullException.ThrowIfNull(folder);
-        if (!folder.IsFolder || await PromptNameAsync("Rename", folder.Name) is not { } name || name == folder.Name) return;
+        if (!folder.IsFolder || await PromptNameAsync(Strings.CommonRename, folder.Name) is not { } name || name == folder.Name) return;
         await RunAsync(() => _collections.SaveFolderAsync(folder.Node.Folder! with { Name = name }, null, CancellationToken.None));
     }
 
@@ -211,7 +212,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
         ArgumentNullException.ThrowIfNull(folder);
         if (!folder.IsFolder) return;
         var requests = folder.Node.Descendants().Where(static n => n.Kind == CollectionNodeKind.Request).Select(static n => n.Id).ToList();
-        var label = requests.Count == 0 ? folder.Name : $"{folder.Name} and its {requests.Count} requests";
+        var label = requests.Count == 0 ? folder.Name : Strings.CollectionsFolderAndRequests(folder.Name, requests.Count);
         if (!await Dialogs.ConfirmDeleteAsync(label)) return;
         foreach (var id in requests)
             _tabs.CloseWithoutPrompt(id);
@@ -222,7 +223,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     private async Task NewRequestAsync(CollectionNodeViewModel? parent)
     {
         var folderId = parent is { IsFolder: true } ? parent.Id : (Guid?)null;
-        var definition = HttpRequestDefinition.Create("New Request");
+        var definition = HttpRequestDefinition.Create(Strings.RequestNewName);
         await RunAsync(
             async () =>
             {
@@ -240,7 +241,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     private async Task RenameRequestAsync(CollectionNodeViewModel node)
     {
         ArgumentNullException.ThrowIfNull(node);
-        if (node.IsFolder || await PromptNameAsync("Rename", node.Name) is not { } name || name == node.Name) return;
+        if (node.IsFolder || await PromptNameAsync(Strings.CommonRename, node.Name) is not { } name || name == node.Name) return;
         if (_tabs.Tabs.FirstOrDefault(t => t.Id == node.Id) is { } tab)
         {
             var wasClean = !tab.IsDirty;
@@ -264,7 +265,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     {
         ArgumentNullException.ThrowIfNull(node);
         if (node.IsFolder) return;
-        var copy = node.Node.Request! with { Id = Guid.NewGuid(), Name = $"{node.Name} copy" };
+        var copy = node.Node.Request! with { Id = Guid.NewGuid(), Name = Strings.CommonCopyName(node.Name) };
         var folderId = node.Parent?.Id;
         await RunAsync(
             async () =>
@@ -291,7 +292,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     {
         ArgumentNullException.ThrowIfNull(node);
         List<FolderOption> options = [];
-        if (node.Parent is not null) options.Add(new FolderOption(null, "Top level"));
+        if (node.Parent is not null) options.Add(new FolderOption(null, Strings.CollectionsTopLevel));
         AddTargets(_tree, "", node, options);
         return options;
     }
@@ -321,7 +322,7 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
 
     // A blank answer counts as a cancel.
     private async Task<string?> PromptNameAsync(string title, string initial) =>
-        (await Dialogs.PromptTextAsync(title, "Name", initial))?.Trim() is { Length: > 0 } name ? name : null;
+        (await Dialogs.PromptTextAsync(title, Strings.CommonName, initial))?.Trim() is { Length: > 0 } name ? name : null;
 
     private async Task RunAsync(Func<Task> action, Action? onSuccess = null)
     {

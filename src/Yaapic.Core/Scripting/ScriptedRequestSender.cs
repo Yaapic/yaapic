@@ -3,6 +3,7 @@ using Yaapic.Core.Responses;
 using Yaapic.Core.Secrets;
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Scripting;
 
@@ -51,9 +52,9 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
         foreach (var step in preSteps)
         {
             var block = step.Scripts.PreRequest;
-            var origin = $"pre-request · {step.Origin}";
+            var origin = Strings.ScriptOriginPreRequest(step.Origin);
             var run = ct.IsCancellationRequested
-                ? Failure(ScriptPhase.PreRequest, origin, block.Language, ScriptRunStatus.Canceled, "Canceled")
+                ? Failure(ScriptPhase.PreRequest, origin, block.Language, ScriptRunStatus.Canceled, Strings.ScriptStatusCanceled)
                 : await engines.Get(block.Language).RunAsync(
                     new ScriptInvocation(
                         block,
@@ -79,7 +80,7 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
             catch (InvalidOperationException ex)
             {
                 var last = preSteps[^1];
-                var failed = Failure(ScriptPhase.PreRequest, $"pre-request · {last.Origin}", last.Scripts.PreRequest.Language, ScriptRunStatus.Failed, ex.Message);
+                var failed = Failure(ScriptPhase.PreRequest, Strings.ScriptOriginPreRequest(last.Origin), last.Scripts.PreRequest.Language, ScriptRunStatus.Failed, ex.Message);
                 runs.Add(failed);
                 return Aborted(runs, overlay, failed, sends);
             }
@@ -115,10 +116,10 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
         foreach (var step in input.Chain.Steps.Where(s => !s.Scripts.PostResponse.IsEmpty))
         {
             var block = step.Scripts.PostResponse;
-            var origin = $"post-response · {step.Origin}";
+            var origin = Strings.ScriptOriginPostResponse(step.Origin);
             if (ct.IsCancellationRequested)
             {
-                runs.Add(Failure(ScriptPhase.PostResponse, origin, block.Language, ScriptRunStatus.Canceled, "Canceled"));
+                runs.Add(Failure(ScriptPhase.PostResponse, origin, block.Language, ScriptRunStatus.Canceled, Strings.ScriptStatusCanceled));
                 return;
             }
 
@@ -152,7 +153,7 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
 
         if (report.UnresolvedVariables.Count > 0)
         {
-            log.Add(new(now, ConsoleLevel.Warn, ConsoleSource.System, $"Unresolved variables: {string.Join(", ", report.UnresolvedVariables)}", origin));
+            log.Add(new(now, ConsoleLevel.Warn, ConsoleSource.System, Strings.VariablesUnresolved(string.Join(", ", report.UnresolvedVariables)), origin));
         }
 
         return log;

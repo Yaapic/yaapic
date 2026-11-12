@@ -1,4 +1,5 @@
 using Yaapic.ViewModels.Tabs;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Palette;
 
@@ -19,9 +20,9 @@ public sealed class TabsPaletteSource : IPaletteSource
     public IReadOnlyList<PaletteItem> GetItems() =>
         [.. _tabs.Tabs.Select(tab => new PaletteItem(
             $"tab:{tab.Id}",
-            $"Go to tab: {tab.DisplayName}",
+            Strings.PaletteGoToTab(tab.DisplayName),
             $"{tab.MethodText}  {tab.Url}",
-            "Tab",
+            Strings.PaletteCategoryTab,
             null,
             () =>
             {

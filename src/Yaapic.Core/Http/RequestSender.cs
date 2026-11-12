@@ -1,6 +1,7 @@
 using Yaapic.Core.Variables;
 using Yaapic.Domain.Environments;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Http;
 
@@ -35,7 +36,7 @@ public sealed class RequestSender(IHttpTransport transport)
         }
         catch (OperationCanceledException)
         {
-            result = SendResult.Fail(SendFailureKind.Canceled, "Request canceled");
+            result = SendResult.Fail(SendFailureKind.Canceled, Strings.RequestCanceled);
         }
         catch (Exception ex)
         {

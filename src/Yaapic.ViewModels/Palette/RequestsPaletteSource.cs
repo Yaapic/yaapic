@@ -1,6 +1,7 @@
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Collections;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Palette;
 
@@ -37,7 +38,7 @@ public sealed class RequestsPaletteSource : IPaletteSource
             {
                 var subtitle = $"{request.Method.ToText()}  {request.Url}" + (path.Length == 0 ? "" : $"  ·  {path}");
                 var id = request.Id;
-                items.Add(new PaletteItem($"request:{id}", request.Name, subtitle, "Request", null, () =>
+                items.Add(new PaletteItem($"request:{id}", request.Name, subtitle, Strings.PaletteCategoryRequest, null, () =>
                 {
                     _collections.OpenRequest(id);
                     return Task.CompletedTask;

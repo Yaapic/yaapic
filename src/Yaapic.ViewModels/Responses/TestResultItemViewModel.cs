@@ -1,5 +1,6 @@
 using System.Globalization;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Responses;
 
@@ -34,7 +35,7 @@ public sealed class TestResultItemViewModel
     public string Origin { get; }
 
     /// <summary>Gets <c>Passed</c> or <c>Failed</c>.</summary>
-    public string StatusText => Passed ? "Passed" : "Failed";
+    public string StatusText => Passed ? Strings.TestsPassed : Strings.TestsFailed;
 
     /// <summary>Gets the status glyph: a check mark or a cross.</summary>
     public string Symbol => Passed ? "✓" : "×";
