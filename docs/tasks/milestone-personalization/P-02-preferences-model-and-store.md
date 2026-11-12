@@ -1,6 +1,6 @@
 # P-02: Preferences model and store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: P-01
 
@@ -18,8 +18,8 @@ Per-user appearance preferences, loaded before the first window opens.
 
 ## Acceptance criteria
 
-- [ ] Tests: round trip, missing file, corrupt file, unknown preset id.
-- [ ] A custom colour that is not `#RRGGBB` falls back to the default accent.
+- [x] Tests: round trip, missing file, corrupt file, unknown preset id.
+- [x] A custom colour that is not `#RRGGBB` falls back to the default accent.
 
 ## Suggested commit message
 
