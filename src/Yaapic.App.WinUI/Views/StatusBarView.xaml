@@ -22,7 +22,7 @@
             ToolTipService.ToolTip="Show the response beside or below the request"
             MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"
             Command="{x:Bind ViewModel.Layout.ToggleCommand, Mode=OneWay}">
-      <Viewbox Width="14" Height="14">
+      <Viewbox Width="14" Height="14" Margin="0,2,0,0">
         <Grid>
           <ic:FluentIcon Icon="SplitVertical" IconVariant="Regular" IconSize="Size16" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                          Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.Layout.IsHorizontal), Mode=OneWay}"/>
