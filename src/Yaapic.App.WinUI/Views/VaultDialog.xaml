@@ -23,7 +23,7 @@
               <TextBlock Text="{x:Bind Label}"/>
               <TextBlock Style="{StaticResource YaapicBodySmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                          Visibility="{x:Bind p:VisibilityMap.WhenTrue(RequiresPassphrase)}"
-                         Text="{x:Bind loc:Strings.VaultPassphraseNote}"/>
+                         Text="{x:Bind loc:Strings.VaultTypedEachTimeNote}"/>
             </StackPanel>
           </DataTemplate>
         </RadioButtons.ItemTemplate>

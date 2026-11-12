@@ -309,7 +309,7 @@
   "script.hint": "Variables, tests et requêtes : pm.* (JavaScript et Lua)",
   "vault.lockedHint": "Le coffre est verrouillé. Déverrouillez-le pour afficher ou modifier les valeurs secrètes.",
   "collections.descriptionPlaceholder": "À quoi sert cette collection ?",
-  "vault.passphraseNote": "Vous la saisirez à chaque ouverture de l'espace de travail",
+  "vault.typedEachTimeNote": "Vous la saisirez à chaque ouverture de l'espace de travail",
   "editing.variableHint": "Utilisez {{variable}} pour garder les secrets hors du fichier",
   "editor.variableUpper": "VARIABLE",
   "body.selectFile": "Sélectionner un fichier",

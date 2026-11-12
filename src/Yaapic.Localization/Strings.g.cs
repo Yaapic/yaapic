@@ -945,9 +945,6 @@ public static class Strings
     /// <summary>Vault is locked. Unlock it to view or edit secret values.</summary>
     public static string VaultLockedHint => Localizer.Pick("Vault is locked. Unlock it to view or edit secret values.", "Le coffre est verrouillé. Déverrouillez-le pour afficher ou modifier les valeurs secrètes.");
 
-    /// <summary>You will type it each time you open the workspace</summary>
-    public static string VaultPassphraseNote => Localizer.Pick("You will type it each time you open the workspace", "Vous la saisirez à chaque ouverture de l'espace de travail");
-
     /// <summary>Protect the vault with</summary>
     public static string VaultProtectWith => Localizer.Pick("Protect the vault with", "Protéger le coffre avec");
 
@@ -977,6 +974,9 @@ public static class Strings
 
     /// <summary>Vault unlocked</summary>
     public static string VaultStatusUnlocked => Localizer.Pick("Vault unlocked", "Coffre déverrouillé");
+
+    /// <summary>You will type it each time you open the workspace</summary>
+    public static string VaultTypedEachTimeNote => Localizer.Pick("You will type it each time you open the workspace", "Vous la saisirez à chaque ouverture de l'espace de travail");
 
     /// <summary>Unlock</summary>
     public static string VaultUnlock => Localizer.Pick("Unlock", "Déverrouiller");

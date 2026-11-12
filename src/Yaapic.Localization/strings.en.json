@@ -309,7 +309,7 @@
   "script.hint": "Variables, tests and requests: pm.* (JavaScript and Lua)",
   "vault.lockedHint": "Vault is locked. Unlock it to view or edit secret values.",
   "collections.descriptionPlaceholder": "What is this collection for?",
-  "vault.passphraseNote": "You will type it each time you open the workspace",
+  "vault.typedEachTimeNote": "You will type it each time you open the workspace",
   "editing.variableHint": "Use {{variable}} to keep secrets out of the file",
   "editor.variableUpper": "VARIABLE",
   "body.selectFile": "Select file",
