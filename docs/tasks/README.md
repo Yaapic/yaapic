@@ -349,6 +349,12 @@ packing on Linux and macOS have not run yet (`docs/releasing.md`, "Checked by ha
 WinUI AOT build, a start from the packed layout, both update UIs with a scripted service (`docs/screenshots/updates`). Not checked:
 the update UI on macOS and Linux, and signing (no certificate yet).
 
+## UX improvements
+
+| Card | Title | Platform | Depends on | Status |
+|---|---|---|---|---|
+| [U-01](milestone-ux-improvements/U-01-request-response-layout.md) | Request / response layout toggle (stacked or side by side) | any | none | done |
+
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |

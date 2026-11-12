@@ -100,6 +100,10 @@
   </Style>
 
   <!-- Request tabs: square tabs on the sidebar surface, the selected one on the base surface with an accent top line. -->
+  <!-- Compact: the strip is hidden (a drop-down takes its place, see RequestEditorView.UpdateSectionsOverflow) and the content starts below it. -->
+  <Style Selector="TabControl.panel.compact /template/ ItemsPresenter#PART_ItemsPresenter">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
   <Style Selector="TabControl.requests">
     <Setter Property="Template">
       <ControlTemplate>
@@ -303,6 +307,20 @@
     <Setter Property="Background" Value="{DynamicResource YaapicSurfaceSidebarBrush}" />
     <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
     <Setter Property="BorderThickness" Value="0,1" />
+  </Style>
+  <!-- Side-by-side layout: the same bar turned into a vertical one. -->
+  <Style Selector="GridSplitter.columns">
+    <Setter Property="Width" Value="5" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="ResizeDirection" Value="Columns" />
+    <Setter Property="Cursor" Value="SizeWestEast" />
+    <Setter Property="Focusable" Value="True" />
+    <Setter Property="Background" Value="{DynamicResource YaapicSurfaceSidebarBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource YaapicBorderSubtleBrush}" />
+    <Setter Property="BorderThickness" Value="1,0" />
+  </Style>
+  <Style Selector="GridSplitter.columns:pointerover">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
   </Style>
   <Style Selector="GridSplitter.rows:pointerover">
     <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />

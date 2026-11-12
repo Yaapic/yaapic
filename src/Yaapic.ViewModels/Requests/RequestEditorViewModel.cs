@@ -143,6 +143,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <summary>Gets the response panel; it keeps the last response of this tab.</summary>
     public ResponsePanelViewModel Response { get; }
 
+    /// <summary>Gets or sets the request / response layout shared by all tabs; the composition root replaces the default with the shell's.</summary>
+    public PaneLayoutViewModel Layout { get; set; } = new();
+
     /// <summary>Gets a value indicating whether a send is in flight.</summary>
     public bool IsSending => SendCommand.IsRunning;
 

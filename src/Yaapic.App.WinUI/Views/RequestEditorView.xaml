@@ -22,6 +22,12 @@
     <KeyboardAccelerator Key="Escape" Invoked="OnCancelAccelerator"/>
   </UserControl.KeyboardAccelerators>
   <Grid Background="{ThemeResource YaapicSurfaceBaseBrush}">
+    <!-- Columns 1 and 2 only exist in the side-by-side layout (ApplyLayout); the stacked layout keeps them at width 0. -->
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition x:Name="RequestColumn" Width="*"/>
+      <ColumnDefinition x:Name="SplitterColumn" Width="0"/>
+      <ColumnDefinition x:Name="ResponseColumn" Width="0"/>
+    </Grid.ColumnDefinitions>
     <Grid.RowDefinitions>
       <RowDefinition Height="40"/>
       <RowDefinition Height="Auto"/>
@@ -32,7 +38,7 @@
     </Grid.RowDefinitions>
 
     <!-- Header: name, unsaved dot, Save. -->
-    <Grid Padding="16,0,12,0" ColumnSpacing="8">
+    <Grid Grid.ColumnSpan="3" Padding="16,0,12,0" ColumnSpacing="8">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
@@ -56,7 +62,7 @@
     </Grid>
 
     <!-- URL bar: method picker + URL in one frame, then Send / Cancel. -->
-    <Grid Grid.Row="1" Padding="16,0,16,12" ColumnSpacing="8">
+    <Grid Grid.Row="1" Grid.ColumnSpan="3" Padding="16,0,16,12" ColumnSpacing="8">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
@@ -123,8 +129,20 @@
     </Grid>
 
     <!-- Section tabs with count badges. -->
-    <Border Grid.Row="2" Padding="16,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
-      <StackPanel Orientation="Horizontal">
+    <!-- When the strip does not fit (side by side layout), it is replaced by a drop-down listing the same sections. -->
+    <Border x:Name="SectionTabs" Grid.Row="2" Grid.ColumnSpan="3" Padding="16,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+      <Grid>
+      <Button x:Name="TabOverflow" Visibility="Collapsed" Style="{StaticResource YaapicSubtleButtonStyle}" HorizontalAlignment="Left"
+              VerticalAlignment="Center" Margin="-10,2,0,2" MinHeight="0" Height="28" Padding="10,0" AutomationProperties.Name="Request sections">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock x:Name="TabOverflowLabel" VerticalAlignment="Center"/>
+          <FontIcon Glyph="&#xE70D;" FontSize="10" VerticalAlignment="Center"/>
+        </StackPanel>
+        <Button.Flyout>
+          <MenuFlyout x:Name="TabOverflowMenu" Opening="OnTabOverflowOpening"/>
+        </Button.Flyout>
+      </Button>
+      <StackPanel x:Name="TabStrip" Orientation="Horizontal">
         <ToggleButton x:Name="ParamsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" IsChecked="True"
                       Click="OnTabClick">
           <StackPanel Orientation="Horizontal" Spacing="5">
@@ -173,9 +191,10 @@
           <TextBlock Text="Settings" VerticalAlignment="Center"/>
         </ToggleButton>
       </StackPanel>
+      </Grid>
     </Border>
 
-    <Grid Grid.Row="3">
+    <Grid x:Name="EditorContent" Grid.Row="3" Grid.ColumnSpan="3">
       <v:KeyValueEditorView x:Name="ParamsPane" Margin="16,12,16,12"
                             VariableContext="{x:Bind ViewModel.Variables, Mode=OneWay}"
                                     ViewModel="{x:Bind ViewModel.QueryParams, Mode=OneWay}"/>
@@ -272,7 +291,7 @@
     </Grid>
 
     <!-- Editor / response splitter: 5 px hit area, 1 px visible line (2 px accent while hovered or dragged). -->
-    <Grid Grid.Row="4" Height="5">
+    <Grid x:Name="SplitterHost" Grid.Row="4" Grid.ColumnSpan="3" Height="5">
       <Rectangle x:Name="SplitterLine" Height="1" VerticalAlignment="Center" IsHitTestVisible="False"
                  Fill="{ThemeResource YaapicBorderSubtleBrush}"/>
       <v:SplitterHandle x:Name="Splitter" Background="Transparent" IsTabStop="True" UseSystemFocusVisuals="True"
@@ -291,6 +310,6 @@
       </v:SplitterHandle>
     </Grid>
 
-    <v:ResponsePanelView Grid.Row="5" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
+    <v:ResponsePanelView x:Name="ResponseView" Grid.Row="5" Grid.ColumnSpan="3" ViewModel="{x:Bind ViewModel.Response, Mode=OneWay}"/>
   </Grid>
 </UserControl>

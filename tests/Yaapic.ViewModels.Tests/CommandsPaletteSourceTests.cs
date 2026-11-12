@@ -13,7 +13,7 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class CommandsPaletteSourceTests
 {
-    private static readonly string[] Always = ["New request", "New collection", "Manage environments", "Show collections", "Show history", "Toggle console", "Clear console", "Set up the secret vault..."];
+    private static readonly string[] Always = ["New request", "New collection", "Manage environments", "Show collections", "Show history", "Toggle request layout (side by side or stacked)", "Toggle console", "Clear console", "Set up the secret vault..."];
 
     private static readonly HttpResponseData Ok = new(200, "OK", [], [], TimeSpan.FromMilliseconds(5), "https://x.test");
 

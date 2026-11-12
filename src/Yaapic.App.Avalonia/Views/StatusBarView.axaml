@@ -4,6 +4,9 @@
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
              x:Class="Yaapic.App.Avalonia.Views.StatusBarView"
              x:DataType="vm:ShellViewModel">
+  <UserControl.Resources>
+    <StreamGeometry x:Key="YiLayoutStacked">M4 5h16v14H4zM4 12h16</StreamGeometry>
+  </UserControl.Resources>
   <UserControl.Styles>
     <Style Selector="TextBlock.consoleToggle">
       <Setter Property="Foreground" Value="{DynamicResource YaapicTextSecondaryBrush}" />
@@ -20,13 +23,25 @@
   </UserControl.Styles>
   <Border Height="24" Padding="10,0" Background="{DynamicResource YaapicSurfaceAppBrush}"
           BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-    <Grid ColumnDefinitions="*,Auto,Auto">
+    <Grid ColumnDefinitions="*,Auto,Auto,Auto">
       <TextBlock Grid.Column="0" Classes="caption" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                  Foreground="{DynamicResource YaapicWarningBrush}"
                  Text="{Binding ScriptEngineWarnings, Converter={x:Static p:ConsoleMap.FirstLine}}"
                  ToolTip.Tip="{Binding ScriptEngineWarnings, Converter={x:Static p:ConsoleMap.JoinLines}}"
                  IsVisible="{Binding HasScriptEngineWarnings}" />
-      <Button x:Name="VaultButton" Grid.Column="1" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
+      <!-- The icon shows the layout the button switches to. -->
+      <Button x:Name="LayoutToggle" Grid.Column="1" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
+              VerticalAlignment="Center" Command="{Binding Layout.ToggleCommand}"
+              AutomationProperties.AutomationId="Layout" AutomationProperties.Name="Switch request layout"
+              ToolTip.Tip="Show the response beside or below the request">
+        <Panel>
+          <Path Data="{StaticResource YiSplit}" Width="12" Height="12" Stretch="Uniform" StrokeThickness="1.5"
+                Stroke="{DynamicResource YaapicTextSecondaryBrush}" IsVisible="{Binding !Layout.IsHorizontal}" />
+          <Path Data="{StaticResource YiLayoutStacked}" Width="12" Height="12" Stretch="Uniform" StrokeThickness="1.5"
+                Stroke="{DynamicResource YaapicTextSecondaryBrush}" IsVisible="{Binding Layout.IsHorizontal}" />
+        </Panel>
+      </Button>
+      <Button x:Name="VaultButton" Grid.Column="2" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
               VerticalAlignment="Center" Click="OnVaultClick"
               AutomationProperties.AutomationId="Vault" AutomationProperties.Name="{Binding Vault.StatusText}"
               ToolTip.Tip="{Binding Vault.ProtectorLabel, Converter={x:Static p:VaultMap.Tip}}">
@@ -36,7 +51,7 @@
           <TextBlock Text="{Binding Vault.StatusText}" Classes="caption" VerticalAlignment="Center" />
         </StackPanel>
       </Button>
-      <Button x:Name="ConsoleToggle" Grid.Column="2" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
+      <Button x:Name="ConsoleToggle" Grid.Column="3" Classes="subtle" MinHeight="0" Height="22" Padding="8,0"
               VerticalAlignment="Center" Command="{Binding ToggleConsoleCommand}"
               AutomationProperties.AutomationId="Console" AutomationProperties.Name="Console"
               ToolTip.Tip="Toggle the console (Ctrl+`)">

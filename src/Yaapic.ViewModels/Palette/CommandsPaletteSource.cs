@@ -56,6 +56,7 @@ public sealed class CommandsPaletteSource : IPaletteSource
             items.Add(Item("clear-history", "Clear history", null, _shell.History.ClearCommand));
         }
 
+        items.Add(Item("toggle-layout", "Toggle request layout (side by side or stacked)", null, _shell.Layout.ToggleCommand));
         items.Add(Item("toggle-console", "Toggle console", "Ctrl+`", _shell.ToggleConsoleCommand));
         items.Add(Item("clear-console", "Clear console", null, _shell.ClearConsoleCommand));
         var vault = _shell.Vault;

@@ -39,7 +39,8 @@ public sealed class FileSessionStore(string workspaceRoot) : ISessionStore
         return new SessionState(
             [.. (dto.OpenRequests ?? []).Select(ParseGuid).OfType<Guid>()],
             ParseGuid(dto.ActiveRequest),
-            ParseGuid(dto.ActiveEnvironment));
+            ParseGuid(dto.ActiveEnvironment),
+            dto.Layout == "horizontal" ? PaneLayout.Horizontal : PaneLayout.Vertical);
     }
 
     /// <inheritdoc />
@@ -52,6 +53,7 @@ public sealed class FileSessionStore(string workspaceRoot) : ISessionStore
             OpenRequests = [.. state.OpenRequestIds.Select(g => g.ToString("D"))],
             ActiveRequest = state.ActiveRequestId?.ToString("D") ?? "",
             ActiveEnvironment = state.ActiveEnvironmentId?.ToString("D") ?? "",
+            Layout = state.Layout == PaneLayout.Horizontal ? "horizontal" : "vertical",
         };
         var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n").TrimEnd('\n') + "\n";
         try

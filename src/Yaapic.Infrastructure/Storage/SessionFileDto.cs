@@ -12,4 +12,6 @@ internal partial class SessionFileDto
     public string? ActiveRequest { get; set; }
 
     public string? ActiveEnvironment { get; set; }
+
+    public string? Layout { get; set; }
 }
