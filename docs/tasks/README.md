@@ -374,7 +374,7 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 | [P-10](milestone-personalization/P-10-settings-viewmodel.md) | Settings ViewModel | any | P-02, P-03, P-07 | done |
 | [P-11](milestone-personalization/P-11-winui-settings-dialog.md) | WinUI: Settings dialog | windows | P-08, P-10 | done |
 | [P-12](milestone-personalization/P-12-avalonia-settings-window.md) | Avalonia: Settings window | unix | P-09, P-10, P-11 | done |
-| [P-13](milestone-personalization/P-13-end-to-end-and-docs.md) | End-to-end tests and docs | any | P-05, P-06, P-11, P-12 | todo |
+| [P-13](milestone-personalization/P-13-end-to-end-and-docs.md) | End-to-end tests and docs | any | P-05, P-06, P-11, P-12 | done |
 
 ## Milestones 2 to 10
 
