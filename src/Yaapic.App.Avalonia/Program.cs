@@ -1,4 +1,5 @@
 using Avalonia;
+using Yaapic.Infrastructure.Updates;
 
 namespace Yaapic.App.Avalonia;
 
@@ -9,8 +10,11 @@ public static class Program
     /// <param name="args">Command-line arguments (unused).</param>
     /// <returns>The process exit code.</returns>
     [STAThread]
-    public static int Main(string[] args) =>
-        BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    public static int Main(string[] args)
+    {
+        UpdateHooks.Run(); // First statement: the installer runs the app with hook arguments and expects it to exit at once.
+        return BuildAvaloniaApp().StartWithClassicDesktopLifetime(args);
+    }
 
     /// <summary>Builds the Avalonia application, also used by the previewer.</summary>
     /// <returns>The configured application builder.</returns>

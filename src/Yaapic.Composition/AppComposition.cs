@@ -97,7 +97,7 @@ public static class AppComposition
             new SecretAwareCollectionStore(new FileCollectionStore(workspaceRoot), vault), requestStore, tabs, dialogs, vaultViewModel);
         scopes = new VariableScopeProvider(environments, globals, collections);
         scripting = new ScriptSendServices(scriptedSender, new CollectionTreeScriptChainProvider(collections), console, scopes, limits);
-        var updates = new UpdateViewModel(updateService ?? new UnsupportedUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), new UpdateScheduler(TimeProvider.System), console);
+        var updates = new UpdateViewModel(updateService ?? new VelopackUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), new UpdateScheduler(TimeProvider.System), console);
         var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates);
         reloader.Target = shell;
         shell.AttachPalette(new CommandPaletteViewModel(

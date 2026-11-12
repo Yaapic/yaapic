@@ -3,6 +3,7 @@ using Yaapic.App.WinUI.Services;
 using Yaapic.Composition;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
+using Yaapic.Infrastructure.Updates;
 
 namespace Yaapic.App.WinUI;
 
@@ -12,7 +13,12 @@ public partial class App : Application
     private MainWindow? _window;
 
     /// <summary>Initializes the application.</summary>
-    public App() => InitializeComponent();
+    public App()
+    {
+        // WinUI generates Main, so this constructor is the first code of ours to run; see UpdateHooks.
+        UpdateHooks.Run();
+        InitializeComponent();
+    }
 
     /// <inheritdoc/>
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
