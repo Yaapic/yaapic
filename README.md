@@ -7,8 +7,7 @@ core: **WinUI 3** (Windows) and **Avalonia** (Windows, macOS, Linux).
 
 Prerequisites:
 
-- Git and the **.NET 11 SDK** pinned in [global.json](global.json) (a release candidate: install the exact version,
-  it is picked up automatically).
+- Git and the **.NET 11 SDK** pinned in [global.json](global.json) (install at least that version, it is picked up automatically).
 - Native AOT publishing needs a native toolchain: Visual Studio "Desktop development with C++" on Windows,
   `clang` and `zlib1g-dev` on Linux, Xcode command line tools on macOS.
 - The script engines (QuickJS-NG and Lua 5.4) are native libraries built from pinned sources by `pwsh native/Build-Natives.ps1`
