@@ -369,9 +369,22 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
         }
     }
 
-    // Reports on the calling thread: the service reports from its own, and the UI marshals property changes itself.
+    // The service reports from a worker thread and the UI frameworks reject property changes from it (WinUI: 0x8001010E),
+    // so reports are posted back to the context the download started on; without one (tests) they run inline.
     private sealed class InlineProgress(Action<int> report) : IProgress<int>
     {
-        public void Report(int value) => report(value);
+        private readonly SynchronizationContext? _context = SynchronizationContext.Current;
+
+        public void Report(int value)
+        {
+            if (_context is null)
+            {
+                report(value);
+            }
+            else
+            {
+                _context.Post(_ => report(value), null);
+            }
+        }
     }
 }
