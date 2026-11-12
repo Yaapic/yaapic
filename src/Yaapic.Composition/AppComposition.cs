@@ -1,6 +1,8 @@
+using System.Reflection;
 using Yaapic.Core.Http;
 using Yaapic.Core.Scripting;
 using Yaapic.Core.Secrets;
+using Yaapic.Core.Updates;
 using Yaapic.Infrastructure.Http;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
@@ -22,6 +24,15 @@ namespace Yaapic.Composition;
 /// <summary>Wires the application object graph shared by every App project.</summary>
 public static class AppComposition
 {
+    /// <summary>Reads the version of the running application from the entry assembly (<c>0.0.0-dev</c> when it carries none).</summary>
+    /// <returns>The application information.</returns>
+    public static IAppInfo CreateAppInfo() => CreateAppInfo(Assembly.GetEntryAssembly() ?? typeof(AppComposition).Assembly);
+
+    internal static IAppInfo CreateAppInfo(Assembly assembly) =>
+        new AppInfo(AppVersion.TryParse(assembly.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion, out var version)
+            ? version
+            : AppVersion.Parse("0.0.0-dev"));
+
     /// <summary>Creates the shell view model on top of a workspace folder, creating the folder when needed.</summary>
     /// <param name="workspaceRoot">The workspace root directory.</param>
     /// <param name="dialogs">The platform dialog implementation.</param>

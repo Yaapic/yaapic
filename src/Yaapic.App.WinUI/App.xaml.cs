@@ -53,6 +53,7 @@ public partial class App : Application
             new WinUIDialogService(window, () => window.Content?.XamlRoot),
             new DpapiKeyProtectorFactory(),
             dataDirectory);
+        window.Title = $"Yaapic {AppComposition.CreateAppInfo().Version}";
         window.ViewModel = shell;
         window.Activate();
         await shell.InitializeAsync();

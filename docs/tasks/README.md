@@ -334,7 +334,7 @@ background download and apply on restart. Pulled forward from M10 (updates, pack
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
 | [R-01](milestone-release-distribution/R-01-adr-distribution.md) | ADR 0011, installer and automatic updates | any | none | done |
-| [R-02](milestone-release-distribution/R-02-versioning-and-about.md) | Versioning from the tag and the About information | any | R-01 | todo |
+| [R-02](milestone-release-distribution/R-02-versioning-and-about.md) | Versioning from the tag and the About information | any | R-01 | done |
 | [R-03](milestone-release-distribution/R-03-update-port-and-settings.md) | Update port, domain model and settings | any | R-02 | todo |
 | [R-04](milestone-release-distribution/R-04-velopack-adapter.md) | Velopack adapter and startup hook | any | R-03 | todo |
 | [R-05](milestone-release-distribution/R-05-update-viewmodel.md) | Update ViewModel and command palette entries | any | R-03 | todo |
