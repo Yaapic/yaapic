@@ -1,6 +1,6 @@
 # R-07: Avalonia update banner, settings and About
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: R-05
 
@@ -21,8 +21,9 @@ WinUI (R-06).
 
 ## Acceptance criteria
 
-- [ ] Screenshots through the Avalonia screenshot tool, saved next to the WinUI ones.
-- [ ] Runtime check on the dev machine (Windows run of the Avalonia app) of banner transitions with the fake service.
+- [x] Screenshots through the Avalonia screenshot tool, saved next to the WinUI ones.
+- [x] Runtime check on the dev machine (Windows run of the Avalonia AOT build): banner available, downloading (42 %) and ready, and
+      the dialog (up to date, failed check) with the scripted service. Not run on macOS or Linux.
 
 ## Suggested commit message
 

@@ -1,0 +1,35 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:Yaapic.ViewModels.Updates"
+        x:Class="Yaapic.App.Avalonia.Views.UpdatesWindow"
+        x:DataType="vm:UpdateViewModel"
+        Title="Updates and about"
+        Classes="dialog">
+  <StackPanel>
+    <StackPanel Margin="24,24,24,20" Spacing="16" Width="400">
+      <StackPanel Spacing="2">
+        <TextBlock Text="Yaapic" Classes="bodyStrong" />
+        <TextBlock x:Name="VersionText" Classes="dialogBody" />
+        <TextBlock Classes="dialogBody" TextWrapping="Wrap" Text="A fast, local-first API client. No account, no telemetry." />
+      </StackPanel>
+      <StackPanel Spacing="12">
+        <TextBlock Text="Update channel" />
+        <ComboBox x:Name="ChannelBox" ItemsSource="{Binding Channels}" SelectedItem="{Binding Channel}"
+                  IsEnabled="{Binding IsSupported}" AutomationProperties.Name="Update channel" />
+        <ToggleSwitch Content="Check for updates automatically" IsChecked="{Binding CheckAutomatically}"
+                      AutomationProperties.Name="Check for updates automatically" />
+        <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" AutomationProperties.Name="Update status" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Content="Check now" Command="{Binding CheckNowCommand}" />
+          <Button Content="Download" Command="{Binding DownloadCommand}" IsVisible="{Binding ShowDownload}" />
+          <Button Content="Restart to update" Classes="accent" Command="{Binding RestartAndApplyCommand}" IsVisible="{Binding ShowRestart}" />
+        </StackPanel>
+        <ProgressBar Minimum="0" Maximum="100" Value="{Binding DownloadPercent}" IsVisible="{Binding IsDownloading}"
+                     AutomationProperties.Name="Download progress" />
+      </StackPanel>
+    </StackPanel>
+    <Border Classes="dialogCommands">
+      <Button Content="Close" Classes="accent" IsDefault="True" IsCancel="True" Click="OnClose" />
+    </Border>
+  </StackPanel>
+</Window>

@@ -19,6 +19,7 @@ public sealed partial class MainWindow : Window
     private CollectionTreeViewModel? _collectionsSubscribed;
     private ShellViewModel? _shellSubscribed;
     private bool _vaultOpen;
+    private bool _updatesOpen;
     private const double ConsoleReservedHeight = 300;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
@@ -157,6 +158,7 @@ public sealed partial class MainWindow : Window
             _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
             _shellSubscribed.Vault.SetupRequested -= OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested -= OnVaultRequested;
+            _shellSubscribed.Updates.SettingsRequested -= OnUpdatesRequested;
         }
 
         if (_collectionsSubscribed is not null)
@@ -170,6 +172,7 @@ public sealed partial class MainWindow : Window
             _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
             _shellSubscribed.Vault.SetupRequested += OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested += OnVaultRequested;
+            _shellSubscribed.Updates.SettingsRequested += OnUpdatesRequested;
             _collectionsSubscribed = _shellSubscribed.Collections;
             _collectionsSubscribed.PropertyChanged += OnCollectionsChanged;
         }
@@ -190,6 +193,26 @@ public sealed partial class MainWindow : Window
         finally
         {
             _vaultOpen = false;
+        }
+    }
+
+    private void OnUpdatesClick(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => OnUpdatesRequested(sender, EventArgs.Empty);
+
+    private async void OnUpdatesRequested(object? sender, EventArgs e)
+    {
+        if (Shell is not { } shell || _updatesOpen)
+        {
+            return;
+        }
+
+        _updatesOpen = true;
+        try
+        {
+            await new Views.UpdatesWindow(shell.Updates).ShowDialog(this);
+        }
+        finally
+        {
+            _updatesOpen = false;
         }
     }
 
@@ -360,7 +383,7 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
-    /// <param name="name"><c>environments</c>, <c>vault</c>, <c>console</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
+    /// <param name="name"><c>environments</c>, <c>vault</c>, <c>updates</c>, <c>update-download</c>, <c>updates-check</c>, <c>console</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
     /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
     internal void OpenNamed(string name)
     {
@@ -369,6 +392,16 @@ public sealed partial class MainWindow : Window
             case "environments" when Shell is { } shell:
                 shell.Environments.EditedEnvironment ??= shell.Environments.ActiveEnvironment;
                 _ = ManageEnvironmentsAsync();
+                break;
+            case "update-download" when Shell is { } downloadShell:
+                downloadShell.Updates.DownloadCommand.Execute(null);
+                break;
+            case "updates" when Shell is { } updatesShell:
+                updatesShell.Updates.OpenSettingsCommand.Execute(null);
+                break;
+            case "updates-check" when Shell is { } checkShell:
+                checkShell.Updates.OpenSettingsCommand.Execute(null);
+                _ = checkShell.Updates.CheckNowCommand.ExecuteAsync(null);
                 break;
             case "vault" when Shell is { } vaultShell:
                 vaultShell.Vault.RequestSetupCommand.Execute(null);

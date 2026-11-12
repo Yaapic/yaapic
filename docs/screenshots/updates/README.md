@@ -9,6 +9,7 @@ Taken from the Native AOT builds with the scripted update service (`--update-dem
 | `winui-update-ready-dark.png` | Banner after the download, with Restart to update |
 | `winui-updates-dialog-dark.png` | Settings > Updates and about..., up to date |
 | `winui-updates-dialog-failed-light.png` | The same dialog after a failed manual check |
+| `avalonia-update-*.png`, `avalonia-updates-dialog-*.png` | The same screens on Avalonia (Windows run of the AOT build) |
 
 ```powershell
 dotnet publish src/Yaapic.App.WinUI -c Release -r win-x64 -p:PublishAot=true
@@ -18,3 +19,6 @@ pwsh tools/screenshots/Capture-WinUI.ps1 -Theme dark -UpdateDemo uptodate -NoTab
 ```
 
 Modes: `available`, `downloading`, `ready`, `uptodate`, `failed`. Run one capture per `pwsh` process.
+
+Avalonia: `pwsh tools/screenshots/Capture-Avalonia.ps1 -Theme dark -UpdateDemo available -NoTabs -Out ...`; `-Open update-download` presses
+Download (use it with `downloading` or `ready`), `-Open updates` opens the dialog and `-Open updates-check` also runs a manual check.

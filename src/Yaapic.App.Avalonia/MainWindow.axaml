@@ -82,6 +82,23 @@
       </Grid>
     </Border>
 
+    <Border Grid.Row="1" Classes="infobar info" Margin="8,6" IsVisible="{Binding Updates.IsBannerVisible}"
+            AutomationProperties.Name="Update available">
+      <DockPanel LastChildFill="False">
+        <Button DockPanel.Dock="Right" Classes="icon" Content="✕" Command="{Binding Updates.DismissCommand}"
+                AutomationProperties.Name="Dismiss" ToolTip.Tip="Dismiss" />
+        <Button DockPanel.Dock="Right" Content="Restart to update" Classes="accent" Margin="0,0,8,0"
+                Command="{Binding Updates.RestartAndApplyCommand}" IsVisible="{Binding Updates.ShowRestart}" />
+        <Button DockPanel.Dock="Right" Content="Cancel" Margin="0,0,8,0"
+                Command="{Binding Updates.CancelDownloadCommand}" IsVisible="{Binding Updates.IsDownloading}" />
+        <Button DockPanel.Dock="Right" Content="Download" Margin="0,0,8,0"
+                Command="{Binding Updates.DownloadCommand}" IsVisible="{Binding Updates.ShowDownload}" />
+        <ProgressBar DockPanel.Dock="Right" Width="160" Minimum="0" Maximum="100" Margin="0,0,8,0" VerticalAlignment="Center"
+                     Value="{Binding Updates.DownloadPercent}" IsVisible="{Binding Updates.IsDownloading}"
+                     AutomationProperties.Name="Download progress" />
+        <TextBlock Text="{Binding Updates.BannerText}" VerticalAlignment="Center" TextWrapping="Wrap" />
+      </DockPanel>
+    </Border>
     <Border Grid.Row="1" Classes="infobar danger" Margin="8,6"
             IsVisible="{Binding Tabs.LastError, Converter={x:Static ObjectConverters.IsNotNull}}">
       <TextBlock Text="{Binding Tabs.LastError}" TextWrapping="Wrap" />
@@ -112,6 +129,8 @@
                 <MenuItem Header="Dark" Click="OnThemeDark" />
                 <MenuItem Header="Light" Click="OnThemeLight" />
                 <MenuItem Header="System" Click="OnThemeSystem" />
+<Separator />
+<MenuItem Header="Updates and about..." Click="OnUpdatesClick" />
               </MenuFlyout>
             </Button.Flyout>
           </Button>

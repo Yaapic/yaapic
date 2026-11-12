@@ -339,7 +339,7 @@ background download and apply on restart. Pulled forward from M10 (updates, pack
 | [R-04](milestone-release-distribution/R-04-velopack-adapter.md) | Velopack adapter and startup hook | any | R-03 | done |
 | [R-05](milestone-release-distribution/R-05-update-viewmodel.md) | Update ViewModel and command palette entries | any | R-03 | done |
 | [R-06](milestone-release-distribution/R-06-winui-update-ui.md) | WinUI update banner, settings and About | windows | R-05 | done |
-| [R-07](milestone-release-distribution/R-07-avalonia-update-ui.md) | Avalonia update banner, settings and About | unix | R-05 | todo |
+| [R-07](milestone-release-distribution/R-07-avalonia-update-ui.md) | Avalonia update banner, settings and About | unix | R-05 | done |
 | [R-08](milestone-release-distribution/R-08-release-workflow.md) | Release workflow and packaging | any | R-02, R-04 | todo |
 | [R-09](milestone-release-distribution/R-09-update-end-to-end-and-docs.md) | Update end-to-end tests and docs | any | R-06, R-07, R-08 | todo |
 
