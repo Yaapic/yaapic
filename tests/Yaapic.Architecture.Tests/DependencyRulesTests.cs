@@ -10,7 +10,8 @@ public class DependencyRulesTests
     private static readonly Dictionary<string, string[]> AllowedReferences = new()
     {
         ["Yaapic.Domain"] = [],
-        ["Yaapic.Core"] = ["Yaapic.Domain"],
+        ["Yaapic.Localization"] = [],
+        ["Yaapic.Core"] = ["Yaapic.Domain", "Yaapic.Localization"],
         ["Yaapic.Infrastructure"] = ["Yaapic.Core", "Yaapic.Domain"],
         ["Yaapic.Scripting"] = ["Yaapic.Core", "Yaapic.Domain"],
         ["Yaapic.UI.Abstractions"] = [],

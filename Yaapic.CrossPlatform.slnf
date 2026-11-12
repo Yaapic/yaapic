@@ -8,6 +8,8 @@
       "src/Yaapic.ViewModels/Yaapic.ViewModels.csproj",
       "tests/Yaapic.Architecture.Tests/Yaapic.Architecture.Tests.csproj",
       "src/Yaapic.Design.Tokens/Yaapic.Design.Tokens.csproj",
+      "src/Yaapic.Localization/Yaapic.Localization.csproj",
+      "tests/Yaapic.Localization.Tests/Yaapic.Localization.Tests.csproj",
       "tests/Yaapic.Design.Tokens.Tests/Yaapic.Design.Tokens.Tests.csproj",
       "tests/Yaapic.Domain.Tests/Yaapic.Domain.Tests.csproj",
       "tests/Yaapic.Core.Tests/Yaapic.Core.Tests.csproj",

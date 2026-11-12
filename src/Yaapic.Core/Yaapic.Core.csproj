@@ -4,5 +4,6 @@
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Yaapic.Domain\Yaapic.Domain.csproj" />
+    <ProjectReference Include="..\Yaapic.Localization\Yaapic.Localization.csproj" />
   </ItemGroup>
 </Project>
