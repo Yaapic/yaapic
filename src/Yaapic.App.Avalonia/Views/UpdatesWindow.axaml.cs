@@ -34,7 +34,7 @@ public sealed partial class UpdatesWindow : Window
         _restart = restart;
         Title = Strings.SettingsTitle;
         VersionText.Text = Strings.CommonVersion(viewModel.CurrentVersion);
-        TaglineText.Text = "A fast, local-first API client. No account, no telemetry.";
+        TaglineText.Text = Strings.SettingsTagline;
         AppearanceTitle.Text = Strings.SettingsAppearance;
         LanguageLabel.Text = Strings.SettingsLanguage;
         foreach (var (language, label) in new[]

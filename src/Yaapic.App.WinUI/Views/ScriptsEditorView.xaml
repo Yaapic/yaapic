@@ -1,4 +1,5 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.ScriptsEditorView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.ScriptsEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
@@ -15,19 +16,19 @@
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <ListView x:Name="ScriptPhases" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
-                AutomationProperties.Name="Script phase" SelectionChanged="OnScriptPhaseChanged">
-        <x:String>Pre-request</x:String>
-        <x:String>Post-response</x:String>
+                AutomationProperties.Name="{x:Bind loc:Strings.ScriptPhase}" SelectionChanged="OnScriptPhaseChanged">
+        <ListViewItem Content="{x:Bind loc:Strings.ConsolePhasePreRequest}"/>
+        <ListViewItem Content="{x:Bind loc:Strings.ConsolePhasePostResponse}"/>
       </ListView>
       <ComboBox x:Name="ScriptLanguageBox" Grid.Column="1" MinWidth="130" VerticalAlignment="Center"
-                AutomationProperties.Name="Script language" SelectionChanged="OnScriptLanguageChanged"/>
+                AutomationProperties.Name="{x:Bind loc:Strings.ScriptLanguage}" SelectionChanged="OnScriptLanguageChanged"/>
       <TextBlock x:Name="Hint" Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                  FontSize="{StaticResource YaapicFontSizeCaption}"
                  Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
     </Grid>
     <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
             BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
-      <v:CodeEditorView x:Name="ScriptEditor" AutomationProperties.Name="Script"
+      <v:CodeEditorView x:Name="ScriptEditor" AutomationProperties.Name="{x:Bind loc:Strings.ScriptTitle}"
                         EditorLanguage="{x:Bind p:TextMap.ScriptLanguage(ViewModel.Selected.Language), Mode=OneWay}"
                         Text="{x:Bind ViewModel.Selected.Source, Mode=TwoWay}"/>
     </Border>

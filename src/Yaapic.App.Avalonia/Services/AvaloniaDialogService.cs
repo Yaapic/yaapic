@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -25,17 +26,17 @@ public sealed class AvaloniaDialogService : IDialogService
 
     /// <inheritdoc />
     public Task<UnsavedChoice> ConfirmUnsavedAsync(string itemName) => ShowAsync(
-        $"Save changes to '{itemName}'?",
-        "Your changes will be lost if you don't save them.",
+        Strings.DialogSaveChangesTitle(itemName),
+        Strings.DialogSaveChangesBody,
         UnsavedChoice.Cancel,
-        ("Save", UnsavedChoice.Save, "accent"), ("Don't save", UnsavedChoice.Discard, null), ("Cancel", UnsavedChoice.Cancel, null));
+        (Strings.CommonSave, UnsavedChoice.Save, "accent"), (Strings.DialogDontSave, UnsavedChoice.Discard, null), (Strings.CommonCancel, UnsavedChoice.Cancel, null));
 
     /// <inheritdoc />
     public async Task<bool> ConfirmDeleteAsync(string itemName) => await ShowAsync(
-        $"Delete '{itemName}'?",
-        "The request file will be deleted from the workspace.",
+        Strings.DialogDeleteTitle(itemName),
+        Strings.DialogDeleteBody,
         false,
-        ("Delete", true, "danger"), ("Cancel", false, null));
+        (Strings.CommonDelete, true, "danger"), (Strings.CommonCancel, false, null));
 
     /// <inheritdoc />
     public async Task<string?> PromptTextAsync(string title, string label, string initialText)

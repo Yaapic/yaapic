@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:c="using:Yaapic.App.Avalonia.Controls"
              xmlns:ed="using:Yaapic.ViewModels.Editing"
@@ -46,9 +47,9 @@
       <!-- Locked vault: secret rows are unreadable until it is unlocked. -->
       <Grid DockPanel.Dock="Top" ColumnDefinitions="*,Auto" Margin="10,4" IsVisible="{Binding ShowLockedCaption}">
         <TextBlock Classes="caption" TextWrapping="Wrap" VerticalAlignment="Center"
-                   Text="Vault is locked. Unlock it to view or edit secret values." />
-        <Button Grid.Column="1" Classes="subtle" Content="Unlock" MinHeight="24" Padding="8,0"
-                AutomationProperties.Name="Unlock" Command="{Binding UnlockCommand}" />
+                   Text="{x:Static loc:Strings.VaultLockedHint}" />
+        <Button Grid.Column="1" Classes="subtle" Content="{x:Static loc:Strings.VaultUnlock}" MinHeight="24" Padding="8,0"
+                AutomationProperties.Name="{x:Static loc:Strings.VaultUnlock}" Command="{Binding UnlockCommand}" />
       </Grid>
       <ScrollViewer>
         <ItemsControl ItemsSource="{Binding Rows}">
@@ -59,23 +60,23 @@
                 <StackPanel>
                 <Grid ColumnDefinitions="36,*,2*,Auto,36" Height="30">
                   <CheckBox Grid.Column="0" HorizontalAlignment="Center" MinWidth="0" Padding="0"
-                            AutomationProperties.Name="Enabled" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+                            AutomationProperties.Name="{x:Static loc:Strings.CommonEnabled}" IsChecked="{Binding Enabled, Mode=TwoWay}" />
                   <Border Grid.Column="1" Classes="cellhost">
-                    <c:VariableTextBox Watermark="Key" InputName="Key" FontSize="{DynamicResource YaapicFontSizeCode}"
+                    <c:VariableTextBox Watermark="{x:Static loc:Strings.EditorKey}" InputName="Key" FontSize="{DynamicResource YaapicFontSizeCode}"
                                        Context="{Binding #Root.VariableContext}" Text="{Binding Key, Mode=TwoWay}" />
                   </Border>
                   <Border Grid.Column="2" BorderThickness="1,0,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
                     <Border Classes="cellhost">
                       <Grid ColumnDefinitions="*,Auto">
-                        <c:VariableTextBox Watermark="Value" InputName="Value" FontSize="{DynamicResource YaapicFontSizeCode}"
+                        <c:VariableTextBox Watermark="{x:Static loc:Strings.EditorValue}" InputName="Value" FontSize="{DynamicResource YaapicFontSizeCode}"
                                            IsEnabled="{Binding CanEditValue}" IsVisible="{Binding !IsMasked}"
                                            Context="{Binding #Root.VariableContext}" Text="{Binding Value, Mode=TwoWay}" />
                         <!-- A masked secret is shown, never edited: reveal it first. -->
-                        <TextBox Classes="bare" IsReadOnly="True" AutomationProperties.Name="Value (secret)"
+                        <TextBox Classes="bare" IsReadOnly="True" AutomationProperties.Name="{x:Static loc:Strings.EditorValueSecret}"
                                  FontFamily="{DynamicResource YaapicMonoFont}" FontSize="{DynamicResource YaapicFontSizeCode}"
                                  IsEnabled="{Binding CanEditValue}" IsVisible="{Binding IsMasked}" Text="{Binding DisplayValue, Mode=OneWay}" />
                         <Button Grid.Column="1" Classes="icon" Classes.on="{Binding IsRevealed}"
-                                AutomationProperties.Name="Reveal" ToolTip.Tip="Show or hide the value"
+                                AutomationProperties.Name="{x:Static loc:Strings.EditorReveal}" ToolTip.Tip="{x:Static loc:Strings.EditorRevealTip}"
                                 IsEnabled="{Binding CanEditValue}" IsVisible="{Binding IsSecret}"
                                 Command="{Binding ToggleRevealCommand}">
                           <PathIcon Data="{StaticResource YaapicGlyphEye}" />
@@ -85,14 +86,14 @@
                   </Border>
                   <Border Grid.Column="3" Width="36" IsVisible="{Binding $parent[UserControl].((ed:KeyValueEditorViewModel)DataContext).AllowSecrets}">
                     <Button Classes="icon" Classes.on="{Binding IsSecret}" HorizontalAlignment="Center"
-                            AutomationProperties.Name="Secret" ToolTip.Tip="{Binding SecretToggleTooltip}"
+                            AutomationProperties.Name="{x:Static loc:Strings.EditorSecret}" ToolTip.Tip="{Binding SecretToggleTooltip}"
                             IsEnabled="{Binding CanToggleSecret}" IsVisible="{Binding !IsEmpty}"
                             Command="{Binding ToggleSecretCommand}">
                       <PathIcon Data="{StaticResource YaapicGlyphLock}" />
                     </Button>
                   </Border>
                   <Button Grid.Column="4" Classes="icon remove" HorizontalAlignment="Center"
-                          AutomationProperties.Name="Remove row" ToolTip.Tip="Remove row" IsVisible="{Binding !IsEmpty}"
+                          AutomationProperties.Name="{x:Static loc:Strings.EditorRemoveRow}" ToolTip.Tip="{x:Static loc:Strings.EditorRemoveRow}" IsVisible="{Binding !IsEmpty}"
                           Command="{Binding $parent[ItemsControl].((ed:KeyValueEditorViewModel)DataContext).RemoveRowCommand}"
                           CommandParameter="{Binding}">
                     <PathIcon Data="{StaticResource YaapicGlyphClose}" />

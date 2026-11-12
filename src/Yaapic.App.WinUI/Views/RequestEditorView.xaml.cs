@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using System.ComponentModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -223,12 +224,12 @@ public sealed partial class RequestEditorView : UserControl
     // The sections the drop-down lists, in strip order: the tab, its label and its count badge.
     private (ToggleButton Tab, string Label, TextBlock? Badge)[] Sections =>
     [
-        (ParamsTab, "Params", ParamsBadge),
-        (HeadersTab, "Headers", HeadersBadge),
-        (BodyTab, "Body", BodyBadge),
-        (AuthTab, "Auth", AuthBadge),
-        (ScriptsTab, "Scripts", ScriptsBadge),
-        (SettingsTab, "Settings", null),
+        (ParamsTab, Strings.RequestTabParams, ParamsBadge),
+        (HeadersTab, Strings.RequestTabHeaders, HeadersBadge),
+        (BodyTab, Strings.RequestTabBody, BodyBadge),
+        (AuthTab, Strings.RequestTabAuth, AuthBadge),
+        (ScriptsTab, Strings.RequestTabScripts, ScriptsBadge),
+        (SettingsTab, Strings.SettingsTitle, null),
     ];
 
     // Swaps the tab strip for a drop-down when the strip is wider than the room (a narrow request column).
@@ -254,7 +255,7 @@ public sealed partial class RequestEditorView : UserControl
     }
 
     private void UpdateTabOverflowLabel() =>
-        TabOverflowLabel.Text = Sections.FirstOrDefault(s => s.Tab.IsChecked == true).Label ?? "Params";
+        TabOverflowLabel.Text = Sections.FirstOrDefault(s => s.Tab.IsChecked == true).Label ?? Strings.RequestTabParams;
 
     private void OnTabOverflowOpening(object? sender, object e)
     {

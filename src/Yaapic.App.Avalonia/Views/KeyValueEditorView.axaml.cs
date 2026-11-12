@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Avalonia;
 using Avalonia.Controls;
 using Yaapic.ViewModels.Requests;
@@ -9,11 +10,11 @@ public sealed partial class KeyValueEditorView : UserControl
 {
     /// <summary>Identifies <see cref="KeyHeader"/>.</summary>
     public static readonly StyledProperty<string> KeyHeaderProperty =
-        AvaloniaProperty.Register<KeyValueEditorView, string>(nameof(KeyHeader), "KEY");
+        AvaloniaProperty.Register<KeyValueEditorView, string>(nameof(KeyHeader), Strings.EditorKeyUpper);
 
     /// <summary>Identifies <see cref="ValueHeader"/>.</summary>
     public static readonly StyledProperty<string> ValueHeaderProperty =
-        AvaloniaProperty.Register<KeyValueEditorView, string>(nameof(ValueHeader), "VALUE");
+        AvaloniaProperty.Register<KeyValueEditorView, string>(nameof(ValueHeader), Strings.EditorValueUpper);
 
     /// <summary>Identifies <see cref="VariableContext"/>.</summary>
     public static readonly StyledProperty<VariableContext?> VariableContextProperty =

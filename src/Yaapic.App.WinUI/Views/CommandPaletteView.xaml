@@ -1,4 +1,5 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.CommandPaletteView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.CommandPaletteView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
@@ -18,7 +19,7 @@
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <TextBox x:Name="QueryBox" MinHeight="44" Padding="16,11" BorderThickness="0" Background="Transparent" IsSpellCheckEnabled="False"
-                 PlaceholderText="Type a command or search requests" AutomationProperties.Name="Command palette"
+                 PlaceholderText="{x:Bind loc:Strings.PalettePlaceholder}" AutomationProperties.Name="{x:Bind loc:Strings.PaletteTitle}"
                  Text="{x:Bind ViewModel.Query, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <Border Grid.Row="1" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
           <Grid>
@@ -55,7 +56,7 @@
                 </DataTemplate>
               </ListView.ItemTemplate>
             </ListView>
-            <TextBlock Text="No matching commands" HorizontalAlignment="Center" Margin="16,20"
+            <TextBlock Text="{x:Bind loc:Strings.PaletteNoMatch}" HorizontalAlignment="Center" Margin="16,20"
                        Style="{StaticResource YaapicBodySmallTextStyle}"
                        Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsEmpty), Mode=OneWay}"/>

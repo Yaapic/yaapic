@@ -1,4 +1,5 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.RequestEditorView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.RequestEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
@@ -44,17 +45,17 @@
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <TextBox PlaceholderText="Untitled request" VerticalAlignment="Center" Padding="0,5" MinHeight="0"
+      <TextBox PlaceholderText="{x:Bind loc:Strings.RequestUntitled}" VerticalAlignment="Center" Padding="0,5" MinHeight="0"
                FontSize="{StaticResource YaapicFontSizeBodyStrong}" FontWeight="SemiBold"
-               AutomationProperties.Name="Request name"
+               AutomationProperties.Name="{x:Bind loc:Strings.RequestName}"
                Text="{x:Bind ViewModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
       <Ellipse Grid.Column="1" Width="6" Height="6" VerticalAlignment="Center"
-               Fill="{ThemeResource YaapicAccentFillBrush}" AutomationProperties.Name="Unsaved changes"
+               Fill="{ThemeResource YaapicAccentFillBrush}" AutomationProperties.Name="{x:Bind loc:Strings.CommonUnsavedChanges}"
                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsDirty), Mode=OneWay}"/>
-      <Button Grid.Column="2" Height="28" MinHeight="28" Padding="10,0" Click="OnSaveClick" AutomationProperties.Name="Save"
+      <Button Grid.Column="2" Height="28" MinHeight="28" Padding="10,0" Click="OnSaveClick" AutomationProperties.Name="{x:Bind loc:Strings.CommonSave}"
               IsEnabled="{x:Bind ViewModel.IsDirty, Mode=OneWay}">
         <StackPanel Orientation="Horizontal" Spacing="6">
-          <TextBlock Text="Save" VerticalAlignment="Center"/>
+          <TextBlock Text="{x:Bind loc:Strings.CommonSave}" VerticalAlignment="Center"/>
           <TextBlock Text="Ctrl+S" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}"
                      Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
         </StackPanel>
@@ -97,30 +98,30 @@
               </Button.Flyout>
             </Button>
           </Border>
-          <v:VariableTextBox x:Name="UrlBox" Grid.Column="1" PlaceholderText="Enter URL or paste text" VerticalAlignment="Center"
+          <v:VariableTextBox x:Name="UrlBox" Grid.Column="1" PlaceholderText="{x:Bind loc:Strings.RequestUrlPlaceholder}" VerticalAlignment="Center"
                              InputName="URL" Height="32"
                              Context="{x:Bind ViewModel.Variables, Mode=OneWay}"
                              Text="{x:Bind ViewModel.Url, Mode=TwoWay}"/>
         </Grid>
       </Border>
-      <Button Grid.Column="1" Style="{StaticResource AccentButtonStyle}" Height="36" Padding="16,0" AutomationProperties.Name="Send"
+      <Button Grid.Column="1" Style="{StaticResource AccentButtonStyle}" Height="36" Padding="16,0" AutomationProperties.Name="{x:Bind loc:Strings.RequestSend}"
               Command="{x:Bind ViewModel.SendCommand, Mode=OneWay}"
               Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.IsSending), Mode=OneWay}">
         <StackPanel Orientation="Horizontal" Spacing="8">
-          <TextBlock Text="Send" VerticalAlignment="Center"/>
+          <TextBlock Text="{x:Bind loc:Strings.RequestSend}" VerticalAlignment="Center"/>
           <TextBlock Text="Ctrl+Enter" VerticalAlignment="Center" Opacity="0.65"
                      Style="{StaticResource YaapicCodeSmallTextStyle}"
                      Foreground="{ThemeResource YaapicAccentOnBrush}"/>
         </StackPanel>
       </Button>
-      <Button Grid.Column="1" Style="{StaticResource YaapicDangerButtonStyle}" Height="36" Padding="16,0" AutomationProperties.Name="Cancel"
+      <Button Grid.Column="1" Style="{StaticResource YaapicDangerButtonStyle}" Height="36" Padding="16,0" AutomationProperties.Name="{x:Bind loc:Strings.CommonCancel}"
               Command="{x:Bind ViewModel.CancelCommand, Mode=OneWay}"
               Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsSending), Mode=OneWay}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <ProgressRing Width="14" Height="14" IsActive="{x:Bind ViewModel.IsSending, Mode=OneWay}"
                         Style="{StaticResource YaapicProgressRingStyle}"
                         Foreground="{ThemeResource YaapicDangerBrush}"/>
-          <TextBlock Text="Cancel" VerticalAlignment="Center"/>
+          <TextBlock Text="{x:Bind loc:Strings.CommonCancel}" VerticalAlignment="Center"/>
           <TextBlock Text="Esc" VerticalAlignment="Center" Opacity="0.65"
                      Style="{StaticResource YaapicCodeSmallTextStyle}"
                      Foreground="{ThemeResource YaapicDangerBrush}"/>
@@ -133,7 +134,7 @@
     <Border x:Name="SectionTabs" Grid.Row="2" Grid.ColumnSpan="3" Padding="16,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
       <Grid>
       <Button x:Name="TabOverflow" Visibility="Collapsed" Style="{StaticResource YaapicSubtleButtonStyle}" HorizontalAlignment="Left"
-              VerticalAlignment="Center" Margin="-10,2,0,2" MinHeight="0" Height="28" Padding="10,0" AutomationProperties.Name="Request sections">
+              VerticalAlignment="Center" Margin="-10,2,0,2" MinHeight="0" Height="28" Padding="10,0" AutomationProperties.Name="{x:Bind loc:Strings.RequestSections}">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <TextBlock x:Name="TabOverflowLabel" VerticalAlignment="Center"/>
           <FontIcon Glyph="&#xE70D;" FontSize="10" VerticalAlignment="Center"/>
@@ -146,7 +147,7 @@
         <ToggleButton x:Name="ParamsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" IsChecked="True"
                       Click="OnTabClick">
           <StackPanel Orientation="Horizontal" Spacing="5">
-            <TextBlock Text="Params" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Bind loc:Strings.RequestTabParams}" VerticalAlignment="Center"/>
             <TextBlock x:Name="ParamsBadge" VerticalAlignment="Center"
                        Style="{StaticResource YaapicCountBadgeActiveTextStyle}"
                        Text="{x:Bind ViewModel.QueryParams.ActiveCount, Mode=OneWay}"
@@ -155,7 +156,7 @@
         </ToggleButton>
         <ToggleButton x:Name="HeadersTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
           <StackPanel Orientation="Horizontal" Spacing="5">
-            <TextBlock Text="Headers" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Bind loc:Strings.RequestTabHeaders}" VerticalAlignment="Center"/>
             <TextBlock x:Name="HeadersBadge" VerticalAlignment="Center"
                        Style="{StaticResource YaapicCountBadgeTextStyle}"
                        Text="{x:Bind ViewModel.Headers.ActiveCount, Mode=OneWay}"
@@ -164,7 +165,7 @@
         </ToggleButton>
         <ToggleButton x:Name="BodyTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
           <StackPanel Orientation="Horizontal" Spacing="5">
-            <TextBlock Text="Body" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Bind loc:Strings.RequestTabBody}" VerticalAlignment="Center"/>
             <TextBlock x:Name="BodyBadge" VerticalAlignment="Center" Text="●"
                        Style="{StaticResource YaapicCountBadgeTextStyle}"
                        Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"/>
@@ -172,7 +173,7 @@
         </ToggleButton>
         <ToggleButton x:Name="AuthTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
           <StackPanel Orientation="Horizontal" Spacing="5">
-            <TextBlock Text="Auth" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Bind loc:Strings.RequestTabAuth}" VerticalAlignment="Center"/>
             <TextBlock x:Name="AuthBadge" VerticalAlignment="Center" Text="●"
                        Style="{StaticResource YaapicCountBadgeTextStyle}"
                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Auth.IsActive), Mode=OneWay}"/>
@@ -180,7 +181,7 @@
         </ToggleButton>
         <ToggleButton x:Name="ScriptsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
           <StackPanel Orientation="Horizontal" Spacing="5">
-            <TextBlock Text="Scripts" VerticalAlignment="Center"/>
+            <TextBlock Text="{x:Bind loc:Strings.RequestTabScripts}" VerticalAlignment="Center"/>
             <TextBlock x:Name="ScriptsBadge" VerticalAlignment="Center"
                        Style="{StaticResource YaapicCountBadgeTextStyle}"
                        Text="{x:Bind ViewModel.Scripts.BadgeText, Mode=OneWay}"
@@ -188,7 +189,7 @@
           </StackPanel>
         </ToggleButton>
         <ToggleButton x:Name="SettingsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Click="OnTabClick">
-          <TextBlock Text="Settings" VerticalAlignment="Center"/>
+          <TextBlock Text="{x:Bind loc:Strings.SettingsTitle}" VerticalAlignment="Center"/>
         </ToggleButton>
       </StackPanel>
       </Grid>
@@ -204,8 +205,8 @@
       <v:AuthEditorView x:Name="AuthPane" Margin="16,12,16,12" Visibility="Collapsed"
                         ViewModel="{x:Bind ViewModel.Auth, Mode=OneWay}"/>
       <StackPanel x:Name="SettingsPane" Margin="16,12,16,12" Spacing="16" Visibility="Collapsed">
-        <ToggleSwitch Header="Follow redirects" IsOn="{x:Bind ViewModel.FollowRedirects, Mode=TwoWay}"/>
-        <NumberBox x:Name="TimeoutBox" Header="Timeout (seconds, 0 = default)" Minimum="0" Width="260"
+        <ToggleSwitch Header="{x:Bind loc:Strings.RequestFollowRedirects}" IsOn="{x:Bind ViewModel.FollowRedirects, Mode=TwoWay}"/>
+        <NumberBox x:Name="TimeoutBox" Header="{x:Bind loc:Strings.RequestTimeout}" Minimum="0" Width="260"
                    HorizontalAlignment="Left" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="10"
                    ValueChanged="OnTimeoutChanged"/>
       </StackPanel>
@@ -225,21 +226,21 @@
               <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Spacing="14">
-              <RadioButton x:Name="BodyNone" Content="None" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+              <RadioButton x:Name="BodyNone" Content="{x:Bind loc:Strings.BodyNone}" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
                            FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
-              <RadioButton x:Name="BodyRaw" Content="Raw" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+              <RadioButton x:Name="BodyRaw" Content="{x:Bind loc:Strings.BodyRaw}" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
                            FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
               <RadioButton x:Name="BodyUrlEncoded" Content="x-www-form-urlencoded" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
                            FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
               <RadioButton x:Name="BodyFormData" Content="form-data" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
                            FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
-              <RadioButton x:Name="BodyBinary" Content="Binary" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
+              <RadioButton x:Name="BodyBinary" Content="{x:Bind loc:Strings.BodyBinary}" MinWidth="0" MinHeight="24" Padding="6,0,0,0"
                            FontSize="{StaticResource YaapicFontSizeBodySm}" Checked="OnBodyKindChecked"/>
             </StackPanel>
             <Button Grid.Column="1" Height="24" MinHeight="24" Padding="8,0" BorderThickness="1"
                     Background="Transparent" CornerRadius="4" FontWeight="Normal"
                     BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
-                    FontSize="{StaticResource YaapicFontSizeBodySm}" AutomationProperties.Name="Content type"
+                    FontSize="{StaticResource YaapicFontSizeBodySm}" AutomationProperties.Name="{x:Bind loc:Strings.BodyContentType}"
                     Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}">
               <StackPanel Orientation="Horizontal" Spacing="5">
                 <TextBlock x:Name="ContentTypeLabel" VerticalAlignment="Center"/>
@@ -253,7 +254,7 @@
               <Button.Flyout>
                 <MenuFlyout>
                   <MenuFlyoutItem Text="JSON" Tag="0" Click="OnContentTypeClick"/>
-                  <MenuFlyoutItem Text="Text" Tag="1" Click="OnContentTypeClick"/>
+                  <MenuFlyoutItem Text="{x:Bind loc:Strings.CommonText}" Tag="1" Click="OnContentTypeClick"/>
                   <MenuFlyoutItem Text="XML" Tag="2" Click="OnContentTypeClick"/>
                   <MenuFlyoutItem Text="HTML" Tag="3" Click="OnContentTypeClick"/>
                   <MenuFlyoutItem Text="JavaScript" Tag="4" Click="OnContentTypeClick"/>
@@ -264,7 +265,7 @@
           <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
                   BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
             <Grid>
-              <v:CodeEditorView AutomationProperties.Name="Body"
+              <v:CodeEditorView AutomationProperties.Name="{x:Bind loc:Strings.RequestTabBody}"
                                 Visibility="{x:Bind p:VisibilityMap.WhenRaw(ViewModel.BodyKind), Mode=OneWay}"
                                 EditorLanguage="{x:Bind p:TextMap.Language(ViewModel.BodyContentType), Mode=OneWay}"
                                 Text="{x:Bind ViewModel.BodyText, Mode=TwoWay}"/>
@@ -278,11 +279,11 @@
                                     ViewModel="{x:Bind ViewModel.FormData, Mode=OneWay}"/>
               <StackPanel Orientation="Horizontal" Spacing="8" Margin="16,6" VerticalAlignment="Top"
                           Visibility="{x:Bind p:VisibilityMap.WhenBinary(ViewModel.BodyKind), Mode=OneWay}">
-                <TextBox IsReadOnly="True" Width="420" PlaceholderText="No file selected"
+                <TextBox IsReadOnly="True" Width="420" PlaceholderText="{x:Bind loc:Strings.BodyNoFile}"
                          BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
-                         FontFamily="{StaticResource YaapicMonoFont}" AutomationProperties.Name="Binary file path"
+                         FontFamily="{StaticResource YaapicMonoFont}" AutomationProperties.Name="{x:Bind loc:Strings.BodyBinaryFilePath}"
                          Text="{x:Bind ViewModel.BinaryFilePath, Mode=OneWay}"/>
-                <Button Content="Select file" Command="{x:Bind ViewModel.PickBinaryFileCommand}"/>
+                <Button Content="{x:Bind loc:Strings.BodySelectFile}" Command="{x:Bind ViewModel.PickBinaryFileCommand}"/>
               </StackPanel>
             </Grid>
           </Border>
@@ -295,7 +296,7 @@
       <Rectangle x:Name="SplitterLine" Height="1" VerticalAlignment="Center" IsHitTestVisible="False"
                  Fill="{ThemeResource YaapicBorderSubtleBrush}"/>
       <v:SplitterHandle x:Name="Splitter" Background="Transparent" IsTabStop="True" UseSystemFocusVisuals="True"
-                       AutomationProperties.Name="Resize request and response panels"
+                       AutomationProperties.Name="{x:Bind loc:Strings.RequestResizePanels}"
                        PointerPressed="OnSplitterPointerPressed" PointerMoved="OnSplitterPointerMoved"
                        PointerReleased="OnSplitterPointerReleased" PointerCanceled="OnSplitterPointerReleased"
                        PointerCaptureLost="OnSplitterPointerReleased" DoubleTapped="OnSplitterDoubleTapped"

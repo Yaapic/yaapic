@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -185,23 +186,23 @@ public sealed partial class MainWindow : Window
         var menu = new MenuFlyout();
         if (node.IsFolder)
         {
-            AddItem(menu, "New request", tree.NewRequestCommand, node);
-            AddItem(menu, "New folder", tree.NewFolderCommand, node);
-            AddItem(menu, "Rename", tree.RenameFolderCommand, node);
-            AddItem(menu, "Settings", tree.EditSettingsCommand, node);
-            AddItem(menu, "Delete", tree.DeleteFolderCommand, node);
+            AddItem(menu, Strings.PaletteNewRequest, tree.NewRequestCommand, node);
+            AddItem(menu, Strings.CollectionsNewFolder, tree.NewFolderCommand, node);
+            AddItem(menu, Strings.CommonRename, tree.RenameFolderCommand, node);
+            AddItem(menu, Strings.SettingsTitle, tree.EditSettingsCommand, node);
+            AddItem(menu, Strings.CommonDelete, tree.DeleteFolderCommand, node);
         }
         else
         {
-            AddItem(menu, "Rename", tree.RenameRequestCommand, node);
-            AddItem(menu, "Duplicate", tree.DuplicateRequestCommand, node);
-            AddItem(menu, "Delete", tree.DeleteRequestCommand, node);
+            AddItem(menu, Strings.CommonRename, tree.RenameRequestCommand, node);
+            AddItem(menu, Strings.CommonDuplicate, tree.DuplicateRequestCommand, node);
+            AddItem(menu, Strings.CommonDelete, tree.DeleteRequestCommand, node);
         }
 
         var targets = tree.GetMoveTargets(node);
         if (targets.Count > 0)
         {
-            var moveTo = new MenuFlyoutSubItem { Text = "Move to" };
+            var moveTo = new MenuFlyoutSubItem { Text = Strings.CollectionsMoveTo };
             foreach (var target in targets)
             {
                 AddItem(moveTo.Items, target.Path, tree.MoveCommand, new MoveRequest(node, target));
@@ -289,14 +290,14 @@ public sealed partial class MainWindow : Window
 
         var none = new RadioMenuFlyoutItem
         {
-            Text = "No environment",
+            Text = Strings.PaletteNoEnvironment,
             GroupName = "Environment",
             IsChecked = environments.ActiveEnvironment is null,
         };
         none.Click += (_, _) => environments.ActiveEnvironment = null;
         EnvironmentMenu.Items.Add(none);
         EnvironmentMenu.Items.Add(new MenuFlyoutSeparator());
-        var manage = new MenuFlyoutItem { Text = "Manage environments..." };
+        var manage = new MenuFlyoutItem { Text = Strings.EnvironmentsManage };
         manage.Click += OnManageEnvironments;
         EnvironmentMenu.Items.Add(manage);
     }

@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
@@ -112,11 +113,11 @@ public sealed partial class MainWindow : Window
             flyout.Items.Add(entry);
         }
 
-        var none = new MenuItem { Header = "No environment", ToggleType = MenuItemToggleType.Radio, GroupName = "env", IsChecked = environments.ActiveEnvironment is null };
+        var none = new MenuItem { Header = Strings.PaletteNoEnvironment, ToggleType = MenuItemToggleType.Radio, GroupName = "env", IsChecked = environments.ActiveEnvironment is null };
         none.Click += (_, _) => environments.ActiveEnvironment = null;
         flyout.Items.Add(none);
         flyout.Items.Add(new Separator());
-        var manage = new MenuItem { Header = "Manage environments..." };
+        var manage = new MenuItem { Header = Strings.EnvironmentsManage };
         manage.Click += (_, _) => _ = ManageEnvironmentsAsync();
         flyout.Items.Add(manage);
     }
@@ -289,23 +290,23 @@ public sealed partial class MainWindow : Window
         var menu = new ContextMenu();
         if (node.IsFolder)
         {
-            AddItem(menu.Items, "New request", tree.NewRequestCommand, node);
-            AddItem(menu.Items, "New folder", tree.NewFolderCommand, node);
-            AddItem(menu.Items, "Rename", tree.RenameFolderCommand, node);
-            AddItem(menu.Items, "Settings", tree.EditSettingsCommand, node);
-            AddItem(menu.Items, "Delete", tree.DeleteFolderCommand, node);
+            AddItem(menu.Items, Strings.PaletteNewRequest, tree.NewRequestCommand, node);
+            AddItem(menu.Items, Strings.CollectionsNewFolder, tree.NewFolderCommand, node);
+            AddItem(menu.Items, Strings.CommonRename, tree.RenameFolderCommand, node);
+            AddItem(menu.Items, Strings.SettingsTitle, tree.EditSettingsCommand, node);
+            AddItem(menu.Items, Strings.CommonDelete, tree.DeleteFolderCommand, node);
         }
         else
         {
-            AddItem(menu.Items, "Rename", tree.RenameRequestCommand, node);
-            AddItem(menu.Items, "Duplicate", tree.DuplicateRequestCommand, node);
-            AddItem(menu.Items, "Delete", tree.DeleteRequestCommand, node);
+            AddItem(menu.Items, Strings.CommonRename, tree.RenameRequestCommand, node);
+            AddItem(menu.Items, Strings.CommonDuplicate, tree.DuplicateRequestCommand, node);
+            AddItem(menu.Items, Strings.CommonDelete, tree.DeleteRequestCommand, node);
         }
 
         var targets = tree.GetMoveTargets(node);
         if (targets.Count > 0)
         {
-            var moveTo = new MenuItem { Header = "Move to" };
+            var moveTo = new MenuItem { Header = Strings.CollectionsMoveTo };
             foreach (var target in targets)
             {
                 AddItem(moveTo.Items, target.Path, tree.MoveCommand, new MoveRequest(node, target));

@@ -35,7 +35,7 @@ public sealed partial class UpdatesDialog : ContentDialog
         Services.DialogButtons.Normalize(this);
         Title = Strings.SettingsTitle;
         VersionText.Text = Strings.CommonVersion(viewModel.CurrentVersion);
-        TaglineText.Text = "A fast, local-first API client. No account, no telemetry.";
+        TaglineText.Text = Strings.SettingsTagline;
         AppearanceTitle.Text = Strings.SettingsAppearance;
         LanguageBox.Header = Strings.SettingsLanguage;
         AutomationProperties.SetName(LanguageBox, Strings.SettingsLanguage);

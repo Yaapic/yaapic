@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
 
@@ -20,5 +21,5 @@ public static class EnvironmentMap
 
     /// <summary>Converts a variable count to its caption, for example <c>3 variables</c>.</summary>
     public static FuncValueConverter<int, string?> VariableCount { get; } =
-        new(count => count == 1 ? "1 variable" : $"{count} variables");
+        new(count => count == 1 ? Strings.EnvironmentsVariableOne : Strings.EnvironmentsVariableCount(count));
 }

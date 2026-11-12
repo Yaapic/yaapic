@@ -1,9 +1,10 @@
-<Window xmlns="https://github.com/avaloniaui"
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Yaapic.ViewModels.Updates"
         x:Class="Yaapic.App.Avalonia.Views.UpdatesWindow"
         x:DataType="vm:UpdateViewModel"
-        Title="Settings"
+        Title="{x:Static loc:Strings.SettingsTitle}"
         Classes="dialog">
   <StackPanel>
     <ScrollViewer MaxHeight="600" VerticalScrollBarVisibility="Auto">
@@ -31,27 +32,27 @@
         </StackPanel>
         <StackPanel Spacing="12">
           <TextBlock x:Name="UpdatesTitle" Classes="bodyStrong" />
-          <TextBlock Text="Update channel" />
+          <TextBlock Text="{x:Static loc:Strings.SettingsUpdateChannel}" />
           <ComboBox x:Name="ChannelBox" ItemsSource="{Binding Channels}" SelectedItem="{Binding Channel}"
-                    IsEnabled="{Binding IsSupported}" AutomationProperties.Name="Update channel" />
-          <ToggleSwitch Content="Check for updates automatically" IsChecked="{Binding CheckAutomatically}"
-                        AutomationProperties.Name="Check for updates automatically" />
-          <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" AutomationProperties.Name="Update status" />
+                    IsEnabled="{Binding IsSupported}" AutomationProperties.Name="{x:Static loc:Strings.SettingsUpdateChannel}" />
+          <ToggleSwitch Content="{x:Static loc:Strings.SettingsCheckAutomatically}" OnContent="{x:Static loc:Strings.CommonOn}" OffContent="{x:Static loc:Strings.CommonOff}" IsChecked="{Binding CheckAutomatically}"
+                        AutomationProperties.Name="{x:Static loc:Strings.SettingsCheckAutomatically}" />
+          <TextBlock Text="{Binding StatusText}" TextWrapping="Wrap" AutomationProperties.Name="{x:Static loc:Strings.UpdateStatus}" />
           <StackPanel Orientation="Horizontal" Spacing="8">
-            <Button Content="Check now" Command="{Binding CheckNowCommand}" />
-            <Button Content="Download" Command="{Binding DownloadCommand}" IsVisible="{Binding ShowDownload}" />
-            <Button Content="Restart to update" Classes="accent" Command="{Binding RestartAndApplyCommand}" IsVisible="{Binding ShowRestart}" />
+            <Button Content="{x:Static loc:Strings.SettingsCheckNow}" Command="{Binding CheckNowCommand}" />
+            <Button Content="{x:Static loc:Strings.UpdateDownload}" Command="{Binding DownloadCommand}" IsVisible="{Binding ShowDownload}" />
+            <Button Content="{x:Static loc:Strings.PaletteRestartToUpdate}" Classes="accent" Command="{Binding RestartAndApplyCommand}" IsVisible="{Binding ShowRestart}" />
           </StackPanel>
           <ProgressBar Minimum="0" Maximum="100" Value="{Binding DownloadPercent}" IsVisible="{Binding IsDownloading}"
-                       AutomationProperties.Name="Download progress" />
-          <ScrollViewer MaxHeight="180" IsVisible="{Binding HasNotes}" AutomationProperties.Name="Release notes">
+                       AutomationProperties.Name="{x:Static loc:Strings.UpdateDownloadProgress}" />
+          <ScrollViewer MaxHeight="180" IsVisible="{Binding HasNotes}" AutomationProperties.Name="{x:Static loc:Strings.UpdateReleaseNotes}">
             <SelectableTextBlock Text="{Binding Notes}" TextWrapping="Wrap" Classes="dialogBody" />
           </ScrollViewer>
         </StackPanel>
       </StackPanel>
     </ScrollViewer>
     <Border Classes="dialogCommands">
-      <Button Content="Close" Classes="accent" IsDefault="True" IsCancel="True" Click="OnClose" />
+      <Button Content="{x:Static loc:Strings.CommonClose}" Classes="accent" IsDefault="True" IsCancel="True" Click="OnClose" />
     </Border>
   </StackPanel>
 </Window>

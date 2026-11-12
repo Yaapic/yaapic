@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:sc="using:Yaapic.ViewModels.Scripting"
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
@@ -8,21 +9,21 @@
   <Grid RowDefinitions="Auto,*">
     <Grid ColumnDefinitions="Auto,Auto,*" Margin="16,8" ColumnSpacing="12">
       <ListBox x:Name="ScriptPhases" Classes="segmented" VerticalAlignment="Center"
-               AutomationProperties.Name="Script phase"
+               AutomationProperties.Name="{x:Static loc:Strings.ScriptPhase}"
                SelectedIndex="{Binding SelectedPhase, Converter={x:Static p:EditorMap.PhaseIndex}, Mode=OneWay}"
                SelectionChanged="OnScriptPhaseChanged">
-        <ListBoxItem Content="Pre-request" />
-        <ListBoxItem Content="Post-response" />
+        <ListBoxItem Content="{x:Static loc:Strings.ConsolePhasePreRequest}" />
+        <ListBoxItem Content="{x:Static loc:Strings.ConsolePhasePostResponse}" />
       </ListBox>
       <ComboBox x:Name="ScriptLanguageBox" Grid.Column="1" MinWidth="130" VerticalAlignment="Center"
-                AutomationProperties.Name="Script language"
+                AutomationProperties.Name="{x:Static loc:Strings.ScriptLanguage}"
                 SelectedIndex="{Binding Selected.Language, Converter={x:Static p:EditorMap.LanguageIndex}, Mode=OneWay}"
                 SelectionChanged="OnScriptLanguageChanged" />
       <TextBlock Grid.Column="2" Classes="bodySmall" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
-                 Text="Variables, tests and requests: pm.* (JavaScript and Lua)"
+                 Text="{x:Static loc:Strings.ScriptHint}"
                  Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
     </Grid>
-    <v:CodeEditorView Grid.Row="1" x:Name="ScriptEditor" AutomationProperties.Name="Script"
+    <v:CodeEditorView Grid.Row="1" x:Name="ScriptEditor" AutomationProperties.Name="{x:Static loc:Strings.ScriptTitle}"
                       EditorLanguage="{Binding Selected.Language, Converter={x:Static p:EditorMap.ScriptEditorLanguage}}"
                       Text="{Binding Selected.Source, Mode=TwoWay}" />
   </Grid>

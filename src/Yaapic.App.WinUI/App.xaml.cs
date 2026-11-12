@@ -38,11 +38,10 @@ public partial class App : Application
     /// <inheritdoc/>
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
-        var window = new MainWindow();
-        _window = window;
         var workspace = Workspace.DefaultRoot();
         string? dataDirectory = null;
         string? updateDemo = null;
+        ElementTheme? requestedTheme = null;
         var argv = Environment.GetCommandLineArgs();
         for (var i = 1; i < argv.Length - 1; i++)
         {
@@ -60,21 +59,25 @@ public partial class App : Application
             }
             else if (argv[i] == "--theme")
             {
-                ElementTheme? theme = argv[i + 1] switch
+                requestedTheme = argv[i + 1] switch
                 {
                     "dark" => ElementTheme.Dark,
                     "light" => ElementTheme.Light,
                     "system" => ElementTheme.Default,
                     _ => null,
                 };
-                if (theme is { } value)
-                {
-                    window.SetTheme(value);
-                }
             }
         }
 
+        // The language must be applied before the window and any view exist: their texts come from Strings.
         var preferences = AppPreferences.LoadAndApplyLanguage(AppPreferences.CreateStore(dataDirectory));
+        var window = new MainWindow();
+        _window = window;
+        if (requestedTheme is { } theme)
+        {
+            window.SetTheme(theme);
+        }
+
         AccentApplier.Apply(preferences.Accent);
         Settings = new SettingsViewModel(AppPreferences.CreateStore(dataDirectory));
         Settings.AccentChanged += (_, choice) => AccentApplier.Apply(choice);

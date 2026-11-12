@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Yaapic.ViewModels.Environments;
@@ -18,7 +19,7 @@ public sealed partial class EnvironmentsDialog : ContentDialog
         Globals = globals;
         InitializeComponent();
         Services.DialogButtons.Normalize(this, new Thickness(0, 10, 16, 10));
-        DeleteButton.Flyout.Opening += (_, _) => DeletePrompt.Text = $"Delete '{ViewModel.EditedEnvironment?.Name}'?";
+        DeleteButton.Flyout.Opening += (_, _) => DeletePrompt.Text = Strings.DialogDeleteTitle(ViewModel.EditedEnvironment?.Name ?? "");
         ViewModel.PropertyChanged += (_, e) =>
         {
             if (e.PropertyName == nameof(EnvironmentsViewModel.EditedEnvironment))

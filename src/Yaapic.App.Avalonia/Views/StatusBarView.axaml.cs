@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Yaapic.ViewModels.Shell;
@@ -20,7 +21,7 @@ public sealed partial class StatusBarView : UserControl
 
         if (vault.IsUnlocked)
         {
-            var lockItem = new MenuItem { Header = "Lock vault" };
+            var lockItem = new MenuItem { Header = Strings.VaultLock };
             lockItem.Click += (_, _) => vault.LockCommand.Execute(null);
             new MenuFlyout { Items = { lockItem } }.ShowAt(VaultButton);
         }

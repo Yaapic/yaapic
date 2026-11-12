@@ -366,8 +366,8 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 | [P-02](milestone-personalization/P-02-preferences-model-and-store.md) | Preferences model and store | any | P-01 | done |
 | [P-03](milestone-personalization/P-03-string-catalogue-and-localizer.md) | String catalogue, generator and localizer | any | P-01, P-02 | done |
 | [P-04](milestone-personalization/P-04-localize-viewmodels-and-core.md) | Localize the view model and Core texts | any | P-03 | done |
-| [P-05](milestone-personalization/P-05-winui-localization.md) | WinUI: localize the views | windows | P-04 | todo |
-| [P-06](milestone-personalization/P-06-avalonia-localization.md) | Avalonia: localize the views | unix | P-04, P-05 | todo |
+| [P-05](milestone-personalization/P-05-winui-localization.md) | WinUI: localize the views | windows | P-04 | done |
+| [P-06](milestone-personalization/P-06-avalonia-localization.md) | Avalonia: localize the views | unix | P-04, P-05 | done |
 | [P-07](milestone-personalization/P-07-accent-derivation.md) | Accent colour derivation | any | P-02 | done |
 | [P-08](milestone-personalization/P-08-winui-accent-at-runtime.md) | WinUI: apply the accent at runtime | windows | P-07 | done |
 | [P-09](milestone-personalization/P-09-avalonia-accent-at-runtime.md) | Avalonia: apply the accent at runtime | unix | P-07, P-08 | done |

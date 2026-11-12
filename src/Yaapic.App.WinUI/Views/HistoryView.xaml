@@ -1,4 +1,5 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.HistoryView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.HistoryView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
@@ -14,14 +15,14 @@
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <TextBox Height="28" MinHeight="28" Padding="28,3,8,3" PlaceholderText="Filter history"
-               AutomationProperties.Name="Filter history"
+      <TextBox Height="28" MinHeight="28" Padding="28,3,8,3" PlaceholderText="{x:Bind loc:Strings.HistoryFilter}"
+               AutomationProperties.Name="{x:Bind loc:Strings.HistoryFilter}"
                Background="{ThemeResource YaapicSurfaceSunkenBrush}"
                Text="{x:Bind ViewModel.FilterText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
       <ic:FluentIcon Icon="Search" IconVariant="Regular" IconSize="Size16" HorizontalAlignment="Left" Margin="8,0,0,0"
                      IsHitTestVisible="False" Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
-      <Button Grid.Column="1" Content="Clear" Height="28" MinHeight="28" Padding="10,0"
-              AutomationProperties.Name="Clear history"
+      <Button Grid.Column="1" Content="{x:Bind loc:Strings.CommonClear}" Height="28" MinHeight="28" Padding="10,0"
+              AutomationProperties.Name="{x:Bind loc:Strings.PaletteClearHistory}"
               Command="{x:Bind ViewModel.ClearCommand, Mode=OneWay}"/>
     </Grid>
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
@@ -38,8 +39,8 @@
                             Padding="14,5" CornerRadius="0" AutomationProperties.Name="{x:Bind Url}">
                       <Button.ContextFlyout>
                         <MenuFlyout>
-                          <MenuFlyoutItem Text="Open" Tag="{x:Bind}" Click="OnOpen"/>
-                          <MenuFlyoutItem Text="Delete" Tag="{x:Bind}" Click="OnDelete"/>
+                          <MenuFlyoutItem Text="{x:Bind loc:Strings.CommonOpen}" Tag="{x:Bind}" Click="OnOpen"/>
+                          <MenuFlyoutItem Text="{x:Bind loc:Strings.CommonDelete}" Tag="{x:Bind}" Click="OnDelete"/>
                         </MenuFlyout>
                       </Button.ContextFlyout>
                       <StackPanel Spacing="2">
@@ -73,7 +74,7 @@
         </ItemsRepeater.ItemTemplate>
       </ItemsRepeater>
     </ScrollViewer>
-    <TextBlock Grid.Row="1" Text="No requests sent yet" HorizontalAlignment="Center" VerticalAlignment="Top"
+    <TextBlock Grid.Row="1" Text="{x:Bind loc:Strings.HistoryEmpty}" HorizontalAlignment="Center" VerticalAlignment="Top"
                Margin="16,24,16,0" Style="{StaticResource YaapicBodySmallTextStyle}"
                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsEmpty), Mode=OneWay}"/>
   </Grid>

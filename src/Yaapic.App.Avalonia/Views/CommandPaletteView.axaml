@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:pal="using:Yaapic.ViewModels.Palette"
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
@@ -13,7 +14,7 @@
             CornerRadius="{DynamicResource YaapicRadiusLg}">
       <Grid RowDefinitions="Auto,*">
         <TextBox x:Name="QueryBox" MinHeight="44" Padding="16,11" BorderThickness="0" Background="Transparent"
-                 PlaceholderText="Type a command or search requests" AutomationProperties.Name="Command palette"
+                 PlaceholderText="{x:Static loc:Strings.PalettePlaceholder}" AutomationProperties.Name="{x:Static loc:Strings.PaletteTitle}"
                  Text="{Binding Query, Mode=TwoWay}" />
         <Border Grid.Row="1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
           <Grid>
@@ -42,7 +43,7 @@
                 </DataTemplate>
               </ListBox.ItemTemplate>
             </ListBox>
-            <TextBlock Text="No matching commands" Classes="bodySmall" HorizontalAlignment="Center" Margin="16,20"
+            <TextBlock Text="{x:Static loc:Strings.PaletteNoMatch}" Classes="bodySmall" HorizontalAlignment="Center" Margin="16,20"
                        Foreground="{DynamicResource YaapicTextSecondaryBrush}" IsVisible="{Binding IsEmpty}" />
           </Grid>
         </Border>
