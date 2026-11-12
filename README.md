@@ -3,6 +3,18 @@
 Yaapic is a cross-platform API client (HTTP first) built with C# and Native AOT. It ships two front-ends over one shared
 core: **WinUI 3** (Windows) and **Avalonia** (Windows, macOS, Linux).
 
+## Install
+
+Download the installer for your system from the [Releases](https://github.com/Yaapic/yaapic/releases) page (when a release is
+published): `Yaapic-win-Setup.exe` on Windows, the macOS package, or the Linux AppImage. Each release lists SHA-256 checksums.
+Builds are not code-signed unless the release notes say so, so Windows SmartScreen or macOS Gatekeeper may ask you to confirm.
+
+The installed app updates itself: it checks GitHub Releases at start-up (at most once a day), downloads a newer version in
+the background and applies it when you restart. Choose the **stable** or **preview** channel, turn the automatic check off, or
+check by hand in Settings > Updates and about (also in the command palette: "Check for updates"). Nothing is sent about you; the only
+request is the one to GitHub for the release list. A copy built from source is never updated. How releases are cut:
+[docs/releasing.md](docs/releasing.md).
+
 ## Quick start (about 15 minutes)
 
 Prerequisites:

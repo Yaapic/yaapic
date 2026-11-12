@@ -41,7 +41,7 @@ public sealed class CommandsPaletteSourceTests
             dialogs,
             parts.Console,
             parts.VaultViewModel,
-            parts.Engines);
+            parts.Engines, parts.Updates);
     }
 
     private static string[] Titles(ShellViewModel shell) =>
@@ -183,5 +183,20 @@ public sealed class CommandsPaletteSourceTests
         await Find(source, "command:vault-setup").Execute();
         Assert.True(setup);
         Assert.Equal("Ctrl+`", Find(source, "command:toggle-console").Shortcut);
+    }
+
+    [Fact]
+    public void Update_commands_follow_support_and_state()
+    {
+        var parts = new ShellParts();
+        var shell = CreateShell(parts);
+        Assert.DoesNotContain("Check for updates", Titles(shell));
+
+        var supported = new ShellParts();
+        supported.UpdateService.IsSupported = true;
+        var withUpdates = CreateShell(supported);
+
+        Assert.Contains("Check for updates", Titles(withUpdates));
+        Assert.DoesNotContain("Restart to update", Titles(withUpdates));
     }
 }

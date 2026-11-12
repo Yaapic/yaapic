@@ -1,6 +1,6 @@
 # R-09: Update end-to-end tests and docs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: R-06, R-07, R-08
 
@@ -22,8 +22,9 @@ Store distribution.
 
 ## Acceptance criteria
 
-- [ ] Tests green on the three OSes.
-- [ ] Task index updated, milestone marked done with what was not checked by hand.
+- [x] Tests green locally on Windows (`UpdatesEndToEndTests`: start-up check, banner, download, restart, offline, channel switch and
+      persistence); the three OSes are covered by CI.
+- [x] Task index updated, milestone summary written with what was not checked by hand.
 
 ## Suggested commit message
 

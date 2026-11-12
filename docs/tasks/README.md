@@ -334,14 +334,20 @@ background download and apply on restart. Pulled forward from M10 (updates, pack
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
 | [R-01](milestone-release-distribution/R-01-adr-distribution.md) | ADR 0011, installer and automatic updates | any | none | done |
-| [R-02](milestone-release-distribution/R-02-versioning-and-about.md) | Versioning from the tag and the About information | any | R-01 | todo |
-| [R-03](milestone-release-distribution/R-03-update-port-and-settings.md) | Update port, domain model and settings | any | R-02 | todo |
-| [R-04](milestone-release-distribution/R-04-velopack-adapter.md) | Velopack adapter and startup hook | any | R-03 | todo |
-| [R-05](milestone-release-distribution/R-05-update-viewmodel.md) | Update ViewModel and command palette entries | any | R-03 | todo |
-| [R-06](milestone-release-distribution/R-06-winui-update-ui.md) | WinUI update banner, settings and About | windows | R-05 | todo |
-| [R-07](milestone-release-distribution/R-07-avalonia-update-ui.md) | Avalonia update banner, settings and About | unix | R-05 | todo |
-| [R-08](milestone-release-distribution/R-08-release-workflow.md) | Release workflow and packaging | any | R-02, R-04 | todo |
-| [R-09](milestone-release-distribution/R-09-update-end-to-end-and-docs.md) | Update end-to-end tests and docs | any | R-06, R-07, R-08 | todo |
+| [R-02](milestone-release-distribution/R-02-versioning-and-about.md) | Versioning from the tag and the About information | any | R-01 | done |
+| [R-03](milestone-release-distribution/R-03-update-port-and-settings.md) | Update port, domain model and settings | any | R-02 | done |
+| [R-04](milestone-release-distribution/R-04-velopack-adapter.md) | Velopack adapter and startup hook | any | R-03 | done |
+| [R-05](milestone-release-distribution/R-05-update-viewmodel.md) | Update ViewModel and command palette entries | any | R-03 | done |
+| [R-06](milestone-release-distribution/R-06-winui-update-ui.md) | WinUI update banner, settings and About | windows | R-05 | done |
+| [R-07](milestone-release-distribution/R-07-avalonia-update-ui.md) | Avalonia update banner, settings and About | unix | R-05 | done |
+| [R-08](milestone-release-distribution/R-08-release-workflow.md) | Release workflow and packaging | any | R-02, R-04 | in progress |
+| [R-09](milestone-release-distribution/R-09-update-end-to-end-and-docs.md) | Update end-to-end tests and docs | any | R-06, R-07, R-08 | done |
+
+Done except one acceptance step of R-08, which needs a real tag: the workflow is written and a dry run is the check on the pull
+request, but the upload and merge across the three OS jobs, delta packages, a real update from one published version to the next, and
+packing on Linux and macOS have not run yet (`docs/releasing.md`, "Checked by hand"). Checked locally on Windows: `vpk pack` of the
+WinUI AOT build, a start from the packed layout, both update UIs with a scripted service (`docs/screenshots/updates`). Not checked:
+the update UI on macOS and Linux, and signing (no certificate yet).
 
 ## Milestones 2 to 10
 

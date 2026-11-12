@@ -9,6 +9,9 @@ internal sealed class CaptureOptions
     /// <summary>Initial theme (<c>dark</c>, <c>light</c> or <c>system</c>), or <see langword="null"/>.</summary>
     public string? Theme { get; private set; }
 
+    /// <summary>Scripted update mode (<c>available</c>, <c>downloading</c>, <c>ready</c>, <c>uptodate</c>, <c>failed</c>), or <see langword="null"/> for the real service.</summary>
+    public string? UpdateDemo { get; private set; }
+
     /// <summary>Requested window client size, or <see langword="null"/> to keep the XAML size.</summary>
     public (double Width, double Height)? Size { get; private set; }
 
@@ -43,6 +46,9 @@ internal sealed class CaptureOptions
                     break;
                 case "--workspace" when hasValue:
                     options.Workspace = args[++i];
+                    break;
+                case "--update-demo" when hasValue:
+                    options.UpdateDemo = args[++i];
                     break;
                 case "--theme" when hasValue:
                     options.Theme = args[++i];

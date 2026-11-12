@@ -18,7 +18,8 @@ param(
     [string]$Open = '',
     [string]$Request = 'create-user',
     [switch]$NoTabs,
-    [switch]$NoStub
+    [switch]$NoStub,
+    [ValidateSet('', 'available', 'downloading', 'ready', 'uptodate', 'failed')][string]$UpdateDemo = ''
 )
 $ErrorActionPreference = 'Stop'
 if (-not $Exe) {
@@ -66,6 +67,7 @@ try {
     if (Test-Path $Out) { Remove-Item $Out -Force }
     $argv = @('--workspace', $temp, '--theme', $Theme, '--size', "${Width}x${Height}", '--screenshot', $Out, '--wait-ms', $WaitMs)
     if ($Send) { $argv += '--send' }
+    if ($UpdateDemo) { $argv += '--update-demo', $UpdateDemo }
     # -Select Console opens the console panel (after the send); any other value selects a request section tab.
     if ($Select -eq 'Console') { $argv += '--open', 'console' } elseif ($Select) { $argv += '--select', $Select }
     if ($Open) { $argv += '--open', $Open }

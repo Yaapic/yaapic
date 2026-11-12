@@ -23,7 +23,8 @@ param(
     [switch]$Screen,
     [switch]$NoTabs,
     [switch]$NoStub,
-    [string]$Crop = ''
+    [string]$Crop = '',
+    [ValidateSet('', 'available', 'downloading', 'ready', 'uptodate', 'failed')][string]$UpdateDemo = ''
 )
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Windows.Forms, System.Drawing, UIAutomationClient, UIAutomationTypes
@@ -104,7 +105,9 @@ try {
         Start-Sleep -Milliseconds 300
     }
 
-    $proc = Start-Process $Exe -ArgumentList '--workspace', "`"$temp`"", '--data-dir', "`"$temp-data`"", '--theme', $Theme -PassThru
+    $appArgs = @('--workspace', "`"$temp`"", '--data-dir', "`"$temp-data`"", '--theme', $Theme)
+    if ($UpdateDemo) { $appArgs += '--update-demo', $UpdateDemo }
+    $proc = Start-Process $Exe -ArgumentList $appArgs -PassThru
     $deadline = [DateTime]::UtcNow.AddSeconds(30)
     while ($proc.MainWindowHandle -eq [IntPtr]::Zero -and [DateTime]::UtcNow -lt $deadline) { Start-Sleep -Milliseconds 200; $proc.Refresh() }
     if ($proc.MainWindowHandle -eq [IntPtr]::Zero) { throw 'Main window did not appear.' }

@@ -80,6 +80,7 @@ public sealed partial class MainWindow : Window
                 _viewModel.EnvironmentsRequested -= OnEnvironmentsRequested;
                 _viewModel.Vault.SetupRequested -= OnVaultRequested;
                 _viewModel.Vault.UnlockRequested -= OnVaultRequested;
+                _viewModel.Updates.SettingsRequested -= OnUpdatesRequested;
             }
 
             _viewModel = value;
@@ -90,6 +91,7 @@ public sealed partial class MainWindow : Window
                 _viewModel.EnvironmentsRequested += OnEnvironmentsRequested;
                 _viewModel.Vault.SetupRequested += OnVaultRequested;
                 _viewModel.Vault.UnlockRequested += OnVaultRequested;
+                _viewModel.Updates.SettingsRequested += OnUpdatesRequested;
             }
         }
     }
@@ -412,6 +414,26 @@ public sealed partial class MainWindow : Window
         try
         {
             await new Views.VaultDialog(_viewModel.Vault) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
+        }
+        finally
+        {
+            _dialogOpen = false;
+        }
+    }
+
+    private void OnUpdatesClick(object sender, RoutedEventArgs e) => OnUpdatesRequested(sender, EventArgs.Empty);
+
+    private async void OnUpdatesRequested(object? sender, EventArgs e)
+    {
+        if (_viewModel is null || _dialogOpen)
+        {
+            return;
+        }
+
+        _dialogOpen = true;
+        try
+        {
+            await new Views.UpdatesDialog(_viewModel.Updates) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
         }
         finally
         {

@@ -40,7 +40,7 @@ public sealed class ShellViewModelTests
             new CollectionTreeViewModel(_collections, _requests, tabs, _dialogs),
             new HistoryViewModel(new InMemoryHistoryStore(), TimeProvider.System, tabs, _dialogs),
             environments, new GlobalsViewModel(new InMemoryGlobalsStore()), _session, _dialogs,
-            _parts.Console, _parts.VaultViewModel, _parts.Engines);
+            _parts.Console, _parts.VaultViewModel, _parts.Engines, _parts.Updates);
     }
 
     [Fact]

@@ -45,6 +45,8 @@ They map to the app options `--workspace`, `--theme dark|light|system`, `--size 
 server and the temp folder. On Linux it needs a display (`xvfb-run pwsh ...` on a headless box). Run one capture per
 `pwsh` process, as for WinUI.
 
+Update screens (R-06, R-07): `-UpdateDemo available|downloading|ready|uptodate|failed` passes `--update-demo <mode>` (a scripted update service, no network); see `docs/screenshots/updates/README.md`.
+
 Milestone 3 additions: `--data-dir <dir>` on the WinUI app (the per-user data directory that holds the vault; the script passes a
 throw-away one, so `%APPDATA%\Yaapic` is never touched), `-Crop x,y,w,h`, the `wheel:x,y,ticks` step, and `Capture-M3.ps1`, which takes the 18
 M3 screenshots (see `docs/screenshots/m3/README.md`).

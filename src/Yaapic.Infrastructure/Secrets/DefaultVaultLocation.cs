@@ -8,7 +8,7 @@ public sealed class DefaultVaultLocation(string? userDataDirectory = null) : IVa
     public string GetVaultPath(string workspaceId) =>
         Path.Combine(userDataDirectory ?? UserDataDirectory(), "Yaapic", "vaults", Guid.ParseExact(workspaceId, "D").ToString("D") + ".vault");
 
-    private static string UserDataDirectory()
+    internal static string UserDataDirectory()
     {
         if (OperatingSystem.IsWindows())
         {

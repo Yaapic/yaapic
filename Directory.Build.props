@@ -1,5 +1,9 @@
 <Project>
   <PropertyGroup>
+    <!-- Set by the release workflow from the git tag (-p:YaapicVersion=1.2.3); local builds are 0.0.0-dev. -->
+    <YaapicVersion Condition="'$(YaapicVersion)' == ''">0.0.0-dev</YaapicVersion>
+    <Version>$(YaapicVersion)</Version>
+    <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <LangVersion>15</LangVersion>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>

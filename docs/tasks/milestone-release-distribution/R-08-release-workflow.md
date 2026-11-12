@@ -1,6 +1,6 @@
 # R-08: Release workflow and packaging
 
-Status: todo
+Status: in progress
 Platform: any
 Depends on: R-04, R-02
 
@@ -18,7 +18,8 @@ Pushing a `v*` tag builds, packs and publishes installers and the update feed to
 - Signing steps run only when their secrets exist (`WINDOWS_CERT`, `APPLE_*`); otherwise they log "unsigned" and continue.
 - The published artifacts include a SHA-256 list. `docs/releasing.md` explains how to cut a release, rotate secrets and
   what an unsigned build shows to the user.
-- Pull requests that touch the workflow run it in dry mode (`workflow_dispatch` with `dry-run: true`, no upload).
+- Pull requests that touch the workflow, and manual runs, are dry runs (version `0.0.1-dryrun.<run>`, no download or upload).
+- OS jobs run one at a time (`max-parallel: 1`): the first upload creates the draft, the next ones use `--merge`.
 
 ## Out of scope
 
@@ -26,10 +27,11 @@ winget, Homebrew and Flathub manifests (follow-ups).
 
 ## Acceptance criteria
 
-- [ ] A `v0.0.1-preview.1` tag produces a draft release with a Setup for each OS and a feed readable by R-04.
+- [ ] A `v0.0.1-preview.1` tag produces a draft release with a Setup for each OS and a feed readable by R-04. (Needs the real
+      tag on GitHub: see `docs/releasing.md`, "Checked by hand".)
 - [ ] A second tag `v0.0.1-preview.2` yields delta packages and an installed `.1` updates to `.2` (checked by hand on Windows,
       recorded in `docs/releasing.md`).
-- [ ] No secret value appears in logs.
+- [x] No secret value appears in logs (secrets only reach `env`, GitHub masks them; the certificate file is deleted after packing).
 
 ## Suggested commit message
 

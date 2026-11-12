@@ -1,0 +1,38 @@
+<ContentDialog x:Class="Yaapic.App.WinUI.Views.UpdatesDialog"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:p="using:Yaapic.App.WinUI.Presentation"
+               Title="Updates and about"
+               CloseButtonText="Close" DefaultButton="Close" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}">
+  <StackPanel Width="400" Spacing="16">
+    <StackPanel Spacing="2">
+      <TextBlock Text="Yaapic" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+      <TextBlock x:Name="VersionText" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+      <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                 Text="A fast, local-first API client. No account, no telemetry."/>
+    </StackPanel>
+    <StackPanel Spacing="12">
+      <ComboBox x:Name="ChannelBox" Header="Update channel" AutomationProperties.Name="Update channel"
+                SelectionChanged="OnChannelChanged">
+        <ComboBoxItem Content="Stable" Tag="Stable"/>
+        <ComboBoxItem Content="Preview" Tag="Preview"/>
+      </ComboBox>
+      <ToggleSwitch Header="Check for updates automatically" AutomationProperties.Name="Check for updates automatically"
+                    OnContent="On" OffContent="Off"
+                    IsOn="{x:Bind ViewModel.CheckAutomatically, Mode=TwoWay}"/>
+      <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite"
+                 Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"/>
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="Check now" Command="{x:Bind ViewModel.CheckNowCommand}"/>
+        <Button Content="Download" Command="{x:Bind ViewModel.DownloadCommand}"
+                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.ShowDownload), Mode=OneWay}"/>
+        <Button Content="Restart to update" Style="{StaticResource AccentButtonStyle}"
+                Command="{x:Bind ViewModel.RestartAndApplyCommand}"
+                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.ShowRestart), Mode=OneWay}"/>
+      </StackPanel>
+      <ProgressBar Minimum="0" Maximum="100" AutomationProperties.Name="Download progress"
+                   Value="{x:Bind ViewModel.DownloadPercent, Mode=OneWay}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsDownloading), Mode=OneWay}"/>
+    </StackPanel>
+  </StackPanel>
+</ContentDialog>

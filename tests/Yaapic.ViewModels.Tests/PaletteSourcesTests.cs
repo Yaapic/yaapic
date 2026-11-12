@@ -46,7 +46,7 @@ public sealed class PaletteSourcesTests
             _dialogs,
             _parts.Console,
             _parts.VaultViewModel,
-            _parts.Engines);
+            _parts.Engines, _parts.Updates);
         _shell.AttachPalette(new CommandPaletteViewModel(
             [new CommandsPaletteSource(_shell), new RequestsPaletteSource(_collections), new EnvironmentsPaletteSource(_environments), new TabsPaletteSource(_tabs)]));
     }
@@ -158,7 +158,7 @@ public sealed class PaletteSourcesTests
             _tabs, new RequestListViewModel(_requests, _tabs, _dialogs), _collections,
             new HistoryViewModel(new InMemoryHistoryStore(), TimeProvider.System, _tabs, _dialogs),
             _environments, new GlobalsViewModel(new InMemoryGlobalsStore()), new InMemorySessionStore(), _dialogs,
-            _parts.Console, _parts.VaultViewModel, _parts.Engines);
+            _parts.Console, _parts.VaultViewModel, _parts.Engines, _parts.Updates);
         Assert.Throws<InvalidOperationException>(() => shell.Palette);
 
         shell.AttachPalette(new CommandPaletteViewModel([]));
