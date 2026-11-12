@@ -52,6 +52,11 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(IsBannerVisible))]
     [NotifyPropertyChangedFor(nameof(IsBusy))]
+    [NotifyPropertyChangedFor(nameof(IsDownloading))]
+    [NotifyPropertyChangedFor(nameof(ShowDownload))]
+    [NotifyPropertyChangedFor(nameof(ShowRestart))]
+    [NotifyPropertyChangedFor(nameof(BannerText))]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
     [NotifyCanExecuteChangedFor(nameof(CheckNowCommand))]
     [NotifyCanExecuteChangedFor(nameof(DownloadCommand))]
     [NotifyCanExecuteChangedFor(nameof(CancelDownloadCommand))]
@@ -59,9 +64,11 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     private UpdateState _state = UpdateState.Idle;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(BannerText))]
     private int _downloadPercent;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
     private string? _errorMessage;
 
     [ObservableProperty]
@@ -71,6 +78,7 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     private bool _checkAutomatically = true;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(StatusText))]
     private DateTimeOffset? _lastCheckUtc;
 
     /// <summary>Creates the view model.</summary>
@@ -98,6 +106,9 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
         }
     }
 
+    /// <summary>Raised when the UI should open the updates dialog (the palette command, so a manual check has somewhere to report).</summary>
+    public event EventHandler? SettingsRequested;
+
     /// <summary>Gets the running version.</summary>
     public AppVersion CurrentVersion { get; }
 
@@ -115,6 +126,35 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
 
     /// <summary>Gets a value indicating whether a check or a download is running.</summary>
     public bool IsBusy => State is UpdateState.Checking or UpdateState.Downloading;
+
+    /// <summary>Gets a value indicating whether the update is downloading.</summary>
+    public bool IsDownloading => State == UpdateState.Downloading;
+
+    /// <summary>Gets a value indicating whether the Download button shows (also after a failed download, to retry).</summary>
+    public bool ShowDownload => _update is not null && State is UpdateState.Available or UpdateState.Failed;
+
+    /// <summary>Gets a value indicating whether the Restart button shows.</summary>
+    public bool ShowRestart => State == UpdateState.ReadyToRestart;
+
+    /// <summary>Gets the one-line banner text, empty when there is nothing to announce.</summary>
+    public string BannerText => State switch
+    {
+        UpdateState.Available => $"Version {_update?.Version} is available.",
+        UpdateState.Downloading => $"Downloading version {_update?.Version}... {DownloadPercent}%",
+        UpdateState.ReadyToRestart => $"Version {_update?.Version} is ready. Restart to update.",
+        _ => "",
+    };
+
+    /// <summary>Gets the status line of the settings section.</summary>
+    public string StatusText => State switch
+    {
+        UpdateState.Unsupported => "Updates are only available in the installed app.",
+        UpdateState.Checking => "Checking for updates...",
+        UpdateState.UpToDate => "Yaapic is up to date.",
+        UpdateState.Failed => ErrorMessage ?? "The update failed.",
+        UpdateState.Available or UpdateState.Downloading or UpdateState.ReadyToRestart => BannerText,
+        _ => LastCheckUtc is { } last ? $"Last checked {last.ToLocalTime():g}." : "Not checked yet.",
+    };
 
     /// <summary>Gets a value indicating whether the banner shows: an update is found and the user did not dismiss that version.</summary>
     public bool IsBannerVisible =>
@@ -197,6 +237,10 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
 
     private bool CanRestart() => State == UpdateState.ReadyToRestart;
 
+    /// <summary>Asks the UI to open the updates dialog.</summary>
+    [RelayCommand]
+    private void OpenSettings() => SettingsRequested?.Invoke(this, EventArgs.Empty);
+
     /// <summary>Hides the banner for the version found; a newer version shows it again.</summary>
     [RelayCommand]
     private void Dismiss()
@@ -273,6 +317,8 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
                 OnPropertyChanged(nameof(AvailableVersion));
                 OnPropertyChanged(nameof(Notes));
                 State = UpdateState.Available;
+                OnPropertyChanged(nameof(ShowDownload));
+                OnPropertyChanged(nameof(BannerText));
                 OnPropertyChanged(nameof(IsBannerVisible));
                 break;
             case UpdateCheckResult.Failed failed:

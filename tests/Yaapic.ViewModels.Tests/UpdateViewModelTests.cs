@@ -228,4 +228,47 @@ public sealed class UpdateViewModelTests
         Assert.Equal(AppChannel.Preview, vm.Channel);
         Assert.Equal(AppChannel.Preview, _service.Checks[0]);
     }
+
+    [Fact]
+    public async Task The_texts_and_buttons_follow_the_state()
+    {
+        _service.Result = new UpdateCheckResult.Available(V2);
+        var vm = Create();
+        await vm.InitializeAsync();
+
+        Assert.Equal("Version 2.0.0 is available.", vm.BannerText);
+        Assert.True(vm.ShowDownload);
+        Assert.False(vm.ShowRestart);
+
+        await vm.DownloadCommand.ExecuteAsync(null);
+
+        Assert.Equal("Version 2.0.0 is ready. Restart to update.", vm.StatusText);
+        Assert.True(vm.ShowRestart);
+        Assert.False(vm.ShowDownload);
+    }
+
+    [Fact]
+    public async Task The_status_line_reports_check_results()
+    {
+        var vm = Create();
+        Assert.Equal("Not checked yet.", vm.StatusText);
+
+        await vm.CheckNowCommand.ExecuteAsync(null);
+        Assert.Equal("Yaapic is up to date.", vm.StatusText);
+
+        _service.IsSupported = false;
+        Assert.Equal("Updates are only available in the installed app.", Create().StatusText);
+    }
+
+    [Fact]
+    public void Opening_the_updates_dialog_raises_the_event()
+    {
+        var vm = Create();
+        var raised = 0;
+        vm.SettingsRequested += (_, _) => raised++;
+
+        vm.OpenSettingsCommand.Execute(null);
+
+        Assert.Equal(1, raised);
+    }
 }

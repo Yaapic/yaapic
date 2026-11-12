@@ -22,7 +22,7 @@ public sealed class App : Application
         {
             var options = CaptureOptions.Parse(desktop.Args ?? []);
             var window = new MainWindow();
-            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window), PlatformProtectors());
+            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window), PlatformProtectors(), updateDemo: options.UpdateDemo);
             window.Title = $"Yaapic {AppComposition.CreateAppInfo().Version}";
             window.DataContext = shell;
             if (options.Theme is { } theme)

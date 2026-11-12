@@ -75,7 +75,11 @@ public sealed class CommandsPaletteSource : IPaletteSource
         var updates = _shell.Updates;
         if (updates.IsSupported)
         {
-            items.Add(Item("check-updates", "Check for updates", null, updates.CheckNowCommand));
+            items.Add(Item("check-updates", "Check for updates", null, () =>
+            {
+                updates.OpenSettingsCommand.Execute(null);
+                _ = updates.CheckNowCommand.ExecuteAsync(null);
+            }));
         }
 
         if (updates.State == Updates.UpdateState.ReadyToRestart)

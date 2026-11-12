@@ -82,6 +82,25 @@
       </StackPanel>
     </Grid>
     <StackPanel Grid.Row="1">
+      <InfoBar x:Name="UpdateBanner" Severity="Informational" IsClosable="True"
+               AutomationProperties.Name="Update available"
+               IsOpen="{x:Bind ViewModel.Updates.IsBannerVisible, Mode=OneWay}"
+               Message="{x:Bind ViewModel.Updates.BannerText, Mode=OneWay}"
+               CloseButtonCommand="{x:Bind ViewModel.Updates.DismissCommand}">
+        <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,0,0,8">
+          <ProgressBar Width="160" Minimum="0" Maximum="100" VerticalAlignment="Center"
+                       AutomationProperties.Name="Download progress"
+                       Value="{x:Bind ViewModel.Updates.DownloadPercent, Mode=OneWay}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Updates.IsDownloading), Mode=OneWay}"/>
+          <Button Content="Download" Command="{x:Bind ViewModel.Updates.DownloadCommand}"
+                  Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Updates.ShowDownload), Mode=OneWay}"/>
+          <Button Content="Cancel" Command="{x:Bind ViewModel.Updates.CancelDownloadCommand}"
+                  Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Updates.IsDownloading), Mode=OneWay}"/>
+          <Button Content="Restart to update" Style="{StaticResource AccentButtonStyle}"
+                  Command="{x:Bind ViewModel.Updates.RestartAndApplyCommand}"
+                  Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Updates.ShowRestart), Mode=OneWay}"/>
+        </StackPanel>
+      </InfoBar>
       <InfoBar Severity="Error" IsClosable="False"
                IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Tabs.LastError), Mode=OneWay}"
                Message="{x:Bind ViewModel.Tabs.LastError, Mode=OneWay}"/>
@@ -157,6 +176,8 @@
                 <MenuFlyoutItem Text="Dark theme" Click="OnThemeDark"/>
                 <MenuFlyoutItem Text="Light theme" Click="OnThemeLight"/>
                 <MenuFlyoutItem Text="System theme" Click="OnThemeSystem"/>
+                <MenuFlyoutSeparator/>
+                <MenuFlyoutItem Text="Updates and about..." Click="OnUpdatesClick"/>
               </MenuFlyout>
             </Button.Flyout>
           </Button>

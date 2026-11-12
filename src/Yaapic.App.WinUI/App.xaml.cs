@@ -27,6 +27,7 @@ public partial class App : Application
         _window = window;
         var workspace = Workspace.DefaultRoot();
         string? dataDirectory = null;
+        string? updateDemo = null;
         var argv = Environment.GetCommandLineArgs();
         for (var i = 1; i < argv.Length - 1; i++)
         {
@@ -37,6 +38,10 @@ public partial class App : Application
             else if (argv[i] == "--data-dir")
             {
                 dataDirectory = argv[i + 1];
+            }
+            else if (argv[i] == "--update-demo")
+            {
+                updateDemo = argv[i + 1];
             }
             else if (argv[i] == "--theme")
             {
@@ -58,7 +63,8 @@ public partial class App : Application
             workspace,
             new WinUIDialogService(window, () => window.Content?.XamlRoot),
             new DpapiKeyProtectorFactory(),
-            dataDirectory);
+            dataDirectory,
+            updateDemo);
         window.Title = $"Yaapic {AppComposition.CreateAppInfo().Version}";
         window.ViewModel = shell;
         window.Activate();

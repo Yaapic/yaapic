@@ -40,10 +40,13 @@ public static class AppComposition
     /// <param name="dialogs">The platform dialog implementation.</param>
     /// <param name="platformProtectors">The platform key protectors; <see langword="null"/> offers the passphrase protector only.</param>
     /// <param name="userDataDirectory">Another per-user data directory for the vault file (screenshot captures); <see langword="null"/> for the real one.</param>
+    /// <param name="updateDemo">Screenshot tooling only: a scripted update mode (see <see cref="UpdateDemoService"/>); <see langword="null"/> for the real update service.</param>
     /// <returns>The shell; call <see cref="ShellViewModel.InitializeAsync"/> before showing it.</returns>
     /// <exception cref="Yaapic.Core.Storage.StorageException">The workspace cannot be created.</exception>
-    public static ShellViewModel CreateShell(string workspaceRoot, IDialogService dialogs, IKeyProtectorFactory? platformProtectors = null, string? userDataDirectory = null) =>
-        CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateSettings: new FileUpdateSettingsStore(userDataDirectory));
+    public static ShellViewModel CreateShell(string workspaceRoot, IDialogService dialogs, IKeyProtectorFactory? platformProtectors = null, string? userDataDirectory = null, string? updateDemo = null) =>
+        updateDemo is null
+            ? CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateSettings: new FileUpdateSettingsStore(userDataDirectory))
+            : CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateService: new UpdateDemoService(updateDemo), updateSettings: new UpdateDemoService(updateDemo));
 
     // The seam of the tests: another vault location, other engines and other script limits.
     internal static ShellViewModel CreateShell(
