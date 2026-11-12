@@ -85,7 +85,7 @@ public sealed partial class RequestEditorView : UserControl
 
         _compactSections = _stripWidth + 16 > Sections.Bounds.Width;
         Sections.Classes.Set("compact", _compactSections);
-        Sections.Margin = new global::Avalonia.Thickness(0, _compactSections ? 38 : 0, 0, 0);
+        Sections.Margin = new global::Avalonia.Thickness(0, _compactSections ? 32 : 0, 0, 0);
         SectionsOverflow.IsVisible = _compactSections;
         UpdateSectionsOverflowLabel();
     }

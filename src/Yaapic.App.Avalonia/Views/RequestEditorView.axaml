@@ -156,10 +156,10 @@
     </TabControl>
 
     <!-- Replaces the tab strip while it does not fit (side by side layout): a drop-down listing the same sections. -->
-    <Border x:Name="SectionsOverflow" Grid.Row="2" Grid.ColumnSpan="3" Height="38" VerticalAlignment="Top" IsVisible="False"
+    <Border x:Name="SectionsOverflow" Grid.Row="2" Grid.ColumnSpan="3" Height="32" VerticalAlignment="Top" IsVisible="False"
             BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-      <Button x:Name="SectionsOverflowButton" Classes="subtle" MinHeight="0" Height="26" Padding="10,0" Margin="12,5,0,0"
-              HorizontalAlignment="Left" VerticalAlignment="Top" AutomationProperties.Name="Request sections">
+      <Button x:Name="SectionsOverflowButton" Classes="subtle" MinHeight="0" Height="28" Padding="0,0,10,0" Margin="0,2,0,2"
+              HorizontalAlignment="Left" VerticalAlignment="Center" AutomationProperties.Name="Request sections">
         <StackPanel Orientation="Horizontal" Spacing="8">
           <TextBlock x:Name="SectionsOverflowLabel" VerticalAlignment="Center" />
           <PathIcon Data="M4 8l8 8 8-8" Width="10" Height="10" VerticalAlignment="Center" />
