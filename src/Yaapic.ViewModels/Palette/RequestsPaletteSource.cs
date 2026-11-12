@@ -1,7 +1,7 @@
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
-using Yaapic.ViewModels.Collections;
 using Yaapic.Localization;
+using Yaapic.ViewModels.Collections;
 
 namespace Yaapic.ViewModels.Palette;
 

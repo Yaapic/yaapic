@@ -1,6 +1,6 @@
-using Yaapic.Localization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Yaapic.Localization;
 
 namespace Yaapic.App.Avalonia.Presentation;
 

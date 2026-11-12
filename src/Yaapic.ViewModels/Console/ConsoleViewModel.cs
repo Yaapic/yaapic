@@ -4,9 +4,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Scripting;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Responses;
-using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Console;
 

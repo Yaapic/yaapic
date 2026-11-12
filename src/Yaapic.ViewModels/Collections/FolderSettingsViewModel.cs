@@ -2,10 +2,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Scripting;
 using Yaapic.ViewModels.Vault;
-using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Collections;
 

@@ -1,8 +1,8 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Variables;
-using Yaapic.ViewModels.Editing;
 using Yaapic.Localization;
+using Yaapic.ViewModels.Editing;
 
 namespace Yaapic.ViewModels.Requests;
 

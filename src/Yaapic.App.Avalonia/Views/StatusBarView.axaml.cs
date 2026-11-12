@@ -1,6 +1,6 @@
-using Yaapic.Localization;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.App.Avalonia.Views;

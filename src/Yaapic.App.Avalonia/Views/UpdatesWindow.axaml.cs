@@ -78,6 +78,8 @@ public sealed partial class UpdatesWindow : Window
         {
             Width = 28,
             Height = 28,
+            MinWidth = 28,
+            MinHeight = 28,
             Padding = new global::Avalonia.Thickness(0),
             CornerRadius = new global::Avalonia.CornerRadius(14),
             Background = fill,

@@ -2,8 +2,8 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Updates;
 using Yaapic.Domain.Scripting;
-using Yaapic.ViewModels.Console;
 using Yaapic.Localization;
+using Yaapic.ViewModels.Console;
 
 namespace Yaapic.ViewModels.Updates;
 

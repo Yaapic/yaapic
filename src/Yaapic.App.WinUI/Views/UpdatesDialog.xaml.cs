@@ -87,6 +87,8 @@ public sealed partial class UpdatesDialog : ContentDialog
         {
             Width = 28,
             Height = 28,
+            MinWidth = 28,
+            MinHeight = 28,
             Padding = new Thickness(0),
             CornerRadius = new CornerRadius(14),
             Background = fill,

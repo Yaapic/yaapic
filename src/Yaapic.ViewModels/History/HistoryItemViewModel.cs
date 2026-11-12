@@ -1,8 +1,8 @@
 using System.Globalization;
 using Yaapic.Domain.History;
 using Yaapic.Domain.Http;
-using Yaapic.ViewModels.Responses;
 using Yaapic.Localization;
+using Yaapic.ViewModels.Responses;
 
 namespace Yaapic.ViewModels.History;
 

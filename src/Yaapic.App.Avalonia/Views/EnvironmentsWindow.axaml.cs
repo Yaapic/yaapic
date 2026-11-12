@@ -1,6 +1,6 @@
-using Yaapic.Localization;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.Shell;
 

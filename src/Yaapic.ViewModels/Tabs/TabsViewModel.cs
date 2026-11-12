@@ -3,9 +3,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Requests;
-using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Tabs;
 

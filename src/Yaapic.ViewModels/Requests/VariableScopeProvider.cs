@@ -1,9 +1,9 @@
 using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Environments;
-using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Requests;
 

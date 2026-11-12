@@ -1,8 +1,8 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Secrets;
-using Yaapic.ViewModels.Shell;
 using Yaapic.Localization;
+using Yaapic.ViewModels.Shell;
 
 namespace Yaapic.ViewModels.Palette;
 

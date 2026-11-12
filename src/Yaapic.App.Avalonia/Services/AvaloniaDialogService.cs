@@ -1,4 +1,3 @@
-using Yaapic.Localization;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
@@ -7,6 +6,7 @@ using Avalonia.Media;
 using Avalonia.Platform.Storage;
 using Avalonia.Threading;
 using Yaapic.App.Avalonia.Views;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 
 namespace Yaapic.App.Avalonia.Services;

@@ -6,11 +6,11 @@ using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Scripting;
-using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Requests;
 

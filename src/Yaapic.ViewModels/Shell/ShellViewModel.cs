@@ -4,6 +4,7 @@ using Yaapic.Core.Scripting;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Scripting;
 using Yaapic.Domain.Workspace;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Console;
@@ -14,7 +15,6 @@ using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Tabs;
 using Yaapic.ViewModels.Updates;
 using Yaapic.ViewModels.Vault;
-using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Shell;
 

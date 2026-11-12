@@ -1,5 +1,5 @@
-using Yaapic.ViewModels.Environments;
 using Yaapic.Localization;
+using Yaapic.ViewModels.Environments;
 
 namespace Yaapic.ViewModels.Palette;
 

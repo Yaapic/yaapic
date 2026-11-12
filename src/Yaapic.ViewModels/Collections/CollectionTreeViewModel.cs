@@ -4,10 +4,10 @@ using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Tabs;
 using Yaapic.ViewModels.Vault;
-using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Collections;
 
