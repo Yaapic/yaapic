@@ -46,7 +46,7 @@ The fallback (MSIX on Windows) is therefore not needed now; R-04 and R-08 stand 
 - **Signing**: Authenticode (Windows) and notarization (macOS) run only when their secrets exist; unsigned builds are
   allowed and documented. No secret is committed or printed.
 - **Privacy**: the only network call is the feed request to GitHub; no identifier or usage data is sent.
-- **Releases are drafts**: the workflow uploads a draft, a maintainer publishes it after a look.
+- **Releases are published by the workflow**: a `-preview` tag gives a pre-release, any other tag a stable release. A bad release is withdrawn by deleting it.
 
 ## Consequences
 
