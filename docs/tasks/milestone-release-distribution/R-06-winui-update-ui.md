@@ -26,7 +26,7 @@ Avalonia (R-07).
 
 ## Acceptance criteria
 
-- [x] Screenshots of banner (available, downloading, ready), settings and About in `docs/screenshots/release/`.
+- [x] Screenshots of banner (available, downloading, ready), settings and About in `docs/screenshots/updates/`.
 - [x] Driven with a scripted service (`--update-demo <mode>` on both apps, `-UpdateDemo` in the capture scripts), no network, nothing written to disk.
 
 ## Suggested commit message
