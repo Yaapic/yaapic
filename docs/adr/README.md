@@ -12,6 +12,7 @@
 | [0008](0008-collections-globals-history-storage.md) | Collections, globals and history storage | Accepted |
 | [0009](0009-scripting.md) | Scripting architecture, host protocol and file format | Accepted |
 | [0010](0010-secret-vault.md) | Secret vault | Accepted |
+| [0011](0011-distribution-and-updates.md) | Distribution and automatic updates | Accepted |
 
 Each ADR has a status, the options considered, the Native AOT risks and the decision. A "Proposed" ADR is confirmed by
 the card that first needs it.
