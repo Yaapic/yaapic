@@ -177,7 +177,7 @@
                 <MenuFlyoutItem Text="Light theme" Click="OnThemeLight"/>
                 <MenuFlyoutItem Text="System theme" Click="OnThemeSystem"/>
                 <MenuFlyoutSeparator/>
-                <MenuFlyoutItem Text="Updates and about..." Click="OnUpdatesClick"/>
+                <MenuFlyoutItem Text="Settings..." Click="OnUpdatesClick"/>
               </MenuFlyout>
             </Button.Flyout>
           </Button>

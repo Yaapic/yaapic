@@ -4,6 +4,7 @@ using Yaapic.Composition;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
 using Yaapic.Infrastructure.Updates;
+using Yaapic.ViewModels.Settings;
 
 namespace Yaapic.App.WinUI;
 
@@ -11,6 +12,20 @@ namespace Yaapic.App.WinUI;
 public partial class App : Application
 {
     private MainWindow? _window;
+
+    /// <summary>Gets the language and accent settings; their accent choices are applied to the running app as they are made.</summary>
+    internal SettingsViewModel Settings { get; private set; } = null!;
+
+    /// <summary>Starts a new instance of the app with the same arguments and closes this one (the language applies at start-up).</summary>
+    internal void Restart()
+    {
+        if (Environment.ProcessPath is { } exe)
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(exe, Environment.GetCommandLineArgs().Skip(1).Select(a => $"\"{a}\"")) { UseShellExecute = false });
+        }
+
+        Exit();
+    }
 
     /// <summary>Initializes the application.</summary>
     public App()
@@ -61,6 +76,9 @@ public partial class App : Application
 
         var preferences = AppPreferences.LoadAndApplyLanguage(AppPreferences.CreateStore(dataDirectory));
         AccentApplier.Apply(preferences.Accent);
+        Settings = new SettingsViewModel(AppPreferences.CreateStore(dataDirectory));
+        Settings.AccentChanged += (_, choice) => AccentApplier.Apply(choice);
+        await Settings.InitializeAsync();
         var shell = AppComposition.CreateShell(
             workspace,
             new WinUIDialogService(window, () => window.Content?.XamlRoot),

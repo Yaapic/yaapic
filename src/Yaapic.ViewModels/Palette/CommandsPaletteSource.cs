@@ -75,6 +75,10 @@ public sealed class CommandsPaletteSource : IPaletteSource
         }
 
         var updates = _shell.Updates;
+        // The dialog these open holds the language and accent pickers as well as the update settings.
+        items.Add(Item("settings", Strings.PaletteSettings, null, updates.OpenSettingsCommand));
+        items.Add(Item("change-language", Strings.PaletteChangeLanguage, null, updates.OpenSettingsCommand));
+        items.Add(Item("change-accent", Strings.PaletteChangeAccent, null, updates.OpenSettingsCommand));
         if (updates.IsSupported)
         {
             items.Add(Item("check-updates", Strings.PaletteCheckUpdates, null, () =>

@@ -208,7 +208,8 @@ public sealed partial class MainWindow : Window
         _updatesOpen = true;
         try
         {
-            await new Views.UpdatesWindow(shell.Updates).ShowDialog(this);
+            var app = (App)global::Avalonia.Application.Current!;
+            await new Views.UpdatesWindow(shell.Updates, app.Settings, app.Restart).ShowDialog(this);
         }
         finally
         {

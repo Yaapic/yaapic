@@ -130,7 +130,7 @@
                 <MenuItem Header="Light" Click="OnThemeLight" />
                 <MenuItem Header="System" Click="OnThemeSystem" />
 <Separator />
-<MenuItem Header="Updates and about..." Click="OnUpdatesClick" />
+<MenuItem Header="Settings..." Click="OnUpdatesClick" />
               </MenuFlyout>
             </Button.Flyout>
           </Button>

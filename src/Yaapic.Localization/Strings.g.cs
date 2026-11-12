@@ -7,6 +7,30 @@ namespace Yaapic.Localization;
 /// <summary>Every user-visible text of the app, in the current language.</summary>
 public static class Strings
 {
+    /// <summary>Blue</summary>
+    public static string AccentBlue => Localizer.Pick("Blue", "Bleu");
+
+    /// <summary>Green</summary>
+    public static string AccentGreen => Localizer.Pick("Green", "Vert");
+
+    /// <summary>Grey</summary>
+    public static string AccentGrey => Localizer.Pick("Grey", "Gris");
+
+    /// <summary>Orange</summary>
+    public static string AccentOrange => Localizer.Pick("Orange", "Orange");
+
+    /// <summary>Pink</summary>
+    public static string AccentPink => Localizer.Pick("Pink", "Rose");
+
+    /// <summary>Purple</summary>
+    public static string AccentPurple => Localizer.Pick("Purple", "Violet");
+
+    /// <summary>Red</summary>
+    public static string AccentRed => Localizer.Pick("Red", "Rouge");
+
+    /// <summary>Teal</summary>
+    public static string AccentTeal => Localizer.Pick("Teal", "Turquoise");
+
     /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
     public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");
 
@@ -116,6 +140,12 @@ public static class Strings
     /// <summary>Tab</summary>
     public static string PaletteCategoryTab => Localizer.Pick("Tab", "Onglet");
 
+    /// <summary>Change accent colour</summary>
+    public static string PaletteChangeAccent => Localizer.Pick("Change accent colour", "Changer la couleur d'accentuation");
+
+    /// <summary>Change language</summary>
+    public static string PaletteChangeLanguage => Localizer.Pick("Change language", "Changer de langue");
+
     /// <summary>Check for updates</summary>
     public static string PaletteCheckUpdates => Localizer.Pick("Check for updates", "Rechercher des mises à jour");
 
@@ -158,6 +188,9 @@ public static class Strings
 
     /// <summary>Send request</summary>
     public static string PaletteSendRequest => Localizer.Pick("Send request", "Envoyer la requête");
+
+    /// <summary>Settings</summary>
+    public static string PaletteSettings => Localizer.Pick("Settings", "Paramètres");
 
     /// <summary>Show collections</summary>
     public static string PaletteShowCollections => Localizer.Pick("Show collections", "Afficher les collections");
@@ -271,6 +304,48 @@ public static class Strings
     /// <summary>Unlock the vault to mark '{0}' as secret</summary>
     public static string SecretsVaultLocked(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unlock the vault to mark '{0}' as secret", "Déverrouillez le coffre pour marquer '{0}' comme secret"), a0);
+
+    /// <summary>Accent colour</summary>
+    public static string SettingsAccent => Localizer.Pick("Accent colour", "Couleur d'accentuation");
+
+    /// <summary>System accent</summary>
+    public static string SettingsAccentSystem => Localizer.Pick("System accent", "Accent du système");
+
+    /// <summary>Appearance</summary>
+    public static string SettingsAppearance => Localizer.Pick("Appearance", "Apparence");
+
+    /// <summary>Apply</summary>
+    public static string SettingsApply => Localizer.Pick("Apply", "Appliquer");
+
+    /// <summary>Custom colour (#RRGGBB)</summary>
+    public static string SettingsCustomColor => Localizer.Pick("Custom colour (#RRGGBB)", "Couleur personnalisée (#RRGGBB)");
+
+    /// <summary>Enter a colour like #1FC7D4.</summary>
+    public static string SettingsInvalidColor => Localizer.Pick("Enter a colour like #1FC7D4.", "Saisissez une couleur comme #1FC7D4.");
+
+    /// <summary>Language</summary>
+    public static string SettingsLanguage => Localizer.Pick("Language", "Langue");
+
+    /// <summary>English</summary>
+    public static string SettingsLanguageEnglish => Localizer.Pick("English", "English");
+
+    /// <summary>Français</summary>
+    public static string SettingsLanguageFrench => Localizer.Pick("Français", "Français");
+
+    /// <summary>System default</summary>
+    public static string SettingsLanguageSystem => Localizer.Pick("System default", "Langue du système");
+
+    /// <summary>The language changes the next time Yaapic starts.</summary>
+    public static string SettingsRestartNote => Localizer.Pick("The language changes the next time Yaapic starts.", "La langue changera au prochain démarrage de Yaapic.");
+
+    /// <summary>Restart now</summary>
+    public static string SettingsRestartNow => Localizer.Pick("Restart now", "Redémarrer maintenant");
+
+    /// <summary>Settings</summary>
+    public static string SettingsTitle => Localizer.Pick("Settings", "Paramètres");
+
+    /// <summary>Updates</summary>
+    public static string SettingsUpdates => Localizer.Pick("Updates", "Mises à jour");
 
     /// <summary>{0} engine unavailable: {1}</summary>
     public static string ShellEngineUnavailable(object? a0, object? a1) =>

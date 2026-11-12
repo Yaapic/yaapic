@@ -433,7 +433,7 @@ public sealed partial class MainWindow : Window
         _dialogOpen = true;
         try
         {
-            await new Views.UpdatesDialog(_viewModel.Updates) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
+            await new Views.UpdatesDialog(_viewModel.Updates, ((App)Application.Current).Settings, ((App)Application.Current).Restart) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
         }
         finally
         {

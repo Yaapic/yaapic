@@ -130,4 +130,8 @@ public sealed class SettingsViewModelTests : IDisposable
     [Fact]
     public void The_presets_match_the_palette() =>
         Assert.Equal(AccentChoice.Presets, Create().Presets.Select(p => p.Id));
+
+    [Fact]
+    public void Every_preset_has_a_name() =>
+        Assert.All(Create().Presets, p => Assert.NotEqual(p.Id, AccentNames.Of(p.Id)));
 }
