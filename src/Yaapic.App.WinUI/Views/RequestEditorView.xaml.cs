@@ -51,6 +51,7 @@ public sealed partial class RequestEditorView : UserControl
                 ((MenuFlyoutItem)MethodFlyout.Items[i]).Foreground = BrushMap.Method(RequestEditorViewModel.Methods[i]);
             }
         };
+        SectionTabs.SizeChanged += (_, _) => UpdateTabOverflow();
         ActualThemeChanged += (_, _) =>
         {
             BrushMap.IsLight = ActualTheme == ElementTheme.Light;
@@ -213,6 +214,58 @@ public sealed partial class RequestEditorView : UserControl
         ParamsBadge.Style = BadgeStyle(ParamsTab);
         HeadersBadge.Style = BadgeStyle(HeadersTab);
         BodyBadge.Style = BadgeStyle(BodyTab);
+        UpdateTabOverflowLabel();
+    }
+
+    private double _stripWidth;
+    private bool _compactTabs;
+
+    // The sections the drop-down lists, in strip order: the tab, its label and its count badge.
+    private (ToggleButton Tab, string Label, TextBlock? Badge)[] Sections =>
+    [
+        (ParamsTab, "Params", ParamsBadge),
+        (HeadersTab, "Headers", HeadersBadge),
+        (BodyTab, "Body", BodyBadge),
+        (AuthTab, "Auth", AuthBadge),
+        (ScriptsTab, "Scripts", ScriptsBadge),
+        (SettingsTab, "Settings", null),
+    ];
+
+    // Swaps the tab strip for a drop-down when the strip is wider than the room (a narrow request column).
+    // The strip width is measured while the strip is shown and kept, so the swap back needs no hidden measure.
+    private void UpdateTabOverflow()
+    {
+        if (!_compactTabs)
+        {
+            TabStrip.Measure(new Windows.Foundation.Size(double.PositiveInfinity, double.PositiveInfinity));
+            _stripWidth = TabStrip.DesiredSize.Width;
+        }
+
+        var available = SectionTabs.ActualWidth - SectionTabs.Padding.Left - SectionTabs.Padding.Right;
+        if (available <= 0)
+        {
+            return;
+        }
+
+        _compactTabs = _stripWidth > available;
+        TabStrip.Visibility = _compactTabs ? Visibility.Collapsed : Visibility.Visible;
+        TabOverflow.Visibility = _compactTabs ? Visibility.Visible : Visibility.Collapsed;
+        UpdateTabOverflowLabel();
+    }
+
+    private void UpdateTabOverflowLabel() =>
+        TabOverflowLabel.Text = Sections.FirstOrDefault(s => s.Tab.IsChecked == true).Label ?? "Params";
+
+    private void OnTabOverflowOpening(object? sender, object e)
+    {
+        TabOverflowMenu.Items.Clear();
+        foreach (var (tab, label, badge) in Sections)
+        {
+            var text = badge is { Visibility: Visibility.Visible } ? $"{label} {badge.Text}" : label;
+            var item = new RadioMenuFlyoutItem { Text = text, GroupName = "sections", IsChecked = tab.IsChecked == true };
+            item.Click += (_, _) => OnTabClick(tab, new RoutedEventArgs());
+            TabOverflowMenu.Items.Add(item);
+        }
     }
 
     private bool Horizontal => _layout?.IsHorizontal == true;

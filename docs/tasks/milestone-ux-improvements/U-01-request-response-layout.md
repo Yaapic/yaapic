@@ -26,7 +26,9 @@ Remembering the split position per layout, hiding the response panel, per-reques
 
 - [x] Toggle switches every open tab at once and survives a restart (tests: `FileSessionStoreTests`, `ShellViewModelTests`).
 - [x] Screenshots of both layouts on both front-ends in `docs/screenshots/layout`.
-- [x] Known limit: below about 900 px of editor width the tab strips and the response header clip in the side-by-side layout.
+- [x] When the request section tabs no longer fit (narrow request column), they are replaced by a drop-down listing the same sections
+      with their counts (WinUI `UpdateTabOverflow`, Avalonia `UpdateSectionsOverflow`), like Postman; it goes back to tabs when there is room.
+- [x] Known limit: the response header (Body / Headers tabs next to the status chips) still overlaps in a very narrow response column.
 
 ## Suggested commit message
 

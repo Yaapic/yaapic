@@ -100,6 +100,10 @@
   </Style>
 
   <!-- Request tabs: square tabs on the sidebar surface, the selected one on the base surface with an accent top line. -->
+  <!-- Compact: the strip is hidden (a drop-down takes its place, see RequestEditorView.UpdateSectionsOverflow) and the content starts below it. -->
+  <Style Selector="TabControl.panel.compact /template/ ItemsPresenter#PART_ItemsPresenter">
+    <Setter Property="IsVisible" Value="False" />
+  </Style>
   <Style Selector="TabControl.requests">
     <Setter Property="Template">
       <ControlTemplate>

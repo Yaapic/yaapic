@@ -129,8 +129,20 @@
     </Grid>
 
     <!-- Section tabs with count badges. -->
+    <!-- When the strip does not fit (side by side layout), it is replaced by a drop-down listing the same sections. -->
     <Border x:Name="SectionTabs" Grid.Row="2" Grid.ColumnSpan="3" Padding="16,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
-      <StackPanel Orientation="Horizontal">
+      <Grid>
+      <Button x:Name="TabOverflow" Visibility="Collapsed" Style="{StaticResource YaapicSubtleButtonStyle}" HorizontalAlignment="Left"
+              VerticalAlignment="Center" MinHeight="0" Height="26" Padding="10,0" AutomationProperties.Name="Request sections">
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <TextBlock x:Name="TabOverflowLabel" VerticalAlignment="Center"/>
+          <FontIcon Glyph="&#xE70D;" FontSize="10" VerticalAlignment="Center"/>
+        </StackPanel>
+        <Button.Flyout>
+          <MenuFlyout x:Name="TabOverflowMenu" Opening="OnTabOverflowOpening"/>
+        </Button.Flyout>
+      </Button>
+      <StackPanel x:Name="TabStrip" Orientation="Horizontal">
         <ToggleButton x:Name="ParamsTab" Style="{StaticResource YaapicPanelToggleTabStyle}" IsChecked="True"
                       Click="OnTabClick">
           <StackPanel Orientation="Horizontal" Spacing="5">
@@ -179,6 +191,7 @@
           <TextBlock Text="Settings" VerticalAlignment="Center"/>
         </ToggleButton>
       </StackPanel>
+      </Grid>
     </Border>
 
     <Grid x:Name="EditorContent" Grid.Row="3" Grid.ColumnSpan="3">
