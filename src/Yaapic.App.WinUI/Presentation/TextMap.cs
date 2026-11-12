@@ -1,5 +1,6 @@
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -20,7 +21,7 @@ public static class TextMap
     /// <summary>Gets the hint shown for a method whose requests carry no body.</summary>
     /// <param name="methodText">The upper-case method name.</param>
     /// <returns>The hint.</returns>
-    public static string NoBodyHint(string methodText) => $"{methodText} requests are sent without a body";
+    public static string NoBodyHint(string methodText) => Strings.RequestNoBodyHint(methodText);
 
     /// <summary>Gets the code editor language of a raw body content type.</summary>
     /// <param name="contentType">The content type.</param>
@@ -61,7 +62,7 @@ public static class TextMap
     /// <summary>Gets the tooltip of the vault status item.</summary>
     /// <param name="protectorLabel">The protector label; <see langword="null"/> when no vault exists.</param>
     /// <returns>The tooltip text.</returns>
-    public static string VaultTip(string? protectorLabel) => protectorLabel ?? "Secret variables are not protected yet";
+    public static string VaultTip(string? protectorLabel) => protectorLabel ?? Strings.VaultUnprotected;
 
     /// <summary>Gets the Segoe Fluent glyph of the vault status item.</summary>
     /// <param name="isUnlocked">Whether the vault is unlocked.</param>

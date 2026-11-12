@@ -1,4 +1,5 @@
-<Window xmlns="https://github.com/avaloniaui"
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:vm="using:Yaapic.ViewModels.Shell"
         xmlns:col="using:Yaapic.ViewModels.Collections"
@@ -83,19 +84,19 @@
     </Border>
 
     <Border Grid.Row="1" Classes="infobar info" Margin="8,6" IsVisible="{Binding Updates.IsBannerVisible}"
-            AutomationProperties.Name="Update available">
+            AutomationProperties.Name="{x:Static loc:Strings.UpdateAvailable}">
       <DockPanel LastChildFill="False">
         <Button DockPanel.Dock="Right" Classes="icon" Content="✕" Command="{Binding Updates.DismissCommand}"
-                AutomationProperties.Name="Dismiss" ToolTip.Tip="Dismiss" />
-        <Button DockPanel.Dock="Right" Content="Restart to update" Classes="accent" Margin="0,0,8,0"
+                AutomationProperties.Name="{x:Static loc:Strings.CommonDismiss}" ToolTip.Tip="{x:Static loc:Strings.CommonDismiss}" />
+        <Button DockPanel.Dock="Right" Content="{x:Static loc:Strings.PaletteRestartToUpdate}" Classes="accent" Margin="0,0,8,0"
                 Command="{Binding Updates.RestartAndApplyCommand}" IsVisible="{Binding Updates.ShowRestart}" />
-        <Button DockPanel.Dock="Right" Content="Cancel" Margin="0,0,8,0"
+        <Button DockPanel.Dock="Right" Content="{x:Static loc:Strings.CommonCancel}" Margin="0,0,8,0"
                 Command="{Binding Updates.CancelDownloadCommand}" IsVisible="{Binding Updates.IsDownloading}" />
-        <Button DockPanel.Dock="Right" Content="Download" Margin="0,0,8,0"
+        <Button DockPanel.Dock="Right" Content="{x:Static loc:Strings.UpdateDownload}" Margin="0,0,8,0"
                 Command="{Binding Updates.DownloadCommand}" IsVisible="{Binding Updates.ShowDownload}" />
         <ProgressBar DockPanel.Dock="Right" Width="160" Minimum="0" Maximum="100" Margin="0,0,8,0" VerticalAlignment="Center"
                      Value="{Binding Updates.DownloadPercent}" IsVisible="{Binding Updates.IsDownloading}"
-                     AutomationProperties.Name="Download progress" />
+                     AutomationProperties.Name="{x:Static loc:Strings.UpdateDownloadProgress}" />
         <TextBlock Text="{Binding Updates.BannerText}" VerticalAlignment="Center" TextWrapping="Wrap" />
       </DockPanel>
     </Border>
@@ -122,22 +123,22 @@
               BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
         <DockPanel Margin="0,8">
           <Button DockPanel.Dock="Bottom" Classes="icon rail" HorizontalAlignment="Center"
-                  ToolTip.Tip="Settings" AutomationProperties.Name="Settings">
+                  ToolTip.Tip="{x:Static loc:Strings.SettingsTitle}" AutomationProperties.Name="{x:Static loc:Strings.SettingsTitle}">
             <PathIcon Data="{StaticResource YiSettings}" />
             <Button.Flyout>
               <MenuFlyout Placement="RightEdgeAlignedBottom">
-                <MenuItem Header="Dark" Click="OnThemeDark" />
-                <MenuItem Header="Light" Click="OnThemeLight" />
-                <MenuItem Header="System" Click="OnThemeSystem" />
+                <MenuItem Header="{x:Static loc:Strings.ThemeDark}" Click="OnThemeDark" />
+                <MenuItem Header="{x:Static loc:Strings.ThemeLight}" Click="OnThemeLight" />
+                <MenuItem Header="{x:Static loc:Strings.ThemeSystem}" Click="OnThemeSystem" />
 <Separator />
-<MenuItem Header="Updates and about..." Click="OnUpdatesClick" />
+<MenuItem Header="{x:Static loc:Strings.SettingsMenu}" Click="OnUpdatesClick" />
               </MenuFlyout>
             </Button.Flyout>
           </Button>
           <StackPanel Spacing="4">
             <Grid HorizontalAlignment="Center">
               <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}"
-                      Command="{Binding ShowCollectionsCommand}" ToolTip.Tip="Collections" AutomationProperties.Name="Collections">
+                      Command="{Binding ShowCollectionsCommand}" ToolTip.Tip="{x:Static loc:Strings.CollectionsTitle}" AutomationProperties.Name="{x:Static loc:Strings.CollectionsTitle}">
                 <PathIcon Data="{StaticResource YiCollection}" />
               </Button>
               <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
@@ -146,7 +147,7 @@
             </Grid>
             <Grid HorizontalAlignment="Center">
               <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}"
-                      Command="{Binding ShowHistoryCommand}" ToolTip.Tip="History" AutomationProperties.Name="History">
+                      Command="{Binding ShowHistoryCommand}" ToolTip.Tip="{x:Static loc:Strings.HistoryTitle}" AutomationProperties.Name="{x:Static loc:Strings.HistoryTitle}">
                 <PathIcon Data="{StaticResource YiHistory}" />
               </Button>
               <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
@@ -154,11 +155,11 @@
                       IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
             </Grid>
             <Button Classes="icon rail" HorizontalAlignment="Center" Click="OnManageEnvironments"
-                    ToolTip.Tip="Environments (Ctrl+Shift+E)" AutomationProperties.Name="Environments">
+                    ToolTip.Tip="{x:Static loc:Strings.EnvironmentsTitleTip}" AutomationProperties.Name="{x:Static loc:Strings.EnvironmentsTitle}">
               <PathIcon Data="{StaticResource YiEnvironment}" />
             </Button>
             <Button Classes="icon rail" HorizontalAlignment="Center" Command="{Binding OpenPaletteCommand}"
-                    ToolTip.Tip="Command palette (Ctrl+P)" AutomationProperties.Name="Command palette">
+                    ToolTip.Tip="{x:Static loc:Strings.PaletteTitleTip}" AutomationProperties.Name="{x:Static loc:Strings.PaletteTitle}">
               <PathIcon Data="{StaticResource YiSearch}" />
             </Button>
           </StackPanel>
@@ -169,17 +170,17 @@
               BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
         <Grid RowDefinitions="40,Auto,*">
           <Grid Grid.Row="0" Margin="14,0,8,0" ColumnDefinitions="*,Auto">
-            <TextBlock Text="Requests" Classes="bodyStrong" VerticalAlignment="Center"
+            <TextBlock Text="{x:Static loc:Strings.CollectionsRequests}" Classes="bodyStrong" VerticalAlignment="Center"
                        IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" />
-            <TextBlock Text="History" Classes="bodyStrong" VerticalAlignment="Center"
+            <TextBlock Text="{x:Static loc:Strings.HistoryTitle}" Classes="bodyStrong" VerticalAlignment="Center"
                        IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
-            <Button Grid.Column="1" Classes="icon" ToolTip.Tip="New request or collection"
-                    IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" AutomationProperties.Name="New request">
+            <Button Grid.Column="1" Classes="icon" ToolTip.Tip="{x:Static loc:Strings.CollectionsNewRequestOrCollection}"
+                    IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" AutomationProperties.Name="{x:Static loc:Strings.PaletteNewRequest}">
               <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
               <Button.Flyout>
                 <MenuFlyout>
-                  <MenuItem Header="New request" Command="{Binding Collections.NewRequestCommand}" />
-                  <MenuItem Header="New collection" Command="{Binding Collections.NewCollectionCommand}" />
+                  <MenuItem Header="{x:Static loc:Strings.PaletteNewRequest}" Command="{Binding Collections.NewRequestCommand}" />
+                  <MenuItem Header="{x:Static loc:Strings.CollectionsNewCollection}" Command="{Binding Collections.NewCollectionCommand}" />
                 </MenuFlyout>
               </Button.Flyout>
             </Button>
@@ -188,7 +189,7 @@
                              IsVisible="{Binding $parent[Window].((vm:ShellViewModel)DataContext).Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
           <Grid Grid.Row="1" Margin="10,0,10,8" IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}">
             <TextBox x:Name="FilterBox" Height="28" MinHeight="28" Padding="28,0,8,0" VerticalContentAlignment="Center"
-                     PlaceholderText="Filter requests" AutomationProperties.Name="Filter requests"
+                     PlaceholderText="{x:Static loc:Strings.CollectionsFilter}" AutomationProperties.Name="{x:Static loc:Strings.CollectionsFilter}"
                      Text="{Binding Collections.FilterText, Mode=TwoWay}" />
             <Viewbox Width="14" Height="14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0"
                      IsHitTestVisible="False">
@@ -247,9 +248,9 @@
                 <Binding Path="Mode" Converter="{x:Static p:SidebarMap.IsCollections}" />
               </MultiBinding>
             </StackPanel.IsVisible>
-            <TextBlock Text="No collections yet" Classes="bodySmall" TextAlignment="Center"
+            <TextBlock Text="{x:Static loc:Strings.CollectionsNone}" Classes="bodySmall" TextAlignment="Center"
                        Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
-            <Button Content="New request" HorizontalAlignment="Center" Command="{Binding Requests.NewRequestCommand}" />
+            <Button Content="{x:Static loc:Strings.PaletteNewRequest}" HorizontalAlignment="Center" Command="{Binding Requests.NewRequestCommand}" />
           </StackPanel>
         </Grid>
       </Border>
@@ -266,9 +267,9 @@
                            TextTrimming="CharacterEllipsis" />
                 <Panel Width="18" Height="18" VerticalAlignment="Center">
                   <Ellipse Classes="dirtyDot" Width="6" Height="6" IsVisible="{Binding IsDirty}"
-                           Fill="{DynamicResource YaapicAccentTextBrush}" AutomationProperties.Name="Unsaved changes" />
+                           Fill="{DynamicResource YaapicAccentTextBrush}" AutomationProperties.Name="{x:Static loc:Strings.CommonUnsavedChanges}" />
                   <Button Classes="icon close" Classes.dirty="{Binding IsDirty}" Width="18" Height="18" MinHeight="18"
-                          Padding="0" Click="OnCloseTab" AutomationProperties.Name="Close tab" ToolTip.Tip="Close tab">
+                          Padding="0" Click="OnCloseTab" AutomationProperties.Name="{x:Static loc:Strings.PaletteCloseTab}" ToolTip.Tip="{x:Static loc:Strings.PaletteCloseTab}">
                     <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="10" Height="10" />
                   </Button>
                 </Panel>
@@ -283,7 +284,7 @@
         </TabControl>
         <Button Classes="icon" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,4,8,0"
                 IsVisible="{Binding !Tabs.IsEmpty}" Command="{Binding Requests.NewRequestCommand}"
-                AutomationProperties.Name="New tab" ToolTip.Tip="New tab (Ctrl+T)">
+                AutomationProperties.Name="{x:Static loc:Strings.TabsNew}" ToolTip.Tip="{x:Static loc:Strings.TabsNewTip}">
           <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
         </Button>
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="10"
@@ -303,12 +304,12 @@
                     Stroke="{DynamicResource YaapicAccentBorderBrush}" />
             </Canvas>
           </Viewbox>
-          <TextBlock Text="No request open." Classes="subtitle" HorizontalAlignment="Center" />
-          <TextBlock Text="Create a request, or open a saved one from the list." Classes="body" MaxWidth="320"
+          <TextBlock Text="{x:Static loc:Strings.ShellNoRequest}" Classes="subtitle" HorizontalAlignment="Center" />
+          <TextBlock Text="{x:Static loc:Strings.ShellNoRequestHint}" Classes="body" MaxWidth="320"
                      TextAlignment="Center" TextWrapping="Wrap" HorizontalAlignment="Center"
                      Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
           <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Center">
-            <Button Classes="accent" Content="New request" Command="{Binding Requests.NewRequestCommand}" />
+            <Button Classes="accent" Content="{x:Static loc:Strings.PaletteNewRequest}" Command="{Binding Requests.NewRequestCommand}" />
             <Border Classes="keycap" VerticalAlignment="Center">
               <TextBlock Text="Ctrl+T" Classes="bodySmall" Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
             </Border>

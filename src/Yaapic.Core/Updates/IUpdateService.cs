@@ -1,3 +1,5 @@
+using Yaapic.Localization;
+
 namespace Yaapic.Core.Updates;
 
 /// <summary>An update that can be downloaded.</summary>
@@ -58,7 +60,7 @@ public sealed class UnsupportedUpdateService : IUpdateService
 
     /// <inheritdoc />
     public Task<UpdateCheckResult> CheckAsync(AppChannel channel, CancellationToken ct) =>
-        Task.FromResult<UpdateCheckResult>(new UpdateCheckResult.Failed("Updates are not available in this build."));
+        Task.FromResult<UpdateCheckResult>(new UpdateCheckResult.Failed(Strings.UpdateUnavailable));
 
     /// <inheritdoc />
     public Task DownloadAsync(UpdateInfo update, IProgress<int> progress, CancellationToken ct) =>

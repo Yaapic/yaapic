@@ -1,6 +1,6 @@
 # P-05: WinUI: localize the views
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: P-04
 
@@ -16,8 +16,8 @@ The roughly 250 literals of the WinUI XAML and code-behind (menus, dialogs, tool
 
 ## Acceptance criteria
 
-- [ ] Every view in French; screenshots of the main window, a dialog and the palette in `docs/screenshots/localization`.
-- [ ] No clipped text at French lengths (buttons, status bar, tabs).
+- [x] Every view in French; screenshots of the main window, a dialog and the palette in `docs/screenshots/localization`.
+- [x] No clipped text at French lengths (buttons, status bar, tabs).
 
 ## Suggested commit message
 

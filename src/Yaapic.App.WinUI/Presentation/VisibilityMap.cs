@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Microsoft.UI.Xaml;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Responses;
@@ -196,5 +197,5 @@ public static class VisibilityMap
     /// <summary>Gets the message shown when a filter matches no request.</summary>
     /// <param name="filter">The filter text.</param>
     /// <returns>The message.</returns>
-    public static string NoMatchText(string? filter) => $"No request matches '{filter?.Trim()}'.";
+    public static string NoMatchText(string? filter) => Strings.CollectionsNoMatch(filter?.Trim() ?? "");
 }

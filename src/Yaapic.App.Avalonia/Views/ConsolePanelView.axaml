@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="using:Yaapic.ViewModels.Shell"
              xmlns:con="using:Yaapic.ViewModels.Console"
@@ -50,27 +51,27 @@
   <Grid RowDefinitions="Auto,34,*" Background="{DynamicResource YaapicSurfaceBaseBrush}">
     <Panel Height="4">
       <Border Height="1" VerticalAlignment="Top" IsHitTestVisible="False" Background="{DynamicResource YaapicBorderDefaultBrush}" />
-      <Thumb x:Name="Splitter" Classes="consoleSplitter" AutomationProperties.Name="Resize the console"
+      <Thumb x:Name="Splitter" Classes="consoleSplitter" AutomationProperties.Name="{x:Static loc:Strings.ConsoleResize}"
              DragDelta="OnSplitterDrag" KeyDown="OnSplitterKeyDown" DoubleTapped="OnSplitterDoubleTapped" />
     </Panel>
 
     <Border Grid.Row="1" Padding="12,0,8,0" BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
       <Grid ColumnDefinitions="Auto,Auto,240,*,Auto" ColumnSpacing="10">
-        <TextBlock Text="Console" Classes="bodyStrong" VerticalAlignment="Center" />
+        <TextBlock Text="{x:Static loc:Strings.ConsoleTitle}" Classes="bodyStrong" VerticalAlignment="Center" />
         <ListBox x:Name="FilterChips" Grid.Column="1" Classes="segmented" VerticalAlignment="Center" SelectedIndex="0"
-                 AutomationProperties.Name="Console level filter" SelectionChanged="OnFilterChanged">
-          <ListBoxItem>All</ListBoxItem>
-          <ListBoxItem>Log</ListBoxItem>
-          <ListBoxItem>Warn</ListBoxItem>
-          <ListBoxItem>Error</ListBoxItem>
+                 AutomationProperties.Name="{x:Static loc:Strings.ConsoleLevelFilter}" SelectionChanged="OnFilterChanged">
+          <ListBoxItem Content="{x:Static loc:Strings.TestsAll}" />
+          <ListBoxItem Content="{x:Static loc:Strings.ConsoleLevelLog}" />
+          <ListBoxItem Content="{x:Static loc:Strings.ConsoleLevelWarn}" />
+          <ListBoxItem Content="{x:Static loc:Strings.ConsoleLevelError}" />
         </ListBox>
         <TextBox x:Name="SearchBox" Grid.Column="2" Height="26" MinHeight="26" Padding="8,2" VerticalAlignment="Center"
-                 VerticalContentAlignment="Center" PlaceholderText="Filter logs" AutomationProperties.Name="Filter logs"
+                 VerticalContentAlignment="Center" PlaceholderText="{x:Static loc:Strings.ConsoleFilter}" AutomationProperties.Name="{x:Static loc:Strings.ConsoleFilter}"
                  KeyDown="OnSearchKeyDown" Text="{Binding Console.Search, Mode=TwoWay}" />
         <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-          <Button Content="Clear" Classes="subtle" AutomationProperties.Name="Clear console" Command="{Binding Console.ClearCommand}" />
-          <Button Content="Copy" Classes="subtle" AutomationProperties.Name="Copy console" Command="{Binding Console.CopyCommand}" />
-          <Button Classes="icon" AutomationProperties.Name="Close console" ToolTip.Tip="Close (Ctrl+`)" Command="{Binding ToggleConsoleCommand}">
+          <Button Content="{x:Static loc:Strings.CommonClear}" Classes="subtle" AutomationProperties.Name="{x:Static loc:Strings.PaletteClearConsole}" Command="{Binding Console.ClearCommand}" />
+          <Button Content="{x:Static loc:Strings.CommonCopy}" Classes="subtle" AutomationProperties.Name="{x:Static loc:Strings.ConsoleCopy}" Command="{Binding Console.CopyCommand}" />
+          <Button Classes="icon" AutomationProperties.Name="{x:Static loc:Strings.ConsoleClose}" ToolTip.Tip="{x:Static loc:Strings.ConsoleCloseTip}" Command="{Binding ToggleConsoleCommand}">
             <PathIcon Data="{StaticResource YaapicGlyphClose}" Width="10" Height="10" />
           </Button>
         </StackPanel>
@@ -78,7 +79,7 @@
     </Border>
 
     <ListBox x:Name="Lines" Grid.Row="2" Classes="consoleLines" Background="Transparent" BorderThickness="0" Padding="0"
-             AutomationProperties.Name="Console messages" ItemsSource="{Binding Console.Lines}">
+             AutomationProperties.Name="{x:Static loc:Strings.ConsoleMessages}" ItemsSource="{Binding Console.Lines}">
       <ListBox.ItemTemplate>
         <DataTemplate x:DataType="con:ConsoleLineViewModel">
           <Border Classes="consoleRow" Classes.err="{Binding IsError}" Height="22" Padding="12,0"
@@ -110,7 +111,7 @@
     </ListBox>
     <TextBlock Grid.Row="2" Classes="bodySmall" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360"
                TextWrapping="Wrap" TextAlignment="Center" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
-               Text="No messages yet. Script output and network activity appear here."
+               Text="{x:Static loc:Strings.ConsoleEmpty}"
                IsVisible="{Binding Console.IsEmpty}" />
   </Grid>
 </UserControl>

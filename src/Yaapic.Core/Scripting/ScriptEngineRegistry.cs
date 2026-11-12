@@ -1,4 +1,5 @@
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Scripting;
 
@@ -31,7 +32,7 @@ public sealed class ScriptEngineRegistry
 
 internal sealed class UnavailableScriptEngine(ScriptLanguage language) : IScriptEngine
 {
-    private readonly string _reason = $"No {language} engine is installed";
+    private readonly string _reason = Strings.ScriptingEngineMissing(language);
 
     public ScriptLanguage Language => language;
 

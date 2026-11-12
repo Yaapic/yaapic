@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.Shell;
 
@@ -12,7 +13,7 @@ public sealed partial class EnvironmentsWindow : Window
     public EnvironmentsWindow()
     {
         InitializeComponent();
-        ((Flyout)DeleteButton.Flyout!).Opened += (_, _) => DeletePrompt.Text = $"Delete '{ViewModel?.EditedEnvironment?.Name}'?";
+        ((Flyout)DeleteButton.Flyout!).Opened += (_, _) => DeletePrompt.Text = Strings.DialogDeleteTitle(ViewModel?.EditedEnvironment?.Name ?? "");
     }
 
     private EnvironmentsViewModel? ViewModel => (DataContext as ShellViewModel)?.Environments;

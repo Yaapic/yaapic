@@ -1,4 +1,5 @@
-<Window xmlns="https://github.com/avaloniaui"
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         x:Class="Yaapic.App.Avalonia.Views.PromptWindow"
         Classes="dialog">
@@ -9,8 +10,8 @@
     </StackPanel>
     <Border Classes="dialogCommands">
       <UniformGrid Rows="1">
-        <Button x:Name="OkButton" Classes="accent" Content="OK" IsDefault="True" Click="OnOk" />
-        <Button Content="Cancel" IsCancel="True" Click="OnCancel" />
+        <Button x:Name="OkButton" Classes="accent" Content="{x:Static loc:Strings.CommonOk}" IsDefault="True" Click="OnOk" />
+        <Button Content="{x:Static loc:Strings.CommonCancel}" IsCancel="True" Click="OnCancel" />
       </UniformGrid>
     </Border>
   </StackPanel>

@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:h="using:Yaapic.ViewModels.History"
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
@@ -7,7 +8,7 @@
   <Grid RowDefinitions="Auto,*">
     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="6" Margin="10,0,10,8">
       <TextBox Height="28" MinHeight="28" Padding="28,0,8,0" VerticalContentAlignment="Center"
-               PlaceholderText="Filter history" AutomationProperties.Name="Filter history"
+               PlaceholderText="{x:Static loc:Strings.HistoryFilter}" AutomationProperties.Name="{x:Static loc:Strings.HistoryFilter}"
                Text="{Binding FilterText, Mode=TwoWay}" />
       <Viewbox Width="14" Height="14" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="9,0,0,0"
                IsHitTestVisible="False">
@@ -16,8 +17,8 @@
                 StrokeLineCap="Round" StrokeJoin="Round" />
         </Canvas>
       </Viewbox>
-      <Button Grid.Column="1" Content="Clear" Height="28" MinHeight="28" Padding="10,0"
-              AutomationProperties.Name="Clear history" Command="{Binding ClearCommand}" />
+      <Button Grid.Column="1" Content="{x:Static loc:Strings.CommonClear}" Height="28" MinHeight="28" Padding="10,0"
+              AutomationProperties.Name="{x:Static loc:Strings.PaletteClearHistory}" Command="{Binding ClearCommand}" />
     </Grid>
     <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
       <ItemsControl ItemsSource="{Binding Groups}">
@@ -34,8 +35,8 @@
                             AutomationProperties.Name="{Binding Url}">
                       <Button.ContextMenu>
                         <ContextMenu>
-                          <MenuItem Header="Open" Click="OnOpen" />
-                          <MenuItem Header="Delete" Click="OnDelete" />
+                          <MenuItem Header="{x:Static loc:Strings.CommonOpen}" Click="OnOpen" />
+                          <MenuItem Header="{x:Static loc:Strings.CommonDelete}" Click="OnDelete" />
                         </ContextMenu>
                       </Button.ContextMenu>
                       <StackPanel Spacing="2">
@@ -70,7 +71,7 @@
         </ItemsControl.ItemTemplate>
       </ItemsControl>
     </ScrollViewer>
-    <TextBlock Grid.Row="1" Text="No requests sent yet" Classes="bodySmall" HorizontalAlignment="Center"
+    <TextBlock Grid.Row="1" Text="{x:Static loc:Strings.HistoryEmpty}" Classes="bodySmall" HorizontalAlignment="Center"
                VerticalAlignment="Top" Margin="16,24,16,0" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
                IsVisible="{Binding IsEmpty}" />
   </Grid>

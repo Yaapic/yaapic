@@ -1,4 +1,5 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.ResponsePanelView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.ResponsePanelView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
@@ -27,7 +28,7 @@
                     StrokeStartLineCap="Round" StrokeEndLineCap="Round" StrokeLineJoin="Round"/>
             </Canvas>
           </Viewbox>
-          <TextBlock Text="The response will appear here." Style="{StaticResource YaapicBodyTextStyle}"
+          <TextBlock Text="{x:Bind loc:Strings.ResponsePlaceholder}" Style="{StaticResource YaapicBodyTextStyle}"
                      Foreground="{ThemeResource YaapicTextSecondaryBrush}" HorizontalAlignment="Center"/>
           <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
             <Border Style="{StaticResource YaapicKeycapBorderStyle}" VerticalAlignment="Center">
@@ -38,7 +39,7 @@
               <TextBlock Text="Enter" Style="{StaticResource YaapicCodeSmallTextStyle}"
                          Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
             </Border>
-            <TextBlock Text="to send" VerticalAlignment="Center" Style="{StaticResource YaapicBodySmallTextStyle}"
+            <TextBlock Text="{x:Bind loc:Strings.ResponseToSend}" VerticalAlignment="Center" Style="{StaticResource YaapicBodySmallTextStyle}"
                        Foreground="{ThemeResource YaapicTextTertiaryBrush}"/>
           </StackPanel>
         </StackPanel>
@@ -52,7 +53,7 @@
           <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Border Padding="16,0,12,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
-          <TextBlock Text="Sending" Style="{StaticResource YaapicBodyStrongTextStyle}" VerticalAlignment="Center"/>
+          <TextBlock Text="{x:Bind loc:Strings.ResponseSending}" Style="{StaticResource YaapicBodyStrongTextStyle}" VerticalAlignment="Center"/>
         </Border>
         <ProgressBar Grid.Row="1" IsIndeterminate="True" VerticalAlignment="Top"/>
         <StackPanel Grid.Row="2" Padding="16" Spacing="12">
@@ -83,7 +84,7 @@
               </Canvas>
             </Viewbox>
           </Border>
-          <TextBlock Text="No response" Style="{StaticResource YaapicSubtitleTextStyle}" VerticalAlignment="Center"/>
+          <TextBlock Text="{x:Bind loc:Strings.ResponseNone}" Style="{StaticResource YaapicSubtitleTextStyle}" VerticalAlignment="Center"/>
         </StackPanel>
         <TextBlock Text="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}" IsTextSelectionEnabled="True" TextWrapping="Wrap"
                    Style="{StaticResource YaapicBodyTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
@@ -98,11 +99,11 @@
         <Grid Padding="16,0,12,0" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
           <StackPanel Orientation="Horizontal">
             <ToggleButton x:Name="BodyTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
-                          IsChecked="True" Click="OnTabClick" Content="Body"/>
+                          IsChecked="True" Click="OnTabClick" Content="{x:Bind loc:Strings.RequestTabBody}"/>
             <ToggleButton x:Name="HeadersTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
                           Click="OnTabClick">
               <StackPanel Orientation="Horizontal" Spacing="5">
-                <TextBlock Text="Headers" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind loc:Strings.RequestTabHeaders}" VerticalAlignment="Center"/>
                 <TextBlock x:Name="HeadersBadge" VerticalAlignment="Center"
                            Style="{StaticResource YaapicCountBadgeTextStyle}"
                            Text="{x:Bind ViewModel.Headers.Count, Mode=OneWay}"
@@ -113,7 +114,7 @@
                           Click="OnTabClick"
                           Visibility="{x:Bind p:VisibilityMap.WhenEither(ViewModel.Tests.HasTests, ViewModel.Tests.HasErrors), Mode=OneWay}">
               <StackPanel Orientation="Horizontal" Spacing="5">
-                <TextBlock Text="Tests" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind loc:Strings.ResponseTabTests}" VerticalAlignment="Center"/>
                 <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicCountBadgeTextStyle}"
                            Text="{x:Bind ViewModel.Tests.BadgeText, Mode=OneWay}"
                            Foreground="{x:Bind p:BrushMap.TestOutcome(ViewModel.Tests.AllPassed), Mode=OneWay}"/>
@@ -178,16 +179,16 @@
             <StackPanel Orientation="Horizontal" Margin="16,0,12,0" Spacing="8" VerticalAlignment="Center">
               <ListView x:Name="ViewModes" Style="{StaticResource YaapicSegmentedStyle}"
                         VerticalAlignment="Center" SelectionChanged="OnViewModeChanged">
-                <x:String>Pretty</x:String>
-                <x:String>Raw</x:String>
+                <ListViewItem Content="{x:Bind loc:Strings.ResponsePretty}"/>
+                <ListViewItem Content="{x:Bind loc:Strings.BodyRaw}"/>
               </ListView>
-              <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="Copy response body"
-                      ToolTipService.ToolTip="Copy response body"
+              <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="{x:Bind loc:Strings.ResponseCopyBody}"
+                      ToolTipService.ToolTip="{x:Bind loc:Strings.ResponseCopyBody}"
                       Command="{x:Bind ViewModel.CopyBodyCommand, Mode=OneWay}">
                 <ic:FluentIcon Icon="Copy" IconVariant="Regular" IconSize="Size16"/>
               </Button>
-              <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="Save response to file"
-                      ToolTipService.ToolTip="Save response to file"
+              <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="{x:Bind loc:Strings.ResponseSaveToFile}"
+                      ToolTipService.ToolTip="{x:Bind loc:Strings.ResponseSaveToFile}"
                       Command="{x:Bind ViewModel.SaveBodyCommand, Mode=OneWay}">
                 <ic:FluentIcon Icon="Save" IconVariant="Regular" IconSize="Size16"/>
               </Button>
@@ -247,9 +248,9 @@
               <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"
                          Text="{x:Bind ViewModel.Tests.SummaryText, Mode=OneWay}"/>
               <ListView x:Name="TestFilters" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
-                        AutomationProperties.Name="Test filter" SelectionChanged="OnTestFilterChanged">
-                <x:String>All</x:String>
-                <x:String>Failed</x:String>
+                        AutomationProperties.Name="{x:Bind loc:Strings.TestsFilter}" SelectionChanged="OnTestFilterChanged">
+                <ListViewItem Content="{x:Bind loc:Strings.TestsAll}"/>
+                <ListViewItem Content="{x:Bind loc:Strings.TestsFailed}"/>
               </ListView>
             </StackPanel>
             <ItemsControl Grid.Row="1" Margin="16,0,16,8"
@@ -320,7 +321,7 @@
             </ListView>
             <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap" Style="{StaticResource YaapicBodyTextStyle}"
                        Foreground="{ThemeResource YaapicTextSecondaryBrush}"
-                       Text="No tests ran. Add pm.test(...) to the post-response script."
+                       Text="{x:Bind loc:Strings.TestsNone}"
                        Visibility="{x:Bind p:VisibilityMap.WhenNeitherFlag(ViewModel.Tests.HasTests, ViewModel.Tests.HasErrors), Mode=OneWay}"/>
           </Grid>
         </Grid>

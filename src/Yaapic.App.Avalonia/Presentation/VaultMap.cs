@@ -1,4 +1,5 @@
 using Avalonia.Data.Converters;
+using Yaapic.Localization;
 
 namespace Yaapic.App.Avalonia.Presentation;
 
@@ -6,5 +7,5 @@ namespace Yaapic.App.Avalonia.Presentation;
 public static class VaultMap
 {
     /// <summary>Converts the protector label (<see langword="null"/> when no vault exists) to the tooltip of the vault item.</summary>
-    public static FuncValueConverter<string?, string> Tip { get; } = new(label => label ?? "Secret variables are not protected yet");
+    public static FuncValueConverter<string?, string> Tip { get; } = new(label => label ?? Strings.VaultUnprotected);
 }

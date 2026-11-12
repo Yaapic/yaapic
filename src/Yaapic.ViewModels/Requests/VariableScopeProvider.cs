@@ -1,5 +1,6 @@
 using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Environments;
@@ -70,12 +71,12 @@ public sealed class VariableScopeProvider : IVariableScopeProvider, IScriptVaria
         name = name.Trim();
         if (!VariableContext.IsCreatableName(name))
         {
-            return "The variable name is not valid.";
+            return Strings.VariablesErrorInvalidName;
         }
 
         if (!GetWritableScopes(requestId).Contains(scope))
         {
-            return "This scope is not available for the request.";
+            return Strings.VariablesErrorScopeUnavailable;
         }
 
         return await ApplyScopeAsync(requestId, scope, [new VariableChange(scope, name, value)]);
@@ -88,12 +89,12 @@ public sealed class VariableScopeProvider : IVariableScopeProvider, IScriptVaria
         name = name.Trim();
         if (!VariableContext.IsCreatableName(name))
         {
-            return "The variable name is not valid.";
+            return Strings.VariablesErrorInvalidName;
         }
 
         if (!GetWritableScopes(requestId).Contains(scope))
         {
-            return "This scope is not available for the request.";
+            return Strings.VariablesErrorScopeUnavailable;
         }
 
         return await ApplyScopeAsync(requestId, scope, [new VariableChange(scope, name, null)]);
@@ -143,7 +144,7 @@ public sealed class VariableScopeProvider : IVariableScopeProvider, IScriptVaria
             case VariableScopeKind.Globals:
                 if (!_globals.CanSave)
                 {
-                    return _globals.LastError ?? "The global variables cannot be saved.";
+                    return _globals.LastError ?? Strings.VariablesErrorGlobalsNotSaved;
                 }
 
                 Apply(_globals.Variables, changes);

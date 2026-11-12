@@ -1,5 +1,6 @@
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Environments;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Secrets;
 
@@ -36,7 +37,7 @@ public sealed class SecretAwareEnvironmentStore(IEnvironmentStore inner, ISecret
         }
         catch (VaultException ex)
         {
-            throw new StorageException($"Cannot remove the secrets of the environment: {ex.Message}", ex);
+            throw new StorageException(Strings.SecretsRemoveEnvironmentFailed(ex.Message), ex);
         }
     }
 }

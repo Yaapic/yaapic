@@ -5,6 +5,7 @@ using Yaapic.Core.Http;
 using Yaapic.Core.Responses;
 using Yaapic.Core.Scripting;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 
 namespace Yaapic.ViewModels.Responses;
@@ -94,12 +95,12 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         Clear();
         UnresolvedWarning = report.UnresolvedVariables.Count == 0
             ? null
-            : "Unresolved variables: " + string.Join(", ", report.UnresolvedVariables);
+            : Strings.VariablesUnresolved(string.Join(", ", report.UnresolvedVariables));
 
         if (report.Result.Response is not { } response)
         {
             State = ResponseState.Failed;
-            ErrorMessage = report.Result.Failure?.Message ?? "The request failed.";
+            ErrorMessage = report.Result.Failure?.Message ?? Strings.RequestFailed;
             return;
         }
 
@@ -132,8 +133,9 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
             Clear();
             State = ResponseState.Failed;
             var message = aborted.Error?.Message;
-            ErrorMessage = $"Pre-request script failed — {aborted.Origin}: "
-                + (string.IsNullOrEmpty(message) ? ScriptErrorItemViewModel.StatusTextFor(aborted.Status) : message);
+            ErrorMessage = Strings.ResponsePreRequestFailed(
+                aborted.Origin,
+                string.IsNullOrEmpty(message) ? ScriptErrorItemViewModel.StatusTextFor(aborted.Status) : message);
         }
         else
         {
@@ -220,7 +222,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         BodyText = body.Text;
         BodyLanguage = body.Language;
         IsBinary = body.IsBinary;
-        BinaryText = body.IsBinary ? $"Binary content, {SizeText}" : "";
+        BinaryText = body.IsBinary ? Strings.ResponseBinaryContent(SizeText) : "";
         RefreshCommands();
     }
 

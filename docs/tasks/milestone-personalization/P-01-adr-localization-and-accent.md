@@ -1,6 +1,6 @@
 # P-01: ADR: localization (FR/EN) and accent colour
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -28,7 +28,7 @@ Write `docs/adr/0012-localization-and-accent.md` recording the decisions below, 
 
 ## Acceptance criteria
 
-- [ ] ADR written with context, options considered, AOT risks and the decision; indexed in `docs/adr/README.md`.
+- [x] ADR written with context, options considered, AOT risks and the decision; indexed in `docs/adr/README.md`.
 
 ## Suggested commit message
 

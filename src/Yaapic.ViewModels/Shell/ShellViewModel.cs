@@ -4,6 +4,7 @@ using Yaapic.Core.Scripting;
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Scripting;
 using Yaapic.Domain.Workspace;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Console;
@@ -183,7 +184,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         ScriptEngineWarnings =
         [
             .. Enum.GetValues<ScriptLanguage>()
-                .Select(l => _engines.IsAvailable(l, out var reason) ? null : $"{l} engine unavailable: {reason}")
+                .Select(l => _engines.IsAvailable(l, out var reason) ? null : Strings.ShellEngineUnavailable(l, reason))
                 .OfType<string>(),
         ];
         _vaultInitializing = true;

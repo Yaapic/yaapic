@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Secrets;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Vault;
 
@@ -80,9 +81,9 @@ public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
     /// <summary>Gets the status text.</summary>
     public string StatusText => State switch
     {
-        VaultState.NotCreated => "No vault",
-        VaultState.Locked => "Vault locked",
-        _ => "Vault unlocked",
+        VaultState.NotCreated => Strings.VaultStatusNone,
+        VaultState.Locked => Strings.VaultStatusLocked,
+        _ => Strings.VaultStatusUnlocked,
     };
 
     /// <summary>Gets the label of the vault protector; <see langword="null"/> when no vault exists.</summary>
@@ -107,8 +108,8 @@ public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
     /// <summary>Gets the inline validation message of the setup form; empty when there is nothing to report.</summary>
     public string SetupHint => SelectedProtector is { RequiresPassphrase: true } && Passphrase.Length > 0
         ? Passphrase.Length < MinPassphraseLength
-            ? $"Use at least {MinPassphraseLength} characters"
-            : ConfirmPassphrase.Length > 0 && Passphrase != ConfirmPassphrase ? "Passphrases do not match" : ""
+            ? Strings.VaultHintMinLength(MinPassphraseLength)
+            : ConfirmPassphrase.Length > 0 && Passphrase != ConfirmPassphrase ? Strings.VaultHintMismatch : ""
         : "";
 
     /// <summary>Reads the vault and raises the first reload.</summary>
@@ -154,7 +155,7 @@ public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
         {
             if (!await _vault.UnlockAsync(passphrase, CancellationToken.None))
             {
-                LastError = "Wrong passphrase";
+                LastError = Strings.VaultErrorWrongPassphrase;
             }
         });
         UnlockPassphrase = "";
@@ -178,10 +179,10 @@ public sealed partial class VaultViewModel : ObservableObject, IVaultStateSource
 
     private static string LabelOf(string id) => id switch
     {
-        "dpapi" => "Windows account (DPAPI)",
-        "keychain" => "macOS Keychain",
-        "secret-service" => "Secret Service",
-        "passphrase" => "Passphrase",
+        "dpapi" => Strings.VaultProtectorDpapi,
+        "keychain" => Strings.VaultProtectorKeychain,
+        "secret-service" => Strings.VaultProtectorSecretService,
+        "passphrase" => Strings.VaultProtectorPassphrase,
         _ => id,
     };
 

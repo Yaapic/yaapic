@@ -1,5 +1,6 @@
 using System.Globalization;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Responses;
 
@@ -14,7 +15,7 @@ public sealed class ScriptErrorItemViewModel
         Origin = run.Origin;
         StatusText = StatusTextFor(run.Status);
         Message = run.Error?.Message ?? "";
-        Location = run.Error?.Line is { } line ? "line " + line.ToString(CultureInfo.InvariantCulture) : "";
+        Location = run.Error?.Line is { } line ? Strings.ScriptLine(line.ToString(CultureInfo.InvariantCulture)) : "";
     }
 
     /// <summary>Gets the owner of the script.</summary>
@@ -31,10 +32,10 @@ public sealed class ScriptErrorItemViewModel
 
     internal static string StatusTextFor(ScriptRunStatus status) => status switch
     {
-        ScriptRunStatus.TimedOut => "Timed out",
-        ScriptRunStatus.MemoryLimit => "Memory limit",
-        ScriptRunStatus.Canceled => "Canceled",
-        ScriptRunStatus.Unavailable => "Engine unavailable",
-        _ => "Script error",
+        ScriptRunStatus.TimedOut => Strings.ScriptStatusTimedOut,
+        ScriptRunStatus.MemoryLimit => Strings.ScriptStatusMemoryLimit,
+        ScriptRunStatus.Canceled => Strings.ScriptStatusCanceled,
+        ScriptRunStatus.Unavailable => Strings.ScriptStatusUnavailable,
+        _ => Strings.ScriptStatusError,
     };
 }

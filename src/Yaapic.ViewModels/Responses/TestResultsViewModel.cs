@@ -1,5 +1,6 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Responses;
 
@@ -39,7 +40,7 @@ public sealed partial class TestResultsViewModel : ObservableObject
     public string Summary { get; private set; } = "";
 
     /// <summary>Gets the summary sentence, such as <c>4 of 6 passed</c>; empty without tests.</summary>
-    public string SummaryText => HasTests ? $"{PassedCount} of {TotalCount} passed" : "";
+    public string SummaryText => HasTests ? Strings.TestsSummary(PassedCount, TotalCount) : "";
 
     /// <summary>Gets the tab badge: the summary, or <c>!</c> when there are script errors and no tests.</summary>
     public string BadgeText => HasTests ? Summary : HasErrors ? "!" : "";

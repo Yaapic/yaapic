@@ -1,6 +1,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 
 namespace Yaapic.ViewModels.Editing;
@@ -45,7 +46,7 @@ public sealed partial class FormDataRowViewModel : ObservableObject
             return;
         }
 
-        var path = await _dialogs.PickFileAsync("Select a file");
+        var path = await _dialogs.PickFileAsync(Strings.CommonSelectFile);
         if (path is not null)
         {
             Value = path;

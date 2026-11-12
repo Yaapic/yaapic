@@ -1,4 +1,5 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.VariablePopupView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.VariablePopupView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ic="using:FluentIcons.WinUI"
@@ -35,7 +36,7 @@
                 AutomationProperties.Name="{x:Bind ViewModel.ScopeLabel}">
           <StackPanel Orientation="Horizontal" Spacing="4">
             <ic:FluentIcon Icon="LockClosed" IconVariant="Regular" IconSize="Size12" Visibility="{x:Bind IsSecretState, Mode=OneTime}"
-                           AutomationProperties.Name="Secret"/>
+                           AutomationProperties.Name="{x:Bind loc:Strings.EditorSecret}"/>
             <TextBlock Style="{StaticResource YaapicChipTextStyle}" Text="{x:Bind ViewModel.ScopeLabel}"
                        Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
           </StackPanel>
@@ -69,34 +70,34 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="Auto"/>
           </Grid.ColumnDefinitions>
-          <TextBox x:Name="EditBox" MinHeight="0" Padding="8,5" AutomationProperties.Name="Value"
+          <TextBox x:Name="EditBox" MinHeight="0" Padding="8,5" AutomationProperties.Name="{x:Bind loc:Strings.EditorValue}"
                    FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeBody}"
                    Text="{x:Bind ViewModel.EditableValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                    KeyDown="OnValueKeyDown"/>
-          <Button Grid.Column="1" Content="Save" Style="{StaticResource YaapicPrimaryButtonStyle}" AutomationProperties.Name="Save"
+          <Button Grid.Column="1" Content="{x:Bind loc:Strings.CommonSave}" Style="{StaticResource YaapicPrimaryButtonStyle}" AutomationProperties.Name="{x:Bind loc:Strings.CommonSave}"
                   Command="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"/>
         </Grid>
         <StackPanel Orientation="Horizontal" Spacing="4">
           <HyperlinkButton x:Name="RevealLink" Content="{x:Bind RevealLabel(ViewModel.IsRevealed), Mode=OneWay}" Padding="4,2"
-                           AutomationProperties.Name="Reveal" Visibility="{x:Bind IsSecretState, Mode=OneTime}"
+                           AutomationProperties.Name="{x:Bind loc:Strings.EditorReveal}" Visibility="{x:Bind IsSecretState, Mode=OneTime}"
                            Command="{x:Bind ViewModel.RevealCommand}"/>
-          <HyperlinkButton x:Name="EditLink" Content="Edit" Padding="4,2" AutomationProperties.Name="Edit"
+          <HyperlinkButton x:Name="EditLink" Content="{x:Bind loc:Strings.CommonEdit}" Padding="4,2" AutomationProperties.Name="{x:Bind loc:Strings.CommonEdit}"
                            Visibility="{x:Bind IsEditable, Mode=OneTime}"
                            Command="{x:Bind ViewModel.ToggleEditCommand}"/>
-          <HyperlinkButton Content="Open" Padding="4,2" AutomationProperties.Name="Open"
+          <HyperlinkButton Content="{x:Bind loc:Strings.CommonOpen}" Padding="4,2" AutomationProperties.Name="{x:Bind loc:Strings.CommonOpen}"
                            Command="{x:Bind ViewModel.OpenCommand}"/>
         </StackPanel>
       </StackPanel>
 
       <!-- Unresolved: where to create it and with which value. -->
       <StackPanel Spacing="8" Visibility="{x:Bind IsUnresolvedState, Mode=OneTime}">
-        <ComboBox x:Name="ScopeBox" HorizontalAlignment="Stretch" AutomationProperties.Name="Scope"
+        <ComboBox x:Name="ScopeBox" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Bind loc:Strings.VariablesScope}"
                   SelectionChanged="OnScopeChanged"/>
-        <TextBox x:Name="CreateBox" PlaceholderText="Value" MinHeight="0" Padding="8,5" AutomationProperties.Name="Value"
+        <TextBox x:Name="CreateBox" PlaceholderText="{x:Bind loc:Strings.EditorValue}" MinHeight="0" Padding="8,5" AutomationProperties.Name="{x:Bind loc:Strings.EditorValue}"
                  FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeBody}"
                  Text="{x:Bind ViewModel.EditableValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                  KeyDown="OnValueKeyDown"/>
-        <Button Content="Create" Style="{StaticResource YaapicPrimaryButtonStyle}" AutomationProperties.Name="Create"
+        <Button Content="{x:Bind loc:Strings.CommonCreate}" Style="{StaticResource YaapicPrimaryButtonStyle}" AutomationProperties.Name="{x:Bind loc:Strings.CommonCreate}"
                 HorizontalAlignment="Right" Command="{x:Bind ViewModel.SubmitCommand, Mode=OneWay}"/>
       </StackPanel>
 

@@ -6,6 +6,7 @@ using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Editing;
 using Yaapic.ViewModels.Responses;
@@ -16,7 +17,7 @@ namespace Yaapic.ViewModels.Requests;
 /// <summary>Editable state of one request tab, convertible to and from <see cref="HttpRequestDefinition"/>.</summary>
 public sealed partial class RequestEditorViewModel : ObservableObject
 {
-    private const string DefaultName = "New Request";
+    private static string DefaultName => Strings.RequestNewName;
 
     private readonly RequestSender _sender;
     private readonly IVariableScopeProvider _scopes;
@@ -258,7 +259,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             return;
         }
 
-        var path = await _dialogs.PickFileAsync("Select a file");
+        var path = await _dialogs.PickFileAsync(Strings.CommonSelectFile);
         if (path is not null)
         {
             BinaryFilePath = path;
@@ -309,7 +310,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         if (scripted.AbortedBy is { Status: ScriptRunStatus.Canceled })
         {
             // A canceled script is a canceled send, not a script failure.
-            Response.ShowReport(new SendReport(SendResult.Fail(SendFailureKind.Canceled, "Request canceled"), []));
+            Response.ShowReport(new SendReport(SendResult.Fail(SendFailureKind.Canceled, Strings.RequestCanceled), []));
         }
         else
         {
@@ -320,7 +321,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         {
             foreach (var error in await services.Variables.ApplyAsync(Id, scripted.Changes))
             {
-                services.Console.AppendSystem(ConsoleLevel.Warn, $"Could not save variable changes: {error}");
+                services.Console.AppendSystem(ConsoleLevel.Warn, Strings.RequestVariableChangesNotSaved(error));
             }
         }
 
@@ -351,7 +352,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     }
 
     /// <summary>The warning line added when a request uses a secret variable that is empty because the vault is locked.</summary>
-    public const string VaultLockedWarning = "Vault is locked: secret variables are not available.";
+    public static string VaultLockedWarning => Strings.RequestVaultLockedWarning;
 
     private bool CanSend() => Url.Trim().Length > 0;
 

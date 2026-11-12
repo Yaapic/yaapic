@@ -1,5 +1,6 @@
 using Yaapic.Core.Storage;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Secrets;
 
@@ -33,7 +34,7 @@ internal static class SecretRows
             var added = rows.FirstOrDefault(r => r.IsSecret && !previousNames.Contains(r.Key));
             if (added is not null)
             {
-                throw new StorageException($"Unlock the vault to mark '{added.Key}' as secret");
+                throw new StorageException(Strings.SecretsVaultLocked(added.Key));
             }
         }
         else
@@ -55,7 +56,7 @@ internal static class SecretRows
             }
             catch (VaultException ex)
             {
-                throw new StorageException($"Cannot save secret '{current}': {ex.Message}", ex);
+                throw new StorageException(Strings.SecretsSaveFailed(current, ex.Message), ex);
             }
         }
 

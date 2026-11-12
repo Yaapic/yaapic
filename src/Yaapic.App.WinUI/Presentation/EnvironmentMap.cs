@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Text;
 using Windows.UI.Text;
@@ -22,7 +23,7 @@ public static class EnvironmentMap
     /// <summary>Gets the caption under the environment name.</summary>
     /// <param name="count">The number of enabled, non-empty variables.</param>
     /// <returns>For example <c>3 variables</c>.</returns>
-    public static string VariableCount(int count) => count == 1 ? "1 variable" : $"{count} variables";
+    public static string VariableCount(int count) => count == 1 ? Strings.EnvironmentsVariableOne : Strings.EnvironmentsVariableCount(count);
 
     /// <summary>Gets the background of the fixed Globals row: raised surface when it is the edited entry.</summary>
     /// <param name="isSelected">Whether the globals are being edited.</param>

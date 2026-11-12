@@ -1,16 +1,17 @@
-<Window xmlns="https://github.com/avaloniaui"
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:col="using:Yaapic.ViewModels.Collections"
         xmlns:views="using:Yaapic.App.Avalonia.Views"
         x:Class="Yaapic.App.Avalonia.Views.FolderSettingsWindow"
         x:DataType="col:FolderSettingsViewModel"
-        Title="Settings"
+        Title="{x:Static loc:Strings.SettingsTitle}"
         Width="640" MinWidth="400" SizeToContent="Height"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
         Background="{DynamicResource YaapicSurfaceBaseBrush}">
   <Grid RowDefinitions="56,*,Auto">
     <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-      <TextBlock Margin="20,0" Text="Settings" VerticalAlignment="Center" FontSize="{DynamicResource YaapicFontSizeTitle}" FontWeight="SemiBold" />
+      <TextBlock Margin="20,0" Text="{x:Static loc:Strings.SettingsTitle}" VerticalAlignment="Center" FontSize="{DynamicResource YaapicFontSizeTitle}" FontWeight="SemiBold" />
     </Border>
     <ScrollViewer Grid.Row="1">
       <StackPanel Margin="20,16" Spacing="12">
@@ -19,21 +20,21 @@
           <TextBlock Text="{Binding LastError}" TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextPrimaryBrush}" />
         </Border>
         <StackPanel Spacing="4">
-          <TextBlock Text="Name" Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
-          <TextBox Text="{Binding Name, Mode=TwoWay}" AutomationProperties.Name="Name" />
+          <TextBlock Text="{x:Static loc:Strings.CommonName}" Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <TextBox Text="{Binding Name, Mode=TwoWay}" AutomationProperties.Name="{x:Static loc:Strings.CommonName}" />
         </StackPanel>
         <StackPanel Spacing="4">
-          <TextBlock Text="Description" Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
-          <TextBox Text="{Binding Description, Mode=TwoWay}" AutomationProperties.Name="Description" AcceptsReturn="True" TextWrapping="Wrap"
-                   MinHeight="88" MaxHeight="160" PlaceholderText="What is this collection for?" />
+          <TextBlock Text="{x:Static loc:Strings.CommonDescription}" Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+          <TextBox Text="{Binding Description, Mode=TwoWay}" AutomationProperties.Name="{x:Static loc:Strings.CommonDescription}" AcceptsReturn="True" TextWrapping="Wrap"
+                   MinHeight="88" MaxHeight="160" PlaceholderText="{x:Static loc:Strings.CollectionsDescriptionPlaceholder}" />
         </StackPanel>
         <StackPanel Spacing="8" IsVisible="{Binding ShowVariables}">
-          <TextBlock Text="Collection variables" Classes="bodyStrong" />
-          <TextBlock Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="Override globals; the active environment overrides them." />
-          <views:KeyValueEditorView Height="220" KeyHeader="VARIABLE" DataContext="{Binding Variables}" />
+          <TextBlock Text="{x:Static loc:Strings.CollectionsVariables}" Classes="bodyStrong" />
+          <TextBlock Classes="bodySmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.CollectionsVariablesHint}" />
+          <views:KeyValueEditorView Height="220" KeyHeader="{x:Static loc:Strings.EditorVariableUpper}" DataContext="{Binding Variables}" />
         </StackPanel>
         <StackPanel Spacing="8" IsVisible="{Binding ShowScripts}">
-          <TextBlock Text="Scripts" Classes="bodyStrong" />
+          <TextBlock Text="{x:Static loc:Strings.RequestTabScripts}" Classes="bodyStrong" />
           <TextBlock Classes="bodySmall" TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding ScriptsHint}" />
           <Border Height="280" MinHeight="240" BorderThickness="1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
             <views:ScriptsEditorView DataContext="{Binding Scripts}" />
@@ -43,8 +44,8 @@
     </ScrollViewer>
     <Border Grid.Row="2" Classes="dialogCommands">
       <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="8">
-        <Button Content="Save" Classes="accent" Command="{Binding SaveCommand}" MinWidth="96" HorizontalContentAlignment="Center" />
-        <Button Content="Close" IsCancel="True" Click="OnClose" MinWidth="96" HorizontalContentAlignment="Center" />
+        <Button Content="{x:Static loc:Strings.CommonSave}" Classes="accent" Command="{Binding SaveCommand}" MinWidth="96" HorizontalContentAlignment="Center" />
+        <Button Content="{x:Static loc:Strings.CommonClose}" IsCancel="True" Click="OnClose" MinWidth="96" HorizontalContentAlignment="Center" />
       </StackPanel>
     </Border>
   </Grid>

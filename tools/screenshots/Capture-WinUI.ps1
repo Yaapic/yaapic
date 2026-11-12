@@ -24,7 +24,9 @@ param(
     [switch]$NoTabs,
     [switch]$NoStub,
     [string]$Crop = '',
-    [ValidateSet('', 'available', 'downloading', 'ready', 'uptodate', 'failed')][string]$UpdateDemo = ''
+    [ValidateSet('', 'available', 'downloading', 'ready', 'uptodate', 'failed')][string]$UpdateDemo = '',
+    [string]$Accent = '',
+    [ValidateSet('', 'english', 'french')][string]$Language = ''
 )
 $ErrorActionPreference = 'Stop'
 Add-Type -AssemblyName System.Windows.Forms, System.Drawing, UIAutomationClient, UIAutomationTypes
@@ -103,6 +105,15 @@ try {
         })
         $stub = $ps.BeginInvoke()
         Start-Sleep -Milliseconds 300
+    }
+
+    if ($Accent -or $Language) {
+        # Seeds the throw-away data dir with preferences.json (an accent preset id or #RRGGBB, and a language).
+        New-Item -ItemType Directory -Force "$temp-data\Yaapic" | Out-Null
+        $prefs = [ordered]@{}
+        if ($Language) { $prefs.language = $Language }
+        if ($Accent) { $prefs.accent = $Accent }
+        $prefs | ConvertTo-Json | Set-Content "$temp-data\Yaapic\preferences.json" -Encoding utf8
     }
 
     $appArgs = @('--workspace', "`"$temp`"", '--data-dir', "`"$temp-data`"", '--theme', $Theme)

@@ -1,4 +1,5 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.ConsolePanelView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.ConsolePanelView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ic="using:FluentIcons.WinUI"
@@ -18,7 +19,7 @@
       <Rectangle x:Name="SplitterLine" Height="1" VerticalAlignment="Top" IsHitTestVisible="False"
                  Fill="{ThemeResource YaapicBorderDefaultBrush}"/>
       <v:SplitterHandle x:Name="Splitter" Background="Transparent" IsTabStop="True" UseSystemFocusVisuals="True"
-                        AutomationProperties.Name="Resize the console"
+                        AutomationProperties.Name="{x:Bind loc:Strings.ConsoleResize}"
                         PointerPressed="OnSplitterPointerPressed" PointerMoved="OnSplitterPointerMoved"
                         PointerReleased="OnSplitterPointerReleased" PointerCanceled="OnSplitterPointerReleased"
                         PointerCaptureLost="OnSplitterPointerReleased" DoubleTapped="OnSplitterDoubleTapped"
@@ -42,32 +43,32 @@
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <TextBlock Text="Console" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+      <TextBlock Text="{x:Bind loc:Strings.ConsoleTitle}" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
       <ListView x:Name="FilterChips" Grid.Column="1" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
-                AutomationProperties.Name="Console level filter" SelectionChanged="OnFilterChanged">
-        <x:String>All</x:String>
-        <x:String>Log</x:String>
-        <x:String>Warn</x:String>
-        <x:String>Error</x:String>
+                AutomationProperties.Name="{x:Bind loc:Strings.ConsoleLevelFilter}" SelectionChanged="OnFilterChanged">
+        <ListViewItem Content="{x:Bind loc:Strings.TestsAll}"/>
+        <ListViewItem Content="{x:Bind loc:Strings.ConsoleLevelLog}"/>
+        <ListViewItem Content="{x:Bind loc:Strings.ConsoleLevelWarn}"/>
+        <ListViewItem Content="{x:Bind loc:Strings.ConsoleLevelError}"/>
       </ListView>
       <TextBox x:Name="SearchBox" Grid.Column="2" Height="26" MinHeight="26" Padding="8,2" VerticalAlignment="Center"
-               PlaceholderText="Filter logs" AutomationProperties.Name="Filter logs"
+               PlaceholderText="{x:Bind loc:Strings.ConsoleFilter}" AutomationProperties.Name="{x:Bind loc:Strings.ConsoleFilter}"
                Background="{ThemeResource YaapicSurfaceSunkenBrush}" KeyDown="OnSearchKeyDown"
                Text="{x:Bind ViewModel.Search, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
       <StackPanel Grid.Column="4" Orientation="Horizontal" Spacing="4" VerticalAlignment="Center">
-        <Button Content="Clear" Style="{StaticResource YaapicSubtleButtonStyle}" AutomationProperties.Name="Clear console"
+        <Button Content="{x:Bind loc:Strings.CommonClear}" Style="{StaticResource YaapicSubtleButtonStyle}" AutomationProperties.Name="{x:Bind loc:Strings.PaletteClearConsole}"
                 Command="{x:Bind ViewModel.ClearCommand, Mode=OneWay}"/>
-        <Button Content="Copy" Style="{StaticResource YaapicSubtleButtonStyle}" AutomationProperties.Name="Copy console"
+        <Button Content="{x:Bind loc:Strings.CommonCopy}" Style="{StaticResource YaapicSubtleButtonStyle}" AutomationProperties.Name="{x:Bind loc:Strings.ConsoleCopy}"
                 Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"/>
-        <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="Close console"
-                ToolTipService.ToolTip="Close (Ctrl+`)" Command="{x:Bind Shell.ToggleConsoleCommand, Mode=OneWay}">
+        <Button Style="{StaticResource YaapicIconButtonStyle}" AutomationProperties.Name="{x:Bind loc:Strings.ConsoleClose}"
+                ToolTipService.ToolTip="{x:Bind loc:Strings.ConsoleCloseTip}" Command="{x:Bind Shell.ToggleConsoleCommand, Mode=OneWay}">
           <ic:FluentIcon Icon="Dismiss" IconVariant="Regular" IconSize="Size16"/>
         </Button>
       </StackPanel>
     </Grid>
 
     <ListView x:Name="Lines" Grid.Row="2" SelectionMode="None" IsItemClickEnabled="False"
-              AutomationProperties.Name="Console messages"
+              AutomationProperties.Name="{x:Bind loc:Strings.ConsoleMessages}"
               ItemsSource="{x:Bind ViewModel.Lines, Mode=OneWay}">
       <ListView.ItemContainerStyle>
         <Style TargetType="ListViewItem" BasedOn="{StaticResource YaapicListRowStyle}">
@@ -111,7 +112,7 @@
     <TextBlock Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="360" TextWrapping="Wrap"
                TextAlignment="Center" Style="{StaticResource YaapicBodySmallTextStyle}"
                Foreground="{ThemeResource YaapicTextSecondaryBrush}"
-               Text="No messages yet. Script output and network activity appear here."
+               Text="{x:Bind loc:Strings.ConsoleEmpty}"
                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsEmpty), Mode=OneWay}"/>
   </Grid>
 </UserControl>

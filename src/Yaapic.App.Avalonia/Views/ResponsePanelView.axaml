@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:rsp="using:Yaapic.ViewModels.Responses"
              xmlns:d="using:Yaapic.Domain.Http"
@@ -29,12 +30,12 @@
           <Path Width="64" Height="40" Stretch="None" HorizontalAlignment="Center" StrokeThickness="3"
                 StrokeLineCap="Round" Stroke="{DynamicResource YaapicBorderOverlayBrush}"
                 Data="M4 30h8M16 30h14M34 30h6M44 30h16M4 20h22M30 20h10M4 10h12" />
-          <TextBlock Text="The response will appear here." HorizontalAlignment="Center"
+          <TextBlock Text="{x:Static loc:Strings.ResponsePlaceholder}" HorizontalAlignment="Center"
                      Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
           <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
             <Border Classes="keycap"><TextBlock Classes="codeSmall" Text="Ctrl" /></Border>
             <Border Classes="keycap"><TextBlock Classes="codeSmall" Text="Enter" /></Border>
-            <TextBlock Text="to send" FontSize="12" VerticalAlignment="Center"
+            <TextBlock Text="{x:Static loc:Strings.ResponseToSend}" FontSize="12" VerticalAlignment="Center"
                        Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
           </StackPanel>
         </StackPanel>
@@ -44,7 +45,7 @@
       <StackPanel VerticalAlignment="Top" IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsSending}}">
         <Border Height="36" Padding="16,0,12,0" BorderThickness="0,0,0,1"
                 BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
-          <TextBlock Text="Sending" Classes="bodyStrong" VerticalAlignment="Center" />
+          <TextBlock Text="{x:Static loc:Strings.ResponseSending}" Classes="bodyStrong" VerticalAlignment="Center" />
         </Border>
         <ProgressBar IsIndeterminate="True" />
         <StackPanel Margin="16" Spacing="10">
@@ -65,7 +66,7 @@
                     Stroke="{DynamicResource YaapicDangerBrush}" />
             </Viewbox>
           </Border>
-          <TextBlock Text="No response" Classes="subtitle" VerticalAlignment="Center" />
+          <TextBlock Text="{x:Static loc:Strings.ResponseNone}" Classes="subtitle" VerticalAlignment="Center" />
         </StackPanel>
         <SelectableTextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" Classes="body"
                              Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
@@ -76,7 +77,7 @@
         <TabControl Classes="panel" Padding="0">
           <TabItem>
             <TabItem.Header>
-              <TextBlock Text="Body" />
+              <TextBlock Text="{x:Static loc:Strings.RequestTabBody}" />
             </TabItem.Header>
             <Grid RowDefinitions="40,*">
               <StackPanel Orientation="Horizontal" Spacing="8" Margin="16,0,12,0" HorizontalAlignment="Left"
@@ -84,21 +85,21 @@
                 <ListBox Classes="segmented" VerticalAlignment="Center"
                          SelectedIndex="{Binding ViewMode, Converter={x:Static p:ResponseMap.ViewModeIndex}, Mode=OneWay}"
                          SelectionChanged="OnViewModeChanged">
-                  <ListBoxItem Content="Pretty" />
-                  <ListBoxItem Content="Raw" />
+                  <ListBoxItem Content="{x:Static loc:Strings.ResponsePretty}" />
+                  <ListBoxItem Content="{x:Static loc:Strings.BodyRaw}" />
                 </ListBox>
                 <Button Classes="icon" Command="{Binding CopyBodyCommand}"
-                        AutomationProperties.Name="Copy response body" ToolTip.Tip="Copy response body">
+                        AutomationProperties.Name="{x:Static loc:Strings.ResponseCopyBody}" ToolTip.Tip="{x:Static loc:Strings.ResponseCopyBody}">
                   <PathIcon Data="{StaticResource YaapicGlyphCopy}" />
                 </Button>
                 <Button Classes="icon" Command="{Binding SaveBodyCommand}"
-                        AutomationProperties.Name="Save response to file" ToolTip.Tip="Save response to file">
+                        AutomationProperties.Name="{x:Static loc:Strings.ResponseSaveToFile}" ToolTip.Tip="{x:Static loc:Strings.ResponseSaveToFile}">
                   <PathIcon Data="{StaticResource YiExport}" />
                 </Button>
               </StackPanel>
               <Panel Grid.Row="1" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
                 <Border BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}" />
-                <v:CodeEditorView IsReadOnly="True" AutomationProperties.Name="Body"
+                <v:CodeEditorView IsReadOnly="True" AutomationProperties.Name="{x:Static loc:Strings.RequestTabBody}"
                                   IsVisible="{Binding !IsBinary}" EditorLanguage="{Binding BodyLanguage, Mode=OneWay}"
                                   Text="{Binding BodyText, Mode=OneWay}" />
                 <TextBox IsReadOnly="True" BorderThickness="0" Background="Transparent" Padding="12,2"
@@ -111,7 +112,7 @@
           <TabItem>
             <TabItem.Header>
               <StackPanel Orientation="Horizontal" Spacing="6">
-                <TextBlock Text="Headers" />
+                <TextBlock Text="{x:Static loc:Strings.RequestTabHeaders}" />
                 <TextBlock Classes="badge" Text="{Binding Headers.Count}"
                            IsVisible="{Binding Headers.Count, Converter={x:Static p:EditorMap.IsPositive}}" />
               </StackPanel>
@@ -136,7 +137,7 @@
               </ItemsControl>
             </ScrollViewer>
           </TabItem>
-          <TabItem AutomationProperties.Name="Tests">
+          <TabItem AutomationProperties.Name="{x:Static loc:Strings.ResponseTabTests}">
             <TabItem.IsVisible>
               <MultiBinding Converter="{x:Static BoolConverters.Or}">
                 <Binding Path="Tests.HasTests" />
@@ -145,7 +146,7 @@
             </TabItem.IsVisible>
             <TabItem.Header>
               <StackPanel Orientation="Horizontal" Spacing="6">
-                <TextBlock Text="Tests" />
+                <TextBlock Text="{x:Static loc:Strings.ResponseTabTests}" />
                 <TextBlock Classes="badge" Text="{Binding Tests.BadgeText}"
                            Foreground="{Binding Tests.AllPassed, Converter={x:Static p:ResponseMap.TestOutcome}}" />
               </StackPanel>
@@ -154,11 +155,11 @@
               <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12" Margin="16,8,12,8"
                           IsVisible="{Binding Tests.HasTests}">
                 <TextBlock Text="{Binding Tests.SummaryText}" Classes="bodyStrong" VerticalAlignment="Center" />
-                <ListBox Classes="segmented" VerticalAlignment="Center" AutomationProperties.Name="Test filter"
+                <ListBox Classes="segmented" VerticalAlignment="Center" AutomationProperties.Name="{x:Static loc:Strings.TestsFilter}"
                          SelectedIndex="{Binding Tests.Filter, Converter={x:Static p:ResponseMap.FilterIndex}, Mode=OneWay}"
                          SelectionChanged="OnTestFilterChanged">
-                  <ListBoxItem Content="All" />
-                  <ListBoxItem Content="Failed" />
+                  <ListBoxItem Content="{x:Static loc:Strings.TestsAll}" />
+                  <ListBoxItem Content="{x:Static loc:Strings.TestsFailed}" />
                 </ListBox>
               </StackPanel>
               <ItemsControl Grid.Row="1" Margin="16,0,16,8" ItemsSource="{Binding Tests.Errors}">
@@ -209,7 +210,7 @@
               </ScrollViewer>
               <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap"
                          Foreground="{DynamicResource YaapicTextSecondaryBrush}"
-                         Text="No tests ran. Add pm.test(...) to the post-response script.">
+                         Text="{x:Static loc:Strings.TestsNone}">
                 <TextBlock.IsVisible>
                   <MultiBinding Converter="{x:Static p:ResponseMap.NeitherFlag}">
                     <Binding Path="Tests.HasTests" />

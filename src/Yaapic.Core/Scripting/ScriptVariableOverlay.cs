@@ -1,5 +1,6 @@
 using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Scripting;
 
@@ -76,11 +77,11 @@ public sealed class ScriptVariableOverlay(VariableScopes initial, bool hasEnviro
                 break;
             case ScriptScope.Environment:
                 _local[name] = value;
-                _warnings.Add($"No active environment: the value of '{name}' only lives for this send");
+                _warnings.Add(Strings.ScriptingWarningNoEnvironment(name));
                 break;
             case ScriptScope.Collection:
                 _local[name] = value;
-                _warnings.Add($"No collection: the value of '{name}' only lives for this send");
+                _warnings.Add(Strings.ScriptingWarningNoCollection(name));
                 break;
             default:
                 _local[name] = value;

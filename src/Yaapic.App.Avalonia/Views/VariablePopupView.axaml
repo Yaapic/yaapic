@@ -1,4 +1,5 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:req="using:Yaapic.ViewModels.Requests"
              x:Class="Yaapic.App.Avalonia.Views.VariablePopupView"
@@ -16,7 +17,7 @@
                 CornerRadius="{DynamicResource YaapicRadiusSm}" Padding="6,2"
                 AutomationProperties.Name="{Binding ScopeLabel}">
           <StackPanel Orientation="Horizontal" Spacing="4">
-            <Viewbox x:Name="SecretGlyph" Width="12" Height="12" AutomationProperties.Name="Secret">
+            <Viewbox x:Name="SecretGlyph" Width="12" Height="12" AutomationProperties.Name="{x:Static loc:Strings.EditorSecret}">
               <Canvas Width="24" Height="24">
                 <Path Data="{StaticResource YaapicGlyphLock}" Stroke="{DynamicResource YaapicTextSecondaryBrush}"
                       StrokeThickness="2" StrokeLineCap="Round" StrokeJoin="Round" />
@@ -43,30 +44,30 @@
         <TextBlock Text="{Binding DisplayValue}" TextWrapping="Wrap" FontFamily="{DynamicResource YaapicMonoFont}"
                    Foreground="{DynamicResource YaapicTextPrimaryBrush}" IsVisible="{Binding !IsEditing}" />
         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8" IsVisible="{Binding IsEditing}">
-          <TextBox x:Name="EditBox" MinHeight="0" Padding="8,5" AutomationProperties.Name="Value"
+          <TextBox x:Name="EditBox" MinHeight="0" Padding="8,5" AutomationProperties.Name="{x:Static loc:Strings.EditorValue}"
                    FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding EditableValue, Mode=TwoWay}"
                    KeyDown="OnValueKeyDown" />
-          <Button Grid.Column="1" Classes="accent" Content="Save" AutomationProperties.Name="Save"
+          <Button Grid.Column="1" Classes="accent" Content="{x:Static loc:Strings.CommonSave}" AutomationProperties.Name="{x:Static loc:Strings.CommonSave}"
                   Command="{Binding SubmitCommand}" />
         </Grid>
         <StackPanel Orientation="Horizontal" Spacing="4">
-          <Button x:Name="RevealLink" Classes="subtle" MinHeight="24" Padding="8,0" AutomationProperties.Name="Reveal"
-                  Content="Reveal" Command="{Binding RevealCommand}" />
-          <Button x:Name="EditLink" Classes="subtle" Content="Edit" MinHeight="24" Padding="8,0"
-                  AutomationProperties.Name="Edit" Command="{Binding ToggleEditCommand}" />
-          <Button x:Name="OpenLink" Classes="subtle" Content="Open" MinHeight="24" Padding="8,0"
-                  AutomationProperties.Name="Open" Command="{Binding OpenCommand}" />
+          <Button x:Name="RevealLink" Classes="subtle" MinHeight="24" Padding="8,0" AutomationProperties.Name="{x:Static loc:Strings.EditorReveal}"
+                  Content="{x:Static loc:Strings.EditorReveal}" Command="{Binding RevealCommand}" />
+          <Button x:Name="EditLink" Classes="subtle" Content="{x:Static loc:Strings.CommonEdit}" MinHeight="24" Padding="8,0"
+                  AutomationProperties.Name="{x:Static loc:Strings.CommonEdit}" Command="{Binding ToggleEditCommand}" />
+          <Button x:Name="OpenLink" Classes="subtle" Content="{x:Static loc:Strings.CommonOpen}" MinHeight="24" Padding="8,0"
+                  AutomationProperties.Name="{x:Static loc:Strings.CommonOpen}" Command="{Binding OpenCommand}" />
         </StackPanel>
       </StackPanel>
 
       <!-- Unresolved: where to create it and with which value. -->
       <StackPanel x:Name="UnresolvedPanel" Spacing="8">
-        <ComboBox x:Name="ScopeBox" HorizontalAlignment="Stretch" AutomationProperties.Name="Scope"
+        <ComboBox x:Name="ScopeBox" HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.VariablesScope}"
                   SelectionChanged="OnScopeChanged" />
-        <TextBox x:Name="CreateBox" PlaceholderText="Value" MinHeight="0" Padding="8,5" AutomationProperties.Name="Value"
+        <TextBox x:Name="CreateBox" PlaceholderText="{x:Static loc:Strings.EditorValue}" MinHeight="0" Padding="8,5" AutomationProperties.Name="{x:Static loc:Strings.EditorValue}"
                  FontFamily="{DynamicResource YaapicMonoFont}" Text="{Binding EditableValue, Mode=TwoWay}"
                  KeyDown="OnValueKeyDown" />
-        <Button Classes="accent" Content="Create" HorizontalAlignment="Right" AutomationProperties.Name="Create"
+        <Button Classes="accent" Content="{x:Static loc:Strings.CommonCreate}" HorizontalAlignment="Right" AutomationProperties.Name="{x:Static loc:Strings.CommonCreate}"
                 Command="{Binding SubmitCommand}" />
       </StackPanel>
 

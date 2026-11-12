@@ -1,0 +1,9 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net11.0</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- The catalogue sources; Strings.g.cs is generated from them (see the Localization tests, YAAPIC_UPDATE_SNAPSHOTS=1). -->
+    <None Include="strings.en.json;strings.fr.json" />
+  </ItemGroup>
+</Project>

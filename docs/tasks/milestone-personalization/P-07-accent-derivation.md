@@ -1,6 +1,6 @@
 # P-07: Accent colour derivation
 
-Status: todo
+Status: done
 Platform: any
 Depends on: P-02
 
@@ -18,8 +18,8 @@ A pure function that turns one accent colour into the full set of accent tokens 
 
 ## Acceptance criteria
 
-- [ ] The teal output equals the current token file values.
-- [ ] Contrast tests for every preset in both themes.
+- [x] The teal output equals the current token file values.
+- [x] Contrast tests for every preset in both themes.
 
 ## Suggested commit message
 

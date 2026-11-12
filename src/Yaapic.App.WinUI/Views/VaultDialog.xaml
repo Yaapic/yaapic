@@ -1,10 +1,11 @@
-<ContentDialog x:Class="Yaapic.App.WinUI.Views.VaultDialog"
+<ContentDialog
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.VaultDialog"
                xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                xmlns:p="using:Yaapic.App.WinUI.Presentation"
                xmlns:vm="using:Yaapic.ViewModels.Vault"
                PrimaryButtonStyle="{StaticResource AccentButtonStyle}" PrimaryButtonClick="OnPrimaryButtonClick"
-               CloseButtonText="Cancel" DefaultButton="Primary" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}"
+               CloseButtonText="{x:Bind loc:Strings.CommonCancel}" DefaultButton="Primary" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}"
                Closed="OnClosed">
   <StackPanel Width="400" Spacing="12">
     <InfoBar Severity="Error" IsClosable="False"
@@ -12,8 +13,8 @@
              Message="{x:Bind ViewModel.LastError, Mode=OneWay}"/>
     <StackPanel x:Name="SetupPanel" Spacing="12">
       <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
-                 Text="Secret variables are encrypted and stored outside the workspace, on this computer only."/>
-      <RadioButtons x:Name="Protectors" Header="Protect the vault with" AutomationProperties.Name="Protector"
+                 Text="{x:Bind loc:Strings.VaultSetupHint}"/>
+      <RadioButtons x:Name="Protectors" Header="{x:Bind loc:Strings.VaultProtectWith}" AutomationProperties.Name="{x:Bind loc:Strings.VaultProtector}"
                     ItemsSource="{x:Bind p:ListMap.Protectors(ViewModel.Protectors)}"
                     SelectionChanged="OnProtectorChanged">
         <RadioButtons.ItemTemplate>
@@ -22,22 +23,22 @@
               <TextBlock Text="{x:Bind Label}"/>
               <TextBlock Style="{StaticResource YaapicBodySmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                          Visibility="{x:Bind p:VisibilityMap.WhenTrue(RequiresPassphrase)}"
-                         Text="You will type it each time you open the workspace"/>
+                         Text="{x:Bind loc:Strings.VaultTypedEachTimeNote}"/>
             </StackPanel>
           </DataTemplate>
         </RadioButtons.ItemTemplate>
       </RadioButtons>
       <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.SelectedProtector.RequiresPassphrase), Mode=OneWay}">
-        <PasswordBox x:Name="Passphrase" Header="Passphrase" AutomationProperties.Name="Passphrase"
+        <PasswordBox x:Name="Passphrase" Header="{x:Bind loc:Strings.VaultProtectorPassphrase}" AutomationProperties.Name="{x:Bind loc:Strings.VaultProtectorPassphrase}"
                      Password="{x:Bind ViewModel.Passphrase, Mode=TwoWay}"/>
-        <PasswordBox x:Name="Confirm" Header="Confirm passphrase" AutomationProperties.Name="Confirm passphrase"
+        <PasswordBox x:Name="Confirm" Header="{x:Bind loc:Strings.VaultConfirmPassphrase}" AutomationProperties.Name="{x:Bind loc:Strings.VaultConfirmPassphrase}"
                      Password="{x:Bind ViewModel.ConfirmPassphrase, Mode=TwoWay}"/>
         <TextBlock Style="{StaticResource YaapicBodySmallTextStyle}" Foreground="{ThemeResource YaapicDangerBrush}"
                    Text="{x:Bind ViewModel.SetupHint, Mode=OneWay}"
                    Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.SetupHint), Mode=OneWay}"/>
       </StackPanel>
     </StackPanel>
-    <PasswordBox x:Name="Unlock" Header="Passphrase" AutomationProperties.Name="Passphrase"
+    <PasswordBox x:Name="Unlock" Header="{x:Bind loc:Strings.VaultProtectorPassphrase}" AutomationProperties.Name="{x:Bind loc:Strings.VaultProtectorPassphrase}"
                  Password="{x:Bind ViewModel.UnlockPassphrase, Mode=TwoWay}"/>
   </StackPanel>
 </ContentDialog>

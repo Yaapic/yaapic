@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Scripting;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
 using Yaapic.ViewModels.Responses;
 
@@ -92,7 +93,7 @@ public sealed partial class ConsoleViewModel : ObservableObject
     public void AppendSystem(ConsoleLevel level, string message)
     {
         ArgumentNullException.ThrowIfNull(message);
-        Add(new(DateTimeOffset.Now, KindOf(level), message, "System"));
+        Add(new(DateTimeOffset.Now, KindOf(level), message, Strings.ConsoleOriginSystem));
         Rebuild();
     }
 
@@ -131,7 +132,7 @@ public sealed partial class ConsoleViewModel : ObservableObject
         var origin = run.Origin;
         if (entries.Count > 0 || run.Tests.Count > 0 || !run.Succeeded)
         {
-            var phase = run.Phase == ScriptPhase.PreRequest ? "Pre-request" : "Post-response";
+            var phase = run.Phase == ScriptPhase.PreRequest ? Strings.ConsolePhasePreRequest : Strings.ConsolePhasePostResponse;
             Add(new(at, ConsoleLineKind.Header, $"{phase} · {origin}", origin));
         }
 
@@ -157,7 +158,7 @@ public sealed partial class ConsoleViewModel : ObservableObject
         if (run.Tests.Count > 0)
         {
             var (passed, failed) = TestSummary.Count(run.Tests);
-            Add(new(at, ConsoleLineKind.Info, $"Tests: {passed} passed, {failed} failed", origin));
+            Add(new(at, ConsoleLineKind.Info, Strings.ConsoleTestsSummary(passed, failed), origin));
         }
 
         if (!run.Succeeded)
@@ -168,7 +169,7 @@ public sealed partial class ConsoleViewModel : ObservableObject
                 message += $": {error.Message}";
                 if (error.Line is { } line)
                 {
-                    message += $" (line {line.ToString(CultureInfo.InvariantCulture)})";
+                    message += $" ({Strings.ScriptLine(line.ToString(CultureInfo.InvariantCulture))})";
                 }
             }
 

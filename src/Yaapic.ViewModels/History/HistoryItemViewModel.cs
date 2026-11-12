@@ -1,6 +1,7 @@
 using System.Globalization;
 using Yaapic.Domain.History;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Responses;
 
 namespace Yaapic.ViewModels.History;
@@ -38,7 +39,7 @@ public sealed class HistoryItemViewModel
         else
         {
             IsFailed = true;
-            StatusText = entry.FailureMessage ?? "The request failed.";
+            StatusText = entry.FailureMessage ?? Strings.RequestFailed;
         }
     }
 

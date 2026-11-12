@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Yaapic.ViewModels.Editing;
@@ -15,11 +16,11 @@ public sealed partial class KeyValueEditorView : UserControl
 
     /// <summary>Identifies the <see cref="KeyHeader"/> dependency property.</summary>
     public static readonly DependencyProperty KeyHeaderProperty = DependencyProperty.Register(
-        nameof(KeyHeader), typeof(string), typeof(KeyValueEditorView), new PropertyMetadata("Key"));
+        nameof(KeyHeader), typeof(string), typeof(KeyValueEditorView), new PropertyMetadata(Strings.EditorKey));
 
     /// <summary>Identifies the <see cref="ValueHeader"/> dependency property.</summary>
     public static readonly DependencyProperty ValueHeaderProperty = DependencyProperty.Register(
-        nameof(ValueHeader), typeof(string), typeof(KeyValueEditorView), new PropertyMetadata("Value"));
+        nameof(ValueHeader), typeof(string), typeof(KeyValueEditorView), new PropertyMetadata(Strings.EditorValue));
 
     /// <summary>Identifies the <see cref="VariableContext"/> dependency property.</summary>
     public static readonly DependencyProperty VariableContextProperty = DependencyProperty.Register(

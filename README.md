@@ -87,6 +87,10 @@ and workspace, outside the workspace (`%APPDATA%\Yaapic\vaults\<workspace id>.va
 never reaches Git. The vault key is protected by DPAPI (Windows), the Keychain (macOS), the Secret Service (Linux) or a
 passphrase. See [ADR 0010](docs/adr/0010-secret-vault.md) and [docs/file-format.md](docs/file-format.md).
 
+## Language and accent colour
+
+The interface is available in English and French, and the accent colour is yours to pick (presets or any `#RRGGBB`): open **Settings**. See [docs/personalization.md](docs/personalization.md).
+
 ## Architecture rules
 
 Dependencies only point downwards; the table is in [docs/architecture.md](docs/architecture.md) and is enforced by

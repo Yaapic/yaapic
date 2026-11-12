@@ -1,3 +1,4 @@
+using Yaapic.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Windows.ApplicationModel.DataTransfer;
@@ -29,11 +30,11 @@ public sealed class WinUIDialogService : IDialogService
     {
         var result = await ShowAsync(new ContentDialog
         {
-            Title = $"Save changes to '{itemName}'?",
-            Content = Body("Your changes will be lost if you don't save them."),
-            PrimaryButtonText = "Save",
-            SecondaryButtonText = "Don't save",
-            CloseButtonText = "Cancel",
+            Title = Strings.DialogSaveChangesTitle(itemName),
+            Content = Body(Strings.DialogSaveChangesBody),
+            PrimaryButtonText = Strings.CommonSave,
+            SecondaryButtonText = Strings.DialogDontSave,
+            CloseButtonText = Strings.CommonCancel,
             DefaultButton = ContentDialogButton.Primary,
             PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicPrimaryButtonStyle"],
             SecondaryButtonStyle = DialogButtonStyle,
@@ -51,11 +52,11 @@ public sealed class WinUIDialogService : IDialogService
     public async Task<bool> ConfirmDeleteAsync(string itemName) =>
         await ShowAsync(new ContentDialog
         {
-            Title = $"Delete '{itemName}'?",
-            Content = Body("The request file will be deleted from the workspace."),
-            PrimaryButtonText = "Delete",
+            Title = Strings.DialogDeleteTitle(itemName),
+            Content = Body(Strings.DialogDeleteBody),
+            PrimaryButtonText = Strings.CommonDelete,
             PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicDangerButtonStyle"],
-            CloseButtonText = "Cancel",
+            CloseButtonText = Strings.CommonCancel,
             CloseButtonStyle = DialogButtonStyle,
             DefaultButton = ContentDialogButton.Close,
         }) == ContentDialogResult.Primary;
@@ -69,9 +70,9 @@ public sealed class WinUIDialogService : IDialogService
         {
             Title = title,
             Content = box,
-            PrimaryButtonText = "OK",
+            PrimaryButtonText = Strings.CommonOk,
             PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicPrimaryButtonStyle"],
-            CloseButtonText = "Cancel",
+            CloseButtonText = Strings.CommonCancel,
             CloseButtonStyle = DialogButtonStyle,
             DefaultButton = ContentDialogButton.Primary,
             IsPrimaryButtonEnabled = !string.IsNullOrWhiteSpace(initialText),
@@ -96,10 +97,10 @@ public sealed class WinUIDialogService : IDialogService
         var extension = Path.GetExtension(suggestedName);
         if (extension.Length > 1)
         {
-            picker.FileTypeChoices.Add($"{extension.TrimStart('.').ToUpperInvariant()} file", [extension]);
+            picker.FileTypeChoices.Add(Strings.FilesFileOfType(extension.TrimStart('.').ToUpperInvariant()), [extension]);
         }
 
-        picker.FileTypeChoices.Add("All files", ["."]);
+        picker.FileTypeChoices.Add(Strings.FilesAll, ["."]);
         InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(_window));
         if (await picker.PickSaveFileAsync() is not { } file)
         {

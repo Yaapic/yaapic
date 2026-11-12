@@ -1,9 +1,10 @@
-<UserControl x:Class="Yaapic.App.WinUI.Views.CodeEditorView"
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.CodeEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:loom="using:LoomEditor.WinUI.Controls">
   <loom:LoomEditor x:Name="Editor" LineNumbersEnabled="True" MinimapEnabled="False"
                    FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeCode}"
                    LineHeight="20"
-                   AutomationProperties.Name="Code editor"/>
+                   AutomationProperties.Name="{x:Bind loc:Strings.EditorCode}"/>
 </UserControl>

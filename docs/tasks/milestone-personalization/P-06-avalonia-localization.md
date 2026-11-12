@@ -1,6 +1,6 @@
 # P-06: Avalonia: localize the views
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: P-04, P-05
 
@@ -15,7 +15,7 @@ Same as P-05 for the roughly 250 literals of the Avalonia `.axaml` files and cod
 
 ## Acceptance criteria
 
-- [ ] Every view in French; screenshots next to the WinUI ones; no clipped text.
+- [x] Every view in French; screenshots next to the WinUI ones; no clipped text.
 
 ## Suggested commit message
 
