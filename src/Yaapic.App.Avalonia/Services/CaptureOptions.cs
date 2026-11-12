@@ -6,6 +6,9 @@ internal sealed class CaptureOptions
     /// <summary>Workspace root replacing the default one, or <see langword="null"/>.</summary>
     public string? Workspace { get; private set; }
 
+    /// <summary>Per-user data directory replacing the real one (vault, update and preference files), or <see langword="null"/>.</summary>
+    public string? DataDirectory { get; private set; }
+
     /// <summary>Initial theme (<c>dark</c>, <c>light</c> or <c>system</c>), or <see langword="null"/>.</summary>
     public string? Theme { get; private set; }
 
@@ -46,6 +49,9 @@ internal sealed class CaptureOptions
                     break;
                 case "--workspace" when hasValue:
                     options.Workspace = args[++i];
+                    break;
+                case "--data-dir" when hasValue:
+                    options.DataDirectory = args[++i];
                     break;
                 case "--update-demo" when hasValue:
                     options.UpdateDemo = args[++i];

@@ -21,8 +21,10 @@ public sealed class App : Application
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             var options = CaptureOptions.Parse(desktop.Args ?? []);
+            var preferences = AppPreferences.LoadAndApplyLanguage(AppPreferences.CreateStore(options.DataDirectory));
+            AccentApplier.Apply(this, preferences.Accent);
             var window = new MainWindow();
-            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window), PlatformProtectors(), updateDemo: options.UpdateDemo);
+            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window), PlatformProtectors(), options.DataDirectory, options.UpdateDemo);
             window.Title = $"Yaapic {AppComposition.CreateAppInfo().Version}";
             window.DataContext = shell;
             if (options.Theme is { } theme)

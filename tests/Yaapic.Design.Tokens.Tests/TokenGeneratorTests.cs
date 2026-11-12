@@ -39,6 +39,32 @@ public class TokenGeneratorTests
         AssertMatchesReference(TokenGenerator.GenerateAvalonia(Tokens()), "xaml", "Yaapic.Colors.Avalonia.axaml");
 
     [Fact]
+    public void Accent_keys_match_the_generated_source()
+    {
+        var actual = TokenGenerator.GenerateAccentKeys(Tokens());
+        var path = Path.Combine(DesignDir, "..", "src", "Yaapic.UI.Abstractions", "Theming", "AccentResourceKeys.g.cs");
+        if (Environment.GetEnvironmentVariable("YAAPIC_UPDATE_SNAPSHOTS") == "1")
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(path)!);
+            File.WriteAllText(path, actual, new UTF8Encoding(false));
+        }
+        else
+        {
+            Assert.Equal(File.ReadAllText(path).Replace("\r\n", "\n"), actual);
+        }
+    }
+
+    [Fact]
+    public void The_accent_keys_cover_the_aliases_of_the_dictionaries()
+    {
+        var keys = TokenGenerator.GenerateAccentKeys(Tokens());
+
+        Assert.Contains("\"AccentButtonBackground\"", keys);
+        Assert.Contains("\"SystemAccentColorLight1\"", keys);
+        Assert.Contains("\"TextOnAccentFillColorPrimaryBrush\"", keys);
+    }
+
+    [Fact]
     public void Changing_a_token_changes_the_output_and_breaks_the_snapshot()
     {
         var changed = Tokens().Replace("#1FC7D4", "#FF00FF", StringComparison.Ordinal);

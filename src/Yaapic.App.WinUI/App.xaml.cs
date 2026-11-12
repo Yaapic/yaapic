@@ -59,6 +59,8 @@ public partial class App : Application
             }
         }
 
+        var preferences = AppPreferences.LoadAndApplyLanguage(AppPreferences.CreateStore(dataDirectory));
+        AccentApplier.Apply(preferences.Accent);
         var shell = AppComposition.CreateShell(
             workspace,
             new WinUIDialogService(window, () => window.Content?.XamlRoot),

@@ -19,7 +19,9 @@ param(
     [string]$Request = 'create-user',
     [switch]$NoTabs,
     [switch]$NoStub,
-    [ValidateSet('', 'available', 'downloading', 'ready', 'uptodate', 'failed')][string]$UpdateDemo = ''
+    [ValidateSet('', 'available', 'downloading', 'ready', 'uptodate', 'failed')][string]$UpdateDemo = '',
+    [string]$Accent = '',
+    [ValidateSet('', 'english', 'french')][string]$Language = ''
 )
 $ErrorActionPreference = 'Stop'
 if (-not $Exe) {
@@ -65,7 +67,14 @@ try {
 
     New-Item -ItemType Directory -Force (Split-Path $Out) | Out-Null
     if (Test-Path $Out) { Remove-Item $Out -Force }
-    $argv = @('--workspace', $temp, '--theme', $Theme, '--size', "${Width}x${Height}", '--screenshot', $Out, '--wait-ms', $WaitMs)
+    # A throw-away data dir keeps the vault and preferences out of the real profile; -Accent and -Language seed preferences.json.
+    $data = "$temp-data"
+    New-Item -ItemType Directory -Force "$data/Yaapic" | Out-Null
+    $prefs = [ordered]@{}
+    if ($Language) { $prefs.language = $Language }
+    if ($Accent) { $prefs.accent = $Accent }
+    if ($prefs.Count) { $prefs | ConvertTo-Json | Set-Content "$data/Yaapic/preferences.json" -Encoding utf8 }
+    $argv = @('--data-dir', $data, '--workspace', $temp, '--theme', $Theme, '--size', "${Width}x${Height}", '--screenshot', $Out, '--wait-ms', $WaitMs)
     if ($Send) { $argv += '--send' }
     if ($UpdateDemo) { $argv += '--update-demo', $UpdateDemo }
     # -Select Console opens the console panel (after the send); any other value selects a request section tab.
@@ -84,6 +93,7 @@ finally {
     # GetContext blocks inside the runspace: do not wait for it, the process exit ends it.
     if ($ps) { [void]$ps.BeginStop($null, $null) }
     if (Test-Path $temp) { Remove-Item $temp -Recurse -Force }
+    if ($data -and (Test-Path $data)) { Remove-Item $data -Recurse -Force }
     if ($errFile -and (Test-Path $errFile)) { Remove-Item $errFile -Force }
     # The stub runspace is blocked in GetContext and keeps pwsh -File alive: end the process explicitly.
     if ($ps) { [Environment]::Exit([int](-not $ok)) }
