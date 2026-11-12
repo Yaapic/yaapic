@@ -6,7 +6,7 @@ Depends on: none
 
 ## Goal
 
-Like Postman, let the user show the response below the request (default) or beside it, with a toggle in the request header.
+Like Postman, let the user show the response below the request (default) or beside it, with a toggle in the status bar (bottom right, next to the vault and Console).
 
 ## Design decisions
 
@@ -15,7 +15,7 @@ Like Postman, let the user show the response below the request (default) or besi
 - The choice is saved in the session file (`.yaapic/session.yaml`, key `layout`), restored at start-up; an absent or unknown value is vertical.
 - Side by side keeps the name header and URL bar at the full width; the section tabs and editor take the left column, the response the
   right one, with a vertical splitter (drag, arrow keys, double-tap or Home to reset). Both columns have a 280 px minimum.
-- The header button shows the layout it switches to; the palette has "Toggle request layout (side by side or stacked)".
+- The status bar button shows the layout it switches to; the palette has "Toggle request layout (side by side or stacked)".
 - Both front-ends: WinUI (`RequestEditorView.ApplyLayout`) and Avalonia (`RequestEditorView.ApplyLayout`).
 
 ## Out of scope

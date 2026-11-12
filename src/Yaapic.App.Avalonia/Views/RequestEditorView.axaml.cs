@@ -69,7 +69,6 @@ public sealed partial class RequestEditorView : UserControl
     private void ApplyLayout()
     {
         var horizontal = _layout?.IsHorizontal == true;
-        LayoutIcon.Data = (global::Avalonia.Media.Geometry)this.FindResource(horizontal ? "YiLayoutStacked" : "YiSplit")!;
         var columns = Panes.ColumnDefinitions;
         var rows = Panes.RowDefinitions;
         columns[0].Width = new GridLength(1, GridUnitType.Star);

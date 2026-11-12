@@ -1,11 +1,13 @@
 <UserControl x:Class="Yaapic.App.WinUI.Views.StatusBarView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ic="using:FluentIcons.WinUI"
              xmlns:p="using:Yaapic.App.WinUI.Presentation">
   <Grid Height="24" Padding="10,0" Background="{ThemeResource YaapicSurfaceAppBrush}"
         BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
@@ -14,7 +16,20 @@
                Text="{x:Bind p:TextMap.FirstLine(ViewModel.ScriptEngineWarnings), Mode=OneWay}"
                ToolTipService.ToolTip="{x:Bind p:TextMap.JoinLines(ViewModel.ScriptEngineWarnings), Mode=OneWay}"
                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasScriptEngineWarnings), Mode=OneWay}"/>
-    <Button x:Name="VaultButton" Grid.Column="1" Style="{StaticResource YaapicSubtleButtonStyle}"
+    <!-- The icon shows the layout the button switches to. -->
+    <Button x:Name="LayoutToggle" Grid.Column="1" Style="{StaticResource YaapicSubtleButtonStyle}"
+            AutomationProperties.AutomationId="Layout" AutomationProperties.Name="Switch request layout"
+            ToolTipService.ToolTip="Show the response beside or below the request"
+            MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"
+            Command="{x:Bind ViewModel.Layout.ToggleCommand, Mode=OneWay}">
+      <Grid>
+        <ic:FluentIcon Icon="SplitVertical" IconVariant="Regular" IconSize="Size16"
+                       Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.Layout.IsHorizontal), Mode=OneWay}"/>
+        <ic:FluentIcon Icon="SplitHorizontal" IconVariant="Regular" IconSize="Size16"
+                       Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Layout.IsHorizontal), Mode=OneWay}"/>
+      </Grid>
+    </Button>
+    <Button x:Name="VaultButton" Grid.Column="2" Style="{StaticResource YaapicSubtleButtonStyle}"
             AutomationProperties.AutomationId="Vault" AutomationProperties.Name="{x:Bind ViewModel.Vault.StatusText, Mode=OneWay}"
             ToolTipService.ToolTip="{x:Bind p:TextMap.VaultTip(ViewModel.Vault.ProtectorLabel), Mode=OneWay}"
             MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center" Click="OnVaultClick">
@@ -31,7 +46,7 @@
         </MenuFlyout>
       </FlyoutBase.AttachedFlyout>
     </Button>
-    <Button x:Name="ConsoleToggle" Grid.Column="2" Style="{StaticResource YaapicSubtleButtonStyle}"
+    <Button x:Name="ConsoleToggle" Grid.Column="3" Style="{StaticResource YaapicSubtleButtonStyle}"
             AutomationProperties.AutomationId="Console" AutomationProperties.Name="Console"
             ToolTipService.ToolTip="Toggle the console (Ctrl+`)"
             MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"

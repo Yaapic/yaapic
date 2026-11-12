@@ -224,7 +224,6 @@ public sealed partial class RequestEditorView : UserControl
     private void ApplyLayout()
     {
         var horizontal = Horizontal;
-        LayoutIcon.Icon = horizontal ? FluentIcons.Common.Icon.SplitHorizontal : FluentIcons.Common.Icon.SplitVertical;
         var span = horizontal ? 1 : 3;
         Grid.SetColumnSpan(SectionTabs, span);
         Grid.SetColumnSpan(EditorContent, span);

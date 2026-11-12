@@ -1,7 +1,6 @@
 <UserControl x:Class="Yaapic.App.WinUI.Views.RequestEditorView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ic="using:FluentIcons.WinUI"
              xmlns:p="using:Yaapic.App.WinUI.Presentation"
              xmlns:v="using:Yaapic.App.WinUI.Views"
              xmlns:vm="using:Yaapic.ViewModels.Requests">
@@ -38,11 +37,10 @@
       <RowDefinition x:Name="ResponseRow" Height="2*" MinHeight="120"/>
     </Grid.RowDefinitions>
 
-    <!-- Header: name, unsaved dot, layout toggle, Save. -->
+    <!-- Header: name, unsaved dot, Save. -->
     <Grid Grid.ColumnSpan="3" Padding="16,0,12,0" ColumnSpacing="8">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
-        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
@@ -53,11 +51,7 @@
       <Ellipse Grid.Column="1" Width="6" Height="6" VerticalAlignment="Center"
                Fill="{ThemeResource YaapicAccentFillBrush}" AutomationProperties.Name="Unsaved changes"
                Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsDirty), Mode=OneWay}"/>
-      <Button Grid.Column="2" Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.Layout.ToggleCommand, Mode=OneWay}"
-              AutomationProperties.Name="Switch request layout" ToolTipService.ToolTip="Show the response beside or below the request">
-        <ic:FluentIcon x:Name="LayoutIcon" Icon="SplitVertical" IconVariant="Regular" IconSize="Size16"/>
-      </Button>
-      <Button Grid.Column="3" Height="28" MinHeight="28" Padding="10,0" Click="OnSaveClick" AutomationProperties.Name="Save"
+      <Button Grid.Column="2" Height="28" MinHeight="28" Padding="10,0" Click="OnSaveClick" AutomationProperties.Name="Save"
               IsEnabled="{x:Bind ViewModel.IsDirty, Mode=OneWay}">
         <StackPanel Orientation="Horizontal" Spacing="6">
           <TextBlock Text="Save" VerticalAlignment="Center"/>
