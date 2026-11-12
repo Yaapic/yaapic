@@ -6,6 +6,7 @@ using Yaapic.Core.Updates;
 using Yaapic.Infrastructure.Http;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
+using Yaapic.Infrastructure.Updates;
 using Yaapic.Scripting.Lua;
 using Yaapic.Scripting.QuickJs;
 using Yaapic.UI.Abstractions;
@@ -17,6 +18,7 @@ using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.ViewModels.Updates;
 using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.Composition;
@@ -41,7 +43,7 @@ public static class AppComposition
     /// <returns>The shell; call <see cref="ShellViewModel.InitializeAsync"/> before showing it.</returns>
     /// <exception cref="Yaapic.Core.Storage.StorageException">The workspace cannot be created.</exception>
     public static ShellViewModel CreateShell(string workspaceRoot, IDialogService dialogs, IKeyProtectorFactory? platformProtectors = null, string? userDataDirectory = null) =>
-        CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()]);
+        CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateSettings: new FileUpdateSettingsStore(userDataDirectory));
 
     // The seam of the tests: another vault location, other engines and other script limits.
     internal static ShellViewModel CreateShell(
@@ -50,7 +52,9 @@ public static class AppComposition
         IKeyProtectorFactory? platformProtectors,
         IVaultLocation vaultLocation,
         IEnumerable<IScriptEngine> scriptEngines,
-        ScriptLimits? limits = null)
+        ScriptLimits? limits = null,
+        IUpdateService? updateService = null,
+        IUpdateSettingsStore? updateSettings = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workspaceRoot);
         ArgumentNullException.ThrowIfNull(dialogs);
@@ -93,7 +97,8 @@ public static class AppComposition
             new SecretAwareCollectionStore(new FileCollectionStore(workspaceRoot), vault), requestStore, tabs, dialogs, vaultViewModel);
         scopes = new VariableScopeProvider(environments, globals, collections);
         scripting = new ScriptSendServices(scriptedSender, new CollectionTreeScriptChainProvider(collections), console, scopes, limits);
-        var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines);
+        var updates = new UpdateViewModel(updateService ?? new UnsupportedUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), new UpdateScheduler(TimeProvider.System), console);
+        var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates);
         reloader.Target = shell;
         shell.AttachPalette(new CommandPaletteViewModel(
         [

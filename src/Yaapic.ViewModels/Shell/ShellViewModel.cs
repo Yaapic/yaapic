@@ -12,6 +12,7 @@ using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.ViewModels.Updates;
 using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.ViewModels.Shell;
@@ -62,6 +63,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
     /// <param name="console">The application-wide console.</param>
     /// <param name="vault">The secret vault view model.</param>
     /// <param name="engines">The script engines, checked for availability at start-up.</param>
+    /// <param name="updates">The update banner and settings.</param>
     public ShellViewModel(
         TabsViewModel tabs,
         RequestListViewModel requests,
@@ -73,7 +75,8 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         IDialogService dialogs,
         ConsoleViewModel console,
         VaultViewModel vault,
-        ScriptEngineRegistry engines)
+        ScriptEngineRegistry engines,
+        UpdateViewModel updates)
     {
         ArgumentNullException.ThrowIfNull(tabs);
         ArgumentNullException.ThrowIfNull(requests);
@@ -86,6 +89,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         ArgumentNullException.ThrowIfNull(console);
         ArgumentNullException.ThrowIfNull(vault);
         ArgumentNullException.ThrowIfNull(engines);
+        ArgumentNullException.ThrowIfNull(updates);
         Tabs = tabs;
         Requests = requests;
         Collections = collections;
@@ -94,6 +98,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         Globals = globals;
         Console = console;
         Vault = vault;
+        Updates = updates;
         _session = session;
         _dialogs = dialogs;
         _engines = engines;
@@ -125,6 +130,9 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
 
     /// <summary>Gets the secret vault view model.</summary>
     public VaultViewModel Vault { get; }
+
+    /// <summary>Gets the update banner and settings.</summary>
+    public UpdateViewModel Updates { get; }
 
     /// <summary>Gets or sets the height of the console panel, clamped to <see cref="MinConsoleHeight"/>..<see cref="MaxConsoleHeight"/>.</summary>
     public double ConsoleHeight
@@ -204,6 +212,9 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         }
 
         _initialized = true;
+
+        // Never awaited: the check must not delay start-up, and it cannot throw.
+        _ = Updates.InitializeAsync();
     }
 
     /// <summary>Asks about unsaved tabs before the window closes; tabs stay open so the session keeps them.</summary>
@@ -236,6 +247,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
 
         QueueSave();
         await _drain;
+        Updates.Dispose();
         return true;
     }
 

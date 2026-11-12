@@ -72,6 +72,17 @@ public sealed class CommandsPaletteSource : IPaletteSource
                 break;
         }
 
+        var updates = _shell.Updates;
+        if (updates.IsSupported)
+        {
+            items.Add(Item("check-updates", "Check for updates", null, updates.CheckNowCommand));
+        }
+
+        if (updates.State == Updates.UpdateState.ReadyToRestart)
+        {
+            items.Add(Item("restart-to-update", "Restart to update", null, updates.RestartAndApplyCommand));
+        }
+
         return items;
     }
 

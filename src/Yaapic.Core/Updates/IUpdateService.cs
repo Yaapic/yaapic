@@ -49,3 +49,24 @@ public interface IUpdateService
     /// <exception cref="InvalidOperationException">No update was downloaded.</exception>
     void RestartAndApply();
 }
+
+/// <summary>The service of a build that cannot update itself: never supported, never checks.</summary>
+public sealed class UnsupportedUpdateService : IUpdateService
+{
+    /// <inheritdoc />
+    public bool IsSupported => false;
+
+    /// <inheritdoc />
+    public Task<UpdateCheckResult> CheckAsync(AppChannel channel, CancellationToken ct) =>
+        Task.FromResult<UpdateCheckResult>(new UpdateCheckResult.Failed("Updates are not available in this build."));
+
+    /// <inheritdoc />
+    public Task DownloadAsync(UpdateInfo update, IProgress<int> progress, CancellationToken ct) =>
+        throw new InvalidOperationException("Updates are not available in this build.");
+
+    /// <inheritdoc />
+    public void ApplyOnRestart() => throw new InvalidOperationException("Updates are not available in this build.");
+
+    /// <inheritdoc />
+    public void RestartAndApply() => throw new InvalidOperationException("Updates are not available in this build.");
+}
