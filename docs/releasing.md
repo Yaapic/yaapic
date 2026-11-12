@@ -13,6 +13,9 @@ Decisions: [ADR 0011](adr/0011-distribution-and-updates.md). The workflow is `.g
    git push origin v1.2.0
    ```
 
+   Before tagging, rewrite `RELEASE_NOTES.md` at the repo root for this release: `vpk pack --releaseNotes` embeds it in the
+   packages and installed apps show it in "Updates and about" when the update is offered.
+
 3. The workflow runs on Windows, Linux and macOS, one after the other. Each one builds the native script engines, publishes the
    app with Native AOT (`-p:YaapicVersion=<tag without v>`), packs it with `vpk` and uploads the packages to a **draft** release
    named `Yaapic <version>`: Windows `Setup.exe` and portable zip, the macOS bundle package, the Linux AppImage, the full and delta

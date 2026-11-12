@@ -103,7 +103,7 @@ jobs:
             $sign = @('--signParams', "/f cert.pfx /p $env:WINDOWS_CERT_PASSWORD /fd sha256 /tr http://timestamp.digicert.com /td sha256")
             Write-Host 'Signing with the Authenticode certificate.'
           } else { Write-Host 'No certificate: the Windows installer is unsigned (SmartScreen will warn).' }
-          vpk pack --packId Yaapic --packTitle Yaapic --packVersion ${{ steps.version.outputs.version }} --packDir publish --mainExe ${{ matrix.exe }} @sign
+          vpk pack --packId Yaapic --packTitle Yaapic --packVersion ${{ steps.version.outputs.version }} --packDir publish --mainExe ${{ matrix.exe }} --releaseNotes RELEASE_NOTES.md @sign
           if ($LASTEXITCODE -ne 0) { throw 'vpk pack failed.' }
           Remove-Item cert.pfx -ErrorAction SilentlyContinue
 
@@ -111,7 +111,7 @@ jobs:
         if: runner.os != 'Windows'
         run: |
           echo "The ${{ runner.os }} build is unsigned (no notarization): Gatekeeper or the package manager may warn."
-          vpk pack --packId Yaapic --packTitle Yaapic --packVersion ${{ steps.version.outputs.version }} --packDir publish --mainExe ${{ matrix.exe }}
+          vpk pack --packId Yaapic --packTitle Yaapic --packVersion ${{ steps.version.outputs.version }} --packDir publish --mainExe ${{ matrix.exe }} --releaseNotes RELEASE_NOTES.md
 
       - name: Checksums
         shell: pwsh
