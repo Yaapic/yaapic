@@ -1,6 +1,6 @@
 # P-12: Avalonia: Settings window
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: P-09, P-10, P-11
 
@@ -10,7 +10,7 @@ Same as P-11 for Avalonia (no "Windows accent" option; the system accent where t
 
 ## Acceptance criteria
 
-- [ ] Same behaviour as WinUI; screenshot in `docs/screenshots/settings`.
+- [x] Same behaviour as WinUI; screenshot in `docs/screenshots/settings`.
 
 ## Suggested commit message
 

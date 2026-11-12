@@ -1,6 +1,6 @@
 # P-11: WinUI: Settings dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: P-08, P-10
 
@@ -11,8 +11,8 @@ notice, accent swatches with a live preview, a custom colour field and a "Window
 
 ## Acceptance criteria
 
-- [ ] Opened from the menu and the palette; keyboard and screen-reader friendly (names, focus order).
-- [ ] Screenshot in `docs/screenshots/settings`.
+- [x] Opened from the menu and the palette; keyboard and screen-reader friendly (names, focus order).
+- [x] Screenshot in `docs/screenshots/settings`.
 
 ## Suggested commit message
 
