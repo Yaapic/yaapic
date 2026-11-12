@@ -33,6 +33,11 @@
       <ProgressBar Minimum="0" Maximum="100" AutomationProperties.Name="Download progress"
                    Value="{x:Bind ViewModel.DownloadPercent, Mode=OneWay}"
                    Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsDownloading), Mode=OneWay}"/>
+      <ScrollViewer MaxHeight="180" AutomationProperties.Name="Release notes"
+                    Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasNotes), Mode=OneWay}">
+        <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                   Text="{x:Bind ViewModel.Notes, Mode=OneWay}"/>
+      </ScrollViewer>
     </StackPanel>
   </StackPanel>
 </ContentDialog>

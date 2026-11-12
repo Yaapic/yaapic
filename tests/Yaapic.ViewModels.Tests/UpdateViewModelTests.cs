@@ -248,6 +248,22 @@ public sealed class UpdateViewModelTests
     }
 
     [Fact]
+    public async Task The_release_notes_follow_the_update_found()
+    {
+        var vm = Create();
+        Assert.False(vm.HasNotes);
+
+        _service.Result = new UpdateCheckResult.Available(V2);
+        await vm.CheckNowCommand.ExecuteAsync(null);
+        Assert.True(vm.HasNotes);
+        Assert.Equal("notes", vm.Notes);
+
+        _service.Result = new UpdateCheckResult.Available(V3);
+        await vm.CheckNowCommand.ExecuteAsync(null);
+        Assert.False(vm.HasNotes);
+    }
+
+    [Fact]
     public async Task The_status_line_reports_check_results()
     {
         var vm = Create();

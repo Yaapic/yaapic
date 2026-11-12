@@ -118,6 +118,9 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     /// <summary>Gets the release notes of the update found.</summary>
     public string Notes => _update?.Notes ?? "";
 
+    /// <summary>Gets a value indicating whether there are release notes to show.</summary>
+    public bool HasNotes => !string.IsNullOrWhiteSpace(Notes);
+
     /// <summary>Gets the channels the user can pick.</summary>
     public IReadOnlyList<AppChannel> Channels { get; } = [AppChannel.Stable, AppChannel.Preview];
 
@@ -266,6 +269,7 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
 
         OnPropertyChanged(nameof(AvailableVersion));
         OnPropertyChanged(nameof(Notes));
+        OnPropertyChanged(nameof(HasNotes));
         OnPropertyChanged(nameof(IsBannerVisible));
         _ = SaveAsync(_settings with { Channel = value });
     }
@@ -316,6 +320,7 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
                 _update = available.Update;
                 OnPropertyChanged(nameof(AvailableVersion));
                 OnPropertyChanged(nameof(Notes));
+                OnPropertyChanged(nameof(HasNotes));
                 State = UpdateState.Available;
                 OnPropertyChanged(nameof(ShowDownload));
                 OnPropertyChanged(nameof(BannerText));

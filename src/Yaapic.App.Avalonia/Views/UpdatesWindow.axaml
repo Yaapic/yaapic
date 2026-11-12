@@ -26,6 +26,9 @@
         </StackPanel>
         <ProgressBar Minimum="0" Maximum="100" Value="{Binding DownloadPercent}" IsVisible="{Binding IsDownloading}"
                      AutomationProperties.Name="Download progress" />
+        <ScrollViewer MaxHeight="180" IsVisible="{Binding HasNotes}" AutomationProperties.Name="Release notes">
+          <SelectableTextBlock Text="{Binding Notes}" TextWrapping="Wrap" Classes="dialogBody" />
+        </ScrollViewer>
       </StackPanel>
     </StackPanel>
     <Border Classes="dialogCommands">
