@@ -28,7 +28,7 @@ jobs:
     timeout-minutes: 60
     strategy:
       fail-fast: false
-      # One OS at a time: the first upload creates the draft release, the next ones merge into it.
+      # One OS at a time: the first upload creates the release (published at once, a pre-release for a -preview tag), the next ones merge into it.
       max-parallel: 1
       matrix:
         include:
@@ -121,11 +121,11 @@ jobs:
           $sums | Set-Content "Releases/SHA256SUMS-${{ matrix.rid }}.txt"
           $sums
 
-      - name: Upload to the draft release
+      - name: Upload to the release
         if: env.IS_RELEASE == 'true'
         run: >
           vpk upload github --repoUrl https://github.com/${{ github.repository }} --token ${{ env.GH_TOKEN }}
-          --tag ${{ github.ref_name }} --releaseName "Yaapic ${{ steps.version.outputs.version }}" --merge
+          --tag ${{ github.ref_name }} --releaseName "Yaapic ${{ steps.version.outputs.version }}" --merge --publish
           ${{ steps.version.outputs.prerelease == 'true' && '--pre' || '' }}
 
       - name: Upload the checksums

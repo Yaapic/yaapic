@@ -17,10 +17,10 @@ Decisions: [ADR 0011](adr/0011-distribution-and-updates.md). The workflow is `.g
    packages and installed apps show it in "Updates and about" when the update is offered.
 
 3. The workflow runs on Windows, Linux and macOS, one after the other. Each one builds the native script engines, publishes the
-   app with Native AOT (`-p:YaapicVersion=<tag without v>`), packs it with `vpk` and uploads the packages to a **draft** release
+   app with Native AOT (`-p:YaapicVersion=<tag without v>`), packs it with `vpk` and uploads the packages to a release, published at once (a pre-release when the tag has a `-preview` suffix)
    named `Yaapic <version>`: Windows `Setup.exe` and portable zip, the macOS bundle package, the Linux AppImage, the full and delta
    packages, the `releases.<os>.json` feed files and `SHA256SUMS-<rid>.txt`.
-4. Open the draft, check the assets (three `SHA256SUMS`, one `releases.*.json` per OS), write the notes, and publish it. Installed
+4. Open the release, check the assets (three `SHA256SUMS`, one `releases.*.json` per OS) (the notes come from `RELEASE_NOTES.md`). Installed
    apps find it on their next check (once a day, or "Check for updates"). The `preview` channel sees pre-releases and stable
    releases, the `stable` channel only stable ones.
 
