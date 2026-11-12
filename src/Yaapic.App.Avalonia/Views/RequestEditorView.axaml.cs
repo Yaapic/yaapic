@@ -31,6 +31,7 @@ public sealed partial class RequestEditorView : UserControl
     private RequestEditorViewModel? Editor => DataContext as RequestEditorViewModel;
 
     private VariableContext? _variables;
+    private PaneLayoutViewModel? _layout;
 
     /// <inheritdoc />
     protected override void OnDataContextChanged(EventArgs e)
@@ -46,6 +47,50 @@ public sealed partial class RequestEditorView : UserControl
         {
             _variables.OpenRequested += OnVariableOpenRequested;
         }
+
+        if (_layout is not null)
+        {
+            _layout.PropertyChanged -= OnLayoutChanged;
+        }
+
+        _layout = Editor?.Layout;
+        if (_layout is not null)
+        {
+            _layout.PropertyChanged += OnLayoutChanged;
+        }
+
+        ApplyLayout();
+    }
+
+    private void OnLayoutChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e) => ApplyLayout();
+
+    // Stacked: everything spans the three columns and the response is in row 4. Side by side: the header and URL bar keep the full width,
+    // the sections take the left column, and the splitter and response sit in the other two columns next to them.
+    private void ApplyLayout()
+    {
+        var horizontal = _layout?.IsHorizontal == true;
+        LayoutIcon.Data = (global::Avalonia.Media.Geometry)this.FindResource(horizontal ? "YiLayoutStacked" : "YiSplit")!;
+        var columns = Panes.ColumnDefinitions;
+        var rows = Panes.RowDefinitions;
+        columns[0].Width = new GridLength(1, GridUnitType.Star);
+        columns[0].MinWidth = horizontal ? 280 : 0;
+        columns[1].Width = horizontal ? GridLength.Auto : new GridLength(0);
+        columns[2].Width = horizontal ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+        columns[2].MinWidth = horizontal ? 280 : 0;
+        rows[2].Height = horizontal ? new GridLength(1, GridUnitType.Star) : new GridLength(9, GridUnitType.Star);
+        rows[3].Height = GridLength.Auto;
+        rows[4].Height = horizontal ? new GridLength(0) : new GridLength(11, GridUnitType.Star);
+        rows[4].MinHeight = horizontal ? 0 : 180;
+        Grid.SetColumnSpan(Sections, horizontal ? 1 : 3);
+        Grid.SetRow(Splitter, horizontal ? 2 : 3);
+        Grid.SetColumn(Splitter, horizontal ? 1 : 0);
+        Grid.SetColumnSpan(Splitter, horizontal ? 1 : 3);
+        Splitter.Classes.Set("rows", !horizontal);
+        Splitter.Classes.Set("columns", horizontal);
+        Splitter.ResizeDirection = horizontal ? GridResizeDirection.Columns : GridResizeDirection.Rows;
+        Grid.SetRow(ResponseView, horizontal ? 2 : 4);
+        Grid.SetColumn(ResponseView, horizontal ? 2 : 0);
+        Grid.SetColumnSpan(ResponseView, horizontal ? 1 : 3);
     }
 
     private void OnVariableOpenRequested(object? sender, VariableScopeKind scope) => VariableScopeOpenRequested?.Invoke(this, scope);

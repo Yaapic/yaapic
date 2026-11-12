@@ -1,0 +1,33 @@
+# U-01: Request / response layout toggle (stacked or side by side)
+
+Status: done
+Platform: any
+Depends on: none
+
+## Goal
+
+Like Postman, let the user show the response below the request (default) or beside it, with a toggle in the request header.
+
+## Design decisions
+
+- `PaneLayout { Vertical, Horizontal }` in the domain and `PaneLayoutViewModel` (one shared instance, `Shell.Layout`, also set on every
+  `RequestEditorViewModel.Layout` by the composition root), so all open tabs switch together.
+- The choice is saved in the session file (`.yaapic/session.yaml`, key `layout`), restored at start-up; an absent or unknown value is vertical.
+- Side by side keeps the name header and URL bar at the full width; the section tabs and editor take the left column, the response the
+  right one, with a vertical splitter (drag, arrow keys, double-tap or Home to reset). Both columns have a 280 px minimum.
+- The header button shows the layout it switches to; the palette has "Toggle request layout (side by side or stacked)".
+- Both front-ends: WinUI (`RequestEditorView.ApplyLayout`) and Avalonia (`RequestEditorView.ApplyLayout`).
+
+## Out of scope
+
+Remembering the split position per layout, hiding the response panel, per-request layout.
+
+## Acceptance criteria
+
+- [x] Toggle switches every open tab at once and survives a restart (tests: `FileSessionStoreTests`, `ShellViewModelTests`).
+- [x] Screenshots of both layouts on both front-ends in `docs/screenshots/layout`.
+- [x] Known limit: below about 900 px of editor width the tab strips and the response header clip in the side-by-side layout.
+
+## Suggested commit message
+
+`feat: add the request and response layout toggle`

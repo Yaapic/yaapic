@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Controls.Primitives;
@@ -68,9 +69,23 @@ public sealed partial class RequestEditorView : UserControl
 
     private VariableContext? _variables;
 
+    private PaneLayoutViewModel? _layout;
+
     private void OnViewModelChanged()
     {
         Bindings?.Update();
+        if (_layout is not null)
+        {
+            _layout.PropertyChanged -= OnLayoutChanged;
+        }
+
+        _layout = ViewModel?.Layout;
+        if (_layout is not null)
+        {
+            _layout.PropertyChanged += OnLayoutChanged;
+        }
+
+        ApplyLayout();
         if (_variables is not null)
         {
             _variables.OpenRequested -= OnVariableOpenRequested;
@@ -200,17 +215,51 @@ public sealed partial class RequestEditorView : UserControl
         BodyBadge.Style = BadgeStyle(BodyTab);
     }
 
+    private bool Horizontal => _layout?.IsHorizontal == true;
+
+    private void OnLayoutChanged(object? sender, PropertyChangedEventArgs e) => ApplyLayout();
+
+    // Stacked: everything spans the three columns and the response is in row 5. Side by side: the header and URL bar keep the full width,
+    // the section tabs and editor take the left column, and the splitter and response sit in the other two columns next to them.
+    private void ApplyLayout()
+    {
+        var horizontal = Horizontal;
+        LayoutIcon.Icon = horizontal ? FluentIcons.Common.Icon.SplitHorizontal : FluentIcons.Common.Icon.SplitVertical;
+        var span = horizontal ? 1 : 3;
+        Grid.SetColumnSpan(SectionTabs, span);
+        Grid.SetColumnSpan(EditorContent, span);
+        RequestColumn.Width = new GridLength(1, GridUnitType.Star);
+        RequestColumn.MinWidth = horizontal ? 280 : 0;
+        SplitterColumn.Width = horizontal ? GridLength.Auto : new GridLength(0);
+        ResponseColumn.Width = horizontal ? new GridLength(1, GridUnitType.Star) : new GridLength(0);
+        ResponseColumn.MinWidth = horizontal ? 280 : 0;
+        ResponseRow.MinHeight = horizontal ? 0 : 120;
+        Grid.SetRow(ResponseView, horizontal ? 2 : 5);
+        Grid.SetRowSpan(ResponseView, horizontal ? 2 : 1);
+        Grid.SetColumn(ResponseView, horizontal ? 2 : 0);
+        Grid.SetColumnSpan(ResponseView, horizontal ? 1 : 3);
+        Grid.SetRow(SplitterHost, horizontal ? 2 : 4);
+        Grid.SetRowSpan(SplitterHost, horizontal ? 2 : 1);
+        Grid.SetColumn(SplitterHost, horizontal ? 1 : 0);
+        Grid.SetColumnSpan(SplitterHost, horizontal ? 1 : 3);
+        SplitterHost.Height = horizontal ? double.NaN : 5;
+        SplitterHost.Width = horizontal ? 5 : double.NaN;
+        Splitter.SetVertical(horizontal);
+        ResetSplitter();
+        UpdateSplitterLine();
+    }
+
     private const double SplitterStep = 16;
     private bool _splitterDragging;
 
-    private double _splitterLastY;
+    private double _splitterLast;
 
     private void OnSplitterPointerPressed(object sender, PointerRoutedEventArgs e)
     {
         if (Splitter.CapturePointer(e.Pointer))
         {
             _splitterDragging = true;
-            _splitterLastY = e.GetCurrentPoint(this).Position.Y;
+            _splitterLast = Position(e);
             Splitter.Focus(FocusState.Pointer);
             UpdateSplitterLine();
         }
@@ -220,11 +269,13 @@ public sealed partial class RequestEditorView : UserControl
     {
         if (_splitterDragging)
         {
-            var y = e.GetCurrentPoint(this).Position.Y;
-            MoveSplitter(y - _splitterLastY);
-            _splitterLastY = y;
+            var position = Position(e);
+            MoveSplitter(position - _splitterLast);
+            _splitterLast = position;
         }
     }
+
+    private double Position(PointerRoutedEventArgs e) => Horizontal ? e.GetCurrentPoint(this).Position.X : e.GetCurrentPoint(this).Position.Y;
 
     private void OnSplitterPointerReleased(object sender, PointerRoutedEventArgs e)
     {
@@ -239,8 +290,14 @@ public sealed partial class RequestEditorView : UserControl
     {
         switch (e.Key)
         {
-            case Windows.System.VirtualKey.Up: MoveSplitter(-SplitterStep); break;
-            case Windows.System.VirtualKey.Down: MoveSplitter(SplitterStep); break;
+            case Windows.System.VirtualKey.Up when !Horizontal:
+            case Windows.System.VirtualKey.Left when Horizontal:
+                MoveSplitter(-SplitterStep);
+                break;
+            case Windows.System.VirtualKey.Down when !Horizontal:
+            case Windows.System.VirtualKey.Right when Horizontal:
+                MoveSplitter(SplitterStep);
+                break;
             case Windows.System.VirtualKey.Home: ResetSplitter(); break;
             default: return;
         }
@@ -257,21 +314,42 @@ public sealed partial class RequestEditorView : UserControl
     private void UpdateSplitterLine(bool hovered = false)
     {
         var active = hovered || _splitterDragging || Splitter.FocusState != FocusState.Unfocused;
-        SplitterLine.Height = _splitterDragging ? 2 : 1;
+        var thickness = _splitterDragging ? 2 : 1;
+        SplitterLine.Height = Horizontal ? double.NaN : thickness;
+        SplitterLine.Width = Horizontal ? thickness : double.NaN;
+        SplitterLine.HorizontalAlignment = Horizontal ? HorizontalAlignment.Center : HorizontalAlignment.Stretch;
+        SplitterLine.VerticalAlignment = Horizontal ? VerticalAlignment.Stretch : VerticalAlignment.Center;
         SplitterLine.Fill = BrushMap.Themed(active ? "YaapicAccentFillBrush" : "YaapicBorderSubtleBrush");
     }
 
     private void MoveSplitter(double delta)
     {
-        // The request row switches from a star to a pixel height; the response row keeps the rest.
-        var total = RequestRow.ActualHeight + ResponseRow.ActualHeight;
-        var height = Math.Clamp(RequestRow.ActualHeight + delta, RequestRow.MinHeight, Math.Max(RequestRow.MinHeight, total - ResponseRow.MinHeight));
+        // The request side switches from a star to a pixel size; the response side keeps the rest.
+        if (Horizontal)
+        {
+            var total = RequestColumn.ActualWidth + ResponseColumn.ActualWidth;
+            RequestColumn.Width = new GridLength(Math.Clamp(RequestColumn.ActualWidth + delta, RequestColumn.MinWidth, Math.Max(RequestColumn.MinWidth, total - ResponseColumn.MinWidth)));
+            ResponseColumn.Width = new GridLength(1, GridUnitType.Star);
+            return;
+        }
+
+        var totalHeight = RequestRow.ActualHeight + ResponseRow.ActualHeight;
+        var height = Math.Clamp(RequestRow.ActualHeight + delta, RequestRow.MinHeight, Math.Max(RequestRow.MinHeight, totalHeight - ResponseRow.MinHeight));
         RequestRow.Height = new GridLength(height);
         ResponseRow.Height = new GridLength(1, GridUnitType.Star);
     }
 
     private void ResetSplitter()
     {
+        if (Horizontal)
+        {
+            RequestColumn.Width = new GridLength(1, GridUnitType.Star);
+            ResponseColumn.Width = new GridLength(1, GridUnitType.Star);
+            RequestRow.Height = new GridLength(1, GridUnitType.Star);
+            ResponseRow.Height = new GridLength(0);
+            return;
+        }
+
         RequestRow.Height = new GridLength(3, GridUnitType.Star);
         ResponseRow.Height = new GridLength(2, GridUnitType.Star);
     }

@@ -64,6 +64,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
     /// <param name="vault">The secret vault view model.</param>
     /// <param name="engines">The script engines, checked for availability at start-up.</param>
     /// <param name="updates">The update banner and settings.</param>
+    /// <param name="layout">The request / response layout shared with the tabs; <see langword="null"/> creates one.</param>
     public ShellViewModel(
         TabsViewModel tabs,
         RequestListViewModel requests,
@@ -76,7 +77,8 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         ConsoleViewModel console,
         VaultViewModel vault,
         ScriptEngineRegistry engines,
-        UpdateViewModel updates)
+        UpdateViewModel updates,
+        PaneLayoutViewModel? layout = null)
     {
         ArgumentNullException.ThrowIfNull(tabs);
         ArgumentNullException.ThrowIfNull(requests);
@@ -99,6 +101,8 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         Console = console;
         Vault = vault;
         Updates = updates;
+        Layout = layout ?? new PaneLayoutViewModel();
+        Layout.PropertyChanged += (_, _) => QueueSave();
         _session = session;
         _dialogs = dialogs;
         _engines = engines;
@@ -130,6 +134,9 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
 
     /// <summary>Gets the secret vault view model.</summary>
     public VaultViewModel Vault { get; }
+
+    /// <summary>Gets the request / response panel layout.</summary>
+    public PaneLayoutViewModel Layout { get; }
 
     /// <summary>Gets the update banner and settings.</summary>
     public UpdateViewModel Updates { get; }
@@ -190,6 +197,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         }
 
         var state = await _session.LoadAsync(CancellationToken.None);
+        Layout.IsHorizontal = state.Layout == PaneLayout.Horizontal;
         await Environments.LoadAsync(state.ActiveEnvironmentId);
         await Globals.LoadAsync();
         await Requests.RefreshAsync();
@@ -297,7 +305,8 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         _pending = new SessionState(
             [.. Tabs.Tabs.Where(t => !t.IsNew).Select(t => t.Id)],
             Tabs.ActiveTab is { IsNew: false } active ? active.Id : null,
-            Environments.ActiveEnvironment?.Id);
+            Environments.ActiveEnvironment?.Id,
+            Layout.IsHorizontal ? PaneLayout.Horizontal : PaneLayout.Vertical);
         if (!_saving)
         {
             _drain = DrainAsync();

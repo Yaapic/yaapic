@@ -35,6 +35,16 @@ public sealed class FileSessionStoreTests : IDisposable
     }
 
     [Fact]
+    public async Task The_layout_round_trips_and_defaults_to_vertical()
+    {
+        await new FileSessionStore(_root).SaveAsync(new SessionState([], null, null, PaneLayout.Horizontal), CancellationToken.None);
+        Assert.Equal(PaneLayout.Horizontal, (await new FileSessionStore(_root).LoadAsync(CancellationToken.None)).Layout);
+
+        await new FileSessionStore(_root).SaveAsync(SessionState.Empty, CancellationToken.None);
+        Assert.Equal(PaneLayout.Vertical, (await new FileSessionStore(_root).LoadAsync(CancellationToken.None)).Layout);
+    }
+
+    [Fact]
     public async Task SaveEmptyThenLoadReturnsNulls()
     {
         await new FileSessionStore(_root).SaveAsync(SessionState.Empty, CancellationToken.None);

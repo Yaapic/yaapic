@@ -80,6 +80,22 @@ public sealed class ShellViewModelTests
     }
 
     [Fact]
+    public async Task The_layout_is_restored_and_saved_when_toggled()
+    {
+        await _session.SaveAsync(new SessionState([], null, null, PaneLayout.Horizontal), CancellationToken.None);
+        var shell = Create();
+
+        await shell.InitializeAsync();
+        Assert.True(shell.Layout.IsHorizontal);
+
+        shell.Layout.ToggleCommand.Execute(null);
+        await Task.Yield();
+
+        Assert.False(shell.Layout.IsHorizontal);
+        Assert.Equal(PaneLayout.Vertical, (await _session.LoadAsync(CancellationToken.None)).Layout);
+    }
+
+    [Fact]
     public async Task RestoresTabsInOrderDroppingMissingIdsAndActivatesTheSavedOne()
     {
         var a = await SeedAsync("a");

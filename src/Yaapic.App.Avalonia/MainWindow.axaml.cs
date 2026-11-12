@@ -383,7 +383,7 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>Opens a named window or prompt for the screenshot tooling.</summary>
-    /// <param name="name"><c>environments</c>, <c>vault</c>, <c>updates</c>, <c>update-download</c>, <c>updates-check</c>, <c>console</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
+    /// <param name="name"><c>environments</c>, <c>vault</c>, <c>updates</c>, <c>layout</c>, <c>update-download</c>, <c>updates-check</c>, <c>console</c>, <c>settings</c>, <c>palette</c>, <c>palette-query</c>, <c>prompt</c>, <c>unsaved</c> or <c>empty</c>.</param>
     /// <exception cref="InvalidOperationException">Unknown name or nothing to act on.</exception>
     internal void OpenNamed(string name)
     {
@@ -392,6 +392,9 @@ public sealed partial class MainWindow : Window
             case "environments" when Shell is { } shell:
                 shell.Environments.EditedEnvironment ??= shell.Environments.ActiveEnvironment;
                 _ = ManageEnvironmentsAsync();
+                break;
+            case "layout" when Shell is { } layoutShell:
+                layoutShell.Layout.ToggleCommand.Execute(null);
                 break;
             case "update-download" when Shell is { } downloadShell:
                 downloadShell.Updates.DownloadCommand.Execute(null);

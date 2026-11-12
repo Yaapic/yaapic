@@ -6,7 +6,11 @@
              xmlns:c="using:Yaapic.App.Avalonia.Controls"
              x:Class="Yaapic.App.Avalonia.Views.RequestEditorView"
              x:DataType="req:RequestEditorViewModel">
-  <Grid>
+  <UserControl.Resources>
+    <StreamGeometry x:Key="YiLayoutStacked">M4 5h16v14H4zM4 12h16</StreamGeometry>
+  </UserControl.Resources>
+  <!-- Columns 1 and 2 only exist in the side-by-side layout (ApplyLayout); the stacked layout keeps them at width 0. -->
+  <Grid x:Name="Panes" ColumnDefinitions="*,0,0">
     <Grid.RowDefinitions>
       <RowDefinition Height="40" />
       <RowDefinition Height="Auto" />
@@ -15,19 +19,23 @@
       <RowDefinition Height="11*" MinHeight="180" />
     </Grid.RowDefinitions>
 
-    <Grid Grid.Row="0" ColumnDefinitions="*,Auto,Auto" Margin="16,0,12,0" ColumnSpacing="10">
+    <Grid Grid.Row="0" Grid.ColumnSpan="3" ColumnDefinitions="*,Auto,Auto,Auto" Margin="16,0,12,0" ColumnSpacing="10">
       <StackPanel Orientation="Horizontal" Spacing="8">
         <TextBox Classes="bare" PlaceholderText="Untitled request" FontSize="13" FontWeight="SemiBold" MinWidth="160"
                  Text="{Binding Name, Mode=TwoWay}" AutomationProperties.Name="Request name" />
         <Ellipse Width="6" Height="6" VerticalAlignment="Center" IsVisible="{Binding IsDirty}"
                  Fill="{DynamicResource YaapicAccentTextBrush}" AutomationProperties.Name="Unsaved changes" />
       </StackPanel>
-      <TextBlock Grid.Column="1" Classes="codeSmall" Text="Ctrl+S" VerticalAlignment="Center"
+      <Button Grid.Column="1" Classes="icon" Command="{Binding Layout.ToggleCommand}" VerticalAlignment="Center"
+              AutomationProperties.Name="Switch request layout" ToolTip.Tip="Show the response beside or below the request">
+        <PathIcon x:Name="LayoutIcon" Data="{StaticResource YiSplit}" />
+      </Button>
+      <TextBlock Grid.Column="2" Classes="codeSmall" Text="Ctrl+S" VerticalAlignment="Center"
                  Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
-      <Button Grid.Column="2" Content="Save" Click="OnSaveClick" />
+      <Button Grid.Column="3" Content="Save" Click="OnSaveClick" />
     </Grid>
 
-    <Border Grid.Row="1" Classes="urlbar" Margin="16,0,16,12">
+    <Border Grid.Row="1" Grid.ColumnSpan="3" Classes="urlbar" Margin="16,0,16,12">
       <Grid ColumnDefinitions="Auto,*,Auto">
         <ComboBox x:Name="MethodBox" Classes="methodpicker"
                   SelectedIndex="{Binding Method, Converter={x:Static p:EditorMap.MethodIndex}, Mode=OneWay}"
@@ -47,7 +55,7 @@
       </Grid>
     </Border>
 
-    <TabControl Grid.Row="2" Classes="panel" Padding="0">
+    <TabControl x:Name="Sections" Grid.Row="2" Grid.ColumnSpan="3" Classes="panel" Padding="0">
       <TabItem>
         <TabItem.Header>
           <StackPanel Orientation="Horizontal" Spacing="6">
@@ -154,7 +162,7 @@
       </TabItem>
     </TabControl>
 
-    <GridSplitter Grid.Row="3" Classes="rows" />
-    <v:ResponsePanelView Grid.Row="4" DataContext="{Binding Response}" />
+    <GridSplitter x:Name="Splitter" Grid.Row="3" Grid.ColumnSpan="3" Classes="rows" />
+    <v:ResponsePanelView x:Name="ResponseView" Grid.Row="4" Grid.ColumnSpan="3" DataContext="{Binding Response}" />
   </Grid>
 </UserControl>

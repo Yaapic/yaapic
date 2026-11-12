@@ -85,12 +85,14 @@ public static class AppComposition
         VariableScopeProvider? scopes = null;
         HistoryViewModel? history = null;
         ScriptSendServices? scripting = null;
+        var layout = new PaneLayoutViewModel();
         var tabs = new TabsViewModel(
             requestStore,
             dialogs,
             (definition, isNew) =>
             {
                 var editor = RequestEditorViewModel.FromDefinition(definition, sender, scopes!, isNew, dialogs, scripting);
+                editor.Layout = layout;
                 editor.Sent += (_, e) => _ = history!.RecordAsync(e.Request, e.Report);
                 return editor;
             });
@@ -101,7 +103,7 @@ public static class AppComposition
         scopes = new VariableScopeProvider(environments, globals, collections);
         scripting = new ScriptSendServices(scriptedSender, new CollectionTreeScriptChainProvider(collections), console, scopes, limits);
         var updates = new UpdateViewModel(updateService ?? new VelopackUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), new UpdateScheduler(TimeProvider.System), console);
-        var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates);
+        var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates, layout);
         reloader.Target = shell;
         shell.AttachPalette(new CommandPaletteViewModel(
         [
