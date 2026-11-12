@@ -22,12 +22,14 @@
             ToolTipService.ToolTip="Show the response beside or below the request"
             MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"
             Command="{x:Bind ViewModel.Layout.ToggleCommand, Mode=OneWay}">
-      <Grid>
-        <ic:FluentIcon Icon="SplitVertical" IconVariant="Regular" IconSize="Size16"
-                       Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.Layout.IsHorizontal), Mode=OneWay}"/>
-        <ic:FluentIcon Icon="SplitHorizontal" IconVariant="Regular" IconSize="Size16"
-                       Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Layout.IsHorizontal), Mode=OneWay}"/>
-      </Grid>
+      <Viewbox Width="14" Height="14">
+        <Grid>
+          <ic:FluentIcon Icon="SplitVertical" IconVariant="Regular" IconSize="Size16" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.Layout.IsHorizontal), Mode=OneWay}"/>
+          <ic:FluentIcon Icon="SplitHorizontal" IconVariant="Regular" IconSize="Size16" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Layout.IsHorizontal), Mode=OneWay}"/>
+        </Grid>
+      </Viewbox>
     </Button>
     <Button x:Name="VaultButton" Grid.Column="2" Style="{StaticResource YaapicSubtleButtonStyle}"
             AutomationProperties.AutomationId="Vault" AutomationProperties.Name="{x:Bind ViewModel.Vault.StatusText, Mode=OneWay}"
