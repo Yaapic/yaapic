@@ -1,6 +1,6 @@
 # R-01: ADR 0011, installer and automatic updates
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -30,8 +30,8 @@ Any code, the workflow, store distribution (winget, Homebrew, Flathub: listed as
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0011-distribution-and-updates.md` written and linked from `docs/adr/README.md`.
-- [ ] The Native AOT spike result is recorded (what was tried, version of Velopack, outcome).
+- [x] `docs/adr/0011-distribution-and-updates.md` written and linked from `docs/adr/README.md`.
+- [x] The Native AOT spike result is recorded (what was tried, version of Velopack, outcome).
 
 ## Suggested commit message
 
