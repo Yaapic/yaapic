@@ -1,0 +1,142 @@
+name: Release
+
+# A tag vMAJOR.MINOR.PATCH[-suffix] builds, packs and uploads the installers and the update feed (ADR 0011) to a DRAFT
+# GitHub Release; a maintainer publishes it by hand after a look. A suffix (v1.2.0-preview.1) makes it a pre-release,
+# which is what the "preview" channel of the app reads. Pull requests that touch this file and manual runs are dry runs:
+# everything is built and packed, nothing is downloaded from or uploaded to a release.
+
+on:
+  push:
+    tags: ["v[0-9]+.[0-9]+.[0-9]+*"]
+  pull_request:
+    paths: [".github/workflows/release.yml"]
+  workflow_dispatch:
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  # Pinned: the pack tool and the Velopack package must come from the same release.
+  VPK_VERSION: 1.2.161
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    name: Pack and upload (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      # One OS at a time: the first upload creates the draft release, the next ones merge into it.
+      max-parallel: 1
+      matrix:
+        include:
+          - os: windows-latest
+            rid: win-x64
+            app: src/Yaapic.App.WinUI
+            exe: Yaapic.App.WinUI.exe
+          - os: ubuntu-latest
+            rid: linux-x64
+            app: src/Yaapic.App.Avalonia
+            exe: Yaapic.App.Avalonia
+          - os: macos-latest
+            rid: osx-arm64
+            app: src/Yaapic.App.Avalonia
+            exe: Yaapic.App.Avalonia
+    env:
+      IS_RELEASE: ${{ startsWith(github.ref, 'refs/tags/v') }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # Optional signing material: when a secret is missing the matching step logs "unsigned" and the build carries on.
+      WINDOWS_CERT_BASE64: ${{ secrets.WINDOWS_CERT_BASE64 }}
+      WINDOWS_CERT_PASSWORD: ${{ secrets.WINDOWS_CERT_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-dotnet@v6
+        with:
+          global-json-file: global.json
+
+      - name: Work out the version
+        id: version
+        shell: pwsh
+        run: |
+          if ($env:IS_RELEASE -eq 'true') { $v = $env:GITHUB_REF_NAME.TrimStart('v') } else { $v = "0.0.0-dryrun.$env:GITHUB_RUN_NUMBER" }
+          if ($v -notmatch '^\d+\.\d+\.\d+(-[0-9A-Za-z.-]+)?$') { throw "'$v' is not a valid version." }
+          "version=$v" >> $env:GITHUB_OUTPUT
+          "prerelease=$($v.Contains('-').ToString().ToLowerInvariant())" >> $env:GITHUB_OUTPUT
+          "Version: $v"
+
+      - name: Install native AOT prerequisites (Linux)
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y clang zlib1g-dev
+
+      - name: Cache native script engine sources
+        uses: actions/cache@v4
+        with:
+          path: artifacts/native/_src
+          key: native-src-${{ hashFiles('native/versions.json') }}
+
+      - name: Build native script engines (QuickJS-NG, Lua)
+        shell: pwsh
+        run: ./native/Build-Natives.ps1 -Rid ${{ matrix.rid }}
+
+      - name: Publish with Native AOT
+        run: dotnet publish ${{ matrix.app }} -c Release -r ${{ matrix.rid }} -p:PublishAot=true -p:YaapicVersion=${{ steps.version.outputs.version }} -o publish
+
+      - name: Install vpk
+        run: dotnet tool install -g vpk --version ${{ env.VPK_VERSION }}
+
+      # The previous release is needed for delta packages; the first release has none, so a failure here is fine.
+      - name: Download the previous release (for deltas)
+        if: env.IS_RELEASE == 'true'
+        continue-on-error: true
+        run: vpk download github --repoUrl https://github.com/${{ github.repository }} --token ${{ env.GH_TOKEN }} ${{ steps.version.outputs.prerelease == 'true' && '--pre' || '' }}
+
+      - name: Pack (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $sign = @()
+          if ($env:WINDOWS_CERT_BASE64 -and $env:WINDOWS_CERT_PASSWORD) {
+            [IO.File]::WriteAllBytes('cert.pfx', [Convert]::FromBase64String($env:WINDOWS_CERT_BASE64))
+            $sign = @('--signParams', "/f cert.pfx /p $env:WINDOWS_CERT_PASSWORD /fd sha256 /tr http://timestamp.digicert.com /td sha256")
+            Write-Host 'Signing with the Authenticode certificate.'
+          } else { Write-Host 'No certificate: the Windows installer is unsigned (SmartScreen will warn).' }
+          vpk pack --packId Yaapic --packTitle Yaapic --packVersion ${{ steps.version.outputs.version }} --packDir publish --mainExe ${{ matrix.exe }} @sign
+          if ($LASTEXITCODE -ne 0) { throw 'vpk pack failed.' }
+          Remove-Item cert.pfx -ErrorAction SilentlyContinue
+
+      - name: Pack (Linux and macOS)
+        if: runner.os != 'Windows'
+        run: |
+          echo "The ${{ runner.os }} build is unsigned (no notarization): Gatekeeper or the package manager may warn."
+          vpk pack --packId Yaapic --packTitle Yaapic --packVersion ${{ steps.version.outputs.version }} --packDir publish --mainExe ${{ matrix.exe }}
+
+      - name: Checksums
+        shell: pwsh
+        run: |
+          $sums = Get-ChildItem Releases -File | Where-Object { $_.Name -notlike '*.json' -and $_.Name -ne 'RELEASES' } |
+            ForEach-Object { "$((Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant())  $($_.Name)" }
+          $sums | Set-Content "Releases/SHA256SUMS-${{ matrix.rid }}.txt"
+          $sums
+
+      - name: Upload to the draft release
+        if: env.IS_RELEASE == 'true'
+        run: >
+          vpk upload github --repoUrl https://github.com/${{ github.repository }} --token ${{ env.GH_TOKEN }}
+          --tag ${{ github.ref_name }} --releaseName "Yaapic ${{ steps.version.outputs.version }}" --merge
+          ${{ steps.version.outputs.prerelease == 'true' && '--pre' || '' }}
+
+      - name: Upload the checksums
+        if: env.IS_RELEASE == 'true'
+        run: gh release upload ${{ github.ref_name }} Releases/SHA256SUMS-${{ matrix.rid }}.txt --clobber
+
+      - name: Keep the packages of a dry run
+        if: env.IS_RELEASE != 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: dry-run-${{ matrix.rid }}
+          path: Releases
+          retention-days: 3
+          if-no-files-found: error
