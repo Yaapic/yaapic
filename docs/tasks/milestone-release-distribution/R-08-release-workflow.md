@@ -18,7 +18,7 @@ Pushing a `v*` tag builds, packs and publishes installers and the update feed to
 - Signing steps run only when their secrets exist (`WINDOWS_CERT`, `APPLE_*`); otherwise they log "unsigned" and continue.
 - The published artifacts include a SHA-256 list. `docs/releasing.md` explains how to cut a release, rotate secrets and
   what an unsigned build shows to the user.
-- Pull requests that touch the workflow, and manual runs, are dry runs (version `0.0.0-dryrun.<run>`, no download or upload).
+- Pull requests that touch the workflow, and manual runs, are dry runs (version `0.0.1-dryrun.<run>`, no download or upload).
 - OS jobs run one at a time (`max-parallel: 1`): the first upload creates the draft, the next ones use `--merge`.
 
 ## Out of scope

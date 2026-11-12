@@ -26,7 +26,7 @@ A bad release is withdrawn by deleting (or un-publishing) the GitHub release: ap
 ## Dry run
 
 Changing `release.yml` in a pull request, or running the workflow by hand, builds and packs everything as version
-`0.0.0-dryrun.<run number>` and keeps the packages as a workflow artifact for three days. It never touches a release.
+`0.0.1-dryrun.<run number>` and keeps the packages as a workflow artifact for three days. It never touches a release.
 
 ## Signing
 
