@@ -13,6 +13,7 @@
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <ListView x:Name="ScriptPhases" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
@@ -22,7 +23,13 @@
       </ListView>
       <ComboBox x:Name="ScriptLanguageBox" Grid.Column="1" MinWidth="130" VerticalAlignment="Center"
                 AutomationProperties.Name="{x:Bind loc:Strings.ScriptLanguage}" SelectionChanged="OnScriptLanguageChanged"/>
-      <TextBlock x:Name="Hint" Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+      <Button x:Name="SnippetsButton" Grid.Column="2" VerticalAlignment="Center" Content="{x:Bind loc:Strings.ScriptSnippets}"
+              AutomationProperties.Name="{x:Bind loc:Strings.ScriptSnippets}">
+        <Button.Flyout>
+          <MenuFlyout x:Name="SnippetsMenu" Opening="OnSnippetsOpening"/>
+        </Button.Flyout>
+      </Button>
+      <TextBlock x:Name="Hint" Grid.Column="3" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                  FontSize="{StaticResource YaapicFontSizeCaption}"
                  Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
     </Grid>

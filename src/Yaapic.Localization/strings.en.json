@@ -307,6 +307,8 @@
   "settings.updateChannel": "Update channel",
   "update.status": "Update status",
   "script.hint": "Variables, tests and requests: yaapic.* (JavaScript and Lua)",
+  "script.snippets": "Snippets",
+  "script.snippetsEmpty": "No snippet for this language and phase",
   "vault.lockedHint": "Vault is locked. Unlock it to view or edit secret values.",
   "collections.descriptionPlaceholder": "What is this collection for?",
   "vault.typedEachTimeNote": "You will type it each time you open the workspace",

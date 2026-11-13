@@ -646,6 +646,12 @@ public static class Strings
     /// <summary>Script phase</summary>
     public static string ScriptPhase => Localizer.Pick("Script phase", "Phase du script");
 
+    /// <summary>Snippets</summary>
+    public static string ScriptSnippets => Localizer.Pick("Snippets", "Extraits");
+
+    /// <summary>No snippet for this language and phase</summary>
+    public static string ScriptSnippetsEmpty => Localizer.Pick("No snippet for this language and phase", "Aucun extrait pour ce langage et cette phase");
+
     /// <summary>Canceled</summary>
     public static string ScriptStatusCanceled => Localizer.Pick("Canceled", "Annulé");
 

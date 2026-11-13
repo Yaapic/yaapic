@@ -7,7 +7,7 @@
              x:Class="Yaapic.App.Avalonia.Views.ScriptsEditorView"
              x:DataType="sc:ScriptsEditorViewModel">
   <Grid RowDefinitions="Auto,*">
-    <Grid ColumnDefinitions="Auto,Auto,*" Margin="16,8" ColumnSpacing="12">
+    <Grid ColumnDefinitions="Auto,Auto,Auto,*" Margin="16,8" ColumnSpacing="12">
       <ListBox x:Name="ScriptPhases" Classes="segmented" VerticalAlignment="Center"
                AutomationProperties.Name="{x:Static loc:Strings.ScriptPhase}"
                SelectedIndex="{Binding SelectedPhase, Converter={x:Static p:EditorMap.PhaseIndex}, Mode=OneWay}"
@@ -19,7 +19,13 @@
                 AutomationProperties.Name="{x:Static loc:Strings.ScriptLanguage}"
                 SelectedIndex="{Binding Selected.Language, Converter={x:Static p:EditorMap.LanguageIndex}, Mode=OneWay}"
                 SelectionChanged="OnScriptLanguageChanged" />
-      <TextBlock Grid.Column="2" Classes="bodySmall" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+      <Button x:Name="SnippetsButton" Grid.Column="2" VerticalAlignment="Center" Content="{x:Static loc:Strings.ScriptSnippets}"
+              AutomationProperties.Name="{x:Static loc:Strings.ScriptSnippets}">
+        <Button.Flyout>
+          <MenuFlyout Opening="OnSnippetsOpening" />
+        </Button.Flyout>
+      </Button>
+      <TextBlock Grid.Column="3" Classes="bodySmall" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                  Text="{x:Static loc:Strings.ScriptHint}"
                  Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
     </Grid>

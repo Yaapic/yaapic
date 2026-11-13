@@ -1,6 +1,8 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
+using Yaapic.UI.Abstractions.Editing;
 using Yaapic.ViewModels.Scripting;
 
 namespace Yaapic.App.WinUI.Views;
@@ -25,6 +27,7 @@ public sealed partial class ScriptsEditorView : UserControl
     {
         InitializeComponent();
         Hint.Text = HintText;
+        ScriptEditor.SnippetPhaseSource = CurrentPhase;
         foreach (var choice in ScriptBlockEditorViewModel.Languages)
         {
             ScriptLanguageBox.Items.Add(new ComboBoxItem { Content = choice.Label });
@@ -43,6 +46,33 @@ public sealed partial class ScriptsEditorView : UserControl
     {
         get => (string)GetValue(HintTextProperty);
         set => SetValue(HintTextProperty, value);
+    }
+
+    private ScriptSnippetPhase CurrentPhase() =>
+        ViewModel?.SelectedPhase == ScriptPhase.PostResponse ? ScriptSnippetPhase.PostResponse : ScriptSnippetPhase.PreRequest;
+
+    // The menu lists the snippets of the language and phase being edited; a pick is inserted at the caret.
+    private void OnSnippetsOpening(object sender, object e)
+    {
+        if (ViewModel is not { } vm)
+        {
+            return;
+        }
+
+        SnippetsMenu.Items.Clear();
+        var lua = vm.Selected.Language == ScriptLanguage.Lua;
+        foreach (var snippet in ScriptSnippetCatalogue.For(lua, CurrentPhase()))
+        {
+            var template = snippet.Template(lua)!;
+            var item = new MenuFlyoutItem { Text = snippet.Name };
+            item.Click += (_, _) => ScriptEditor.InsertSnippet(template);
+            SnippetsMenu.Items.Add(item);
+        }
+
+        if (SnippetsMenu.Items.Count == 0)
+        {
+            SnippetsMenu.Items.Add(new MenuFlyoutItem { Text = Strings.ScriptSnippetsEmpty, IsEnabled = false });
+        }
     }
 
     private void OnViewModelChanged()

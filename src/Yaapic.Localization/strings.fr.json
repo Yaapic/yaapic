@@ -307,6 +307,8 @@
   "settings.updateChannel": "Canal de mise à jour",
   "update.status": "État de la mise à jour",
   "script.hint": "Variables, tests et requêtes : yaapic.* (JavaScript et Lua)",
+  "script.snippets": "Extraits",
+  "script.snippetsEmpty": "Aucun extrait pour ce langage et cette phase",
   "vault.lockedHint": "Le coffre est verrouillé. Déverrouillez-le pour afficher ou modifier les valeurs secrètes.",
   "collections.descriptionPlaceholder": "À quoi sert cette collection ?",
   "vault.typedEachTimeNote": "Vous la saisirez à chaque ouverture de l'espace de travail",
