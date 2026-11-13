@@ -1,6 +1,6 @@
 # U-03: Script editor autocompletion
 
-Status: todo
+Status: done (the `pm` API; the `yaapic` names join the catalogue with U-02)
 Platform: any
 Depends on: U-02
 
@@ -26,8 +26,8 @@ standard library.
 
 ## Acceptance criteria
 
-- [ ] Catalogue for JavaScript and Lua with a test comparing it to the engines' real members.
-- [ ] Completion wired in both front-ends for both languages, opened by typing `.` and by Ctrl+Space.
+- [x] Catalogue for JavaScript and Lua with a test comparing it to the engines' real members (`ScriptApiCatalogueTests`).
+- [x] Completion wired in both front-ends for both languages, opened by typing `.` and by Ctrl+Space (WinUI checked in the AOT build; Avalonia built and not driven by hand).
 - [ ] Screenshots of the popup on both front-ends in `docs/screenshots/scripting`.
 
 ## Suggested commit message

@@ -330,6 +330,7 @@
   "environments.manage": "Gérer les environnements...",
   "environments.allCollections": "Toutes les collections",
   "environments.availableIn": "Disponible dans",
+  "variables.suggestInactive": "{0} (inactif)",
   "settings.tagline": "Un client d'API rapide, local d'abord. Sans compte, sans télémétrie.",
   "console.levelLog": "Log",
   "console.levelWarn": "Avert.",

@@ -14,6 +14,9 @@ public sealed class DynamicVariableSource(TimeProvider time, Func<Guid> newGuid,
     {
     }
 
+    /// <summary>Gets the names of the dynamic variables, for completion.</summary>
+    public static IReadOnlyList<string> Names { get; } = ["$guid", "$timestamp", "$isoTimestamp", "$randomInt"];
+
     /// <inheritdoc />
     public bool TryGet(string name, out string value)
     {

@@ -25,6 +25,12 @@ public sealed class FakeVariableScopeProvider : IVariableScopeProvider
     /// <summary>Gets or sets the error returned by <see cref="SetVariableAsync"/>; <see langword="null"/> succeeds.</summary>
     public string? WriteError { get; set; }
 
+    /// <summary>Gets or sets the inactive environments reported by <see cref="GetOtherEnvironments"/>.</summary>
+    public IReadOnlyList<Yaapic.Domain.Environments.EnvironmentDefinition> OtherEnvironments { get; set; } = [];
+
+    /// <inheritdoc/>
+    public IReadOnlyList<Yaapic.Domain.Environments.EnvironmentDefinition> GetOtherEnvironments(Guid requestId) => OtherEnvironments;
+
     /// <inheritdoc/>
     public IReadOnlyList<VariableScopeKind> GetWritableScopes(Guid requestId) => WritableScopes;
 

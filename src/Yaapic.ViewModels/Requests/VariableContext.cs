@@ -1,4 +1,6 @@
 using Yaapic.Core.Variables;
+using Yaapic.Domain.Http;
+using Yaapic.Localization;
 
 namespace Yaapic.ViewModels.Requests;
 
@@ -84,6 +86,52 @@ public sealed class VariableContext
     /// <param name="name">The variable name.</param>
     /// <returns>The hint.</returns>
     public VariableHint Describe(string name) => Describe(_scopes.GetScopes(_requestId), name);
+
+    /// <summary>Lists the variables to offer while the user types <c>{{prefix</c>: those that resolve now, then those of the other available environments.</summary>
+    /// <param name="prefix">What is typed after the braces; matched anywhere in the name, ignoring case. Empty offers everything.</param>
+    /// <returns>The suggestions, names that start with the prefix first; each name appears once.</returns>
+    public IReadOnlyList<VariableSuggestion> Suggest(string prefix)
+    {
+        ArgumentNullException.ThrowIfNull(prefix);
+        var scopes = _scopes.GetScopes(_requestId);
+        HashSet<string> seen = new(StringComparer.Ordinal);
+        List<VariableSuggestion> all = [];
+
+        void Add(IEnumerable<KeyValueEntry>? rows, VariableScopeKind kind, string label, bool active)
+        {
+            foreach (var row in rows ?? [])
+            {
+                if (row.Enabled && row.Key.Length > 0 && seen.Add(row.Key))
+                {
+                    all.Add(new(row.Key, kind, label, row.IsSecret ? "" : Shorten(row.Value), row.IsSecret, active));
+                }
+            }
+        }
+
+        Add(scopes.Local, VariableScopeKind.Local, Strings.VariablesScopeLocal, true);
+        Add(scopes.Environment?.Variables, VariableScopeKind.Environment, scopes.Environment?.Name ?? "", true);
+        Add(scopes.Collection, VariableScopeKind.Collection, Strings.VariablesScopeCollection, true);
+        Add(scopes.Globals, VariableScopeKind.Globals, Strings.VariablesScopeGlobals, true);
+        foreach (var name in DynamicVariableSource.Names)
+        {
+            if (seen.Add(name))
+            {
+                all.Add(new(name, VariableScopeKind.Dynamic, Strings.VariablesScopeDynamic, "", false, true));
+            }
+        }
+
+        foreach (var other in _scopes.GetOtherEnvironments(_requestId))
+        {
+            Add(other.Variables, VariableScopeKind.Environment, Strings.VariablesSuggestInactive(other.Name), false);
+        }
+
+        return prefix.Length == 0
+            ? all
+            : [.. all.Where(s => s.Name.Contains(prefix, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(s => s.Name.StartsWith(prefix, StringComparison.OrdinalIgnoreCase) ? 0 : 1)];
+    }
+
+    private static string Shorten(string value) => value.Length <= 40 ? value : value[..40] + "…";
 
     /// <summary>Creates the popup of a variable.</summary>
     /// <param name="name">The variable name.</param>

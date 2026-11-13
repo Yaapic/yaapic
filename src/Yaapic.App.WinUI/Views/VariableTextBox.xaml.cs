@@ -205,6 +205,7 @@ public sealed partial class VariableTextBox : UserControl
 
         Render();
         CloseIfTokenGone();
+        UpdateCompletion();
     }
 
     private void OnContextChanged(VariableContext? oldValue, VariableContext? newValue)
@@ -216,6 +217,7 @@ public sealed partial class VariableTextBox : UserControl
         }
 
         ClosePopup();
+        CloseCompletion();
         Render();
     }
 
@@ -275,6 +277,7 @@ public sealed partial class VariableTextBox : UserControl
         }
 
         ClosePopup();
+        CloseCompletion();
         Unsubscribe(Context);
         if (_scroller is not null)
         {
@@ -330,7 +333,14 @@ public sealed partial class VariableTextBox : UserControl
         Canvas.SetTop(SelectionOverlay, top);
     }
 
-    private void OnInputSelectionChanged(object sender, RoutedEventArgs e) => RenderSelection();
+    private void OnInputSelectionChanged(object sender, RoutedEventArgs e)
+    {
+        RenderSelection();
+        if (IsCompletionOpen)
+        {
+            UpdateCompletion();
+        }
+    }
 
     private void RenderSelection()
     {
@@ -547,7 +557,17 @@ public sealed partial class VariableTextBox : UserControl
 
     private void OnInputKeyDown(object sender, KeyRoutedEventArgs e)
     {
-        if (e.Key == VirtualKey.Escape && _shown is not null)
+        if (HandleCompletionKey(e))
+        {
+            return;
+        }
+
+        if (e.Key == VirtualKey.Space && IsControlDown())
+        {
+            OpenCompletionManually();
+            e.Handled = true;
+        }
+        else if (e.Key == VirtualKey.Escape && _shown is not null)
         {
             ClosePopup();
             e.Handled = true;
@@ -634,6 +654,7 @@ public sealed partial class VariableTextBox : UserControl
 
     private void OnInputLostFocus(object sender, RoutedEventArgs e)
     {
+        CloseCompletion();
         RenderSelection();
         CloseIfFocusLeft();
     }

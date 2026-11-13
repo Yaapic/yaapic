@@ -14,6 +14,11 @@ public interface IVariableScopeProvider
     /// <returns>The environment, collection and global variables.</returns>
     VariableScopes GetScopes(Guid requestId);
 
+    /// <summary>Gets the environments offered for a request other than the active one, so their variables can be suggested.</summary>
+    /// <param name="requestId">The request being edited.</param>
+    /// <returns>The inactive environments available for the request's collection; none by default.</returns>
+    IReadOnlyList<Yaapic.Domain.Environments.EnvironmentDefinition> GetOtherEnvironments(Guid requestId) => [];
+
     /// <summary>Gets the scopes a variable can be written to for a request.</summary>
     /// <param name="requestId">The request the variable is created for.</param>
     /// <returns>Environment when one is active, Collection when the request is in a collection, and Globals.</returns>
