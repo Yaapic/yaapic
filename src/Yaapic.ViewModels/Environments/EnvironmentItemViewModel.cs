@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Yaapic.Domain.Environments;
 using Yaapic.ViewModels.Editing;
@@ -14,6 +15,10 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
     private string _name;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsDirty), nameof(SelectedCollection))]
+    private Guid? _collectionId;
+
+    [ObservableProperty]
     private bool _isActive;
 
     [ObservableProperty]
@@ -23,6 +28,7 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
     {
         Id = definition.Id;
         _name = definition.Name;
+        _collectionId = definition.CollectionId;
         Variables.Load(definition.Variables);
         Variables.Changed += (_, _) => OnPropertyChanged(nameof(IsDirty));
         _baseline = isSaved ? definition : null;
@@ -35,6 +41,26 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
 
     /// <summary>Gets the variables editor.</summary>
     public KeyValueEditorViewModel Variables { get; } = new() { AllowSecrets = true };
+
+    /// <summary>Gets the collections this environment can be tied to, "all collections" first; set by the list that owns the item.</summary>
+    public ObservableCollection<CollectionChoice> Choices { get; internal set; } = [];
+
+    /// <summary>Gets or sets the "available in" choice; an unknown collection reads as "all collections" so the environment never disappears.</summary>
+    public CollectionChoice? SelectedCollection
+    {
+        get => Choices.FirstOrDefault(c => c.Id == CollectionId) ?? Choices.FirstOrDefault();
+        set
+        {
+            // A ComboBox writes null while its list is being replaced: that is not a choice.
+            if (value is not null)
+            {
+                CollectionId = value.Id;
+            }
+        }
+    }
+
+    /// <summary>Tells the view that <see cref="Choices"/> changed.</summary>
+    internal void RaiseChoicesChanged() => OnPropertyChanged(nameof(SelectedCollection));
 
     /// <summary>Gets a value indicating whether the environment was never saved or differs from its last saved state.</summary>
     public bool IsDirty => _baseline is null || !ToDefinition().IsEquivalentTo(_baseline);
@@ -59,7 +85,7 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
 
     /// <summary>Builds the environment from the current edited values.</summary>
     /// <returns>The definition, saved or not.</returns>
-    public EnvironmentDefinition ToDefinition() => new(Id, Name, Variables.ToEntries());
+    public EnvironmentDefinition ToDefinition() => new(Id, Name, Variables.ToEntries(), CollectionId);
 
     /// <summary>Records the current state as saved.</summary>
     public void MarkSaved()

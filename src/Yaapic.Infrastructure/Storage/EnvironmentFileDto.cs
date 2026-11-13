@@ -11,5 +11,7 @@ internal partial class EnvironmentFileDto
 
     public string? Name { get; set; }
 
+    public string? Collection { get; set; }
+
     public List<KeyValueDto>? Variables { get; set; }
 }

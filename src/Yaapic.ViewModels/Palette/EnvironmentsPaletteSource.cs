@@ -23,7 +23,7 @@ public sealed class EnvironmentsPaletteSource : IPaletteSource
     {
         var active = _environments.ActiveEnvironment;
         List<PaletteItem> items = [Item("environment:none", Strings.PaletteNoEnvironment, active is null, null)];
-        foreach (var environment in _environments.Environments)
+        foreach (var environment in _environments.GetAvailable())
         {
             items.Add(Item($"environment:{environment.Id}", Strings.PaletteUseEnvironment(environment.Name), active == environment, environment));
         }

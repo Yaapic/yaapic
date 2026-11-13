@@ -6,7 +6,8 @@ namespace Yaapic.Domain.Environments;
 /// <param name="Id">The stable identifier.</param>
 /// <param name="Name">The display name.</param>
 /// <param name="Variables">The variables, in order; <see cref="KeyValueEntry.Key"/> is the case-sensitive name.</param>
-public sealed record EnvironmentDefinition(Guid Id, string Name, IReadOnlyList<KeyValueEntry> Variables)
+/// <param name="CollectionId">The collection (top-level folder) this environment is offered in; <see langword="null"/> offers it everywhere.</param>
+public sealed record EnvironmentDefinition(Guid Id, string Name, IReadOnlyList<KeyValueEntry> Variables, Guid? CollectionId = null)
 {
     /// <summary>Creates an empty environment with a new identifier.</summary>
     /// <param name="name">The display name; it is trimmed.</param>
@@ -22,5 +23,5 @@ public sealed record EnvironmentDefinition(Guid Id, string Name, IReadOnlyList<K
     /// <param name="other">The environment to compare with.</param>
     /// <returns><see langword="true"/> when every member is equal.</returns>
     public bool IsEquivalentTo(EnvironmentDefinition other) =>
-        Id == other.Id && Name == other.Name && Variables.SequenceEqual(other.Variables);
+        Id == other.Id && Name == other.Name && CollectionId == other.CollectionId && Variables.SequenceEqual(other.Variables);
 }

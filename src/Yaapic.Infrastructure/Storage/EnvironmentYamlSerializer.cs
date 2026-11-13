@@ -23,10 +23,13 @@ public static class EnvironmentYamlSerializer
             Version = CurrentVersion,
             Id = environment.Id.ToString("D"),
             Name = environment.Name,
+            Collection = environment.CollectionId?.ToString("D"),
             Variables = [.. environment.Variables.Select(v => KeyValueMapper.ToDto(v, true))],
         };
         var yaml = YamlSerializer.SerializeToString(dto).Replace("\r\n", "\n");
-        return KeyValueMapper.StripNullSecret(yaml).TrimEnd('\n') + "\n";
+
+        // An environment tied to no collection omits the key, which keeps existing files unchanged.
+        return KeyValueMapper.StripNullSecret(yaml).Replace("\ncollection: null", "").TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses an environment file.</summary>
@@ -61,9 +64,18 @@ public static class EnvironmentYamlSerializer
             throw new StorageException($"Invalid environment id: '{dto.Id}'");
         }
 
+        Guid? collection = null;
+        if (dto.Collection is not null)
+        {
+            collection = Guid.TryParseExact(dto.Collection, "D", out var parsed)
+                ? parsed
+                : throw new StorageException($"Invalid environment collection id: '{dto.Collection}'");
+        }
+
         return new EnvironmentDefinition(
             id,
             string.IsNullOrWhiteSpace(dto.Name) ? "Untitled" : dto.Name,
-            [.. (dto.Variables ?? []).Select(v => KeyValueMapper.FromDto(v, true))]);
+            [.. (dto.Variables ?? []).Select(v => KeyValueMapper.FromDto(v, true))],
+            collection);
     }
 }

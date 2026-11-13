@@ -328,6 +328,8 @@
   "request.tabParams": "Params",
   "collections.moveTo": "Move to",
   "environments.manage": "Manage environments...",
+  "environments.allCollections": "All collections",
+  "environments.availableIn": "Available in",
   "settings.tagline": "A fast, local-first API client. No account, no telemetry.",
   "console.levelLog": "Log",
   "console.levelWarn": "Warn",

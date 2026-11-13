@@ -57,11 +57,6 @@
                 Command="{x:Bind ViewModel.OpenPaletteCommand}">
           <ic:FluentIcon Icon="Search" IconVariant="Regular" IconSize="Size16"/>
         </Button>
-        <Button Style="{StaticResource YaapicIconButtonStyle}"
-                AutomationProperties.Name="{x:Bind loc:Strings.EnvironmentsTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.EnvironmentsTitleTip}"
-                Click="OnManageEnvironments">
-          <ic:FluentIcon Icon="Globe" IconVariant="Regular" IconSize="Size16"/>
-        </Button>
         <Button x:Name="EnvironmentPill" Style="{StaticResource YaapicPillButtonStyle}"
                 VerticalAlignment="Center"
                 AutomationProperties.Name="{x:Bind loc:Strings.EnvironmentsEnvironment}">

@@ -341,6 +341,12 @@ public static class Strings
     /// <summary>active</summary>
     public static string EnvironmentsActive => Localizer.Pick("active", "actif");
 
+    /// <summary>All collections</summary>
+    public static string EnvironmentsAllCollections => Localizer.Pick("All collections", "Toutes les collections");
+
+    /// <summary>Available in</summary>
+    public static string EnvironmentsAvailableIn => Localizer.Pick("Available in", "Disponible dans");
+
     /// <summary>Environment</summary>
     public static string EnvironmentsEnvironment => Localizer.Pick("Environment", "Environnement");
 

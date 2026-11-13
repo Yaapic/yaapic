@@ -154,10 +154,6 @@
                       Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
                       IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
             </Grid>
-            <Button Classes="icon rail" HorizontalAlignment="Center" Click="OnManageEnvironments"
-                    ToolTip.Tip="{x:Static loc:Strings.EnvironmentsTitleTip}" AutomationProperties.Name="{x:Static loc:Strings.EnvironmentsTitle}">
-              <PathIcon Data="{StaticResource YiEnvironment}" />
-            </Button>
             <Button Classes="icon rail" HorizontalAlignment="Center" Command="{Binding OpenPaletteCommand}"
                     ToolTip.Tip="{x:Static loc:Strings.PaletteTitleTip}" AutomationProperties.Name="{x:Static loc:Strings.PaletteTitle}">
               <PathIcon Data="{StaticResource YiSearch}" />

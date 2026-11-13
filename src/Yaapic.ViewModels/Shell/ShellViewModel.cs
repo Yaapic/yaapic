@@ -110,6 +110,18 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         tabs.SessionChanged += (_, _) => QueueSave();
         tabs.RequestSaved += (_, _) => QueueSave();
         environments.ActiveEnvironmentChanged += (_, _) => QueueSave();
+        tabs.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(TabsViewModel.ActiveTab))
+            {
+                UpdateEnvironmentScope();
+            }
+        };
+        collections.Refreshed += (_, _) =>
+        {
+            environments.SetCollections(collections.Tree.Where(static n => n.Folder is not null).Select(static n => n.Folder!));
+            UpdateEnvironmentScope();
+        };
     }
 
     /// <summary>Gets the open tabs.</summary>
@@ -220,6 +232,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
             Tabs.NewTab();
         }
 
+        UpdateEnvironmentScope();
         _initialized = true;
 
         // Never awaited: the check must not delay start-up, and it cannot throw.
@@ -273,6 +286,10 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         await Globals.LoadAsync();
         await Collections.RefreshAsync();
     }
+
+    // Environments are offered by the collection of the request being worked on.
+    private void UpdateEnvironmentScope() =>
+        Environments.SetScope(Tabs.ActiveTab is { } tab ? Collections.FindCollection(tab.Id)?.Id : null);
 
     [RelayCommand]
     private void ToggleConsole() => IsConsoleOpen = !IsConsoleOpen;
