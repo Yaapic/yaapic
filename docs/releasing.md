@@ -16,6 +16,9 @@ Decisions: [ADR 0011](adr/0011-distribution-and-updates.md). The workflow is `.g
    Before tagging, rewrite `RELEASE_NOTES.md` at the repo root for this release: `vpk pack --releaseNotes` embeds it in the
    packages and installed apps show it in "Updates and about" when the update is offered.
 
+   The file holds one section per language, each starting at a line `<!-- lang:en -->` or `<!-- lang:fr -->`; the app shows the
+   section of its interface language (English when that language has none). The GitHub release shows both.
+
 3. The workflow runs on Windows, Linux and macOS, one after the other. Each one builds the native script engines, publishes the
    app with Native AOT (`-p:YaapicVersion=<tag without v>`), packs it with `vpk` and uploads the packages to a release, published at once (a pre-release when the tag has a `-preview` suffix)
    named `Yaapic <version>`: Windows `Setup.exe` and portable zip, the macOS bundle package, the Linux AppImage, the full and delta
