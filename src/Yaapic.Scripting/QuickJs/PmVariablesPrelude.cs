@@ -1,6 +1,6 @@
 namespace Yaapic.Scripting.QuickJs;
 
-/// <summary>The JavaScript <c>pm</c> prelude, part 1: <c>pm.info</c>, the variable scopes, the legacy <c>postman</c> aliases and the unsupported stubs.</summary>
+/// <summary>The JavaScript <c>yaapic</c> prelude, part 1: <c>yaapic.info</c>, the variable scopes, the legacy <c>postman</c> aliases and the unsupported stubs.</summary>
 internal static class PmVariablesPrelude
 {
     /// <summary>The prelude source, evaluated as its own script after <see cref="JsPrelude.Core"/>.</summary>
@@ -99,38 +99,37 @@ internal static class PmVariablesPrelude
 
           const scope = (label, name, write) => Object.freeze(new VariableScope(label, name, write));
           const info = host('info.get');
-          const pm = {};
+          const yaapic = {};
           const define = (target, name, value) =>
             Object.defineProperty(target, name, { value, enumerable: true });
 
-          define(pm, 'info', Object.freeze({
+          define(yaapic, 'info', Object.freeze({
             eventName: info.eventName,
             requestName: info.requestName,
             requestId: info.requestId,
             iteration: 0,
             iterationCount: 1,
           }));
-          define(pm, 'variables', scope('pm.variables', 'layered', 'local'));
-          const environment = scope('pm.environment', 'environment', 'environment');
-          const collectionVariables = scope('pm.collectionVariables', 'collection', 'collection');
-          const globals = scope('pm.globals', 'globals', 'globals');
-          // pm.environment.name is not exposed in v1: wrap the frozen scope so that the member throws.
-          define(pm, 'environment', new Proxy(environment, {
+          define(yaapic, 'variables', scope('yaapic.variables', 'layered', 'local'));
+          const environment = scope('yaapic.environment', 'environment', 'environment');
+          const collectionVariables = scope('yaapic.collectionVariables', 'collection', 'collection');
+          const globals = scope('yaapic.globals', 'globals', 'globals');
+          // yaapic.environment.name is not exposed in v1: wrap the frozen scope so that the member throws.
+          define(yaapic, 'environment', new Proxy(environment, {
             get: (target, member, receiver) => {
               if (member === 'name') {
-                throw new Error('pm.environment.name is not supported in Yaapic');
+                throw new Error('yaapic.environment.name is not supported in Yaapic');
               }
               const value = Reflect.get(target, member, target);
               return typeof value === 'function' ? value.bind(target) : value;
             },
           }));
-          define(pm, 'collectionVariables', collectionVariables);
-          define(pm, 'globals', globals);
+          define(yaapic, 'collectionVariables', collectionVariables);
+          define(yaapic, 'globals', globals);
           for (const name of ['execution', 'iterationData', 'vault', 'visualizer', 'require']) {
-            define(pm, name, unsupported('pm.' + name));
+            define(yaapic, name, unsupported('yaapic.' + name));
           }
-          Object.defineProperty(globalThis, 'pm', { value: pm, writable: false, configurable: false });
-          Object.defineProperty(globalThis, 'yaapic', { value: pm, writable: false, configurable: false });
+          Object.defineProperty(globalThis, 'yaapic', { value: yaapic, writable: false, configurable: false });
 
           const postman = {};
           define(postman, 'setEnvironmentVariable', (key, value) => environment.set(key, value));

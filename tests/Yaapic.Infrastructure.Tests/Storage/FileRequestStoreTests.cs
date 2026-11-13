@@ -41,7 +41,7 @@ public sealed class FileRequestStoreTests : IDisposable
         var request = HttpRequestDefinition.Create("Scripted") with
         {
             Scripts = new ScriptSet(
-                new ScriptBlock(ScriptLanguage.JavaScript, "pm.environment.set(\"a\", \"1\");\n"),
+                new ScriptBlock(ScriptLanguage.JavaScript, "yaapic.environment.set(\"a\", \"1\");\n"),
                 new ScriptBlock(ScriptLanguage.Lua, "print(\"é\")\n")),
         };
         await store.SaveAsync(request, CancellationToken.None);

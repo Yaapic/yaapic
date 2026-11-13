@@ -63,7 +63,7 @@ scripts:               # optional on read, see ADR 0009
   preRequest:
     language: javascript   # javascript | lua
     source: |
-      pm.environment.set("ts", Date.now().toString());
+      yaapic.environment.set("ts", Date.now().toString());
   postResponse:
     language: javascript
     source: ""

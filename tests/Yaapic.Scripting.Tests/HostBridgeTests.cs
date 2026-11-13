@@ -281,7 +281,7 @@ public class HostBridgeTests
     public void Unsupported_names_the_member()
     {
         var (bridge, _, _) = Create();
-        Assert.Equal("pm.vault is not supported in Yaapic", Err(bridge.Invoke(HostOps.Unsupported, "\"vault\"")));
+        Assert.Equal("yaapic.vault is not supported in Yaapic", Err(bridge.Invoke(HostOps.Unsupported, "\"vault\"")));
     }
 
     [Theory]

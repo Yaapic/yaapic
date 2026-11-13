@@ -5,7 +5,7 @@ using Yaapic.Scripting.QuickJs;
 
 namespace Yaapic.Scripting.Tests;
 
-/// <summary>The JavaScript <c>pm.request</c> and <c>pm.response</c>, on the real QuickJS engine over a real <see cref="ScriptRequest"/>.</summary>
+/// <summary>The JavaScript <c>yaapic.request</c> and <c>yaapic.response</c>, on the real QuickJS engine over a real <see cref="ScriptRequest"/>.</summary>
 public sealed class PmRequestResponseTests
 {
     internal const string Origin = "pre-request · Users API";
@@ -62,8 +62,8 @@ public sealed class PmRequestResponseTests
     [Fact]
     public async Task Method_is_read_and_set_in_upper_case()
     {
-        Assert.Equal("\"GET\"", await Eval("pm.request.method"));
-        var (result, request) = await Run("pm.request.method = 'post';");
+        Assert.Equal("\"GET\"", await Eval("yaapic.request.method"));
+        var (result, request) = await Run("yaapic.request.method = 'post';");
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal("POST", request.ApplyTo(Definition()).Method.ToText());
@@ -72,35 +72,35 @@ public sealed class PmRequestResponseTests
     [Fact]
     public async Task Id_and_name_come_from_the_request_info()
     {
-        Assert.Equal($"[\"{RequestId}\",\"Users API\"]", await Eval("[pm.request.id, pm.request.name]"));
+        Assert.Equal($"[\"{RequestId}\",\"Users API\"]", await Eval("[yaapic.request.id, yaapic.request.name]"));
     }
 
     [Fact]
     public async Task Url_exposes_its_parts()
     {
-        Assert.Equal("\"https://api.example.com:8443/v1/users?page=1&q=a%20b#top\"", await Eval("pm.request.url.toString()"));
+        Assert.Equal("\"https://api.example.com:8443/v1/users?page=1&q=a%20b#top\"", await Eval("yaapic.request.url.toString()"));
         Assert.Equal(
             "[\"https\",[\"api\",\"example\",\"com\"],\"8443\",[\"v1\",\"users\"],\"api.example.com\",\"/v1/users\",\"/v1/users?page=1&q=a%20b\",\"page=1&q=a%20b\",\"top\"]",
-            await Eval("(() => { const u = pm.request.url; return [u.protocol, u.host, u.port, u.path, u.getHost(), u.getPath(), u.getPathWithQuery(), u.getQueryString(), u.hash]; })()"));
+            await Eval("(() => { const u = yaapic.request.url; return [u.protocol, u.host, u.port, u.path, u.getHost(), u.getPath(), u.getPathWithQuery(), u.getQueryString(), u.hash]; })()"));
         Assert.Equal(
             "[[{\"key\":\"page\",\"value\":\"1\"},{\"key\":\"q\",\"value\":\"a b\"}],2,\"a b\",true,false,{\"page\":\"1\",\"q\":\"a b\"}]",
-            await Eval("(() => { const q = pm.request.url.query; return [q.all(), q.count(), q.get('q'), q.has('page'), q.has('nope'), q.toObject()]; })()"));
+            await Eval("(() => { const q = yaapic.request.url.query; return [q.all(), q.count(), q.get('q'), q.has('page'), q.has('nope'), q.toObject()]; })()"));
     }
 
     [Fact]
     public async Task Url_with_variables_survives_untouched()
     {
         const string Url = "{{base}}/users/{{id}}?a={{x}}&b=1#f";
-        Assert.Equal($"\"{Url}\"", await Eval("pm.request.url.toString()", Definition(Url)));
+        Assert.Equal($"\"{Url}\"", await Eval("yaapic.request.url.toString()", Definition(Url)));
         Assert.Equal(
             "[[\"{{base}}\"],\"\",\"{{x}}\"]",
-            await Eval("(() => { const u = pm.request.url; return [u.host, u.port, u.query.get('a')]; })()", Definition(Url)));
+            await Eval("(() => { const u = yaapic.request.url; return [u.host, u.port, u.query.get('a')]; })()", Definition(Url)));
     }
 
     [Fact]
     public async Task Url_set_and_update_reach_the_applied_definition()
     {
-        var (result, request) = await Run("pm.request.url = 'https://other.test/x?y=2'; pm.request.url.update('{{base}}/z?k=v#frag');");
+        var (result, request) = await Run("yaapic.request.url = 'https://other.test/x?y=2'; yaapic.request.url.update('{{base}}/z?k=v#frag');");
 
         Assert.True(result.Succeeded, result.Error?.Message);
         var applied = request.ApplyTo(Definition());
@@ -111,7 +111,7 @@ public sealed class PmRequestResponseTests
     [Fact]
     public async Task Url_set_accepts_a_url_object()
     {
-        var (result, request) = await Run("const u = pm.request.url; u.query.add({ key: 'n', value: '1' }); pm.request.url = u;");
+        var (result, request) = await Run("const u = yaapic.request.url; u.query.add({ key: 'n', value: '1' }); yaapic.request.url = u;");
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Contains(new KeyValueEntry("n", "1"), request.ApplyTo(Definition()).QueryParams);
@@ -121,7 +121,7 @@ public sealed class PmRequestResponseTests
     public async Task Query_add_upsert_and_remove_are_applied_with_variables_and_fragment()
     {
         var (result, request) = await Run(
-            "const q = pm.request.url.query; q.add({ key: 'new', value: 'a b&c' }); q.upsert({ key: 'page', value: '2' }); q.upsert({ key: 'tok', value: '{{token}}' }); q.remove('q');",
+            "const q = yaapic.request.url.query; q.add({ key: 'new', value: 'a b&c' }); q.upsert({ key: 'page', value: '2' }); q.upsert({ key: 'tok', value: '{{token}}' }); q.remove('q');",
             Definition("{{base}}/v1?page=1&q=x#top"));
 
         Assert.True(result.Succeeded, result.Error?.Message);
@@ -134,7 +134,7 @@ public sealed class PmRequestResponseTests
     [Fact]
     public async Task Url_part_setters_rebuild_the_url()
     {
-        var (result, request) = await Run("const u = pm.request.url; u.protocol = 'http'; u.host = ['svc', 'test']; u.port = 80; u.path = ['a', 'b']; u.hash = 'x';");
+        var (result, request) = await Run("const u = yaapic.request.url; u.protocol = 'http'; u.host = ['svc', 'test']; u.port = 80; u.path = ['a', 'b']; u.hash = 'x';");
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal("http://svc.test:80/a/b?page=1&q=a%20b#x", request.Url);
@@ -145,10 +145,10 @@ public sealed class PmRequestResponseTests
     {
         Assert.Equal(
             "[\"application/json\",true,false,3,{\"Accept\":\"application/json\",\"X-Old\":\"1\"},{\"key\":\"X-Old\",\"value\":\"1\"}]",
-            await Eval("(() => { const h = pm.request.headers; return [h.get('ACCEPT'), h.has('x-old'), h.has('X-Off'), h.count(), h.toObject(), h.idx(1)]; })()"));
+            await Eval("(() => { const h = yaapic.request.headers; return [h.get('ACCEPT'), h.has('x-old'), h.has('X-Off'), h.count(), h.toObject(), h.idx(1)]; })()"));
 
         var (result, request) = await Run(
-            "const h = pm.request.headers; h.add({ key: 'X-New', value: 'n' }); h.upsert({ key: 'accept', value: 'text/plain' }); h.remove('X-OLD'); const keys = []; h.each((i) => keys.push(i.key)); console.log(keys.join());");
+            "const h = yaapic.request.headers; h.add({ key: 'X-New', value: 'n' }); h.upsert({ key: 'accept', value: 'text/plain' }); h.remove('X-OLD'); const keys = []; h.each((i) => keys.push(i.key)); console.log(keys.join());");
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal("accept,X-Off,X-New", Assert.Single(result.Console).Message);
@@ -158,7 +158,7 @@ public sealed class PmRequestResponseTests
     [Fact]
     public async Task Raw_body_is_set_and_the_mode_switched()
     {
-        var (result, request) = await Run("pm.request.body.mode = 'raw'; pm.request.body.raw = '{\"a\":1}'; console.log(pm.request.body.mode, pm.request.body.toString());");
+        var (result, request) = await Run("yaapic.request.body.mode = 'raw'; yaapic.request.body.raw = '{\"a\":1}'; console.log(yaapic.request.body.mode, yaapic.request.body.toString());");
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal("raw {\"a\":1}", Assert.Single(result.Console).Message);
@@ -172,7 +172,7 @@ public sealed class PmRequestResponseTests
     {
         var original = Definition(body: RequestBody.UrlEncoded([new("a", "1"), new("b", "2")]));
         var (result, request) = await Run(
-            "const u = pm.request.body.urlencoded; u.add({ key: 'c', value: '3' }); u.upsert({ key: 'a', value: 'x' }); u.remove('b'); console.log(JSON.stringify(u.toObject()));",
+            "const u = yaapic.request.body.urlencoded; u.add({ key: 'c', value: '3' }); u.upsert({ key: 'a', value: 'x' }); u.remove('b'); console.log(JSON.stringify(u.toObject()));",
             original);
 
         Assert.True(result.Succeeded, result.Error?.Message);
@@ -184,15 +184,15 @@ public sealed class PmRequestResponseTests
     public async Task Formdata_is_read_only_and_its_mode_cannot_be_set()
     {
         var original = Definition(body: RequestBody.FormData([new("f", "v")]));
-        Assert.Equal("[\"formdata\",{\"f\":\"v\"}]", await Eval("[pm.request.body.mode, pm.request.body.formdata.toObject()]", original));
+        Assert.Equal("[\"formdata\",{\"f\":\"v\"}]", await Eval("[yaapic.request.body.mode, yaapic.request.body.formdata.toObject()]", original));
 
         var (result, request) = await Run(
-            "const out = []; for (const f of [() => pm.request.body.formdata.add({ key: 'x', value: 'y' }), () => { pm.request.body.mode = 'formdata'; }, () => { pm.request.body.mode = 'binary'; }, () => { pm.request.body.mode = 'bogus'; }]) { try { f(); } catch (e) { out.push(e.message); } } console.log(out.join('|'));",
+            "const out = []; for (const f of [() => yaapic.request.body.formdata.add({ key: 'x', value: 'y' }), () => { yaapic.request.body.mode = 'formdata'; }, () => { yaapic.request.body.mode = 'binary'; }, () => { yaapic.request.body.mode = 'bogus'; }]) { try { f(); } catch (e) { out.push(e.message); } } console.log(out.join('|'));",
             original);
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal(
-            "pm.request.body.formdata is read-only|pm.request.body mode 'formdata' cannot be set from a script|pm.request.body mode 'binary' cannot be set from a script|pm.request.body mode 'bogus' is not valid",
+            "yaapic.request.body.formdata is read-only|yaapic.request.body mode 'formdata' cannot be set from a script|yaapic.request.body mode 'binary' cannot be set from a script|yaapic.request.body mode 'bogus' is not valid",
             Assert.Single(result.Console).Message);
         Assert.Equal("formdata", request.BodyMode);
     }
@@ -203,15 +203,15 @@ public sealed class PmRequestResponseTests
         var (result, request) = await Run(
             """
             const attempts = [
-              () => { pm.request.method = 'POST'; },
-              () => { pm.request.url = 'http://x'; },
-              () => pm.request.url.update('http://x'),
-              () => pm.request.url.query.add({ key: 'a', value: 'b' }),
-              () => pm.request.headers.add({ key: 'a', value: 'b' }),
-              () => pm.request.headers.remove('Accept'),
-              () => { pm.request.body.mode = 'raw'; },
-              () => { pm.request.body.raw = 'x'; },
-              () => pm.request.body.urlencoded.add({ key: 'a', value: 'b' }),
+              () => { yaapic.request.method = 'POST'; },
+              () => { yaapic.request.url = 'http://x'; },
+              () => yaapic.request.url.update('http://x'),
+              () => yaapic.request.url.query.add({ key: 'a', value: 'b' }),
+              () => yaapic.request.headers.add({ key: 'a', value: 'b' }),
+              () => yaapic.request.headers.remove('Accept'),
+              () => { yaapic.request.body.mode = 'raw'; },
+              () => { yaapic.request.body.raw = 'x'; },
+              () => yaapic.request.body.urlencoded.add({ key: 'a', value: 'b' }),
             ];
             const messages = new Set();
             for (const attempt of attempts) {
@@ -223,7 +223,7 @@ public sealed class PmRequestResponseTests
             readOnly: true);
 
         Assert.True(result.Succeeded, result.Error?.Message);
-        Assert.Equal("pm.request is read-only in post-response scripts", Assert.Single(result.Console).Message);
+        Assert.Equal("yaapic.request is read-only in post-response scripts", Assert.Single(result.Console).Message);
         var untouched = ScriptRequest.FromDefinition(Definition(), true);
         Assert.Equal(untouched.Url, request.Url);
         Assert.Equal(untouched.Method, request.Method);
@@ -234,17 +234,17 @@ public sealed class PmRequestResponseTests
     [Fact]
     public async Task Reading_the_request_works_in_post_response()
     {
-        Assert.Equal("[\"GET\",\"application/json\"]", await Eval("[pm.request.method, pm.request.headers.get('accept')]", response: Response("{}")));
+        Assert.Equal("[\"GET\",\"application/json\"]", await Eval("[yaapic.request.method, yaapic.request.headers.get('accept')]", response: Response("{}")));
     }
 
     [Fact]
     public async Task Request_auth_and_certificate_are_unsupported()
     {
-        var (result, _) = await Run("try { pm.request.auth.type; } catch (e) { console.log(e.message); } try { pm.request.certificate; pm.request.certificate.x; } catch (e) { console.log(e.message); }");
+        var (result, _) = await Run("try { yaapic.request.auth.type; } catch (e) { console.log(e.message); } try { yaapic.request.certificate; yaapic.request.certificate.x; } catch (e) { console.log(e.message); }");
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal(
-            ["pm.request.auth.type is not supported in Yaapic", "pm.request.certificate.x is not supported in Yaapic"],
+            ["yaapic.request.auth.type is not supported in Yaapic", "yaapic.request.certificate.x is not supported in Yaapic"],
             result.Console.Select(c => c.Message));
     }
 
@@ -254,8 +254,8 @@ public sealed class PmRequestResponseTests
         var response = Response("{\"id\":7,\"tags\":[\"a\"]}");
         Assert.Equal(
             "[200,\"OK\",\"OK\",42,21,{\"body\":21,\"header\":0,\"total\":21},\"{\\\"id\\\":7,\\\"tags\\\":[\\\"a\\\"]}\",{\"id\":7,\"tags\":[\"a\"]}]",
-            await Eval("[pm.response.code, pm.response.status, pm.response.reason(), pm.response.responseTime, pm.response.responseSize, pm.response.size(), pm.response.text(), pm.response.json()]", response: response));
-        Assert.Equal("14", await Eval("pm.response.json((k, v) => (k === 'id' ? v * 2 : v)).id", response: response));
+            await Eval("[yaapic.response.code, yaapic.response.status, yaapic.response.reason(), yaapic.response.responseTime, yaapic.response.responseSize, yaapic.response.size(), yaapic.response.text(), yaapic.response.json()]", response: response));
+        Assert.Equal("14", await Eval("yaapic.response.json((k, v) => (k === 'id' ? v * 2 : v)).id", response: response));
     }
 
     [Fact]
@@ -263,18 +263,18 @@ public sealed class PmRequestResponseTests
     {
         var response = Response("{}");
         Assert.Equal(
-            "[\"application/json\",\"a=1\",true,3,\"pm.response.headers is read-only\"]",
+            "[\"application/json\",\"a=1\",true,3,\"yaapic.response.headers is read-only\"]",
             await Eval(
-                "(() => { const h = pm.response.headers; let err; try { h.add({ key: 'a', value: 'b' }); } catch (e) { err = e.message; } return [h.get('content-type'), h.get('SET-COOKIE'), h.has('Content-Type'), h.count(), err]; })()",
+                "(() => { const h = yaapic.response.headers; let err; try { h.add({ key: 'a', value: 'b' }); } catch (e) { err = e.message; } return [h.get('content-type'), h.get('SET-COOKIE'), h.has('Content-Type'), h.count(), err]; })()",
                 response: response));
     }
 
     [Fact]
     public async Task Response_text_and_empty_and_binary_bodies()
     {
-        Assert.Equal("[\"hello\",404,\"Not Found\"]", await Eval("[pm.response.text(), pm.response.code, pm.response.status]", response: Response("hello", "text/plain", 404)));
-        Assert.Equal("[\"\",0]", await Eval("[pm.response.text(), pm.response.size().body]", response: Response("", "text/plain")));
-        Assert.Equal("[\"\",2048]", await Eval("[pm.response.text(), pm.response.responseSize]", response: Response("", "image/png", padding: 2048)));
+        Assert.Equal("[\"hello\",404,\"Not Found\"]", await Eval("[yaapic.response.text(), yaapic.response.code, yaapic.response.status]", response: Response("hello", "text/plain", 404)));
+        Assert.Equal("[\"\",0]", await Eval("[yaapic.response.text(), yaapic.response.size().body]", response: Response("", "text/plain")));
+        Assert.Equal("[\"\",2048]", await Eval("[yaapic.response.text(), yaapic.response.responseSize]", response: Response("", "image/png", padding: 2048)));
     }
 
     [Theory]
@@ -284,7 +284,7 @@ public sealed class PmRequestResponseTests
     public async Task Invalid_json_throws_with_the_parser_message(string text, string contentType)
     {
         var (result, _) = await Run(
-            "try { pm.response.json(); } catch (e) { console.log(e.message); }",
+            "try { yaapic.response.json(); } catch (e) { console.log(e.message); }",
             response: Response(text, contentType),
             readOnly: true);
 
@@ -295,10 +295,10 @@ public sealed class PmRequestResponseTests
     [Fact]
     public async Task Response_in_pre_request_throws()
     {
-        var (result, _) = await Run("pm.response.code;");
+        var (result, _) = await Run("yaapic.response.code;");
 
         Assert.False(result.Succeeded);
-        Assert.Equal("pm.response is only available in post-response scripts", result.Error?.Message);
+        Assert.Equal("yaapic.response is only available in post-response scripts", result.Error?.Message);
     }
 
     internal sealed class TestHost(ScriptRequest request, ScriptResponse? response, ScriptInfo info) : IScriptHost

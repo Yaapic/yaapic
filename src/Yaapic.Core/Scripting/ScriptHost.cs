@@ -11,11 +11,11 @@ internal sealed class ScriptHost(
     Func<ScriptRequest, CancellationToken, ScriptSendResult>? send = null) : IScriptHost
 {
     private readonly Func<ScriptRequest, CancellationToken, ScriptSendResult> _send =
-        send ?? ((_, _) => new ScriptSendResult(null, "pm.sendRequest is not available yet"));
+        send ?? ((_, _) => new ScriptSendResult(null, "yaapic.sendRequest is not available yet"));
 
     /// <summary>
     /// Gets or sets the token observed by <see cref="Send"/>. <see cref="ScriptedRequestSender"/> sets it to the send's token;
-    /// an engine replaces it with a token linked to its timeout so that a blocked <c>pm.sendRequest</c> is interrupted.
+    /// an engine replaces it with a token linked to its timeout so that a blocked <c>yaapic.sendRequest</c> is interrupted.
     /// </summary>
     public CancellationToken CancellationToken { get; set; }
 

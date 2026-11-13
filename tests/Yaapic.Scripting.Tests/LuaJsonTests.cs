@@ -25,7 +25,7 @@ public sealed class LuaJsonTests
 
     // Decodes the text and prints it re-encoded (keys sorted) or the decode error.
     private static Task<string> Decoded(string json) =>
-        Eval($"(function() local ok, v = pcall(pm.json.decode, [==[{json}]==]) return ok and pm.json.encode(v) or v end)()");
+        Eval($"(function() local ok, v = pcall(yaapic.json.decode, [==[{json}]==]) return ok and yaapic.json.encode(v) or v end)()");
 
     [Theory]
     [InlineData("[]", "[]")]
@@ -65,7 +65,7 @@ public sealed class LuaJsonTests
 
     [Fact]
     public async Task Control_characters_in_strings_are_rejected() =>
-        Assert.StartsWith("invalid JSON at position 4: control character", await Eval("(function() local ok, e = pcall(pm.json.decode, '[\"a\\nb\"]') return e end)()"), StringComparison.Ordinal);
+        Assert.StartsWith("invalid JSON at position 4: control character", await Eval("(function() local ok, e = pcall(yaapic.json.decode, '[\"a\\nb\"]') return e end)()"), StringComparison.Ordinal);
 
     [Fact]
     public async Task Depth_100_decodes_and_depth_101_fails()
@@ -79,13 +79,13 @@ public sealed class LuaJsonTests
     {
         Assert.Equal(
             "integer float float float integer float",
-            await Eval("table.concat({ math.type(pm.json.decode('1')), math.type(pm.json.decode('1.0')), math.type(pm.json.decode('1e2')), math.type(pm.json.decode('9223372036854775808')), math.type(pm.json.decode('-5')), math.type(pm.json.decode('-1.5')) }, ' ')"));
+            await Eval("table.concat({ math.type(yaapic.json.decode('1')), math.type(yaapic.json.decode('1.0')), math.type(yaapic.json.decode('1e2')), math.type(yaapic.json.decode('9223372036854775808')), math.type(yaapic.json.decode('-5')), math.type(yaapic.json.decode('-1.5')) }, ' ')"));
     }
 
     [Fact]
     public async Task Arrays_keep_their_length_with_trailing_nulls_and_null_is_the_sentinel()
     {
-        var text = await Eval("(function() local a = pm.json.decode('[1,null,null]') return a.n .. ' ' .. tostring(a[3]) .. ' ' .. tostring(a[3] == pm.null) .. ' ' .. pm.json.decode('[]').n end)()");
+        var text = await Eval("(function() local a = yaapic.json.decode('[1,null,null]') return a.n .. ' ' .. tostring(a[3]) .. ' ' .. tostring(a[3] == yaapic.null) .. ' ' .. yaapic.json.decode('[]').n end)()");
 
         Assert.Equal("3 null true 0", text);
     }
@@ -93,32 +93,32 @@ public sealed class LuaJsonTests
     [Fact]
     public async Task The_null_sentinel_is_frozen()
     {
-        Assert.Contains("read-only", await Eval("select(2, pcall(function() pm.null.x = 1 end))"), StringComparison.Ordinal);
+        Assert.Contains("read-only", await Eval("select(2, pcall(function() yaapic.null.x = 1 end))"), StringComparison.Ordinal);
     }
 
     [Theory]
-    [InlineData("pm.json.encode({ 1, 2, 3 })", "[1,2,3]")]
-    [InlineData("pm.json.encode({})", "{}")]
-    [InlineData("pm.json.encode(pm.json.array())", "[]")]
-    [InlineData("pm.json.encode({ b = 1, a = { 'x', pm.null, true } })", """{"a":["x",null,true],"b":1}""")]
-    [InlineData("pm.json.encode({ [5] = 'a', [10] = 'b' })", """{"10":"b","5":"a"}""")]
-    [InlineData("pm.json.encode('a\"\\\\\\n\\1é😀')", "\"a\\\"\\\\\\n\\u0001é😀\"")]
-    [InlineData("pm.json.encode(1.5)", "1.5")]
-    [InlineData("pm.json.encode(0.1)", "0.1")]
-    [InlineData("pm.json.encode(1 / 3)", "0.3333333333333333")]
-    [InlineData("pm.json.encode(-0.0)", "-0")]
-    [InlineData("pm.json.encode(math.maxinteger)", "9223372036854775807")]
-    [InlineData("pm.json.encode(nil)", "null")]
+    [InlineData("yaapic.json.encode({ 1, 2, 3 })", "[1,2,3]")]
+    [InlineData("yaapic.json.encode({})", "{}")]
+    [InlineData("yaapic.json.encode(yaapic.json.array())", "[]")]
+    [InlineData("yaapic.json.encode({ b = 1, a = { 'x', yaapic.null, true } })", """{"a":["x",null,true],"b":1}""")]
+    [InlineData("yaapic.json.encode({ [5] = 'a', [10] = 'b' })", """{"10":"b","5":"a"}""")]
+    [InlineData("yaapic.json.encode('a\"\\\\\\n\\1é😀')", "\"a\\\"\\\\\\n\\u0001é😀\"")]
+    [InlineData("yaapic.json.encode(1.5)", "1.5")]
+    [InlineData("yaapic.json.encode(0.1)", "0.1")]
+    [InlineData("yaapic.json.encode(1 / 3)", "0.3333333333333333")]
+    [InlineData("yaapic.json.encode(-0.0)", "-0")]
+    [InlineData("yaapic.json.encode(math.maxinteger)", "9223372036854775807")]
+    [InlineData("yaapic.json.encode(nil)", "null")]
     public async Task Encode_produces_compact_json(string expression, string expected) => Assert.Equal(expected, await Eval(expression));
 
     [Theory]
-    [InlineData("pm.json.encode({ 1, 2, a = 3 })", "cannot encode mixed table")]
-    [InlineData("pm.json.encode(0/0)", "cannot encode")]
-    [InlineData("pm.json.encode(math.huge)", "cannot encode inf")]
-    [InlineData("pm.json.encode(print)", "cannot encode function")]
-    [InlineData("pm.json.encode(coroutine.create(print))", "cannot encode thread")]
-    [InlineData("pm.json.encode('\\xff')", "cannot encode invalid UTF-8")]
-    [InlineData("pm.json.encode({ [true] = 1 })", "cannot encode boolean key")]
+    [InlineData("yaapic.json.encode({ 1, 2, a = 3 })", "cannot encode mixed table")]
+    [InlineData("yaapic.json.encode(0/0)", "cannot encode")]
+    [InlineData("yaapic.json.encode(math.huge)", "cannot encode inf")]
+    [InlineData("yaapic.json.encode(print)", "cannot encode function")]
+    [InlineData("yaapic.json.encode(coroutine.create(print))", "cannot encode thread")]
+    [InlineData("yaapic.json.encode('\\xff')", "cannot encode invalid UTF-8")]
+    [InlineData("yaapic.json.encode({ [true] = 1 })", "cannot encode boolean key")]
     public async Task Encode_rejects_what_json_cannot_hold(string expression, string message)
     {
         var text = await Eval($"select(2, pcall(function() return {expression} end))");
@@ -129,7 +129,7 @@ public sealed class LuaJsonTests
     [Fact]
     public async Task Encode_depth_is_limited_to_100()
     {
-        var text = await Eval("(function() local t = {} t.a = t return select(2, pcall(pm.json.encode, t)) end)()");
+        var text = await Eval("(function() local t = {} t.a = t return select(2, pcall(yaapic.json.encode, t)) end)()");
 
         Assert.Contains("nesting deeper than 100", text, StringComparison.Ordinal);
     }
@@ -138,9 +138,9 @@ public sealed class LuaJsonTests
     public async Task Nested_data_round_trips_with_pm_null()
     {
         const string source = """
-            local original = { name = 'x', list = pm.json.array({ 1, pm.null, { deep = pm.null } }), empty = pm.json.array(), flag = false, n = 2.5 }
-            local text = pm.json.encode(original)
-            local again = pm.json.encode(pm.json.decode(text))
+            local original = { name = 'x', list = yaapic.json.array({ 1, yaapic.null, { deep = yaapic.null } }), empty = yaapic.json.array(), flag = false, n = 2.5 }
+            local text = yaapic.json.encode(original)
+            local again = yaapic.json.encode(yaapic.json.decode(text))
             console.log(text == again, text)
             """;
 
@@ -159,7 +159,7 @@ public sealed class LuaJsonTests
         }
 
         sb.Append(']');
-        var script = $"local a = pm.json.decode([==[{sb}]==]) console.log(a.n, a[a.n].id)";
+        var script = $"local a = yaapic.json.decode([==[{sb}]==]) console.log(a.n, a[a.n].id)";
 
         var sw = Stopwatch.StartNew();
         var result = await Run(script);

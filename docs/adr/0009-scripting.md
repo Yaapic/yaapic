@@ -7,15 +7,15 @@ See also: [ADR 0001](0001-script-engines.md) (engine choice), [ADR 0005](0005-st
 
 ## Context
 
-Milestone 3 adds pre-request and post-response scripts in JavaScript and Lua with a Postman-style `pm` API, a console,
+Milestone 3 adds pre-request and post-response scripts in JavaScript and Lua with a Postman-style `yaapic` API, a console,
 test results and limits. Every scripting card reads this ADR first. It fixes the port and adapters, the host protocol,
-the semantics of a scripted send, the supported `pm` surface, the sandbox, the native binaries and the file format.
+the semantics of a scripted send, the supported `yaapic` surface, the sandbox, the native binaries and the file format.
 
 ## Options
 
-1. **Typed native bindings per `pm` function.** One P/Invoke callback per operation. Many entry points per engine, each
+1. **Typed native bindings per `yaapic` function.** One P/Invoke callback per operation. Many entry points per engine, each
    needing its own marshalling and tests.
-2. **One native function plus a script-language prelude.** Scripts call `__host(op, argsJson) -> resultJson`; `pm`,
+2. **One native function plus a script-language prelude.** Scripts call `__host(op, argsJson) -> resultJson`; `yaapic`,
    `console` and `expect` are written in the script language on top of it. One bridge to bind and test per engine.
 3. **Managed JavaScript engine or Roslyn/IronPython.** Rejected by ADR 0001 (reflection and code generation).
 
@@ -46,7 +46,7 @@ M3-14). `Yaapic.Composition` references it; ViewModels never do.
 ### Engines and host protocol
 
 QuickJS-NG (JavaScript) and Lua 5.4. One native function is exposed to scripts, `__host(op, argsJson) -> resultJson`.
-Everything else (`pm`, `console`, `expect`) is a prelude in the script language. The bridge decodes `argsJson` with
+Everything else (`yaapic`, `console`, `expect`) is a prelude in the script language. The bridge decodes `argsJson` with
 `HostJsonContext` and calls the typed `IScriptHost`. The result is `{"ok":<json>}` or `{"err":"<message>"}`; the
 prelude throws on `err`. Op names are constants in `HostOps` (M3-14).
 
@@ -64,14 +64,14 @@ order (collection first). An empty block (blank source) is skipped.
 ### What scripts see
 
 Pre-request scripts see the request definition as written (URL, headers, body keep their `{{variables}}`);
-`pm.variables.replaceIn(text)` resolves a string. The sender resolves the (possibly mutated) definition afterwards, so a
+`yaapic.variables.replaceIn(text)` resolves a string. The sender resolves the (possibly mutated) definition afterwards, so a
 variable set by a pre-request script is visible to `{{name}}` in the same send. Post-response scripts additionally see
 the response (read-only) and the request as it was sent.
 
 ### Variable layers
 
-Highest first: local (`pm.variables.set`, lives for one send), environment, collection, globals, dynamic (read-only).
-`pm.environment.set`, `pm.collectionVariables.set` and `pm.globals.set` write to the layered overlay at once and are
+Highest first: local (`yaapic.variables.set`, lives for one send), environment, collection, globals, dynamic (read-only).
+`yaapic.environment.set`, `yaapic.collectionVariables.set` and `yaapic.globals.set` write to the layered overlay at once and are
 persisted after the whole chain ran, through the existing stores (M3-44). When the scope does not exist (no active
 environment, request outside a collection) the value lives in the local layer for that send and a `warn` console line
 says so.
@@ -81,43 +81,43 @@ says so.
 A script error (exception, timeout, memory limit) in a pre-request block aborts the send: the response panel shows the
 error with origin, line and message, nothing is sent, and the variable changes made before the error are discarded. An
 error in a post-response block never discards the response: it is shown next to the response and the tests of that block
-already recorded are kept. A failed `pm.test` is a test result, not a script error.
+already recorded are kept. A failed `yaapic.test` is a test result, not a script error.
 
 ### Limits
 
-`ScriptLimits` (one record, defaults): 5 s wall-clock per block, 64 MiB memory per run, 20 `pm.sendRequest` calls per
+`ScriptLimits` (one record, defaults): 5 s wall-clock per block, 64 MiB memory per run, 20 `yaapic.sendRequest` calls per
 run, 1 000 console entries per send, 8 192 characters per console entry (truncated with an ellipsis). Cancelling the send
 cancels the script.
 
 ### Sandbox
 
-No file system, no `require`/`import` of host modules, no `process`, no timers, no network except `pm.sendRequest`
+No file system, no `require`/`import` of host modules, no `process`, no timers, no network except `yaapic.sendRequest`
 (host-mediated, uses the app transport). JavaScript: QuickJS core only (no `std`/`os`). Lua: only `base` (minus
 `dofile`, `loadfile`, `load` of binary chunks, `require`), `string`, `table`, `math`, `utf8`; no `io`, `os`, `package`,
 `debug`.
 
-### `pm` surface (v1)
+### `yaapic` surface (v1)
 
-`pm.info`, `pm.variables`, `pm.environment`, `pm.collectionVariables`, `pm.globals` (`get`, `set`, `unset`, `has`,
-`clear`, `toObject`, plus `replaceIn` on `pm.variables`), `pm.request` (read in both phases, mutate in pre-request),
-`pm.response` (post-response only), `pm.test`, `pm.expect`, `pm.sendRequest`, `pm.cookies` (read-only), `console.*`.
+`yaapic.info`, `yaapic.variables`, `yaapic.environment`, `yaapic.collectionVariables`, `yaapic.globals` (`get`, `set`, `unset`, `has`,
+`clear`, `toObject`, plus `replaceIn` on `yaapic.variables`), `yaapic.request` (read in both phases, mutate in pre-request),
+`yaapic.response` (post-response only), `yaapic.test`, `yaapic.expect`, `yaapic.sendRequest`, `yaapic.cookies` (read-only), `console.*`.
 
-Not supported, failing with `"pm.<name> is not supported in Yaapic"`: `pm.execution.setNextRequest` and
-`pm.iterationData` (Runner, milestone 6), `pm.vault`, `pm.visualizer`, `pm.require`, and the legacy `postman.*` globals
+Not supported, failing with `"yaapic.<name> is not supported in Yaapic"`: `yaapic.execution.setNextRequest` and
+`yaapic.iterationData` (Runner, milestone 6), `yaapic.vault`, `yaapic.visualizer`, `yaapic.require`, and the legacy `postman.*` globals
 except `postman.setEnvironmentVariable`, `postman.getEnvironmentVariable` and `postman.clearEnvironmentVariable`, which
 alias the environment calls.
 
 ### Cookies
 
-There is no cookie jar (deferred by ADR 0008). `pm.cookies.get(name)`, `has(name)` and `toObject()` read the
-`Set-Cookie` headers of the current response (post-response only; empty in pre-request). `pm.cookies.jar()` throws
+There is no cookie jar (deferred by ADR 0008). `yaapic.cookies.get(name)`, `has(name)` and `toObject()` read the
+`Set-Cookie` headers of the current response (post-response only; empty in pre-request). `yaapic.cookies.jar()` throws
 `"The cookie jar is not available in Yaapic yet"`. The UI has no Cookies tab in M3.
 
 ### Lua idioms
 
-The Lua `pm` mirrors the JavaScript one with the same names. Calls use dots (no colon) because the prelude binds
-closures: `pm.environment.set("a", "1")`, `pm.test("name", function() ... end)`, `pm.expect(x).to.equal(1)`.
-`pm.response.json()` returns a Lua table, `pm.response.text()` a string; JSON `null` maps to the sentinel `pm.null`.
+The Lua `yaapic` mirrors the JavaScript one with the same names. Calls use dots (no colon) because the prelude binds
+closures: `yaapic.environment.set("a", "1")`, `yaapic.test("name", function() ... end)`, `yaapic.expect(x).to.equal(1)`.
+`yaapic.response.json()` returns a Lua table, `yaapic.response.text()` a string; JSON `null` maps to the sentinel `yaapic.null`.
 Chai property assertions (`.to.be.true`, `.to.be.ok`) become calls in Lua (`.to.be.is_true()`, `.to.be.ok()`); the Lua
 `expect` card lists the exact names.
 
@@ -136,7 +136,7 @@ scripts:
   preRequest:
     language: javascript   # javascript | lua
     source: |
-      pm.environment.set("ts", Date.now().toString());
+      yaapic.environment.set("ts", Date.now().toString());
   postResponse:
     language: javascript
     source: ""
@@ -147,7 +147,7 @@ scripts:
 Python and C# scripting, `require` of npm modules, script debugging and breakpoints, a snippets sidebar, timers
 (`setTimeout`), collection-run integration, importing Postman scripts (milestone 5; they stay JavaScript).
 
-See [scripting-compatibility.md](../scripting-compatibility.md) for the supported `pm` surface and the differences from Postman.
+See [scripting-compatibility.md](../scripting-compatibility.md) for the supported `yaapic` surface and the differences from Postman.
 
 ## Implementation notes (M3)
 
@@ -155,7 +155,7 @@ Deviations and details found while building milestone 3 (read from the notes of 
 
 - **Host operations.** `HostOps` has `var.get`, `var.set`, `var.unset`, `var.has`, `var.clear`, `var.list`, `var.replace`, `req.get`,
   `req.set`, `res.get`, `info.get`, `console`, `console.plain`, `test`, `send`, `cookies` and `unsupported`. Every
-  `pm.<name> is not supported in Yaapic` error goes through `unsupported`.
+  `yaapic.<name> is not supported in Yaapic` error goes through `unsupported`.
 - **Native libraries.** They are copied next to the executable by an MSBuild target of `Yaapic.Scripting` (not into
   `runtimes/<rid>/native` as first written); `NativeLibraryResolver` tries the application directory, then
   `runtimes/<rid>/native`. The target runs `pwsh native/Build-Natives.ps1` when `artifacts/native/<rid>` is missing. Only
@@ -168,7 +168,7 @@ Deviations and details found while building milestone 3 (read from the notes of 
   hook and the traceback. `print` and `warn` are removed in addition to the functions listed above, `collectgarbage` only
   accepts `"count"`, chunks load in text mode only, and out of memory is reported even when a script catches the error with
   `pcall`. After a timeout or a cancel the hook fires at every instruction, so `pcall` cannot swallow it.
-- **Sandbox surface.** The `pm.info` object has `iteration: 0` and `iterationCount: 1`; `pm.environment.name` is not supported.
+- **Sandbox surface.** The `yaapic.info` object has `iteration: 0` and `iterationCount: 1`; `yaapic.environment.name` is not supported.
 - **Redaction.** Console entries, test results and script errors are redacted by `ScriptedRequestSender` (ADR 0010).
 - **Persisting variable changes.** `ApplyChangesAsync` silently skips changes whose name is not a creatable variable name, and
   saving an environment or the globals also saves the unsaved edits of the same scope held by an open dialog.

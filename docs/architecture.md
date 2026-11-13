@@ -62,11 +62,11 @@ leaves the report. `VariableScopeProvider` implements `IScriptVariableApplier`; 
 `IScriptEngine`, `IScriptHost`, `ScriptInvocation`, `ScriptLimits` and `ScriptEngineRegistry` are in `Yaapic.Core.Scripting`.
 `Yaapic.Scripting` holds the adapters: `QuickJs.QuickJsEngine` (QuickJS-NG) and `Lua.LuaEngine` (Lua 5.4), both bound with
 `LibraryImport` to native libraries built by `native/Build-Natives.ps1` (see [dependencies.md](dependencies.md)). A script
-sees one native function, `__host(op, argsJson) -> resultJson`; `pm`, `console` and `expect` are preludes written in the
+sees one native function, `__host(op, argsJson) -> resultJson`; `yaapic`, `console` and `expect` are preludes written in the
 script language (C# `const string`s). `HostBridge` decodes the arguments with the source-generated `HostJsonContext`,
 calls the typed `IScriptHost` and answers `{"ok":...}` or `{"err":"..."}`. The operations (`HostOps`) are `var.*`
 (get, set, unset, has, clear, list, replace), `req.get`/`req.set`, `res.get`, `info.get`, `console`, `console.plain`, `test`,
-`send` (`pm.sendRequest`), `cookies` and `unsupported`. `Yaapic.Composition` registers both engines; a library that cannot
+`send` (`yaapic.sendRequest`), `cookies` and `unsupported`. `Yaapic.Composition` registers both engines; a library that cannot
 be loaded makes that language report itself unavailable, the rest of the app keeps working.
 
 ## Secret vault

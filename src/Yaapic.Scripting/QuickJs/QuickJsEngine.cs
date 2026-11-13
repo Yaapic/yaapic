@@ -58,7 +58,7 @@ public sealed class QuickJsEngine : IScriptEngine
 
         TaskCompletionSource<ScriptRunResult> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        // A dedicated thread, never the pool: host calls (pm.sendRequest) block it.
+        // A dedicated thread, never the pool: host calls (yaapic.sendRequest) block it.
         Thread thread = new(() => completion.SetResult(RunGuarded(invocation, ct)), ThreadStackBytes)
         {
             Name = "yaapic-js",
@@ -192,7 +192,7 @@ public sealed class QuickJsEngine : IScriptEngine
                 : (ScriptRunStatus.Failed, ToScriptError(error, invocation.Origin));
         }
 
-        // A pm.sendRequest callback that threw: the run fails with the first such error.
+        // A yaapic.sendRequest callback that threw: the run fails with the first such error.
         var thrown = context.Eval("__yaapic.errors.length === 0 ? '' : String(__yaapic.errors[0]?.message ?? __yaapic.errors[0])", PreludeName);
         if (thrown is { IsSuccess: true, Value: { Length: > 0 } message })
         {
@@ -205,7 +205,7 @@ public sealed class QuickJsEngine : IScriptEngine
             return (ScriptRunStatus.TimedOut, new ScriptError($"{TimeoutText(limits.Timeout)}: a promise never settled"));
         }
 
-        // The same for a pm.test whose done callback or promise is still open once the jobs are drained.
+        // The same for a yaapic.test whose done callback or promise is still open once the jobs are drained.
         var open = context.Eval("__pendingTests()", PreludeName);
         return open.IsSuccess && open.Value != "0"
             ? (ScriptRunStatus.TimedOut, new ScriptError($"{TimeoutText(limits.Timeout)}: a test never completed"))

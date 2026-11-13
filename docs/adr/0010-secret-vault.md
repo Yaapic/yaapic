@@ -72,7 +72,7 @@ missing vault makes secret variables **unresolved** (the existing unresolved-var
 
 Stores are decorated (`SecretAware*Store`, Core): on load the secret rows get their values from the vault, on save the
 values are written to the vault and blanked in the YAML. Scripts read and write secret variables like any variable;
-`pm.environment.set` on an existing secret row keeps the flag.
+`yaapic.environment.set` on an existing secret row keeps the flag.
 
 ### Leak control
 

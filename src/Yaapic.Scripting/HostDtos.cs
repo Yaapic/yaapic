@@ -41,7 +41,7 @@ internal sealed record ResponseDto(
     string Url,
     List<CookieDto> Cookies);
 
-/// <summary>The data behind <c>pm.info</c>.</summary>
+/// <summary>The data behind <c>yaapic.info</c>.</summary>
 internal sealed record InfoDto(string EventName, string RequestName, string RequestId, string Origin);
 
 /// <summary>Arguments of the <c>console</c> op; <c>level</c> is <c>log|info|warn|error|debug</c>.</summary>

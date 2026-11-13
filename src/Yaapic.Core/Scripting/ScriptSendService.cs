@@ -5,7 +5,7 @@ using Yaapic.Domain.Scripting;
 namespace Yaapic.Core.Scripting;
 
 /// <summary>
-/// Performs the <c>pm.sendRequest</c> calls of one scripted send. Sub-requests run no scripts and are not recorded in the
+/// Performs the <c>yaapic.sendRequest</c> calls of one scripted send. Sub-requests run no scripts and are not recorded in the
 /// history; each one appends network console entries to <see cref="NetworkLog"/>.
 /// </summary>
 /// <param name="sender">The plain sender used for sub-requests.</param>
@@ -14,7 +14,7 @@ namespace Yaapic.Core.Scripting;
 /// <param name="time">The clock stamping the console entries.</param>
 internal sealed class ScriptSendService(RequestSender sender, ScriptVariableOverlay overlay, int maxSends, TimeProvider time)
 {
-    internal const string Origin = "pm.sendRequest";
+    internal const string Origin = "yaapic.sendRequest";
 
     private readonly List<ConsoleEntry> _networkLog = [];
     private int _count;
@@ -34,7 +34,7 @@ internal sealed class ScriptSendService(RequestSender sender, ScriptVariableOver
         ArgumentNullException.ThrowIfNull(request);
         if (++_count > maxSends)
         {
-            return new(null, $"pm.sendRequest limit of {maxSends} per run reached");
+            return new(null, $"yaapic.sendRequest limit of {maxSends} per run reached");
         }
 
         HttpRequestDefinition definition;

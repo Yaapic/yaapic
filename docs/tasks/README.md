@@ -354,9 +354,10 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
 | [U-01](milestone-ux-improvements/U-01-request-response-layout.md) | Request / response layout toggle (stacked or side by side) | any | none | done |
-| [U-02](milestone-ux-improvements/U-02-script-api-yaapic-namespace.md) | `yaapic` script namespace with `pm` as an alias | any | none | done |
+| [U-02](milestone-ux-improvements/U-02-script-api-yaapic-namespace.md) | `yaapic` script namespace replaces `pm` | any | none | done |
 | [U-03](milestone-ux-improvements/U-03-script-editor-autocompletion.md) | Script editor autocompletion | any | U-02 | done |
 | [U-04](milestone-ux-improvements/U-04-script-snippets.md) | Script snippets | any | U-02, U-03 | todo |
+| [U-05](milestone-ux-improvements/U-05-script-converter-postman-bruno.md) | Convert Postman and Bruno scripts to `yaapic` | any | U-02 | todo |
 
 ## Personalization: language and accent colour
 

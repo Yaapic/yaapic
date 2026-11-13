@@ -4,8 +4,8 @@ using System.Text.Json.Serialization;
 namespace Yaapic.Scripting.Tests.Conformance;
 
 /// <summary>One failing assertion written in both languages and the message both engines must produce.</summary>
-/// <param name="Javascript">The JavaScript statements run inside one <c>pm.test</c>.</param>
-/// <param name="Lua">The Lua statements run inside one <c>pm.test</c>.</param>
+/// <param name="Javascript">The JavaScript statements run inside one <c>yaapic.test</c>.</param>
+/// <param name="Lua">The Lua statements run inside one <c>yaapic.test</c>.</param>
 /// <param name="Message">The recorded failure message, identical in both languages.</param>
 internal sealed record ExpectMessageCase(string Javascript, string Lua, string Message);
 

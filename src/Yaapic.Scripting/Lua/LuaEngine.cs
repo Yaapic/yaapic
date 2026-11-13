@@ -57,7 +57,7 @@ public sealed class LuaEngine : IScriptEngine
 
         TaskCompletionSource<ScriptRunResult> completion = new(TaskCreationOptions.RunContinuationsAsynchronously);
 
-        // A dedicated thread, never the pool: host calls (pm.sendRequest) block it.
+        // A dedicated thread, never the pool: host calls (yaapic.sendRequest) block it.
         Thread thread = new(() => completion.SetResult(RunGuarded(invocation, ct)), ThreadStackBytes)
         {
             Name = "yaapic-lua",

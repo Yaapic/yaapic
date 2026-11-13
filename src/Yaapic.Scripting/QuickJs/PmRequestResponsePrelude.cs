@@ -1,6 +1,6 @@
 namespace Yaapic.Scripting.QuickJs;
 
-/// <summary>The JavaScript <c>pm</c> prelude, part 2: <c>pm.request</c> (read and, in pre-request, write) and <c>pm.response</c> (post-response).</summary>
+/// <summary>The JavaScript <c>yaapic</c> prelude, part 2: <c>yaapic.request</c> (read and, in pre-request, write) and <c>yaapic.response</c> (post-response).</summary>
 internal static class PmRequestResponsePrelude
 {
     /// <summary>The prelude source, evaluated as its own script after <see cref="PmVariablesPrelude.Source"/>.</summary>
@@ -8,7 +8,7 @@ internal static class PmRequestResponsePrelude
         (() => {
           'use strict';
           const host = globalThis.__host;
-          const pm = globalThis.pm;
+          const yaapic = globalThis.yaapic;
           const info = host('info.get');
 
           const define = (target, name, value) => Object.defineProperty(target, name, { value, enumerable: true });
@@ -195,7 +195,7 @@ internal static class PmRequestResponsePrelude
             }
             update(text) {
               if (typeof text !== 'string') {
-                throw new TypeError('pm.request.url.update: url must be a string');
+                throw new TypeError('yaapic.request.url.update: url must be a string');
               }
               this.#set(text);
             }
@@ -249,16 +249,16 @@ internal static class PmRequestResponsePrelude
             }
             get query() {
               return new PropertyList(
-                'pm.request.url.query',
+                'yaapic.request.url.query',
                 () => readQuery(parse(this.#text).query),
                 (items) => this.#edit((p) => { p.query = writeQuery(items); }),
                 false);
             }
           }
 
-          // ---- pm.request
+          // ---- yaapic.request
           const headers = () => new PropertyList(
-            'pm.request.headers',
+            'yaapic.request.headers',
             () => host('req.get').headers.map(toItem),
             (items) => mutate((dto) => { dto.headers = items.map(toRow); }),
             true);
@@ -271,10 +271,10 @@ internal static class PmRequestResponsePrelude
             () => host('req.get').bodyMode,
             (mode) => {
               if (mode === 'formdata' || mode === 'binary') {
-                throw new Error("pm.request.body mode '" + mode + "' cannot be set from a script");
+                throw new Error("yaapic.request.body mode '" + mode + "' cannot be set from a script");
               }
               if (!settableModes.includes(mode)) {
-                throw new Error("pm.request.body mode '" + String(mode) + "' is not valid");
+                throw new Error("yaapic.request.body mode '" + String(mode) + "' is not valid");
               }
               mutate((dto) => { dto.bodyMode = mode; });
             });
@@ -284,7 +284,7 @@ internal static class PmRequestResponsePrelude
             () => host('req.get').bodyText,
             (text) => {
               if (typeof text !== 'string') {
-                throw new TypeError('pm.request.body.raw must be a string');
+                throw new TypeError('yaapic.request.body.raw must be a string');
               }
               mutate((dto) => { dto.bodyText = text; });
             });
@@ -292,14 +292,14 @@ internal static class PmRequestResponsePrelude
             body,
             'urlencoded',
             () => new PropertyList(
-              'pm.request.body.urlencoded',
+              'yaapic.request.body.urlencoded',
               () => host('req.get').urlEncoded.map(toItem),
               (items) => mutate((dto) => { dto.urlEncoded = items.map(toRow); }),
               false));
           accessor(
             body,
             'formdata',
-            () => new PropertyList('pm.request.body.formdata', () => (host('req.get').formData ?? []).map(toItem), null, false));
+            () => new PropertyList('yaapic.request.body.formdata', () => (host('req.get').formData ?? []).map(toItem), null, false));
           define(body, 'toString', () => host('req.get').bodyText);
 
           const request = {};
@@ -311,7 +311,7 @@ internal static class PmRequestResponsePrelude
             () => host('req.get').method,
             (method) => {
               if (typeof method !== 'string') {
-                throw new TypeError('pm.request.method must be a string');
+                throw new TypeError('yaapic.request.method must be a string');
               }
               mutate((dto) => { dto.method = method.toUpperCase(); });
             });
@@ -322,17 +322,17 @@ internal static class PmRequestResponsePrelude
             () => new Url(host('req.get').url, flushUrl),
             (value) => {
               if (typeof value !== 'string' && !(value instanceof Url)) {
-                throw new TypeError('pm.request.url must be a string or a Url');
+                throw new TypeError('yaapic.request.url must be a string or a Url');
               }
               flushUrl(String(value));
             });
           accessor(request, 'headers', headers);
           define(request, 'body', body);
-          define(request, 'auth', unsupported('pm.request.auth'));
-          define(request, 'certificate', unsupported('pm.request.certificate'));
-          define(pm, 'request', request);
+          define(request, 'auth', unsupported('yaapic.request.auth'));
+          define(request, 'certificate', unsupported('yaapic.request.certificate'));
+          define(yaapic, 'request', request);
 
-          // ---- pm.response (post-response only; the snapshot is immutable, so it is built once)
+          // ---- yaapic.response (post-response only; the snapshot is immutable, so it is built once)
           let response;
           const buildResponse = (dto) => {
             const result = {};
@@ -340,7 +340,7 @@ internal static class PmRequestResponsePrelude
             define(result, 'status', dto.status);
             define(result, 'responseTime', dto.time);
             define(result, 'responseSize', dto.size);
-            define(result, 'headers', new PropertyList('pm.response.headers', () => dto.headers.map(toItem), null, true));
+            define(result, 'headers', new PropertyList('yaapic.response.headers', () => dto.headers.map(toItem), null, true));
             define(result, 'text', () => dto.text);
             define(result, 'json', (reviver) => {
               try {
@@ -356,13 +356,13 @@ internal static class PmRequestResponsePrelude
             return Object.freeze(result);
           };
           Object.defineProperty(globalThis, '__buildResponse', { value: buildResponse });
-          Object.defineProperty(pm, 'response', {
+          Object.defineProperty(yaapic, 'response', {
             enumerable: true,
             get() {
               if (response === undefined) {
                 const dto = host('res.get');
                 if (dto === null) {
-                  throw new Error('pm.response is only available in post-response scripts');
+                  throw new Error('yaapic.response is only available in post-response scripts');
                 }
                 response = buildResponse(dto);
               }

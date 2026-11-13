@@ -140,7 +140,7 @@ public sealed class ScriptRequest
     {
         if (IsReadOnly)
         {
-            throw new InvalidOperationException("pm.request is read-only in post-response scripts");
+            throw new InvalidOperationException("yaapic.request is read-only in post-response scripts");
         }
     }
 

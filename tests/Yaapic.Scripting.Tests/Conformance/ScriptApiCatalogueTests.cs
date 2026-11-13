@@ -39,7 +39,7 @@ public sealed class ScriptApiCatalogueTests
     {
         var checks = string.Join('\n', AllPaths(lua: false).Select(p =>
             $"try {{ if (typeof ({p}) === 'undefined') missing.push('{p}'); }} catch (e) {{ /* a property assertion that failed: it exists */ }}"));
-        var script = $"const missing = [];\n{checks}\npm.environment.set('missing', missing.join(','));";
+        var script = $"const missing = [];\n{checks}\nyaapic.environment.set('missing', missing.join(','));";
 
         var (report, _) = await Run(new("catalogue-js"), post: script);
 
@@ -51,7 +51,7 @@ public sealed class ScriptApiCatalogueTests
     {
         var checks = string.Join('\n', AllPaths(lua: true).Select(p =>
             $"do local ok, v = pcall(function() return {p} end) if ok and v == nil then missing[#missing + 1] = '{p}' end end"));
-        var script = $"local missing = {{}}\n{checks}\npm.environment.set('missing', table.concat(missing, ','))";
+        var script = $"local missing = {{}}\n{checks}\nyaapic.environment.set('missing', table.concat(missing, ','))";
 
         var (report, _) = await Run(new("catalogue-lua") { Language = ScriptLanguage.Lua }, post: script);
 

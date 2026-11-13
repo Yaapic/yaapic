@@ -60,7 +60,7 @@ failure.
 | `src/Yaapic.Domain` | Plain models and enums, no dependencies |
 | `src/Yaapic.Core` | Use cases and ports (HTTP, storage, variables, scripting, secrets) |
 | `src/Yaapic.Infrastructure` | Port implementations (HTTP client, YAML workspace files, encrypted secret vault) |
-| `src/Yaapic.Scripting` | Script engines (QuickJS-NG for JavaScript, Lua 5.4) and the `yaapic` / `pm` API preludes |
+| `src/Yaapic.Scripting` | Script engines (QuickJS-NG for JavaScript, Lua 5.4) and the `yaapic` / `yaapic` API preludes |
 | `src/Yaapic.UI.Abstractions` | UI-facing interfaces (dialogs, code editor) |
 | `src/Yaapic.ViewModels` | MVVM view models, shared by both front-ends |
 | `src/Yaapic.Composition` | Wires the object graph for the App projects |
@@ -75,7 +75,7 @@ failure.
 
 Requests, folders and collections can have a pre-request and a post-response script, each in JavaScript or Lua, written
 against the `yaapic.*` API (`yaapic.variables`, `yaapic.environment`, `yaapic.request`, `yaapic.response`, `yaapic.test`,
-`yaapic.expect`, `yaapic.sendRequest`, `console`); `pm` is the same object under Postman's name, so imported scripts keep working. A collection script runs first, then its folders, then the request, in both phases; a
+`yaapic.expect`, `yaapic.sendRequest`, `console`); scripts written for Postman use `pm` and need converting to `yaapic` (a converter is planned). A collection script runs first, then its folders, then the request, in both phases; a
 pre-request error cancels the send, a post-response error keeps the response. Each block runs in its own sandbox (no file
 system, no timers, 5 s and 64 MiB per block). The console panel and the response "Tests" tab show the output. What is
 supported and what differs from Postman: [docs/scripting-compatibility.md](docs/scripting-compatibility.md); the design is

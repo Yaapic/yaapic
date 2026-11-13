@@ -5,7 +5,7 @@ using Yaapic.UI.Abstractions.Editing;
 
 namespace Yaapic.App.Avalonia.Views;
 
-/// <summary>Completes the <c>pm</c> and <c>console</c> API in a script editor, from <see cref="ScriptApiCatalogue"/>.</summary>
+/// <summary>Completes the <c>yaapic</c> and <c>console</c> API in a script editor, from <see cref="ScriptApiCatalogue"/>.</summary>
 /// <param name="lua"><see langword="true"/> to offer the Lua names.</param>
 internal sealed class ScriptCompletionProvider(bool lua) : ICompletionItemProvider
 {

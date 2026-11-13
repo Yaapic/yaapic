@@ -162,7 +162,7 @@ public sealed class RequestYamlSerializerTests
         "\tindented\n\t\tdeeper\n",
         "  starts with spaces\nsecond",
         "// comment: with colon # and hash\nkey: value # x\n- item\n",
-        "pm.test(\"é ☕ 日本語 😀\");\n",
+        "yaapic.test(\"é ☕ 日本語 😀\");\n",
         "line\n\nafter blank\n\n",
         LongSource,
     };

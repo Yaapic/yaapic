@@ -6,7 +6,7 @@ namespace Yaapic.Domain.Tests;
 
 public class ScriptModelTests
 {
-    private static readonly ScriptBlock Js = new(ScriptLanguage.JavaScript, "pm.test('a')");
+    private static readonly ScriptBlock Js = new(ScriptLanguage.JavaScript, "yaapic.test('a')");
 
     [Theory]
     [InlineData(ScriptLanguage.JavaScript, "javascript")]
@@ -43,7 +43,7 @@ public class ScriptModelTests
     [InlineData("", true)]
     [InlineData("   ", true)]
     [InlineData("\r\n\n\t", true)]
-    [InlineData("pm.test()", false)]
+    [InlineData("yaapic.test()", false)]
     public void Block_is_empty_follows_whitespace(string source, bool expected) =>
         Assert.Equal(expected, new ScriptBlock(ScriptLanguage.Lua, source).IsEmpty);
 

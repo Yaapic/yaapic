@@ -68,7 +68,7 @@ public sealed class FolderYamlSerializerTests
     public void ScriptsRoundTripForJavaScriptAndLua()
     {
         var scripts = new ScriptSet(
-            new ScriptBlock(ScriptLanguage.JavaScript, "pm.test(\"a: b\", () => {});\n  indented\n"),
+            new ScriptBlock(ScriptLanguage.JavaScript, "yaapic.test(\"a: b\", () => {});\n  indented\n"),
             new ScriptBlock(ScriptLanguage.Lua, " leading space\nprint('é ☕')"));
         var folder = Sample() with { Scripts = scripts };
         Assert.Equal(scripts, FolderYamlSerializer.Deserialize(FolderYamlSerializer.Serialize(folder)).Scripts);

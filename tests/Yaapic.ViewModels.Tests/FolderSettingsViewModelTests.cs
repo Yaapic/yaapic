@@ -261,11 +261,11 @@ public sealed class FolderSettingsViewModelTests
         var provider = new CollectionTreeScriptChainProvider(_tree);
         Assert.Equal("", provider.GetAncestors(request.Id).Steps.Single().Scripts.PreRequest.Source);
         _tree.EditSettingsCommand.Execute(_tree.Roots[0]);
-        _tree.SettingsEditor!.Scripts.PreRequest.Source = "pm.test()";
+        _tree.SettingsEditor!.Scripts.PreRequest.Source = "yaapic.test()";
 
         await _tree.SettingsEditor.SaveCommand.ExecuteAsync(null);
         await _tree.RefreshAsync();
 
-        Assert.Equal("pm.test()", provider.GetAncestors(request.Id).Steps.Single().Scripts.PreRequest.Source);
+        Assert.Equal("yaapic.test()", provider.GetAncestors(request.Id).Steps.Single().Scripts.PreRequest.Source);
     }
 }

@@ -68,7 +68,7 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         set => SetValue(EditorLanguageProperty, value);
     }
 
-    /// <summary>Gets or sets whether typing <c>pm.</c> or <c>console.</c> offers the script API; for script editors only.</summary>
+    /// <summary>Gets or sets whether typing <c>yaapic.</c> or <c>console.</c> offers the script API; for script editors only.</summary>
     public bool EnableScriptCompletion
     {
         get => GetValue(EnableScriptCompletionProperty);

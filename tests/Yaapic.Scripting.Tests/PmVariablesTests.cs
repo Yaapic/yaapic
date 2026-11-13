@@ -6,7 +6,7 @@ using Yaapic.Scripting.QuickJs;
 
 namespace Yaapic.Scripting.Tests;
 
-/// <summary>The JavaScript <c>pm</c> variables and info, on the real QuickJS engine over a real <see cref="ScriptVariableOverlay"/>.</summary>
+/// <summary>The JavaScript <c>yaapic</c> variables and info, on the real QuickJS engine over a real <see cref="ScriptVariableOverlay"/>.</summary>
 public sealed class PmVariablesTests
 {
     private const string Origin = "pre-request · Users API";
@@ -39,9 +39,9 @@ public sealed class PmVariablesTests
     }
 
     [Theory]
-    [InlineData("pm.environment", "env", "e")]
-    [InlineData("pm.collectionVariables", "col", "c")]
-    [InlineData("pm.globals", "glob", "g")]
+    [InlineData("yaapic.environment", "env", "e")]
+    [InlineData("yaapic.collectionVariables", "col", "c")]
+    [InlineData("yaapic.globals", "glob", "g")]
     public async Task Each_scope_supports_get_set_unset_has_clear_and_toObject(string scope, string existing, string existingValue)
     {
         var overlay = NewOverlay();
@@ -79,7 +79,7 @@ public sealed class PmVariablesTests
     public async Task Set_coerces_the_value_to_a_string(string value, string expected)
     {
         var overlay = NewOverlay();
-        var result = await Run($"pm.environment.set('k', {value});", overlay);
+        var result = await Run($"yaapic.environment.set('k', {value});", overlay);
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.True(overlay.TryGet(ScriptScope.Environment, "k", out var stored));
@@ -87,21 +87,14 @@ public sealed class PmVariablesTests
     }
 
     [Fact]
-    public async Task Yaapic_is_the_same_object_as_pm()
-    {
-        Assert.Equal("true", await Eval("yaapic === pm"));
-        Assert.Equal("true", await Eval("yaapic.variables.get('shared') === pm.variables.get('shared') && typeof yaapic.test === 'function'"));
-    }
-
-    [Fact]
     public async Task Layered_view_reads_local_then_environment_then_collection_then_globals()
     {
-        Assert.Equal("\"from-env\"", await Eval("pm.variables.get('shared')"));
-        Assert.Equal("\"from-col\"", await Eval("pm.variables.get('deep')"));
-        Assert.Equal("\"g\"", await Eval("pm.variables.get('glob')"));
-        Assert.Equal("\"local\"", await Eval("(pm.variables.set('shared', 'local'), pm.variables.get('shared'))"));
-        Assert.Equal("false", await Eval("pm.variables.has('off')"));
-        Assert.Equal("true", await Eval("pm.variables.has('env')"));
+        Assert.Equal("\"from-env\"", await Eval("yaapic.variables.get('shared')"));
+        Assert.Equal("\"from-col\"", await Eval("yaapic.variables.get('deep')"));
+        Assert.Equal("\"g\"", await Eval("yaapic.variables.get('glob')"));
+        Assert.Equal("\"local\"", await Eval("(yaapic.variables.set('shared', 'local'), yaapic.variables.get('shared'))"));
+        Assert.Equal("false", await Eval("yaapic.variables.has('off')"));
+        Assert.Equal("true", await Eval("yaapic.variables.has('env')"));
     }
 
     [Fact]
@@ -109,14 +102,14 @@ public sealed class PmVariablesTests
     {
         Assert.Equal(
             "{\"glob\":\"g\",\"shared\":\"local\",\"deep\":\"from-col\",\"col\":\"c\",\"env\":\"e\"}",
-            await Eval("(pm.variables.set('shared', 'local'), pm.variables.toObject())"));
+            await Eval("(yaapic.variables.set('shared', 'local'), yaapic.variables.toObject())"));
     }
 
     [Fact]
     public async Task Variables_set_writes_the_local_layer_only()
     {
         var overlay = NewOverlay();
-        var result = await Run("pm.variables.set('t', 'x'); pm.variables.set('env', 'shadow');", overlay);
+        var result = await Run("yaapic.variables.set('t', 'x'); yaapic.variables.set('env', 'shadow');", overlay);
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.True(overlay.TryGet(ScriptScope.Local, "t", out _));
@@ -131,7 +124,7 @@ public sealed class PmVariablesTests
     {
         var overlay = NewOverlay();
         var result = await Run(
-            "pm.variables.set('a', '1'); pm.variables.set('b', '2'); pm.variables.unset('a'); pm.variables.unset('env'); console.log(pm.variables.has('a'), pm.variables.has('env'), pm.variables.has('b')); pm.variables.clear(); console.log(pm.variables.has('b'), pm.variables.has('env'));",
+            "yaapic.variables.set('a', '1'); yaapic.variables.set('b', '2'); yaapic.variables.unset('a'); yaapic.variables.unset('env'); console.log(yaapic.variables.has('a'), yaapic.variables.has('env'), yaapic.variables.has('b')); yaapic.variables.clear(); console.log(yaapic.variables.has('b'), yaapic.variables.has('env'));",
             overlay);
 
         Assert.True(result.Succeeded, result.Error?.Message);
@@ -141,9 +134,9 @@ public sealed class PmVariablesTests
     [Fact]
     public async Task ReplaceIn_resolves_variables_dynamic_variables_and_leaves_unresolved_names()
     {
-        Assert.Equal("\"id=e/g/{{nope}}\"", await Eval("pm.variables.replaceIn('id={{env}}/{{glob}}/{{nope}}')"));
+        Assert.Equal("\"id=e/g/{{nope}}\"", await Eval("yaapic.variables.replaceIn('id={{env}}/{{glob}}/{{nope}}')"));
 
-        var guid = await Eval("pm.variables.replaceIn('{{$guid}}')");
+        var guid = await Eval("yaapic.variables.replaceIn('{{$guid}}')");
         Assert.True(Guid.TryParse(guid.Trim('"'), out _), guid);
     }
 
@@ -151,7 +144,7 @@ public sealed class PmVariablesTests
     public async Task Writes_to_scopes_are_recorded_as_changes()
     {
         var overlay = NewOverlay();
-        var result = await Run("pm.environment.set('a', '1'); pm.collectionVariables.set('b', '2'); pm.globals.set('c', '3'); pm.globals.unset('glob');", overlay);
+        var result = await Run("yaapic.environment.set('a', '1'); yaapic.collectionVariables.set('b', '2'); yaapic.globals.set('c', '3'); yaapic.globals.unset('glob');", overlay);
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal(4, overlay.Changes.Count);
@@ -164,7 +157,7 @@ public sealed class PmVariablesTests
     public async Task Writing_a_missing_environment_falls_back_to_local_with_a_warning()
     {
         var overlay = NewOverlay(environment: false);
-        var result = await Run("pm.environment.set('x', '1'); console.log(pm.variables.get('x'));", overlay);
+        var result = await Run("yaapic.environment.set('x', '1'); console.log(yaapic.variables.get('x'));", overlay);
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal("1", Assert.Single(result.Console).Message);
@@ -173,10 +166,10 @@ public sealed class PmVariablesTests
     }
 
     [Theory]
-    [InlineData("pm.environment.get(1)", "pm.environment.get: name must be a string")]
-    [InlineData("pm.globals.set(null, 'x')", "pm.globals.set: name must be a string")]
-    [InlineData("pm.collectionVariables.unset({})", "pm.collectionVariables.unset: name must be a string")]
-    [InlineData("pm.variables.has(undefined)", "pm.variables.has: name must be a string")]
+    [InlineData("yaapic.environment.get(1)", "yaapic.environment.get: name must be a string")]
+    [InlineData("yaapic.globals.set(null, 'x')", "yaapic.globals.set: name must be a string")]
+    [InlineData("yaapic.collectionVariables.unset({})", "yaapic.collectionVariables.unset: name must be a string")]
+    [InlineData("yaapic.variables.has(undefined)", "yaapic.variables.has: name must be a string")]
     public async Task A_non_string_name_throws_a_TypeError(string call, string message)
     {
         var result = await Run($"try {{ {call}; console.log('no throw'); }} catch (e) {{ console.log(e instanceof TypeError, e.message); }}", NewOverlay());
@@ -189,7 +182,7 @@ public sealed class PmVariablesTests
     [InlineData("test")]
     public async Task Info_exposes_the_event_and_the_request(string eventName)
     {
-        var result = await Run("console.log(JSON.stringify(pm.info));", NewOverlay(), eventName);
+        var result = await Run("console.log(JSON.stringify(yaapic.info));", NewOverlay(), eventName);
 
         Assert.Equal(
             $"{{\"eventName\":\"{eventName}\",\"requestName\":\"Users\",\"requestId\":\"{RequestId}\",\"iteration\":0,\"iterationCount\":1}}",
@@ -213,12 +206,12 @@ public sealed class PmVariablesTests
     }
 
     [Theory]
-    [InlineData("pm.execution.setNextRequest", "pm.execution.setNextRequest")]
-    [InlineData("pm.iterationData.get", "pm.iterationData.get")]
-    [InlineData("pm.vault.get", "pm.vault.get")]
-    [InlineData("pm.visualizer.set", "pm.visualizer.set")]
-    [InlineData("pm.require('x')", "pm.require")]
-    [InlineData("pm.environment.name", "pm.environment.name")]
+    [InlineData("yaapic.execution.setNextRequest", "yaapic.execution.setNextRequest")]
+    [InlineData("yaapic.iterationData.get", "yaapic.iterationData.get")]
+    [InlineData("yaapic.vault.get", "yaapic.vault.get")]
+    [InlineData("yaapic.visualizer.set", "yaapic.visualizer.set")]
+    [InlineData("yaapic.require('x')", "yaapic.require")]
+    [InlineData("yaapic.environment.name", "yaapic.environment.name")]
     [InlineData("postman.setNextRequest('x')", "postman.setNextRequest")]
     [InlineData("postman.visualizer.set", "postman.visualizer.set")]
     public async Task Unsupported_members_throw_the_exact_message(string access, string path)
@@ -229,9 +222,9 @@ public sealed class PmVariablesTests
     }
 
     [Fact]
-    public async Task Scripts_cannot_replace_pm()
+    public async Task Scripts_cannot_replace_yaapic()
     {
-        var result = await Run("pm = 1; delete globalThis.pm; globalThis.pm = 2; pm.environment = 3; console.log(typeof pm.environment.get, pm.info.eventName);", NewOverlay());
+        var result = await Run("yaapic = 1; delete globalThis.yaapic; globalThis.yaapic = 2; yaapic.environment = 3; console.log(typeof yaapic.environment.get, yaapic.info.eventName);", NewOverlay());
 
         Assert.True(result.Succeeded, result.Error?.Message);
         Assert.Equal("function prerequest", Assert.Single(result.Console).Message);
@@ -241,7 +234,7 @@ public sealed class PmVariablesTests
     public async Task Prototypes_are_frozen()
     {
         var result = await Run(
-            "const proto = Object.getPrototypeOf(pm.globals); proto.get = () => 'hacked'; console.log(Object.isFrozen(proto), Object.isFrozen(pm.globals), pm.globals.get('glob'));",
+            "const proto = Object.getPrototypeOf(yaapic.globals); proto.get = () => 'hacked'; console.log(Object.isFrozen(proto), Object.isFrozen(yaapic.globals), yaapic.globals.get('glob'));",
             NewOverlay());
 
         Assert.Equal("true true g", Assert.Single(result.Console).Message);
@@ -255,10 +248,10 @@ public sealed class PmVariablesTests
         QuickJsEngine engine = new();
 
         var first = await engine.RunAsync(
-            new(new(ScriptLanguage.JavaScript, "pm.variables.set('t', 'one'); pm.environment.set('e2', 'two');"), ScriptPhase.PreRequest, Origin, host, ScriptLimits.Default),
+            new(new(ScriptLanguage.JavaScript, "yaapic.variables.set('t', 'one'); yaapic.environment.set('e2', 'two');"), ScriptPhase.PreRequest, Origin, host, ScriptLimits.Default),
             TestContext.Current.CancellationToken);
         var second = await engine.RunAsync(
-            new(new(ScriptLanguage.JavaScript, "console.log(pm.variables.get('t'), pm.environment.get('e2'));"), ScriptPhase.PreRequest, Origin, host, ScriptLimits.Default),
+            new(new(ScriptLanguage.JavaScript, "console.log(yaapic.variables.get('t'), yaapic.environment.get('e2'));"), ScriptPhase.PreRequest, Origin, host, ScriptLimits.Default),
             TestContext.Current.CancellationToken);
 
         Assert.True(first.Succeeded, first.Error?.Message);

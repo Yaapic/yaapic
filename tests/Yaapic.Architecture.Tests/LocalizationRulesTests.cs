@@ -4,7 +4,7 @@ namespace Yaapic.Architecture.Tests;
 
 // A source-text scan, not a compiler check: it flags a literal that reads like an English sentence (a capitalised
 // word followed by another word) in Yaapic.ViewModels and Yaapic.Core. User-visible text must come from Strings.
-// Exception messages are developer-facing and stay English; comments and script samples (pm. and yaapic.) are skipped.
+// Exception messages are developer-facing and stay English; comments and script samples (yaapic. and yaapic.) are skipped.
 public partial class LocalizationRulesTests
 {
     // Texts that are deliberately not translated: they are returned to scripts (script API).
@@ -36,7 +36,7 @@ public partial class LocalizationRulesTests
                     if (line.TrimStart().StartsWith("//", StringComparison.Ordinal)
                         || line.Contains("Exception(", StringComparison.Ordinal)
                         || line.Contains("nameof(", StringComparison.Ordinal)
-                        || line.Contains("pm.", StringComparison.Ordinal) || line.Contains("yaapic.", StringComparison.Ordinal)
+                        || line.Contains("yaapic.", StringComparison.Ordinal) || line.Contains("yaapic.", StringComparison.Ordinal)
                         || Allowed.Any(a => line.Contains($"\"{a}\"", StringComparison.Ordinal)))
                         continue;
 

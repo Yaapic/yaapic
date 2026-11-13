@@ -16,7 +16,7 @@ public sealed partial class ScriptsEditorView : UserControl
     /// <summary>Identifies the <see cref="HintText"/> dependency property.</summary>
     public static readonly DependencyProperty HintTextProperty = DependencyProperty.Register(
         nameof(HintText), typeof(string), typeof(ScriptsEditorView),
-        new PropertyMetadata("Variables, tests and requests: pm.* (JavaScript and Lua)", (d, e) => ((ScriptsEditorView)d).Hint.Text = (string)e.NewValue));
+        new PropertyMetadata("Variables, tests and requests: yaapic.* (JavaScript and Lua)", (d, e) => ((ScriptsEditorView)d).Hint.Text = (string)e.NewValue));
 
     private bool _syncing;
 

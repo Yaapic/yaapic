@@ -1,7 +1,7 @@
 namespace Yaapic.Scripting.Lua;
 
 /// <summary>
-/// The Lua <c>pm</c> prelude, part 4: <c>pm.test</c>, <c>AssertionError</c> values and the core <c>pm.expect</c> assertions.
+/// The Lua <c>yaapic</c> prelude, part 4: <c>yaapic.test</c>, <c>AssertionError</c> values and the core <c>yaapic.expect</c> assertions.
 /// The Lua twin of <see cref="QuickJs.PmTestPrelude"/>: failure messages are the same text in both languages.
 /// </summary>
 internal static class LuaPmTestPrelude
@@ -10,7 +10,7 @@ internal static class LuaPmTestPrelude
     internal const string Source = """
         do
           local hostCall, define = __hostCall, __pmDefine
-          local NULL, json = pm.null, pm.json
+          local NULL, json = yaapic.null, yaapic.json
           local ARRAY = getmetatable(json.decode('[]'))
           local type, error, pcall, setmetatable, getmetatable, tostring, rawequal, rawget, rawlen, next, ipairs =
             type, error, pcall, setmetatable, getmetatable, tostring, rawequal, rawget, rawlen, next, ipairs
@@ -44,7 +44,7 @@ internal static class LuaPmTestPrelude
             end
           end
 
-          -- The length of a table that is an array (decoded JSON, pm.json.array, or keys 1..n), nil for any other table.
+          -- The length of a table that is an array (decoded JSON, yaapic.json.array, or keys 1..n), nil for any other table.
           local function arrayLength(t)
             local mt = getmetatable(t)
             if mt == ARRAY then
@@ -147,7 +147,7 @@ internal static class LuaPmTestPrelude
             return text
           end
 
-          -- ---- deep equality: arrays by length, objects by keys, pm.null by identity, NaN is not equal to NaN ----
+          -- ---- deep equality: arrays by length, objects by keys, yaapic.null by identity, NaN is not equal to NaN ----
           local function deepEqual(a, b, seen)
             if type(a) ~= 'table' or type(b) ~= 'table' then
               return a == b
@@ -627,7 +627,7 @@ internal static class LuaPmTestPrelude
             check(flags, result ~= nil and result ~= false, 'expected #{this} to satisfy ' .. inspect(matcher), 'expected #{this} to not satisfy ' .. inspect(matcher), true, result)
           end)
           def({ 'instance_of', 'instanceOf', 'instanceof' }, function()
-            error('pm.expect(...).instance_of is not supported in Lua', 3)
+            error('yaapic.expect(...).instance_of is not supported in Lua', 3)
           end)
 
           -- The text of an error raised by a function under test: an AssertionError keeps its message, a string loses "chunk:line: ".
@@ -701,14 +701,14 @@ internal static class LuaPmTestPrelude
                 end
                 local fn = impl[member]
                 if fn == nil then
-                  error('pm.expect(...).' .. tostring(member) .. ' is not supported in Yaapic', 2)
+                  error('yaapic.expect(...).' .. tostring(member) .. ' is not supported in Yaapic', 2)
                 end
                 return function(...)
                   fn(flags, ...)
                   return self
                 end
               end,
-              __newindex = function(_, member) error('pm.expect(...).' .. tostring(member) .. ' cannot be assigned', 2) end,
+              __newindex = function(_, member) error('yaapic.expect(...).' .. tostring(member) .. ' cannot be assigned', 2) end,
               __metatable = 'assertion is protected',
             })
             return self
@@ -720,12 +720,12 @@ internal static class LuaPmTestPrelude
             end,
           }, {
             __call = function(_, value, message) return newAssertion(value, message) end,
-            __newindex = function() error('pm.expect is read-only', 2) end,
-            __metatable = 'pm.expect is protected',
+            __newindex = function() error('yaapic.expect is read-only', 2) end,
+            __metatable = 'yaapic.expect is protected',
           })
           define('expect', expect)
 
-          -- ---- pm.response.to: Postman's response assertions, call-style, one fresh chain per access ----
+          -- ---- yaapic.response.to: Postman's response assertions, call-style, one fresh chain per access ----
           local rimpl = {}
           local function rdef(names, fn)
             for _, name in ipairs(names) do
@@ -852,14 +852,14 @@ internal static class LuaPmTestPrelude
               'expected response JSON body path ' .. inspect(path) .. ' to not equal ' .. inspect(expected))
           end)
           rdef({ 'jsonSchema', 'json_schema' }, function()
-            error('pm.response.to.have.jsonSchema is not supported in Yaapic', 3)
+            error('yaapic.response.to.have.jsonSchema is not supported in Yaapic', 3)
           end)
 
           local rchain = {}
           for _, word in ipairs({ 'to', 'be', 'been', 'is', 'have', 'has', 'with', 'that', 'a', 'an', 'also' }) do
             rchain[word] = true
           end
-          -- Read by pm.response.to (part 3), which is built before this prelude runs.
+          -- Read by yaapic.response.to (part 3), which is built before this prelude runs.
           function __responseTo(dto)
             local flags = { dto = dto, negate = false }
             local self = {}
@@ -873,20 +873,20 @@ internal static class LuaPmTestPrelude
                 end
                 local fn = rimpl[member]
                 if fn == nil then
-                  error('pm.response.to.' .. tostring(member) .. ' is not supported in Yaapic', 2)
+                  error('yaapic.response.to.' .. tostring(member) .. ' is not supported in Yaapic', 2)
                 end
                 return function(...)
                   fn(flags, ...)
                   return self
                 end
               end,
-              __newindex = function(_, member) error('pm.response.to.' .. tostring(member) .. ' cannot be assigned', 2) end,
-              __metatable = 'pm.response.to is protected',
+              __newindex = function(_, member) error('yaapic.response.to.' .. tostring(member) .. ' cannot be assigned', 2) end,
+              __metatable = 'yaapic.response.to is protected',
             })
             return self
           end
 
-          -- ---- pm.test ----
+          -- ---- yaapic.test ----
           local recorded = 0
 
           -- The message of a failed test: an AssertionError reads "AssertionError: ...", any other error loses its "chunk:line: " prefix.
@@ -933,8 +933,8 @@ internal static class LuaPmTestPrelude
             index = function() return recorded end,
           }, {
             __call = function(_, name, fn) run(name, fn) end,
-            __newindex = function() error('pm.test is read-only', 2) end,
-            __metatable = 'pm.test is protected',
+            __newindex = function() error('yaapic.test is read-only', 2) end,
+            __metatable = 'yaapic.test is protected',
           })
           define('test', test)
         end

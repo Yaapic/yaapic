@@ -10,7 +10,7 @@ scripts:
   preRequest:
     language: javascript
     source: |
-      pm.request.headers.add({ key: "X-Collection", value: "1" });
+      yaapic.request.headers.add({ key: "X-Collection", value: "1" });
   postResponse:
     language: javascript
     source: ""

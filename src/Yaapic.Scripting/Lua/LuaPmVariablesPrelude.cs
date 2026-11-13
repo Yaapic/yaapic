@@ -1,8 +1,8 @@
 namespace Yaapic.Scripting.Lua;
 
 /// <summary>
-/// The Lua <c>pm</c> prelude, part 2: <c>pm.info</c>, the variable scopes, the unsupported stubs and the read-only
-/// <c>pm</c> proxy. Later parts add their members through <c>__pmDefine</c>.
+/// The Lua <c>yaapic</c> prelude, part 2: <c>yaapic.info</c>, the variable scopes, the unsupported stubs and the read-only
+/// <c>yaapic</c> proxy. Later parts add their members through <c>__pmDefine</c>.
 /// </summary>
 internal static class LuaPmVariablesPrelude
 {
@@ -10,7 +10,7 @@ internal static class LuaPmVariablesPrelude
     internal const string Source = """
         do
           local hostCall = __hostCall
-          local target = pm
+          local target = yaapic
           local encode, NULL = target.json.encode, target.null
           local type, error, ipairs, next, setmetatable, tostring, rawequal = type, error, ipairs, next, setmetatable, tostring, rawequal
           local format, mtype, huge, floor = string.format, math.type, math.huge, math.floor
@@ -112,11 +112,11 @@ internal static class LuaPmVariablesPrelude
           }
           target.variables = newScope('layered', 'local', true)
           local environment = newScope('environment', 'environment', false)
-          -- pm.environment.name is not exposed in v1.
+          -- yaapic.environment.name is not exposed in v1.
           target.environment = setmetatable(environment, {
             __index = function(_, member)
               if member == 'name' then
-                error('pm.environment.name is not supported in Yaapic', 2)
+                error('yaapic.environment.name is not supported in Yaapic', 2)
               end
             end,
           })
@@ -124,18 +124,17 @@ internal static class LuaPmVariablesPrelude
           target.collection_variables = target.collectionVariables
           target.globals = newScope('globals', 'globals', false)
           for _, name in ipairs({ 'execution', 'iterationData', 'vault', 'visualizer', 'require' }) do
-            target[name] = unsupported('pm.' .. name)
+            target[name] = unsupported('yaapic.' .. name)
           end
           target.iteration_data = target.iterationData
 
-          -- pm is a read-only proxy; a script that rawsets _G.pm only hurts itself.
-          pm = setmetatable({}, {
+          -- yaapic is a read-only proxy; a script that rawsets _G.yaapic only hurts itself.
+          yaapic = setmetatable({}, {
             __index = target,
-            __newindex = function() error('pm is read-only', 2) end,
+            __newindex = function() error('yaapic is read-only', 2) end,
             __pairs = function() return next, target end,
-            __metatable = 'pm is protected',
+            __metatable = 'yaapic is protected',
           })
-          yaapic = pm -- same proxy: the native name, pm stays for Postman scripts
           function __pmDefine(name, value)
             target[name] = value
           end
