@@ -27,8 +27,8 @@ standard library.
 ## Acceptance criteria
 
 - [x] Catalogue for JavaScript and Lua with a test comparing it to the engines' real members (`ScriptApiCatalogueTests`).
-- [x] Completion wired in both front-ends for both languages, opened by typing `.` and by Ctrl+Space (WinUI checked in the AOT build; Avalonia built and not driven by hand).
-- [ ] Screenshots of the popup on both front-ends in `docs/screenshots/scripting`.
+- [x] Completion wired in both front-ends for both languages, opened by typing `.` and by Ctrl+Space (checked by hand in the AOT builds of both front-ends).
+- [x] Screenshots of the popup on both front-ends in `docs/screenshots/scripting`.
 
 ## Suggested commit message
 
