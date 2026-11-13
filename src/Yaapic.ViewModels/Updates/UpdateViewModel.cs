@@ -116,8 +116,8 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     /// <summary>Gets the version of the update found, or <see langword="null"/>.</summary>
     public AppVersion? AvailableVersion => _update?.Version;
 
-    /// <summary>Gets the release notes of the update found.</summary>
-    public string Notes => _update?.Notes ?? "";
+    /// <summary>Gets the release notes of the update found, in the language of the interface.</summary>
+    public string Notes => ReleaseNotes.For(_update?.Notes ?? "", Yaapic.Localization.Localizer.Current);
 
     /// <summary>Gets a value indicating whether there are release notes to show.</summary>
     public bool HasNotes => !string.IsNullOrWhiteSpace(Notes);
