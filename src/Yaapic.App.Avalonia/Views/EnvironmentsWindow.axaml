@@ -58,7 +58,7 @@
     <Border Grid.Column="1" Width="1" Background="{DynamicResource YaapicBorderSubtleBrush}" />
 
     <Grid Grid.Column="2" Background="{DynamicResource YaapicSurfaceBaseBrush}">
-      <Grid RowDefinitions="56,*" IsVisible="{Binding Environments.EditedEnvironment, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <Grid RowDefinitions="56,Auto,*" IsVisible="{Binding Environments.EditedEnvironment, Converter={x:Static ObjectConverters.IsNotNull}}">
         <Border BorderThickness="0,0,0,1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
           <Grid Margin="20,0" ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10"
                 DataContext="{Binding Environments.EditedEnvironment}" x:DataType="env:EnvironmentItemViewModel">
@@ -86,7 +86,19 @@
             </StackPanel>
           </Grid>
         </Border>
-        <views:KeyValueEditorView Grid.Row="1" Margin="20,12,20,16" KeyHeader="{x:Static loc:Strings.EditorVariableUpper}"
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="20,12,20,0"
+                    DataContext="{Binding Environments.EditedEnvironment}" x:DataType="env:EnvironmentItemViewModel">
+          <TextBlock VerticalAlignment="Center" Text="{x:Static loc:Strings.EnvironmentsAvailableIn}" />
+          <ComboBox MinWidth="220" ItemsSource="{Binding Choices}" SelectedItem="{Binding SelectedCollection}"
+                    AutomationProperties.Name="{x:Static loc:Strings.EnvironmentsAvailableIn}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="env:CollectionChoice">
+                <TextBlock Text="{Binding Name}" />
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+        <views:KeyValueEditorView Grid.Row="2" Margin="20,12,20,16" KeyHeader="{x:Static loc:Strings.EditorVariableUpper}"
                                   DataContext="{Binding Environments.EditedEnvironment.Variables}" />
       </Grid>
       <Grid RowDefinitions="56,Auto,*" IsVisible="{Binding Environments.IsEditingGlobals}">

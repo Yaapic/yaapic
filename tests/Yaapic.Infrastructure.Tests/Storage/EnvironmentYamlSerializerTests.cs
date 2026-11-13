@@ -34,6 +34,19 @@ public sealed class EnvironmentYamlSerializerTests
     }
 
     [Fact]
+    public void RoundTripKeepsTheCollection()
+    {
+        var environment = Sample() with { CollectionId = Guid.NewGuid() };
+        var read = EnvironmentYamlSerializer.Deserialize(EnvironmentYamlSerializer.Serialize(environment));
+        Assert.Equal(environment.CollectionId, read.CollectionId);
+        Assert.Null(EnvironmentYamlSerializer.Deserialize(EnvironmentYamlSerializer.Serialize(Sample())).CollectionId);
+    }
+
+    [Fact]
+    public void AMalformedCollectionIdIsRejected() =>
+        Assert.Throws<StorageException>(() => EnvironmentYamlSerializer.Deserialize($"version: 1\nid: {IdText}\ncollection: nope\n"));
+
+    [Fact]
     public void SerializeMatchesGoldenFile() => Assert.Equal(Golden(), EnvironmentYamlSerializer.Serialize(Sample()));
 
     [Fact]

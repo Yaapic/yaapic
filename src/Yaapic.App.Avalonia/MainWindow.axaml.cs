@@ -105,7 +105,7 @@ public sealed partial class MainWindow : Window
 
         var environments = shell.Environments;
         flyout.Items.Clear();
-        foreach (var item in environments.Environments)
+        foreach (var item in environments.GetAvailable())
         {
             var captured = item;
             var entry = new MenuItem { Header = item.Name, ToggleType = MenuItemToggleType.Radio, GroupName = "env", IsChecked = item == environments.ActiveEnvironment };

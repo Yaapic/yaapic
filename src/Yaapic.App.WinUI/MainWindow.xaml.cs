@@ -276,7 +276,7 @@ public sealed partial class MainWindow : Window
 
         var environments = _viewModel.Environments;
         EnvironmentMenu.Items.Clear();
-        foreach (var environment in environments.Environments)
+        foreach (var environment in environments.GetAvailable())
         {
             var item = new RadioMenuFlyoutItem
             {

@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Storage;
+using Yaapic.Domain.Collections;
 using Yaapic.Domain.Environments;
 using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
@@ -16,6 +17,10 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     private readonly IEnvironmentStore _store;
     private readonly IDialogService _dialogs;
     private readonly IVaultStateSource? _vaultState;
+    private readonly Dictionary<Guid, EnvironmentItemViewModel?> _lastPick = [];
+    private IReadOnlyList<CollectionChoice> _choices = [new(null, Strings.EnvironmentsAllCollections)];
+    private Guid? _scope;
+    private bool _switchingScope;
 
     [ObservableProperty]
     private EnvironmentItemViewModel? _activeEnvironment;
@@ -57,6 +62,60 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
 
     /// <summary>Gets the known environments.</summary>
     public ObservableCollection<EnvironmentItemViewModel> Environments { get; } = [];
+
+    /// <summary>Gets the collections an environment can be tied to, "all collections" first.</summary>
+    public IReadOnlyList<CollectionChoice> CollectionChoices => _choices;
+
+    /// <summary>Gets the environments offered for the current scope: those tied to its collection and those tied to none.</summary>
+    /// <returns>The environments, in list order.</returns>
+    public IReadOnlyList<EnvironmentItemViewModel> GetAvailable() => [.. Environments.Where(IsAvailable)];
+
+    /// <summary>Sets the collections that exist, so environments can be tied to them.</summary>
+    /// <param name="collections">The collections (top-level folders) of the tree.</param>
+    public void SetCollections(IEnumerable<FolderDefinition> collections)
+    {
+        ArgumentNullException.ThrowIfNull(collections);
+        _choices = [new(null, Strings.EnvironmentsAllCollections), .. collections.Select(c => new CollectionChoice(c.Id, c.Name))];
+        OnPropertyChanged(nameof(CollectionChoices));
+        foreach (var item in Environments)
+        {
+            item.Choices = _choices;
+            item.RaiseChoicesChanged();
+        }
+    }
+
+    /// <summary>Sets the collection of the request being worked on; an active environment tied to another collection is deselected.</summary>
+    /// <param name="collectionId">The collection of the current request; <see langword="null"/> for a request outside any collection.</param>
+    public void SetScope(Guid? collectionId)
+    {
+        _scope = collectionId;
+        EnsureActiveIsAvailable();
+    }
+
+    // An environment tied to a collection that no longer exists stays available, so it never silently disappears.
+    private bool IsAvailable(EnvironmentItemViewModel item) =>
+        item.CollectionId is not { } id || id == _scope || _choices.All(c => c.Id != id);
+
+    private void EnsureActiveIsAvailable()
+    {
+        if (ActiveEnvironment is { } active && IsAvailable(active))
+        {
+            return;
+        }
+
+        // Back in a scope where an environment was picked, bring that one back.
+        _switchingScope = true;
+        try
+        {
+            ActiveEnvironment = _lastPick.TryGetValue(_scope ?? Guid.Empty, out var last) && last is not null && Environments.Contains(last) && IsAvailable(last)
+                ? last
+                : null;
+        }
+        finally
+        {
+            _switchingScope = false;
+        }
+    }
 
     /// <summary>Gets the active environment with its current edited values, saved or not; null when none is active.</summary>
     public EnvironmentDefinition? Current => ActiveEnvironment?.ToDefinition();
@@ -121,6 +180,11 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     {
         oldValue?.IsActive = false;
         newValue?.IsActive = true;
+        if (!_switchingScope)
+        {
+            _lastPick[_scope ?? Guid.Empty] = newValue;
+        }
+
         OnPropertyChanged(nameof(Current));
         ActiveEnvironmentChanged?.Invoke(this, EventArgs.Empty);
     }
@@ -148,7 +212,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     {
         ArgumentNullException.ThrowIfNull(item);
         var source = item.ToDefinition();
-        var copy = EnvironmentItemViewModel.FromNew(new(Guid.NewGuid(), Strings.CommonCopyName(source.Name), source.Variables));
+        var copy = EnvironmentItemViewModel.FromNew(new(Guid.NewGuid(), Strings.CommonCopyName(source.Name), source.Variables, source.CollectionId));
         AddItem(copy);
         EditedEnvironment = copy;
     }
@@ -169,6 +233,14 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
             item.Variables.SetVaultState(_vaultState.State);
         }
 
+        item.Choices = _choices;
+        item.PropertyChanged += (_, e) =>
+        {
+            if (e.PropertyName == nameof(EnvironmentItemViewModel.CollectionId))
+            {
+                EnsureActiveIsAvailable();
+            }
+        };
         Environments.Add(item);
     }
 

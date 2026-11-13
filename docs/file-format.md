@@ -154,7 +154,11 @@ stored; an auth value or other field typed literally is stored in clear (see "Se
 
 ## Environment file
 
-Keys: `version: 1`, `id`, `name`, `variables` (same list shape as `params`).
+Keys: `version: 1`, `id`, `name`, `collection` (optional), `variables` (same list shape as `params`).
+
+`collection` is the id of a collection (top-level folder). An environment with a `collection` is offered only on requests
+of that collection; without it (the key is omitted) it is offered everywhere. A collection that no longer exists is ignored.
+A request outside any collection is offered the environments without a `collection`.
 
 ## Session file
 

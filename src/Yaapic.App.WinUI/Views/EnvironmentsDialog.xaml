@@ -90,6 +90,7 @@
       <Grid Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.EditedEnvironment), Mode=OneWay}">
         <Grid.RowDefinitions>
           <RowDefinition Height="56"/>
+          <RowDefinition Height="Auto"/>
           <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Padding="20,0" ColumnSpacing="12" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
@@ -140,7 +141,19 @@
             </Button>
           </StackPanel>
         </Grid>
-        <v:KeyValueEditorView Grid.Row="1" x:Name="Variables" KeyHeader="{x:Bind loc:Strings.EditorVariableUpper}" Margin="20,12,20,16"/>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12" Margin="20,12,20,0">
+          <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicBodyTextStyle}" Text="{x:Bind loc:Strings.EnvironmentsAvailableIn}"/>
+          <ComboBox MinWidth="220" ItemsSource="{x:Bind ViewModel.EditedEnvironment.Choices, Mode=OneWay}"
+                    SelectedItem="{x:Bind ViewModel.EditedEnvironment.SelectedCollection, Mode=TwoWay}"
+                    AutomationProperties.Name="{x:Bind loc:Strings.EnvironmentsAvailableIn}">
+            <ComboBox.ItemTemplate>
+              <DataTemplate x:DataType="env:CollectionChoice">
+                <TextBlock Text="{x:Bind Name}"/>
+              </DataTemplate>
+            </ComboBox.ItemTemplate>
+          </ComboBox>
+        </StackPanel>
+        <v:KeyValueEditorView Grid.Row="2" x:Name="Variables" KeyHeader="{x:Bind loc:Strings.EditorVariableUpper}" Margin="20,12,20,16"/>
       </Grid>
       <Grid Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsEditingGlobals), Mode=OneWay}">
         <Grid.RowDefinitions>
