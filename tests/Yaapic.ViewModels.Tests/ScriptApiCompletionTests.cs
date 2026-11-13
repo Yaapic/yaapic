@@ -11,7 +11,7 @@ public sealed class ScriptApiCompletionTests
     public void Typing_a_word_offers_the_top_level_names()
     {
         Assert.Equal(["pm"], Names("p"));
-        Assert.Equal(["console", "pm"], Names("", explicitRequest: true));
+        Assert.Equal(["console", "pm", "yaapic"], Names("", explicitRequest: true));
         Assert.Empty(Names(""));
     }
 

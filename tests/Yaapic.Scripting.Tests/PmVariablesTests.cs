@@ -87,6 +87,13 @@ public sealed class PmVariablesTests
     }
 
     [Fact]
+    public async Task Yaapic_is_the_same_object_as_pm()
+    {
+        Assert.Equal("true", await Eval("yaapic === pm"));
+        Assert.Equal("true", await Eval("yaapic.variables.get('shared') === pm.variables.get('shared') && typeof yaapic.test === 'function'"));
+    }
+
+    [Fact]
     public async Task Layered_view_reads_local_then_environment_then_collection_then_globals()
     {
         Assert.Equal("\"from-env\"", await Eval("pm.variables.get('shared')"));

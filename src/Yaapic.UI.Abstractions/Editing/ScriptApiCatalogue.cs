@@ -38,7 +38,7 @@ public sealed record ScriptApiMember(
     public bool ExistsIn(bool lua) => lua || Name is not ("setMethod" or "setUrl");
 }
 
-/// <summary>The members of the <c>pm</c> API and of <c>console</c> that script editors complete, for JavaScript and Lua.</summary>
+/// <summary>The members of the <c>yaapic</c> API (also reachable as <c>pm</c>) and of <c>console</c> that script editors complete, for JavaScript and Lua.</summary>
 /// <remarks>
 /// Kept in step with the engines by <c>ScriptApiCatalogueTests</c>, which checks every entry exists on the real engine.
 /// A path such as <c>pm.response.</c> or <c>pm.expect(x).to.</c> is resolved by <see cref="Complete"/>.
@@ -220,14 +220,15 @@ public static class ScriptApiCatalogue
 
     private static readonly ScriptApiMember[] Roots =
     [
-        P("pm", "The Yaapic script API (Postman compatible).", members: Pm),
+        P("yaapic", "The Yaapic script API.", members: Pm),
+        P("pm", "Alias of yaapic, for Postman scripts.", members: Pm),
         P("console", "The console panel.", members: Console),
     ];
 
     /// <summary>Gets the members of the assertion chain, for the drift test.</summary>
     public static IReadOnlyList<ScriptApiMember> ChainMembers => Chain;
 
-    /// <summary>Gets the top-level names (<c>pm</c>, <c>console</c>).</summary>
+    /// <summary>Gets the top-level names (<c>yaapic</c>, <c>pm</c>, <c>console</c>).</summary>
     public static IReadOnlyList<ScriptApiMember> TopLevel => Roots;
 
     /// <summary>Lists what can be typed after the end of <paramref name="textBeforeCaret"/>.</summary>

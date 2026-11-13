@@ -98,6 +98,14 @@ public sealed class LuaPmVariablesTests
     }
 
     [Fact]
+    public async Task Yaapic_is_the_same_object_as_pm()
+    {
+        var result = await Run("console.log(yaapic == pm, yaapic.variables.get('shared') == pm.variables.get('shared'))", NewOverlay());
+        Assert.True(result.Succeeded, result.Error?.Message);
+        Assert.Equal("true true", Assert.Single(result.Console).Message);
+    }
+
+    [Fact]
     public async Task Set_rejects_functions_and_tables_that_cannot_be_encoded()
     {
         Assert.Contains("cannot store value of type function", await ErrorOf("pm.environment.set('k', print)"), StringComparison.Ordinal);

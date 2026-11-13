@@ -625,8 +625,8 @@ public static class Strings
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
 
-    /// <summary>Variables, tests and requests: pm.* (JavaScript and Lua)</summary>
-    public static string ScriptHint => Localizer.Pick("Variables, tests and requests: pm.* (JavaScript and Lua)", "Variables, tests et requêtes : pm.* (JavaScript et Lua)");
+    /// <summary>Variables, tests and requests: yaapic.* (JavaScript and Lua)</summary>
+    public static string ScriptHint => Localizer.Pick("Variables, tests and requests: yaapic.* (JavaScript and Lua)", "Variables, tests et requêtes : yaapic.* (JavaScript et Lua)");
 
     /// <summary>Script language</summary>
     public static string ScriptLanguage => Localizer.Pick("Script language", "Langage du script");
@@ -795,8 +795,8 @@ public static class Strings
     /// <summary>Test filter</summary>
     public static string TestsFilter => Localizer.Pick("Test filter", "Filtre des tests");
 
-    /// <summary>No tests ran. Add pm.test(...) to the post-response script.</summary>
-    public static string TestsNone => Localizer.Pick("No tests ran. Add pm.test(...) to the post-response script.", "Aucun test exécuté. Ajoutez pm.test(...) au script post-réponse.");
+    /// <summary>No tests ran. Add yaapic.test(...) to the post-response script.</summary>
+    public static string TestsNone => Localizer.Pick("No tests ran. Add yaapic.test(...) to the post-response script.", "Aucun test exécuté. Ajoutez yaapic.test(...) au script post-réponse.");
 
     /// <summary>Passed</summary>
     public static string TestsPassed => Localizer.Pick("Passed", "Réussi");

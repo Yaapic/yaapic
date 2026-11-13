@@ -1,11 +1,13 @@
 # Scripting compatibility with Postman (JavaScript)
 
-Yaapic runs Postman-style scripts on QuickJS-NG with a `pm` object (ADR [0009](adr/0009-scripting.md)). This page lists
+Yaapic runs Postman-style scripts on QuickJS-NG with a `yaapic` object, also reachable as `pm` (the Postman name; the same object, so Postman scripts run unchanged; ADR [0009](adr/0009-scripting.md)). This page lists
 what is supported and what differs. It is kept in step with the conformance suite
 `tests/Yaapic.Scripting.Tests/Conformance/JavaScriptConformanceTests.cs` (and, for Lua, `LuaConformanceTests.cs`): every
 `supported` row is covered by a case there, and every `unsupported` row by an unsupported-member case.
 
 ## The `pm` surface
+
+`yaapic` and `pm` are one object in JavaScript and in Lua (`yaapic === pm`); every row below applies to both names.
 
 | Member | Status | Note |
 |---|---|---|

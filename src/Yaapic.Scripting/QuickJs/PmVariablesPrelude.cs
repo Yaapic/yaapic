@@ -130,6 +130,7 @@ internal static class PmVariablesPrelude
             define(pm, name, unsupported('pm.' + name));
           }
           Object.defineProperty(globalThis, 'pm', { value: pm, writable: false, configurable: false });
+          Object.defineProperty(globalThis, 'yaapic', { value: pm, writable: false, configurable: false });
 
           const postman = {};
           define(postman, 'setEnvironmentVariable', (key, value) => environment.set(key, value));

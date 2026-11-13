@@ -1,6 +1,6 @@
 # U-02: `yaapic` script namespace with `pm` as an alias
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -25,10 +25,10 @@ Removing `pm`, warning when `pm` is used, importing scripts (M5 rewrites nothing
 
 ## Acceptance criteria
 
-- [ ] `yaapic.x` and `pm.x` give the same result in JavaScript and Lua for every member covered by the conformance suites.
-- [ ] `yaapic === pm` (JavaScript) and `yaapic == pm` (Lua).
-- [ ] Docs and the scripting section of the README show `yaapic` first and mention `pm`.
-- [ ] Existing scripts using `pm` still pass (full test run).
+- [x] `yaapic.x` and `pm.x` give the same result in JavaScript and Lua for every member covered by the conformance suites.
+- [x] `yaapic === pm` (JavaScript) and `yaapic == pm` (Lua).
+- [x] Docs and the scripting section of the README show `yaapic` first and mention `pm`.
+- [x] Existing scripts using `pm` still pass (full test run).
 
 ## Suggested commit message
 

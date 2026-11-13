@@ -135,6 +135,7 @@ internal static class LuaPmVariablesPrelude
             __pairs = function() return next, target end,
             __metatable = 'pm is protected',
           })
+          yaapic = pm -- same proxy: the native name, pm stays for Postman scripts
           function __pmDefine(name, value)
             target[name] = value
           end
