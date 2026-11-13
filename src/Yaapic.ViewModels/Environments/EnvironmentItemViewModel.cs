@@ -49,7 +49,14 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
     public CollectionChoice? SelectedCollection
     {
         get => Choices.FirstOrDefault(c => c.Id == CollectionId) ?? Choices.FirstOrDefault();
-        set => CollectionId = value?.Id;
+        set
+        {
+            // A ComboBox writes null while its list is being replaced: that is not a choice.
+            if (value is not null)
+            {
+                CollectionId = value.Id;
+            }
+        }
     }
 
     /// <summary>Tells the view that <see cref="Choices"/> changed.</summary>

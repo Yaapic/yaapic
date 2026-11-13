@@ -26,6 +26,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     private EnvironmentItemViewModel? _activeEnvironment;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsEditingEnvironment))]
     private EnvironmentItemViewModel? _editedEnvironment;
 
     [ObservableProperty]
@@ -62,6 +63,9 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
 
     /// <summary>Gets the known environments.</summary>
     public ObservableCollection<EnvironmentItemViewModel> Environments { get; } = [];
+
+    /// <summary>Gets a value indicating whether an environment is shown in the editor; views bind to this because an x:Bind function over a null item is not re-evaluated.</summary>
+    public bool IsEditingEnvironment => EditedEnvironment is not null;
 
     /// <summary>Gets the collections an environment can be tied to, "all collections" first.</summary>
     public ObservableCollection<CollectionChoice> CollectionChoices => _choices;

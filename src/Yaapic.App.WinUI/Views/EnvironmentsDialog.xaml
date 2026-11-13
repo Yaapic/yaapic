@@ -87,7 +87,7 @@
     </Grid>
     <Border Grid.Column="1" Background="{ThemeResource YaapicBorderSubtleBrush}"/>
     <Grid Grid.Column="2" Background="{ThemeResource YaapicSurfaceBaseBrush}">
-      <Grid Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.EditedEnvironment), Mode=OneWay}">
+      <Grid Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsEditingEnvironment), Mode=OneWay}">
         <Grid.RowDefinitions>
           <RowDefinition Height="56"/>
           <RowDefinition Height="Auto"/>
@@ -175,7 +175,7 @@
       </Grid>
       <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind loc:Strings.EnvironmentsSelectHint}"
                  Style="{StaticResource YaapicBodyTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
-                 Visibility="{x:Bind p:VisibilityMap.WhenNeither(ViewModel.IsEditingGlobals, ViewModel.EditedEnvironment), Mode=OneWay}"/>
+                 Visibility="{x:Bind p:VisibilityMap.WhenNeitherFlag(ViewModel.IsEditingGlobals, ViewModel.IsEditingEnvironment), Mode=OneWay}"/>
     </Grid>
   </Grid>
 </ContentDialog>
