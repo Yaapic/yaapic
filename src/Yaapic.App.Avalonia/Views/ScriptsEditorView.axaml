@@ -23,7 +23,7 @@
                  Text="{x:Static loc:Strings.ScriptHint}"
                  Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
     </Grid>
-    <v:CodeEditorView Grid.Row="1" x:Name="ScriptEditor" AutomationProperties.Name="{x:Static loc:Strings.ScriptTitle}"
+    <v:CodeEditorView Grid.Row="1" x:Name="ScriptEditor" EnableScriptCompletion="True" AutomationProperties.Name="{x:Static loc:Strings.ScriptTitle}"
                       EditorLanguage="{Binding Selected.Language, Converter={x:Static p:EditorMap.ScriptEditorLanguage}}"
                       Text="{Binding Selected.Source, Mode=TwoWay}" />
   </Grid>

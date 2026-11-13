@@ -28,7 +28,7 @@
     </Grid>
     <Border Grid.Row="1" Padding="0,6" Background="{ThemeResource YaapicSurfaceSunkenBrush}"
             BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,1,0,0">
-      <v:CodeEditorView x:Name="ScriptEditor" AutomationProperties.Name="{x:Bind loc:Strings.ScriptTitle}"
+      <v:CodeEditorView x:Name="ScriptEditor" EnableScriptCompletion="True" AutomationProperties.Name="{x:Bind loc:Strings.ScriptTitle}"
                         EditorLanguage="{x:Bind p:TextMap.ScriptLanguage(ViewModel.Selected.Language), Mode=OneWay}"
                         Text="{x:Bind ViewModel.Selected.Source, Mode=TwoWay}"/>
     </Border>

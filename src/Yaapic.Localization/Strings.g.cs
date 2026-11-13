@@ -922,6 +922,10 @@ public static class Strings
     /// <summary>Local</summary>
     public static string VariablesScopeLocal => Localizer.Pick("Local", "Locale");
 
+    /// <summary>{0} (not active)</summary>
+    public static string VariablesSuggestInactive(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} (not active)", "{0} (inactif)"), a0);
+
     /// <summary>Unresolved variables: {0}</summary>
     public static string VariablesUnresolved(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unresolved variables: {0}", "Variables non résolues : {0}"), a0);

@@ -46,6 +46,10 @@ public sealed class VariableScopeProvider : IVariableScopeProvider, IScriptVaria
         new(_environments.Current, _collections.FindCollectionVariables(requestId), _globals.Current);
 
     /// <inheritdoc/>
+    public IReadOnlyList<Yaapic.Domain.Environments.EnvironmentDefinition> GetOtherEnvironments(Guid requestId) =>
+        [.. _environments.GetAvailable().Where(e => e != _environments.ActiveEnvironment).Select(e => e.ToDefinition())];
+
+    /// <inheritdoc/>
     public IReadOnlyList<VariableScopeKind> GetWritableScopes(Guid requestId)
     {
         List<VariableScopeKind> scopes = [];

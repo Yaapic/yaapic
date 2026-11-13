@@ -75,6 +75,7 @@ public sealed partial class VariableTextBox : UserControl
         _openTimer.Tick += OnOpenTimerTick;
         _closeTimer.Tick += OnCloseTimerTick;
         ActualThemeVariantChanged += (_, _) => Render(force: true);
+        StartCompletion();
     }
 
     /// <summary>Gets or sets the text; changes flow both ways as the user types.</summary>
@@ -209,6 +210,7 @@ public sealed partial class VariableTextBox : UserControl
 
         Render();
         CloseIfTokenGone();
+        UpdateCompletion();
     }
 
     private void OnContextChanged(VariableContext? oldValue, VariableContext? newValue)
@@ -220,6 +222,7 @@ public sealed partial class VariableTextBox : UserControl
         }
 
         ClosePopup();
+        CloseCompletion();
         Render();
     }
 
@@ -477,7 +480,11 @@ public sealed partial class VariableTextBox : UserControl
         Input.Focus();
     }
 
-    private void OnInputLostFocus(object? sender, RoutedEventArgs e) => CloseIfFocusLeft();
+    private void OnInputLostFocus(object? sender, RoutedEventArgs e)
+    {
+        CloseCompletion();
+        CloseIfFocusLeft();
+    }
 
     private void CloseIfFocusLeft() =>
         Dispatcher.UIThread.Post(() =>

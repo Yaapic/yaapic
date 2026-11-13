@@ -25,9 +25,14 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
     public static readonly StyledProperty<string> EditorLanguageProperty =
         AvaloniaProperty.Register<CodeEditorView, string>(nameof(EditorLanguage), "text");
 
+    /// <summary>Identifies the <see cref="EnableScriptCompletion"/> styled property.</summary>
+    public static readonly StyledProperty<bool> EnableScriptCompletionProperty =
+        AvaloniaProperty.Register<CodeEditorView, bool>(nameof(EnableScriptCompletion));
+
     /// <summary>Above this many characters the text is shown as plain text: re-tokenising a multi-megabyte line freezes the UI (M2-70 measurement).</summary>
     internal const int MaxHighlightedLength = 1_000_000;
 
+    private readonly List<IDisposable> _scriptProviders = [];
     private bool _resetting;
 
     /// <summary>Initializes the editor.</summary>
@@ -63,6 +68,13 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         set => SetValue(EditorLanguageProperty, value);
     }
 
+    /// <summary>Gets or sets whether typing <c>pm.</c> or <c>console.</c> offers the script API; for script editors only.</summary>
+    public bool EnableScriptCompletion
+    {
+        get => GetValue(EnableScriptCompletionProperty);
+        set => SetValue(EnableScriptCompletionProperty, value);
+    }
+
     /// <inheritdoc/>
     string ICodeEditor.Language
     {
@@ -92,6 +104,26 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         else if (change.Property == EditorLanguageProperty)
         {
             ApplyLanguage();
+        }
+        else if (change.Property == EnableScriptCompletionProperty)
+        {
+            ApplyScriptCompletion();
+        }
+    }
+
+    // Registered for both script languages; the editor picks the provider by its language id.
+    private void ApplyScriptCompletion()
+    {
+        foreach (var registration in _scriptProviders)
+        {
+            registration.Dispose();
+        }
+
+        _scriptProviders.Clear();
+        if (EnableScriptCompletion && Editor.LanguageFeatures is { } features)
+        {
+            _scriptProviders.Add(features.CompletionProviders.Register("javascript", new ScriptCompletionProvider(lua: false)));
+            _scriptProviders.Add(features.CompletionProviders.Register("lua", new ScriptCompletionProvider(lua: true)));
         }
     }
 
