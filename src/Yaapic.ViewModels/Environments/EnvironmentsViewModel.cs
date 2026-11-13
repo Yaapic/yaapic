@@ -18,7 +18,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     private readonly IDialogService _dialogs;
     private readonly IVaultStateSource? _vaultState;
     private readonly Dictionary<Guid, EnvironmentItemViewModel?> _lastPick = [];
-    private IReadOnlyList<CollectionChoice> _choices = [new(null, Strings.EnvironmentsAllCollections)];
+    private readonly ObservableCollection<CollectionChoice> _choices = [new(null, Strings.EnvironmentsAllCollections)];
     private Guid? _scope;
     private bool _switchingScope;
 
@@ -64,7 +64,7 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     public ObservableCollection<EnvironmentItemViewModel> Environments { get; } = [];
 
     /// <summary>Gets the collections an environment can be tied to, "all collections" first.</summary>
-    public IReadOnlyList<CollectionChoice> CollectionChoices => _choices;
+    public ObservableCollection<CollectionChoice> CollectionChoices => _choices;
 
     /// <summary>Gets the environments offered for the current scope: those tied to its collection and those tied to none.</summary>
     /// <returns>The environments, in list order.</returns>
@@ -75,11 +75,16 @@ public sealed partial class EnvironmentsViewModel : ObservableObject, IActiveEnv
     public void SetCollections(IEnumerable<FolderDefinition> collections)
     {
         ArgumentNullException.ThrowIfNull(collections);
-        _choices = [new(null, Strings.EnvironmentsAllCollections), .. collections.Select(c => new CollectionChoice(c.Id, c.Name))];
-        OnPropertyChanged(nameof(CollectionChoices));
+        // Updated in place: the views bind to this very list (a WinUI ComboBox needs an observable collection).
+        _choices.Clear();
+        _choices.Add(new(null, Strings.EnvironmentsAllCollections));
+        foreach (var c in collections)
+        {
+            _choices.Add(new(c.Id, c.Name));
+        }
+
         foreach (var item in Environments)
         {
-            item.Choices = _choices;
             item.RaiseChoicesChanged();
         }
     }

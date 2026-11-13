@@ -1,3 +1,4 @@
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 using Yaapic.Domain.Environments;
 using Yaapic.ViewModels.Editing;
@@ -42,7 +43,7 @@ public sealed partial class EnvironmentItemViewModel : ObservableObject
     public KeyValueEditorViewModel Variables { get; } = new() { AllowSecrets = true };
 
     /// <summary>Gets the collections this environment can be tied to, "all collections" first; set by the list that owns the item.</summary>
-    public IReadOnlyList<CollectionChoice> Choices { get; internal set; } = [];
+    public ObservableCollection<CollectionChoice> Choices { get; internal set; } = [];
 
     /// <summary>Gets or sets the "available in" choice; an unknown collection reads as "all collections" so the environment never disappears.</summary>
     public CollectionChoice? SelectedCollection
