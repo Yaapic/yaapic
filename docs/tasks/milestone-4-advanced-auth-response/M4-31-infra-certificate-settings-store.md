@@ -1,6 +1,6 @@
 # M4-31: Infrastructure: the client certificate list store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-29
 
@@ -29,10 +29,10 @@ Loading certificates from the paths (M4-33), passphrases (M4-32), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` (temp folder): round trip with two entries; missing file; corrupt JSON; wrong version; unknown
+- [x] Tests in `Yaapic.Infrastructure.Tests` (temp folder): round trip with two entries; missing file; corrupt JSON; wrong version; unknown
   format dropped; atomic write (the old file survives when the temp write fails: simulate with a read-only target on the host OS or
   document why not); `Changed` raised once per save; `InMemoryCertificateStore` contract tests.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

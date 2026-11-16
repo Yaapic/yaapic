@@ -63,12 +63,18 @@ internal static class WorkspaceFiles
     /// <param name="path">The target path.</param>
     /// <param name="content">The file content.</param>
     /// <param name="ct">The cancellation token.</param>
+    /// <param name="userOnly">Whether the file gets mode 0600 on Unix.</param>
     /// <returns>A task that completes when the file is in place.</returns>
-    public static async Task WriteAtomicAsync(string path, string content, CancellationToken ct)
+    public static async Task WriteAtomicAsync(string path, string content, CancellationToken ct, bool userOnly = false)
     {
         Directory.CreateDirectory(Path.GetDirectoryName(path)!);
         var tmp = path + ".tmp";
         await File.WriteAllTextAsync(tmp, content, new UTF8Encoding(false), ct);
+        if (userOnly && !OperatingSystem.IsWindows())
+        {
+            File.SetUnixFileMode(tmp, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        }
+
         File.Move(tmp, path, overwrite: true);
     }
 }
