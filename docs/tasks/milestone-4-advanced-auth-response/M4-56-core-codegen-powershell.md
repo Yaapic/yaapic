@@ -1,6 +1,6 @@
 # M4-56: Core: code generator, PowerShell (Invoke-RestMethod)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-50
 
@@ -37,11 +37,11 @@ Depends on: M4-50
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples` (JSON with newline uses the here-string); escape helpers; method casing;
+- [x] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples` (JSON with newline uses the here-string); escape helpers; method casing;
   `-ContentType` placement; repeated form field fallback.
-- [ ] A test, skipped when neither `pwsh` nor `powershell` is on the PATH, that parses each generated text with
+- [x] A test, skipped when neither `pwsh` nor `powershell` is on the PATH, that parses each generated text with
   `[System.Management.Automation.Language.Parser]::ParseInput` and expects no errors.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
