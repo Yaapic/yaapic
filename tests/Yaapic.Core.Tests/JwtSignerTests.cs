@@ -35,7 +35,7 @@ public class JwtSignerTests
     [InlineData(JwtAlgorithm.Rs256)]
     [InlineData(JwtAlgorithm.Es256)]
     public void Non_hmac_algorithms_are_not_supported(JwtAlgorithm algorithm) =>
-        Assert.Throws<NotSupportedException>(() => JwtSigner.Sign("{}", "{}", algorithm, [1]));
+        Assert.Throws<ArgumentException>(() => JwtSigner.Sign("{}", "{}", algorithm, [1]));
 }
 
 public class Base64UrlTests

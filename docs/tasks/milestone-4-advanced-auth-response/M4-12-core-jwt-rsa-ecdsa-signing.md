@@ -1,6 +1,6 @@
 # M4-12: Core: JWT signing with RSA and ECDSA
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-11
 
@@ -28,10 +28,10 @@ PS256, EdDSA, key files, claims.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: each RS and ES algorithm signs and the signature verifies with the public key (ES in the
+- [x] Tests in `Yaapic.Core.Tests`: each RS and ES algorithm signs and the signature verifies with the public key (ES in the
   IEEE P1363 format, 64/96/132 bytes); the RFC 7515 appendix A.2 (RS256) published token is **verified** with its public key; PKCS#1 and
   PKCS#8 PEM both work; wrong curve rejected; garbage PEM rejected without leaking the text; HS vs PEM overload misuse.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
