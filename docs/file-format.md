@@ -171,7 +171,7 @@ Like the other auth fields these are plain text: write `{{variables}}` (secret v
 Client certificates (mTLS) are **not part of the workspace**: they live in the per-user file
 `<user data dir>/Yaapic/certificates.json` because their paths are machine specific, and their passphrases are in the
 vault. See [ADR 0014](adr/0014-transport-certificates-timings.md). The per-request `settings.httpVersion` key
-(`default` is never written; a missing or unknown value reads as `default`) is defined by card M4-38.
+(`default` is never written; a missing or unknown value reads as `default`) selects the HTTP version.
 
 ## Variable precedence
 

@@ -1,6 +1,6 @@
 # M4-38: Domain and YAML: HTTP version preference
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-03
 
@@ -28,10 +28,10 @@ Using it in the transport (M4-39), the editor view model and UI (M4-59, M4-69, M
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests` and `Yaapic.Infrastructure.Tests`: default value; round trip of each value; absent key reads as `Default`; a
+- [x] Tests in `Yaapic.Domain.Tests` and `Yaapic.Infrastructure.Tests`: default value; round trip of each value; absent key reads as `Default`; a
   file with `Default` is byte-identical to the file written before this card (golden test on an existing fixture); unknown text; equivalence
   test.
-- [ ] Docs updated. Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Docs updated. Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

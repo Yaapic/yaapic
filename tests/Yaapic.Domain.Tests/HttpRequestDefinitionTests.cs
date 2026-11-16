@@ -19,6 +19,13 @@ public class HttpRequestDefinitionTests
     public void Negative_timeout_throws() =>
         Assert.Throws<ArgumentOutOfRangeException>(() => new RequestSettings(true, -1));
 
+    [Fact]
+    public void Default_settings_prefer_default_http_version()
+    {
+        Assert.Equal(HttpVersionPreference.Default, RequestSettings.Default.HttpVersion);
+        Assert.Equal(HttpVersionPreference.Default, new RequestSettings(false, 3).HttpVersion);
+    }
+
     [Theory]
     [InlineData(null)]
     [InlineData("")]
@@ -57,6 +64,7 @@ public class HttpRequestDefinitionTests
         r => r with { Auth = RequestAuth.None with { Kind = AuthKind.Bearer, Token = "t" } },
         r => r with { Settings = new RequestSettings(false, 0) },
         r => r with { Settings = new RequestSettings(true, 5) },
+        r => r with { Settings = new RequestSettings(true, 0, HttpVersionPreference.Http2) },
     };
 
     [Theory]

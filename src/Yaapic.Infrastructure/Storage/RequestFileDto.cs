@@ -169,6 +169,8 @@ internal partial class SettingsDto
     public bool? FollowRedirects { get; set; }
 
     public int? TimeoutSeconds { get; set; }
+
+    public string? HttpVersion { get; set; }
 }
 
 [YamlObject(NamingConvention.LowerCamelCase)]

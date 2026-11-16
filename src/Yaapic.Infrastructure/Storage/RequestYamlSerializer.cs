@@ -58,11 +58,18 @@ public static class RequestYamlSerializer
             {
                 FollowRedirects = request.Settings.FollowRedirects,
                 TimeoutSeconds = request.Settings.TimeoutSeconds,
+                HttpVersion = request.Settings.HttpVersion switch
+                {
+                    HttpVersionPreference.Http1 => "http1",
+                    HttpVersionPreference.Http2 => "http2",
+                    HttpVersionPreference.Http3 => "http3",
+                    _ => null,
+                },
             },
             Scripts = ScriptsMapper.ToDto(request.Scripts),
         };
         var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
-        return KeyValueMapper.StripNullSecret(yaml).Replace("\n  oauth2: null", "").Replace("\n  jwt: null", "").Replace("\n  awsv4: null", "").TrimEnd('\n') + "\n";
+        return KeyValueMapper.StripNullSecret(yaml).Replace("\n  oauth2: null", "").Replace("\n  jwt: null", "").Replace("\n  awsv4: null", "").Replace("\n  httpVersion: null", "").TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses a request file.</summary>
@@ -225,6 +232,13 @@ public static class RequestYamlSerializer
             throw new StorageException($"Invalid timeoutSeconds: {timeout}");
         }
 
-        return new RequestSettings(dto?.FollowRedirects ?? true, timeout);
+        var version = dto?.HttpVersion switch
+        {
+            "http1" => HttpVersionPreference.Http1,
+            "http2" => HttpVersionPreference.Http2,
+            "http3" => HttpVersionPreference.Http3,
+            _ => HttpVersionPreference.Default,
+        };
+        return new RequestSettings(dto?.FollowRedirects ?? true, timeout, version);
     }
 }
