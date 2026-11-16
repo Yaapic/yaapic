@@ -1,6 +1,6 @@
 # M4-41: ViewModel: OAuth 2.0 token actions and status
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-21, M4-23, M4-40
 
@@ -33,11 +33,11 @@ Showing the token text, copying it, views, persistence.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with `FakeOAuth2TokenService` and a fake `TimeProvider`: status text for the three states and its refresh
+- [x] Tests in `Yaapic.ViewModels.Tests` with `FakeOAuth2TokenService` and a fake `TimeProvider`: status text for the three states and its refresh
   on events; get-token success and failure; cancel during `GetNewTokenAsync` (a gated fake) leaves no error and resets `IsGettingToken`; clear;
   can-execute rules; the fake receives the **resolved** settings; no property contains the token value.
-- [ ] Core test for `TokensChanged` raised on set, remove, clear.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Core test for `TokensChanged` raised on set, remove, clear.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

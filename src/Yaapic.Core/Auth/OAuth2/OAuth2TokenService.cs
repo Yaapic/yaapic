@@ -25,6 +25,13 @@ public sealed class OAuth2TokenService(
     private readonly Dictionary<OAuth2TokenKey, Task<OAuth2TokenResult>> _inFlight = [];
 
     /// <inheritdoc/>
+    public event EventHandler? TokensChanged
+    {
+        add => cache.Changed += value;
+        remove => cache.Changed -= value;
+    }
+
+    /// <inheritdoc/>
     public Task<OAuth2TokenResult> GetTokenAsync(OAuth2Settings resolved, CancellationToken ct) =>
         Shared(resolved, ct, GetCoreAsync);
 

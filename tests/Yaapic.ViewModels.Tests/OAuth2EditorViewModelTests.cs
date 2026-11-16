@@ -1,5 +1,8 @@
+using System.Globalization;
+using Yaapic.Core.Auth.OAuth2;
 using Yaapic.Domain.Http;
 using Yaapic.Localization;
+using Yaapic.TestDoubles;
 using Yaapic.ViewModels.Requests;
 
 namespace Yaapic.ViewModels.Tests;
@@ -101,5 +104,144 @@ public sealed class OAuth2EditorViewModelTests
         Assert.Equal([Strings.Oauth2RedirectUriInvalid], vm.Hints);
         vm.RedirectUri = "http://127.0.0.1:8742/callback";
         Assert.Empty(vm.Hints);
+    }
+
+    private sealed class UtcClock(DateTimeOffset now) : TimeProvider
+    {
+        public override DateTimeOffset GetUtcNow() => now;
+
+        public override TimeZoneInfo LocalTimeZone => TimeZoneInfo.Utc;
+    }
+
+    private static readonly DateTimeOffset Now = new(2026, 3, 4, 10, 0, 0, TimeSpan.Zero);
+
+    private static readonly OAuth2Settings Ready = OAuth2Settings.Default with { TokenUrl = "https://t/token", ClientId = "id" };
+
+    private static OAuth2EditorViewModel WithTokens(FakeOAuth2TokenService tokens, Func<OAuth2Settings, OAuth2Settings>? resolve = null)
+    {
+        OAuth2EditorViewModel vm = new(tokens, resolve ?? (s => s), new UtcClock(Now));
+        vm.Load(Ready);
+        return vm;
+    }
+
+    private static OAuth2Token Token(string value) => new(value, "Bearer", null, null, null, Now);
+
+    [Fact]
+    public void Status_text_follows_the_three_states_and_the_Changed_event()
+    {
+        FakeOAuth2TokenService tokens = new();
+        var vm = WithTokens(tokens);
+        Assert.Equal(Strings.Oauth2NoToken, vm.TokenStatusText);
+        Assert.False(vm.HasToken);
+
+        var expires = Now.AddHours(1);
+        tokens.Status = new(OAuth2TokenState.Valid, expires);
+        tokens.RaiseTokensChanged();
+        Assert.Equal(Strings.Oauth2TokenValidUntil(expires.ToString("g", CultureInfo.CurrentCulture)), vm.TokenStatusText);
+        Assert.True(vm.HasToken);
+
+        tokens.Status = new(OAuth2TokenState.Expired);
+        tokens.RaiseTokensChanged();
+        Assert.Equal(Strings.Oauth2TokenExpired, vm.TokenStatusText);
+        Assert.True(vm.HasToken);
+
+        tokens.Status = new(OAuth2TokenState.NoToken);
+        vm.ClientId = "edited";
+        Assert.Equal(Strings.Oauth2NoToken, vm.TokenStatusText);
+        Assert.False(vm.HasToken);
+    }
+
+    [Fact]
+    public void Status_changes_do_not_raise_Changed()
+    {
+        FakeOAuth2TokenService tokens = new();
+        var vm = WithTokens(tokens);
+        var count = 0;
+        vm.Changed += (_, _) => count++;
+        tokens.Status = new(OAuth2TokenState.Expired);
+        tokens.RaiseTokensChanged();
+        Assert.Equal(0, count);
+    }
+
+    [Fact]
+    public async Task GetNewToken_success_clears_the_error_and_receives_the_resolved_settings()
+    {
+        FakeOAuth2TokenService tokens = new() { NewTokenResult = OAuth2TokenResult.Fail("boom") };
+        var vm = WithTokens(tokens, s => s with { ClientId = "resolved" });
+        await vm.GetNewTokenCommand.ExecuteAsync(null);
+        Assert.Equal("boom", vm.TokenError);
+
+        tokens.NewTokenResult = OAuth2TokenResult.Ok(Token("secret-token"));
+        tokens.Status = new(OAuth2TokenState.Valid, Now.AddHours(1));
+        await vm.GetNewTokenCommand.ExecuteAsync(null);
+
+        Assert.Null(vm.TokenError);
+        Assert.True(vm.HasToken);
+        Assert.Equal("resolved", tokens.NewTokenCalls[^1].ClientId);
+        Assert.False(vm.IsGettingToken);
+    }
+
+    [Fact]
+    public async Task Cancelling_GetNewToken_leaves_no_error_and_resets_IsGettingToken()
+    {
+        FakeOAuth2TokenService tokens = new() { NewTokenGate = new(TaskCreationOptions.RunContinuationsAsynchronously) };
+        var vm = WithTokens(tokens);
+        var running = vm.GetNewTokenCommand.ExecuteAsync(null);
+        Assert.True(vm.IsGettingToken);
+
+        vm.CancelGetTokenCommand.Execute(null);
+        await running;
+
+        Assert.Null(vm.TokenError);
+        Assert.False(vm.IsGettingToken);
+    }
+
+    [Fact]
+    public void Clear_clears_the_service_and_the_error()
+    {
+        FakeOAuth2TokenService tokens = new() { Status = new(OAuth2TokenState.Expired) };
+        var vm = WithTokens(tokens);
+        vm.TokenError = "old";
+        Assert.True(vm.ClearTokenCommand.CanExecute(null));
+
+        tokens.Status = new(OAuth2TokenState.NoToken);
+        vm.ClearTokenCommand.Execute(null);
+
+        Assert.Equal(1, tokens.ClearCount);
+        Assert.Null(vm.TokenError);
+        Assert.Equal(Strings.Oauth2NoToken, vm.TokenStatusText);
+        Assert.False(vm.ClearTokenCommand.CanExecute(null));
+    }
+
+    [Fact]
+    public void GetNewToken_can_execute_rules()
+    {
+        FakeOAuth2TokenService tokens = new();
+        var vm = WithTokens(tokens);
+        Assert.True(vm.GetNewTokenCommand.CanExecute(null));
+
+        vm.TokenUrl = "";
+        Assert.False(vm.GetNewTokenCommand.CanExecute(null));
+        vm.TokenUrl = "https://t/token";
+
+        vm.Grant = OAuth2Grant.AuthorizationCode;
+        Assert.False(vm.GetNewTokenCommand.CanExecute(null));
+        vm.AuthorizationUrl = "https://t/auth";
+        Assert.True(vm.GetNewTokenCommand.CanExecute(null));
+
+        Assert.False(new OAuth2EditorViewModel().GetNewTokenCommand.CanExecute(null));
+    }
+
+    [Fact]
+    public async Task No_property_contains_the_token_value()
+    {
+        FakeOAuth2TokenService tokens = new() { NewTokenResult = OAuth2TokenResult.Ok(Token("secret-token")), Status = new(OAuth2TokenState.Valid, Now.AddHours(1)) };
+        var vm = WithTokens(tokens);
+        await vm.GetNewTokenCommand.ExecuteAsync(null);
+
+        foreach (var property in new[] { vm.TokenStatusText, vm.TokenError, vm.ToSettings().ToString() })
+        {
+            Assert.DoesNotContain("secret-token", property ?? "", StringComparison.Ordinal);
+        }
     }
 }

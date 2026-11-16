@@ -9,6 +9,15 @@ public sealed class FakeOAuth2TokenService : IOAuth2TokenService
     private readonly List<OAuth2Settings> _tokenCalls = [];
     private readonly List<OAuth2Settings> _newTokenCalls = [];
 
+    /// <inheritdoc/>
+    public event EventHandler? TokensChanged;
+
+    /// <summary>Gets or sets a gate <see cref="GetNewTokenAsync"/> waits on before returning; null to return at once.</summary>
+    public TaskCompletionSource? NewTokenGate { get; set; }
+
+    /// <summary>Raises <see cref="TokensChanged"/>.</summary>
+    public void RaiseTokensChanged() => TokensChanged?.Invoke(this, EventArgs.Empty);
+
     /// <summary>Gets or sets the result of <see cref="GetTokenAsync"/>.</summary>
     public OAuth2TokenResult TokenResult { get; set; } = OAuth2TokenResult.Fail("no token scripted");
 
@@ -35,10 +44,15 @@ public sealed class FakeOAuth2TokenService : IOAuth2TokenService
     }
 
     /// <inheritdoc/>
-    public Task<OAuth2TokenResult> GetNewTokenAsync(OAuth2Settings resolved, CancellationToken ct)
+    public async Task<OAuth2TokenResult> GetNewTokenAsync(OAuth2Settings resolved, CancellationToken ct)
     {
         _newTokenCalls.Add(resolved);
-        return Task.FromResult(NewTokenResult);
+        if (NewTokenGate is { } gate)
+        {
+            await gate.Task.WaitAsync(ct);
+        }
+
+        return NewTokenResult;
     }
 
     /// <inheritdoc/>

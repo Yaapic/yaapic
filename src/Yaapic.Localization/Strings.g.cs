@@ -489,6 +489,9 @@ public static class Strings
     /// <summary>Could not open the browser. Try again, or check that a default browser is configured.</summary>
     public static string Oauth2BrowserFailed => Localizer.Pick("Could not open the browser. Try again, or check that a default browser is configured.", "Impossible d'ouvrir le navigateur. Réessayez, ou vérifiez qu'un navigateur par défaut est configuré.");
 
+    /// <summary>Clear token</summary>
+    public static string Oauth2ClearToken => Localizer.Pick("Clear token", "Effacer le jeton");
+
     /// <summary>Send as Basic auth header</summary>
     public static string Oauth2ClientAuthBasic => Localizer.Pick("Send as Basic auth header", "Envoyer en en-tête Basic");
 
@@ -540,6 +543,9 @@ public static class Strings
     /// <summary>Username</summary>
     public static string Oauth2FieldUsername => Localizer.Pick("Username", "Nom d'utilisateur");
 
+    /// <summary>Get new token</summary>
+    public static string Oauth2GetNewToken => Localizer.Pick("Get new token", "Obtenir un nouveau jeton");
+
     /// <summary>Get a token first: this grant needs an interactive sign-in.</summary>
     public static string Oauth2GetTokenFirst => Localizer.Pick("Get a token first: this grant needs an interactive sign-in.", "Obtenez d'abord un jeton : ce flux nécessite une connexion interactive.");
 
@@ -555,6 +561,9 @@ public static class Strings
     /// <summary>The token endpoint answered with an unexpected response (HTTP {0}).</summary>
     public static string Oauth2InvalidResponse(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The token endpoint answered with an unexpected response (HTTP {0}).", "Le point de terminaison de jeton a renvoyé une réponse inattendue (HTTP {0})."), a0);
+
+    /// <summary>No token</summary>
+    public static string Oauth2NoToken => Localizer.Pick("No token", "Aucun jeton");
 
     /// <summary>Interactive OAuth 2.0 sign-in is not available yet.</summary>
     public static string Oauth2NotAvailable => Localizer.Pick("Interactive OAuth 2.0 sign-in is not available yet.", "La connexion interactive OAuth 2.0 n'est pas encore disponible.");
@@ -572,11 +581,24 @@ public static class Strings
     /// <summary>OAuth 2.0: </summary>
     public static string Oauth2TokenError => Localizer.Pick("OAuth 2.0: ", "OAuth 2.0 : ");
 
+    /// <summary>Token expired</summary>
+    public static string Oauth2TokenExpired => Localizer.Pick("Token expired", "Jeton expiré");
+
+    /// <summary>Token never expires</summary>
+    public static string Oauth2TokenNeverExpires => Localizer.Pick("Token never expires", "Le jeton n'expire pas");
+
     /// <summary>Enter an absolute http or https token URL.</summary>
     public static string Oauth2TokenUrlMissing => Localizer.Pick("Enter an absolute http or https token URL.", "Saisissez une URL de jeton absolue en http ou https.");
 
+    /// <summary>Valid until {0}</summary>
+    public static string Oauth2TokenValidUntil(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Valid until {0}", "Valide jusqu'au {0}"), a0);
+
     /// <summary>Enter the OAuth 2.0 username.</summary>
     public static string Oauth2UsernameMissing => Localizer.Pick("Enter the OAuth 2.0 username.", "Saisissez le nom d'utilisateur OAuth 2.0.");
+
+    /// <summary>Waiting for the browser sign-in…</summary>
+    public static string Oauth2WaitingForBrowser => Localizer.Pick("Waiting for the browser sign-in…", "En attente de la connexion dans le navigateur…");
 
     /// <summary>Active</summary>
     public static string PaletteActive => Localizer.Pick("Active", "Actif");

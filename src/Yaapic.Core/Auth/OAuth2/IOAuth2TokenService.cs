@@ -39,6 +39,9 @@ public readonly record struct OAuth2TokenStatus(OAuth2TokenState State, DateTime
 /// <summary>Returns OAuth 2.0 tokens, using the cache and refreshing when possible.</summary>
 public interface IOAuth2TokenService
 {
+    /// <summary>Raised when the cached tokens changed (set, removed or cleared).</summary>
+    event EventHandler? TokensChanged;
+
     /// <summary>Returns a valid token without any user interaction.</summary>
     /// <param name="resolved">The settings with variables resolved.</param>
     /// <param name="ct">The cancellation token.</param>

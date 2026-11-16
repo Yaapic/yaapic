@@ -36,6 +36,24 @@ public class OAuth2TokenServiceTests
     }
 
     [Fact]
+    public async Task TokensChanged_IsRaisedOnSetRemoveAndClear()
+    {
+        var (service, _) = Create();
+        var count = 0;
+        service.TokensChanged += (_, _) => count++;
+
+        await service.GetNewTokenAsync(Settings(), CancellationToken.None);
+        Assert.Equal(1, count);
+
+        service.Clear(Settings());
+        Assert.Equal(2, count);
+
+        await service.GetNewTokenAsync(Settings(), CancellationToken.None);
+        _cache.Clear();
+        Assert.Equal(4, count);
+    }
+
+    [Fact]
     public async Task GetToken_FetchesThenUsesTheCache()
     {
         var (service, transport) = Create();
