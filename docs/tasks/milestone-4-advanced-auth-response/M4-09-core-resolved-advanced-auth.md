@@ -1,6 +1,6 @@
 # M4-09: Core: resolved advanced authentication
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-06
 
@@ -30,10 +30,15 @@ The authenticator port and the send pipeline (M4-10), any signing or network cal
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: each new kind produces the right `PendingAuth` with variables substituted in every field; unresolved
+- [x] Tests in `Yaapic.Core.Tests`: each new kind produces the right `PendingAuth` with variables substituted in every field; unresolved
   names reported once; old kinds produce `PendingAuth == null` and the same headers as before; no auth header added for the new kinds.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
 `feat(core): resolve advanced authentication settings`
+
+## Notes
+
+- Scripted sends: `ScriptRequest` (built by `FromDefinition`) carries no auth object, so a pre-request script cannot read `PendingAuth`;
+  `RequestSender` calls `RequestResolver.Resolve` unchanged. No change needed.

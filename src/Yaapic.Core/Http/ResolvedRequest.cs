@@ -13,6 +13,7 @@ namespace Yaapic.Core.Http;
 /// <param name="BodyFilePath">The path of the file sent as the body, or null when the body is not binary.</param>
 /// <param name="FollowRedirects">Whether redirects are followed.</param>
 /// <param name="TimeoutSeconds">The timeout in seconds; 0 means the application default.</param>
+/// <param name="PendingAuth">The OAuth 2.0, JWT, Digest or AWS authentication the sender applies, or null for the other kinds.</param>
 public sealed record ResolvedRequest(
     HttpMethodKind Method,
     string Url,
@@ -23,7 +24,8 @@ public sealed record ResolvedRequest(
     IReadOnlyList<ResolvedPart>? Parts = null,
     string? BodyFilePath = null,
     bool FollowRedirects = true,
-    int TimeoutSeconds = 0);
+    int TimeoutSeconds = 0,
+    ResolvedAuth? PendingAuth = null);
 
 /// <summary>A part of a multipart form body.</summary>
 /// <param name="Name">The part name.</param>

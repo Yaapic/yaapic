@@ -260,4 +260,79 @@ public class RequestResolverTests
         Assert.Empty(r.Headers);
         Assert.Equal("http://a", r.Url);
     }
+
+    [Fact]
+    public void OAuth2_is_resolved_in_every_field_without_headers()
+    {
+        var o = OAuth2Settings.Default with
+        {
+            TokenUrl = "{{t}}/token", AuthorizationUrl = "{{t}}/auth", ClientId = "{{id}}", ClientSecret = "{{s}}", Scope = "{{sc}}",
+            Audience = "{{aud}}", Username = "{{u}}", Password = "{{p}}", RedirectUri = "{{ru}}", HeaderPrefix = "{{hp}}", QueryParameterName = "{{q}}",
+        };
+        var r = A(Auth(AuthKind.OAuth2) with { OAuth2 = o }, vars:
+            [("t", "T"), ("id", "I"), ("s", "S"), ("sc", "SC"), ("aud", "AU"), ("u", "U"), ("p", "P"), ("ru", "RU"), ("hp", "HP"), ("q", "Q")]);
+        var x = r.PendingAuth!.OAuth2!;
+        Assert.Equal(AuthKind.OAuth2, r.PendingAuth.Kind);
+        Assert.Equal(["T/token", "T/auth", "I", "S", "SC", "AU", "U", "P", "RU", "HP", "Q"],
+            [x.TokenUrl, x.AuthorizationUrl, x.ClientId, x.ClientSecret, x.Scope, x.Audience, x.Username, x.Password, x.RedirectUri, x.HeaderPrefix, x.QueryParameterName]);
+        Assert.Empty(r.Headers);
+        Assert.Equal("http://a", r.Url);
+    }
+
+    [Fact]
+    public void Jwt_is_resolved_in_every_field_without_headers()
+    {
+        var j = JwtSettings.Default with
+        {
+            Secret = "{{s}}", PrivateKey = "{{k}}", Payload = "{\"a\":\"{{v}}\"}", ExtraHeaders = "{{x}}", HeaderPrefix = "{{hp}}", QueryParameterName = "{{q}}",
+        };
+        var r = A(Auth(AuthKind.Jwt) with { Jwt = j }, vars: [("s", "S"), ("k", "K"), ("v", "V"), ("x", "X"), ("hp", "HP"), ("q", "Q")]);
+        var x = r.PendingAuth!.Jwt!;
+        Assert.Equal(["S", "K", "{\"a\":\"V\"}", "X", "HP", "Q"], [x.Secret, x.PrivateKey, x.Payload, x.ExtraHeaders, x.HeaderPrefix, x.QueryParameterName]);
+        Assert.Empty(r.Headers);
+    }
+
+    [Fact]
+    public void Digest_is_resolved()
+    {
+        var r = A(Auth(AuthKind.Digest, "{{u}}", "{{p}}"), vars: [("u", "bob"), ("p", "pw")]);
+        Assert.Equal(new ResolvedAuth(AuthKind.Digest, "bob", "pw", null, null, null), r.PendingAuth);
+        Assert.Empty(r.Headers);
+    }
+
+    [Fact]
+    public void AwsV4_is_resolved()
+    {
+        var a = new AwsV4Settings("{{a}}", "{{s}}", "{{t}}", "{{r}}", "{{sv}}");
+        var r = A(Auth(AuthKind.AwsV4) with { AwsV4 = a }, vars: [("a", "A"), ("s", "S"), ("t", "T"), ("r", "R"), ("sv", "SV")]);
+        Assert.Equal(new AwsV4Settings("A", "S", "T", "R", "SV"), r.PendingAuth!.AwsV4);
+        Assert.Empty(r.Headers);
+    }
+
+    [Theory]
+    [InlineData(AuthKind.OAuth2)]
+    [InlineData(AuthKind.Jwt)]
+    [InlineData(AuthKind.AwsV4)]
+    public void Null_settings_are_treated_as_default(AuthKind kind)
+    {
+        var p = A(Auth(kind)).PendingAuth!;
+        Assert.Equal(kind, p.Kind);
+        Assert.Equal(kind == AuthKind.OAuth2 ? OAuth2Settings.Default : null, p.OAuth2);
+        Assert.Equal(kind == AuthKind.Jwt ? JwtSettings.Default : null, p.Jwt);
+        Assert.Equal(kind == AuthKind.AwsV4 ? AwsV4Settings.Default : null, p.AwsV4);
+    }
+
+    [Fact]
+    public void Advanced_auth_reports_unresolved_names_once()
+    {
+        var r = A(Auth(AuthKind.OAuth2) with { OAuth2 = OAuth2Settings.Default with { ClientId = "{{m}}", ClientSecret = "{{m}}{{n}}" } });
+        Assert.Equal(["m", "n"], r.Unresolved);
+    }
+
+    [Theory]
+    [InlineData(AuthKind.None)]
+    [InlineData(AuthKind.Basic)]
+    [InlineData(AuthKind.Bearer)]
+    [InlineData(AuthKind.ApiKey)]
+    public void Old_kinds_have_no_pending_auth(AuthKind kind) => Assert.Null(A(Auth(kind, "u", "p", "t", "k", "v")).PendingAuth);
 }
