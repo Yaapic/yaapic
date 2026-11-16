@@ -1,6 +1,6 @@
 # M4-47: Core: response differ (headers and body)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-46
 
@@ -36,10 +36,10 @@ Context folding, UI, history.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: snapshot null for binary and for > 1 MiB, formatted JSON used; identical responses give no changes; status change;
+- [x] Tests in `Yaapic.Core.Tests`: snapshot null for binary and for > 1 MiB, formatted JSON used; identical responses give no changes; status change;
   each header kind; case-insensitive names; volatile headers skipped or listed; duplicate header values; body line changes with stats; ignore whitespace
   option; options defaults.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
