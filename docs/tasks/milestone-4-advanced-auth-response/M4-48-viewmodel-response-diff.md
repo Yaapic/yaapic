@@ -1,6 +1,6 @@
 # M4-48: ViewModel: response diff
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-45, M4-47
 
@@ -36,11 +36,11 @@ Views, a diff between arbitrary requests, history.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: first response has no comparison; second produces one against previous; pin then a third compares with the
+- [x] Tests in `Yaapic.ViewModels.Tests`: first response has no comparison; second produces one against previous; pin then a third compares with the
   baseline; unpin; options recompute; fold behaviour on long equal runs (counts, context lines, fold item text, expanded mode); binary response leaves
   previous intact and sets the reason; `Clear` keeps the baseline; the panel records only on success (not on failures or while sending); summary
   text numbers.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

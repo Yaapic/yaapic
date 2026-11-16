@@ -16,6 +16,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     private const double MinimumVisibleFraction = 0.005;
 
     private readonly IDialogService? _dialogs;
+    private readonly TimeProvider _time;
     private HttpResponseData? _response;
 
     [ObservableProperty]
@@ -40,7 +41,15 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
 
     /// <summary>Initializes a new instance of the <see cref="ResponsePanelViewModel"/> class.</summary>
     /// <param name="dialogs">Used to copy and save the body; <see langword="null"/> makes both commands do nothing.</param>
-    public ResponsePanelViewModel(IDialogService? dialogs = null) => _dialogs = dialogs;
+    /// <param name="time">The clock stamping the response snapshots; defaults to the system clock.</param>
+    public ResponsePanelViewModel(IDialogService? dialogs = null, TimeProvider? time = null)
+    {
+        _dialogs = dialogs;
+        _time = time ?? TimeProvider.System;
+    }
+
+    /// <summary>Gets the comparison of the current response with the previous one or a pinned baseline.</summary>
+    public ResponseDiffViewModel Diff { get; } = new();
 
     /// <summary>Gets the tests and script errors of the last scripted send.</summary>
     public TestResultsViewModel Tests { get; } = new();
@@ -114,7 +123,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     /// <summary>Shows that a request is in flight and drops the previous result.</summary>
     public void ShowSending()
     {
-        Clear();
+        ResetDisplay();
         State = ResponseState.Sending;
     }
 
@@ -123,7 +132,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     public void ShowReport(SendReport report)
     {
         ArgumentNullException.ThrowIfNull(report);
-        Clear();
+        ResetDisplay();
         UnresolvedWarning = report.UnresolvedVariables.Count == 0
             ? null
             : Strings.VariablesUnresolved(string.Join(", ", report.UnresolvedVariables));
@@ -154,6 +163,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         ProtocolText = response.Protocol;
         ApplyTimings(response);
         ApplyBody();
+        Diff.Record(response, _time.GetLocalNow());
     }
 
     /// <summary>Shows the outcome of a send with scripts.</summary>
@@ -163,7 +173,7 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         ArgumentNullException.ThrowIfNull(report);
         if (report.AbortedBy is { } aborted)
         {
-            Clear();
+            ResetDisplay();
             State = ResponseState.Failed;
             var message = aborted.Error?.Message;
             ErrorMessage = Strings.ResponsePreRequestFailed(
@@ -178,8 +188,14 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         Tests.Show(report.Runs);
     }
 
-    /// <summary>Resets the panel to <see cref="ResponseState.Empty"/>.</summary>
+    /// <summary>Resets the panel to <see cref="ResponseState.Empty"/> and forgets the diff snapshots, except the pinned baseline.</summary>
     public void Clear()
+    {
+        ResetDisplay();
+        Diff.Clear();
+    }
+
+    private void ResetDisplay()
     {
         _response = null;
         State = ResponseState.Empty;

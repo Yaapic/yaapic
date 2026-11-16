@@ -397,6 +397,45 @@ public static class Strings
     public static string DialogSaveChangesTitle(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Save changes to '{0}'?", "Enregistrer les modifications de « {0} » ?"), a0);
 
+    /// <summary>Pinned baseline</summary>
+    public static string DiffCompareWithBaseline => Localizer.Pick("Pinned baseline", "Référence épinglée");
+
+    /// <summary>Previous response</summary>
+    public static string DiffCompareWithPrevious => Localizer.Pick("Previous response", "Réponse précédente");
+
+    /// <summary>Show unchanged lines</summary>
+    public static string DiffExpandAll => Localizer.Pick("Show unchanged lines", "Afficher les lignes inchangées");
+
+    /// <summary>{0} unchanged lines</summary>
+    public static string DiffFolded(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} unchanged lines", "{0} lignes inchangées"), a0);
+
+    /// <summary>Ignore volatile headers</summary>
+    public static string DiffIgnoreVolatileHeaders => Localizer.Pick("Ignore volatile headers", "Ignorer les en-têtes volatils");
+
+    /// <summary>Ignore whitespace</summary>
+    public static string DiffIgnoreWhitespace => Localizer.Pick("Ignore whitespace", "Ignorer les espaces");
+
+    /// <summary>No differences</summary>
+    public static string DiffNoDifferences => Localizer.Pick("No differences", "Aucune différence");
+
+    /// <summary>Pin as baseline</summary>
+    public static string DiffPin => Localizer.Pick("Pin as baseline", "Épingler comme référence");
+
+    /// <summary>Baseline pinned at {0}</summary>
+    public static string DiffPinnedAt(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Baseline pinned at {0}", "Référence épinglée à {0}"), a0);
+
+    /// <summary>{0} added, {1} removed, {2} header changes</summary>
+    public static string DiffSummary(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} added, {1} removed, {2} header changes", "{0} ajoutées, {1} supprimées, {2} en-têtes modifiés"), a0, a1, a2);
+
+    /// <summary>Too large or binary to compare</summary>
+    public static string DiffTooLarge => Localizer.Pick("Too large or binary to compare", "Trop volumineux ou binaire pour être comparé");
+
+    /// <summary>Unpin baseline</summary>
+    public static string DiffUnpin => Localizer.Pick("Unpin baseline", "Retirer la référence");
+
     /// <summary>Enter a username and a password for Digest authentication.</summary>
     public static string DigestCredentialsMissing => Localizer.Pick("Enter a username and a password for Digest authentication.", "Saisissez un nom d’utilisateur et un mot de passe pour l’authentification Digest.");
 
@@ -902,6 +941,9 @@ public static class Strings
 
     /// <summary>Sending</summary>
     public static string ResponseSending => Localizer.Pick("Sending", "Envoi en cours");
+
+    /// <summary>Diff</summary>
+    public static string ResponseTabDiff => Localizer.Pick("Diff", "Différences");
 
     /// <summary>Tests</summary>
     public static string ResponseTabTests => Localizer.Pick("Tests", "Tests");
