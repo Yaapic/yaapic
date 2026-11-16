@@ -58,6 +58,12 @@ public sealed class FakeOAuth2TokenService : IOAuth2TokenService
     /// <inheritdoc/>
     public OAuth2TokenStatus GetStatus(OAuth2Settings resolved) => Status;
 
+    /// <summary>Gets the number of <see cref="ClearAllTokens"/> calls.</summary>
+    public int ClearAllCount { get; private set; }
+
     /// <inheritdoc/>
     public void Clear(OAuth2Settings resolved) => ClearCount++;
+
+    /// <inheritdoc/>
+    public void ClearAllTokens() => ClearAllCount++;
 }

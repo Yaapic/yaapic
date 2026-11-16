@@ -51,6 +51,12 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     /// <summary>Gets the comparison of the current response with the previous one or a pinned baseline.</summary>
     public ResponseDiffViewModel Diff { get; } = new();
 
+    /// <summary>Raised when the user asks to see the response diff; the view switches to its Diff tab.</summary>
+    public event EventHandler? ShowDiffRequested;
+
+    /// <summary>Asks the view to show the Diff tab.</summary>
+    public void RequestShowDiff() => ShowDiffRequested?.Invoke(this, EventArgs.Empty);
+
     /// <summary>Gets the tests and script errors of the last scripted send.</summary>
     public TestResultsViewModel Tests { get; } = new();
 

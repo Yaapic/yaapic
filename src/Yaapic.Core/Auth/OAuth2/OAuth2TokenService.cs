@@ -66,6 +66,9 @@ public sealed class OAuth2TokenService(
         cache.Remove(OAuth2TokenKey.For(resolved));
     }
 
+    /// <inheritdoc/>
+    public void ClearAllTokens() => cache.Clear();
+
     // The work runs once per key without the caller's token (a cancelled first caller must not fail the others);
     // each caller stops waiting on its own token. The transport has its own timeout.
     private Task<OAuth2TokenResult> Shared(

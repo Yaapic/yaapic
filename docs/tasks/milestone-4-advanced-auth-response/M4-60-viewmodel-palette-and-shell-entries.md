@@ -1,6 +1,6 @@
 # M4-60: ViewModel: palette commands and shell entries for the M4 tools
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-41, M4-44, M4-48, M4-49, M4-58
 
@@ -27,9 +27,9 @@ The windows themselves, composition.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: each entry appears with its localized name; availability rules (request open or not, response present or not); invoking each
+- [x] Tests in `Yaapic.ViewModels.Tests`: each entry appears with its localized name; availability rules (request open or not, response present or not); invoking each
   raises its event or calls its service once; `ClearAllTokens` clears the cache (Core test).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

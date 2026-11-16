@@ -1,5 +1,6 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using Yaapic.Core.Auth.OAuth2;
 using Yaapic.Core.Secrets;
 using Yaapic.Localization;
 using Yaapic.ViewModels.Shell;
@@ -12,13 +13,16 @@ public sealed class CommandsPaletteSource : IPaletteSource
     private static string Category => Strings.PaletteCategoryCommand;
 
     private readonly ShellViewModel _shell;
+    private readonly IOAuth2TokenService? _oauth2Tokens;
 
     /// <summary>Creates the source.</summary>
     /// <param name="shell">The shell whose commands are offered.</param>
-    public CommandsPaletteSource(ShellViewModel shell)
+    /// <param name="oauth2Tokens">The OAuth 2.0 token service; the clear-tokens entry is offered only when set.</param>
+    public CommandsPaletteSource(ShellViewModel shell, IOAuth2TokenService? oauth2Tokens = null)
     {
         ArgumentNullException.ThrowIfNull(shell);
         _shell = shell;
+        _oauth2Tokens = oauth2Tokens;
     }
 
     /// <inheritdoc/>
@@ -34,6 +38,17 @@ public sealed class CommandsPaletteSource : IPaletteSource
             if (active.SendCommand.CanExecute(null))
             {
                 items.Add(Item("send-request", Strings.PaletteSendRequest, "Ctrl+Enter", active.SendCommand));
+            }
+
+            if (active.GenerateCodeCommand.CanExecute(null))
+            {
+                items.Add(Item("generate-code", Strings.PaletteGenerateCode, null, active.GenerateCodeCommand));
+            }
+
+            if (active.Response.Diff.Current is not null)
+            {
+                items.Add(Item("compare-response", Strings.PaletteCompareResponse, null, () => active.Response.RequestShowDiff()));
+                items.Add(Item("pin-baseline", Strings.PalettePinBaseline, null, active.Response.Diff.PinCommand));
             }
 
             if (active.IsSending)
@@ -60,6 +75,13 @@ public sealed class CommandsPaletteSource : IPaletteSource
         items.Add(Item("toggle-layout", Strings.PaletteToggleLayout, null, _shell.Layout.ToggleCommand));
         items.Add(Item("toggle-console", Strings.PaletteToggleConsole, "Ctrl+`", _shell.ToggleConsoleCommand));
         items.Add(Item("clear-console", Strings.PaletteClearConsole, null, _shell.ClearConsoleCommand));
+        items.Add(Item("decode-jwt", Strings.PaletteDecodeJwt, null, () => _shell.RequestJwtDecoder()));
+        items.Add(Item("client-certificates", Strings.PaletteClientCertificates, null, () => _shell.RequestCertificates()));
+        if (_oauth2Tokens is not null)
+        {
+            items.Add(Item("clear-oauth-tokens", Strings.PaletteClearOAuthTokens, null, () => _oauth2Tokens.ClearAllTokens()));
+        }
+
         var vault = _shell.Vault;
         switch (vault.State)
         {

@@ -64,4 +64,7 @@ public interface IOAuth2TokenService
     /// <summary>Removes the cached token.</summary>
     /// <param name="resolved">The settings with variables resolved.</param>
     void Clear(OAuth2Settings resolved);
+
+    /// <summary>Removes every cached token.</summary>
+    void ClearAllTokens();
 }

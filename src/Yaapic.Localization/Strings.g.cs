@@ -848,8 +848,23 @@ public static class Strings
     /// <summary>Clear history</summary>
     public static string PaletteClearHistory => Localizer.Pick("Clear history", "Effacer l'historique");
 
+    /// <summary>Clear OAuth 2.0 tokens</summary>
+    public static string PaletteClearOAuthTokens => Localizer.Pick("Clear OAuth 2.0 tokens", "Effacer les jetons OAuth 2.0");
+
+    /// <summary>Client certificates...</summary>
+    public static string PaletteClientCertificates => Localizer.Pick("Client certificates...", "Certificats clients...");
+
     /// <summary>Close tab</summary>
     public static string PaletteCloseTab => Localizer.Pick("Close tab", "Fermer l'onglet");
+
+    /// <summary>Compare response with previous</summary>
+    public static string PaletteCompareResponse => Localizer.Pick("Compare response with previous", "Comparer la réponse avec la précédente");
+
+    /// <summary>Decode JWT</summary>
+    public static string PaletteDecodeJwt => Localizer.Pick("Decode JWT", "Décoder un JWT");
+
+    /// <summary>Generate code for this request</summary>
+    public static string PaletteGenerateCode => Localizer.Pick("Generate code for this request", "Générer le code de cette requête");
 
     /// <summary>Go to tab: {0}</summary>
     public static string PaletteGoToTab(object? a0) =>
@@ -872,6 +887,9 @@ public static class Strings
 
     /// <summary>No matching commands</summary>
     public static string PaletteNoMatch => Localizer.Pick("No matching commands", "Aucune commande correspondante");
+
+    /// <summary>Pin response as baseline</summary>
+    public static string PalettePinBaseline => Localizer.Pick("Pin response as baseline", "Épingler la réponse comme référence");
 
     /// <summary>Type a command or search requests</summary>
     public static string PalettePlaceholder => Localizer.Pick("Type a command or search requests", "Saisissez une commande ou recherchez des requêtes");

@@ -217,6 +217,15 @@ public class OAuth2TokenServiceTests
     }
 
     [Fact]
+    public async Task ClearAllTokens_EmptiesTheCache()
+    {
+        var (service, _) = Create();
+        await service.GetTokenAsync(Settings(), CancellationToken.None);
+        service.ClearAllTokens();
+        Assert.False(_cache.TryGet(OAuth2TokenKey.For(Settings()), out _));
+    }
+
+    [Fact]
     public async Task GetStatus_ReportsNoTokenValidAndExpired()
     {
         var (service, _) = Create();

@@ -189,6 +189,18 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
     /// <summary>Asks the views to open the environments dialog.</summary>
     public void RequestEnvironments() => EnvironmentsRequested?.Invoke(this, EventArgs.Empty);
 
+    /// <summary>Raised when the user asks for the JWT decoder; the views open their decoder dialog.</summary>
+    public event EventHandler? JwtDecoderRequested;
+
+    /// <summary>Asks the views to open the JWT decoder dialog.</summary>
+    public void RequestJwtDecoder() => JwtDecoderRequested?.Invoke(this, EventArgs.Empty);
+
+    /// <summary>Raised when the user asks to manage client certificates; the views open their certificates dialog.</summary>
+    public event EventHandler? CertificatesRequested;
+
+    /// <summary>Asks the views to open the client certificates dialog.</summary>
+    public void RequestCertificates() => CertificatesRequested?.Invoke(this, EventArgs.Empty);
+
     /// <summary>Loads the stores and restores the saved session; opens one new tab when none is restored.</summary>
     /// <returns>A task that completes when the shell is ready.</returns>
     public async Task InitializeAsync()
