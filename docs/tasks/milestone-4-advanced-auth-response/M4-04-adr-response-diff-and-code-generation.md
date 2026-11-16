@@ -1,6 +1,6 @@
 # M4-04: ADR 0015: response diff and code generation
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -44,9 +44,9 @@ Code, UI, importing from cURL (M5), SDK-style clients, generating a whole collec
 
 ## Acceptance criteria
 
-- [ ] ADR 0015 (`docs/adr/0015-response-diff-and-code-generation.md`) contains every decision above plus the grammar check; the ADR
+- [x] ADR 0015 (`docs/adr/0015-response-diff-and-code-generation.md`) contains every decision above plus the grammar check; the ADR
   index lists it.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

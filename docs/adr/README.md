@@ -16,6 +16,7 @@
 | [0012](0012-localization-and-accent.md) | Localization (FR/EN) and accent colour | Accepted |
 | [0013](0013-advanced-authentication.md) | Advanced authentication | Accepted |
 | [0014](0014-transport-certificates-timings.md) | Transport, client certificates, timings and HTTP version | Accepted |
+| [0015](0015-response-diff-and-code-generation.md) | Response diff and code generation | Accepted |
 
 Each ADR has a status, the options considered, the Native AOT risks and the decision. A "Proposed" ADR is confirmed by
 the card that first needs it.
