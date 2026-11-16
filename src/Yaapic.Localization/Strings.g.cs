@@ -96,6 +96,26 @@ public static class Strings
     /// <summary>Select file</summary>
     public static string BodySelectFile => Localizer.Pick("Select file", "Sélectionner un fichier");
 
+    /// <summary>The client certificate file was not found: {0}</summary>
+    public static string CertificateFileMissing(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate file was not found: {0}", "Le fichier du certificat client est introuvable : {0}"), a0);
+
+    /// <summary>The client certificate "{0}" could not be loaded. Check the file format and the passphrase.</summary>
+    public static string CertificateLoadFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate \"{0}\" could not be loaded. Check the file format and the passphrase.", "Le certificat client « {0} » n'a pas pu être chargé. Vérifiez le format du fichier et la phrase secrète."), a0);
+
+    /// <summary>The client certificate "{0}" has no private key.</summary>
+    public static string CertificateNoPrivateKey(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate \"{0}\" has no private key.", "Le certificat client « {0} » n'a pas de clé privée."), a0);
+
+    /// <summary>No passphrase is stored for the client certificate "{0}".</summary>
+    public static string CertificatePassphraseMissing(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No passphrase is stored for the client certificate \"{0}\".", "Aucune phrase secrète n'est enregistrée pour le certificat client « {0} »."), a0);
+
+    /// <summary>Unlock the vault to use the client certificate "{0}".</summary>
+    public static string CertificateVaultLocked(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unlock the vault to use the client certificate \"{0}\".", "Déverrouillez le coffre pour utiliser le certificat client « {0} »."), a0);
+
     /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
     public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");
 

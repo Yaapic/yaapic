@@ -369,5 +369,10 @@
   "oauth2.authorizationUrlMissing": "Enter an absolute http or https authorization URL.",
   "oauth2.tokenError": "OAuth 2.0: ",
   "oauth2.portBusy": "The loopback port {0} is already in use. Free it or change the redirect URI port.",
-  "oauth2.browserFailed": "Could not open the browser. Try again, or check that a default browser is configured."
+  "oauth2.browserFailed": "Could not open the browser. Try again, or check that a default browser is configured.",
+  "certificate.vaultLocked": "Unlock the vault to use the client certificate \"{0}\".",
+  "certificate.passphraseMissing": "No passphrase is stored for the client certificate \"{0}\".",
+  "certificate.fileMissing": "The client certificate file was not found: {0}",
+  "certificate.loadFailed": "The client certificate \"{0}\" could not be loaded. Check the file format and the passphrase.",
+  "certificate.noPrivateKey": "The client certificate \"{0}\" has no private key."
 }

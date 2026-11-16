@@ -369,5 +369,10 @@
   "oauth2.authorizationUrlMissing": "Saisissez une URL d'autorisation absolue en http ou https.",
   "oauth2.tokenError": "OAuth 2.0 : ",
   "oauth2.portBusy": "Le port de boucle locale {0} est déjà utilisé. Libérez-le ou changez le port de l'URI de redirection.",
-  "oauth2.browserFailed": "Impossible d'ouvrir le navigateur. Réessayez, ou vérifiez qu'un navigateur par défaut est configuré."
+  "oauth2.browserFailed": "Impossible d'ouvrir le navigateur. Réessayez, ou vérifiez qu'un navigateur par défaut est configuré.",
+  "certificate.vaultLocked": "Déverrouillez le coffre pour utiliser le certificat client « {0} ».",
+  "certificate.passphraseMissing": "Aucune phrase secrète n'est enregistrée pour le certificat client « {0} ».",
+  "certificate.fileMissing": "Le fichier du certificat client est introuvable : {0}",
+  "certificate.loadFailed": "Le certificat client « {0} » n'a pas pu être chargé. Vérifiez le format du fichier et la phrase secrète.",
+  "certificate.noPrivateKey": "Le certificat client « {0} » n'a pas de clé privée."
 }

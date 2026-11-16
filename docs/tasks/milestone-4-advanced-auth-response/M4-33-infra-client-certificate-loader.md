@@ -1,6 +1,6 @@
 # M4-33: Infrastructure: client certificate loader and provider
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-30, M4-31, M4-32
 
@@ -38,13 +38,19 @@ Using the certificate in the transport (M4-34), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` with certificates generated at test time (`CertificateRequest`, self-signed, exported to PFX with
+- [x] Tests in `Yaapic.Infrastructure.Tests` with certificates generated at test time (`CertificateRequest`, self-signed, exported to PFX with
   and without passphrase and to PEM cert + key files in a temp folder), `InMemoryCertificateStore` and `InMemorySecretVault`: PFX with
   passphrase from the vault; PFX without; PEM with separate key; PEM combined in one file; encrypted PEM key; wrong passphrase; locked
   vault; missing passphrase secret; missing file; certificate with no private key; no match returns an empty lookup; cache hit loads once;
   `Changed` invalidates; errors contain no secret.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
 `feat(infra): load client certificates from PFX and PEM files`
+
+## Notes
+
+- Key storage flag: `X509KeyStorageFlags.DefaultKeySet` on Windows (SChannel cannot use ephemeral keys for TLS client auth), `EphemeralKeySet` elsewhere. The Windows flag was not verified against a live mTLS handshake; M4-34 exercises it.
+- A PEM certificate with no key (neither a key file nor a key in the certificate file) reports `CertificateLoadFailed`, because `CreateFromPemFile` throws; only PFX files can report `CertificateNoPrivateKey`.
+- Non-`Unlocked` vault states (locked or not created) both give `CertificateVaultLocked`.
