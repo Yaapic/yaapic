@@ -1,6 +1,6 @@
 # M4-27: Core: the composite authenticator
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-13, M4-16, M4-18, M4-26
 
@@ -26,10 +26,10 @@ Composition wiring (M4-61), auth inheritance (M4-28).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: routing per kind with fake methods; unchanged when no pending auth; unknown kind failure; duplicate
+- [x] Tests in `Yaapic.Core.Tests`: routing per kind with fake methods; unchanged when no pending auth; unknown kind failure; duplicate
   kinds rejected; `PendingAuth` cleared before the method runs; the `RequestSender` integration for JWT (HS256), AWS (fixed clock), OAuth 2.0
   (client credentials with `FakeHttpTransport` answering the token request then the API request) and Digest (401 probe then 200).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
