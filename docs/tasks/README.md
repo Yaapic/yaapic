@@ -402,7 +402,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-03](milestone-4-advanced-auth-response/M4-03-adr-transport-certificates-timings.md) | ADR 0014: transport, client certificates, timings and HTTP version | any | M4-02 | done |
 | [M4-04](milestone-4-advanced-auth-response/M4-04-adr-response-diff-and-code-generation.md) | ADR 0015: response diff and code generation | any | none | done |
 | [M4-05](milestone-4-advanced-auth-response/M4-05-domain-oauth2-settings.md) | Domain: OAuth 2.0 settings and the new auth kinds | any | M4-01 | done |
-| [M4-06](milestone-4-advanced-auth-response/M4-06-domain-jwt-and-aws-settings.md) | Domain: JWT and AWS Signature v4 settings | any | M4-05 | todo |
+| [M4-06](milestone-4-advanced-auth-response/M4-06-domain-jwt-and-aws-settings.md) | Domain: JWT and AWS Signature v4 settings | any | M4-05 | done |
 | [M4-07](milestone-4-advanced-auth-response/M4-07-yaml-request-oauth2.md) | YAML request serializer: OAuth 2.0 | any | M4-05 | todo |
 | [M4-08](milestone-4-advanced-auth-response/M4-08-yaml-request-jwt-digest-aws.md) | YAML request serializer: JWT, Digest and AWS Signature v4 | any | M4-06, M4-07 | todo |
 | [M4-09](milestone-4-advanced-auth-response/M4-09-core-resolved-advanced-auth.md) | Core: resolved advanced authentication | any | M4-06 | todo |

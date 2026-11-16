@@ -1,6 +1,6 @@
 # M4-06: Domain: JWT and AWS Signature v4 settings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-05
 
@@ -30,8 +30,8 @@ Signing, resolution, YAML, UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: defaults, equality, `with`, the two equivalence cases.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests in `Yaapic.Domain.Tests`: defaults, equality, `with`, the two equivalence cases.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
