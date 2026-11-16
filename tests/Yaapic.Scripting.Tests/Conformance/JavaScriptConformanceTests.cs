@@ -9,7 +9,7 @@ namespace Yaapic.Scripting.Tests.Conformance;
 /// </summary>
 public sealed class JavaScriptConformanceTests
 {
-    private static readonly Case[] Cases =
+    internal static readonly Case[] Cases =
     [
         // Idiom: yaapic.test + yaapic.response.to.have.status(200).
         new("status-code") { Post = "yaapic.test('Status code is 200', () => { yaapic.response.to.have.status(200); });", Tests = ["Status code is 200|P"] },

@@ -1,6 +1,6 @@
 # U-05: Convert Postman and Bruno scripts to `yaapic`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: U-02
 
@@ -28,10 +28,10 @@ Importing whole collections (M5), Lua conversion of Bruno scripts (Bruno scripts
 
 ## Acceptance criteria
 
-- [ ] Tests for the converter: every Postman member covered by the conformance suites, the mapped Bruno members, strings and comments
+- [x] Tests for the converter: every Postman member covered by the conformance suites, the mapped Bruno members, strings and comments
   left alone, unsupported members reported.
-- [ ] The paste dialog converts, shows the findings and inserts the result in the editor.
-- [ ] Docs: `docs/scripting-compatibility.md` describes the conversion and its limits.
+- [x] The paste dialog converts, shows the findings and inserts the result in the editor.
+- [x] Docs: `docs/scripting-compatibility.md` describes the conversion and its limits.
 
 ## Suggested commit message
 

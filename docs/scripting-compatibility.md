@@ -1,6 +1,6 @@
 # Scripting compatibility with Postman (JavaScript)
 
-Yaapic runs scripts on QuickJS-NG with a `yaapic` object whose API follows Postman's `pm` (ADR [0009](adr/0009-scripting.md)); a script written for Postman replaces `pm` with `yaapic`, and a converter is planned. This page lists
+Yaapic runs scripts on QuickJS-NG with a `yaapic` object whose API follows Postman's `pm` (ADR [0009](adr/0009-scripting.md)); a script written for Postman replaces `pm` with `yaapic` (the script editor's *Paste Postman/Bruno...* action does it, see [Converting Postman and Bruno scripts](#converting-postman-and-bruno-scripts)). This page lists
 what is supported and what differs from Postman. It is kept in step with the conformance suite
 `tests/Yaapic.Scripting.Tests/Conformance/JavaScriptConformanceTests.cs` (and, for Lua, `LuaConformanceTests.cs`): every
 `supported` row is covered by a case there, and every `unsupported` row by an unsupported-member case.
@@ -150,3 +150,23 @@ scripts, JavaScript request test) and shows that variables and the response are 
 
 Open an issue with the script (or the smallest piece that fails), the Postman behavior you expect, and what Yaapic
 printed in the console. A fix starts as a new case in the conformance suite.
+
+## Converting Postman and Bruno scripts
+
+The *Paste Postman/Bruno...* button of the script editor opens a dialog: paste a script, check the dialect (guessed from the
+code, `pm.`/`postman.` versus `bru.`/`req.`/`res.`, and overridable), read the preview and the list of findings, then insert
+the result at the end of the script. The same `ScriptConverter` (`Yaapic.Core`) is meant for the collection importers of
+milestone 5. It rewrites JavaScript only; strings, comments and the text of template literals are never touched.
+
+- **Postman.** `pm.` becomes `yaapic.`; `postman.setEnvironmentVariable`, `getEnvironmentVariable`, `clearEnvironmentVariable` and the
+  global equivalents map to `yaapic.environment.*` / `yaapic.globals.*`. Members from the tables above marked unsupported
+  (`pm.execution`, `pm.vault`, `pm.iterationData`, `pm.visualizer`, `pm.require`, `pm.request.auth`, `pm.response.to.have.jsonSchema`, ...) are renamed
+  and reported, so they fail at run time with Yaapic's own message; other `postman.*` calls are left unchanged and reported.
+- **Bruno.** An explicit table maps `bru.getEnvVar`/`setEnvVar`, `getVar`/`setVar`/`hasVar`/`deleteVar`, `getGlobalEnvVar`/`setGlobalEnvVar`,
+  `getCollectionVar`, `interpolate`, `req.getHeader`/`setHeader`/`deleteHeader`, `getMethod`/`setMethod`, `getUrl`/`setUrl`, `getBody`/`setBody`,
+  `res.status`, `getStatus`, `body`, `getBody()`, `headers`, `getHeader`, `responseTime`, and a bare `test(...)`/`expect(...)` to `yaapic.*`.
+  `req.setBody` becomes an assignment to the raw body, which must be a string. Any other `bru.*`, `req.*` or `res.*` member is
+  kept and reported.
+- **Libraries.** `require`, `CryptoJS`, `moment`, `cheerio`, `tv4`, `lodash`, `atob` and `btoa` are reported (see *No bundled libraries*).
+- **Limits.** Regular-expression literals are not recognised by the scanner; a Bruno script that declares its own `test` or `expect`
+  function gets it renamed; Lua editors are not converted.

@@ -625,6 +625,36 @@ public static class Strings
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
 
+    /// <summary>Paste Postman/Bruno...</summary>
+    public static string ScriptConvert => Localizer.Pick("Paste Postman/Bruno...", "Coller Postman/Bruno...");
+
+    /// <summary>Written for</summary>
+    public static string ScriptConvertDialect => Localizer.Pick("Written for", "Écrit pour");
+
+    /// <summary>To check by hand</summary>
+    public static string ScriptConvertFindings => Localizer.Pick("To check by hand", "À vérifier à la main");
+
+    /// <summary>Insert</summary>
+    public static string ScriptConvertInsert => Localizer.Pick("Insert", "Insérer");
+
+    /// <summary>line</summary>
+    public static string ScriptConvertLine => Localizer.Pick("line", "ligne");
+
+    /// <summary>Everything was converted.</summary>
+    public static string ScriptConvertNone => Localizer.Pick("Everything was converted.", "Tout a été converti.");
+
+    /// <summary>Postman and Bruno scripts are JavaScript: switch the editor to JavaScript to convert one</summary>
+    public static string ScriptConvertNotJs => Localizer.Pick("Postman and Bruno scripts are JavaScript: switch the editor to JavaScript to convert one", "Les scripts Postman et Bruno sont en JavaScript : passez l’éditeur en JavaScript pour en convertir un");
+
+    /// <summary>Result</summary>
+    public static string ScriptConvertPreview => Localizer.Pick("Result", "Résultat");
+
+    /// <summary>Pasted script</summary>
+    public static string ScriptConvertSource => Localizer.Pick("Pasted script", "Script collé");
+
+    /// <summary>Convert a Postman or Bruno script</summary>
+    public static string ScriptConvertTitle => Localizer.Pick("Convert a Postman or Bruno script", "Convertir un script Postman ou Bruno");
+
     /// <summary>Variables, tests and requests: yaapic.* (JavaScript and Lua)</summary>
     public static string ScriptHint => Localizer.Pick("Variables, tests and requests: yaapic.* (JavaScript and Lua)", "Variables, tests et requêtes : yaapic.* (JavaScript et Lua)");
 

@@ -14,6 +14,7 @@
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <ListView x:Name="ScriptPhases" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
@@ -29,7 +30,9 @@
           <MenuFlyout x:Name="SnippetsMenu" Opening="OnSnippetsOpening"/>
         </Button.Flyout>
       </Button>
-      <TextBlock x:Name="Hint" Grid.Column="3" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+      <Button Grid.Column="3" VerticalAlignment="Center" Content="{x:Bind loc:Strings.ScriptConvert}"
+              AutomationProperties.Name="{x:Bind loc:Strings.ScriptConvert}" Click="OnConvertClick"/>
+      <TextBlock x:Name="Hint" Grid.Column="4" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                  FontSize="{StaticResource YaapicFontSizeCaption}"
                  Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
     </Grid>

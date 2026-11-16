@@ -75,6 +75,22 @@ public sealed partial class ScriptsEditorView : UserControl
         }
     }
 
+    private async void OnConvertClick(object sender, RoutedEventArgs e)
+    {
+        if (ViewModel is not { } vm)
+        {
+            return;
+        }
+
+        var dialog = new ConvertScriptDialog(vm.Selected.Language) { XamlRoot = XamlRoot, RequestedTheme = ActualTheme };
+        await dialog.ShowAsync();
+        if (!string.IsNullOrEmpty(dialog.Result))
+        {
+            var current = vm.Selected.Source;
+            vm.Selected.Source = current.Length == 0 ? dialog.Result : current.TrimEnd() + "\n" + dialog.Result;
+        }
+    }
+
     private void OnViewModelChanged()
     {
         Bindings?.Update();

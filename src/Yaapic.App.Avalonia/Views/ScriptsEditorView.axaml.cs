@@ -50,6 +50,21 @@ public sealed partial class ScriptsEditorView : UserControl
         }
     }
 
+    private async void OnConvertClick(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (Scripts is not { } scripts || TopLevel.GetTopLevel(this) is not Window owner)
+        {
+            return;
+        }
+
+        var converted = await new ConvertScriptWindow(scripts.Selected.Language).ShowDialog<string?>(owner);
+        if (!string.IsNullOrEmpty(converted))
+        {
+            var current = scripts.Selected.Source;
+            scripts.Selected.Source = current.Length == 0 ? converted : current.TrimEnd() + "\n" + converted;
+        }
+    }
+
     // Index based, like the body kind: the position is the one in the picker items.
     private void OnScriptPhaseChanged(object? sender, SelectionChangedEventArgs e)
     {
