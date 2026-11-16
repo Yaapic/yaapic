@@ -1,6 +1,6 @@
 # M4-14: Core: JWT decoder
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-11
 
@@ -29,9 +29,9 @@ Signature verification, JWE, UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: the RFC 7515 A.1 token decodes with its header and payload; `Bearer ` prefix and whitespace; two parts,
+- [x] Tests in `Yaapic.Core.Tests`: the RFC 7515 A.1 token decodes with its header and payload; `Bearer ` prefix and whitespace; two parts,
   four parts, bad base64, non-object payload, non-JSON all fail; claims parsed; each `JwtStatus`; unsigned token; property order kept.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
