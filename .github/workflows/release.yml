@@ -134,7 +134,7 @@ jobs:
 
       - name: Keep the packages of a dry run
         if: env.IS_RELEASE != 'true'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: dry-run-${{ matrix.rid }}
           path: Releases
