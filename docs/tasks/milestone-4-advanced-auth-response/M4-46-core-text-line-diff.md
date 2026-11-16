@@ -1,6 +1,6 @@
 # M4-46: Core: line diff (Myers)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-04
 
@@ -30,11 +30,11 @@ Headers, JSON awareness, folding of context (VM), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: identical inputs; empty vs non-empty both ways; one changed line; insertion and deletion at start, middle, end;
+- [x] Tests in `Yaapic.Core.Tests`: identical inputs; empty vs non-empty both ways; one changed line; insertion and deletion at start, middle, end;
   a classic textbook example (`ABCABBA` vs `CBABAC` lines gives an edit script of length 5); reordered blocks; duplicated lines; ignore-whitespace
   true and false; CRLF vs LF split; line numbers consistent (replaying the script on the old lines reproduces the new lines: a property-style test over a
   few hundred random small inputs with a fixed seed); size guard; `Summarize`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

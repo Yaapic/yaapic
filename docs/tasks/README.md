@@ -442,7 +442,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-43](milestone-4-advanced-auth-response/M4-43-viewmodel-auth-editor-integration.md) | ViewModel: the auth editor offers the new kinds | any | M4-08, M4-41, M4-42 | done |
 | [M4-44](milestone-4-advanced-auth-response/M4-44-viewmodel-certificates.md) | ViewModel: client certificates settings | any | M4-31, M4-32 | done |
 | [M4-45](milestone-4-advanced-auth-response/M4-45-viewmodel-response-timings.md) | ViewModel: response timings and protocol | any | M4-36, M4-39 | done |
-| [M4-46](milestone-4-advanced-auth-response/M4-46-core-text-line-diff.md) | Core: line diff (Myers) | any | M4-04 | todo |
+| [M4-46](milestone-4-advanced-auth-response/M4-46-core-text-line-diff.md) | Core: line diff (Myers) | any | M4-04 | done |
 | [M4-47](milestone-4-advanced-auth-response/M4-47-core-response-differ.md) | Core: response differ (headers and body) | any | M4-46 | todo |
 | [M4-48](milestone-4-advanced-auth-response/M4-48-viewmodel-response-diff.md) | ViewModel: response diff | any | M4-45, M4-47 | todo |
 | [M4-49](milestone-4-advanced-auth-response/M4-49-viewmodel-jwt-decoder.md) | ViewModel: JWT decoder | any | M4-14 | todo |
