@@ -1,6 +1,6 @@
 # M4-35: Domain: request timings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-03
 
@@ -28,10 +28,10 @@ Measuring (M4-36), display (M4-45).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: `Sum` with and without null phases; `Empty`; `HttpResponseData` created without timings has
+- [x] Tests in `Yaapic.Domain.Tests`: `Sum` with and without null phases; `Empty`; `HttpResponseData` created without timings has
   `Timings == null` and `Protocol == ""`; record equality includes both.
-- [ ] A test in `Yaapic.Core.Tests` proves a scripted send keeps `Timings` and `Protocol` of the transport response.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] A test in `Yaapic.Core.Tests` proves a scripted send keeps `Timings` and `Protocol` of the transport response.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
