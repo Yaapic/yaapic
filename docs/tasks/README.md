@@ -420,7 +420,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-21](milestone-4-advanced-auth-response/M4-21-core-oauth2-token-client.md) | Core: OAuth 2.0 token client (client credentials, password, refresh) | any | M4-20 | done |
 | [M4-22](milestone-4-advanced-auth-response/M4-22-core-pkce-and-authorization-url.md) | Core: PKCE and the authorization request URL | any | M4-05, M4-11 | done |
 | [M4-23](milestone-4-advanced-auth-response/M4-23-core-oauth2-authorization-code-flow.md) | Core: authorization-code flow ports and orchestration | any | M4-21, M4-22 | done |
-| [M4-24](milestone-4-advanced-auth-response/M4-24-infra-loopback-redirect-receiver.md) | Infrastructure: loopback redirect receiver | any | M4-23 | todo |
+| [M4-24](milestone-4-advanced-auth-response/M4-24-infra-loopback-redirect-receiver.md) | Infrastructure: loopback redirect receiver | any | M4-23 | done |
 | [M4-25](milestone-4-advanced-auth-response/M4-25-infra-system-browser-launcher.md) | Infrastructure: system browser launcher | any | M4-23 | todo |
 | [M4-26](milestone-4-advanced-auth-response/M4-26-core-oauth2-auth-method.md) | Core: OAuth 2.0 authentication method | any | M4-10, M4-21 | todo |
 | [M4-27](milestone-4-advanced-auth-response/M4-27-core-composite-authenticator.md) | Core: the composite authenticator | any | M4-13, M4-16, M4-18, M4-26 | todo |

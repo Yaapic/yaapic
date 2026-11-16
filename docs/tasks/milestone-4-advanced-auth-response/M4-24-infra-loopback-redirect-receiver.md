@@ -1,6 +1,6 @@
 # M4-24: Infrastructure: loopback redirect receiver
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-23
 
@@ -30,11 +30,11 @@ HTTPS, a fixed set of ports, the browser.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` (real sockets on a free port found by binding port 0 first): returns the target after a GET with a
+- [x] Tests in `Yaapic.Infrastructure.Tests` (real sockets on a free port found by binding port 0 first): returns the target after a GET with a
   query; ignores `/favicon.ico` then succeeds; wrong `Host` gets 400 and is ignored; oversize and malformed requests get 400; cancel
   stops the listener and frees the port (a second bind works); port in use gives the localized error; the response has the HTML and
   correct `Content-Length`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green; no listener left open after the tests.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green; no listener left open after the tests.
 
 ## Suggested commit message
 

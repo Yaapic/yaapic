@@ -366,5 +366,6 @@
   "oauth2.redirectUriInvalid": "L'URI de redirection doit être http://127.0.0.1:<port>/<chemin> ou http://localhost:<port>/<chemin>.",
   "oauth2.authorizationTimeout": "Aucune redirection reçue en 3 minutes. Réessayez.",
   "oauth2.stateMismatch": "La réponse d'autorisation ne correspond pas à la demande (state différent). Réessayez.",
-  "oauth2.authorizationUrlMissing": "Saisissez une URL d'autorisation absolue en http ou https."
+  "oauth2.authorizationUrlMissing": "Saisissez une URL d'autorisation absolue en http ou https.",
+  "oauth2.portBusy": "Le port de boucle locale {0} est déjà utilisé. Libérez-le ou changez le port de l'URI de redirection."
 }

@@ -475,6 +475,10 @@ public static class Strings
     /// <summary>Interactive OAuth 2.0 sign-in is not available yet.</summary>
     public static string Oauth2NotAvailable => Localizer.Pick("Interactive OAuth 2.0 sign-in is not available yet.", "La connexion interactive OAuth 2.0 n'est pas encore disponible.");
 
+    /// <summary>The loopback port {0} is already in use. Free it or change the redirect URI port.</summary>
+    public static string Oauth2PortBusy(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The loopback port {0} is already in use. Free it or change the redirect URI port.", "Le port de boucle locale {0} est déjà utilisé. Libérez-le ou changez le port de l'URI de redirection."), a0);
+
     /// <summary>The redirect URI must be http://127.0.0.1:&lt;port&gt;/&lt;path&gt; or http://localhost:&lt;port&gt;/&lt;path&gt;.</summary>
     public static string Oauth2RedirectUriInvalid => Localizer.Pick("The redirect URI must be http://127.0.0.1:<port>/<path> or http://localhost:<port>/<path>.", "L'URI de redirection doit être http://127.0.0.1:<port>/<chemin> ou http://localhost:<port>/<chemin>.");
 
