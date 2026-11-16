@@ -14,13 +14,15 @@ namespace Yaapic.Infrastructure.Http;
 /// <param name="noRedirectClient">The client used when a request does not follow redirects.</param>
 /// <param name="timeout">The default maximum time to wait for the whole response, body included.</param>
 /// <param name="certificates">Finds the client certificate to present (mTLS); <see langword="null"/> presents none.</param>
+/// <param name="support">Tells whether HTTP/3 can be used; <see langword="null"/> means it cannot.</param>
 /// <param name="configureHandler">Tests only: applied to every per-certificate handler the transport creates (e.g. to accept a self-signed server certificate); the composition passes <see langword="null"/>.</param>
 public sealed class HttpClientTransport(
     HttpClient client,
     HttpClient noRedirectClient,
     TimeSpan timeout,
     IClientCertificateProvider? certificates = null,
-    Action<SocketsHttpHandler>? configureHandler = null) : IHttpTransport, IDisposable
+    Action<SocketsHttpHandler>? configureHandler = null,
+    IHttpVersionSupport? support = null) : IHttpTransport, IDisposable
 {
     private sealed record CertificateClients(X509Certificate2 Certificate, HttpClient Follow, HttpClient NoFollow);
 
@@ -88,6 +90,8 @@ public sealed class HttpClientTransport(
         if (unreadable is not null)
             return unreadable;
 
+        HttpVersionMapping.Apply(message, request.HttpVersion, support?.IsHttp3Supported ?? false);
+
         using var _ = message;
         var effectiveTimeout = request.TimeoutSeconds > 0 ? TimeSpan.FromSeconds(request.TimeoutSeconds) : timeout;
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
@@ -118,6 +122,7 @@ public sealed class HttpClientTransport(
                 response.RequestMessage!.RequestUri!.AbsoluteUri)
             {
                 Timings = collector.Build(),
+                Protocol = HttpVersionMapping.ProtocolText(response.Version),
             });
         }
         catch (OperationCanceledException)

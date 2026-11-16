@@ -183,6 +183,8 @@ public class RequestResolverTests
         Assert.False(r.FollowRedirects);
         Assert.Equal(30, r.TimeoutSeconds);
         Assert.True(R(Req("http://a")).FollowRedirects);
+        Assert.Equal(HttpVersionPreference.Http2, R(Req("http://a") with { Settings = new RequestSettings(true, 0, HttpVersionPreference.Http2) }).HttpVersion);
+        Assert.Equal(HttpVersionPreference.Default, R(Req("http://a")).HttpVersion);
     }
 
     [Fact]

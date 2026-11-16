@@ -14,6 +14,7 @@ namespace Yaapic.Core.Http;
 /// <param name="FollowRedirects">Whether redirects are followed.</param>
 /// <param name="TimeoutSeconds">The timeout in seconds; 0 means the application default.</param>
 /// <param name="PendingAuth">The OAuth 2.0, JWT, Digest or AWS authentication the sender applies, or null for the other kinds.</param>
+/// <param name="HttpVersion">The HTTP version the request asks for.</param>
 public sealed record ResolvedRequest(
     HttpMethodKind Method,
     string Url,
@@ -25,7 +26,8 @@ public sealed record ResolvedRequest(
     string? BodyFilePath = null,
     bool FollowRedirects = true,
     int TimeoutSeconds = 0,
-    ResolvedAuth? PendingAuth = null);
+    ResolvedAuth? PendingAuth = null,
+    HttpVersionPreference HttpVersion = HttpVersionPreference.Default);
 
 /// <summary>A part of a multipart form body.</summary>
 /// <param name="Name">The part name.</param>

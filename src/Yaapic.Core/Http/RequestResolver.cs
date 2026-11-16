@@ -106,7 +106,7 @@ public static class RequestResolver
         }
 
         return new(request.Method, url, headers, bodyText, contentType, unresolved, parts, filePath,
-            request.Settings.FollowRedirects, request.Settings.TimeoutSeconds, ResolveAdvancedAuth(request.Auth, Sub));
+            request.Settings.FollowRedirects, request.Settings.TimeoutSeconds, ResolveAdvancedAuth(request.Auth, Sub), request.Settings.HttpVersion);
     }
 
     static void ApplyAuth(RequestAuth auth, Func<string?, string> sub, List<KeyValueEntry> headers, List<KeyValueEntry> query)

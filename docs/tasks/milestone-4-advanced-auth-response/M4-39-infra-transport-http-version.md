@@ -1,6 +1,6 @@
 # M4-39: Infrastructure: send with the chosen HTTP version
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-36, M4-38
 
@@ -36,15 +36,15 @@ The settings UI (M4-59, M4-69, M4-77), showing the protocol (UI timing and statu
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: a recording `HttpMessageHandler`-level test cannot see the version, so use a local TLS server with
+- [x] Tests in `Yaapic.Infrastructure.Tests`: a recording `HttpMessageHandler`-level test cannot see the version, so use a local TLS server with
   ALPN (`SslStream` server offering `h2` and `http/1.1` is heavy: instead assert the mapping through an internal pure function
   `HttpVersionMapping.Apply(HttpRequestMessage, HttpVersionPreference, bool http3Supported)` tested for all four values and both support
   states) plus one end-to-end test with the local plain-HTTP server proving `Http1` and `Default` report `HTTP/1.1`; `Protocol` text mapping
   for 1.1, 2.0, 3.0.
-- [ ] Core test: the resolver copies `HttpVersion`.
-- [ ] Existing transport tests unchanged; Native AOT publish of the host's app project has 0 IL2xxx/IL3xxx warnings and the exe starts and exits (kill
+- [x] Core test: the resolver copies `HttpVersion`.
+- [x] Existing transport tests unchanged; Native AOT publish of the host's app project has 0 IL2xxx/IL3xxx warnings and the exe starts and exits (kill
   it afterwards).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
