@@ -347,5 +347,9 @@
   "settings.tagline": "A fast, local-first API client. No account, no telemetry.",
   "console.levelLog": "Log",
   "console.levelWarn": "Warn",
-  "console.levelError": "Error"
+  "console.levelError": "Error",
+  "jwt.payloadInvalid": "The JWT payload must be a JSON object.",
+  "jwt.headersInvalid": "The extra JWT headers must be a JSON object.",
+  "jwt.keyMissing": "The JWT secret or private key is empty.",
+  "jwt.secretInvalid": "The JWT secret is not valid Base64."
 }

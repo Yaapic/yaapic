@@ -347,5 +347,9 @@
   "settings.tagline": "Un client d'API rapide, local d'abord. Sans compte, sans télémétrie.",
   "console.levelLog": "Log",
   "console.levelWarn": "Avert.",
-  "console.levelError": "Erreur"
+  "console.levelError": "Erreur",
+  "jwt.payloadInvalid": "Le contenu du JWT doit être un objet JSON.",
+  "jwt.headersInvalid": "Les en-têtes JWT supplémentaires doivent être un objet JSON.",
+  "jwt.keyMissing": "Le secret ou la clé privée du JWT est vide.",
+  "jwt.secretInvalid": "Le secret du JWT n’est pas du Base64 valide."
 }

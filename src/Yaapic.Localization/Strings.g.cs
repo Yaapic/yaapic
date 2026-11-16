@@ -415,6 +415,18 @@ public static class Strings
     /// <summary>Yesterday</summary>
     public static string HistoryYesterday => Localizer.Pick("Yesterday", "Hier");
 
+    /// <summary>The extra JWT headers must be a JSON object.</summary>
+    public static string JwtHeadersInvalid => Localizer.Pick("The extra JWT headers must be a JSON object.", "Les en-têtes JWT supplémentaires doivent être un objet JSON.");
+
+    /// <summary>The JWT secret or private key is empty.</summary>
+    public static string JwtKeyMissing => Localizer.Pick("The JWT secret or private key is empty.", "Le secret ou la clé privée du JWT est vide.");
+
+    /// <summary>The JWT payload must be a JSON object.</summary>
+    public static string JwtPayloadInvalid => Localizer.Pick("The JWT payload must be a JSON object.", "Le contenu du JWT doit être un objet JSON.");
+
+    /// <summary>The JWT secret is not valid Base64.</summary>
+    public static string JwtSecretInvalid => Localizer.Pick("The JWT secret is not valid Base64.", "Le secret du JWT n’est pas du Base64 valide.");
+
     /// <summary>English</summary>
     public static string LanguageEnglish => Localizer.Pick("English", "Anglais");
 

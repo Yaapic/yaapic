@@ -409,7 +409,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-10](milestone-4-advanced-auth-response/M4-10-core-authenticator-port-and-pipeline.md) | Core: authenticator port and send pipeline stage | any | M4-09 | done |
 | [M4-11](milestone-4-advanced-auth-response/M4-11-core-jwt-hmac-signing.md) | Core: JWT signing with HMAC | any | M4-01 | done |
 | [M4-12](milestone-4-advanced-auth-response/M4-12-core-jwt-rsa-ecdsa-signing.md) | Core: JWT signing with RSA and ECDSA | any | M4-11 | done |
-| [M4-13](milestone-4-advanced-auth-response/M4-13-core-jwt-authenticator.md) | Core: JWT authenticator | any | M4-10, M4-12 | todo |
+| [M4-13](milestone-4-advanced-auth-response/M4-13-core-jwt-authenticator.md) | Core: JWT authenticator | any | M4-10, M4-12 | done |
 | [M4-14](milestone-4-advanced-auth-response/M4-14-core-jwt-decoder.md) | Core: JWT decoder | any | M4-11 | todo |
 | [M4-15](milestone-4-advanced-auth-response/M4-15-core-digest-challenge-and-response.md) | Core: Digest challenge parsing and response computation | any | M4-01 | todo |
 | [M4-16](milestone-4-advanced-auth-response/M4-16-core-digest-authenticator.md) | Core: Digest authenticator | any | M4-10, M4-15 | todo |

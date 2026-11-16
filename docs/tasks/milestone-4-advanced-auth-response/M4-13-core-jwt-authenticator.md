@@ -1,6 +1,6 @@
 # M4-13: Core: JWT authenticator
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-10, M4-12
 
@@ -34,10 +34,10 @@ Caching tokens, the composite (M4-27), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with a fake `TimeProvider`: header and query placement; `iat` and `exp` added only when absent and when
+- [x] Tests in `Yaapic.Core.Tests` with a fake `TimeProvider`: header and query placement; `iat` and `exp` added only when absent and when
   enabled; claims order preserved; each error (payload not an object, bad extra headers, missing key, bad base64); a user
   `Authorization` header wins; HS256 token verified by recomputing the HMAC in the test; ES256 verified with the public key.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
