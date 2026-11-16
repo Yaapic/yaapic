@@ -1,6 +1,6 @@
 # M4-57: Core: code generator, Go (net/http)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-50
 
@@ -60,10 +60,10 @@ Custom clients and timeouts, `fasthttp`, redirects.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples` (imports differ per sample); escape helper; import selection and order;
+- [x] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples` (imports differ per sample); escape helper; import selection and order;
   header duplicates.
-- [ ] A test, skipped when `gofmt` is not on the PATH, that runs `gofmt -e` on the generated text and expects output equal to the input (already formatted).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] A test, skipped when `gofmt` is not on the PATH, that runs `gofmt -e` on the generated text and expects output equal to the input (already formatted).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
