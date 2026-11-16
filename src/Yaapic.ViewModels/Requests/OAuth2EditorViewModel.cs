@@ -4,7 +4,6 @@ using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Core.Auth.OAuth2;
-using Yaapic.Core.Variables;
 using Yaapic.Domain.Http;
 using Yaapic.Localization;
 
@@ -143,12 +142,12 @@ public sealed partial class OAuth2EditorViewModel : ObservableObject
         get
         {
             List<string> hints = [];
-            if (IsLiteralSecret(ClientSecret))
+            if (AuthHints.IsLiteralSecret(ClientSecret))
             {
                 hints.Add(Strings.AuthSecretLiteralHint(Strings.Oauth2FieldClientSecret));
             }
 
-            if (ShowUserCredentials && IsLiteralSecret(Password))
+            if (ShowUserCredentials && AuthHints.IsLiteralSecret(Password))
             {
                 hints.Add(Strings.AuthSecretLiteralHint(Strings.Oauth2FieldPassword));
             }
@@ -279,17 +278,5 @@ public sealed partial class OAuth2EditorViewModel : ObservableObject
             RefreshTokenStatus();
             Changed?.Invoke(this, EventArgs.Empty);
         }
-    }
-
-    private static bool IsLiteralSecret(string value)
-    {
-        var text = value.Trim();
-        if (text.Length == 0)
-        {
-            return false;
-        }
-
-        var spans = VariableScanner.ScanSpans(text);
-        return !(spans.Count == 1 && spans[0].Start == 0 && spans[0].End == text.Length);
     }
 }

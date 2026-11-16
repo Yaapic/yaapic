@@ -65,9 +65,24 @@ public static class Strings
     /// <summary>Username</summary>
     public static string AuthUsername => Localizer.Pick("Username", "Nom d'utilisateur");
 
+    /// <summary>Access key ID</summary>
+    public static string AwsFieldAccessKeyId => Localizer.Pick("Access key ID", "Identifiant de clé d'accès");
+
     /// <summary>The AWS {0} is empty.</summary>
     public static string AwsFieldMissing(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The AWS {0} is empty.", "Le champ AWS « {0} » est vide."), a0);
+
+    /// <summary>Region</summary>
+    public static string AwsFieldRegion => Localizer.Pick("Region", "Région");
+
+    /// <summary>Secret access key</summary>
+    public static string AwsFieldSecretAccessKey => Localizer.Pick("Secret access key", "Clé d'accès secrète");
+
+    /// <summary>Service</summary>
+    public static string AwsFieldService => Localizer.Pick("Service", "Service");
+
+    /// <summary>Session token</summary>
+    public static string AwsFieldSessionToken => Localizer.Pick("Session token", "Jeton de session");
 
     /// <summary>Cannot read the request body file '{0}'.</summary>
     public static string AwsPayloadUnreadable(object? a0) =>
@@ -456,6 +471,39 @@ public static class Strings
     /// <summary>Yesterday</summary>
     public static string HistoryYesterday => Localizer.Pick("Yesterday", "Hier");
 
+    /// <summary>Add the issued-at (iat) claim</summary>
+    public static string JwtFieldAddIssuedAt => Localizer.Pick("Add the issued-at (iat) claim", "Ajouter la revendication d'émission (iat)");
+
+    /// <summary>Algorithm</summary>
+    public static string JwtFieldAlgorithm => Localizer.Pick("Algorithm", "Algorithme");
+
+    /// <summary>Expires in (seconds, 0 for never)</summary>
+    public static string JwtFieldExpiresInSeconds => Localizer.Pick("Expires in (seconds, 0 for never)", "Expire dans (secondes, 0 pour jamais)");
+
+    /// <summary>Extra header fields</summary>
+    public static string JwtFieldExtraHeaders => Localizer.Pick("Extra header fields", "Champs d'en-tête supplémentaires");
+
+    /// <summary>Header prefix</summary>
+    public static string JwtFieldHeaderPrefix => Localizer.Pick("Header prefix", "Préfixe de l'en-tête");
+
+    /// <summary>Payload</summary>
+    public static string JwtFieldPayload => Localizer.Pick("Payload", "Charge utile");
+
+    /// <summary>Add token to</summary>
+    public static string JwtFieldPlacement => Localizer.Pick("Add token to", "Ajouter le jeton à");
+
+    /// <summary>Private key (PEM)</summary>
+    public static string JwtFieldPrivateKey => Localizer.Pick("Private key (PEM)", "Clé privée (PEM)");
+
+    /// <summary>Query parameter name</summary>
+    public static string JwtFieldQueryParameterName => Localizer.Pick("Query parameter name", "Nom du paramètre de requête");
+
+    /// <summary>Secret</summary>
+    public static string JwtFieldSecret => Localizer.Pick("Secret", "Secret");
+
+    /// <summary>Secret is Base64 encoded</summary>
+    public static string JwtFieldSecretIsBase64 => Localizer.Pick("Secret is Base64 encoded", "Le secret est encodé en Base64");
+
     /// <summary>The extra JWT headers must be a JSON object.</summary>
     public static string JwtHeadersInvalid => Localizer.Pick("The extra JWT headers must be a JSON object.", "Les en-têtes JWT supplémentaires doivent être un objet JSON.");
 
@@ -464,6 +512,12 @@ public static class Strings
 
     /// <summary>The JWT payload must be a JSON object.</summary>
     public static string JwtPayloadInvalid => Localizer.Pick("The JWT payload must be a JSON object.", "Le contenu du JWT doit être un objet JSON.");
+
+    /// <summary>Authorization header</summary>
+    public static string JwtPlacementHeader => Localizer.Pick("Authorization header", "En-tête Authorization");
+
+    /// <summary>Query parameter</summary>
+    public static string JwtPlacementQuery => Localizer.Pick("Query parameter", "Paramètre de requête");
 
     /// <summary>The JWT secret is not valid Base64.</summary>
     public static string JwtSecretInvalid => Localizer.Pick("The JWT secret is not valid Base64.", "Le secret du JWT n’est pas du Base64 valide.");

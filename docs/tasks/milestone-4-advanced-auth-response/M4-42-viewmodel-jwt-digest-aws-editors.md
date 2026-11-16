@@ -1,6 +1,6 @@
 # M4-42: ViewModel: JWT and AWS Signature v4 editors
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-06, M4-40
 
@@ -27,9 +27,9 @@ Wiring into `AuthEditorViewModel` (M4-43), views, signing.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: round trips; `Changed` rules; flags per algorithm and placement; hints with literal, `{{var}}` and
+- [x] Tests in `Yaapic.ViewModels.Tests`: round trips; `Changed` rules; flags per algorithm and placement; hints with literal, `{{var}}` and
   empty values; invalid JSON payload and headers hints; a payload containing `{{x}}` is not flagged.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
