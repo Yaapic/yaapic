@@ -367,5 +367,6 @@
   "oauth2.authorizationTimeout": "Aucune redirection reçue en 3 minutes. Réessayez.",
   "oauth2.stateMismatch": "La réponse d'autorisation ne correspond pas à la demande (state différent). Réessayez.",
   "oauth2.authorizationUrlMissing": "Saisissez une URL d'autorisation absolue en http ou https.",
-  "oauth2.portBusy": "Le port de boucle locale {0} est déjà utilisé. Libérez-le ou changez le port de l'URI de redirection."
+  "oauth2.portBusy": "Le port de boucle locale {0} est déjà utilisé. Libérez-le ou changez le port de l'URI de redirection.",
+  "oauth2.browserFailed": "Impossible d'ouvrir le navigateur. Réessayez, ou vérifiez qu'un navigateur par défaut est configuré."
 }

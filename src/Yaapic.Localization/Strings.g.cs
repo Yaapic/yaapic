@@ -462,6 +462,9 @@ public static class Strings
     /// <summary>Enter an absolute http or https authorization URL.</summary>
     public static string Oauth2AuthorizationUrlMissing => Localizer.Pick("Enter an absolute http or https authorization URL.", "Saisissez une URL d'autorisation absolue en http ou https.");
 
+    /// <summary>Could not open the browser. Try again, or check that a default browser is configured.</summary>
+    public static string Oauth2BrowserFailed => Localizer.Pick("Could not open the browser. Try again, or check that a default browser is configured.", "Impossible d'ouvrir le navigateur. Réessayez, ou vérifiez qu'un navigateur par défaut est configuré.");
+
     /// <summary>Enter the OAuth 2.0 client ID.</summary>
     public static string Oauth2ClientIdMissing => Localizer.Pick("Enter the OAuth 2.0 client ID.", "Saisissez l'identifiant client OAuth 2.0.");
 

@@ -1,6 +1,6 @@
 # M4-25: Infrastructure: system browser launcher
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-23
 
@@ -29,10 +29,10 @@ An embedded web view, copying the URL to the clipboard.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` with the fake start delegate: the `ProcessStartInfo` per OS (the OS is a constructor parameter
+- [x] Tests in `Yaapic.Infrastructure.Tests` with the fake start delegate: the `ProcessStartInfo` per OS (the OS is a constructor parameter
   `OSPlatform` or an enum so all three are tested on any host); `file:///c:/x` and `ftp://` rejected; a URL with spaces and quotes stays one
   argument; start failure mapped.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green; no browser opened by the tests.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green; no browser opened by the tests.
 
 ## Suggested commit message
 
