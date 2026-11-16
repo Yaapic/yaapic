@@ -1,6 +1,6 @@
 # M4-15: Core: Digest challenge parsing and response computation
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-01
 
@@ -33,11 +33,11 @@ Sending the probe (M4-16), `auth-int`, `userhash`, nonce reuse.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: the RFC 2617 section 3.5 example (`Mufasa` / `Circle Of Life`, `/dir/index.html`, the published nonce,
+- [x] Tests in `Yaapic.Core.Tests`: the RFC 2617 section 3.5 example (`Mufasa` / `Circle Of Life`, `/dir/index.html`, the published nonce,
   cnonce `0a4f113b`) reproduces the published response `6629fae49393a05397450978507c4ef1`; the RFC 7616 SHA-256 example reproduces its
   published response; MD5-sess; no-qop form; `auth-int` only throws; parsing of quoted commas, multiple schemes, missing realm, case
   insensitivity, `stale=true`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
