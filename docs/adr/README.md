@@ -14,6 +14,7 @@
 | [0010](0010-secret-vault.md) | Secret vault | Accepted |
 | [0011](0011-distribution-and-updates.md) | Distribution and automatic updates | Accepted |
 | [0012](0012-localization-and-accent.md) | Localization (FR/EN) and accent colour | Accepted |
+| [0013](0013-advanced-authentication.md) | Advanced authentication | Accepted |
 
 Each ADR has a status, the options considered, the Native AOT risks and the decision. A "Proposed" ADR is confirmed by
 the card that first needs it.

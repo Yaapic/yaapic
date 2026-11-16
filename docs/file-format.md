@@ -133,6 +133,12 @@ committed; the file is replaced atomically (temp file, then move) and is `0600` 
 `passphrase`. `kind` is `Environment`, `Collection` (top-level folder id) or `Globals` (owner is the empty GUID).
 A different `version` is refused.
 
+## Authentication (milestone 4)
+
+The `oauth2`, `jwt`, `digest` and `awsv4` authentication kinds are described in
+[ADR 0013](adr/0013-advanced-authentication.md). Their YAML shape is defined by cards M4-07 and M4-08; this section is
+completed there.
+
 ## Variable precedence
 
 Highest first: active environment, collection variables, globals, dynamic variables.

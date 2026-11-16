@@ -397,7 +397,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
-| [M4-01](milestone-4-advanced-auth-response/M4-01-adr-advanced-authentication.md) | ADR 0013: advanced authentication | any | none | todo |
+| [M4-01](milestone-4-advanced-auth-response/M4-01-adr-advanced-authentication.md) | ADR 0013: advanced authentication | any | none | done |
 | [M4-02](milestone-4-advanced-auth-response/M4-02-spike-request-timing-capture.md) | Spike: which request phases .NET can report | any | none | todo |
 | [M4-03](milestone-4-advanced-auth-response/M4-03-adr-transport-certificates-timings.md) | ADR 0014: transport, client certificates, timings and HTTP version | any | M4-02 | todo |
 | [M4-04](milestone-4-advanced-auth-response/M4-04-adr-response-diff-and-code-generation.md) | ADR 0015: response diff and code generation | any | none | todo |

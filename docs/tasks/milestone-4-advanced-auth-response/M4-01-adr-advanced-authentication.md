@@ -1,6 +1,6 @@
 # M4-01: ADR 0013: advanced authentication
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -66,10 +66,10 @@ Code, UI, NTLM, Kerberos, Hawk, OAuth 1.0, persisting tokens (a later vault-back
 
 ## Acceptance criteria
 
-- [ ] ADR 0013 (`docs/adr/0013-advanced-authentication.md`) contains every decision above and the accepted limits; `docs/adr/README.md`
+- [x] ADR 0013 (`docs/adr/0013-advanced-authentication.md`) contains every decision above and the accepted limits; `docs/adr/README.md`
   lists it.
-- [ ] `docs/file-format.md` gets a short "Authentication (milestone 4)" section stating that the YAML shape is defined by M4-07 and M4-08.
-- [ ] No code changed; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
+- [x] `docs/file-format.md` gets a short "Authentication (milestone 4)" section stating that the YAML shape is defined by M4-07 and M4-08.
+- [x] No code changed; `dotnet build Yaapic.sln -c Release` still has 0 warnings.
 
 ## Suggested commit message
 
