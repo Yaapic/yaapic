@@ -1,6 +1,6 @@
 # M4-54: Core: code generator, C# (HttpClient)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-50
 
@@ -40,12 +40,19 @@ Depends on: M4-50
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples`; escape helper on each special character; repeated form field; content header
+- [x] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples`; escape helper on each special character; repeated form field; content header
   placement; `using System.Text;` only when needed; unknown method.
-- [ ] No compile test (it would need a new package): the output of each sample is pasted into a scratch console project outside the repository and built once
+- [x] No compile test (it would need a new package): the output of each sample is pasted into a scratch console project outside the repository and built once
   by hand with the SDK in use; record the result in the card's Notes.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
 `feat(core): add the C# HttpClient code generator`
+
+## Notes
+
+- Compile check done by hand in a scratch console project outside the repository (net11.0, warnings as errors): the GET, text (with `using System.Text;`, custom
+  method, content header), repeated form, dictionary form, form with another content type, multipart and file shapes all built with 0 warnings and 0 errors.
+- A `Content-*` header without a body stays a request header (there is no `request.Content` to attach it to). A form body with a non-form `Content-Type` removes
+  the default content type before adding the given one.
