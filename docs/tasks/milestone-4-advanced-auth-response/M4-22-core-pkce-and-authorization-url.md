@@ -1,6 +1,6 @@
 # M4-22: Core: PKCE and the authorization request URL
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-05, M4-11
 
@@ -32,11 +32,11 @@ Listening, opening the browser, the code exchange (M4-23).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: the RFC 7636 appendix B vector (verifier `dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk` gives challenge
+- [x] Tests in `Yaapic.Core.Tests`: the RFC 7636 appendix B vector (verifier `dBjftJeZ4CVP-mB92K27uhbUJU1p1r_wW1gFWFOEjXk` gives challenge
   `E9Melhoa2OwvFrEMTJguCHaoeK1t8URWbuGJSstw-cM`); random verifier length and alphabet; URL contains every parameter encoded, keeps an
   existing query, omits empty scope and audience; invalid URL throws; callback parsing of success, error, encoded values, missing query;
   listen-address accepts `http://127.0.0.1:8742/callback` and `http://localhost:9000/`, rejects https, other hosts, no port, port 0.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

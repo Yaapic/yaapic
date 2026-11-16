@@ -469,6 +469,9 @@ public static class Strings
     /// <summary>Interactive OAuth 2.0 sign-in is not available yet.</summary>
     public static string Oauth2NotAvailable => Localizer.Pick("Interactive OAuth 2.0 sign-in is not available yet.", "La connexion interactive OAuth 2.0 n'est pas encore disponible.");
 
+    /// <summary>The redirect URI must be http://127.0.0.1:&lt;port&gt;/&lt;path&gt; or http://localhost:&lt;port&gt;/&lt;path&gt;.</summary>
+    public static string Oauth2RedirectUriInvalid => Localizer.Pick("The redirect URI must be http://127.0.0.1:<port>/<path> or http://localhost:<port>/<path>.", "L'URI de redirection doit être http://127.0.0.1:<port>/<chemin> ou http://localhost:<port>/<chemin>.");
+
     /// <summary>Enter an absolute http or https token URL.</summary>
     public static string Oauth2TokenUrlMissing => Localizer.Pick("Enter an absolute http or https token URL.", "Saisissez une URL de jeton absolue en http ou https.");
 

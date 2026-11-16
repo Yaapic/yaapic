@@ -362,5 +362,6 @@
   "oauth2.tokenUrlMissing": "Enter an absolute http or https token URL.",
   "oauth2.clientIdMissing": "Enter the OAuth 2.0 client ID.",
   "oauth2.usernameMissing": "Enter the OAuth 2.0 username.",
-  "oauth2.notAvailable": "Interactive OAuth 2.0 sign-in is not available yet."
+  "oauth2.notAvailable": "Interactive OAuth 2.0 sign-in is not available yet.",
+  "oauth2.redirectUriInvalid": "The redirect URI must be http://127.0.0.1:<port>/<path> or http://localhost:<port>/<path>."
 }
