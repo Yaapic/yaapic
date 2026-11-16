@@ -1,6 +1,6 @@
 # M4-52: Core: code generator, JavaScript (fetch)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-50
 
@@ -39,11 +39,11 @@ Depends on: M4-50
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples`; the escape helper on each special character; header merging;
+- [x] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples`; the escape helper on each special character; header merging;
   `Content-Type` dropped for form and multipart.
-- [ ] A test, skipped when `node` is not on the PATH, that runs `node --check` on the generated text of each sample (wrapped in an async IIFE file) and
+- [x] A test, skipped when `node` is not on the PATH, that runs `node --check` on the generated text of each sample (wrapped in an async IIFE file) and
   expects exit code 0.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
