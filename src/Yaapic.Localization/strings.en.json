@@ -64,6 +64,7 @@
   "palette.vaultSetup": "Set up the secret vault...",
   "palette.vaultUnlock": "Unlock the vault...",
 
+  "auth.notAvailable": "This authentication type is not available.",
   "request.canceled": "Request canceled",
   "request.failed": "The request failed.",
   "request.newName": "New Request",

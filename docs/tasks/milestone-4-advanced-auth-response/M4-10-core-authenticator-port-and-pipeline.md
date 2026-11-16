@@ -1,6 +1,6 @@
 # M4-10: Core: authenticator port and send pipeline stage
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-09
 
@@ -40,10 +40,10 @@ Any concrete authenticator, the composite (M4-27), composition wiring (M4-61).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: header added and sent; a user `Authorization` header wins; query parameter placement before the
+- [x] Tests in `Yaapic.Core.Tests`: header added and sent; a user `Authorization` header wins; query parameter placement before the
   fragment and after params; failure does not call the transport and returns `AuthenticationFailed`; no authenticator with a pending
   auth fails cleanly; no pending auth never calls the authenticator; cancellation; `AppendQuery` tests unchanged.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

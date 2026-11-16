@@ -201,7 +201,7 @@ public static class RequestResolver
             .Select(f => (Key: sub(f.Key), Value: sub(f.Value), IsFile: f.Kind == FormFieldKind.File))
             .Where(f => f.Key.Length > 0)];
 
-    static string AppendQuery(string url, List<KeyValueEntry> query)
+    internal static string AppendQuery(string url, IReadOnlyList<KeyValueEntry> query)
     {
         var hash = url.IndexOf('#', StringComparison.Ordinal);
         var fragment = hash >= 0 ? url[hash..] : "";

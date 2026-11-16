@@ -64,6 +64,7 @@
   "palette.vaultSetup": "Configurer le coffre des secrets...",
   "palette.vaultUnlock": "Déverrouiller le coffre...",
 
+  "auth.notAvailable": "Ce type d’authentification n’est pas disponible.",
   "request.canceled": "Requête annulée",
   "request.failed": "La requête a échoué.",
   "request.newName": "Nouvelle requête",

@@ -20,4 +20,7 @@ public enum SendFailureKind
 
     /// <summary>Any other failure.</summary>
     Unknown,
+
+    /// <summary>The authentication could not be applied.</summary>
+    AuthenticationFailed,
 }

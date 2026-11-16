@@ -46,6 +46,9 @@ public static class Strings
     /// <summary>This request does not use any authentication.</summary>
     public static string AuthNone => Localizer.Pick("This request does not use any authentication.", "Cette requête n'utilise aucune authentification.");
 
+    /// <summary>This authentication type is not available.</summary>
+    public static string AuthNotAvailable => Localizer.Pick("This authentication type is not available.", "Ce type d’authentification n’est pas disponible.");
+
     /// <summary>Password</summary>
     public static string AuthPassword => Localizer.Pick("Password", "Mot de passe");
 
