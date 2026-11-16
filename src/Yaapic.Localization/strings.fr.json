@@ -423,5 +423,19 @@
   "certificate.passphraseMissing": "Aucune phrase secrète n'est enregistrée pour le certificat client « {0} ».",
   "certificate.fileMissing": "Le fichier du certificat client est introuvable : {0}",
   "certificate.loadFailed": "Le certificat client « {0} » n'a pas pu être chargé. Vérifiez le format du fichier et la phrase secrète.",
-  "certificate.noPrivateKey": "Le certificat client « {0} » n'a pas de clé privée."
+  "certificate.noPrivateKey": "Le certificat client « {0} » n'a pas de clé privée.",
+  "certificates.title": "Certificats clients",
+  "certificate.newName": "Nouveau certificat",
+  "certificate.fieldName": "Nom",
+  "certificate.fieldHostPattern": "Motif d'hôte",
+  "certificate.fieldFormat": "Format",
+  "certificate.fieldCertificatePath": "Fichier du certificat",
+  "certificate.fieldKeyPath": "Fichier de la clé",
+  "certificate.fieldPassphrase": "Phrase secrète",
+  "certificate.issueNameEmpty": "Le nom est obligatoire.",
+  "certificate.issueHostPatternInvalid": "Le motif d'hôte doit être un hôte, un hôte avec joker comme *.example.com, ou un hôte avec un port.",
+  "certificate.issueCertificatePathEmpty": "Le fichier du certificat est obligatoire.",
+  "certificate.issueKeyPathRequired": "Le fichier de la clé est obligatoire.",
+  "certificate.vaultLockedForPassphrase": "Déverrouillez le coffre pour enregistrer ou supprimer la phrase secrète d'un certificat.",
+  "certificate.removePassphrase": "Supprimer la phrase secrète enregistrée"
 }

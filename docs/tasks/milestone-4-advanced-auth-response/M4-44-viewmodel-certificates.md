@@ -1,6 +1,6 @@
 # M4-44: ViewModel: client certificates settings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-31, M4-32
 
@@ -35,11 +35,11 @@ Views (M4-64, M4-73), the shell entry (M4-60, M4-61), testing a connection.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with `InMemoryCertificateStore`, `InMemorySecretVault`, `FakeDialogService`: add, edit, save and reload;
+- [x] Tests in `Yaapic.ViewModels.Tests` with `InMemoryCertificateStore`, `InMemorySecretVault`, `FakeDialogService`: add, edit, save and reload;
   invalid entries block save and list issues; passphrase stored in the vault and never in the store's data; locked vault with a typed passphrase
   blocks save with the message; remove deletes the vault secret; order buttons; browse commands set paths; dirty tracking; `Passphrase`
   text is cleared after save.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

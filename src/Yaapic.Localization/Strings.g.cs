@@ -127,13 +127,46 @@ public static class Strings
     /// <summary>Select file</summary>
     public static string BodySelectFile => Localizer.Pick("Select file", "Sélectionner un fichier");
 
+    /// <summary>Certificate file</summary>
+    public static string CertificateFieldCertificatePath => Localizer.Pick("Certificate file", "Fichier du certificat");
+
+    /// <summary>Format</summary>
+    public static string CertificateFieldFormat => Localizer.Pick("Format", "Format");
+
+    /// <summary>Host pattern</summary>
+    public static string CertificateFieldHostPattern => Localizer.Pick("Host pattern", "Motif d'hôte");
+
+    /// <summary>Key file</summary>
+    public static string CertificateFieldKeyPath => Localizer.Pick("Key file", "Fichier de la clé");
+
+    /// <summary>Name</summary>
+    public static string CertificateFieldName => Localizer.Pick("Name", "Nom");
+
+    /// <summary>Passphrase</summary>
+    public static string CertificateFieldPassphrase => Localizer.Pick("Passphrase", "Phrase secrète");
+
     /// <summary>The client certificate file was not found: {0}</summary>
     public static string CertificateFileMissing(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate file was not found: {0}", "Le fichier du certificat client est introuvable : {0}"), a0);
 
+    /// <summary>The certificate file is required.</summary>
+    public static string CertificateIssueCertificatePathEmpty => Localizer.Pick("The certificate file is required.", "Le fichier du certificat est obligatoire.");
+
+    /// <summary>The host pattern must be a host, a wildcard host such as *.example.com, or a host with a port.</summary>
+    public static string CertificateIssueHostPatternInvalid => Localizer.Pick("The host pattern must be a host, a wildcard host such as *.example.com, or a host with a port.", "Le motif d'hôte doit être un hôte, un hôte avec joker comme *.example.com, ou un hôte avec un port.");
+
+    /// <summary>The key file is required.</summary>
+    public static string CertificateIssueKeyPathRequired => Localizer.Pick("The key file is required.", "Le fichier de la clé est obligatoire.");
+
+    /// <summary>The name is required.</summary>
+    public static string CertificateIssueNameEmpty => Localizer.Pick("The name is required.", "Le nom est obligatoire.");
+
     /// <summary>The client certificate "{0}" could not be loaded. Check the file format and the passphrase.</summary>
     public static string CertificateLoadFailed(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate \"{0}\" could not be loaded. Check the file format and the passphrase.", "Le certificat client « {0} » n'a pas pu être chargé. Vérifiez le format du fichier et la phrase secrète."), a0);
+
+    /// <summary>New certificate</summary>
+    public static string CertificateNewName => Localizer.Pick("New certificate", "Nouveau certificat");
 
     /// <summary>The client certificate "{0}" has no private key.</summary>
     public static string CertificateNoPrivateKey(object? a0) =>
@@ -143,9 +176,18 @@ public static class Strings
     public static string CertificatePassphraseMissing(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No passphrase is stored for the client certificate \"{0}\".", "Aucune phrase secrète n'est enregistrée pour le certificat client « {0} »."), a0);
 
+    /// <summary>Remove the stored passphrase</summary>
+    public static string CertificateRemovePassphrase => Localizer.Pick("Remove the stored passphrase", "Supprimer la phrase secrète enregistrée");
+
     /// <summary>Unlock the vault to use the client certificate "{0}".</summary>
     public static string CertificateVaultLocked(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unlock the vault to use the client certificate \"{0}\".", "Déverrouillez le coffre pour utiliser le certificat client « {0} »."), a0);
+
+    /// <summary>Unlock the vault to store or remove a certificate passphrase.</summary>
+    public static string CertificateVaultLockedForPassphrase => Localizer.Pick("Unlock the vault to store or remove a certificate passphrase.", "Déverrouillez le coffre pour enregistrer ou supprimer la phrase secrète d'un certificat.");
+
+    /// <summary>Client certificates</summary>
+    public static string CertificatesTitle => Localizer.Pick("Client certificates", "Certificats clients");
 
     /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
     public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");

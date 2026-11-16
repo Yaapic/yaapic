@@ -423,5 +423,19 @@
   "certificate.passphraseMissing": "No passphrase is stored for the client certificate \"{0}\".",
   "certificate.fileMissing": "The client certificate file was not found: {0}",
   "certificate.loadFailed": "The client certificate \"{0}\" could not be loaded. Check the file format and the passphrase.",
-  "certificate.noPrivateKey": "The client certificate \"{0}\" has no private key."
+  "certificate.noPrivateKey": "The client certificate \"{0}\" has no private key.",
+  "certificates.title": "Client certificates",
+  "certificate.newName": "New certificate",
+  "certificate.fieldName": "Name",
+  "certificate.fieldHostPattern": "Host pattern",
+  "certificate.fieldFormat": "Format",
+  "certificate.fieldCertificatePath": "Certificate file",
+  "certificate.fieldKeyPath": "Key file",
+  "certificate.fieldPassphrase": "Passphrase",
+  "certificate.issueNameEmpty": "The name is required.",
+  "certificate.issueHostPatternInvalid": "The host pattern must be a host, a wildcard host such as *.example.com, or a host with a port.",
+  "certificate.issueCertificatePathEmpty": "The certificate file is required.",
+  "certificate.issueKeyPathRequired": "The key file is required.",
+  "certificate.vaultLockedForPassphrase": "Unlock the vault to store or remove a certificate passphrase.",
+  "certificate.removePassphrase": "Remove the stored passphrase"
 }
