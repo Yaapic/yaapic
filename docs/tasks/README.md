@@ -449,7 +449,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-50](milestone-4-advanced-auth-response/M4-50-core-code-generation-model-and-registry.md) | Core: code generation model, registry and shared samples | any | M4-04, M4-09 | done |
 | [M4-51](milestone-4-advanced-auth-response/M4-51-core-codegen-curl.md) | Core: code generator, cURL | any | M4-50 | done |
 | [M4-52](milestone-4-advanced-auth-response/M4-52-core-codegen-javascript-fetch.md) | Core: code generator, JavaScript (fetch) | any | M4-50 | done |
-| [M4-53](milestone-4-advanced-auth-response/M4-53-core-codegen-python-requests.md) | Core: code generator, Python (requests) | any | M4-50 | todo |
+| [M4-53](milestone-4-advanced-auth-response/M4-53-core-codegen-python-requests.md) | Core: code generator, Python (requests) | any | M4-50 | done |
 | [M4-54](milestone-4-advanced-auth-response/M4-54-core-codegen-csharp-httpclient.md) | Core: code generator, C# (HttpClient) | any | M4-50 | todo |
 | [M4-55](milestone-4-advanced-auth-response/M4-55-more-code-generation-languages.md) | More code generation languages | any | M4-50 | blocked |
 | [M4-56](milestone-4-advanced-auth-response/M4-56-core-codegen-powershell.md) | Core: code generator, PowerShell (Invoke-RestMethod) | any | M4-50 | todo |

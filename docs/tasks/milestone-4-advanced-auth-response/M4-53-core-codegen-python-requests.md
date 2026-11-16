@@ -1,6 +1,6 @@
 # M4-53: Core: code generator, Python (requests)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-50
 
@@ -40,11 +40,11 @@ Depends on: M4-50
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples`; escape helper on each special character; repeated form field;
+- [x] Tests in `Yaapic.Core.Tests`: exact expected text for every sample of `CodeSamples`; escape helper on each special character; repeated form field;
   header merging; `Content-Type` dropped for form and multipart.
-- [ ] A test, skipped when `python` is not on the PATH, that runs `python -c "import ast,sys; ast.parse(sys.stdin.read())"` on each generated text and expects
+- [x] A test, skipped when `python` is not on the PATH, that runs `python -c "import ast,sys; ast.parse(sys.stdin.read())"` on each generated text and expects
   exit code 0.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
