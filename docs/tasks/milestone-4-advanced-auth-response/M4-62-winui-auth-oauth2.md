@@ -1,6 +1,6 @@
 # M4-62: WinUI: OAuth 2.0 in the Auth tab
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M4-43, M4-61
 
@@ -30,13 +30,13 @@ JWT, Digest and AWS fields (M4-63), copying the token, a token viewer.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
-- [ ] Manual smoke on the published exe (stub server from `tools/screenshots` or `httpbin`-like local stub that implements a token endpoint; record what was used): with a client-credentials
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] Manual smoke on the published exe (stub server from `tools/screenshots` or `httpbin`-like local stub that implements a token endpoint; record what was used): with a client-credentials
   configuration the send succeeds and the API stub sees `Authorization: Bearer <token>`; the status shows the expiry; Clear token then Send fetches again; with the authorization-code grant a
   send without a token shows the "Get a new access token first" error and the button opens the system browser (the stub authorization page redirects to the loopback URL and the status
   becomes valid). Record anything not run.
-- [ ] Both themes use tokens only; strings come from `Strings` (EN and FR present).
-- [ ] 0 warnings, all tests green.
+- [x] Both themes use tokens only; strings come from `Strings` (EN and FR present).
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

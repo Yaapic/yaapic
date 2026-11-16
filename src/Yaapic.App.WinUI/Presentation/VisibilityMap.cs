@@ -108,6 +108,11 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenApiKeyAuth(AuthKind kind) => kind == AuthKind.ApiKey ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> for OAuth 2.0 authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenOAuth2Auth(AuthKind kind) => kind == AuthKind.OAuth2 ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when the panel shows a response.</summary>
     /// <param name="state">The panel state.</param>
     /// <returns>The visibility.</returns>
