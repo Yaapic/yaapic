@@ -1,6 +1,6 @@
 # M4-16: Core: Digest authenticator
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-10, M4-15
 
@@ -32,11 +32,11 @@ Nonce caching across sends, `auth-int`, proxies.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with `FakeHttpTransport` and a fixed nonce: probe has no body or auth and keeps method, URL, headers;
+- [x] Tests in `Yaapic.Core.Tests` with `FakeHttpTransport` and a fixed nonce: probe has no body or auth and keeps method, URL, headers;
   401 with a challenge yields the expected header; a 200 probe leaves the request unchanged; a 401 with a Basic-only challenge leaves it
   unchanged; transport failure; missing credentials; a user `Authorization` header wins; POST body is not in the probe but is in the
   returned request.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

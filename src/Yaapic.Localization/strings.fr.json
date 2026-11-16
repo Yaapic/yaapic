@@ -351,5 +351,6 @@
   "jwt.payloadInvalid": "Le contenu du JWT doit être un objet JSON.",
   "jwt.headersInvalid": "Les en-têtes JWT supplémentaires doivent être un objet JSON.",
   "jwt.keyMissing": "Le secret ou la clé privée du JWT est vide.",
-  "jwt.secretInvalid": "Le secret du JWT n’est pas du Base64 valide."
+  "jwt.secretInvalid": "Le secret du JWT n’est pas du Base64 valide.",
+  "digest.credentialsMissing": "Saisissez un nom d’utilisateur et un mot de passe pour l’authentification Digest."
 }

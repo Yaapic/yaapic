@@ -290,6 +290,9 @@ public static class Strings
     public static string DialogSaveChangesTitle(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Save changes to '{0}'?", "Enregistrer les modifications de « {0} » ?"), a0);
 
+    /// <summary>Enter a username and a password for Digest authentication.</summary>
+    public static string DigestCredentialsMissing => Localizer.Pick("Enter a username and a password for Digest authentication.", "Saisissez un nom d’utilisateur et un mot de passe pour l’authentification Digest.");
+
     /// <summary>Unlock the vault to use secrets</summary>
     public static string EditingSecretToggleLocked => Localizer.Pick("Unlock the vault to use secrets", "Déverrouillez le coffre pour utiliser les secrets");
 

@@ -412,7 +412,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-13](milestone-4-advanced-auth-response/M4-13-core-jwt-authenticator.md) | Core: JWT authenticator | any | M4-10, M4-12 | done |
 | [M4-14](milestone-4-advanced-auth-response/M4-14-core-jwt-decoder.md) | Core: JWT decoder | any | M4-11 | done |
 | [M4-15](milestone-4-advanced-auth-response/M4-15-core-digest-challenge-and-response.md) | Core: Digest challenge parsing and response computation | any | M4-01 | done |
-| [M4-16](milestone-4-advanced-auth-response/M4-16-core-digest-authenticator.md) | Core: Digest authenticator | any | M4-10, M4-15 | todo |
+| [M4-16](milestone-4-advanced-auth-response/M4-16-core-digest-authenticator.md) | Core: Digest authenticator | any | M4-10, M4-15 | done |
 | [M4-17](milestone-4-advanced-auth-response/M4-17-core-aws-sigv4-signer.md) | Core: AWS Signature v4 signer | any | M4-01 | todo |
 | [M4-18](milestone-4-advanced-auth-response/M4-18-core-aws-sigv4-authenticator.md) | Core: AWS Signature v4 authenticator | any | M4-10, M4-17 | todo |
 | [M4-19](milestone-4-advanced-auth-response/M4-19-core-oauth2-token-model-and-cache.md) | Core: OAuth 2.0 token model and in-memory cache | any | M4-05 | todo |
