@@ -363,5 +363,8 @@
   "oauth2.clientIdMissing": "Enter the OAuth 2.0 client ID.",
   "oauth2.usernameMissing": "Enter the OAuth 2.0 username.",
   "oauth2.notAvailable": "Interactive OAuth 2.0 sign-in is not available yet.",
-  "oauth2.redirectUriInvalid": "The redirect URI must be http://127.0.0.1:<port>/<path> or http://localhost:<port>/<path>."
+  "oauth2.redirectUriInvalid": "The redirect URI must be http://127.0.0.1:<port>/<path> or http://localhost:<port>/<path>.",
+  "oauth2.authorizationTimeout": "No redirect was received within 3 minutes. Try again.",
+  "oauth2.stateMismatch": "The authorization response does not match the request (state mismatch). Try again.",
+  "oauth2.authorizationUrlMissing": "Enter an absolute http or https authorization URL."
 }

@@ -363,5 +363,8 @@
   "oauth2.clientIdMissing": "Saisissez l'identifiant client OAuth 2.0.",
   "oauth2.usernameMissing": "Saisissez le nom d'utilisateur OAuth 2.0.",
   "oauth2.notAvailable": "La connexion interactive OAuth 2.0 n'est pas encore disponible.",
-  "oauth2.redirectUriInvalid": "L'URI de redirection doit être http://127.0.0.1:<port>/<chemin> ou http://localhost:<port>/<chemin>."
+  "oauth2.redirectUriInvalid": "L'URI de redirection doit être http://127.0.0.1:<port>/<chemin> ou http://localhost:<port>/<chemin>.",
+  "oauth2.authorizationTimeout": "Aucune redirection reçue en 3 minutes. Réessayez.",
+  "oauth2.stateMismatch": "La réponse d'autorisation ne correspond pas à la demande (state différent). Réessayez.",
+  "oauth2.authorizationUrlMissing": "Saisissez une URL d'autorisation absolue en http ou https."
 }

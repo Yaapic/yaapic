@@ -456,6 +456,12 @@ public static class Strings
     /// <summary>Show the response beside or below the request</summary>
     public static string LayoutToggleTip => Localizer.Pick("Show the response beside or below the request", "Afficher la réponse à côté de la requête ou en dessous");
 
+    /// <summary>No redirect was received within 3 minutes. Try again.</summary>
+    public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
+
+    /// <summary>Enter an absolute http or https authorization URL.</summary>
+    public static string Oauth2AuthorizationUrlMissing => Localizer.Pick("Enter an absolute http or https authorization URL.", "Saisissez une URL d'autorisation absolue en http ou https.");
+
     /// <summary>Enter the OAuth 2.0 client ID.</summary>
     public static string Oauth2ClientIdMissing => Localizer.Pick("Enter the OAuth 2.0 client ID.", "Saisissez l'identifiant client OAuth 2.0.");
 
@@ -471,6 +477,9 @@ public static class Strings
 
     /// <summary>The redirect URI must be http://127.0.0.1:&lt;port&gt;/&lt;path&gt; or http://localhost:&lt;port&gt;/&lt;path&gt;.</summary>
     public static string Oauth2RedirectUriInvalid => Localizer.Pick("The redirect URI must be http://127.0.0.1:<port>/<path> or http://localhost:<port>/<path>.", "L'URI de redirection doit être http://127.0.0.1:<port>/<chemin> ou http://localhost:<port>/<chemin>.");
+
+    /// <summary>The authorization response does not match the request (state mismatch). Try again.</summary>
+    public static string Oauth2StateMismatch => Localizer.Pick("The authorization response does not match the request (state mismatch). Try again.", "La réponse d'autorisation ne correspond pas à la demande (state différent). Réessayez.");
 
     /// <summary>Enter an absolute http or https token URL.</summary>
     public static string Oauth2TokenUrlMissing => Localizer.Pick("Enter an absolute http or https token URL.", "Saisissez une URL de jeton absolue en http ou https.");

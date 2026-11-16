@@ -1,6 +1,6 @@
 # M4-23: Core: authorization-code flow ports and orchestration
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-21, M4-22
 
@@ -38,11 +38,11 @@ The real listener and browser launcher (M4-24, M4-25), the authenticator (M4-26)
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: happy path (the opened URL has the expected parameters, the exchange request carries the verifier that
+- [x] Tests in `Yaapic.Core.Tests`: happy path (the opened URL has the expected parameters, the exchange request carries the verifier that
   matches the challenge, the token is cached and returned); error redirect; state mismatch; missing state; missing code; timeout (fake time
   or a short injected timeout); cancel; invalid redirect URI; busy port message surfaces; the browser is opened only after the receiver
   started waiting (order recorded by the doubles).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

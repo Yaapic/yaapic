@@ -32,7 +32,7 @@ public class OAuth2TokenServiceTests
 
             return Task.FromResult(_reply(r.BodyText ?? ""));
         });
-        return (new OAuth2TokenService(transport, _cache, _clock), transport);
+        return (new OAuth2TokenService(transport, _cache, _clock, new FakeLoopbackRedirectReceiver(), new FakeExternalBrowser()), transport);
     }
 
     [Fact]
@@ -137,7 +137,7 @@ public class OAuth2TokenServiceTests
     {
         var gate = new TaskCompletionSource<SendResult>();
         var transport = new FakeHttpTransport((_, _) => gate.Task);
-        var service = new OAuth2TokenService(transport, _cache, _clock);
+        var service = new OAuth2TokenService(transport, _cache, _clock, new FakeLoopbackRedirectReceiver(), new FakeExternalBrowser());
         var a = service.GetTokenAsync(Settings(), CancellationToken.None);
         var b = service.GetTokenAsync(Settings(), CancellationToken.None);
         gate.SetResult(Json(200, """{"access_token":"a1"}"""));
@@ -150,7 +150,7 @@ public class OAuth2TokenServiceTests
     public async Task GetToken_CancelledCaller_Throws()
     {
         var gate = new TaskCompletionSource<SendResult>();
-        var service = new OAuth2TokenService(new FakeHttpTransport((_, _) => gate.Task), _cache, _clock);
+        var service = new OAuth2TokenService(new FakeHttpTransport((_, _) => gate.Task), _cache, _clock, new FakeLoopbackRedirectReceiver(), new FakeExternalBrowser());
         using var cts = new CancellationTokenSource();
         var pending = service.GetTokenAsync(Settings(), cts.Token);
         await cts.CancelAsync();
@@ -187,15 +187,6 @@ public class OAuth2TokenServiceTests
         Assert.Equal(2, transport.Requests.Count);
         Assert.Equal("a9", result.Token!.AccessToken);
         Assert.True(_cache.TryGet(OAuth2TokenKey.For(Settings()), out var cached) && cached.AccessToken == "a9");
-    }
-
-    [Fact]
-    public async Task GetNewToken_AuthorizationCode_IsNotAvailableYet()
-    {
-        var (service, transport) = Create();
-        var result = await service.GetNewTokenAsync(Settings() with { Grant = OAuth2Grant.AuthorizationCode }, CancellationToken.None);
-        Assert.Equal(Yaapic.Localization.Strings.Oauth2NotAvailable, result.Error);
-        Assert.Empty(transport.Requests);
     }
 
     [Fact]

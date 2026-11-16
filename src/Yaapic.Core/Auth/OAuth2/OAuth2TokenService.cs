@@ -8,8 +8,19 @@ namespace Yaapic.Core.Auth.OAuth2;
 /// <param name="transport">Sends the token endpoint requests.</param>
 /// <param name="cache">Holds the tokens.</param>
 /// <param name="time">The clock.</param>
-public sealed class OAuth2TokenService(IHttpTransport transport, IOAuth2TokenCache cache, TimeProvider time) : IOAuth2TokenService
+/// <param name="receiver">Receives the authorization-code redirect.</param>
+/// <param name="browser">Opens the authorization URL.</param>
+/// <param name="authorizationTimeout">How long to wait for the redirect; 3 minutes when null.</param>
+public sealed class OAuth2TokenService(
+    IHttpTransport transport, IOAuth2TokenCache cache, TimeProvider time,
+    ILoopbackRedirectReceiver receiver, IExternalBrowser browser, TimeSpan? authorizationTimeout = null) : IOAuth2TokenService
 {
+    /// <summary>The page shown in the browser once the redirect was received.</summary>
+    internal const string SuccessHtml =
+        "<!DOCTYPE html><html><head><meta charset=\"utf-8\"><title>Yaapic</title></head>"
+        + "<body><p>You can close this tab and return to Yaapic.</p></body></html>";
+
+    private readonly TimeSpan _authorizationTimeout = authorizationTimeout ?? TimeSpan.FromMinutes(3);
     private readonly Lock _gate = new();
     private readonly Dictionary<OAuth2TokenKey, Task<OAuth2TokenResult>> _inFlight = [];
 
@@ -18,8 +29,14 @@ public sealed class OAuth2TokenService(IHttpTransport transport, IOAuth2TokenCac
         Shared(resolved, ct, GetCoreAsync);
 
     /// <inheritdoc/>
-    public Task<OAuth2TokenResult> GetNewTokenAsync(OAuth2Settings resolved, CancellationToken ct) =>
-        Shared(resolved, ct, FetchAsync);
+    public Task<OAuth2TokenResult> GetNewTokenAsync(OAuth2Settings resolved, CancellationToken ct)
+    {
+        ArgumentNullException.ThrowIfNull(resolved);
+        // The interactive flow is not shared: cancelling it must stop the listener.
+        return resolved.Grant == OAuth2Grant.AuthorizationCode
+            ? AuthorizeAsync(resolved, OAuth2TokenKey.For(resolved), ct)
+            : Shared(resolved, ct, FetchAsync);
+    }
 
     /// <inheritdoc/>
     public OAuth2TokenStatus GetStatus(OAuth2Settings resolved)
@@ -119,11 +136,73 @@ public sealed class OAuth2TokenService(IHttpTransport transport, IOAuth2TokenCac
 
         if (s.Grant == OAuth2Grant.AuthorizationCode)
         {
-            return OAuth2TokenResult.Fail(Strings.Oauth2NotAvailable); // the interactive flow arrives with M4-23
+            return await AuthorizeAsync(s, key, CancellationToken.None).ConfigureAwait(false);
         }
 
         var request = s.Grant == OAuth2Grant.Password ? OAuth2TokenRequests.Password(s) : OAuth2TokenRequests.ClientCredentials(s);
         var result = await SendAsync(request, null).ConfigureAwait(false);
+        if (result.Token is { } token)
+        {
+            cache.Set(key, token);
+        }
+
+        return result;
+    }
+
+    private async Task<OAuth2TokenResult> AuthorizeAsync(OAuth2Settings s, OAuth2TokenKey key, CancellationToken ct)
+    {
+        var invalid = Validate(s) ?? (!IsHttpUrl(s.AuthorizationUrl) ? Strings.Oauth2AuthorizationUrlMissing
+            : s.ClientId.Length == 0 ? Strings.Oauth2ClientIdMissing : null);
+        if (invalid is not null)
+        {
+            return OAuth2TokenResult.Fail(invalid);
+        }
+
+        if (!OAuth2AuthorizationRequest.TryGetListenAddress(s.RedirectUri, out var port, out var path))
+        {
+            return OAuth2TokenResult.Fail(Strings.Oauth2RedirectUriInvalid);
+        }
+
+        var pkce = Pkce.Create();
+        var state = OAuth2AuthorizationRequest.NewState();
+        var url = OAuth2AuthorizationRequest.BuildUrl(s, state, pkce.Challenge);
+
+        using var timeout = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        timeout.CancelAfter(_authorizationTimeout);
+        string target;
+        try
+        {
+            // Listen before opening the browser so a fast redirect is not lost.
+            var waiting = receiver.WaitForRequestTargetAsync(port, path, SuccessHtml, timeout.Token);
+            await browser.OpenAsync(url, timeout.Token).ConfigureAwait(false);
+            target = await waiting.ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (!ct.IsCancellationRequested)
+        {
+            return OAuth2TokenResult.Fail(Strings.Oauth2AuthorizationTimeout);
+        }
+        catch (InvalidOperationException ex)
+        {
+            return OAuth2TokenResult.Fail(ex.Message);
+        }
+
+        var callback = OAuth2AuthorizationRequest.ParseCallback(target);
+        if (callback.Error is { Length: > 0 } error)
+        {
+            return OAuth2TokenResult.Fail(callback.ErrorDescription is { Length: > 0 } d ? $"{error}: {d}" : error);
+        }
+
+        if (callback.State != state)
+        {
+            return OAuth2TokenResult.Fail(Strings.Oauth2StateMismatch);
+        }
+
+        if (callback.Code is not { Length: > 0 } code)
+        {
+            return OAuth2TokenResult.Fail(Strings.Oauth2InvalidResponse(0));
+        }
+
+        var result = await SendAsync(OAuth2TokenRequests.AuthorizationCode(s, code, pkce.Verifier, s.RedirectUri), null).ConfigureAwait(false);
         if (result.Token is { } token)
         {
             cache.Set(key, token);
@@ -164,4 +243,7 @@ public sealed class OAuth2TokenService(IHttpTransport transport, IOAuth2TokenCac
             _ => null,
         };
     }
+
+    private static bool IsHttpUrl(string value) =>
+        Uri.TryCreate(value, UriKind.Absolute, out var url) && url.Scheme is "http" or "https";
 }
