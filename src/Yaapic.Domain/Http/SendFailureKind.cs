@@ -23,4 +23,7 @@ public enum SendFailureKind
 
     /// <summary>The authentication could not be applied.</summary>
     AuthenticationFailed,
+
+    /// <summary>The client certificate to present could not be loaded.</summary>
+    ClientCertificateError,
 }

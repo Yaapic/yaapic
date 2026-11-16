@@ -1,6 +1,6 @@
 # M4-34: Infrastructure: send with a client certificate (mTLS)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-33
 
@@ -32,13 +32,13 @@ Timings (M4-36), custom CA and skip verification (M4-37), UI.
 
 ## Acceptance criteria
 
-- [ ] Integration test in `Yaapic.Infrastructure.Tests/EndToEnd/` with a local TLS server (`TcpListener` + `SslStream.AuthenticateAsServer` with
+- [x] Integration test in `Yaapic.Infrastructure.Tests/EndToEnd/` with a local TLS server (`TcpListener` + `SslStream.AuthenticateAsServer` with
   `clientCertificateRequired: true`, a generated self-signed server certificate accepted through `configureHandler`, a minimal HTTP/1.1
   answer that echoes the client certificate thumbprint in the body): a matching entry shows the thumbprint of the client certificate;
   a URL that does not match sends none (the server sees no client certificate); a lookup error fails with `ClientCertificateError` without a
   connection; two sends reuse the same cached client (one handshake per connection: assert by the cache count, not by timing).
-- [ ] Existing transport tests unchanged and green.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green; no listener or process left open.
+- [x] Existing transport tests unchanged and green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green; no listener or process left open.
 
 ## Suggested commit message
 
