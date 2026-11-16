@@ -25,6 +25,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private readonly IDialogService? _dialogs;
     private readonly ScriptSendServices? _scripting;
     private readonly CodeGenerationServices? _codeGeneration;
+    private readonly bool _http3Supported;
     private HttpRequestDefinition? _baseline;
     private bool _syncingUrl;
 
@@ -58,14 +59,19 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     private int _timeoutSeconds;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HttpVersionNote))]
+    private HttpVersionPreference _httpVersion;
+
+    [ObservableProperty]
     private bool _isNew;
 
     /// <summary>Gets or sets a value indicating whether this is the active tab; maintained by the tab list.</summary>
     [ObservableProperty]
     private bool _isActive;
 
-    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs, ScriptSendServices? scripting, IOAuth2TokenService? oauth2Tokens, CodeGenerationServices? codeGeneration)
+    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs, ScriptSendServices? scripting, IOAuth2TokenService? oauth2Tokens, CodeGenerationServices? codeGeneration, bool http3Supported)
     {
+        _http3Supported = http3Supported;
         _codeGeneration = codeGeneration;
         Auth = oauth2Tokens is null
             ? new AuthEditorViewModel()
@@ -105,6 +111,17 @@ public sealed partial class RequestEditorViewModel : ObservableObject
 
     /// <summary>Raised after a send completed, successfully or not; not raised when the user canceled it.</summary>
     public event EventHandler<RequestSentEventArgs>? Sent;
+
+    /// <summary>Gets the choices of the HTTP version picker; HTTP/3 is flagged unavailable on machines without support.</summary>
+    public IReadOnlyList<HttpVersionChoice> HttpVersionChoices => [
+        new(HttpVersionPreference.Default, Strings.HttpVersionAuto, true),
+        new(HttpVersionPreference.Http1, Strings.HttpVersionHttp1, true),
+        new(HttpVersionPreference.Http2, Strings.HttpVersionHttp2, true),
+        new(HttpVersionPreference.Http3, Strings.HttpVersionHttp3, _http3Supported),
+    ];
+
+    /// <summary>Gets the warning shown when HTTP/3 is selected but unavailable; empty otherwise.</summary>
+    public string HttpVersionNote => HttpVersion == HttpVersionPreference.Http3 && !_http3Supported ? Strings.HttpVersionHttp3Unavailable : "";
 
     /// <summary>Gets the HTTP methods offered by the editor.</summary>
     public static IReadOnlyList<HttpMethodKind> Methods { get; } = [
@@ -186,6 +203,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
     /// <param name="oauth2Tokens">Backs the OAuth 2.0 token buttons; <see langword="null"/> leaves them disabled.</param>
     /// <param name="codeGeneration">Backs the code generation dialog; <see langword="null"/> disables the feature.</param>
+    /// <param name="versionSupport">Tells whether HTTP/3 is available; <see langword="null"/> means it is not.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel FromDefinition(
         HttpRequestDefinition definition,
@@ -195,12 +213,13 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         IDialogService? dialogs = null,
         ScriptSendServices? scripting = null,
         IOAuth2TokenService? oauth2Tokens = null,
-        CodeGenerationServices? codeGeneration = null)
+        CodeGenerationServices? codeGeneration = null,
+        IHttpVersionSupport? versionSupport = null)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(sender);
         ArgumentNullException.ThrowIfNull(scopes);
-        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs, scripting, oauth2Tokens, codeGeneration)
+        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs, scripting, oauth2Tokens, codeGeneration, versionSupport?.IsHttp3Supported ?? false)
         {
             Name = definition.Name,
             Method = definition.Method,
@@ -210,6 +229,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
             BinaryFilePath = definition.Body.FilePath,
             FollowRedirects = definition.Settings.FollowRedirects,
             TimeoutSeconds = definition.Settings.TimeoutSeconds,
+            HttpVersion = definition.Settings.HttpVersion,
         };
         editor.Auth.Load(definition.Auth);
         editor.Scripts.Load(definition.Scripts);
@@ -236,6 +256,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
     /// <param name="oauth2Tokens">Backs the OAuth 2.0 token buttons; <see langword="null"/> leaves them disabled.</param>
     /// <param name="codeGeneration">Backs the code generation dialog; <see langword="null"/> disables the feature.</param>
+    /// <param name="versionSupport">Tells whether HTTP/3 is available; <see langword="null"/> means it is not.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel CreateNew(
         RequestSender sender,
@@ -243,8 +264,9 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         IDialogService? dialogs = null,
         ScriptSendServices? scripting = null,
         IOAuth2TokenService? oauth2Tokens = null,
-        CodeGenerationServices? codeGeneration = null) =>
-        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs, scripting, oauth2Tokens, codeGeneration);
+        CodeGenerationServices? codeGeneration = null,
+        IHttpVersionSupport? versionSupport = null) =>
+        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs, scripting, oauth2Tokens, codeGeneration, versionSupport);
 
     /// <summary>Builds the domain request from the current state.</summary>
     /// <returns>The request; a blank name becomes "New Request".</returns>
@@ -257,7 +279,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         Headers.ToEntries(),
         new RequestBody(BodyKind, BodyContentType, BodyText, BodyFields(), BodyKind == BodyKind.Binary ? BinaryFilePath : ""),
         Auth.ToAuth(),
-        new RequestSettings(FollowRedirects, TimeoutSeconds),
+        new RequestSettings(FollowRedirects, TimeoutSeconds, HttpVersion),
         Scripts.ToSet());
 
     /// <summary>Records the current state as saved: the request is no longer new nor dirty.</summary>
@@ -416,6 +438,8 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     partial void OnBinaryFilePathChanged(string value) => Refresh();
 
     partial void OnFollowRedirectsChanged(bool value) => Refresh();
+
+    partial void OnHttpVersionChanged(HttpVersionPreference value) => Refresh();
 
     partial void OnTimeoutSecondsChanged(int value)
     {

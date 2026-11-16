@@ -584,6 +584,21 @@ public static class Strings
     /// <summary>Yesterday</summary>
     public static string HistoryYesterday => Localizer.Pick("Yesterday", "Hier");
 
+    /// <summary>Automatic (HTTP/1.1 or HTTP/2)</summary>
+    public static string HttpVersionAuto => Localizer.Pick("Automatic (HTTP/1.1 or HTTP/2)", "Automatique (HTTP/1.1 ou HTTP/2)");
+
+    /// <summary>HTTP/1.1</summary>
+    public static string HttpVersionHttp1 => Localizer.Pick("HTTP/1.1", "HTTP/1.1");
+
+    /// <summary>HTTP/2</summary>
+    public static string HttpVersionHttp2 => Localizer.Pick("HTTP/2", "HTTP/2");
+
+    /// <summary>HTTP/3 (experimental)</summary>
+    public static string HttpVersionHttp3 => Localizer.Pick("HTTP/3 (experimental)", "HTTP/3 (expérimental)");
+
+    /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
+    public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
+
     /// <summary>The header or payload is not valid Base64URL-encoded JSON.</summary>
     public static string JwtDecodeErrorEncoding => Localizer.Pick("The header or payload is not valid Base64URL-encoded JSON.", "L’en-tête ou la charge utile n’est pas du JSON encodé en Base64URL valide.");
 
@@ -965,6 +980,9 @@ public static class Strings
 
     /// <summary>Send</summary>
     public static string RequestSend => Localizer.Pick("Send", "Envoyer");
+
+    /// <summary>HTTP version</summary>
+    public static string RequestSettingsHttpVersion => Localizer.Pick("HTTP version", "Version HTTP");
 
     /// <summary>Auth</summary>
     public static string RequestTabAuth => Localizer.Pick("Auth", "Auth");

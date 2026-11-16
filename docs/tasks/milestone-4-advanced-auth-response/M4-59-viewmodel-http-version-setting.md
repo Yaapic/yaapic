@@ -1,6 +1,6 @@
 # M4-59: ViewModel: HTTP version in the request settings
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-38, M4-39
 
@@ -26,9 +26,9 @@ Views (M4-69, M4-77).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: load/save round trip of each value; dirty tracking; `Http3` availability true and false (and with no support object); the note
+- [x] Tests in `Yaapic.ViewModels.Tests`: load/save round trip of each value; dirty tracking; `Http3` availability true and false (and with no support object); the note
   appears only for a loaded `Http3` while unavailable; labels present in both languages (the Localization tests already check key parity).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
