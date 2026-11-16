@@ -189,6 +189,26 @@ public static class Strings
     /// <summary>Client certificates</summary>
     public static string CertificatesTitle => Localizer.Pick("Client certificates", "Certificats clients");
 
+    /// <summary>Copy</summary>
+    public static string CodeGenerationCopy => Localizer.Pick("Copy", "Copier");
+
+    /// <summary>Cannot generate the code: {0}</summary>
+    public static string CodeGenerationFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot generate the code: {0}", "Impossible de générer le code : {0}"), a0);
+
+    /// <summary>Language</summary>
+    public static string CodeGenerationLanguage => Localizer.Pick("Language", "Langage");
+
+    /// <summary>The generated code may contain secrets (variables are resolved). Do not share it carelessly.</summary>
+    public static string CodeGenerationSecretWarning => Localizer.Pick("The generated code may contain secrets (variables are resolved). Do not share it carelessly.", "Le code généré peut contenir des secrets (les variables sont résolues). Ne le partagez pas à la légère.");
+
+    /// <summary>Generate code</summary>
+    public static string CodeGenerationTitle => Localizer.Pick("Generate code", "Générer du code");
+
+    /// <summary>Unresolved variables: {0}</summary>
+    public static string CodeGenerationUnresolved(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unresolved variables: {0}", "Variables non résolues : {0}"), a0);
+
     /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
     public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");
 

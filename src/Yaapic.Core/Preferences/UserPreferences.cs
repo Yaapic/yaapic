@@ -48,7 +48,8 @@ public static class AccentChoice
 /// <summary>The per-user appearance preferences.</summary>
 /// <param name="Language">The interface language.</param>
 /// <param name="Accent">The accent choice (see <see cref="AccentChoice"/>).</param>
-public sealed record UserPreferences(AppLanguage Language = AppLanguage.System, string Accent = AccentChoice.Default)
+/// <param name="CodegenTarget">The id of the last code generation target.</param>
+public sealed record UserPreferences(AppLanguage Language = AppLanguage.System, string Accent = AccentChoice.Default, string CodegenTarget = "curl")
 {
     /// <summary>Gets the preferences of a user who never changed anything.</summary>
     public static UserPreferences Default { get; } = new();

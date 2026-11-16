@@ -95,6 +95,12 @@
   "diff.ignoreWhitespace": "Ignore whitespace",
   "diff.ignoreVolatileHeaders": "Ignore volatile headers",
   "diff.expandAll": "Show unchanged lines",
+  "codeGeneration.title": "Generate code",
+  "codeGeneration.language": "Language",
+  "codeGeneration.copy": "Copy",
+  "codeGeneration.failed": "Cannot generate the code: {0}",
+  "codeGeneration.secretWarning": "The generated code may contain secrets (variables are resolved). Do not share it carelessly.",
+  "codeGeneration.unresolved": "Unresolved variables: {0}",
 
   "script.line": "line {0}",
   "script.originPostResponse": "post-response · {0}",

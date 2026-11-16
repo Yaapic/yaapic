@@ -454,7 +454,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-55](milestone-4-advanced-auth-response/M4-55-more-code-generation-languages.md) | More code generation languages | any | M4-50 | blocked |
 | [M4-56](milestone-4-advanced-auth-response/M4-56-core-codegen-powershell.md) | Core: code generator, PowerShell (Invoke-RestMethod) | any | M4-50 | done |
 | [M4-57](milestone-4-advanced-auth-response/M4-57-core-codegen-go.md) | Core: code generator, Go (net/http) | any | M4-50 | done |
-| [M4-58](milestone-4-advanced-auth-response/M4-58-viewmodel-code-generation.md) | ViewModel: code generation dialog | any | M4-51, M4-52, M4-53, M4-54, M4-56, M4-57 | todo |
+| [M4-58](milestone-4-advanced-auth-response/M4-58-viewmodel-code-generation.md) | ViewModel: code generation dialog | any | M4-51, M4-52, M4-53, M4-54, M4-56, M4-57 | done |
 | [M4-59](milestone-4-advanced-auth-response/M4-59-viewmodel-http-version-setting.md) | ViewModel: HTTP version in the request settings | any | M4-38, M4-39 | todo |
 | [M4-60](milestone-4-advanced-auth-response/M4-60-viewmodel-palette-and-shell-entries.md) | ViewModel: palette commands and shell entries for the M4 tools | any | M4-41, M4-44, M4-48, M4-49, M4-58 | todo |
 | [M4-61](milestone-4-advanced-auth-response/M4-61-composition-m4-wiring.md) | Composition: wire the M4 services | any | M4-27, M4-24, M4-25, M4-33, M4-36, M4-39, M4-41, M4-43, M4-58, M4-59, M4-60 | todo |

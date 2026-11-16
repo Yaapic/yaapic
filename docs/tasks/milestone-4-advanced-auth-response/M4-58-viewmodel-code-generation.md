@@ -1,6 +1,6 @@
 # M4-58: ViewModel: code generation dialog
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-51, M4-52, M4-53, M4-54, M4-56, M4-57
 
@@ -34,10 +34,10 @@ Dialog views (M4-68, M4-76), palette (M4-60).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with fake generators, an in-memory preferences store and a fake clipboard: targets listed; default and restored target;
+- [x] Tests in `Yaapic.ViewModels.Tests` with fake generators, an in-memory preferences store and a fake clipboard: targets listed; default and restored target;
   selecting a target regenerates and persists; `Refresh` picks up editor changes; generator exception handled; unresolved variables warning; copy; the
   request editor factory with and without the services; resolution uses unsaved edits.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
