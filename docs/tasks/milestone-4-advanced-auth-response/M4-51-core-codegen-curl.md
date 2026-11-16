@@ -1,6 +1,6 @@
 # M4-51: Core: code generator, cURL
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-50
 
@@ -26,11 +26,11 @@ Windows cmd quoting (PowerShell has its own generator, M4-56), `--compressed`, `
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: the exact expected text, written by hand in the test, for every sample of `CodeSamples` (including awkward quotes, the
+- [x] Tests in `Yaapic.Core.Tests`: the exact expected text, written by hand in the test, for every sample of `CodeSamples` (including awkward quotes, the
   JSON body with a newline, multipart with a file, the unresolved URL, the digest note); `HEAD`; a `Multipart` text value starting with `@`.
-- [ ] A test, skipped when `curl` is not on the PATH, that runs the generated command for `GetSimple` against a local `TcpListener` HTTP server and checks the
+- [x] A test, skipped when `curl` is not on the PATH, that runs the generated command for `GetSimple` against a local `TcpListener` HTTP server and checks the
   request line and headers received.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
