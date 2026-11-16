@@ -1,6 +1,6 @@
 # M4-43: ViewModel: the auth editor offers the new kinds
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-08, M4-41, M4-42
 
@@ -33,11 +33,11 @@ Views, composition.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: the kind list; for each new kind a definition loads and `ToAuth` returns an equal `RequestAuth`;
+- [x] Tests in `Yaapic.ViewModels.Tests`: the kind list; for each new kind a definition loads and `ToAuth` returns an equal `RequestAuth`;
   non-active kinds are null in the output; switching kinds keeps in-memory edits; `Changed` forwarded from each sub-editor and not raised by
   `Load`; the request editor's dirty state changes when an OAuth 2.0 field is edited and not on load; with a fake token service the get-token command
   receives settings with variables substituted; existing auth tests unchanged.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

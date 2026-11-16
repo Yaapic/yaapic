@@ -1,6 +1,7 @@
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Yaapic.Core.Auth.OAuth2;
 using Yaapic.Core.Http;
 using Yaapic.Core.Scripting;
 using Yaapic.Core.Variables;
@@ -62,8 +63,11 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     [ObservableProperty]
     private bool _isActive;
 
-    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs, ScriptSendServices? scripting)
+    private RequestEditorViewModel(Guid id, RequestSender sender, IVariableScopeProvider scopes, IDialogService? dialogs, ScriptSendServices? scripting, IOAuth2TokenService? oauth2Tokens)
     {
+        Auth = oauth2Tokens is null
+            ? new AuthEditorViewModel()
+            : new AuthEditorViewModel(oauth2Tokens, settings => RequestResolver.ResolveOAuth2(settings, scopes.GetScopes(id).CreateSource()), TimeProvider.System);
         _scripting = scripting;
         Id = id;
         _sender = sender;
@@ -130,7 +134,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     public FormDataEditorViewModel FormData { get; }
 
     /// <summary>Gets the authentication editor.</summary>
-    public AuthEditorViewModel Auth { get; } = new();
+    public AuthEditorViewModel Auth { get; }
 
     /// <summary>Gets the pre-request and post-response script editor.</summary>
     public ScriptsEditorViewModel Scripts { get; } = new();
@@ -175,6 +179,7 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="isNew">Whether the request has never been saved.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
     /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
+    /// <param name="oauth2Tokens">Backs the OAuth 2.0 token buttons; <see langword="null"/> leaves them disabled.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel FromDefinition(
         HttpRequestDefinition definition,
@@ -182,12 +187,13 @@ public sealed partial class RequestEditorViewModel : ObservableObject
         IVariableScopeProvider scopes,
         bool isNew = false,
         IDialogService? dialogs = null,
-        ScriptSendServices? scripting = null)
+        ScriptSendServices? scripting = null,
+        IOAuth2TokenService? oauth2Tokens = null)
     {
         ArgumentNullException.ThrowIfNull(definition);
         ArgumentNullException.ThrowIfNull(sender);
         ArgumentNullException.ThrowIfNull(scopes);
-        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs, scripting)
+        var editor = new RequestEditorViewModel(definition.Id, sender, scopes, dialogs, scripting, oauth2Tokens)
         {
             Name = definition.Name,
             Method = definition.Method,
@@ -221,13 +227,15 @@ public sealed partial class RequestEditorViewModel : ObservableObject
     /// <param name="scopes">Provides the variable scopes at send time.</param>
     /// <param name="dialogs">Used to pick files; <see langword="null"/> makes the pick commands do nothing.</param>
     /// <param name="scripting">Sends through the script pipeline; <see langword="null"/> sends plainly, without scripts.</param>
+    /// <param name="oauth2Tokens">Backs the OAuth 2.0 token buttons; <see langword="null"/> leaves them disabled.</param>
     /// <returns>The editor.</returns>
     public static RequestEditorViewModel CreateNew(
         RequestSender sender,
         IVariableScopeProvider scopes,
         IDialogService? dialogs = null,
-        ScriptSendServices? scripting = null) =>
-        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs, scripting);
+        ScriptSendServices? scripting = null,
+        IOAuth2TokenService? oauth2Tokens = null) =>
+        FromDefinition(HttpRequestDefinition.Create(DefaultName), sender, scopes, isNew: true, dialogs, scripting, oauth2Tokens);
 
     /// <summary>Builds the domain request from the current state.</summary>
     /// <returns>The request; a blank name becomes "New Request".</returns>

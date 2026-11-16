@@ -37,6 +37,18 @@ public static class Strings
     /// <summary>API key location</summary>
     public static string AuthApiKeyLocation => Localizer.Pick("API key location", "Emplacement de la clé d'API");
 
+    /// <summary>AWS Signature v4</summary>
+    public static string AuthKindAwsV4 => Localizer.Pick("AWS Signature v4", "AWS Signature v4");
+
+    /// <summary>Digest</summary>
+    public static string AuthKindDigest => Localizer.Pick("Digest", "Digest");
+
+    /// <summary>JWT</summary>
+    public static string AuthKindJwt => Localizer.Pick("JWT", "JWT");
+
+    /// <summary>OAuth 2.0</summary>
+    public static string AuthKindOAuth2 => Localizer.Pick("OAuth 2.0", "OAuth 2.0");
+
     /// <summary>Header</summary>
     public static string AuthLocationHeader => Localizer.Pick("Header", "En-tête");
 

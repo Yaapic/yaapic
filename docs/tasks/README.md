@@ -439,7 +439,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-40](milestone-4-advanced-auth-response/M4-40-viewmodel-oauth2-editor.md) | ViewModel: OAuth 2.0 editor | any | M4-05, M4-22 | done |
 | [M4-41](milestone-4-advanced-auth-response/M4-41-viewmodel-oauth2-token-actions.md) | ViewModel: OAuth 2.0 token actions and status | any | M4-21, M4-23, M4-40 | done |
 | [M4-42](milestone-4-advanced-auth-response/M4-42-viewmodel-jwt-digest-aws-editors.md) | ViewModel: JWT and AWS Signature v4 editors | any | M4-06, M4-40 | done |
-| [M4-43](milestone-4-advanced-auth-response/M4-43-viewmodel-auth-editor-integration.md) | ViewModel: the auth editor offers the new kinds | any | M4-08, M4-41, M4-42 | todo |
+| [M4-43](milestone-4-advanced-auth-response/M4-43-viewmodel-auth-editor-integration.md) | ViewModel: the auth editor offers the new kinds | any | M4-08, M4-41, M4-42 | done |
 | [M4-44](milestone-4-advanced-auth-response/M4-44-viewmodel-certificates.md) | ViewModel: client certificates settings | any | M4-31, M4-32 | todo |
 | [M4-45](milestone-4-advanced-auth-response/M4-45-viewmodel-response-timings.md) | ViewModel: response timings and protocol | any | M4-36, M4-39 | todo |
 | [M4-46](milestone-4-advanced-auth-response/M4-46-core-text-line-diff.md) | Core: line diff (Myers) | any | M4-04 | todo |

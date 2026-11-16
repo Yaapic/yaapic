@@ -159,24 +159,35 @@ public static class RequestResolver
         }
     }
 
+    /// <summary>Substitutes the variables in every text of <paramref name="settings"/>.</summary>
+    /// <param name="settings">The OAuth 2.0 settings as edited.</param>
+    /// <param name="source">The variable source.</param>
+    /// <returns>The settings with variables substituted; unresolved variables stay empty.</returns>
+    public static OAuth2Settings ResolveOAuth2(OAuth2Settings settings, IVariableSource source)
+    {
+        ArgumentNullException.ThrowIfNull(settings);
+        ArgumentNullException.ThrowIfNull(source);
+        return ResolveOAuth2(settings, text => VariableResolver.Resolve(text, source).Text);
+    }
+
+    static OAuth2Settings ResolveOAuth2(OAuth2Settings o, Func<string?, string> sub) => o with
+    {
+        TokenUrl = sub(o.TokenUrl),
+        AuthorizationUrl = sub(o.AuthorizationUrl),
+        ClientId = sub(o.ClientId),
+        ClientSecret = sub(o.ClientSecret),
+        Scope = sub(o.Scope),
+        Audience = sub(o.Audience),
+        Username = sub(o.Username),
+        Password = sub(o.Password),
+        RedirectUri = sub(o.RedirectUri),
+        HeaderPrefix = sub(o.HeaderPrefix),
+        QueryParameterName = sub(o.QueryParameterName),
+    };
+
     static ResolvedAuth? ResolveAdvancedAuth(RequestAuth auth, Func<string?, string> sub) => auth.Kind switch
     {
-        AuthKind.OAuth2 => (auth.OAuth2 ?? OAuth2Settings.Default) is var o
-            ? new ResolvedAuth(auth.Kind, "", "", o with
-            {
-                TokenUrl = sub(o.TokenUrl),
-                AuthorizationUrl = sub(o.AuthorizationUrl),
-                ClientId = sub(o.ClientId),
-                ClientSecret = sub(o.ClientSecret),
-                Scope = sub(o.Scope),
-                Audience = sub(o.Audience),
-                Username = sub(o.Username),
-                Password = sub(o.Password),
-                RedirectUri = sub(o.RedirectUri),
-                HeaderPrefix = sub(o.HeaderPrefix),
-                QueryParameterName = sub(o.QueryParameterName),
-            }, null, null)
-            : null,
+        AuthKind.OAuth2 => new ResolvedAuth(auth.Kind, "", "", ResolveOAuth2(auth.OAuth2 ?? OAuth2Settings.Default, sub), null, null),
         AuthKind.Jwt => (auth.Jwt ?? JwtSettings.Default) is var j
             ? new ResolvedAuth(auth.Kind, "", "", null, j with
             {
