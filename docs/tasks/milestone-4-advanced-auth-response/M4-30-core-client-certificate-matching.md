@@ -1,6 +1,6 @@
 # M4-30: Core: client certificate matching and provider port
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-29
 
@@ -30,9 +30,9 @@ The list store (M4-31), loading files (M4-33).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: each rank beats the next; ties; wildcard depth; bare domain not matched by a wildcard; port rules;
+- [x] Tests in `Yaapic.Core.Tests`: each rank beats the next; ties; wildcard depth; bare domain not matched by a wildcard; port rules;
   `http` never matches; invalid entries skipped; case-insensitive.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
