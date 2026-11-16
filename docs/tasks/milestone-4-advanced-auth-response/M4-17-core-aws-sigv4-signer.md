@@ -1,6 +1,6 @@
 # M4-17: Core: AWS Signature v4 signer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-01
 
@@ -33,11 +33,11 @@ Applying it to a request (M4-18), presigned URLs, SigV4a, chunked uploads.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with AWS's published test-suite vectors (`get-vanilla`, `get-vanilla-query-order-key-case`,
+- [x] Tests in `Yaapic.Core.Tests` with AWS's published test-suite vectors (`get-vanilla`, `get-vanilla-query-order-key-case`,
   `post-vanilla-query`, `post-x-www-form-urlencoded`, `get-header-value-trim`; credential `AKIDEXAMPLE` / `wJalrXUtnFEMI/K7MDENG+bPxRfiCYEXAMPLEKEY`,
   region `us-east-1`, service `service`, time `20150830T123600Z`): canonical request not exposed, but the final signature and header match
   the published ones byte for byte. Add: session token header, a custom port, non-ASCII path, `s3` path handling.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
