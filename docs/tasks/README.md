@@ -446,7 +446,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-47](milestone-4-advanced-auth-response/M4-47-core-response-differ.md) | Core: response differ (headers and body) | any | M4-46 | done |
 | [M4-48](milestone-4-advanced-auth-response/M4-48-viewmodel-response-diff.md) | ViewModel: response diff | any | M4-45, M4-47 | done |
 | [M4-49](milestone-4-advanced-auth-response/M4-49-viewmodel-jwt-decoder.md) | ViewModel: JWT decoder | any | M4-14 | done |
-| [M4-50](milestone-4-advanced-auth-response/M4-50-core-code-generation-model-and-registry.md) | Core: code generation model, registry and shared samples | any | M4-04, M4-09 | todo |
+| [M4-50](milestone-4-advanced-auth-response/M4-50-core-code-generation-model-and-registry.md) | Core: code generation model, registry and shared samples | any | M4-04, M4-09 | done |
 | [M4-51](milestone-4-advanced-auth-response/M4-51-core-codegen-curl.md) | Core: code generator, cURL | any | M4-50 | todo |
 | [M4-52](milestone-4-advanced-auth-response/M4-52-core-codegen-javascript-fetch.md) | Core: code generator, JavaScript (fetch) | any | M4-50 | todo |
 | [M4-53](milestone-4-advanced-auth-response/M4-53-core-codegen-python-requests.md) | Core: code generator, Python (requests) | any | M4-50 | todo |

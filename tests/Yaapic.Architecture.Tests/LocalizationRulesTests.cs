@@ -7,8 +7,14 @@ namespace Yaapic.Architecture.Tests;
 // Exception messages are developer-facing and stay English; comments and script samples (yaapic. and yaapic.) are skipped.
 public partial class LocalizationRulesTests
 {
-    // Texts that are deliberately not translated: they are returned to scripts (script API).
-    private static readonly string[] Allowed = ["Request failed"];
+    // Texts that are deliberately not translated: they are returned to scripts (script API) or emitted as comments in
+    // generated source code (code generation notes).
+    private static readonly string[] Allowed =
+    [
+        "Request failed",
+        "Digest authentication must be computed by the caller (RFC 7616).",
+        "AWS Signature v4 must be computed by the caller.",
+    ];
 
     [GeneratedRegex("""\$?"[A-Z][a-z]+ [A-Za-z.'{}]+""")]
     private static partial Regex Sentence();

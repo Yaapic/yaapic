@@ -1,6 +1,6 @@
 # M4-50: Core: code generation model, registry and shared samples
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-04, M4-09
 
@@ -42,9 +42,9 @@ Any concrete generator, UI, the view model.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: factory body mapping for each case (urlencoded decoding incl. `+` and `%20`), Content-Type header added only when missing and
+- [x] Tests in `Yaapic.Core.Tests`: factory body mapping for each case (urlencoded decoding incl. `+` and `%20`), Content-Type header added only when missing and
   never for multipart, the four auth cases, method casing; registry order, lookup, duplicate rejection.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
