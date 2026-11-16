@@ -1,6 +1,6 @@
 # M4-18: Core: AWS Signature v4 authenticator
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-10, M4-17
 
@@ -29,10 +29,10 @@ Presigned URLs, retries, S3 multipart payload hashing.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with a fake `TimeProvider`: GET without body, POST with text body, file body (temp file), multipart gives
+- [x] Tests in `Yaapic.Core.Tests` with a fake `TimeProvider`: GET without body, POST with text body, file body (temp file), multipart gives
   `UNSIGNED-PAYLOAD`, session token, missing fields each named, unreadable file, user `Authorization` wins, the produced `Authorization`
   equals `AwsSigV4.Sign` called directly with the same inputs.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

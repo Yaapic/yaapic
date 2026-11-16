@@ -61,6 +61,20 @@ public static class Strings
     /// <summary>Username</summary>
     public static string AuthUsername => Localizer.Pick("Username", "Nom d'utilisateur");
 
+    /// <summary>The AWS {0} is empty.</summary>
+    public static string AwsFieldMissing(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The AWS {0} is empty.", "Le champ AWS « {0} » est vide."), a0);
+
+    /// <summary>Cannot read the request body file '{0}'.</summary>
+    public static string AwsPayloadUnreadable(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot read the request body file '{0}'.", "Impossible de lire le fichier du corps de la requête « {0} »."), a0);
+
+    /// <summary>Enter the AWS access key, secret key, region and service.</summary>
+    public static string AwsSettingsMissing => Localizer.Pick("Enter the AWS access key, secret key, region and service.", "Saisissez la clé d’accès, la clé secrète, la région et le service AWS.");
+
+    /// <summary>AWS Signature v4 needs an absolute http or https URL.</summary>
+    public static string AwsUrlInvalid => Localizer.Pick("AWS Signature v4 needs an absolute http or https URL.", "AWS Signature v4 nécessite une URL http ou https absolue.");
+
     /// <summary>Binary</summary>
     public static string BodyBinary => Localizer.Pick("Binary", "Binaire");
 

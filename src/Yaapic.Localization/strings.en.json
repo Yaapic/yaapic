@@ -352,5 +352,9 @@
   "jwt.headersInvalid": "The extra JWT headers must be a JSON object.",
   "jwt.keyMissing": "The JWT secret or private key is empty.",
   "jwt.secretInvalid": "The JWT secret is not valid Base64.",
-  "digest.credentialsMissing": "Enter a username and a password for Digest authentication."
+  "digest.credentialsMissing": "Enter a username and a password for Digest authentication.",
+  "aws.settingsMissing": "Enter the AWS access key, secret key, region and service.",
+  "aws.fieldMissing": "The AWS {0} is empty.",
+  "aws.payloadUnreadable": "Cannot read the request body file '{0}'.",
+  "aws.urlInvalid": "AWS Signature v4 needs an absolute http or https URL."
 }

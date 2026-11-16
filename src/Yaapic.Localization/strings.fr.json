@@ -352,5 +352,9 @@
   "jwt.headersInvalid": "Les en-têtes JWT supplémentaires doivent être un objet JSON.",
   "jwt.keyMissing": "Le secret ou la clé privée du JWT est vide.",
   "jwt.secretInvalid": "Le secret du JWT n’est pas du Base64 valide.",
-  "digest.credentialsMissing": "Saisissez un nom d’utilisateur et un mot de passe pour l’authentification Digest."
+  "digest.credentialsMissing": "Saisissez un nom d’utilisateur et un mot de passe pour l’authentification Digest.",
+  "aws.settingsMissing": "Saisissez la clé d’accès, la clé secrète, la région et le service AWS.",
+  "aws.fieldMissing": "Le champ AWS « {0} » est vide.",
+  "aws.payloadUnreadable": "Impossible de lire le fichier du corps de la requête « {0} ».",
+  "aws.urlInvalid": "AWS Signature v4 nécessite une URL http ou https absolue."
 }
