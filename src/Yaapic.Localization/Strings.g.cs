@@ -456,6 +456,10 @@ public static class Strings
     /// <summary>Show the response beside or below the request</summary>
     public static string LayoutToggleTip => Localizer.Pick("Show the response beside or below the request", "Afficher la réponse à côté de la requête ou en dessous");
 
+    /// <summary>The token endpoint answered with an unexpected response (HTTP {0}).</summary>
+    public static string Oauth2InvalidResponse(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The token endpoint answered with an unexpected response (HTTP {0}).", "Le point de terminaison de jeton a renvoyé une réponse inattendue (HTTP {0})."), a0);
+
     /// <summary>Active</summary>
     public static string PaletteActive => Localizer.Pick("Active", "Actif");
 

@@ -1,6 +1,6 @@
 # M4-20: Core: OAuth 2.0 token requests and response parsing
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-19
 
@@ -39,10 +39,10 @@ Sending (M4-21), PKCE (M4-22), caching decisions.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: the body and headers of each request kind and both client-auth styles (Basic value for `a b` / `c:d`
+- [x] Tests in `Yaapic.Core.Tests`: the body and headers of each request kind and both client-auth styles (Basic value for `a b` / `c:d`
   is form-encoded before base64), scope and audience omitted when empty; parsing of: full response, string `expires_in`, missing
   `token_type`, no `expires_in`, `error` with and without description, 401 with plain text, 200 with HTML, missing `access_token`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

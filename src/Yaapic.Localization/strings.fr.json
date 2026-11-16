@@ -356,5 +356,6 @@
   "aws.settingsMissing": "Saisissez la clé d’accès, la clé secrète, la région et le service AWS.",
   "aws.fieldMissing": "Le champ AWS « {0} » est vide.",
   "aws.payloadUnreadable": "Impossible de lire le fichier du corps de la requête « {0} ».",
-  "aws.urlInvalid": "AWS Signature v4 nécessite une URL http ou https absolue."
+  "aws.urlInvalid": "AWS Signature v4 nécessite une URL http ou https absolue.",
+  "oauth2.invalidResponse": "Le point de terminaison de jeton a renvoyé une réponse inattendue (HTTP {0})."
 }

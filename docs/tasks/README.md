@@ -416,7 +416,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-17](milestone-4-advanced-auth-response/M4-17-core-aws-sigv4-signer.md) | Core: AWS Signature v4 signer | any | M4-01 | done |
 | [M4-18](milestone-4-advanced-auth-response/M4-18-core-aws-sigv4-authenticator.md) | Core: AWS Signature v4 authenticator | any | M4-10, M4-17 | done |
 | [M4-19](milestone-4-advanced-auth-response/M4-19-core-oauth2-token-model-and-cache.md) | Core: OAuth 2.0 token model and in-memory cache | any | M4-05 | done |
-| [M4-20](milestone-4-advanced-auth-response/M4-20-core-oauth2-token-requests-and-parsing.md) | Core: OAuth 2.0 token requests and response parsing | any | M4-19 | todo |
+| [M4-20](milestone-4-advanced-auth-response/M4-20-core-oauth2-token-requests-and-parsing.md) | Core: OAuth 2.0 token requests and response parsing | any | M4-19 | done |
 | [M4-21](milestone-4-advanced-auth-response/M4-21-core-oauth2-token-client.md) | Core: OAuth 2.0 token client (client credentials, password, refresh) | any | M4-20 | todo |
 | [M4-22](milestone-4-advanced-auth-response/M4-22-core-pkce-and-authorization-url.md) | Core: PKCE and the authorization request URL | any | M4-05, M4-11 | todo |
 | [M4-23](milestone-4-advanced-auth-response/M4-23-core-oauth2-authorization-code-flow.md) | Core: authorization-code flow ports and orchestration | any | M4-21, M4-22 | todo |

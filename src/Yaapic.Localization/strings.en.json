@@ -356,5 +356,6 @@
   "aws.settingsMissing": "Enter the AWS access key, secret key, region and service.",
   "aws.fieldMissing": "The AWS {0} is empty.",
   "aws.payloadUnreadable": "Cannot read the request body file '{0}'.",
-  "aws.urlInvalid": "AWS Signature v4 needs an absolute http or https URL."
+  "aws.urlInvalid": "AWS Signature v4 needs an absolute http or https URL.",
+  "oauth2.invalidResponse": "The token endpoint answered with an unexpected response (HTTP {0})."
 }
