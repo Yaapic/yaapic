@@ -10,4 +10,9 @@ public readonly record struct SecretRef(SecretOwnerKind Kind, Guid OwnerId, stri
     /// <param name="name">The variable name.</param>
     /// <returns>The reference, with owner <see cref="Guid.Empty"/>.</returns>
     public static SecretRef Globals(string name) => new(SecretOwnerKind.Globals, Guid.Empty, name);
+
+    /// <summary>Creates a reference to the passphrase of a client certificate.</summary>
+    /// <param name="certificateId">The certificate identifier.</param>
+    /// <returns>The reference, named <c>passphrase</c>.</returns>
+    public static SecretRef Certificate(Guid certificateId) => new(SecretOwnerKind.Certificate, certificateId, "passphrase");
 }

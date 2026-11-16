@@ -112,4 +112,28 @@ public class InMemorySecretVaultTests
         var key = SecretRef.Globals("x");
         Assert.Equal((SecretOwnerKind.Globals, Guid.Empty, "x"), (key.Kind, key.OwnerId, key.Name));
     }
+
+    [Fact]
+    public async Task Certificate_passphrase_round_trips_and_is_redacted()
+    {
+        var vault = await Unlocked();
+        var key = SecretRef.Certificate(Env);
+        var otherKind = new SecretRef(SecretOwnerKind.Environment, Env, "passphrase");
+        Assert.Equal((SecretOwnerKind.Certificate, Env, "passphrase"), (key.Kind, key.OwnerId, key.Name));
+
+        await vault.SetAsync(key, "cert-pass", Ct);
+        await vault.SetAsync(otherKind, "env-pass", Ct);
+        Assert.True(vault.TryGet(key, out var value));
+        Assert.Equal("cert-pass", value);
+        Assert.Contains("cert-pass", vault.GetSecretValues());
+
+        await vault.RemoveAsync(key, Ct);
+        Assert.False(vault.TryGet(key, out _));
+        Assert.True(vault.TryGet(otherKind, out _));
+
+        await vault.SetAsync(key, "cert-pass", Ct);
+        await vault.RemoveOwnerAsync(SecretOwnerKind.Certificate, Env, Ct);
+        Assert.False(vault.TryGet(key, out _));
+        Assert.True(vault.TryGet(otherKind, out _));
+    }
 }

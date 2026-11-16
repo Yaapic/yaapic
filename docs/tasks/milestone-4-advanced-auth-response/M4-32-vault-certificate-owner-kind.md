@@ -1,6 +1,6 @@
 # M4-32: Vault: certificate passphrases
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-29
 
@@ -27,11 +27,11 @@ UI, using the passphrase (M4-33).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` and `Yaapic.Core.Tests`: set/get/remove/remove-owner for a certificate secret on both vault
+- [x] Tests in `Yaapic.Infrastructure.Tests` and `Yaapic.Core.Tests`: set/get/remove/remove-owner for a certificate secret on both vault
   implementations; the associated data differs from the environment kind with the same id and name (a swapped entry fails to decrypt); a vault
   fixture written with the old code (hex or file committed in the test project) still opens; `GetSecretValues` includes certificate
   passphrases of length >= 4 so the redactor hides them.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

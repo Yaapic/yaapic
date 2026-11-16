@@ -428,7 +428,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-29](milestone-4-advanced-auth-response/M4-29-domain-client-certificate.md) | Domain: client certificate model | any | M4-03 | done |
 | [M4-30](milestone-4-advanced-auth-response/M4-30-core-client-certificate-matching.md) | Core: client certificate matching and provider port | any | M4-29 | done |
 | [M4-31](milestone-4-advanced-auth-response/M4-31-infra-certificate-settings-store.md) | Infrastructure: the client certificate list store | any | M4-29 | done |
-| [M4-32](milestone-4-advanced-auth-response/M4-32-vault-certificate-owner-kind.md) | Vault: certificate passphrases | any | M4-29 | todo |
+| [M4-32](milestone-4-advanced-auth-response/M4-32-vault-certificate-owner-kind.md) | Vault: certificate passphrases | any | M4-29 | done |
 | [M4-33](milestone-4-advanced-auth-response/M4-33-infra-client-certificate-loader.md) | Infrastructure: client certificate loader and provider | any | M4-30, M4-31, M4-32 | todo |
 | [M4-34](milestone-4-advanced-auth-response/M4-34-infra-transport-client-certificates.md) | Infrastructure: send with a client certificate (mTLS) | any | M4-33 | todo |
 | [M4-35](milestone-4-advanced-auth-response/M4-35-domain-request-timings.md) | Domain: request timings | any | M4-03 | todo |
