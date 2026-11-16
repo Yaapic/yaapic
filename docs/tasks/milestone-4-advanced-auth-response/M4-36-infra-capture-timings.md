@@ -1,6 +1,6 @@
 # M4-36: Infrastructure: capture request timings in the transport
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-34, M4-35
 
@@ -36,15 +36,22 @@ Display (M4-45, UI cards), storage in history, HTTP version (M4-39).
 
 ## Acceptance criteria
 
-- [ ] Integration tests in `Yaapic.Infrastructure.Tests/EndToEnd/` against local servers: a plain HTTP server that delays the response headers
+- [x] Integration tests in `Yaapic.Infrastructure.Tests/EndToEnd/` against local servers: a plain HTTP server that delays the response headers
   by 200 ms and the body by 200 ms gives `Wait` >= 180 ms and `Download` >= 180 ms (generous lower bounds only, no upper bounds); a TLS server
   that delays its handshake by 300 ms gives `Tls` >= 250 ms; a second request on the same pooled connection has `ConnectionReused` true and
   null connection phases; a first request has a non-null `Connect` (and `Dns` per the spike); `Sum` <= `Duration`.
-- [ ] Existing transport tests unchanged and green; the callbacks do not change TLS validation behaviour (a self-signed server without
+- [x] Existing transport tests unchanged and green; the callbacks do not change TLS validation behaviour (a self-signed server without
   `configureHandler` still fails as before).
-- [ ] Native AOT publish of the host's app project: 0 IL2xxx/IL3xxx warnings, the published exe starts and exits (kill it afterwards).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Native AOT publish of the host's app project: 0 IL2xxx/IL3xxx warnings, the published exe starts and exits (kill it afterwards).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
 `feat(infra): measure DNS, connect, TLS, wait and download timings`
+
+## Notes
+
+- Differences from the card, following the spike: the TLS marker is `SocketsHttpHandler.PlaintextStreamFilter` (the `RemoteCertificateValidationCallback` cannot reach the request), so TLS validation is untouched; the filter only records when the stream is an `SslStream` (null `Tls` for plain http).
+- Redirects: the last connection's phases are reported (each new connection overwrites them); `Wait`/`Download` cover the final response.
+- The `ConnectCallback` is installed on every handler; the proxy-awareness part of ADR 0014 (skip the callback behind a proxy) is not implemented here: the callback connects to the endpoint the handler hands it, which is the proxy's for an HTTP proxy.
+- Native AOT publish of `Yaapic.App.Avalonia` (win-x64): no IL2xxx/IL3xxx; the exe starts and was killed.

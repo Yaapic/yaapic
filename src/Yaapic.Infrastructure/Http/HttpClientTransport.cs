@@ -96,9 +96,14 @@ public sealed class HttpClientTransport(
 
         try
         {
+            var collector = new TimingCollector();
+            message.Options.Set(TimingCollector.Key, collector);
             var watch = Stopwatch.StartNew();
+            collector.Start();
             using var response = await http.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+            collector.HeadersReceived();
             var body = await response.Content.ReadAsByteArrayAsync(cts.Token);
+            collector.BodyEnded();
             watch.Stop();
 
             var headers = response.Headers.Concat(response.Content.Headers)
@@ -110,7 +115,10 @@ public sealed class HttpClientTransport(
                 headers,
                 body,
                 watch.Elapsed,
-                response.RequestMessage!.RequestUri!.AbsoluteUri));
+                response.RequestMessage!.RequestUri!.AbsoluteUri)
+            {
+                Timings = collector.Build(),
+            });
         }
         catch (OperationCanceledException)
         {

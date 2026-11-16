@@ -37,6 +37,8 @@ public static class DefaultHttpClient
             MaxAutomaticRedirections = 10,
             AutomaticDecompression = DecompressionMethods.All,
             UseCookies = false,
+            ConnectCallback = TimingCollector.ConnectAsync,
+            PlaintextStreamFilter = TimingCollector.MarkTlsAsync,
         };
         if (certificate is not null)
             handler.SslOptions = new SslClientAuthenticationOptions { ClientCertificates = [certificate] };

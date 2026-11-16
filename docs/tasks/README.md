@@ -432,7 +432,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-33](milestone-4-advanced-auth-response/M4-33-infra-client-certificate-loader.md) | Infrastructure: client certificate loader and provider | any | M4-30, M4-31, M4-32 | done |
 | [M4-34](milestone-4-advanced-auth-response/M4-34-infra-transport-client-certificates.md) | Infrastructure: send with a client certificate (mTLS) | any | M4-33 | done |
 | [M4-35](milestone-4-advanced-auth-response/M4-35-domain-request-timings.md) | Domain: request timings | any | M4-03 | done |
-| [M4-36](milestone-4-advanced-auth-response/M4-36-infra-capture-timings.md) | Infrastructure: capture request timings in the transport | any | M4-34, M4-35 | todo |
+| [M4-36](milestone-4-advanced-auth-response/M4-36-infra-capture-timings.md) | Infrastructure: capture request timings in the transport | any | M4-34, M4-35 | done |
 | [M4-37](milestone-4-advanced-auth-response/M4-37-tls-verification-and-custom-ca.md) | Server certificate verification: skip or custom CA | any | M4-34 | blocked |
 | [M4-38](milestone-4-advanced-auth-response/M4-38-domain-yaml-http-version.md) | Domain and YAML: HTTP version preference | any | M4-03 | todo |
 | [M4-39](milestone-4-advanced-auth-response/M4-39-infra-transport-http-version.md) | Infrastructure: send with the chosen HTTP version | any | M4-36, M4-38 | todo |
