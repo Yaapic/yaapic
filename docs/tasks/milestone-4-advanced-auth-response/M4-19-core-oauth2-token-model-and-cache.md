@@ -1,6 +1,6 @@
 # M4-19: Core: OAuth 2.0 token model and in-memory cache
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-05
 
@@ -30,9 +30,9 @@ Fetching tokens (M4-20, M4-21), persistence (deferred, ADR 0013).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: key stable and sensitive to each included field and insensitive to secret and password; expiry with
+- [x] Tests in `Yaapic.Core.Tests`: key stable and sensitive to each included field and insensitive to secret and password; expiry with
   leeway and with no expiry; set, get, remove, clear and `Changed` counts; concurrent `Set` from several tasks; `ToString` redaction.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
