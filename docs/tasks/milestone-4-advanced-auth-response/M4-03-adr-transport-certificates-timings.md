@@ -1,6 +1,6 @@
 # M4-03: ADR 0014: transport, client certificates, timings and HTTP version
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-02
 
@@ -47,10 +47,10 @@ Code, UI, proxy settings, custom CA bundles, certificate stores of the OS, HSM o
 
 ## Acceptance criteria
 
-- [ ] ADR 0014 (`docs/adr/0014-transport-certificates-timings.md`) contains every decision above, the spike's measured limits, and
+- [x] ADR 0014 (`docs/adr/0014-transport-certificates-timings.md`) contains every decision above, the spike's measured limits, and
   updates ADR 0004's status line ("HTTP/3 scope confirmed in M4"); `docs/adr/README.md` lists it.
-- [ ] `docs/file-format.md` documents `settings.httpVersion` (shape defined by M4-38) and says certificates are not in the workspace.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] `docs/file-format.md` documents `settings.httpVersion` (shape defined by M4-38) and says certificates are not in the workspace.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

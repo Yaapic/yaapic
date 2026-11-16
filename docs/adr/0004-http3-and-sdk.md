@@ -1,6 +1,6 @@
 # ADR 0004: HTTP/3 and .NET SDK version
 
-Status: Accepted (SDK), Proposed (HTTP/3 scope, confirmed in M4)
+Status: Accepted (SDK), Accepted (HTTP/3 scope confirmed in M4, see [ADR 0014](0014-transport-certificates-timings.md))
 
 ## Context
 

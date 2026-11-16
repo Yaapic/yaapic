@@ -59,6 +59,7 @@ auth:
 settings:
   followRedirects: true
   timeoutSeconds: 0    # 0 = application default (30 s)
+  httpVersion: http2   # optional, milestone 4: http1 | http2 | http3; omitted when default
 scripts:               # optional on read, see ADR 0009
   preRequest:
     language: javascript   # javascript | lua
@@ -138,6 +139,13 @@ A different `version` is refused.
 The `oauth2`, `jwt`, `digest` and `awsv4` authentication kinds are described in
 [ADR 0013](adr/0013-advanced-authentication.md). Their YAML shape is defined by cards M4-07 and M4-08; this section is
 completed there.
+
+## Client certificates (milestone 4)
+
+Client certificates (mTLS) are **not part of the workspace**: they live in the per-user file
+`<user data dir>/Yaapic/certificates.json` because their paths are machine specific, and their passphrases are in the
+vault. See [ADR 0014](adr/0014-transport-certificates-timings.md). The per-request `settings.httpVersion` key
+(`default` is never written; a missing or unknown value reads as `default`) is defined by card M4-38.
 
 ## Variable precedence
 
