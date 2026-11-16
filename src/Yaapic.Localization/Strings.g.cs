@@ -906,6 +906,9 @@ public static class Strings
     /// <summary>Tests</summary>
     public static string ResponseTabTests => Localizer.Pick("Tests", "Tests");
 
+    /// <summary>Timing</summary>
+    public static string ResponseTabTiming => Localizer.Pick("Timing", "Durées");
+
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
 
@@ -1142,6 +1145,30 @@ public static class Strings
 
     /// <summary>System theme</summary>
     public static string ThemeSystemTheme => Localizer.Pick("System theme", "Thème du système");
+
+    /// <summary>Connection reused</summary>
+    public static string TimingConnectionReused => Localizer.Pick("Connection reused", "Connexion réutilisée");
+
+    /// <summary>DNS lookup</summary>
+    public static string TimingDns => Localizer.Pick("DNS lookup", "Résolution DNS");
+
+    /// <summary>Download</summary>
+    public static string TimingDownload => Localizer.Pick("Download", "Téléchargement");
+
+    /// <summary>New connection</summary>
+    public static string TimingNewConnection => Localizer.Pick("New connection", "Nouvelle connexion");
+
+    /// <summary>n/a</summary>
+    public static string TimingNotAvailable => Localizer.Pick("n/a", "n/d");
+
+    /// <summary>TCP connect</summary>
+    public static string TimingTcp => Localizer.Pick("TCP connect", "Connexion TCP");
+
+    /// <summary>TLS handshake</summary>
+    public static string TimingTls => Localizer.Pick("TLS handshake", "Négociation TLS");
+
+    /// <summary>Waiting (TTFB)</summary>
+    public static string TimingWaiting => Localizer.Pick("Waiting (TTFB)", "Attente (TTFB)");
 
     /// <summary>Update available</summary>
     public static string UpdateAvailable => Localizer.Pick("Update available", "Mise à jour disponible");

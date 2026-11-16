@@ -73,6 +73,15 @@
 
   "response.binaryContent": "Contenu binaire, {0}",
   "response.preRequestFailed": "Le script de pré-requête a échoué — {0} : {1}",
+  "response.tabTiming": "Durées",
+  "timing.dns": "Résolution DNS",
+  "timing.tcp": "Connexion TCP",
+  "timing.tls": "Négociation TLS",
+  "timing.waiting": "Attente (TTFB)",
+  "timing.download": "Téléchargement",
+  "timing.notAvailable": "n/d",
+  "timing.connectionReused": "Connexion réutilisée",
+  "timing.newConnection": "Nouvelle connexion",
 
   "script.line": "ligne {0}",
   "script.originPostResponse": "post-réponse · {0}",

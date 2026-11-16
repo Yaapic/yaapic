@@ -73,6 +73,15 @@
 
   "response.binaryContent": "Binary content, {0}",
   "response.preRequestFailed": "Pre-request script failed — {0}: {1}",
+  "response.tabTiming": "Timing",
+  "timing.dns": "DNS lookup",
+  "timing.tcp": "TCP connect",
+  "timing.tls": "TLS handshake",
+  "timing.waiting": "Waiting (TTFB)",
+  "timing.download": "Download",
+  "timing.notAvailable": "n/a",
+  "timing.connectionReused": "Connection reused",
+  "timing.newConnection": "New connection",
 
   "script.line": "line {0}",
   "script.originPostResponse": "post-response · {0}",

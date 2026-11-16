@@ -1,6 +1,6 @@
 # M4-45: ViewModel: response timings and protocol
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-36, M4-39
 
@@ -30,10 +30,10 @@ Views, history storage, charts.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: full new-connection timings give five rows with fractions summing to <= 1 and increasing offsets; a reused
+- [x] Tests in `Yaapic.ViewModels.Tests`: full new-connection timings give five rows with fractions summing to <= 1 and increasing offsets; a reused
   connection gives two rows plus the reused text; null timings give `HasTimings` false; null phases give `n/a`; a failure and `Clear` empty the
   rows; the protocol text; very small and zero durations; duration formatting units.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

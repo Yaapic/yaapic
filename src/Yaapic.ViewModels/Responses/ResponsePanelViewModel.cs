@@ -13,6 +13,8 @@ namespace Yaapic.ViewModels.Responses;
 /// <summary>Display-ready state of a response: status, time, size, body, headers, warnings and errors.</summary>
 public sealed partial class ResponsePanelViewModel : ObservableObject
 {
+    private const double MinimumVisibleFraction = 0.005;
+
     private readonly IDialogService? _dialogs;
     private HttpResponseData? _response;
 
@@ -31,6 +33,10 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
     private IReadOnlyList<KeyValueEntry> _headers = [];
     private string? _errorMessage;
     private string? _unresolvedWarning;
+    private IReadOnlyList<TimingRow> _timings = [];
+    private string _protocolText = "";
+    private string _connectionText = "";
+    private string _totalText = "";
 
     /// <summary>Initializes a new instance of the <see cref="ResponsePanelViewModel"/> class.</summary>
     /// <param name="dialogs">Used to copy and save the body; <see langword="null"/> makes both commands do nothing.</param>
@@ -71,6 +77,31 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
 
     /// <summary>Gets the failure message, or <see langword="null"/> when the request did not fail.</summary>
     public string? ErrorMessage { get => _errorMessage; private set => SetProperty(ref _errorMessage, value); }
+
+    /// <summary>Gets the timing phases as waterfall rows; empty when the response has no timings.</summary>
+    public IReadOnlyList<TimingRow> Timings
+    {
+        get => _timings;
+        private set
+        {
+            if (SetProperty(ref _timings, value))
+            {
+                OnPropertyChanged(nameof(HasTimings));
+            }
+        }
+    }
+
+    /// <summary>Gets a value indicating whether <see cref="Timings"/> has rows to show.</summary>
+    public bool HasTimings => _timings.Count > 0;
+
+    /// <summary>Gets the HTTP version, such as <c>HTTP/2</c>; empty when unknown.</summary>
+    public string ProtocolText { get => _protocolText; private set => SetProperty(ref _protocolText, value); }
+
+    /// <summary>Gets whether the connection was reused or new; empty when there are no timings.</summary>
+    public string ConnectionText { get => _connectionText; private set => SetProperty(ref _connectionText, value); }
+
+    /// <summary>Gets the total elapsed time the timing bars are relative to; empty when there are no timings.</summary>
+    public string TotalText { get => _totalText; private set => SetProperty(ref _totalText, value); }
 
     /// <summary>Gets the unresolved-variables warning, or <see langword="null"/> when every variable resolved.</summary>
     public string? UnresolvedWarning { get => _unresolvedWarning; private set => SetProperty(ref _unresolvedWarning, value); }
@@ -120,6 +151,8 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         DurationText = FormatDuration(response.Duration);
         SizeText = FormatSize(response.SizeBytes);
         Headers = response.Headers;
+        ProtocolText = response.Protocol;
+        ApplyTimings(response);
         ApplyBody();
     }
 
@@ -161,6 +194,10 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         Headers = [];
         ErrorMessage = null;
         UnresolvedWarning = null;
+        Timings = [];
+        ProtocolText = "";
+        ConnectionText = "";
+        TotalText = "";
         Tests.Clear();
         RefreshCommands();
     }
@@ -224,6 +261,46 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
         IsBinary = body.IsBinary;
         BinaryText = body.IsBinary ? Strings.ResponseBinaryContent(SizeText) : "";
         RefreshCommands();
+    }
+
+    private void ApplyTimings(HttpResponseData response)
+    {
+        if (response.Timings is not { } t)
+        {
+            return;
+        }
+
+        var total = response.Duration > TimeSpan.Zero ? response.Duration : t.Sum;
+        var rows = new List<TimingRow>(5);
+        var offset = 0.0;
+
+        void Add(string label, TimeSpan? duration)
+        {
+            if (duration is not { } d)
+            {
+                rows.Add(new TimingRow(label, Strings.TimingNotAvailable, 0, Math.Clamp(offset, 0, 1), false));
+                return;
+            }
+
+            var fraction = d <= TimeSpan.Zero || total <= TimeSpan.Zero
+                ? 0
+                : Math.Clamp(Math.Max(d / total, MinimumVisibleFraction), 0, 1);
+            rows.Add(new TimingRow(label, FormatDuration(d), fraction, Math.Clamp(offset, 0, 1), true));
+            offset += fraction;
+        }
+
+        if (!t.ConnectionReused)
+        {
+            Add(Strings.TimingDns, t.Dns);
+            Add(Strings.TimingTcp, t.Connect);
+            Add(Strings.TimingTls, t.Tls);
+        }
+
+        Add(Strings.TimingWaiting, t.Wait);
+        Add(Strings.TimingDownload, t.Download);
+        ConnectionText = t.ConnectionReused ? Strings.TimingConnectionReused : Strings.TimingNewConnection;
+        TotalText = FormatDuration(response.Duration);
+        Timings = rows;
     }
 
     internal static string FormatDuration(TimeSpan duration) => ResponseText.FormatDuration(duration);
