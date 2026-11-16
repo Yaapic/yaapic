@@ -1,6 +1,6 @@
 # M4-26: Core: OAuth 2.0 authentication method
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-10, M4-21
 
@@ -29,10 +29,10 @@ The composite (M4-27), UI, the interactive button.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with `FakeOAuth2TokenService`: header with default, custom and empty prefix; token type fallback; query
+- [x] Tests in `Yaapic.Core.Tests` with `FakeOAuth2TokenService`: header with default, custom and empty prefix; token type fallback; query
   placement and custom parameter; error propagation with prefix; the service is not called when the user set `Authorization`; the
   settings passed to the service are the resolved ones.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -488,6 +488,9 @@ public static class Strings
     /// <summary>The authorization response does not match the request (state mismatch). Try again.</summary>
     public static string Oauth2StateMismatch => Localizer.Pick("The authorization response does not match the request (state mismatch). Try again.", "La réponse d'autorisation ne correspond pas à la demande (state différent). Réessayez.");
 
+    /// <summary>OAuth 2.0: </summary>
+    public static string Oauth2TokenError => Localizer.Pick("OAuth 2.0: ", "OAuth 2.0 : ");
+
     /// <summary>Enter an absolute http or https token URL.</summary>
     public static string Oauth2TokenUrlMissing => Localizer.Pick("Enter an absolute http or https token URL.", "Saisissez une URL de jeton absolue en http ou https.");
 
