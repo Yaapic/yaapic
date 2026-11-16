@@ -138,7 +138,7 @@ public sealed class RequestYamlSerializerTests
     [InlineData("version: 1\nmethod: GET\n")]
     [InlineData("version: 1\nid: nope\nmethod: GET\n")]
     [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: TRACE\n")]
-    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nauth:\n  type: digest\n")]
+    [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nauth:\n  type: ntlm\n")]
     [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nauth:\n  type: apikey\n  in: cookie\n")]
     [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nbody:\n  type: urlencoded\n  fields:\n    - key: a\n      kind: blob\n")]
     [InlineData("version: 1\nid: 6f1c2a3b-4d5e-4f60-8172-93a4b5c6d7e8\nmethod: GET\nsettings:\n  timeoutSeconds: -1\n")]

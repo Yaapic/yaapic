@@ -404,7 +404,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-05](milestone-4-advanced-auth-response/M4-05-domain-oauth2-settings.md) | Domain: OAuth 2.0 settings and the new auth kinds | any | M4-01 | done |
 | [M4-06](milestone-4-advanced-auth-response/M4-06-domain-jwt-and-aws-settings.md) | Domain: JWT and AWS Signature v4 settings | any | M4-05 | done |
 | [M4-07](milestone-4-advanced-auth-response/M4-07-yaml-request-oauth2.md) | YAML request serializer: OAuth 2.0 | any | M4-05 | done |
-| [M4-08](milestone-4-advanced-auth-response/M4-08-yaml-request-jwt-digest-aws.md) | YAML request serializer: JWT, Digest and AWS Signature v4 | any | M4-06, M4-07 | todo |
+| [M4-08](milestone-4-advanced-auth-response/M4-08-yaml-request-jwt-digest-aws.md) | YAML request serializer: JWT, Digest and AWS Signature v4 | any | M4-06, M4-07 | done |
 | [M4-09](milestone-4-advanced-auth-response/M4-09-core-resolved-advanced-auth.md) | Core: resolved advanced authentication | any | M4-06 | todo |
 | [M4-10](milestone-4-advanced-auth-response/M4-10-core-authenticator-port-and-pipeline.md) | Core: authenticator port and send pipeline stage | any | M4-09 | todo |
 | [M4-11](milestone-4-advanced-auth-response/M4-11-core-jwt-hmac-signing.md) | Core: JWT signing with HMAC | any | M4-01 | todo |

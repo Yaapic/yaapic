@@ -137,7 +137,7 @@ A different `version` is refused.
 ## Authentication (milestone 4)
 
 The `oauth2`, `jwt`, `digest` and `awsv4` authentication kinds are described in
-[ADR 0013](adr/0013-advanced-authentication.md). The `jwt`, `digest` and `awsv4` shapes are defined by card M4-08.
+[ADR 0013](adr/0013-advanced-authentication.md).
 
 `auth.type: oauth2` adds a nested `auth.oauth2` mapping, written only for that type (ignored on read for any other
 type). A missing key reads as the default, and an unknown `grant`, `clientAuth` or `placement` value reads as the

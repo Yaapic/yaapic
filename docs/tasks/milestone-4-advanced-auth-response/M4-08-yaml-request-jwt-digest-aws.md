@@ -1,6 +1,6 @@
 # M4-08: YAML request serializer: JWT, Digest and AWS Signature v4
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-06, M4-07
 
@@ -43,10 +43,10 @@ Resolution and signing, UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: round trip of each kind and of each JWT algorithm; a PEM private key with newlines and a
+- [x] Tests in `Yaapic.Infrastructure.Tests`: round trip of each kind and of each JWT algorithm; a PEM private key with newlines and a
   payload with quotes survive; defaults; unknown algorithm; digest keeps its username and password; stable output.
-- [ ] Docs updated.
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] Docs updated.
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 

@@ -85,6 +85,50 @@ internal partial class AuthDto
     public string? Location { get; set; }
 
     public OAuth2Dto? Oauth2 { get; set; }
+
+    public JwtDto? Jwt { get; set; }
+
+    public AwsV4Dto? Awsv4 { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class JwtDto
+{
+    public string? Algorithm { get; set; }
+
+    public string? Secret { get; set; }
+
+    public bool? SecretIsBase64 { get; set; }
+
+    public string? PrivateKey { get; set; }
+
+    public string? Payload { get; set; }
+
+    public string? Headers { get; set; }
+
+    public bool? AddIssuedAt { get; set; }
+
+    public int? ExpiresIn { get; set; }
+
+    public string? Placement { get; set; }
+
+    public string? HeaderPrefix { get; set; }
+
+    public string? QueryParameter { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class AwsV4Dto
+{
+    public string? AccessKeyId { get; set; }
+
+    public string? SecretAccessKey { get; set; }
+
+    public string? SessionToken { get; set; }
+
+    public string? Region { get; set; }
+
+    public string? Service { get; set; }
 }
 
 [YamlObject(NamingConvention.LowerCamelCase)]

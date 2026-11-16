@@ -51,6 +51,8 @@ public static class RequestYamlSerializer
                 Value = request.Auth.Value,
                 Location = request.Auth.Location == ApiKeyLocation.Query ? "query" : "header",
                 Oauth2 = request.Auth.Kind == AuthKind.OAuth2 ? OAuth2Mapper.ToDto(request.Auth.OAuth2 ?? OAuth2Settings.Default) : null,
+                Jwt = request.Auth.Kind == AuthKind.Jwt ? JwtAwsMapper.ToDto(request.Auth.Jwt ?? JwtSettings.Default) : null,
+                Awsv4 = request.Auth.Kind == AuthKind.AwsV4 ? JwtAwsMapper.ToDto(request.Auth.AwsV4 ?? AwsV4Settings.Default) : null,
             },
             Settings = new SettingsDto
             {
@@ -60,7 +62,7 @@ public static class RequestYamlSerializer
             Scripts = ScriptsMapper.ToDto(request.Scripts),
         };
         var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
-        return KeyValueMapper.StripNullSecret(yaml).Replace("\n  oauth2: null", "").TrimEnd('\n') + "\n";
+        return KeyValueMapper.StripNullSecret(yaml).Replace("\n  oauth2: null", "").Replace("\n  jwt: null", "").Replace("\n  awsv4: null", "").TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses a request file.</summary>
@@ -137,6 +139,9 @@ public static class RequestYamlSerializer
         AuthKind.Bearer => "bearer",
         AuthKind.ApiKey => "apikey",
         AuthKind.OAuth2 => "oauth2",
+        AuthKind.Jwt => "jwt",
+        AuthKind.Digest => "digest",
+        AuthKind.AwsV4 => "awsv4",
         _ => "none",
     };
 
@@ -192,6 +197,9 @@ public static class RequestYamlSerializer
             "bearer" => AuthKind.Bearer,
             "apikey" => AuthKind.ApiKey,
             "oauth2" => AuthKind.OAuth2,
+            "jwt" => AuthKind.Jwt,
+            "digest" => AuthKind.Digest,
+            "awsv4" => AuthKind.AwsV4,
             _ => throw new StorageException($"Unknown auth type: '{dto.Type}'"),
         };
         var location = dto.Location switch
@@ -204,6 +212,8 @@ public static class RequestYamlSerializer
             kind, dto.Username ?? "", dto.Password ?? "", dto.Token ?? "", dto.Key ?? "", dto.Value ?? "", location)
         {
             OAuth2 = kind == AuthKind.OAuth2 ? OAuth2Mapper.FromDto(dto.Oauth2) : null,
+            Jwt = kind == AuthKind.Jwt ? JwtAwsMapper.FromDto(dto.Jwt) : null,
+            AwsV4 = kind == AuthKind.AwsV4 ? JwtAwsMapper.FromDto(dto.Awsv4) : null,
         };
     }
 
