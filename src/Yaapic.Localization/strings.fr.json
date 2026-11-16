@@ -357,5 +357,10 @@
   "aws.fieldMissing": "Le champ AWS « {0} » est vide.",
   "aws.payloadUnreadable": "Impossible de lire le fichier du corps de la requête « {0} ».",
   "aws.urlInvalid": "AWS Signature v4 nécessite une URL http ou https absolue.",
-  "oauth2.invalidResponse": "Le point de terminaison de jeton a renvoyé une réponse inattendue (HTTP {0})."
+  "oauth2.invalidResponse": "Le point de terminaison de jeton a renvoyé une réponse inattendue (HTTP {0}).",
+  "oauth2.getTokenFirst": "Obtenez d'abord un jeton : ce flux nécessite une connexion interactive.",
+  "oauth2.tokenUrlMissing": "Saisissez une URL de jeton absolue en http ou https.",
+  "oauth2.clientIdMissing": "Saisissez l'identifiant client OAuth 2.0.",
+  "oauth2.usernameMissing": "Saisissez le nom d'utilisateur OAuth 2.0.",
+  "oauth2.notAvailable": "La connexion interactive OAuth 2.0 n'est pas encore disponible."
 }

@@ -1,6 +1,6 @@
 # M4-21: Core: OAuth 2.0 token client (client credentials, password, refresh)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-20
 
@@ -37,12 +37,12 @@ The interactive flow (M4-22 to M4-25), the authenticator (M4-26), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with `FakeHttpTransport`, `InMemoryOAuth2TokenCache` and a fake `TimeProvider`: first call fetches and caches;
+- [x] Tests in `Yaapic.Core.Tests` with `FakeHttpTransport`, `InMemoryOAuth2TokenCache` and a fake `TimeProvider`: first call fetches and caches;
   second call uses the cache (transport called once); after expiry minus leeway it refreshes; failed refresh falls back to a fresh fetch;
   kept refresh token; each required-field error; authorization-code grant without a token fails with the "get a token" message; two
   concurrent calls make one request; transport failure and error JSON surface their message; `Clear` removes the entry; `GetStatus` for all
   three states.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

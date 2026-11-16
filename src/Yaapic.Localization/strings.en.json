@@ -357,5 +357,10 @@
   "aws.fieldMissing": "The AWS {0} is empty.",
   "aws.payloadUnreadable": "Cannot read the request body file '{0}'.",
   "aws.urlInvalid": "AWS Signature v4 needs an absolute http or https URL.",
-  "oauth2.invalidResponse": "The token endpoint answered with an unexpected response (HTTP {0})."
+  "oauth2.invalidResponse": "The token endpoint answered with an unexpected response (HTTP {0}).",
+  "oauth2.getTokenFirst": "Get a token first: this grant needs an interactive sign-in.",
+  "oauth2.tokenUrlMissing": "Enter an absolute http or https token URL.",
+  "oauth2.clientIdMissing": "Enter the OAuth 2.0 client ID.",
+  "oauth2.usernameMissing": "Enter the OAuth 2.0 username.",
+  "oauth2.notAvailable": "Interactive OAuth 2.0 sign-in is not available yet."
 }

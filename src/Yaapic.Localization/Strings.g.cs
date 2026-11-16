@@ -456,9 +456,24 @@ public static class Strings
     /// <summary>Show the response beside or below the request</summary>
     public static string LayoutToggleTip => Localizer.Pick("Show the response beside or below the request", "Afficher la réponse à côté de la requête ou en dessous");
 
+    /// <summary>Enter the OAuth 2.0 client ID.</summary>
+    public static string Oauth2ClientIdMissing => Localizer.Pick("Enter the OAuth 2.0 client ID.", "Saisissez l'identifiant client OAuth 2.0.");
+
+    /// <summary>Get a token first: this grant needs an interactive sign-in.</summary>
+    public static string Oauth2GetTokenFirst => Localizer.Pick("Get a token first: this grant needs an interactive sign-in.", "Obtenez d'abord un jeton : ce flux nécessite une connexion interactive.");
+
     /// <summary>The token endpoint answered with an unexpected response (HTTP {0}).</summary>
     public static string Oauth2InvalidResponse(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The token endpoint answered with an unexpected response (HTTP {0}).", "Le point de terminaison de jeton a renvoyé une réponse inattendue (HTTP {0})."), a0);
+
+    /// <summary>Interactive OAuth 2.0 sign-in is not available yet.</summary>
+    public static string Oauth2NotAvailable => Localizer.Pick("Interactive OAuth 2.0 sign-in is not available yet.", "La connexion interactive OAuth 2.0 n'est pas encore disponible.");
+
+    /// <summary>Enter an absolute http or https token URL.</summary>
+    public static string Oauth2TokenUrlMissing => Localizer.Pick("Enter an absolute http or https token URL.", "Saisissez une URL de jeton absolue en http ou https.");
+
+    /// <summary>Enter the OAuth 2.0 username.</summary>
+    public static string Oauth2UsernameMissing => Localizer.Pick("Enter the OAuth 2.0 username.", "Saisissez le nom d'utilisateur OAuth 2.0.");
 
     /// <summary>Active</summary>
     public static string PaletteActive => Localizer.Pick("Active", "Actif");
