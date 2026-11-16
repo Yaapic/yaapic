@@ -99,6 +99,10 @@ moves), `IGlobalsStore` and `IHistoryStore`. `Infrastructure` implements them in
 append-only JSON Lines file (`FileHistoryStore`); see [file-format.md](file-format.md) and
 [ADR 0008](adr/0008-collections-globals-history-storage.md). `Composition.AppComposition.CreateShell` wires the whole
 graph for every App project.
+It builds once and shares the M4 services: the OAuth 2.0 token service (in-memory cache, loopback redirect receiver,
+system browser), the request authenticator, the client certificate provider and store, the HTTP/3 support probe and the
+six code generators. The `HttpClientTransport` and the certificate provider are owned by the shell and disposed when it
+closes; the shell creates the certificates and JWT decoder view models on demand (`CreateCertificates`, `CreateJwtDecoder`).
 
 ## Search and command palette
 

@@ -1,6 +1,6 @@
 # M4-61: Composition: wire the M4 services
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-27, M4-24, M4-25, M4-33, M4-36, M4-39, M4-41, M4-43, M4-58, M4-59, M4-60
 
@@ -30,11 +30,11 @@ Views and dialogs on either front-end, end-to-end tests.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` or a composition test project if one exists: `CreateShell` with fakes for the file-system parts still returns a shell; an
+- [x] Tests in `Yaapic.ViewModels.Tests` or a composition test project if one exists: `CreateShell` with fakes for the file-system parts still returns a shell; an
   OAuth 2.0 request through the composed `RequestSender` with a fake transport reaches the token service; the registry has the six generators in order;
   the palette entries of M4-60 are present. Existing composition tests unchanged and green.
-- [ ] AOT publish of the host's app project: 0 IL2xxx/IL3xxx warnings, the published exe starts and exits (kill it afterwards).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] AOT publish of the host's app project: 0 IL2xxx/IL3xxx warnings, the published exe starts and exits (kill it afterwards).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
