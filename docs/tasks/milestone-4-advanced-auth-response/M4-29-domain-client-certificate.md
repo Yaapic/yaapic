@@ -1,6 +1,6 @@
 # M4-29: Domain: client certificate model
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-03
 
@@ -28,9 +28,9 @@ Matching (M4-30), storage (M4-31), loading (M4-33).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: valid entries (`api.example.com`, `*.example.com`, `api.example.com:8443`, `*.example.com:8443`,
+- [x] Tests in `Yaapic.Domain.Tests`: valid entries (`api.example.com`, `*.example.com`, `api.example.com:8443`, `*.example.com:8443`,
   `localhost`, `10.0.0.5`); each invalid pattern listed above; empty name; empty certificate path; record equality.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

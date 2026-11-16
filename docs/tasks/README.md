@@ -425,7 +425,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-26](milestone-4-advanced-auth-response/M4-26-core-oauth2-auth-method.md) | Core: OAuth 2.0 authentication method | any | M4-10, M4-21 | done |
 | [M4-27](milestone-4-advanced-auth-response/M4-27-core-composite-authenticator.md) | Core: the composite authenticator | any | M4-13, M4-16, M4-18, M4-26 | done |
 | [M4-28](milestone-4-advanced-auth-response/M4-28-auth-inheritance-from-folders-and-collections.md) | Authentication inherited from folders and collections | any | M4-27 | blocked |
-| [M4-29](milestone-4-advanced-auth-response/M4-29-domain-client-certificate.md) | Domain: client certificate model | any | M4-03 | todo |
+| [M4-29](milestone-4-advanced-auth-response/M4-29-domain-client-certificate.md) | Domain: client certificate model | any | M4-03 | done |
 | [M4-30](milestone-4-advanced-auth-response/M4-30-core-client-certificate-matching.md) | Core: client certificate matching and provider port | any | M4-29 | todo |
 | [M4-31](milestone-4-advanced-auth-response/M4-31-infra-certificate-settings-store.md) | Infrastructure: the client certificate list store | any | M4-29 | todo |
 | [M4-32](milestone-4-advanced-auth-response/M4-32-vault-certificate-owner-kind.md) | Vault: certificate passphrases | any | M4-29 | todo |
