@@ -49,7 +49,7 @@ body:
       kind: text       # text | file
   file: ""             # binary: path of the file to send
 auth:
-  type: none           # none | basic | bearer | apikey
+  type: none           # none | basic | bearer | apikey | oauth2
   username: ""         # basic
   password: ""         # basic
   token: ""            # bearer
@@ -137,8 +137,34 @@ A different `version` is refused.
 ## Authentication (milestone 4)
 
 The `oauth2`, `jwt`, `digest` and `awsv4` authentication kinds are described in
-[ADR 0013](adr/0013-advanced-authentication.md). Their YAML shape is defined by cards M4-07 and M4-08; this section is
-completed there.
+[ADR 0013](adr/0013-advanced-authentication.md). The `jwt`, `digest` and `awsv4` shapes are defined by card M4-08.
+
+`auth.type: oauth2` adds a nested `auth.oauth2` mapping, written only for that type (ignored on read for any other
+type). A missing key reads as the default, and an unknown `grant`, `clientAuth` or `placement` value reads as the
+default without error:
+
+```yaml
+auth:
+  type: oauth2
+  oauth2:
+    grant: client_credentials   # client_credentials | authorization_code | password
+    tokenUrl: https://idp.example.com/token
+    authorizationUrl: ""        # authorization_code only
+    clientId: "{{clientId}}"
+    clientSecret: "{{clientSecret}}"
+    scope: read write
+    audience: ""
+    username: ""                # password grant only
+    password: ""
+    redirectUri: http://127.0.0.1:8742/callback
+    clientAuth: basic           # basic | body
+    placement: header           # header | query
+    headerPrefix: Bearer
+    queryParameter: access_token
+```
+
+Like the other auth fields these are plain text: write `{{variables}}` (secret variables) for `clientSecret` and
+`password`, never the literal value.
 
 ## Client certificates (milestone 4)
 

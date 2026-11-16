@@ -83,6 +83,40 @@ internal partial class AuthDto
 
     [YamlMember("in")]
     public string? Location { get; set; }
+
+    public OAuth2Dto? Oauth2 { get; set; }
+}
+
+[YamlObject(NamingConvention.LowerCamelCase)]
+internal partial class OAuth2Dto
+{
+    public string? Grant { get; set; }
+
+    public string? TokenUrl { get; set; }
+
+    public string? AuthorizationUrl { get; set; }
+
+    public string? ClientId { get; set; }
+
+    public string? ClientSecret { get; set; }
+
+    public string? Scope { get; set; }
+
+    public string? Audience { get; set; }
+
+    public string? Username { get; set; }
+
+    public string? Password { get; set; }
+
+    public string? RedirectUri { get; set; }
+
+    public string? ClientAuth { get; set; }
+
+    public string? Placement { get; set; }
+
+    public string? HeaderPrefix { get; set; }
+
+    public string? QueryParameter { get; set; }
 }
 
 [YamlObject(NamingConvention.LowerCamelCase)]

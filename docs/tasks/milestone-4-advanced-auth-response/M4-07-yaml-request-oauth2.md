@@ -1,6 +1,6 @@
 # M4-07: YAML request serializer: OAuth 2.0
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-05
 
@@ -45,10 +45,10 @@ JWT, Digest, AWS (M4-08), folder or collection level auth.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: round trip of each grant with every field set; defaults when keys are missing; unknown
+- [x] Tests in `Yaapic.Infrastructure.Tests`: round trip of each grant with every field set; defaults when keys are missing; unknown
   enum text tolerated; a file written by the previous version (no `oauth2`) still reads; the four old kinds unchanged; stable output.
-- [ ] Docs updated.
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] Docs updated.
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 

@@ -50,6 +50,7 @@ public static class RequestYamlSerializer
                 Key = request.Auth.Key,
                 Value = request.Auth.Value,
                 Location = request.Auth.Location == ApiKeyLocation.Query ? "query" : "header",
+                Oauth2 = request.Auth.Kind == AuthKind.OAuth2 ? OAuth2Mapper.ToDto(request.Auth.OAuth2 ?? OAuth2Settings.Default) : null,
             },
             Settings = new SettingsDto
             {
@@ -59,7 +60,7 @@ public static class RequestYamlSerializer
             Scripts = ScriptsMapper.ToDto(request.Scripts),
         };
         var yaml = YamlSerializer.SerializeToString(dto, ScriptSourceFormatter.Options).Replace("\r\n", "\n");
-        return KeyValueMapper.StripNullSecret(yaml).TrimEnd('\n') + "\n";
+        return KeyValueMapper.StripNullSecret(yaml).Replace("\n  oauth2: null", "").TrimEnd('\n') + "\n";
     }
 
     /// <summary>Parses a request file.</summary>
@@ -135,6 +136,7 @@ public static class RequestYamlSerializer
         AuthKind.Basic => "basic",
         AuthKind.Bearer => "bearer",
         AuthKind.ApiKey => "apikey",
+        AuthKind.OAuth2 => "oauth2",
         _ => "none",
     };
 
@@ -189,6 +191,7 @@ public static class RequestYamlSerializer
             "basic" => AuthKind.Basic,
             "bearer" => AuthKind.Bearer,
             "apikey" => AuthKind.ApiKey,
+            "oauth2" => AuthKind.OAuth2,
             _ => throw new StorageException($"Unknown auth type: '{dto.Type}'"),
         };
         var location = dto.Location switch
@@ -198,7 +201,10 @@ public static class RequestYamlSerializer
             _ => throw new StorageException($"Unknown auth location: '{dto.Location}'"),
         };
         return new RequestAuth(
-            kind, dto.Username ?? "", dto.Password ?? "", dto.Token ?? "", dto.Key ?? "", dto.Value ?? "", location);
+            kind, dto.Username ?? "", dto.Password ?? "", dto.Token ?? "", dto.Key ?? "", dto.Value ?? "", location)
+        {
+            OAuth2 = kind == AuthKind.OAuth2 ? OAuth2Mapper.FromDto(dto.Oauth2) : null,
+        };
     }
 
     private static RequestSettings ReadSettings(SettingsDto? dto)
