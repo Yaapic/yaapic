@@ -1,6 +1,6 @@
 # M4-11: Core: JWT signing with HMAC
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-01
 
@@ -27,10 +27,10 @@ RS/ES (M4-12), claims handling (M4-13), decoding (M4-14).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with fixed vectors: the RFC 7515 appendix A.1 token (HS256, the published key and payload) is
+- [x] Tests in `Yaapic.Core.Tests` with fixed vectors: the RFC 7515 appendix A.1 token (HS256, the published key and payload) is
   reproduced byte for byte; HS384 and HS512 against values computed independently (document how in a test comment); `Base64Url`
   round trip, padding, `+/` replaced, invalid text throws.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
