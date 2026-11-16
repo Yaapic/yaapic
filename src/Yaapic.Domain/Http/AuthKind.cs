@@ -14,4 +14,16 @@ public enum AuthKind
 
     /// <summary>A named API key sent in a header or the query string.</summary>
     ApiKey,
+
+    /// <summary>OAuth 2.0 with an automatically obtained access token.</summary>
+    OAuth2,
+
+    /// <summary>A signed JSON Web Token.</summary>
+    Jwt,
+
+    /// <summary>HTTP Digest challenge-response.</summary>
+    Digest,
+
+    /// <summary>AWS Signature Version 4.</summary>
+    AwsV4,
 }

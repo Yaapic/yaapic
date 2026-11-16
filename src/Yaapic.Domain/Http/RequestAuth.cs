@@ -17,6 +17,9 @@ public sealed record RequestAuth(
     string Value,
     ApiKeyLocation Location)
 {
+    /// <summary>The OAuth 2.0 settings, used when <c>Kind</c> is <see cref="AuthKind.OAuth2"/>.</summary>
+    public OAuth2Settings? OAuth2 { get; init; }
+
     /// <summary>No authentication: every string is empty.</summary>
     public static RequestAuth None { get; } = new(AuthKind.None, "", "", "", "", "", ApiKeyLocation.Header);
 }

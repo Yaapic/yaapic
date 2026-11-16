@@ -1,6 +1,6 @@
 # M4-05: Domain: OAuth 2.0 settings and the new auth kinds
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-01
 
@@ -31,9 +31,9 @@ JWT, AWS, Digest settings (M4-06), YAML (M4-07), resolution (M4-09), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests`: `OAuth2Settings.Default` values, record equality, `with` on `RequestAuth.OAuth2`, equivalence test above.
-- [ ] Every existing `AuthKind` switch still compiles and behaves as before for the four old kinds.
-- [ ] Architecture tests green (Domain depends on nothing), 0 warnings, XML docs, all tests green.
+- [x] Tests in `Yaapic.Domain.Tests`: `OAuth2Settings.Default` values, record equality, `with` on `RequestAuth.OAuth2`, equivalence test above.
+- [x] Every existing `AuthKind` switch still compiles and behaves as before for the four old kinds.
+- [x] Architecture tests green (Domain depends on nothing), 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
