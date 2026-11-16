@@ -1,6 +1,6 @@
 # M4-49: ViewModel: JWT decoder
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-14
 
@@ -29,9 +29,9 @@ Dialog views (M4-65, M4-72), palette entry (M4-60), decoding from a response.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` with a fake `TimeProvider`: valid token fills every output; each error; `Bearer ` prefix accepted; expiry
+- [x] Tests in `Yaapic.ViewModels.Tests` with a fake `TimeProvider`: valid token fills every output; each error; `Bearer ` prefix accepted; expiry
   states and relative texts at the boundaries; unsigned token; empty input gives no error and `StatusKind.None`; clear.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -564,6 +564,15 @@ public static class Strings
     /// <summary>Yesterday</summary>
     public static string HistoryYesterday => Localizer.Pick("Yesterday", "Hier");
 
+    /// <summary>The header or payload is not valid Base64URL-encoded JSON.</summary>
+    public static string JwtDecodeErrorEncoding => Localizer.Pick("The header or payload is not valid Base64URL-encoded JSON.", "L’en-tête ou la charge utile n’est pas du JSON encodé en Base64URL valide.");
+
+    /// <summary>The header and the payload must be JSON objects.</summary>
+    public static string JwtDecodeErrorNotObject => Localizer.Pick("The header and the payload must be JSON objects.", "L’en-tête et la charge utile doivent être des objets JSON.");
+
+    /// <summary>A JWT needs exactly three dot-separated parts.</summary>
+    public static string JwtDecodeErrorParts => Localizer.Pick("A JWT needs exactly three dot-separated parts.", "Un JWT comporte exactement trois parties séparées par des points.");
+
     /// <summary>Add the issued-at (iat) claim</summary>
     public static string JwtFieldAddIssuedAt => Localizer.Pick("Add the issued-at (iat) claim", "Ajouter la revendication d'émission (iat)");
 
@@ -603,6 +612,9 @@ public static class Strings
     /// <summary>The JWT secret or private key is empty.</summary>
     public static string JwtKeyMissing => Localizer.Pick("The JWT secret or private key is empty.", "Le secret ou la clé privée du JWT est vide.");
 
+    /// <summary>The signature is never verified. Do not trust these claims.</summary>
+    public static string JwtNotVerifiedNote => Localizer.Pick("The signature is never verified. Do not trust these claims.", "La signature n’est jamais vérifiée. Ne faites pas confiance à ces claims.");
+
     /// <summary>The JWT payload must be a JSON object.</summary>
     public static string JwtPayloadInvalid => Localizer.Pick("The JWT payload must be a JSON object.", "Le contenu du JWT doit être un objet JSON.");
 
@@ -614,6 +626,27 @@ public static class Strings
 
     /// <summary>The JWT secret is not valid Base64.</summary>
     public static string JwtSecretInvalid => Localizer.Pick("The JWT secret is not valid Base64.", "Le secret du JWT n’est pas du Base64 valide.");
+
+    /// <summary>Signature (not verified)</summary>
+    public static string JwtSignatureNotVerified => Localizer.Pick("Signature (not verified)", "Signature (non vérifiée)");
+
+    /// <summary>Expired {0}</summary>
+    public static string JwtStatusExpired(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Expired {0}", "Expiré {0}"), a0);
+
+    /// <summary>No expiry</summary>
+    public static string JwtStatusNoExpiry => Localizer.Pick("No expiry", "Sans expiration");
+
+    /// <summary>Not valid yet, starts {0}</summary>
+    public static string JwtStatusNotYetValid(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Not valid yet, starts {0}", "Pas encore valide, commence {0}"), a0);
+
+    /// <summary>Valid, expires {0}</summary>
+    public static string JwtStatusValid(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Valid, expires {0}", "Valide, expire {0}"), a0);
+
+    /// <summary>Unsigned token (no signature)</summary>
+    public static string JwtUnsigned => Localizer.Pick("Unsigned token (no signature)", "Jeton non signé (sans signature)");
 
     /// <summary>English</summary>
     public static string LanguageEnglish => Localizer.Pick("English", "Anglais");
@@ -853,6 +886,37 @@ public static class Strings
 
     /// <summary>Unlock the vault...</summary>
     public static string PaletteVaultUnlock => Localizer.Pick("Unlock the vault...", "Déverrouiller le coffre...");
+
+    /// <summary>{0} day</summary>
+    public static string RelativeDay(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} day", "{0} jour"), a0);
+
+    /// <summary>{0} days</summary>
+    public static string RelativeDays(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} days", "{0} jours"), a0);
+
+    /// <summary>{0} h</summary>
+    public static string RelativeHours(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} h", "{0} h"), a0);
+
+    /// <summary>in {0}</summary>
+    public static string RelativeInFuture(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("in {0}", "dans {0}"), a0);
+
+    /// <summary>{0} ago</summary>
+    public static string RelativeInPast(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} ago", "il y a {0}"), a0);
+
+    /// <summary>{0} min</summary>
+    public static string RelativeMinutes(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} min", "{0} min"), a0);
+
+    /// <summary>now</summary>
+    public static string RelativeNow => Localizer.Pick("now", "maintenant");
+
+    /// <summary>{0} s</summary>
+    public static string RelativeSeconds(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} s", "{0} s"), a0);
 
     /// <summary>Request canceled</summary>
     public static string RequestCanceled => Localizer.Pick("Request canceled", "Requête annulée");
