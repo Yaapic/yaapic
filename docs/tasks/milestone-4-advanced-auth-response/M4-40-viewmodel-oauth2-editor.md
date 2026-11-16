@@ -1,6 +1,6 @@
 # M4-40: ViewModel: OAuth 2.0 editor
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-05, M4-22
 
@@ -32,9 +32,9 @@ Token buttons and status (M4-41), the Auth editor integration (M4-43), views.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: load/to-settings round trip; `Changed` count; no `Changed` on load; visibility flags per grant;
+- [x] Tests in `Yaapic.ViewModels.Tests`: load/to-settings round trip; `Changed` count; no `Changed` on load; visibility flags per grant;
   hints for a literal secret, for `{{secret}}` (no hint), for empty (no hint); redirect URI hint only for the code grant.
-- [ ] Architecture tests green (ViewModels never reference an App project), 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green (ViewModels never reference an App project), 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

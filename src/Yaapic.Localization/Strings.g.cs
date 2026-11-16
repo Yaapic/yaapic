@@ -52,6 +52,10 @@ public static class Strings
     /// <summary>Password</summary>
     public static string AuthPassword => Localizer.Pick("Password", "Mot de passe");
 
+    /// <summary>{0} is stored as plain text in the request. Use a secret variable instead.</summary>
+    public static string AuthSecretLiteralHint(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} is stored as plain text in the request. Use a secret variable instead.", "{0} est stocké en clair dans la requête. Utilisez plutôt une variable secrète."), a0);
+
     /// <summary>Token</summary>
     public static string AuthToken => Localizer.Pick("Token", "Jeton");
 
@@ -485,11 +489,68 @@ public static class Strings
     /// <summary>Could not open the browser. Try again, or check that a default browser is configured.</summary>
     public static string Oauth2BrowserFailed => Localizer.Pick("Could not open the browser. Try again, or check that a default browser is configured.", "Impossible d'ouvrir le navigateur. Réessayez, ou vérifiez qu'un navigateur par défaut est configuré.");
 
+    /// <summary>Send as Basic auth header</summary>
+    public static string Oauth2ClientAuthBasic => Localizer.Pick("Send as Basic auth header", "Envoyer en en-tête Basic");
+
+    /// <summary>Send in the request body</summary>
+    public static string Oauth2ClientAuthBody => Localizer.Pick("Send in the request body", "Envoyer dans le corps de la requête");
+
     /// <summary>Enter the OAuth 2.0 client ID.</summary>
     public static string Oauth2ClientIdMissing => Localizer.Pick("Enter the OAuth 2.0 client ID.", "Saisissez l'identifiant client OAuth 2.0.");
 
+    /// <summary>Audience</summary>
+    public static string Oauth2FieldAudience => Localizer.Pick("Audience", "Audience");
+
+    /// <summary>Authorization URL</summary>
+    public static string Oauth2FieldAuthorizationUrl => Localizer.Pick("Authorization URL", "URL d'autorisation");
+
+    /// <summary>Client authentication</summary>
+    public static string Oauth2FieldClientAuthentication => Localizer.Pick("Client authentication", "Authentification du client");
+
+    /// <summary>Client ID</summary>
+    public static string Oauth2FieldClientId => Localizer.Pick("Client ID", "Identifiant client");
+
+    /// <summary>Client secret</summary>
+    public static string Oauth2FieldClientSecret => Localizer.Pick("Client secret", "Secret client");
+
+    /// <summary>Grant type</summary>
+    public static string Oauth2FieldGrant => Localizer.Pick("Grant type", "Type d'octroi");
+
+    /// <summary>Header prefix</summary>
+    public static string Oauth2FieldHeaderPrefix => Localizer.Pick("Header prefix", "Préfixe de l'en-tête");
+
+    /// <summary>Password</summary>
+    public static string Oauth2FieldPassword => Localizer.Pick("Password", "Mot de passe");
+
+    /// <summary>Add token to</summary>
+    public static string Oauth2FieldPlacement => Localizer.Pick("Add token to", "Ajouter le jeton à");
+
+    /// <summary>Query parameter name</summary>
+    public static string Oauth2FieldQueryParameterName => Localizer.Pick("Query parameter name", "Nom du paramètre de requête");
+
+    /// <summary>Redirect URI</summary>
+    public static string Oauth2FieldRedirectUri => Localizer.Pick("Redirect URI", "URI de redirection");
+
+    /// <summary>Scope</summary>
+    public static string Oauth2FieldScope => Localizer.Pick("Scope", "Portée");
+
+    /// <summary>Access token URL</summary>
+    public static string Oauth2FieldTokenUrl => Localizer.Pick("Access token URL", "URL du jeton d'accès");
+
+    /// <summary>Username</summary>
+    public static string Oauth2FieldUsername => Localizer.Pick("Username", "Nom d'utilisateur");
+
     /// <summary>Get a token first: this grant needs an interactive sign-in.</summary>
     public static string Oauth2GetTokenFirst => Localizer.Pick("Get a token first: this grant needs an interactive sign-in.", "Obtenez d'abord un jeton : ce flux nécessite une connexion interactive.");
+
+    /// <summary>Authorization code (PKCE)</summary>
+    public static string Oauth2GrantAuthorizationCode => Localizer.Pick("Authorization code (PKCE)", "Code d'autorisation (PKCE)");
+
+    /// <summary>Client credentials</summary>
+    public static string Oauth2GrantClientCredentials => Localizer.Pick("Client credentials", "Identifiants client");
+
+    /// <summary>Password</summary>
+    public static string Oauth2GrantPassword => Localizer.Pick("Password", "Mot de passe");
 
     /// <summary>The token endpoint answered with an unexpected response (HTTP {0}).</summary>
     public static string Oauth2InvalidResponse(object? a0) =>
