@@ -1,6 +1,6 @@
 # M4-68: WinUI: code generation dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M4-58, M4-61
 
@@ -26,12 +26,18 @@ Editing the code, saving to a file, running it.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
 - [ ] Manual smoke on the published exe: open the dialog for a POST JSON request, switch through the six languages (text changes, highlighting where a grammar exists, plain text otherwise),
   Copy puts the text on the clipboard (paste it into the editor to check), edit the request and reopen to see the change, the unresolved-variable line appears for `{{missing}}`. Record
   anything not run.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the code generation dialog`
+
+## Notes
+
+- Entry point: the palette command "Generate code for this request" (M4-60); no header icon button was added (the request header has none for secondary actions). `RequestEditorView` handles `CodeGenerationRequested`.
+- The clipboard service already existed (`WinUIDialogService.SetClipboardTextAsync`); the "Copied" state is a `DispatcherTimer` in the dialog code-behind. Added the `codeGeneration.copied` string (EN/FR).
+- Not run: the manual smoke on the published exe (dialog interaction, six languages, Copy, `{{missing}}` line). Only the AOT publish (0 IL warnings) and a clean start/exit were checked.

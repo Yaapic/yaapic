@@ -1,0 +1,51 @@
+<ContentDialog
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.CodeGenerationDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.WinUI.Presentation"
+    xmlns:v="using:Yaapic.App.WinUI.Views"
+    xmlns:r="using:Yaapic.ViewModels.Requests"
+    Title="{x:Bind loc:Strings.CodeGenerationTitle}"
+    CloseButtonText="{x:Bind loc:Strings.CommonClose}" DefaultButton="Close" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}">
+  <Grid Width="680" Height="380" RowSpacing="10" Margin="0,0,12,0">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+      <RowDefinition Height="Auto"/>
+    </Grid.RowDefinitions>
+    <Grid ColumnSpacing="8">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <ComboBox HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.CodeGenerationLanguage}"
+                AutomationProperties.Name="{x:Bind loc:Strings.CodeGenerationLanguage}"
+                ItemsSource="{x:Bind ViewModel.Targets}"
+                SelectedItem="{x:Bind ViewModel.SelectedTarget, Mode=TwoWay}">
+        <ComboBox.ItemTemplate>
+          <DataTemplate x:DataType="r:CodeTarget">
+            <TextBlock Text="{x:Bind DisplayName}"/>
+          </DataTemplate>
+        </ComboBox.ItemTemplate>
+      </ComboBox>
+      <Button x:Name="CopyButton" Grid.Column="1" VerticalAlignment="Bottom" MinWidth="88"
+              Command="{x:Bind ViewModel.CopyCommand}" Click="OnCopyClick"
+              AutomationProperties.Name="{x:Bind loc:Strings.CodeGenerationCopy}">
+        <TextBlock x:Name="CopyLabel" Text="{x:Bind loc:Strings.CodeGenerationCopy}"/>
+      </Button>
+    </Grid>
+    <v:CodeEditorView Grid.Row="1" IsReadOnly="True"
+                      EditorLanguage="{x:Bind ViewModel.EditorLanguage, Mode=OneWay}"
+                      Text="{x:Bind ViewModel.Code, Mode=OneWay}"/>
+    <StackPanel Grid.Row="2" Spacing="4">
+      <TextBlock TextWrapping="Wrap" Style="{StaticResource YaapicBodySmallTextStyle}" Foreground="{ThemeResource YaapicWarningBrush}"
+                 Text="{x:Bind ViewModel.SecretWarning}"/>
+      <TextBlock TextWrapping="Wrap" Style="{StaticResource YaapicBodySmallTextStyle}" Foreground="{ThemeResource YaapicWarningBrush}"
+                 Text="{x:Bind ViewModel.UnresolvedWarning, Mode=OneWay}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.UnresolvedWarning), Mode=OneWay}"/>
+      <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{ThemeResource YaapicDangerBrush}"
+                 Text="{x:Bind ViewModel.Error, Mode=OneWay}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Error), Mode=OneWay}"/>
+    </StackPanel>
+  </Grid>
+</ContentDialog>

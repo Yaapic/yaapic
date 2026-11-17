@@ -219,6 +219,9 @@ public static class Strings
     /// <summary>Client certificates</summary>
     public static string CertificatesTitle => Localizer.Pick("Client certificates", "Certificats clients");
 
+    /// <summary>Copied</summary>
+    public static string CodeGenerationCopied => Localizer.Pick("Copied", "Copié");
+
     /// <summary>Copy</summary>
     public static string CodeGenerationCopy => Localizer.Pick("Copy", "Copier");
 

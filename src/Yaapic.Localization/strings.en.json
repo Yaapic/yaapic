@@ -106,6 +106,7 @@
   "codeGeneration.title": "Generate code",
   "codeGeneration.language": "Language",
   "codeGeneration.copy": "Copy",
+  "codeGeneration.copied": "Copied",
   "codeGeneration.failed": "Cannot generate the code: {0}",
   "codeGeneration.secretWarning": "The generated code may contain secrets (variables are resolved). Do not share it carelessly.",
   "codeGeneration.unresolved": "Unresolved variables: {0}",

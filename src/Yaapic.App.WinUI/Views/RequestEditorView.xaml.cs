@@ -73,9 +73,44 @@ public sealed partial class RequestEditorView : UserControl
 
     private PaneLayoutViewModel? _layout;
 
+    private RequestEditorViewModel? _subscribed;
+
+    private static bool _codeDialogOpen;
+
+    private async void OnCodeGenerationRequested(object? sender, EventArgs e)
+    {
+        if (_subscribed is not { } vm || _codeDialogOpen || XamlRoot is null)
+        {
+            return;
+        }
+
+        _codeDialogOpen = true;
+        try
+        {
+            var generation = vm.CreateCodeGeneration();
+            await generation.InitializeAsync();
+            await new CodeGenerationDialog(generation) { XamlRoot = XamlRoot, RequestedTheme = ActualTheme }.ShowAsync();
+        }
+        finally
+        {
+            _codeDialogOpen = false;
+        }
+    }
+
     private void OnViewModelChanged()
     {
         Bindings?.Update();
+        if (_subscribed is not null)
+        {
+            _subscribed.CodeGenerationRequested -= OnCodeGenerationRequested;
+        }
+
+        _subscribed = ViewModel;
+        if (_subscribed is not null)
+        {
+            _subscribed.CodeGenerationRequested += OnCodeGenerationRequested;
+        }
+
         if (_layout is not null)
         {
             _layout.PropertyChanged -= OnLayoutChanged;
