@@ -504,6 +504,92 @@ languages.
 Runtime checks not run by hand: HTTP/3 against a real QUIC server and the Avalonia views on macOS and Linux; the WinUI visual
 check is M4-81.
 
+## Milestone 5: Import and export
+
+Scope: importing Postman collections (v2.0 and v2.1) and environments, OpenAPI 3.x and Swagger 2.0 (JSON or YAML), cURL commands, HAR files, Insomnia v4 exports and Bruno collection folders, with a report of what was converted, skipped or lost;
+exporting to Postman v2.1 (collection and environment), OpenAPI 3.0 (inferred, JSON or YAML), Insomnia v4 and Bruno (zip). The decisions are in [ADR 0016](../adr/0016-import-export-architecture.md) and [ADR 0017](../adr/0017-import-export-formats.md)
+(written by M5-01 and M5-03, read them first). Build order: ADRs and the YAML spike, then `any` cards (Core model and helpers, Infrastructure, importers per format, exporters, view models, composition), then `windows`, then `unix` cards, then the end-to-end tests, docs and the WinUI visual check.
+
+Slices: M5-01 to M5-03 the ADRs and the spike; M5-04 to M5-11 the shared model, `DataNode`, helpers, applier, registry and file reader; M5-12 to M5-16 Postman import; M5-17 and M5-18 cURL; M5-19 to M5-24 OpenAPI and Swagger 2.0; M5-25 and M5-26 HAR; M5-27 to M5-30 Insomnia;
+M5-31 to M5-35 Bruno; M5-36 and M5-37 the export model and packager; M5-38 to M5-41 Postman export; M5-42 and M5-43 OpenAPI export; M5-44 Insomnia export; M5-45 and M5-46 Bruno export; M5-47 and M5-48 blocked; M5-49 to M5-53 view models and shell entries; M5-54 the composition;
+M5-55 to M5-59 WinUI; M5-60 to M5-64 Avalonia; M5-65 and M5-66 end-to-end tests; M5-67 docs; M5-68 the WinUI visual check.
+
+Blocked (product decisions, each card states the question): M5-30 Insomnia 5 YAML import, M5-47 HAR export, M5-48 pasting a cURL command into the URL box. No other card depends on them. Cards added after an answer are numbered after M5-68.
+cURL export is the existing code generation (M4-51), so it has no card.
+
+Sonnet-sized cards: each card is one session; the card text holds every decision (field names, mappings, algorithms, file shapes, strings, test cases), so no card needs a design choice. Shared types: `ImportBundle`, `ImportReport`, `IImporter` (M5-04), `DataNode` (M5-05), `IExporter` (M5-36).
+
+| Card | Title | Platform | Depends on | Status |
+|---|---|---|---|---|
+| [M5-01](milestone-5-import-export/M5-01-adr-import-export-architecture.md) | ADR 0016: import and export architecture | any | none | todo |
+| [M5-02](milestone-5-import-export/M5-02-spike-yaml-tree-under-aot.md) | Spike: read arbitrary YAML into a tree under Native AOT | any | none | todo |
+| [M5-03](milestone-5-import-export/M5-03-adr-import-export-formats.md) | ADR 0017: supported formats, mappings and losses | any | M5-01, M5-02 | todo |
+| [M5-04](milestone-5-import-export/M5-04-core-import-model.md) | Core: import model, report and importer contract | any | M5-01 | todo |
+| [M5-05](milestone-5-import-export/M5-05-core-data-node-and-json.md) | Core: DataNode tree, JSON reading and writing | any | M5-01 | todo |
+| [M5-06](milestone-5-import-export/M5-06-core-import-helpers.md) | Core: import helpers (methods, URLs, names, dynamic variables) | any | M5-04 | todo |
+| [M5-07](milestone-5-import-export/M5-07-infra-vyaml-tree-reader.md) | Infrastructure: YAML tree reader (VYaml) | any | M5-02, M5-05 | todo |
+| [M5-08](milestone-5-import-export/M5-08-core-data-node-yaml-writer.md) | Core: DataNode YAML writer | any | M5-05 | todo |
+| [M5-09](milestone-5-import-export/M5-09-core-import-applier.md) | Core: import applier | any | M5-04 | todo |
+| [M5-10](milestone-5-import-export/M5-10-core-importer-registry-and-service.md) | Core: importer registry, import service and input reader port | any | M5-04, M5-09 | todo |
+| [M5-11](milestone-5-import-export/M5-11-infra-import-input-reader.md) | Infrastructure: import input reader (file and folder) | any | M5-10 | todo |
+| [M5-12](milestone-5-import-export/M5-12-core-postman-collection-requests.md) | Core: Postman collection import, folders, requests, URLs and headers | any | M5-05, M5-06 | todo |
+| [M5-13](milestone-5-import-export/M5-13-core-postman-bodies.md) | Core: Postman import, request bodies | any | M5-12 | todo |
+| [M5-14](milestone-5-import-export/M5-14-core-postman-auth.md) | Core: Postman import, authentication | any | M5-12 | todo |
+| [M5-15](milestone-5-import-export/M5-15-core-postman-scripts-and-variables.md) | Core: Postman import, scripts and collection variables | any | M5-12 | todo |
+| [M5-16](milestone-5-import-export/M5-16-core-postman-environment-import.md) | Core: Postman environment and globals import | any | M5-04, M5-05 | todo |
+| [M5-17](milestone-5-import-export/M5-17-core-curl-tokenizer.md) | Core: cURL command tokenizer | any | M5-04 | todo |
+| [M5-18](milestone-5-import-export/M5-18-core-curl-importer.md) | Core: cURL importer | any | M5-06, M5-17 | todo |
+| [M5-19](milestone-5-import-export/M5-19-core-openapi-document-and-refs.md) | Core: OpenAPI document reading and `$ref` resolution | any | M5-05 | todo |
+| [M5-20](milestone-5-import-export/M5-20-core-openapi-operations-and-parameters.md) | Core: OpenAPI import, operations, servers and parameters | any | M5-06, M5-19 | todo |
+| [M5-21](milestone-5-import-export/M5-21-core-openapi-schema-examples.md) | Core: OpenAPI schema example generator | any | M5-19 | todo |
+| [M5-22](milestone-5-import-export/M5-22-core-openapi-request-bodies.md) | Core: OpenAPI import, request bodies | any | M5-20, M5-21 | todo |
+| [M5-23](milestone-5-import-export/M5-23-core-openapi-security.md) | Core: OpenAPI import, security schemes to authentication | any | M5-20 | todo |
+| [M5-24](milestone-5-import-export/M5-24-core-swagger2-normalizer.md) | Core: Swagger 2.0 normalization | any | M5-19 | todo |
+| [M5-25](milestone-5-import-export/M5-25-core-har-entries.md) | Core: HAR import, entries to requests | any | M5-05, M5-06 | todo |
+| [M5-26](milestone-5-import-export/M5-26-core-har-filtering-and-duplicates.md) | Core: HAR import, static resources, preflights and duplicates | any | M5-25 | todo |
+| [M5-27](milestone-5-import-export/M5-27-core-insomnia-requests.md) | Core: Insomnia v4 import, workspace, folders, requests and bodies | any | M5-05, M5-06 | todo |
+| [M5-28](milestone-5-import-export/M5-28-core-insomnia-auth-and-template-tags.md) | Core: Insomnia import, authentication and template tags | any | M5-27 | todo |
+| [M5-29](milestone-5-import-export/M5-29-core-insomnia-environments.md) | Core: Insomnia import, environments | any | M5-27, M5-28 | todo |
+| [M5-30](milestone-5-import-export/M5-30-insomnia-5-yaml-import.md) | Insomnia 5 YAML import | any | M5-07, M5-27 | blocked |
+| [M5-31](milestone-5-import-export/M5-31-core-bru-block-parser.md) | Core: Bruno `.bru` block parser | any | M5-04 | todo |
+| [M5-32](milestone-5-import-export/M5-32-core-bruno-requests.md) | Core: Bruno import, request files | any | M5-06, M5-31 | todo |
+| [M5-33](milestone-5-import-export/M5-33-core-bruno-collection-structure.md) | Core: Bruno import, collection structure and auth inheritance | any | M5-32 | todo |
+| [M5-34](milestone-5-import-export/M5-34-core-bruno-scripts-vars-and-tests.md) | Core: Bruno import, scripts, variables and tests | any | M5-33 | todo |
+| [M5-35](milestone-5-import-export/M5-35-core-bruno-environments.md) | Core: Bruno import, environments | any | M5-31, M5-33 | todo |
+| [M5-36](milestone-5-import-export/M5-36-core-export-model-and-source-reader.md) | Core: export model, contract, registry and source reader | any | M5-04 | todo |
+| [M5-37](milestone-5-import-export/M5-37-core-export-packager.md) | Core: export packager (zip) | any | M5-36 | todo |
+| [M5-38](milestone-5-import-export/M5-38-core-postman-export-requests.md) | Core: Postman collection export, folders, requests, URLs, headers and bodies | any | M5-05, M5-36 | todo |
+| [M5-39](milestone-5-import-export/M5-39-core-postman-export-auth-and-variables.md) | Core: Postman export, authentication and collection variables | any | M5-38 | todo |
+| [M5-40](milestone-5-import-export/M5-40-core-postman-export-scripts.md) | Core: Postman export, scripts | any | M5-39 | todo |
+| [M5-41](milestone-5-import-export/M5-41-core-postman-environment-export.md) | Core: Postman environment and globals export | any | M5-05, M5-36 | todo |
+| [M5-42](milestone-5-import-export/M5-42-core-openapi-export-paths-and-parameters.md) | Core: OpenAPI export, info, servers, paths, operations and parameters | any | M5-05, M5-36 | todo |
+| [M5-43](milestone-5-import-export/M5-43-core-openapi-export-bodies-security-and-exporters.md) | Core: OpenAPI export, bodies, security and the JSON and YAML exporters | any | M5-42, M5-08 | todo |
+| [M5-44](milestone-5-import-export/M5-44-core-insomnia-export.md) | Core: Insomnia v4 export | any | M5-05, M5-36 | todo |
+| [M5-45](milestone-5-import-export/M5-45-core-bruno-export-request-files.md) | Core: Bruno export, request files | any | M5-36 | todo |
+| [M5-46](milestone-5-import-export/M5-46-core-bruno-export-collection-and-zip.md) | Core: Bruno export, collection layout, environments and the exporter | any | M5-45, M5-37 | todo |
+| [M5-47](milestone-5-import-export/M5-47-har-export.md) | HAR export | any | M5-36 | blocked |
+| [M5-48](milestone-5-import-export/M5-48-paste-curl-into-url-box.md) | Paste a cURL command into the URL box | any | M5-18 | blocked |
+| [M5-49](milestone-5-import-export/M5-49-ui-abstractions-pick-folder.md) | UI abstractions: pick a folder | any | M5-01 | todo |
+| [M5-50](milestone-5-import-export/M5-50-viewmodel-import-report.md) | ViewModel: import report | any | M5-04 | todo |
+| [M5-51](milestone-5-import-export/M5-51-viewmodel-import.md) | ViewModel: import | any | M5-10, M5-49, M5-50 | todo |
+| [M5-52](milestone-5-import-export/M5-52-viewmodel-export.md) | ViewModel: export | any | M5-36, M5-37, M5-49 | todo |
+| [M5-53](milestone-5-import-export/M5-53-viewmodel-palette-and-shell-entries.md) | ViewModel: palette commands and shell entries for import and export | any | M5-51, M5-52 | todo |
+| [M5-54](milestone-5-import-export/M5-54-composition-m5-wiring.md) | Composition: wire the M5 services | any | M5-07, M5-08, M5-09, M5-10, M5-11, M5-13, M5-14, M5-15, M5-16, M5-18, M5-22, M5-23, M5-24, M5-26, M5-29, M5-34, M5-35, M5-37, M5-40, M5-41, M5-43, M5-44, M5-46, M5-53 | todo |
+| [M5-55](milestone-5-import-export/M5-55-winui-pick-folder.md) | WinUI: folder picker | windows | M5-49, M5-54 | todo |
+| [M5-56](milestone-5-import-export/M5-56-winui-import-report-view.md) | WinUI: import report view | windows | M5-50, M5-54 | todo |
+| [M5-57](milestone-5-import-export/M5-57-winui-import-dialog.md) | WinUI: import dialog | windows | M5-51, M5-55, M5-56 | todo |
+| [M5-58](milestone-5-import-export/M5-58-winui-export-dialog.md) | WinUI: export dialog | windows | M5-52, M5-55, M5-56 | todo |
+| [M5-59](milestone-5-import-export/M5-59-winui-import-export-entry-points.md) | WinUI: import and export entry points | windows | M5-53, M5-57, M5-58 | todo |
+| [M5-60](milestone-5-import-export/M5-60-avalonia-pick-folder.md) | Avalonia: folder picker | unix | M5-49, M5-54, M5-55 | todo |
+| [M5-61](milestone-5-import-export/M5-61-avalonia-import-report-view.md) | Avalonia: import report view | unix | M5-50, M5-54, M5-56 | todo |
+| [M5-62](milestone-5-import-export/M5-62-avalonia-import-window.md) | Avalonia: import window | unix | M5-51, M5-57, M5-60, M5-61 | todo |
+| [M5-63](milestone-5-import-export/M5-63-avalonia-export-window.md) | Avalonia: export window | unix | M5-52, M5-58, M5-60, M5-61 | todo |
+| [M5-64](milestone-5-import-export/M5-64-avalonia-import-export-entry-points.md) | Avalonia: import and export entry points | unix | M5-53, M5-59, M5-62, M5-63 | todo |
+| [M5-65](milestone-5-import-export/M5-65-end-to-end-import.md) | End-to-end tests: import | any | M5-54 | todo |
+| [M5-66](milestone-5-import-export/M5-66-end-to-end-export-and-round-trips.md) | End-to-end tests: export and round trips | any | M5-54 | todo |
+| [M5-67](milestone-5-import-export/M5-67-milestone-docs.md) | Milestone 5 docs | any | M5-65, M5-66, M5-57, M5-58, M5-59, M5-62, M5-63, M5-64 | todo |
+| [M5-68](milestone-5-import-export/M5-68-winui-visual-verification.md) | WinUI visual verification of the milestone 5 views | windows | M5-56, M5-57, M5-58, M5-59 | todo |
+
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |
@@ -511,7 +597,7 @@ check is M4-81.
 | M2 | Full request editor, collections, environments, history, command palette | detailed (77 cards, see above) |
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above) |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | detailed (81 cards, see above) |
-| M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | planned |
+| M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | detailed (68 cards, see above) |
 | M6 | Automation (Runner, load tests, mock servers, monitors) | planned |
 | M7 | Protocols (WebSocket, SSE, Socket.IO, GraphQL, gRPC, MQTT, SOAP) | planned |
 | M8 | Collaboration (Git, versions, comments, OpenAPI editor and docs) | planned |
