@@ -466,6 +466,9 @@ public static class Strings
     /// <summary>Ignore whitespace</summary>
     public static string DiffIgnoreWhitespace => Localizer.Pick("Ignore whitespace", "Ignorer les espaces");
 
+    /// <summary>Send this request twice to compare two responses.</summary>
+    public static string DiffNeedTwo => Localizer.Pick("Send this request twice to compare two responses.", "Envoyez cette requête deux fois pour comparer deux réponses.");
+
     /// <summary>No differences</summary>
     public static string DiffNoDifferences => Localizer.Pick("No differences", "Aucune différence");
 

@@ -102,6 +102,7 @@
   "diff.ignoreWhitespace": "Ignorer les espaces",
   "diff.ignoreVolatileHeaders": "Ignorer les en-têtes volatils",
   "diff.expandAll": "Afficher les lignes inchangées",
+  "diff.needTwo": "Envoyez cette requête deux fois pour comparer deux réponses.",
   "codeGeneration.title": "Générer du code",
   "codeGeneration.language": "Langage",
   "codeGeneration.copy": "Copier",

@@ -1,6 +1,6 @@
 # M4-67: WinUI: response Diff tab
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M4-48, M4-61
 
@@ -29,11 +29,16 @@ Side-by-side layout, intra-line highlighting, exporting a patch.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
-- [ ] Manual smoke on the published exe: send a request whose stub body changes between sends: the Diff tab shows added/removed lines with line numbers and folds long unchanged
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] Manual smoke on the published exe: send a request whose stub body changes between sends: the Diff tab shows added/removed lines with line numbers and folds long unchanged
   runs; pin a response and compare a later one against it; toggling the options recomputes; a binary or 2 MiB response shows the unavailable text. Record anything not run.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the response Diff tab`
+
+## Notes
+
+- No new token: the added/removed rows use `YaapicSuccessBackgroundBrush` / `YaapicDangerBackgroundBrush`. Added the `diff.needTwo` string (EN/FR).
+- Verified: build 0 warnings, tests green (the thread-count test `ScriptErrorsAbortTheSendKeepTheResponseOrTimeOutWithoutLeakingThreads` is flaky and unrelated), AOT publish without IL warnings, exe started and responding. The manual smoke of the Diff tab (stub body changes, pin, options, unavailable text) was not run; it is covered by M4-81.

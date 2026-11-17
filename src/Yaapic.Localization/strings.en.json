@@ -102,6 +102,7 @@
   "diff.ignoreWhitespace": "Ignore whitespace",
   "diff.ignoreVolatileHeaders": "Ignore volatile headers",
   "diff.expandAll": "Show unchanged lines",
+  "diff.needTwo": "Send this request twice to compare two responses.",
   "codeGeneration.title": "Generate code",
   "codeGeneration.language": "Language",
   "codeGeneration.copy": "Copy",

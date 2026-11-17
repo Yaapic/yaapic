@@ -32,6 +32,16 @@ public static class ListMap
     /// <returns>An observable collection of the rows.</returns>
     public static ObservableCollection<TimingRow> Timings(IReadOnlyList<TimingRow> items) => new(items);
 
+    /// <summary>Copies diff body rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<DiffItem> DiffLines(IReadOnlyList<DiffItem> items) => new(items);
+
+    /// <summary>Copies header diff rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<HeaderDiffItem> DiffHeaders(IReadOnlyList<HeaderDiffItem> items) => new(items);
+
     /// <summary>Copies vault protector choices into an observable collection (see <see cref="Entries"/> for why).</summary>
     /// <param name="items">The protectors to offer.</param>
     /// <returns>An observable collection of the choices.</returns>
