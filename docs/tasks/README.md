@@ -460,7 +460,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-61](milestone-4-advanced-auth-response/M4-61-composition-m4-wiring.md) | Composition: wire the M4 services | any | M4-27, M4-24, M4-25, M4-33, M4-36, M4-39, M4-41, M4-43, M4-58, M4-59, M4-60 | done |
 | [M4-62](milestone-4-advanced-auth-response/M4-62-winui-auth-oauth2.md) | WinUI: OAuth 2.0 in the Auth tab | windows | M4-43, M4-61 | done |
 | [M4-63](milestone-4-advanced-auth-response/M4-63-winui-auth-jwt-digest-aws.md) | WinUI: JWT, Digest and AWS Signature v4 in the Auth tab | windows | M4-62 | done |
-| [M4-64](milestone-4-advanced-auth-response/M4-64-winui-certificates-dialog.md) | WinUI: client certificates dialog | windows | M4-44, M4-61 | todo |
+| [M4-64](milestone-4-advanced-auth-response/M4-64-winui-certificates-dialog.md) | WinUI: client certificates dialog | windows | M4-44, M4-61 | done |
 | [M4-65](milestone-4-advanced-auth-response/M4-65-winui-jwt-decoder-dialog.md) | WinUI: JWT decoder dialog | windows | M4-49, M4-61 | todo |
 | [M4-66](milestone-4-advanced-auth-response/M4-66-winui-response-timings-tab.md) | WinUI: response Timing tab | windows | M4-45, M4-61 | todo |
 | [M4-67](milestone-4-advanced-auth-response/M4-67-winui-response-diff-tab.md) | WinUI: response Diff tab | windows | M4-48, M4-61 | todo |

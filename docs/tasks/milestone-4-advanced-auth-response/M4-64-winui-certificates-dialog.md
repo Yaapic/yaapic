@@ -1,6 +1,6 @@
 # M4-64: WinUI: client certificates dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M4-44, M4-61
 
@@ -27,12 +27,18 @@ A "test connection" button, importing certificates into the OS store.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
 - [ ] Manual smoke on the published exe: add a PFX entry for `localhost`, store its passphrase with the vault unlocked, save, reopen the dialog (entry and the "has passphrase"
   state back, no passphrase text shown), send to a local mTLS stub (the test project's stub server started by hand with a client certificate requirement: describe how) and see the
   response; with the vault locked the send reports the vault message; remove the entry. Record anything not run.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the client certificates dialog`
+
+## Verification notes
+
+- AOT publish: 0 IL2xxx/IL3xxx warnings; the exe starts and was killed afterwards.
+- Manual smoke against a local mTLS stub (add/save/reopen/send/remove) was **not run**: it needs interactive driving of the published exe.
+- The dialog hides itself before the delete confirmation, the vault dialog and the unsaved-changes prompt (WinUI shows one `ContentDialog` at a time) and comes back afterwards.

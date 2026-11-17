@@ -189,6 +189,33 @@ public static class Strings
     /// <summary>Unlock the vault to store or remove a certificate passphrase.</summary>
     public static string CertificateVaultLockedForPassphrase => Localizer.Pick("Unlock the vault to store or remove a certificate passphrase.", "Déverrouillez le coffre pour enregistrer ou supprimer la phrase secrète d'un certificat.");
 
+    /// <summary>Add a certificate</summary>
+    public static string CertificatesAdd => Localizer.Pick("Add a certificate", "Ajouter un certificat");
+
+    /// <summary>PEM</summary>
+    public static string CertificatesFormatPem => Localizer.Pick("PEM", "PEM");
+
+    /// <summary>PFX</summary>
+    public static string CertificatesFormatPfx => Localizer.Pick("PFX", "PFX");
+
+    /// <summary>api.example.com or *.example.com:8443</summary>
+    public static string CertificatesHostPatternPlaceholder => Localizer.Pick("api.example.com or *.example.com:8443", "api.example.com ou *.example.com:8443");
+
+    /// <summary>Leave empty to keep the current one</summary>
+    public static string CertificatesKeepPassphrase => Localizer.Pick("Leave empty to keep the current one", "Laisser vide pour conserver l'actuelle");
+
+    /// <summary>Move down</summary>
+    public static string CertificatesMoveDown => Localizer.Pick("Move down", "Descendre");
+
+    /// <summary>Move up</summary>
+    public static string CertificatesMoveUp => Localizer.Pick("Move up", "Monter");
+
+    /// <summary>Remove the certificate</summary>
+    public static string CertificatesRemove => Localizer.Pick("Remove the certificate", "Supprimer le certificat");
+
+    /// <summary>Add a certificate or select one to edit it.</summary>
+    public static string CertificatesSelectHint => Localizer.Pick("Add a certificate or select one to edit it.", "Ajoutez un certificat ou sélectionnez-en un pour le modifier.");
+
     /// <summary>Client certificates</summary>
     public static string CertificatesTitle => Localizer.Pick("Client certificates", "Certificats clients");
 

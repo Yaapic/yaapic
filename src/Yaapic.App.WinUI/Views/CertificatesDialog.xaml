@@ -1,0 +1,140 @@
+<ContentDialog
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.CertificatesDialog"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:p="using:Yaapic.App.WinUI.Presentation"
+               xmlns:st="using:Yaapic.ViewModels.Settings"
+               xmlns:ic="using:FluentIcons.WinUI"
+               PrimaryButtonText="{x:Bind loc:Strings.CommonSave}" PrimaryButtonStyle="{StaticResource AccentButtonStyle}" PrimaryButtonClick="OnPrimaryButtonClick"
+               IsPrimaryButtonEnabled="{x:Bind ViewModel.IsDirty, Mode=OneWay}"
+               CloseButtonText="{x:Bind loc:Strings.CommonClose}" DefaultButton="None" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}"
+               CloseButtonClick="OnCloseButtonClick">
+  <ContentDialog.Resources>
+    <x:Double x:Key="ContentDialogMaxWidth">900</x:Double>
+    <x:Double x:Key="ContentDialogMaxHeight">720</x:Double>
+    <Thickness x:Key="ContentDialogPadding">0</Thickness>
+    <Thickness x:Key="ContentDialogCommandSpaceMargin">0</Thickness>
+    <Style x:Key="CertificateRowStyle" TargetType="ListViewItem" BasedOn="{StaticResource YaapicListRowStyle}">
+      <Setter Property="MinHeight" Value="48"/>
+      <Setter Property="Padding" Value="14,0"/>
+    </Style>
+  </ContentDialog.Resources>
+  <Grid x:Name="Body" Width="840" Height="520">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="280"/>
+      <ColumnDefinition Width="1"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+    <Grid Background="{ThemeResource YaapicSurfaceSidebarBrush}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="40"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <Grid Padding="14,0,8,0">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Text="{x:Bind loc:Strings.CertificatesTitle}" VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+        <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+          <Button Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.MoveUpCommand}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.CertificatesMoveUp}" ToolTipService.ToolTip="{x:Bind loc:Strings.CertificatesMoveUp}">
+            <ic:FluentIcon Icon="ArrowUp" IconVariant="Regular" IconSize="Size16"/>
+          </Button>
+          <Button Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.MoveDownCommand}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.CertificatesMoveDown}" ToolTipService.ToolTip="{x:Bind loc:Strings.CertificatesMoveDown}">
+            <ic:FluentIcon Icon="ArrowDown" IconVariant="Regular" IconSize="Size16"/>
+          </Button>
+          <Button Style="{StaticResource YaapicIconButtonStyle}" Click="OnRemove" IsEnabled="{x:Bind p:VisibilityMap.IsNotNull(ViewModel.Selected), Mode=OneWay}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.CertificatesRemove}" ToolTipService.ToolTip="{x:Bind loc:Strings.CertificatesRemove}">
+            <ic:FluentIcon Icon="Delete" IconVariant="Regular" IconSize="Size16"/>
+          </Button>
+          <Button Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.AddCommand}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.CertificatesAdd}" ToolTipService.ToolTip="{x:Bind loc:Strings.CertificatesAdd}">
+            <ic:FluentIcon Icon="Add" IconVariant="Regular" IconSize="Size16"/>
+          </Button>
+        </StackPanel>
+      </Grid>
+      <ListView Grid.Row="1" SelectionMode="Single" ItemContainerStyle="{StaticResource CertificateRowStyle}"
+                ItemsSource="{x:Bind ViewModel.Items}"
+                SelectedItem="{x:Bind ViewModel.Selected, Mode=TwoWay}">
+        <ListView.ItemTemplate>
+          <DataTemplate x:DataType="st:CertificateItemViewModel">
+            <StackPanel VerticalAlignment="Center">
+              <TextBlock Text="{x:Bind Name, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicBodyTextStyle}"/>
+              <TextBlock Text="{x:Bind HostPattern, Mode=OneWay}" TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicBodySmallTextStyle}"
+                         Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+            </StackPanel>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+    </Grid>
+    <Border Grid.Column="1" Background="{ThemeResource YaapicBorderSubtleBrush}"/>
+    <Grid Grid.Column="2" Background="{ThemeResource YaapicSurfaceBaseBrush}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <StackPanel Margin="20,12,20,0" Spacing="8">
+        <InfoBar Severity="Warning" IsClosable="False" Message="{x:Bind loc:Strings.RequestVaultLockedWarning}"
+                 IsOpen="{x:Bind IsVaultNotUnlocked(ViewModel.VaultState), Mode=OneWay}">
+          <InfoBar.ActionButton>
+            <Button Content="{x:Bind loc:Strings.VaultUnlock}" Click="OnUnlock"/>
+          </InfoBar.ActionButton>
+        </InfoBar>
+        <InfoBar Severity="Error" IsClosable="False"
+                 IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.ErrorMessage), Mode=OneWay}"
+                 Message="{x:Bind ViewModel.ErrorMessage, Mode=OneWay}"/>
+      </StackPanel>
+      <ScrollViewer Grid.Row="1" Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.Selected), Mode=OneWay}">
+        <StackPanel Margin="20,12,20,16" Spacing="12">
+          <TextBox Header="{x:Bind loc:Strings.CertificateFieldName}" BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                   Text="{x:Bind ViewModel.Selected.Name, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
+          <TextBox Header="{x:Bind loc:Strings.CertificateFieldHostPattern}" PlaceholderText="{x:Bind loc:Strings.CertificatesHostPatternPlaceholder}"
+                   BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                   Text="{x:Bind ViewModel.Selected.HostPattern, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
+          <ComboBox x:Name="FormatBox" Header="{x:Bind loc:Strings.CertificateFieldFormat}" MinWidth="200" SelectionChanged="OnFormatChanged">
+            <ComboBoxItem Content="{x:Bind loc:Strings.CertificatesFormatPfx}"/>
+            <ComboBoxItem Content="{x:Bind loc:Strings.CertificatesFormatPem}"/>
+          </ComboBox>
+          <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Header="{x:Bind loc:Strings.CertificateFieldCertificatePath}" BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                     Text="{x:Bind ViewModel.Selected.CertificatePath, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1" VerticalAlignment="Bottom" Content="{x:Bind loc:Strings.CommonBrowse}"
+                    Command="{x:Bind ViewModel.BrowseCertificateCommand}"/>
+          </Grid>
+          <Grid ColumnSpacing="8" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Selected.IsKeyPathVisible), Mode=OneWay}">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Header="{x:Bind loc:Strings.CertificateFieldKeyPath}" BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+                     Text="{x:Bind ViewModel.Selected.KeyPath, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="1" VerticalAlignment="Bottom" Content="{x:Bind loc:Strings.CommonBrowse}"
+                    Command="{x:Bind ViewModel.BrowseKeyCommand}"/>
+          </Grid>
+          <PasswordBox Header="{x:Bind loc:Strings.CertificateFieldPassphrase}"
+                       PlaceholderText="{x:Bind PassphrasePlaceholder(ViewModel.Selected.HasPassphrase), Mode=OneWay}"
+                       Password="{x:Bind ViewModel.Selected.Passphrase, Mode=TwoWay, FallbackValue=''}"/>
+          <CheckBox Content="{x:Bind loc:Strings.CertificateRemovePassphrase}"
+                    IsChecked="{x:Bind ViewModel.Selected.RemovePassphrase, Mode=TwoWay, FallbackValue=False}"
+                    Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Selected.HasPassphrase), Mode=OneWay}"/>
+          <ItemsControl ItemsSource="{x:Bind ViewModel.Selected.Issues, Mode=OneWay}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <InfoBar Severity="Warning" IsOpen="True" IsClosable="False" Message="{x:Bind}" Margin="0,0,0,8"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </ScrollViewer>
+      <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Bind loc:Strings.CertificatesSelectHint}"
+                 Style="{StaticResource YaapicBodyTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenNull(ViewModel.Selected), Mode=OneWay}"/>
+    </Grid>
+  </Grid>
+</ContentDialog>
