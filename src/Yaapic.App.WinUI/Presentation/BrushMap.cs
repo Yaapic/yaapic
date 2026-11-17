@@ -4,6 +4,7 @@ using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Shell;
+using Yaapic.ViewModels.Tools;
 
 namespace Yaapic.App.WinUI.Presentation;
 
@@ -30,6 +31,17 @@ public static class BrushMap
         HttpMethodKind.Options => "YaapicMethodOptionsBrush",
         _ => "YaapicMethodCustomBrush",
     }, light);
+
+    /// <summary>Gets the brush of the JWT status chip.</summary>
+    /// <param name="kind">The expiry state of the token.</param>
+    /// <returns>The brush from the application resources.</returns>
+    public static Brush JwtStatus(JwtStatusKind kind) => Get(kind switch
+    {
+        JwtStatusKind.Valid => "YaapicSuccessBrush",
+        JwtStatusKind.Expired => "YaapicDangerBrush",
+        JwtStatusKind.NotYetValid => "YaapicWarningBrush",
+        _ => "YaapicTextSecondaryBrush",
+    });
 
     /// <summary>Gets the text brush of the status chip.</summary>
     /// <param name="category">The class of the status code.</param>

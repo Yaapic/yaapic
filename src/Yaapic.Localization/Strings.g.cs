@@ -629,6 +629,9 @@ public static class Strings
     /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
     public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
 
+    /// <summary>Time claims</summary>
+    public static string JwtClaimsLabel => Localizer.Pick("Time claims", "Dates des claims");
+
     /// <summary>The header or payload is not valid Base64URL-encoded JSON.</summary>
     public static string JwtDecodeErrorEncoding => Localizer.Pick("The header or payload is not valid Base64URL-encoded JSON.", "L’en-tête ou la charge utile n’est pas du JSON encodé en Base64URL valide.");
 
@@ -637,6 +640,12 @@ public static class Strings
 
     /// <summary>A JWT needs exactly three dot-separated parts.</summary>
     public static string JwtDecodeErrorParts => Localizer.Pick("A JWT needs exactly three dot-separated parts.", "Un JWT comporte exactement trois parties séparées par des points.");
+
+    /// <summary>Paste a JWT</summary>
+    public static string JwtDecoderPlaceholder => Localizer.Pick("Paste a JWT", "Collez un JWT");
+
+    /// <summary>Decode JWT</summary>
+    public static string JwtDecoderTitle => Localizer.Pick("Decode JWT", "Décoder un JWT");
 
     /// <summary>Add the issued-at (iat) claim</summary>
     public static string JwtFieldAddIssuedAt => Localizer.Pick("Add the issued-at (iat) claim", "Ajouter la revendication d'émission (iat)");
@@ -671,6 +680,9 @@ public static class Strings
     /// <summary>Secret is Base64 encoded</summary>
     public static string JwtFieldSecretIsBase64 => Localizer.Pick("Secret is Base64 encoded", "Le secret est encodé en Base64");
 
+    /// <summary>Header</summary>
+    public static string JwtHeaderLabel => Localizer.Pick("Header", "En-tête");
+
     /// <summary>The extra JWT headers must be a JSON object.</summary>
     public static string JwtHeadersInvalid => Localizer.Pick("The extra JWT headers must be a JSON object.", "Les en-têtes JWT supplémentaires doivent être un objet JSON.");
 
@@ -679,6 +691,9 @@ public static class Strings
 
     /// <summary>The signature is never verified. Do not trust these claims.</summary>
     public static string JwtNotVerifiedNote => Localizer.Pick("The signature is never verified. Do not trust these claims.", "La signature n’est jamais vérifiée. Ne faites pas confiance à ces claims.");
+
+    /// <summary>Paste</summary>
+    public static string JwtPaste => Localizer.Pick("Paste", "Coller");
 
     /// <summary>The JWT payload must be a JSON object.</summary>
     public static string JwtPayloadInvalid => Localizer.Pick("The JWT payload must be a JSON object.", "Le contenu du JWT doit être un objet JSON.");

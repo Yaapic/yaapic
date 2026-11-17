@@ -1,6 +1,6 @@
 # M4-65: WinUI: JWT decoder dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M4-49, M4-61
 
@@ -26,10 +26,10 @@ Verifying signatures, editing and re-signing, decoding from the response panel.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
-- [ ] Manual smoke on the published exe: paste the RFC 7515 A.1 token: header and payload shown, status "No expiry"; paste a token with a past `exp`: "Expired"; paste garbage: the error
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] Manual smoke (NOT RUN beyond start/exit: the paste, expired and garbage scenarios and the palette entry were not exercised by hand; the logic is covered by the JwtDecoderViewModel tests) on the published exe: paste the RFC 7515 A.1 token: header and payload shown, status "No expiry"; paste a token with a past `exp`: "Expired"; paste garbage: the error
   text; the palette entry opens the dialog. Record anything not run.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 

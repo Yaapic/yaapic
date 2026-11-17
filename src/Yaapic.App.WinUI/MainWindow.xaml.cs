@@ -80,6 +80,7 @@ public sealed partial class MainWindow : Window
                 _viewModel.Collections.PropertyChanged -= OnCollectionsChanged;
                 _viewModel.EnvironmentsRequested -= OnEnvironmentsRequested;
                 _viewModel.CertificatesRequested -= OnCertificatesRequested;
+                _viewModel.JwtDecoderRequested -= OnJwtDecoderRequested;
                 _viewModel.Vault.SetupRequested -= OnVaultRequested;
                 _viewModel.Vault.UnlockRequested -= OnVaultRequested;
                 _viewModel.Updates.SettingsRequested -= OnUpdatesRequested;
@@ -92,6 +93,7 @@ public sealed partial class MainWindow : Window
                 _viewModel.Collections.PropertyChanged += OnCollectionsChanged;
                 _viewModel.EnvironmentsRequested += OnEnvironmentsRequested;
                 _viewModel.CertificatesRequested += OnCertificatesRequested;
+                _viewModel.JwtDecoderRequested += OnJwtDecoderRequested;
                 _viewModel.Vault.SetupRequested += OnVaultRequested;
                 _viewModel.Vault.UnlockRequested += OnVaultRequested;
                 _viewModel.Updates.SettingsRequested += OnUpdatesRequested;
@@ -441,6 +443,24 @@ public sealed partial class MainWindow : Window
             await certificates.LoadAsync();
             await Views.CertificatesDialog.RunAsync(
                 certificates, new Services.WinUIDialogService(this, () => Root.XamlRoot), () => ShowVaultDialogAsync(shell), Root.XamlRoot, Root.RequestedTheme);
+        }
+        finally
+        {
+            _dialogOpen = false;
+        }
+    }
+
+    private async void OnJwtDecoderRequested(object? sender, EventArgs e)
+    {
+        if (_viewModel is not { } shell || _dialogOpen)
+        {
+            return;
+        }
+
+        _dialogOpen = true;
+        try
+        {
+            await new Views.JwtDecoderDialog(shell.CreateJwtDecoder()) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
         }
         finally
         {
