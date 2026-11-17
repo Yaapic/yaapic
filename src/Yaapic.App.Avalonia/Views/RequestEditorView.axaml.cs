@@ -33,12 +33,25 @@ public sealed partial class RequestEditorView : UserControl
     private RequestEditorViewModel? Editor => DataContext as RequestEditorViewModel;
 
     private VariableContext? _variables;
+    private RequestEditorViewModel? _codeSubscribed;
+    private static bool _codeWindowOpen;
     private PaneLayoutViewModel? _layout;
 
     /// <inheritdoc />
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
+        if (_codeSubscribed is not null)
+        {
+            _codeSubscribed.CodeGenerationRequested -= OnCodeGenerationRequested;
+        }
+
+        _codeSubscribed = Editor;
+        if (_codeSubscribed is not null)
+        {
+            _codeSubscribed.CodeGenerationRequested += OnCodeGenerationRequested;
+        }
+
         if (_variables is not null)
         {
             _variables.OpenRequested -= OnVariableOpenRequested;
@@ -62,6 +75,26 @@ public sealed partial class RequestEditorView : UserControl
         }
 
         ApplyLayout();
+    }
+
+    private async void OnCodeGenerationRequested(object? sender, EventArgs e)
+    {
+        if (_codeSubscribed is not { } vm || _codeWindowOpen || TopLevel.GetTopLevel(this) is not Window owner)
+        {
+            return;
+        }
+
+        _codeWindowOpen = true;
+        try
+        {
+            var generation = vm.CreateCodeGeneration();
+            await generation.InitializeAsync();
+            await new CodeGenerationWindow(generation).ShowDialog(owner);
+        }
+        finally
+        {
+            _codeWindowOpen = false;
+        }
     }
 
     private double _stripWidth;
