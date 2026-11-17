@@ -36,6 +36,18 @@ public sealed class App : Application
     /// <inheritdoc />
     public override void Initialize() => AvaloniaXamlLoader.Load(this);
 
+    // Prompts raised from a modal window (delete confirmation) must be owned by that window, not hidden behind it.
+    private static global::Avalonia.Controls.Window TopWindow(global::Avalonia.Controls.Window main)
+    {
+        var top = main;
+        while (top.OwnedWindows.Count > 0)
+        {
+            top = top.OwnedWindows[^1];
+        }
+
+        return top;
+    }
+
     /// <inheritdoc />
     public override void OnFrameworkInitializationCompleted()
     {
@@ -48,7 +60,7 @@ public sealed class App : Application
             Settings.AccentChanged += (_, choice) => AccentApplier.Apply(this, choice);
             _ = Settings.InitializeAsync();
             var window = new MainWindow();
-            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => window), PlatformProtectors(), options.DataDirectory, options.UpdateDemo);
+            var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => TopWindow(window)), PlatformProtectors(), options.DataDirectory, options.UpdateDemo);
             window.Title = $"Yaapic {AppComposition.CreateAppInfo().Version}";
             window.DataContext = shell;
             if (options.Theme is { } theme)

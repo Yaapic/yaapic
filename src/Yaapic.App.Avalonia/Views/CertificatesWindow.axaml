@@ -1,0 +1,130 @@
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:st="using:Yaapic.ViewModels.Settings"
+    xmlns:pres="using:Yaapic.App.Avalonia.Presentation"
+    x:Class="Yaapic.App.Avalonia.Views.CertificatesWindow"
+    x:DataType="st:CertificatesViewModel"
+    Title="{x:Static loc:Strings.CertificatesTitle}"
+    Width="880" Height="560" MinWidth="560" MinHeight="360"
+    WindowStartupLocation="CenterOwner"
+    Background="{DynamicResource YaapicSurfaceBaseBrush}">
+  <Grid RowDefinitions="*,Auto">
+    <Grid ColumnDefinitions="280,Auto,*">
+      <Grid RowDefinitions="40,*" Background="{DynamicResource YaapicSurfaceSidebarBrush}">
+        <Grid Margin="14,0,8,0" ColumnDefinitions="*,Auto">
+          <TextBlock Text="{x:Static loc:Strings.CertificatesTitle}" Classes="bodyStrong" VerticalAlignment="Center" />
+          <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="2" VerticalAlignment="Center">
+            <Button Classes="icon" Command="{Binding MoveUpCommand}"
+                    ToolTip.Tip="{x:Static loc:Strings.CertificatesMoveUp}" AutomationProperties.Name="{x:Static loc:Strings.CertificatesMoveUp}">
+              <PathIcon Data="{StaticResource YaapicGlyphArrowUp}" />
+            </Button>
+            <Button Classes="icon" Command="{Binding MoveDownCommand}"
+                    ToolTip.Tip="{x:Static loc:Strings.CertificatesMoveDown}" AutomationProperties.Name="{x:Static loc:Strings.CertificatesMoveDown}">
+              <PathIcon Data="{StaticResource YaapicGlyphArrowDown}" />
+            </Button>
+            <Button Classes="icon" Command="{Binding RemoveCommand}"
+                    ToolTip.Tip="{x:Static loc:Strings.CertificatesRemove}" AutomationProperties.Name="{x:Static loc:Strings.CertificatesRemove}">
+              <PathIcon Data="{StaticResource YaapicGlyphDelete}" />
+            </Button>
+            <Button Classes="icon" Command="{Binding AddCommand}"
+                    ToolTip.Tip="{x:Static loc:Strings.CertificatesAdd}" AutomationProperties.Name="{x:Static loc:Strings.CertificatesAdd}">
+              <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
+            </Button>
+          </StackPanel>
+        </Grid>
+        <ListBox Grid.Row="1" Background="Transparent" ItemsSource="{Binding Items}" SelectedItem="{Binding Selected, Mode=TwoWay}">
+          <ListBox.ItemContainerTheme>
+            <ControlTheme TargetType="ListBoxItem" BasedOn="{StaticResource {x:Type ListBoxItem}}">
+              <Setter Property="Padding" Value="14,6" />
+              <Setter Property="MinHeight" Value="48" />
+            </ControlTheme>
+          </ListBox.ItemContainerTheme>
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="st:CertificateItemViewModel">
+              <StackPanel VerticalAlignment="Center">
+                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Text="{Binding HostPattern}" TextTrimming="CharacterEllipsis" Classes="bodySmall"
+                           Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+              </StackPanel>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+      </Grid>
+      <Border Grid.Column="1" Width="1" Background="{DynamicResource YaapicBorderSubtleBrush}" />
+
+      <Grid Grid.Column="2" RowDefinitions="Auto,*" Background="{DynamicResource YaapicSurfaceBaseBrush}">
+        <StackPanel Margin="20,12,20,0" Spacing="8">
+          <Border Classes="infobar warning" IsVisible="{Binding VaultState, Converter={x:Static pres:CertificateMap.IsNotUnlocked}}">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+              <TextBlock Text="{x:Static loc:Strings.RequestVaultLockedWarning}" TextWrapping="Wrap" VerticalAlignment="Center" />
+              <Button Grid.Column="1" Content="{x:Static loc:Strings.VaultUnlock}" Click="OnUnlock" />
+            </Grid>
+          </Border>
+          <Border Classes="infobar danger" IsVisible="{Binding ErrorMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock Text="{Binding ErrorMessage}" TextWrapping="Wrap" />
+          </Border>
+        </StackPanel>
+        <ScrollViewer Grid.Row="1" IsVisible="{Binding Selected, Converter={x:Static ObjectConverters.IsNotNull}}">
+          <StackPanel Margin="20,12,20,16" Spacing="12">
+            <StackPanel Spacing="4">
+              <TextBlock Text="{x:Static loc:Strings.CertificateFieldName}" Classes="bodySmall" />
+              <TextBox Text="{Binding Selected.Name, Mode=TwoWay}" />
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="{x:Static loc:Strings.CertificateFieldHostPattern}" Classes="bodySmall" />
+              <TextBox PlaceholderText="{x:Static loc:Strings.CertificatesHostPatternPlaceholder}" Text="{Binding Selected.HostPattern, Mode=TwoWay}" />
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="{x:Static loc:Strings.CertificateFieldFormat}" Classes="bodySmall" />
+              <ComboBox x:Name="FormatBox" MinWidth="200" SelectionChanged="OnFormatChanged"
+                        AutomationProperties.Name="{x:Static loc:Strings.CertificateFieldFormat}">
+                <ComboBoxItem Content="{x:Static loc:Strings.CertificatesFormatPfx}" />
+                <ComboBoxItem Content="{x:Static loc:Strings.CertificatesFormatPem}" />
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="{x:Static loc:Strings.CertificateFieldCertificatePath}" Classes="bodySmall" />
+              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <TextBox Text="{Binding Selected.CertificatePath, Mode=TwoWay}" />
+                <Button Grid.Column="1" Content="{x:Static loc:Strings.CommonBrowse}" Command="{Binding BrowseCertificateCommand}" />
+              </Grid>
+            </StackPanel>
+            <StackPanel Spacing="4" IsVisible="{Binding Selected.IsKeyPathVisible}">
+              <TextBlock Text="{x:Static loc:Strings.CertificateFieldKeyPath}" Classes="bodySmall" />
+              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <TextBox Text="{Binding Selected.KeyPath, Mode=TwoWay}" />
+                <Button Grid.Column="1" Content="{x:Static loc:Strings.CommonBrowse}" Command="{Binding BrowseKeyCommand}" />
+              </Grid>
+            </StackPanel>
+            <StackPanel Spacing="4">
+              <TextBlock Text="{x:Static loc:Strings.CertificateFieldPassphrase}" Classes="bodySmall" />
+              <TextBox PasswordChar="●" Text="{Binding Selected.Passphrase, Mode=TwoWay}"
+                       PlaceholderText="{Binding Selected.HasPassphrase, Converter={x:Static pres:CertificateMap.PassphrasePlaceholder}}" />
+            </StackPanel>
+            <CheckBox Content="{x:Static loc:Strings.CertificateRemovePassphrase}" IsChecked="{Binding Selected.RemovePassphrase, Mode=TwoWay}"
+                      IsVisible="{Binding Selected.HasPassphrase}" />
+            <ItemsControl ItemsSource="{Binding Selected.Issues}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                  <Border Classes="infobar warning" Margin="0,0,0,8">
+                    <TextBlock Text="{Binding}" TextWrapping="Wrap" />
+                  </Border>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </ScrollViewer>
+        <TextBlock Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center" Text="{x:Static loc:Strings.CertificatesSelectHint}"
+                   Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                   IsVisible="{Binding Selected, Converter={x:Static ObjectConverters.IsNull}}" />
+      </Grid>
+    </Grid>
+    <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+      <StackPanel Margin="16,10" Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+        <Button Content="{x:Static loc:Strings.CommonClose}" Click="OnClose" />
+        <Button Content="{x:Static loc:Strings.CommonSave}" Classes="accent" Command="{Binding SaveCommand}" IsEnabled="{Binding IsDirty}" />
+      </StackPanel>
+    </Border>
+  </Grid>
+</Window>

@@ -22,6 +22,7 @@ public sealed partial class MainWindow : Window
     private bool _vaultOpen;
     private bool _updatesOpen;
     private bool _jwtOpen;
+    private bool _certificatesOpen;
     private const double ConsoleReservedHeight = 300;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
@@ -159,6 +160,7 @@ public sealed partial class MainWindow : Window
         {
             _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
             _shellSubscribed.JwtDecoderRequested -= OnJwtDecoderRequested;
+            _shellSubscribed.CertificatesRequested -= OnCertificatesRequested;
             _shellSubscribed.Vault.SetupRequested -= OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested -= OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested -= OnUpdatesRequested;
@@ -174,6 +176,7 @@ public sealed partial class MainWindow : Window
         {
             _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
             _shellSubscribed.JwtDecoderRequested += OnJwtDecoderRequested;
+            _shellSubscribed.CertificatesRequested += OnCertificatesRequested;
             _shellSubscribed.Vault.SetupRequested += OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested += OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested += OnUpdatesRequested;
@@ -197,6 +200,26 @@ public sealed partial class MainWindow : Window
         finally
         {
             _vaultOpen = false;
+        }
+    }
+
+    private async void OnCertificatesRequested(object? sender, EventArgs e)
+    {
+        if (Shell is not { } shell || _certificatesOpen)
+        {
+            return;
+        }
+
+        _certificatesOpen = true;
+        try
+        {
+            var certificates = shell.CreateCertificates();
+            await certificates.LoadAsync();
+            await new Views.CertificatesWindow(certificates, owner => new Views.VaultWindow(shell.Vault).ShowDialog(owner)).ShowDialog(this);
+        }
+        finally
+        {
+            _certificatesOpen = false;
         }
     }
 
