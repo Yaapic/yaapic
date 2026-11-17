@@ -1,6 +1,6 @@
 # M4-78: End-to-end tests: authentication
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-27, M4-61
 
@@ -29,9 +29,9 @@ mTLS and timings (M4-79), the UI.
 
 ## Acceptance criteria
 
-- [ ] The scenarios above, all green and deterministic (no sleeps over 200 ms; the fake `TimeProvider` drives expiry).
-- [ ] No listener or process left open (run the class twice in one session).
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] The scenarios above, all green and deterministic (no sleeps over 200 ms; the fake `TimeProvider` drives expiry).
+- [x] No listener or process left open (run the class twice in one session).
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 
