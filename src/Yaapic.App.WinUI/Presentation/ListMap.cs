@@ -27,6 +27,11 @@ public static class ListMap
     /// <returns>An observable collection of the errors.</returns>
     public static ObservableCollection<ScriptErrorItemViewModel> ScriptErrors(IReadOnlyList<ScriptErrorItemViewModel> items) => new(items);
 
+    /// <summary>Copies timing rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The waterfall rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<TimingRow> Timings(IReadOnlyList<TimingRow> items) => new(items);
+
     /// <summary>Copies vault protector choices into an observable collection (see <see cref="Entries"/> for why).</summary>
     /// <param name="items">The protectors to offer.</param>
     /// <returns>An observable collection of the choices.</returns>

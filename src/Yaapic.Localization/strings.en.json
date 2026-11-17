@@ -88,6 +88,7 @@
   "timing.notAvailable": "n/a",
   "timing.connectionReused": "Connection reused",
   "timing.newConnection": "New connection",
+  "timing.none": "No timing data for this response.",
   "response.tabDiff": "Diff",
   "diff.tooLarge": "Too large or binary to compare",
   "diff.pinnedAt": "Baseline pinned at {0}",

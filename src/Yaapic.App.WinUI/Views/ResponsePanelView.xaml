@@ -120,6 +120,8 @@
                            Foreground="{x:Bind p:BrushMap.TestOutcome(ViewModel.Tests.AllPassed), Mode=OneWay}"/>
               </StackPanel>
             </ToggleButton>
+            <ToggleButton x:Name="TimingTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
+                          Click="OnTabClick" Content="{x:Bind loc:Strings.ResponseTabTiming}"/>
           </StackPanel>
           <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" VerticalAlignment="Center">
             <Border Style="{StaticResource YaapicChipBorderStyle}" VerticalAlignment="Center"
@@ -323,6 +325,51 @@
                        Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                        Text="{x:Bind loc:Strings.TestsNone}"
                        Visibility="{x:Bind p:VisibilityMap.WhenNeitherFlag(ViewModel.Tests.HasTests, ViewModel.Tests.HasErrors), Mode=OneWay}"/>
+          </Grid>
+          <Grid x:Name="TimingPane" Visibility="Collapsed">
+            <StackPanel Padding="16,12" Spacing="8" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasTimings), Mode=OneWay}">
+              <StackPanel Orientation="Horizontal" Spacing="16">
+                <TextBlock Text="{x:Bind ViewModel.ProtocolText, Mode=OneWay}" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+                <TextBlock Text="{x:Bind ViewModel.ConnectionText, Mode=OneWay}" Style="{StaticResource YaapicBodyTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                <TextBlock Text="{x:Bind ViewModel.TotalText, Mode=OneWay}" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" VerticalAlignment="Center"/>
+              </StackPanel>
+              <ItemsControl ItemsSource="{x:Bind p:ListMap.Timings(ViewModel.Timings), Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="r:TimingRow">
+                    <Grid ColumnSpacing="12" Margin="0,0,0,6">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="72"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBlock Text="{x:Bind Label}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                                 Style="{StaticResource YaapicBodyTextStyle}"/>
+                      <Grid Grid.Column="1" Height="14" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="{x:Bind p:TimingMap.Lead(IsMeasured, OffsetFraction)}"/>
+                          <ColumnDefinition Width="{x:Bind p:TimingMap.Bar(IsMeasured, Fraction)}"/>
+                          <ColumnDefinition Width="{x:Bind p:TimingMap.Rest(IsMeasured, OffsetFraction, Fraction)}"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="1" MinWidth="2" CornerRadius="2"
+                                Background="{x:Bind p:TimingMap.BarBrush(Label)}"
+                                Visibility="{x:Bind p:TimingMap.WhenMeasured(IsMeasured)}"/>
+                        <Border Grid.ColumnSpan="3" Height="1" VerticalAlignment="Center"
+                                BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1"
+                                Visibility="{x:Bind p:TimingMap.WhenUnmeasured(IsMeasured)}"/>
+                      </Grid>
+                      <TextBlock Grid.Column="2" Text="{x:Bind DurationText}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                 Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+            <TextBlock Margin="16,12" TextWrapping="Wrap" Style="{StaticResource YaapicBodyTextStyle}"
+                       Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="{x:Bind loc:Strings.TimingNone}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.HasTimings), Mode=OneWay}"/>
           </Grid>
         </Grid>
       </Grid>

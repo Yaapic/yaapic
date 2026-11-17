@@ -88,6 +88,7 @@
   "timing.notAvailable": "n/d",
   "timing.connectionReused": "Connexion réutilisée",
   "timing.newConnection": "Nouvelle connexion",
+  "timing.none": "Aucune donnée de durée pour cette réponse.",
   "response.tabDiff": "Différences",
   "diff.tooLarge": "Trop volumineux ou binaire pour être comparé",
   "diff.pinnedAt": "Référence épinglée à {0}",

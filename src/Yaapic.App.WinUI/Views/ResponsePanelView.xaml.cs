@@ -54,10 +54,13 @@ public sealed partial class ResponsePanelView : UserControl
     {
         var headers = ReferenceEquals(sender, HeadersTab);
         var tests = ReferenceEquals(sender, TestsTab);
-        BodyTab.IsChecked = !headers && !tests;
+        var timing = ReferenceEquals(sender, TimingTab);
+        BodyTab.IsChecked = !headers && !tests && !timing;
         HeadersTab.IsChecked = headers;
         TestsTab.IsChecked = tests;
-        BodyPane.Visibility = headers || tests ? Visibility.Collapsed : Visibility.Visible;
+        TimingTab.IsChecked = timing;
+        TimingPane.Visibility = timing ? Visibility.Visible : Visibility.Collapsed;
+        BodyPane.Visibility = headers || tests || timing ? Visibility.Collapsed : Visibility.Visible;
         HeadersPane.Visibility = headers ? Visibility.Visible : Visibility.Collapsed;
         TestsPane.Visibility = tests ? Visibility.Visible : Visibility.Collapsed;
         HeadersBadge.Style = (Style)Application.Current.Resources[headers ? "YaapicCountBadgeActiveTextStyle" : "YaapicCountBadgeTextStyle"];

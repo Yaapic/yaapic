@@ -1368,6 +1368,9 @@ public static class Strings
     /// <summary>New connection</summary>
     public static string TimingNewConnection => Localizer.Pick("New connection", "Nouvelle connexion");
 
+    /// <summary>No timing data for this response.</summary>
+    public static string TimingNone => Localizer.Pick("No timing data for this response.", "Aucune donnée de durée pour cette réponse.");
+
     /// <summary>n/a</summary>
     public static string TimingNotAvailable => Localizer.Pick("n/a", "n/d");
 

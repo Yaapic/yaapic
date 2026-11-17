@@ -1,6 +1,6 @@
 # M4-66: WinUI: response Timing tab
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M4-45, M4-61
 
@@ -26,10 +26,10 @@ History of timings, copying values, HAR export.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
-- [ ] Manual smoke on the published exe: a request to a local stub that delays headers by 300 ms shows a visibly longer Waiting bar; a second request to the same host shows
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] Manual smoke on the published exe: a request to a local stub that delays headers by 300 ms shows a visibly longer Waiting bar; a second request to the same host shows
   "Connection reused" and no connection rows; the protocol reads `HTTP/1.1`; resizing the window keeps the bars proportional; an error response hides the data. Record anything not run.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
