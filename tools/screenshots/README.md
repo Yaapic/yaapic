@@ -50,3 +50,8 @@ Update screens (R-06, R-07): `-UpdateDemo available|downloading|ready|uptodate|f
 Milestone 3 additions: `--data-dir <dir>` on the WinUI app (the per-user data directory that holds the vault; the script passes a
 throw-away one, so `%APPDATA%\Yaapic` is never touched), `-Crop x,y,w,h`, the `wheel:x,y,ticks` step, and `Capture-M3.ps1`, which takes the 18
 M3 screenshots (see `docs/screenshots/m3/README.md`).
+
+Milestone 4 additions: `Capture-M4.ps1` (the 20 M4 screenshots, see `docs/screenshots/m4/README.md`), the `-Certificates` switch (a
+throw-away `certificates.json` with two self-signed certificates in `C:\yaapic-shot-certs`, deleted afterwards), the fixture requests
+`oauth2`, `oauth2-code`, `jwt` (a throw-away RSA key is generated per run), `aws` and `changing`, and the stub endpoints `/token` and
+`/changing`.

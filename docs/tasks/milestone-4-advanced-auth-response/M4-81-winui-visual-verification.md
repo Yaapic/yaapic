@@ -1,6 +1,6 @@
 # M4-81: WinUI visual verification of the milestone 4 views
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69
 
@@ -37,10 +37,17 @@ Avalonia screenshots, redesigns.
 
 ## Acceptance criteria
 
-- [ ] Twenty PNGs (ten screens, two themes) under `docs/screenshots/m4/`, each under 500 KB, captured from the Native AOT build; the capture script changes are committed.
-- [ ] `docs/screenshots/m4/README.md` exists and lists the differences.
-- [ ] No process left running (the published exe and the stub server are killed); 0 warnings, all tests green.
+- [x] Twenty PNGs (ten screens, two themes) under `docs/screenshots/m4/`, each under 500 KB, captured from the Native AOT build; the capture script changes are committed.
+- [x] `docs/screenshots/m4/README.md` exists and lists the differences.
+- [x] No process left running (the published exe and the stub server are killed); 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `docs: add milestone 4 WinUI screenshots and visual review`
+
+## Notes
+
+Defects found and fixed here (OAuth 2.0 cross-thread token status in AOT, certificates dialog AOT crash, non-scrolling Auth, Settings
+and Timing panes, borderless password boxes) and the open deviations (responsive response header and diff toolbar, compact JWT
+decoder, `ToggleSwitch` language, dialog footers) are listed in `docs/screenshots/m4/README.md`. No follow-up card was added to the
+index (the user decides).

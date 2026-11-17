@@ -7,9 +7,9 @@
     <TextBox Header="{x:Bind loc:Strings.AwsFieldAccessKeyId}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
              BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
              Text="{x:Bind ViewModel.AccessKeyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <PasswordBox Header="{x:Bind loc:Strings.AwsFieldSecretAccessKey}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+    <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.AwsFieldSecretAccessKey}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                  Password="{x:Bind ViewModel.SecretAccessKey, Mode=TwoWay}"/>
-    <PasswordBox Header="{x:Bind loc:Strings.AwsFieldSessionToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+    <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.AwsFieldSessionToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                  Password="{x:Bind ViewModel.SessionToken, Mode=TwoWay}"/>
     <TextBox Header="{x:Bind loc:Strings.AwsFieldRegion}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
              BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"

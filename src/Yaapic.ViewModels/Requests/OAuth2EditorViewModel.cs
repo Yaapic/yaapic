@@ -91,7 +91,21 @@ public sealed partial class OAuth2EditorViewModel : ObservableObject
         _tokens = tokens ?? throw new ArgumentNullException(nameof(tokens));
         _resolveSettings = resolveSettings ?? throw new ArgumentNullException(nameof(resolveSettings));
         _time = time ?? throw new ArgumentNullException(nameof(time));
-        _tokens.TokensChanged += (_, _) => RefreshTokenStatus();
+
+        // A token fetched while sending raises TokensChanged from a worker thread, and the UI frameworks reject property
+        // changes from it (WinUI: 0x8001010E): post back to the creating context; without one (tests) run inline.
+        var context = SynchronizationContext.Current;
+        _tokens.TokensChanged += (_, _) =>
+        {
+            if (context is null)
+            {
+                RefreshTokenStatus();
+            }
+            else
+            {
+                context.Post(_ => RefreshTokenStatus(), null);
+            }
+        };
     }
 
     /// <summary>Raised on every property change; never raised by <see cref="Load"/>.</summary>

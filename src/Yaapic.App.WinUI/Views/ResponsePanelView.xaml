@@ -329,7 +329,9 @@
                        Visibility="{x:Bind p:VisibilityMap.WhenNeitherFlag(ViewModel.Tests.HasTests, ViewModel.Tests.HasErrors), Mode=OneWay}"/>
           </Grid>
           <Grid x:Name="TimingPane" Visibility="Collapsed">
-            <StackPanel Padding="16,12" Spacing="8" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasTimings), Mode=OneWay}">
+            <!-- Scrolls: the waterfall is taller than a short response pane. -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasTimings), Mode=OneWay}">
+            <StackPanel Padding="16,12" Spacing="8">
               <StackPanel Orientation="Horizontal" Spacing="16">
                 <TextBlock Text="{x:Bind ViewModel.ProtocolText, Mode=OneWay}" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
                 <TextBlock Text="{x:Bind ViewModel.ConnectionText, Mode=OneWay}" Style="{StaticResource YaapicBodyTextStyle}"
@@ -368,6 +370,7 @@
                 </ItemsControl.ItemTemplate>
               </ItemsControl>
             </StackPanel>
+            </ScrollViewer>
             <TextBlock Margin="16,12" TextWrapping="Wrap" Style="{StaticResource YaapicBodyTextStyle}"
                        Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                        Text="{x:Bind loc:Strings.TimingNone}"

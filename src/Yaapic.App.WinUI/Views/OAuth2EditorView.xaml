@@ -25,13 +25,13 @@
     <TextBox Header="{x:Bind loc:Strings.Oauth2FieldClientId}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
              BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
              Text="{x:Bind ViewModel.ClientId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-    <PasswordBox Header="{x:Bind loc:Strings.Oauth2FieldClientSecret}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+    <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.Oauth2FieldClientSecret}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                  Password="{x:Bind ViewModel.ClientSecret, Mode=TwoWay}"/>
     <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.ShowUserCredentials), Mode=OneWay}">
       <TextBox Header="{x:Bind loc:Strings.Oauth2FieldUsername}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
                Text="{x:Bind ViewModel.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-      <PasswordBox Header="{x:Bind loc:Strings.Oauth2FieldPassword}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+      <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.Oauth2FieldPassword}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                    Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
     </StackPanel>
     <TextBox Header="{x:Bind loc:Strings.Oauth2FieldScope}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"

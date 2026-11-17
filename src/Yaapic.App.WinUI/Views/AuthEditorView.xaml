@@ -24,13 +24,13 @@
       <TextBox Header="{x:Bind loc:Strings.AuthUsername}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
                Text="{x:Bind ViewModel.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-      <PasswordBox Header="{x:Bind loc:Strings.AuthPassword}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+      <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.AuthPassword}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                    Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
       <TextBlock Text="{x:Bind loc:Strings.AuthDigestHint}" TextWrapping="Wrap" Style="{StaticResource YaapicBodySmallTextStyle}"
                  Visibility="{x:Bind p:VisibilityMap.WhenDigestAuth(ViewModel.Kind), Mode=OneWay}"/>
     </StackPanel>
 
-    <PasswordBox Header="{x:Bind loc:Strings.AuthToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+    <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.AuthToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                  Password="{x:Bind ViewModel.Token, Mode=TwoWay}"
                  Visibility="{x:Bind p:VisibilityMap.WhenBearerAuth(ViewModel.Kind), Mode=OneWay}"/>
 

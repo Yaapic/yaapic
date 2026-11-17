@@ -18,7 +18,7 @@
     </ComboBox>
 
     <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.UsesSecret), Mode=OneWay}">
-      <PasswordBox Header="{x:Bind loc:Strings.JwtFieldSecret}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+      <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.JwtFieldSecret}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                    Password="{x:Bind ViewModel.Secret, Mode=TwoWay}"/>
       <CheckBox Content="{x:Bind loc:Strings.JwtFieldSecretIsBase64}" IsChecked="{x:Bind ViewModel.SecretIsBase64, Mode=TwoWay}"/>
     </StackPanel>

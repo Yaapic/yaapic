@@ -57,4 +57,9 @@ public static class ListMap
     /// <param name="items">The rows to show.</param>
     /// <returns>An observable collection of the rows.</returns>
     public static ObservableCollection<JwtClaimRow> Claims(IReadOnlyList<JwtClaimRow> items) => new(items);
+
+    /// <summary>Copies text lines into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The lines to show, or <see langword="null"/> when nothing is selected.</param>
+    /// <returns>An observable collection of the lines.</returns>
+    public static ObservableCollection<string> Lines(IReadOnlyList<string>? items) => new(items ?? []);
 }

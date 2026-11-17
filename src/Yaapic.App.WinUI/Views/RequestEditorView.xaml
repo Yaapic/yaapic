@@ -202,9 +202,12 @@
       <v:KeyValueEditorView x:Name="HeadersPane" Margin="16,12,16,12" Visibility="Collapsed"
                             VariableContext="{x:Bind ViewModel.Variables, Mode=OneWay}"
                                     ViewModel="{x:Bind ViewModel.Headers, Mode=OneWay}"/>
-      <v:AuthEditorView x:Name="AuthPane" Margin="16,12,16,12" Visibility="Collapsed"
-                        ViewModel="{x:Bind ViewModel.Auth, Mode=OneWay}"/>
-      <StackPanel x:Name="SettingsPane" Margin="16,12,16,12" Spacing="16" Visibility="Collapsed">
+      <!-- Scrolls: the OAuth 2.0 and JWT forms are taller than the request pane of a 900 px window. -->
+      <ScrollViewer x:Name="AuthPane" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+        <v:AuthEditorView Margin="16,12,16,12" ViewModel="{x:Bind ViewModel.Auth, Mode=OneWay}"/>
+      </ScrollViewer>
+      <ScrollViewer x:Name="SettingsPane" Visibility="Collapsed" VerticalScrollBarVisibility="Auto">
+      <StackPanel Margin="16,12,16,12" Spacing="16">
         <ToggleSwitch Header="{x:Bind loc:Strings.RequestFollowRedirects}" IsOn="{x:Bind ViewModel.FollowRedirects, Mode=TwoWay}"/>
         <NumberBox x:Name="TimeoutBox" Header="{x:Bind loc:Strings.RequestTimeout}" Minimum="0" Width="260"
                    HorizontalAlignment="Left" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="10"
@@ -216,6 +219,7 @@
                      Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.HttpVersionNote), Mode=OneWay}"/>
         </StackPanel>
       </StackPanel>
+      </ScrollViewer>
       <v:ScriptsEditorView x:Name="ScriptsPane" Visibility="Collapsed" ViewModel="{x:Bind ViewModel.Scripts, Mode=OneWay}"/>
       <Grid x:Name="BodyPane" Visibility="Collapsed">
         <TextBlock Text="{x:Bind p:TextMap.NoBodyHint(ViewModel.MethodText), Mode=OneWay}" Margin="16,12"

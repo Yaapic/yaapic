@@ -152,6 +152,37 @@ public sealed class OAuth2EditorViewModelTests
     }
 
     [Fact]
+    public void Status_changes_are_posted_to_the_creating_synchronization_context()
+    {
+        var previous = SynchronizationContext.Current;
+        RecordingContext context = new();
+        SynchronizationContext.SetSynchronizationContext(context);
+        try
+        {
+            FakeOAuth2TokenService tokens = new();
+            var vm = WithTokens(tokens);
+            tokens.Status = new(OAuth2TokenState.Expired);
+            tokens.RaiseTokensChanged();
+
+            Assert.Equal(Strings.Oauth2NoToken, vm.TokenStatusText);
+            Assert.Single(context.Posted);
+            context.Posted[0]();
+            Assert.Equal(Strings.Oauth2TokenExpired, vm.TokenStatusText);
+        }
+        finally
+        {
+            SynchronizationContext.SetSynchronizationContext(previous);
+        }
+    }
+
+    private sealed class RecordingContext : SynchronizationContext
+    {
+        public List<Action> Posted { get; } = [];
+
+        public override void Post(SendOrPostCallback d, object? state) => Posted.Add(() => d(state));
+    }
+
+    [Fact]
     public void Status_changes_do_not_raise_Changed()
     {
         FakeOAuth2TokenService tokens = new();

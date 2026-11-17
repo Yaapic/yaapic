@@ -1,0 +1,15 @@
+version: 1
+id: 11111111-0000-0000-0000-000000000011
+name: Changing
+method: GET
+url: "{{baseUrl}}/changing"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+auth:
+  type: none
+settings:
+  httpVersion: http2

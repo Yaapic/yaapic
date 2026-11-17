@@ -117,13 +117,13 @@
             <Button Grid.Column="1" VerticalAlignment="Bottom" Content="{x:Bind loc:Strings.CommonBrowse}"
                     Command="{x:Bind ViewModel.BrowseKeyCommand}"/>
           </Grid>
-          <PasswordBox Header="{x:Bind loc:Strings.CertificateFieldPassphrase}"
+          <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.CertificateFieldPassphrase}"
                        PlaceholderText="{x:Bind PassphrasePlaceholder(ViewModel.Selected.HasPassphrase), Mode=OneWay}"
                        Password="{x:Bind ViewModel.Selected.Passphrase, Mode=TwoWay, FallbackValue=''}"/>
           <CheckBox Content="{x:Bind loc:Strings.CertificateRemovePassphrase}"
                     IsChecked="{x:Bind ViewModel.Selected.RemovePassphrase, Mode=TwoWay, FallbackValue=False}"
                     Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Selected.HasPassphrase), Mode=OneWay}"/>
-          <ItemsControl ItemsSource="{x:Bind ViewModel.Selected.Issues, Mode=OneWay}">
+          <ItemsControl ItemsSource="{x:Bind p:ListMap.Lines(ViewModel.Selected.Issues), Mode=OneWay}">
             <ItemsControl.ItemTemplate>
               <DataTemplate x:DataType="x:String">
                 <InfoBar Severity="Warning" IsOpen="True" IsClosable="False" Message="{x:Bind}" Margin="0,0,0,8"/>
