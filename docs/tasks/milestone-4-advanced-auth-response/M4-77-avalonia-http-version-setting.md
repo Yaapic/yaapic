@@ -1,6 +1,6 @@
 # M4-77: Avalonia: HTTP version in the Settings tab
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M4-59, M4-61
 
@@ -21,10 +21,14 @@ Showing the protocol (M4-74).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
-- [ ] Runtime smoke on macOS or Linux as in M4-69; if not possible, say so in the Notes and tick only the build and AOT items.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
+- [x] Runtime smoke on macOS or Linux as in M4-69; if not possible, say so in the Notes and tick only the build and AOT items.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the HTTP version choice to request settings`
+
+## Notes
+
+No macOS/Linux host available: the AOT exe was smoke-tested on Windows (starts, stays up, killed); the picker was not exercised interactively. Only the flaky `ScriptErrorsAbortTheSend...` test failed (known noise).

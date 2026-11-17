@@ -110,6 +110,9 @@ public static partial class EditorMap
     /// <summary>Converts a timeout in seconds to the value of a <c>NumericUpDown</c>.</summary>
     public static FuncValueConverter<int, decimal?> TimeoutValue { get; } = new(n => n);
 
+    /// <summary>Converts an HTTP version preference to its index in the picker (the enum order is the picker order).</summary>
+    public static FuncValueConverter<HttpVersionPreference, int> HttpVersionIndex { get; } = new(v => (int)v);
+
     /// <summary>Converts a script language to the code editor language.</summary>
     public static FuncValueConverter<ScriptLanguage, string?> ScriptEditorLanguage { get; } = new(l => ScriptLanguage(l));
 

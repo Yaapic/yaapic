@@ -218,5 +218,13 @@ public sealed partial class RequestEditorView : UserControl
         }
     }
 
+    private void OnHttpVersionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (Editor is { } editor && sender is ComboBox { SelectedItem: HttpVersionChoice choice })
+        {
+            editor.HttpVersion = choice.Value;
+        }
+    }
+
     private void OnSaveClick(object? sender, RoutedEventArgs e) => SaveRequested?.Invoke(this, EventArgs.Empty);
 }
