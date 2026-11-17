@@ -182,7 +182,9 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         "xml" => "xml",
         "javascript" => "javascript",
         "lua" => "lua",
-        _ => "plaintext",
+        "csharp" => "csharp",
+        "python" => "python",
+        _ => "plaintext", // no shell, PowerShell or Go grammar ships with LoomEditor 0.6.0
     };
 
     private void ApplyTheme()

@@ -7,7 +7,11 @@
     xmlns:r="using:Yaapic.ViewModels.Requests"
     Title="{x:Bind loc:Strings.CodeGenerationTitle}"
     CloseButtonText="{x:Bind loc:Strings.CommonClose}" DefaultButton="Close" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}">
-  <Grid Width="680" Height="380" RowSpacing="10" Margin="0,0,12,0">
+  <ContentDialog.Resources>
+    <!-- The default 548 px cap clips a 680 px body: raise it so the editor and warnings fit the dialog. -->
+    <x:Double x:Key="ContentDialogMaxWidth">760</x:Double>
+  </ContentDialog.Resources>
+  <Grid Width="680" Height="380" RowSpacing="10">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>
