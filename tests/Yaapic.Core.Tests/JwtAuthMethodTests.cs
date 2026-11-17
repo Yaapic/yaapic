@@ -1,7 +1,7 @@
-using Yaapic.Core.Auth;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+using Yaapic.Core.Auth;
 using Yaapic.Core.Auth.Jwt;
 using Yaapic.Core.Http;
 using Yaapic.Domain.Http;

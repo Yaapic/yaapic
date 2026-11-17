@@ -9,7 +9,11 @@ public class OAuth2TokenCacheTests
 
     static OAuth2Settings Settings() => OAuth2Settings.Default with
     {
-        TokenUrl = "https://t/token", ClientId = "id", Scope = "a b", Audience = "aud", Username = "u",
+        TokenUrl = "https://t/token",
+        ClientId = "id",
+        Scope = "a b",
+        Audience = "aud",
+        Username = "u",
     };
 
     static OAuth2Token Token(string access = "at", DateTimeOffset? exp = null) =>

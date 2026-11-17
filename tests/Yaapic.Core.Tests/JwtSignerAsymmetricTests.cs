@@ -22,8 +22,14 @@ public class JwtSignerAsymmetricTests
         byte[] Field(string name) => Base64Url.Decode(doc.RootElement.GetProperty(name).GetString()!);
         return new RSAParameters
         {
-            Modulus = Field("n"), Exponent = Field("e"), D = Field("d"), P = Field("p"), Q = Field("q"),
-            DP = Field("dp"), DQ = Field("dq"), InverseQ = Field("qi"),
+            Modulus = Field("n"),
+            Exponent = Field("e"),
+            D = Field("d"),
+            P = Field("p"),
+            Q = Field("q"),
+            DP = Field("dp"),
+            DQ = Field("dq"),
+            InverseQ = Field("qi"),
         };
     }
 

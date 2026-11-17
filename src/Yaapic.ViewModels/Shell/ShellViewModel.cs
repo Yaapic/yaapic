@@ -13,8 +13,8 @@ using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Settings;
-using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Updates;
 using Yaapic.ViewModels.Vault;
 

@@ -1,5 +1,5 @@
-using Yaapic.Core.Auth;
 using System.Text;
+using Yaapic.Core.Auth;
 using Yaapic.Core.Auth.Aws;
 using Yaapic.Core.Http;
 using Yaapic.Domain.Http;

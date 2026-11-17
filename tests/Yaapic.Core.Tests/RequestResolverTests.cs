@@ -268,8 +268,17 @@ public class RequestResolverTests
     {
         var o = OAuth2Settings.Default with
         {
-            TokenUrl = "{{t}}/token", AuthorizationUrl = "{{t}}/auth", ClientId = "{{id}}", ClientSecret = "{{s}}", Scope = "{{sc}}",
-            Audience = "{{aud}}", Username = "{{u}}", Password = "{{p}}", RedirectUri = "{{ru}}", HeaderPrefix = "{{hp}}", QueryParameterName = "{{q}}",
+            TokenUrl = "{{t}}/token",
+            AuthorizationUrl = "{{t}}/auth",
+            ClientId = "{{id}}",
+            ClientSecret = "{{s}}",
+            Scope = "{{sc}}",
+            Audience = "{{aud}}",
+            Username = "{{u}}",
+            Password = "{{p}}",
+            RedirectUri = "{{ru}}",
+            HeaderPrefix = "{{hp}}",
+            QueryParameterName = "{{q}}",
         };
         var r = A(Auth(AuthKind.OAuth2) with { OAuth2 = o }, vars:
             [("t", "T"), ("id", "I"), ("s", "S"), ("sc", "SC"), ("aud", "AU"), ("u", "U"), ("p", "P"), ("ru", "RU"), ("hp", "HP"), ("q", "Q")]);
@@ -286,7 +295,12 @@ public class RequestResolverTests
     {
         var j = JwtSettings.Default with
         {
-            Secret = "{{s}}", PrivateKey = "{{k}}", Payload = "{\"a\":\"{{v}}\"}", ExtraHeaders = "{{x}}", HeaderPrefix = "{{hp}}", QueryParameterName = "{{q}}",
+            Secret = "{{s}}",
+            PrivateKey = "{{k}}",
+            Payload = "{\"a\":\"{{v}}\"}",
+            ExtraHeaders = "{{x}}",
+            HeaderPrefix = "{{hp}}",
+            QueryParameterName = "{{q}}",
         };
         var r = A(Auth(AuthKind.Jwt) with { Jwt = j }, vars: [("s", "S"), ("k", "K"), ("v", "V"), ("x", "X"), ("hp", "HP"), ("q", "Q")]);
         var x = r.PendingAuth!.Jwt!;
