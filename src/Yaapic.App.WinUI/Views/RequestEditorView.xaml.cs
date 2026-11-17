@@ -147,6 +147,17 @@ public sealed partial class RequestEditorView : UserControl
         BodyBinary.IsChecked = vm.BodyKind == BodyKind.Binary;
         ContentTypeLabel.Text = ContentTypeNames[IndexOf(RequestEditorViewModel.ContentTypes, vm.BodyContentType)];
         TimeoutBox.Value = vm.TimeoutSeconds;
+
+        // Items are built here: ComboBoxItem.IsEnabled cannot be bound from a plain list.
+        _syncingVersion = true;
+        HttpVersionBox.Items.Clear();
+        foreach (var choice in vm.HttpVersionChoices)
+        {
+            HttpVersionBox.Items.Add(new ComboBoxItem { Content = choice.Label, IsEnabled = choice.IsAvailable });
+        }
+
+        HttpVersionBox.SelectedIndex = IndexOfVersion(vm);
+        _syncingVersion = false;
     }
 
     private void OnVariableOpenRequested(object? sender, Yaapic.Core.Variables.VariableScopeKind scope)
@@ -154,6 +165,30 @@ public sealed partial class RequestEditorView : UserControl
         if (ViewModel is { } vm)
         {
             VariableScopeOpenRequested?.Invoke(this, new VariableScopeOpenRequest(vm.Id, scope));
+        }
+    }
+
+    private bool _syncingVersion;
+
+    private static int IndexOfVersion(RequestEditorViewModel vm)
+    {
+        var choices = vm.HttpVersionChoices;
+        for (var i = 0; i < choices.Count; i++)
+        {
+            if (choices[i].Value == vm.HttpVersion)
+            {
+                return i;
+            }
+        }
+
+        return 0;
+    }
+
+    private void OnHttpVersionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_syncingVersion && ViewModel is { } vm && HttpVersionBox.SelectedIndex >= 0)
+        {
+            vm.HttpVersion = vm.HttpVersionChoices[HttpVersionBox.SelectedIndex].Value;
         }
     }
 

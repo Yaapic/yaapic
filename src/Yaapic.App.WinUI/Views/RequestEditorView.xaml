@@ -209,6 +209,12 @@
         <NumberBox x:Name="TimeoutBox" Header="{x:Bind loc:Strings.RequestTimeout}" Minimum="0" Width="260"
                    HorizontalAlignment="Left" SpinButtonPlacementMode="Inline" SmallChange="1" LargeChange="10"
                    ValueChanged="OnTimeoutChanged"/>
+        <StackPanel Spacing="4">
+          <ComboBox x:Name="HttpVersionBox" Header="{x:Bind loc:Strings.RequestSettingsHttpVersion}" Width="260"
+                    SelectionChanged="OnHttpVersionChanged"/>
+          <TextBlock Text="{x:Bind ViewModel.HttpVersionNote, Mode=OneWay}" TextWrapping="Wrap" Style="{StaticResource YaapicBodySmallTextStyle}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.HttpVersionNote), Mode=OneWay}"/>
+        </StackPanel>
       </StackPanel>
       <v:ScriptsEditorView x:Name="ScriptsPane" Visibility="Collapsed" ViewModel="{x:Bind ViewModel.Scripts, Mode=OneWay}"/>
       <Grid x:Name="BodyPane" Visibility="Collapsed">
