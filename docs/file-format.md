@@ -49,9 +49,9 @@ body:
       kind: text       # text | file
   file: ""             # binary: path of the file to send
 auth:
-  type: none           # none | basic | bearer | apikey | oauth2
-  username: ""         # basic
-  password: ""         # basic
+  type: none           # none | basic | bearer | apikey | oauth2 | jwt | digest | awsv4
+  username: ""         # basic, digest
+  password: ""         # basic, digest
   token: ""            # bearer
   key: ""              # apikey
   value: ""            # apikey
@@ -165,6 +165,41 @@ auth:
 
 Like the other auth fields these are plain text: write `{{variables}}` (secret variables) for `clientSecret` and
 `password`, never the literal value.
+
+`auth.type: jwt` adds `auth.jwt` and `auth.type: awsv4` adds `auth.awsv4`, each written only for its type (missing keys read
+as the defaults shown, an unknown `algorithm` or `placement` reads as the default):
+
+```yaml
+auth:
+  type: jwt
+  jwt:
+    algorithm: HS256            # HS256|HS384|HS512|RS256|RS384|RS512|ES256|ES384|ES512
+    secret: "{{jwtSecret}}"     # HS*; UTF-8 text, or Base64 when secretIsBase64
+    secretIsBase64: false
+    privateKey: ""              # RS* and ES*: PEM text, or {{variable}}
+    payload: "{}"               # JSON object text
+    headers: ""                 # optional JSON object merged into the JWT header
+    addIssuedAt: true           # adds iat when the payload has none
+    expiresIn: 0                # seconds, > 0 adds exp when the payload has none
+    placement: header           # header | query
+    headerPrefix: Bearer
+    queryParameter: token
+```
+
+```yaml
+auth:
+  type: awsv4
+  awsv4:
+    accessKeyId: "{{awsKey}}"
+    secretAccessKey: "{{awsSecret}}"
+    sessionToken: ""
+    region: eu-west-1
+    service: s3
+```
+
+`auth.type: digest` has no nested mapping: it reuses `auth.username` and `auth.password`. As with every auth field, keep
+secrets in `{{variables}}`. OAuth 2.0 tokens are never written to the workspace (they live in memory only). User guide:
+[authentication.md](authentication.md).
 
 ## Client certificates (milestone 4)
 

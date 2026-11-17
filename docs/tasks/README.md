@@ -476,8 +476,33 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-77](milestone-4-advanced-auth-response/M4-77-avalonia-http-version-setting.md) | Avalonia: HTTP version in the Settings tab | unix | M4-59, M4-61 | done |
 | [M4-78](milestone-4-advanced-auth-response/M4-78-end-to-end-authentication.md) | End-to-end tests: authentication | any | M4-27, M4-61 | done |
 | [M4-79](milestone-4-advanced-auth-response/M4-79-end-to-end-mtls-timings-and-http-version.md) | End-to-end tests: mTLS, timings, HTTP version, diff and code generation | any | M4-39, M4-48, M4-58, M4-61 | done |
-| [M4-80](milestone-4-advanced-auth-response/M4-80-milestone-docs.md) | Milestone 4 docs | any | M4-78, M4-79, M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69, M4-70, M4-71, M4-72, M4-73, M4-74, M4-75, M4-76, M4-77 | todo |
+| [M4-80](milestone-4-advanced-auth-response/M4-80-milestone-docs.md) | Milestone 4 docs | any | M4-78, M4-79, M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69, M4-70, M4-71, M4-72, M4-73, M4-74, M4-75, M4-76, M4-77 | done |
 | [M4-81](milestone-4-advanced-auth-response/M4-81-winui-visual-verification.md) | WinUI visual verification of the milestone 4 views | windows | M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69 | todo |
+
+### Milestone 4 summary
+
+Delivered: authentication beyond Basic, Bearer and API key, resolved through an `IRequestAuthenticator` pipeline (`PendingAuth` on
+the resolved request): OAuth 2.0 (client credentials, authorization code with PKCE through a loopback redirect receiver and the
+system browser, password, automatic refresh, in-memory token cache), JWT signing (HS, RS and ES 256/384/512), Digest (RFC 7616,
+body-less probe) and AWS Signature v4. Client certificates (mTLS) matched by host pattern, stored outside the workspace with
+passphrases in the vault. Per-phase response timings (DNS, connect, TLS, waiting, download, reused connection) and the protocol
+used, the per-request HTTP version (HTTP/3 opt-in), a response diff (previous response or pinned baseline), code generation (cURL,
+JavaScript, Python, C#, PowerShell, Go) and a JWT decoder, on both front-ends, with palette entries. End-to-end tests:
+`Milestone4AuthenticationEndToEndTests` and `Milestone4TransportEndToEndTests`. Documentation:
+[authentication.md](../authentication.md), [response-tools.md](../response-tools.md), [architecture.md](../architecture.md),
+[file-format.md](../file-format.md) and ADRs [0013](../adr/0013-advanced-authentication.md),
+[0014](../adr/0014-transport-certificates-timings.md), [0015](../adr/0015-response-diff-and-code-generation.md). No new
+dependency (see [dependencies.md](../dependencies.md)).
+
+Deferred: auth inherited from folders and collections, tokens persisted across restarts, presigned AWS URLs and signed multipart
+payloads, Digest `auth-int`, PS256, EdDSA and JWE, OAuth Implicit, Device Code and DPoP, a custom CA or skipping TLS
+verification, proxy settings, diff against history entries, importing from cURL (M5).
+
+Open (blocked, product decisions): M4-28 auth inheritance, M4-37 TLS verification and custom CA, M4-55 more code generation
+languages.
+
+Runtime checks not run by hand: HTTP/3 against a real QUIC server and the Avalonia views on macOS and Linux; the WinUI visual
+check is M4-81.
 
 ## Milestones 2 to 10
 

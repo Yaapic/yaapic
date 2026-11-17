@@ -1,6 +1,6 @@
 # M4-80: Milestone 4 docs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-78, M4-79, M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69, M4-70, M4-71, M4-72, M4-73, M4-74, M4-75, M4-76, M4-77
 
@@ -28,9 +28,9 @@ Screenshots (M4-81).
 
 ## Acceptance criteria
 
-- [ ] The documents above are updated and their links work (check relative links by opening each).
-- [ ] The summary lists the blocked cards still open (M4-28, M4-37, M4-55) and anything deferred.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] The documents above are updated and their links work (check relative links by opening each).
+- [x] The summary lists the blocked cards still open (M4-28, M4-37, M4-55) and anything deferred.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

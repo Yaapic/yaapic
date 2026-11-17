@@ -69,7 +69,7 @@ failure.
 | `tests/` | One test project per library, plus `Yaapic.Architecture.Tests` |
 | `native/` | Build script and pinned sources for the native script engines |
 | `design/`, `tools/` | Design assets and tokens; screenshot tooling |
-| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [task cards](docs/tasks/README.md) |
+| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [authentication](docs/authentication.md), [response tools](docs/response-tools.md), [task cards](docs/tasks/README.md) |
 
 ## Scripts and secrets
 
@@ -86,6 +86,16 @@ and workspace, outside the workspace (`%APPDATA%\Yaapic\vaults\<workspace id>.va
 `~/Library/Application Support/Yaapic/vaults` on macOS, `$XDG_DATA_HOME/Yaapic/vaults` or `~/.local/share/Yaapic/vaults` on Linux), so it
 never reaches Git. The vault key is protected by DPAPI (Windows), the Keychain (macOS), the Secret Service (Linux) or a
 passphrase. See [ADR 0010](docs/adr/0010-secret-vault.md) and [docs/file-format.md](docs/file-format.md).
+
+## Authentication and response tools
+
+Besides Basic, Bearer and API key, a request can use **OAuth 2.0** (client credentials, authorization code with PKCE, password,
+automatic refresh), **JWT** signing (HS, RS and ES algorithms), **Digest** and **AWS Signature v4**: see
+[docs/authentication.md](docs/authentication.md). **Client certificates** (mTLS) are configured per host and kept outside the
+workspace. Each response has a **Timing** tab (DNS, connect, TLS, waiting, download) and shows the HTTP version used, which you
+can choose per request (HTTP/3 is experimental). A **Diff** tab compares the response with the previous one or a pinned baseline,
+**Generate code** turns a request into cURL, JavaScript, Python, C#, PowerShell or Go, and **Decode JWT** inspects a token. See
+[docs/response-tools.md](docs/response-tools.md).
 
 ## Language and accent colour
 

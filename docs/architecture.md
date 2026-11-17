@@ -104,6 +104,35 @@ system browser), the request authenticator, the client certificate provider and 
 six code generators. The `HttpClientTransport` and the certificate provider are owned by the shell and disposed when it
 closes; the shell creates the certificates and JWT decoder view models on demand (`CreateCertificates`, `CreateJwtDecoder`).
 
+## Authentication, transport and response tools (milestone 4)
+
+Decisions: [ADR 0013](adr/0013-advanced-authentication.md), [ADR 0014](adr/0014-transport-certificates-timings.md),
+[ADR 0015](adr/0015-response-diff-and-code-generation.md); user level: [authentication.md](authentication.md) and
+[response-tools.md](response-tools.md).
+
+```
+RequestSender
+  -> RequestResolver          Basic, Bearer, API key resolved at once; OAuth 2.0, JWT, Digest and AWS v4 are
+                              substituted and kept in ResolvedRequest.PendingAuth
+  -> IRequestAuthenticator    (Core: RequestAuthenticator, one IAuthMethod per kind: JwtAuthMethod, DigestAuthMethod,
+                               AwsV4AuthMethod, OAuth2AuthMethod; an error is SendFailureKind.AuthenticationFailed)
+       |-- OAuth2AuthMethod -> IOAuth2TokenService -> IOAuth2TokenCache (memory), IExternalBrowser,
+       |                       ILoopbackRedirectReceiver (authorization code with PKCE)
+       `-- DigestAuthMethod -> IHttpTransport (the body-less probe)
+  -> IHttpTransport           (HttpClientTransport)
+       |-- IClientCertificateProvider  host pattern match, certificate cache, one HttpClient per certificate (mTLS)
+       |-- TimingCollector             per-request, in HttpRequestMessage.Options; ConnectCallback times DNS and
+       |                               connect, PlaintextStreamFilter ends TLS; Wait and Download from the headers
+       `-- HttpVersionMapping          HttpVersionPreference -> version and policy (IHttpVersionSupport for HTTP/3)
+  -> HttpResponseData         status, body, Protocol, Timings (RequestTimings)
+```
+
+Response side: `ResponseDiffer` and `LineDiff` (Core.Diff, Myers) compare two `ResponseSnapshot`s for
+`ResponseDiffViewModel`; `JwtDecoder` (Core.Auth.Jwt) feeds `JwtDecoderViewModel`; `CodeRequestFactory` turns a `ResolvedRequest`
+into a `CodeRequest` and `CodeGeneratorRegistry` offers the six `ICodeGenerator`s (cURL, JavaScript, Python, C#, PowerShell, Go)
+to `CodeGenerationViewModel`. Client certificates are listed in `ICertificateStore` (`FileCertificateStore`,
+`certificates.json` outside the workspace) and their passphrases are vault entries of kind `Certificate`.
+
 ## Search and command palette
 
 `Core.Search.FuzzyMatcher` ranks and highlights matches. `CommandPaletteViewModel` aggregates `IPaletteSource`s
