@@ -24,7 +24,7 @@
       </Grid.ColumnDefinitions>
       <ComboBox HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.CodeGenerationLanguage}"
                 AutomationProperties.Name="{x:Bind loc:Strings.CodeGenerationLanguage}"
-                ItemsSource="{x:Bind ViewModel.Targets}"
+                ItemsSource="{x:Bind p:ListMap.Targets(ViewModel.Targets)}"
                 SelectedItem="{x:Bind ViewModel.SelectedTarget, Mode=TwoWay}">
         <ComboBox.ItemTemplate>
           <DataTemplate x:DataType="r:CodeTarget">

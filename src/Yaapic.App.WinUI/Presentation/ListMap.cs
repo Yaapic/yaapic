@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.App.WinUI.Presentation;
@@ -46,4 +47,14 @@ public static class ListMap
     /// <param name="items">The protectors to offer.</param>
     /// <returns>An observable collection of the choices.</returns>
     public static ObservableCollection<VaultProtectorChoice> Protectors(IReadOnlyList<VaultProtectorChoice> items) => new(items);
+
+    /// <summary>Copies code generation targets into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The targets to offer.</param>
+    /// <returns>An observable collection of the targets.</returns>
+    public static ObservableCollection<CodeTarget> Targets(IReadOnlyList<CodeTarget> items) => new(items);
+
+    /// <summary>Copies JWT claim rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<JwtClaimRow> Claims(IReadOnlyList<JwtClaimRow> items) => new(items);
 }

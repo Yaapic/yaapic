@@ -29,7 +29,7 @@
         <v:CodeEditorView Height="170" IsReadOnly="True" EditorLanguage="json" Text="{x:Bind ViewModel.PayloadText, Mode=OneWay}"/>
         <TextBlock Text="{x:Bind loc:Strings.JwtClaimsLabel}" Style="{StaticResource YaapicBodyStrongTextStyle}"
                    Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Claims.Count), Mode=OneWay}"/>
-        <ItemsControl ItemsSource="{x:Bind ViewModel.Claims, Mode=OneWay}">
+        <ItemsControl ItemsSource="{x:Bind p:ListMap.Claims(ViewModel.Claims), Mode=OneWay}">
           <ItemsControl.ItemTemplate>
             <DataTemplate x:DataType="t:JwtClaimRow">
               <Grid ColumnSpacing="12" Margin="0,2">
