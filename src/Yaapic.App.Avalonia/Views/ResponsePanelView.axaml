@@ -220,6 +220,71 @@
               </TextBlock>
             </Grid>
           </TabItem>
+          <TabItem AutomationProperties.Name="{x:Static loc:Strings.ResponseTabTiming}">
+            <TabItem.Header>
+              <TextBlock Text="{x:Static loc:Strings.ResponseTabTiming}" />
+            </TabItem.Header>
+            <Panel>
+              <StackPanel Margin="16,12" Spacing="8" IsVisible="{Binding HasTimings}">
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                  <TextBlock Text="{Binding ProtocolText}" Classes="bodyStrong" />
+                  <TextBlock Text="{Binding ConnectionText}" Classes="body"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                  <TextBlock Text="{Binding TotalText}" Classes="codeSmall" VerticalAlignment="Center"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Timings}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="rsp:TimingRow">
+                      <Grid ColumnDefinitions="140,*,72" ColumnSpacing="12" Margin="0,0,0,6">
+                        <TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                        <Grid Grid.Column="1" Height="14" VerticalAlignment="Center">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition>
+                              <ColumnDefinition.Width>
+                                <MultiBinding Converter="{x:Static p:TimingBarMap.Lead}">
+                                  <Binding Path="IsMeasured" />
+                                  <Binding Path="OffsetFraction" />
+                                </MultiBinding>
+                              </ColumnDefinition.Width>
+                            </ColumnDefinition>
+                            <ColumnDefinition>
+                              <ColumnDefinition.Width>
+                                <MultiBinding Converter="{x:Static p:TimingBarMap.Bar}">
+                                  <Binding Path="IsMeasured" />
+                                  <Binding Path="Fraction" />
+                                </MultiBinding>
+                              </ColumnDefinition.Width>
+                            </ColumnDefinition>
+                            <ColumnDefinition>
+                              <ColumnDefinition.Width>
+                                <MultiBinding Converter="{x:Static p:TimingBarMap.Rest}">
+                                  <Binding Path="IsMeasured" />
+                                  <Binding Path="OffsetFraction" />
+                                  <Binding Path="Fraction" />
+                                </MultiBinding>
+                              </ColumnDefinition.Width>
+                            </ColumnDefinition>
+                          </Grid.ColumnDefinitions>
+                          <Border Grid.Column="1" MinWidth="2" CornerRadius="2" IsVisible="{Binding IsMeasured}"
+                                  Background="{Binding Label, Converter={x:Static p:TimingBarMap.BarBrush}}" />
+                          <Line Grid.ColumnSpan="3" StartPoint="0,0" EndPoint="400,0" Stretch="Fill" VerticalAlignment="Center"
+                                StrokeThickness="1" StrokeDashArray="3,3" Stroke="{DynamicResource YaapicBorderSubtleBrush}"
+                                IsVisible="{Binding !IsMeasured}" />
+                        </Grid>
+                        <TextBlock Grid.Column="2" Text="{Binding DurationText}" Classes="codeSmall"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+              <TextBlock Margin="16,12" TextWrapping="Wrap" Text="{x:Static loc:Strings.TimingNone}"
+                         Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                         IsVisible="{Binding !HasTimings}" />
+            </Panel>
+          </TabItem>
         </TabControl>
 
         <!-- Status block, in the header row at the right of the panel tabs. -->

@@ -1,6 +1,6 @@
 # M4-74: Avalonia: response Timing tab
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M4-45, M4-61
 
@@ -22,12 +22,18 @@ HAR export, history.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
 - [ ] Runtime smoke on macOS or Linux as in M4-66; if not possible, say so in the Notes and tick only the build and AOT items.
-- [ ] A unit test for `TimingBarMap` in the Avalonia-independent place the other `*Map` helpers are tested (check `tests/` for where `ResponseMap` is tested; if none, the map is
+- [x] A unit test for `TimingBarMap` in the Avalonia-independent place the other `*Map` helpers are tested (check `tests/` for where `ResponseMap` is tested; if none, the map is
   covered by view model tests only and the card says so).
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the response Timing tab`
+
+## Notes
+
+- The bar is placed with three star columns fed by `TimingBarMap` multi-value converters (as in WinUI) instead of measuring `Bounds.Width`: it stays proportional on resize with no code-behind.
+- No test project covers the Avalonia `*Map` helpers (`ResponseMap` has none), so `TimingBarMap` is covered by the view model tests of `TimingRow` only.
+- Runtime smoke on macOS/Linux was not possible (Windows host); only the build and the AOT publish (0 IL warnings, exe starts) were verified.
