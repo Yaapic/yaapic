@@ -37,6 +37,9 @@ public static class Strings
     /// <summary>API key location</summary>
     public static string AuthApiKeyLocation => Localizer.Pick("API key location", "Emplacement de la clé d'API");
 
+    /// <summary>The first request is a probe without a body; the server's challenge is then answered.</summary>
+    public static string AuthDigestHint => Localizer.Pick("The first request is a probe without a body; the server's challenge is then answered.", "La première requête est une sonde sans corps ; le défi du serveur reçoit ensuite une réponse.");
+
     /// <summary>AWS Signature v4</summary>
     public static string AuthKindAwsV4 => Localizer.Pick("AWS Signature v4", "AWS Signature v4");
 
@@ -658,6 +661,9 @@ public static class Strings
 
     /// <summary>Query parameter</summary>
     public static string JwtPlacementQuery => Localizer.Pick("Query parameter", "Paramètre de requête");
+
+    /// <summary>Paste a PEM private key or use {{variable}}</summary>
+    public static string JwtPrivateKeyPlaceholder => Localizer.Pick("Paste a PEM private key or use {{variable}}", "Collez une clé privée PEM ou utilisez {{variable}}");
 
     /// <summary>The JWT secret is not valid Base64.</summary>
     public static string JwtSecretInvalid => Localizer.Pick("The JWT secret is not valid Base64.", "Le secret du JWT n’est pas du Base64 valide.");

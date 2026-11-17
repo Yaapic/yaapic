@@ -20,12 +20,14 @@
     <TextBlock Text="{x:Bind loc:Strings.AuthNone}" Style="{StaticResource YaapicBodySmallTextStyle}"
                Visibility="{x:Bind p:VisibilityMap.WhenNoAuth(ViewModel.Kind), Mode=OneWay}"/>
 
-    <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenBasicAuth(ViewModel.Kind), Mode=OneWay}">
+    <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenUserPasswordAuth(ViewModel.Kind), Mode=OneWay}">
       <TextBox Header="{x:Bind loc:Strings.AuthUsername}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
                Text="{x:Bind ViewModel.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
       <PasswordBox Header="{x:Bind loc:Strings.AuthPassword}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                    Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
+      <TextBlock Text="{x:Bind loc:Strings.AuthDigestHint}" TextWrapping="Wrap" Style="{StaticResource YaapicBodySmallTextStyle}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenDigestAuth(ViewModel.Kind), Mode=OneWay}"/>
     </StackPanel>
 
     <PasswordBox Header="{x:Bind loc:Strings.AuthToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
@@ -47,5 +49,9 @@
 
     <local:OAuth2EditorView ViewModel="{x:Bind ViewModel.OAuth2, Mode=OneWay}"
                             Visibility="{x:Bind p:VisibilityMap.WhenOAuth2Auth(ViewModel.Kind), Mode=OneWay}"/>
+    <local:JwtEditorView ViewModel="{x:Bind ViewModel.Jwt, Mode=OneWay}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenJwtAuth(ViewModel.Kind), Mode=OneWay}"/>
+    <local:AwsV4EditorView ViewModel="{x:Bind ViewModel.AwsV4, Mode=OneWay}"
+                           Visibility="{x:Bind p:VisibilityMap.WhenAwsV4Auth(ViewModel.Kind), Mode=OneWay}"/>
   </StackPanel>
 </UserControl>

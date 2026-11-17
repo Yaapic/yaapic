@@ -1,0 +1,73 @@
+<UserControl
+    x:Class="Yaapic.App.WinUI.Views.JwtEditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:Yaapic.Localization"
+    xmlns:p="using:Yaapic.App.WinUI.Presentation">
+  <StackPanel Spacing="12">
+    <ComboBox x:Name="AlgorithmBox" Header="{x:Bind loc:Strings.JwtFieldAlgorithm}" MinWidth="200" SelectionChanged="OnAlgorithmChanged">
+      <ComboBoxItem Content="HS256"/>
+      <ComboBoxItem Content="HS384"/>
+      <ComboBoxItem Content="HS512"/>
+      <ComboBoxItem Content="RS256"/>
+      <ComboBoxItem Content="RS384"/>
+      <ComboBoxItem Content="RS512"/>
+      <ComboBoxItem Content="ES256"/>
+      <ComboBoxItem Content="ES384"/>
+      <ComboBoxItem Content="ES512"/>
+    </ComboBox>
+
+    <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.UsesSecret), Mode=OneWay}">
+      <PasswordBox Header="{x:Bind loc:Strings.JwtFieldSecret}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+                   Password="{x:Bind ViewModel.Secret, Mode=TwoWay}"/>
+      <CheckBox Content="{x:Bind loc:Strings.JwtFieldSecretIsBase64}" IsChecked="{x:Bind ViewModel.SecretIsBase64, Mode=TwoWay}"/>
+    </StackPanel>
+
+    <TextBox Header="{x:Bind loc:Strings.JwtFieldPrivateKey}" PlaceholderText="{x:Bind loc:Strings.JwtPrivateKeyPlaceholder}"
+             AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="120" MaxHeight="120"
+             ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+             FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeCode}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.PrivateKey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.UsesPrivateKey), Mode=OneWay}"/>
+
+    <TextBox Header="{x:Bind loc:Strings.JwtFieldPayload}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+             AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="120" MaxHeight="120"
+             ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+             FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeCode}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.Payload, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+    <TextBox Header="{x:Bind loc:Strings.JwtFieldExtraHeaders}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+             AcceptsReturn="True" TextWrapping="NoWrap" MinHeight="64" MaxHeight="64"
+             ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.HorizontalScrollBarVisibility="Auto"
+             FontFamily="{StaticResource YaapicMonoFont}" FontSize="{StaticResource YaapicFontSizeCode}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.ExtraHeaders, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+    <CheckBox Content="{x:Bind loc:Strings.JwtFieldAddIssuedAt}" IsChecked="{x:Bind ViewModel.AddIssuedAt, Mode=TwoWay}"/>
+    <NumberBox x:Name="ExpiresBox" Header="{x:Bind loc:Strings.JwtFieldExpiresInSeconds}" Minimum="0" SmallChange="60"
+               SpinButtonPlacementMode="Compact" ValueChanged="OnExpiresChanged"/>
+
+    <ComboBox x:Name="PlacementBox" Header="{x:Bind loc:Strings.JwtFieldPlacement}" MinWidth="200" SelectionChanged="OnPlacementChanged">
+      <ComboBoxItem Content="{x:Bind loc:Strings.JwtPlacementHeader}"/>
+      <ComboBoxItem Content="{x:Bind loc:Strings.JwtPlacementQuery}"/>
+    </ComboBox>
+    <TextBox Header="{x:Bind loc:Strings.JwtFieldHeaderPrefix}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.HeaderPrefix, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.ShowHeaderPrefix), Mode=OneWay}"/>
+    <TextBox Header="{x:Bind loc:Strings.JwtFieldQueryParameterName}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.QueryParameterName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.ShowQueryParameter), Mode=OneWay}"/>
+
+    <ItemsControl ItemsSource="{x:Bind ViewModel.Hints, Mode=OneWay}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="x:String">
+          <InfoBar Severity="Warning" IsOpen="True" IsClosable="False" Message="{x:Bind}" Margin="0,0,0,8"/>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </StackPanel>
+</UserControl>

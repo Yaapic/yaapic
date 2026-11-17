@@ -1,0 +1,29 @@
+<UserControl
+    x:Class="Yaapic.App.WinUI.Views.AwsV4EditorView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:Yaapic.Localization">
+  <StackPanel Spacing="12">
+    <TextBox Header="{x:Bind loc:Strings.AwsFieldAccessKeyId}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.AccessKeyId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    <PasswordBox Header="{x:Bind loc:Strings.AwsFieldSecretAccessKey}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+                 Password="{x:Bind ViewModel.SecretAccessKey, Mode=TwoWay}"/>
+    <PasswordBox Header="{x:Bind loc:Strings.AwsFieldSessionToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+                 Password="{x:Bind ViewModel.SessionToken, Mode=TwoWay}"/>
+    <TextBox Header="{x:Bind loc:Strings.AwsFieldRegion}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.Region, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+    <TextBox Header="{x:Bind loc:Strings.AwsFieldService}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+             BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
+             Text="{x:Bind ViewModel.Service, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+
+    <ItemsControl ItemsSource="{x:Bind ViewModel.Hints, Mode=OneWay}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="x:String">
+          <InfoBar Severity="Warning" IsOpen="True" IsClosable="False" Message="{x:Bind}" Margin="0,0,0,8"/>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </StackPanel>
+</UserControl>
