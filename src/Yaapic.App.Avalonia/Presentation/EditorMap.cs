@@ -70,6 +70,10 @@ public static partial class EditorMap
         AuthKind.Basic => 1,
         AuthKind.Bearer => 2,
         AuthKind.ApiKey => 3,
+        AuthKind.OAuth2 => 4,
+        AuthKind.Jwt => 5,
+        AuthKind.Digest => 6,
+        AuthKind.AwsV4 => 7,
         _ => 0,
     });
 
@@ -84,6 +88,9 @@ public static partial class EditorMap
 
     /// <summary>Converts an authentication kind to <see langword="true"/> for API key authentication.</summary>
     public static FuncValueConverter<AuthKind, bool> IsApiKeyAuth { get; } = new(k => k == AuthKind.ApiKey);
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> for OAuth 2.0 authentication.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsOAuth2Auth { get; } = new(k => k == AuthKind.OAuth2);
 
     /// <summary>Converts an API key location to its index in the "Add to" picker (Header, Query Params).</summary>
     public static FuncValueConverter<ApiKeyLocation, int> LocationIndex { get; } = new(l => l == ApiKeyLocation.Query ? 1 : 0);

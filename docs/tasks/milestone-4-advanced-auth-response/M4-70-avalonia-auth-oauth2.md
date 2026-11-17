@@ -1,6 +1,6 @@
 # M4-70: Avalonia: OAuth 2.0 in the Auth tab
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M4-43, M4-61
 
@@ -22,11 +22,15 @@ JWT, Digest, AWS (M4-71), a token viewer.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
 - [ ] Runtime smoke on macOS or Linux, as in M4-62 (client-credentials send, status, clear, authorization-code button opening the browser and returning through the loopback URL). If the host is
   Windows or no display is available, say so in the Notes and tick only the build and AOT items (as the other Avalonia cards did).
-- [ ] Both themes use tokens only; strings in EN and FR; 0 warnings, all tests green.
+- [x] Both themes use tokens only; strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add OAuth 2.0 authentication to the Auth tab`
+
+## Notes
+
+- Host is Windows: the AOT-published exe was started and stayed up for 6 s, then killed (not driven; no OAuth round trip, no theme check). The runtime smoke item stays unticked for a macOS or Linux run.

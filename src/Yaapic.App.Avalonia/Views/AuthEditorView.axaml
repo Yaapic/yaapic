@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:req="using:Yaapic.ViewModels.Requests"
              xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+             xmlns:v="using:Yaapic.App.Avalonia.Views"
              x:Class="Yaapic.App.Avalonia.Views.AuthEditorView"
              x:DataType="req:AuthEditorViewModel">
   <StackPanel Margin="16,12" Spacing="12" MaxWidth="480" HorizontalAlignment="Left">
@@ -15,6 +16,10 @@
         <ComboBoxItem Content="Basic Auth" />
         <ComboBoxItem Content="Bearer Token" />
         <ComboBoxItem Content="API Key" />
+        <ComboBoxItem Content="{x:Static loc:Strings.AuthKindOAuth2}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.AuthKindJwt}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.AuthKindDigest}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.AuthKindAwsV4}" />
       </ComboBox>
     </StackPanel>
 
@@ -58,6 +63,10 @@
           <ComboBoxItem Content="{x:Static loc:Strings.AuthLocationQuery}" />
         </ComboBox>
       </StackPanel>
+    </StackPanel>
+
+    <StackPanel IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsOAuth2Auth}}">
+      <v:OAuth2EditorView DataContext="{Binding OAuth2}" />
     </StackPanel>
   </StackPanel>
 </UserControl>
