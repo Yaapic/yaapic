@@ -12,5 +12,5 @@ public static class CertificateMap
 
     /// <summary>Converts the "a passphrase is stored" flag to the placeholder of the passphrase field.</summary>
     public static FuncValueConverter<bool, string?> PassphrasePlaceholder { get; } =
-        new(hasPassphrase => hasPassphrase ? Strings.CertificatesKeepPassphrase : "");
+        new(hasPassphrase => hasPassphrase ? Strings.CertificatesKeepCurrent : "");
 }

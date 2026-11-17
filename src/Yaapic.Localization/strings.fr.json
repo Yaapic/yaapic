@@ -488,7 +488,7 @@
   "certificates.moveUp": "Monter",
   "certificates.moveDown": "Descendre",
   "certificates.hostPatternPlaceholder": "api.example.com ou *.example.com:8443",
-  "certificates.keepPassphrase": "Laisser vide pour conserver l'actuelle",
+  "certificates.keepCurrent": "Laisser vide pour conserver l'actuelle",
   "certificates.selectHint": "Ajoutez un certificat ou sélectionnez-en un pour le modifier.",
   "certificates.formatPfx": "PFX",
   "certificates.formatPem": "PEM",

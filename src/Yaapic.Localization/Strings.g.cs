@@ -202,7 +202,7 @@ public static class Strings
     public static string CertificatesHostPatternPlaceholder => Localizer.Pick("api.example.com or *.example.com:8443", "api.example.com ou *.example.com:8443");
 
     /// <summary>Leave empty to keep the current one</summary>
-    public static string CertificatesKeepPassphrase => Localizer.Pick("Leave empty to keep the current one", "Laisser vide pour conserver l'actuelle");
+    public static string CertificatesKeepCurrent => Localizer.Pick("Leave empty to keep the current one", "Laisser vide pour conserver l'actuelle");
 
     /// <summary>Move down</summary>
     public static string CertificatesMoveDown => Localizer.Pick("Move down", "Descendre");

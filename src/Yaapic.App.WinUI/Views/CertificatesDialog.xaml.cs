@@ -104,7 +104,7 @@ public sealed partial class CertificatesDialog : ContentDialog
 
     private bool IsVaultNotUnlocked(VaultState state) => state != VaultState.Unlocked;
 
-    private string PassphrasePlaceholder(bool hasPassphrase) => hasPassphrase ? Strings.CertificatesKeepPassphrase : "";
+    private string PassphrasePlaceholder(bool hasPassphrase) => hasPassphrase ? Strings.CertificatesKeepCurrent : "";
 
     // Keeps the dialog clear of the title bar when the window is small.
     private void Fit()
