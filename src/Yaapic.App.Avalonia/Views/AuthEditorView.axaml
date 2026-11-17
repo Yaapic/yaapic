@@ -27,7 +27,7 @@
                Foreground="{DynamicResource YaapicTextTertiaryBrush}"
                IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsNoAuth}}" />
 
-    <StackPanel Spacing="12" IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsBasicAuth}}">
+    <StackPanel Spacing="12" IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsUserPasswordAuth}}">
       <StackPanel Spacing="6">
         <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.AuthUsername}" />
         <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding Username, Mode=TwoWay}" />
@@ -38,6 +38,10 @@
                  Text="{Binding Password, Mode=TwoWay}" />
       </StackPanel>
     </StackPanel>
+
+    <TextBlock Classes="bodySmall" TextWrapping="Wrap" Text="{x:Static loc:Strings.AuthDigestHint}"
+               Foreground="{DynamicResource YaapicTextTertiaryBrush}"
+               IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsDigestAuth}}" />
 
     <StackPanel Spacing="6" IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsBearerAuth}}">
       <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.AuthToken}" />
@@ -67,6 +71,14 @@
 
     <StackPanel IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsOAuth2Auth}}">
       <v:OAuth2EditorView DataContext="{Binding OAuth2}" />
+    </StackPanel>
+
+    <StackPanel IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsJwtAuth}}">
+      <v:JwtEditorView DataContext="{Binding Jwt}" />
+    </StackPanel>
+
+    <StackPanel IsVisible="{Binding Kind, Converter={x:Static p:EditorMap.IsAwsV4Auth}}">
+      <v:AwsV4EditorView DataContext="{Binding AwsV4}" />
     </StackPanel>
   </StackPanel>
 </UserControl>

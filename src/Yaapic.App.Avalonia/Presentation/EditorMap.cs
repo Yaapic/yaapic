@@ -89,6 +89,18 @@ public static partial class EditorMap
     /// <summary>Converts an authentication kind to <see langword="true"/> for API key authentication.</summary>
     public static FuncValueConverter<AuthKind, bool> IsApiKeyAuth { get; } = new(k => k == AuthKind.ApiKey);
 
+    /// <summary>Converts an authentication kind to <see langword="true"/> for the username and password kinds (Basic and Digest).</summary>
+    public static FuncValueConverter<AuthKind, bool> IsUserPasswordAuth { get; } = new(k => k is AuthKind.Basic or AuthKind.Digest);
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> for Digest authentication.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsDigestAuth { get; } = new(k => k == AuthKind.Digest);
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> for JWT authentication.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsJwtAuth { get; } = new(k => k == AuthKind.Jwt);
+
+    /// <summary>Converts an authentication kind to <see langword="true"/> for AWS Signature Version 4 authentication.</summary>
+    public static FuncValueConverter<AuthKind, bool> IsAwsV4Auth { get; } = new(k => k == AuthKind.AwsV4);
+
     /// <summary>Converts an authentication kind to <see langword="true"/> for OAuth 2.0 authentication.</summary>
     public static FuncValueConverter<AuthKind, bool> IsOAuth2Auth { get; } = new(k => k == AuthKind.OAuth2);
 
