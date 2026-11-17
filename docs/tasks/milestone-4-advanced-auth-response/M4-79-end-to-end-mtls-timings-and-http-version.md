@@ -1,6 +1,6 @@
 # M4-79: End-to-end tests: mTLS, timings, HTTP version, diff and code generation
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M4-39, M4-48, M4-58, M4-61
 
@@ -31,9 +31,9 @@ UI tests, authentication scenarios (M4-78).
 
 ## Acceptance criteria
 
-- [ ] The scenarios above are green and deterministic; every listener, certificate file and server is cleaned up.
-- [ ] Skip nothing silently: a scenario that needs a capability the host lacks (for example the vault protector) uses the passphrase protector, which exists everywhere.
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] The scenarios above are green and deterministic; every listener, certificate file and server is cleaned up.
+- [x] Skip nothing silently: a scenario that needs a capability the host lacks (for example the vault protector) uses the passphrase protector, which exists everywhere.
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 

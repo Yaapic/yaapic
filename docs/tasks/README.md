@@ -475,7 +475,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-76](milestone-4-advanced-auth-response/M4-76-avalonia-code-generation-window.md) | Avalonia: code generation window | unix | M4-58, M4-61 | done |
 | [M4-77](milestone-4-advanced-auth-response/M4-77-avalonia-http-version-setting.md) | Avalonia: HTTP version in the Settings tab | unix | M4-59, M4-61 | done |
 | [M4-78](milestone-4-advanced-auth-response/M4-78-end-to-end-authentication.md) | End-to-end tests: authentication | any | M4-27, M4-61 | done |
-| [M4-79](milestone-4-advanced-auth-response/M4-79-end-to-end-mtls-timings-and-http-version.md) | End-to-end tests: mTLS, timings, HTTP version, diff and code generation | any | M4-39, M4-48, M4-58, M4-61 | todo |
+| [M4-79](milestone-4-advanced-auth-response/M4-79-end-to-end-mtls-timings-and-http-version.md) | End-to-end tests: mTLS, timings, HTTP version, diff and code generation | any | M4-39, M4-48, M4-58, M4-61 | done |
 | [M4-80](milestone-4-advanced-auth-response/M4-80-milestone-docs.md) | Milestone 4 docs | any | M4-78, M4-79, M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69, M4-70, M4-71, M4-72, M4-73, M4-74, M4-75, M4-76, M4-77 | todo |
 | [M4-81](milestone-4-advanced-auth-response/M4-81-winui-visual-verification.md) | WinUI visual verification of the milestone 4 views | windows | M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69 | todo |
 
