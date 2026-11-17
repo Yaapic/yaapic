@@ -6,6 +6,7 @@ using Avalonia.Media;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Tools;
 
 namespace Yaapic.App.Avalonia.Presentation;
 
@@ -14,6 +15,15 @@ public static class BrushMap
 {
     /// <summary>Converts an HTTP method to the brush that colors its label.</summary>
     public static FuncValueConverter<HttpMethodKind, IBrush?> MethodBrush { get; } = new(m => Method(m));
+
+    /// <summary>Converts the expiry state of a JWT to the brush of the status text.</summary>
+    public static FuncValueConverter<JwtStatusKind, IBrush?> JwtStatus { get; } = new(k => Get(k switch
+    {
+        JwtStatusKind.Valid => "YaapicSuccessBrush",
+        JwtStatusKind.Expired => "YaapicDangerBrush",
+        JwtStatusKind.NotYetValid => "YaapicWarningBrush",
+        _ => "YaapicTextSecondaryBrush",
+    }));
 
     /// <summary>Converts a history row's status category and failure flag to the brush of its status text.</summary>
     public static FuncMultiValueConverter<object?, IBrush?> HistoryStatus { get; } = new(values =>

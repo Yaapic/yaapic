@@ -21,6 +21,7 @@ public sealed partial class MainWindow : Window
     private ShellViewModel? _shellSubscribed;
     private bool _vaultOpen;
     private bool _updatesOpen;
+    private bool _jwtOpen;
     private const double ConsoleReservedHeight = 300;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
@@ -157,6 +158,7 @@ public sealed partial class MainWindow : Window
         if (_shellSubscribed is not null)
         {
             _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
+            _shellSubscribed.JwtDecoderRequested -= OnJwtDecoderRequested;
             _shellSubscribed.Vault.SetupRequested -= OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested -= OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested -= OnUpdatesRequested;
@@ -171,6 +173,7 @@ public sealed partial class MainWindow : Window
         if (_shellSubscribed is not null)
         {
             _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
+            _shellSubscribed.JwtDecoderRequested += OnJwtDecoderRequested;
             _shellSubscribed.Vault.SetupRequested += OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested += OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested += OnUpdatesRequested;
@@ -194,6 +197,24 @@ public sealed partial class MainWindow : Window
         finally
         {
             _vaultOpen = false;
+        }
+    }
+
+    private async void OnJwtDecoderRequested(object? sender, EventArgs e)
+    {
+        if (Shell is not { } shell || _jwtOpen)
+        {
+            return;
+        }
+
+        _jwtOpen = true;
+        try
+        {
+            await new Views.JwtDecoderWindow(shell.CreateJwtDecoder()).ShowDialog(this);
+        }
+        finally
+        {
+            _jwtOpen = false;
         }
     }
 

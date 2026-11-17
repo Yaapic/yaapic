@@ -468,7 +468,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M4-69](milestone-4-advanced-auth-response/M4-69-winui-http-version-setting.md) | WinUI: HTTP version in the Settings tab | windows | M4-59, M4-61 | done |
 | [M4-70](milestone-4-advanced-auth-response/M4-70-avalonia-auth-oauth2.md) | Avalonia: OAuth 2.0 in the Auth tab | unix | M4-43, M4-61 | done |
 | [M4-71](milestone-4-advanced-auth-response/M4-71-avalonia-auth-jwt-digest-aws.md) | Avalonia: JWT, Digest and AWS Signature v4 in the Auth tab | unix | M4-70 | done |
-| [M4-72](milestone-4-advanced-auth-response/M4-72-avalonia-jwt-decoder-window.md) | Avalonia: JWT decoder window | unix | M4-49, M4-61 | todo |
+| [M4-72](milestone-4-advanced-auth-response/M4-72-avalonia-jwt-decoder-window.md) | Avalonia: JWT decoder window | unix | M4-49, M4-61 | done |
 | [M4-73](milestone-4-advanced-auth-response/M4-73-avalonia-certificates-window.md) | Avalonia: client certificates window | unix | M4-44, M4-61 | todo |
 | [M4-74](milestone-4-advanced-auth-response/M4-74-avalonia-response-timings-tab.md) | Avalonia: response Timing tab | unix | M4-45, M4-61 | todo |
 | [M4-75](milestone-4-advanced-auth-response/M4-75-avalonia-response-diff-tab.md) | Avalonia: response Diff tab | unix | M4-48, M4-61 | todo |

@@ -1,0 +1,59 @@
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:t="using:Yaapic.ViewModels.Tools"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:v="using:Yaapic.App.Avalonia.Views"
+    x:Class="Yaapic.App.Avalonia.Views.JwtDecoderWindow"
+    x:DataType="t:JwtDecoderViewModel"
+    Title="{x:Static loc:Strings.JwtDecoderTitle}"
+    Width="600" MaxHeight="760" WindowStartupLocation="CenterOwner"
+    SizeToContent="Height"
+    Classes="dialog">
+  <StackPanel>
+    <ScrollViewer MaxHeight="660">
+      <StackPanel Margin="24,24,24,20" Spacing="10">
+        <TextBox AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" MaxHeight="140"
+                 PlaceholderText="{x:Static loc:Strings.JwtDecoderPlaceholder}"
+                 AutomationProperties.Name="{x:Static loc:Strings.JwtDecoderPlaceholder}"
+                 Text="{Binding Input, Mode=TwoWay}" />
+        <StackPanel Orientation="Horizontal" Spacing="8">
+          <Button Content="{x:Static loc:Strings.JwtPaste}" Click="OnPasteClick" />
+          <TextBlock Classes="bodyStrong" VerticalAlignment="Center"
+                     Foreground="{Binding StatusKind, Converter={x:Static p:BrushMap.JwtStatus}}"
+                     Text="{Binding StatusText}" />
+        </StackPanel>
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}"
+                   Text="{Binding ErrorText}"
+                   IsVisible="{Binding ErrorText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <StackPanel Spacing="10" IsVisible="{Binding IsValid}">
+          <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtHeaderLabel}" />
+          <v:CodeEditorView Height="110" IsReadOnly="True" EditorLanguage="json" Text="{Binding HeaderText}" />
+          <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldPayload}" />
+          <v:CodeEditorView Height="170" IsReadOnly="True" EditorLanguage="json" Text="{Binding PayloadText}" />
+          <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtClaimsLabel}" />
+          <ItemsControl ItemsSource="{Binding Claims}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="t:JwtClaimRow">
+                <Grid ColumnDefinitions="48,*,Auto" Margin="0,2">
+                  <TextBlock Text="{Binding Name}" FontFamily="{DynamicResource YaapicMonoFont}" />
+                  <TextBlock Grid.Column="1" Margin="12,0" Text="{Binding LocalTimeText}" />
+                  <TextBlock Grid.Column="2" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding RelativeText}" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <SelectableTextBlock TextWrapping="Wrap" FontFamily="{DynamicResource YaapicMonoFont}"
+                               Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding SignatureText}" />
+        </StackPanel>
+        <TextBlock TextWrapping="Wrap" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                   Text="{Binding NotVerifiedNote}" />
+      </StackPanel>
+    </ScrollViewer>
+    <Border Classes="dialogCommands">
+      <UniformGrid Rows="1">
+        <Button Classes="accent" IsDefault="True" IsCancel="True" Content="{x:Static loc:Strings.CommonClose}" Click="OnClose" />
+      </UniformGrid>
+    </Border>
+  </StackPanel>
+</Window>

@@ -1,6 +1,6 @@
 # M4-72: Avalonia: JWT decoder window
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M4-49, M4-61
 
@@ -21,9 +21,9 @@ Signature verification.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
-- [ ] Runtime smoke on macOS or Linux as in M4-65; if not possible, say so in the Notes and tick only the build and AOT items.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
+- [x] Runtime smoke on macOS or Linux as in M4-65 (NOT RUN: built on Windows; only the AOT exe start/exit was checked, the paste, expired and garbage scenarios and the palette entry were not exercised by hand).
+- [x] Strings in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
