@@ -1,6 +1,6 @@
 # M5-04: Core: import model, report and importer contract
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-01
 
@@ -39,9 +39,9 @@ Importers, the applier (M5-09), the registry (M5-10).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Import`: `ImportReport` counts, `HasProblems`, `AddOnce` (same message twice adds one, same message with another severity adds two), `ImportPath.Join` (empty parts, no parts),
+- [x] Tests in `Yaapic.Core.Tests/Import`: `ImportReport` counts, `HasProblems`, `AddOnce` (same message twice adds one, same message with another severity adds two), `ImportPath.Join` (empty parts, no parts),
   `ImportBundle.RequestCount` and `FolderCount` on a nested tree plus unfiled requests, `ImportContext.NewId` order with `SequentialIds`, `ImportInput.FromText`, `Single` on empty files throws.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
