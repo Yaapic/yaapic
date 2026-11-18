@@ -1,6 +1,6 @@
 # M5-09: Core: import applier
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04
 
@@ -35,10 +35,10 @@ Reading files, picking the importer (M5-10), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Import/ImportApplierTests` with the in-memory stores: a nested bundle lands with the right parents (check through `LoadTreeAsync`); unfiled requests; name clash `Name (2)` and `Name (3)` ignoring case, with the `Info` entry; environment clash;
+- [x] Tests in `Yaapic.Core.Tests/Import/ImportApplierTests` with the in-memory stores: a nested bundle lands with the right parents (check through `LoadTreeAsync`); unfiled requests; name clash `Name (2)` and `Name (3)` ignoring case, with the `Info` entry; environment clash;
   globals merge (existing key kept, new key added, `Info` count); locked vault drops secret values and adds one `Warning` with the count, unlocked vault passes the rows through unchanged (collection folder, environment, globals); nested folder secret rows are always blanked;
   a store that throws `StorageException` on one request gives `Skipped` and the other requests still land; a failing folder skips its subtree with a single entry; cancellation throws `OperationCanceledException`; the outcome counts; the bundle's own entries come first in the outcome report.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

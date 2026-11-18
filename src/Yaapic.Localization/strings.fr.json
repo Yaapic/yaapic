@@ -519,5 +519,10 @@
   "import.invalidJson": "Le fichier n'est pas du JSON valide : {0}",
   "import.invalidYaml": "Le fichier n'est pas du YAML valide : {0}",
   "import.methodUnsupported": "La méthode HTTP {0} n'est pas prise en charge, la requête a été ignorée.",
-  "import.dynamicVariableUnsupported": "La variable dynamique {{{{{0}}}}} n'existe pas dans Yaapic et a été laissée telle quelle."
+  "import.dynamicVariableUnsupported": "La variable dynamique {{{{{0}}}}} n'existe pas dans Yaapic et a été laissée telle quelle.",
+  "import.secretsDropped": "{0} valeurs secrètes n'ont pas été importées car le coffre est verrouillé. Déverrouillez le coffre et saisissez-les à nouveau.",
+  "import.renamed": "\"{0}\" existe déjà, l'import a été nommé \"{1}\".",
+  "import.globalsSkipped": "{0} variables globales existent déjà et n'ont pas été modifiées.",
+  "import.saveFailed": "Impossible d'enregistrer \"{0}\" : {1}",
+  "import.subtreeSkipped": "\"{0}\" n'a pas pu être enregistré, ses {1} requêtes ont été ignorées."
 }

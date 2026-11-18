@@ -639,6 +639,10 @@ public static class Strings
     public static string ImportDynamicVariableUnsupported(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.", "La variable dynamique {{{{{0}}}}} n'existe pas dans Yaapic et a été laissée telle quelle."), a0);
 
+    /// <summary>{0} global variables already exist and were left unchanged.</summary>
+    public static string ImportGlobalsSkipped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} global variables already exist and were left unchanged.", "{0} variables globales existent déjà et n'ont pas été modifiées."), a0);
+
     /// <summary>The file is not valid JSON: {0}</summary>
     public static string ImportInvalidJson(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid JSON: {0}", "Le fichier n'est pas du JSON valide : {0}"), a0);
@@ -650,6 +654,22 @@ public static class Strings
     /// <summary>The HTTP method {0} is not supported, the request was skipped.</summary>
     public static string ImportMethodUnsupported(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The HTTP method {0} is not supported, the request was skipped.", "La méthode HTTP {0} n'est pas prise en charge, la requête a été ignorée."), a0);
+
+    /// <summary>"{0}" already exists, the import was named "{1}".</summary>
+    public static string ImportRenamed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" already exists, the import was named \"{1}\".", "\"{0}\" existe déjà, l'import a été nommé \"{1}\"."), a0, a1);
+
+    /// <summary>Could not save "{0}": {1}</summary>
+    public static string ImportSaveFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Could not save \"{0}\": {1}", "Impossible d'enregistrer \"{0}\" : {1}"), a0, a1);
+
+    /// <summary>{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.</summary>
+    public static string ImportSecretsDropped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.", "{0} valeurs secrètes n'ont pas été importées car le coffre est verrouillé. Déverrouillez le coffre et saisissez-les à nouveau."), a0);
+
+    /// <summary>"{0}" could not be saved, its {1} requests were skipped.</summary>
+    public static string ImportSubtreeSkipped(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" could not be saved, its {1} requests were skipped.", "\"{0}\" n'a pas pu être enregistré, ses {1} requêtes ont été ignorées."), a0, a1);
 
     /// <summary>Time claims</summary>
     public static string JwtClaimsLabel => Localizer.Pick("Time claims", "Dates des claims");

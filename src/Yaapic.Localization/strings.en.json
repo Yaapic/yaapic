@@ -519,5 +519,10 @@
   "import.invalidJson": "The file is not valid JSON: {0}",
   "import.invalidYaml": "The file is not valid YAML: {0}",
   "import.methodUnsupported": "The HTTP method {0} is not supported, the request was skipped.",
-  "import.dynamicVariableUnsupported": "The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written."
+  "import.dynamicVariableUnsupported": "The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.",
+  "import.secretsDropped": "{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.",
+  "import.renamed": "\"{0}\" already exists, the import was named \"{1}\".",
+  "import.globalsSkipped": "{0} global variables already exist and were left unchanged.",
+  "import.saveFailed": "Could not save \"{0}\": {1}",
+  "import.subtreeSkipped": "\"{0}\" could not be saved, its {1} requests were skipped."
 }
