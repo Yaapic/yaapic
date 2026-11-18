@@ -730,6 +730,32 @@ public static class Strings
     public static string ImportNothingFound(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No request, environment or variable was found in this {0} source.", "Aucune requête, aucun environnement ni aucune variable n'a été trouvé dans cette source {0}."), a0);
 
+    /// <summary>{0}: the reference "{1}" does not exist.</summary>
+    public static string ImportOpenapiBrokenRef(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" does not exist.", "{0} : la référence \"{1}\" n'existe pas."), a0, a1);
+
+    /// <summary>OpenAPI</summary>
+    public static string ImportOpenapiDisplayName => Localizer.Pick("OpenAPI", "OpenAPI");
+
+    /// <summary>{0}: the external reference "{1}" is not followed.</summary>
+    public static string ImportOpenapiExternalRef(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the external reference \"{1}\" is not followed.", "{0} : la référence externe \"{1}\" n'est pas suivie."), a0, a1);
+
+    /// <summary>This file is not an OpenAPI document (no "openapi" version or "paths").</summary>
+    public static string ImportOpenapiNotADocument => Localizer.Pick("This file is not an OpenAPI document (no \"openapi\" version or \"paths\").", "Ce fichier n'est pas un document OpenAPI (ni version \"openapi\" ni \"paths\").");
+
+    /// <summary>{0}: the reference "{1}" is circular.</summary>
+    public static string ImportOpenapiRefCycle(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" is circular.", "{0} : la référence \"{1}\" est circulaire."), a0, a1);
+
+    /// <summary>OpenAPI version {0} is not supported.</summary>
+    public static string ImportOpenapiVersion(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("OpenAPI version {0} is not supported.", "La version {0} d'OpenAPI n'est pas prise en charge."), a0);
+
+    /// <summary>OpenAPI version {0} is newer than the versions Yaapic knows; it is read as 3.1.</summary>
+    public static string ImportOpenapiVersionUntested(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("OpenAPI version {0} is newer than the versions Yaapic knows; it is read as 3.1.", "La version {0} d'OpenAPI est plus récente que celles connues de Yaapic ; elle est lue comme la 3.1."), a0);
+
     /// <summary>Yaapic sorts folders and requests by name; the order of the source is not kept.</summary>
     public static string ImportOrderLost => Localizer.Pick("Yaapic sorts folders and requests by name; the order of the source is not kept.", "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.");
 

@@ -1,6 +1,6 @@
 # M5-19: Core: OpenAPI document reading and `$ref` resolution
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05
 
@@ -29,9 +29,9 @@ Operations (M5-20), Swagger 2.0 (M5-24).
 
 ## Acceptance criteria
 
-- [ ] Tests: sniff for JSON and YAML 3.0, 3.1, Swagger 2.0, a file with only `paths`, an unrelated JSON; parse with a fake `IYamlTreeReader` for YAML input; missing `paths` throws; `4.0.0` throws; collection name from `info.title` with fallback; `$ref` cases: simple, nested chain, pointer with `~1` and `%20`, external file ref, URL ref, missing target,
+- [x] Tests: sniff for JSON and YAML 3.0, 3.1, Swagger 2.0, a file with only `paths`, an unrelated JSON; parse with a fake `IYamlTreeReader` for YAML input; missing `paths` throws; `4.0.0` throws; collection name from `info.title` with fallback; `$ref` cases: simple, nested chain, pointer with `~1` and `%20`, external file ref, URL ref, missing target,
   cycle (A refers to B refers to A), sibling keys ignored, a non-ref node returned as is.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
