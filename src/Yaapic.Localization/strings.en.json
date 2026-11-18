@@ -533,5 +533,11 @@
   "import.fileTooLarge": "{0} is larger than 50 MB and cannot be imported.",
   "import.folderTooLarge": "This folder has more than 5000 files or 200 MB of data.",
   "import.folderEmpty": "No importable file in {0}.",
-  "import.fileUnreadable": "Cannot read {0}: {1}"
+  "import.fileUnreadable": "Cannot read {0}: {1}",
+  "import.postman.notACollection": "This file is not a Postman collection (no \"info\" or \"item\").",
+  "import.postman.itemUnknown": "\"{0}\" is neither a folder nor a request and was skipped.",
+  "import.orderLost": "Yaapic sorts folders and requests by name; the order of the source is not kept.",
+  "import.postman.droppedExamples": "Saved response examples ({0}) were not imported.",
+  "import.descriptionsDropped": "Descriptions of {0} requests were not imported.",
+  "import.postman.displayName": "Postman collection"
 }

@@ -635,6 +635,10 @@ public static class Strings
     /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
     public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
 
+    /// <summary>Descriptions of {0} requests were not imported.</summary>
+    public static string ImportDescriptionsDropped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Descriptions of {0} requests were not imported.", "Les descriptions de {0} requêtes n'ont pas été importées."), a0);
+
     /// <summary>The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.</summary>
     public static string ImportDynamicVariableUnsupported(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.", "La variable dynamique {{{{{0}}}}} n'existe pas dans Yaapic et a été laissée telle quelle."), a0);
@@ -684,6 +688,23 @@ public static class Strings
     /// <summary>No request, environment or variable was found in this {0} source.</summary>
     public static string ImportNothingFound(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No request, environment or variable was found in this {0} source.", "Aucune requête, aucun environnement ni aucune variable n'a été trouvé dans cette source {0}."), a0);
+
+    /// <summary>Yaapic sorts folders and requests by name; the order of the source is not kept.</summary>
+    public static string ImportOrderLost => Localizer.Pick("Yaapic sorts folders and requests by name; the order of the source is not kept.", "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.");
+
+    /// <summary>Postman collection</summary>
+    public static string ImportPostmanDisplayName => Localizer.Pick("Postman collection", "Collection Postman");
+
+    /// <summary>Saved response examples ({0}) were not imported.</summary>
+    public static string ImportPostmanDroppedExamples(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved response examples ({0}) were not imported.", "Les exemples de réponses enregistrés ({0}) n'ont pas été importés."), a0);
+
+    /// <summary>"{0}" is neither a folder nor a request and was skipped.</summary>
+    public static string ImportPostmanItemUnknown(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" is neither a folder nor a request and was skipped.", "\"{0}\" n'est ni un dossier ni une requête et a été ignoré."), a0);
+
+    /// <summary>This file is not a Postman collection (no "info" or "item").</summary>
+    public static string ImportPostmanNotACollection => Localizer.Pick("This file is not a Postman collection (no \"info\" or \"item\").", "Ce fichier n'est pas une collection Postman (ni \"info\" ni \"item\").");
 
     /// <summary>"{0}" already exists, the import was named "{1}".</summary>
     public static string ImportRenamed(object? a0, object? a1) =>

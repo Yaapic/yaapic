@@ -1,6 +1,6 @@
 # M5-12: Core: Postman collection import, folders, requests, URLs and headers
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05, M5-06
 
@@ -37,10 +37,10 @@ Bodies (M5-13), auth (M5-14), scripts, variables (M5-15), environments (M5-16).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Import/Postman/PostmanCollectionImporterTests` with inline JSON (raw string literals) and `SequentialIds`: sniff cases (certain, possible, none, a non-JSON text); the wrapper `{"collection": ...}`; a collection with two folder levels and requests (names, parents, ids in walk order);
+- [x] Tests in `Yaapic.Core.Tests/Import/Postman/PostmanCollectionImporterTests` with inline JSON (raw string literals) and `SequentialIds`: sniff cases (certain, possible, none, a non-JSON text); the wrapper `{"collection": ...}`; a collection with two folder levels and requests (names, parents, ids in walk order);
   string `request` form; URL as string, as object with `raw`, as object composed from `protocol/host/port/path` (path elements as strings and as `{value}`), with `query` that overrides the raw query and a disabled param, with `variable` (`:id` substituted, `:name` without value becomes `{{name}}`);
   headers with a disabled one and a string form; `TRACE` skipped with the entry; an unknown item skipped; `$randomUUID` rewritten and `$randomFirstName` warned once; the order `Info` appears once; the dropped examples and descriptions entries; a missing `info` throws `ImportException`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

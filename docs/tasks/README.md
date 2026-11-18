@@ -532,7 +532,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-09](milestone-5-import-export/M5-09-core-import-applier.md) | Core: import applier | any | M5-04 | done |
 | [M5-10](milestone-5-import-export/M5-10-core-importer-registry-and-service.md) | Core: importer registry, import service and input reader port | any | M5-04, M5-09 | done |
 | [M5-11](milestone-5-import-export/M5-11-infra-import-input-reader.md) | Infrastructure: import input reader (file and folder) | any | M5-10 | done |
-| [M5-12](milestone-5-import-export/M5-12-core-postman-collection-requests.md) | Core: Postman collection import, folders, requests, URLs and headers | any | M5-05, M5-06 | todo |
+| [M5-12](milestone-5-import-export/M5-12-core-postman-collection-requests.md) | Core: Postman collection import, folders, requests, URLs and headers | any | M5-05, M5-06 | done |
 | [M5-13](milestone-5-import-export/M5-13-core-postman-bodies.md) | Core: Postman import, request bodies | any | M5-12 | todo |
 | [M5-14](milestone-5-import-export/M5-14-core-postman-auth.md) | Core: Postman import, authentication | any | M5-12 | todo |
 | [M5-15](milestone-5-import-export/M5-15-core-postman-scripts-and-variables.md) | Core: Postman import, scripts and collection variables | any | M5-12 | todo |

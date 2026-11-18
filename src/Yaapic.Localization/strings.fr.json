@@ -533,5 +533,11 @@
   "import.fileTooLarge": "{0} dépasse 50 Mo et ne peut pas être importé.",
   "import.folderTooLarge": "Ce dossier contient plus de 5000 fichiers ou 200 Mo de données.",
   "import.folderEmpty": "Aucun fichier importable dans {0}.",
-  "import.fileUnreadable": "Impossible de lire {0} : {1}"
+  "import.fileUnreadable": "Impossible de lire {0} : {1}",
+  "import.postman.notACollection": "Ce fichier n'est pas une collection Postman (ni \"info\" ni \"item\").",
+  "import.postman.itemUnknown": "\"{0}\" n'est ni un dossier ni une requête et a été ignoré.",
+  "import.orderLost": "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.",
+  "import.postman.droppedExamples": "Les exemples de réponses enregistrés ({0}) n'ont pas été importés.",
+  "import.descriptionsDropped": "Les descriptions de {0} requêtes n'ont pas été importées.",
+  "import.postman.displayName": "Collection Postman"
 }
