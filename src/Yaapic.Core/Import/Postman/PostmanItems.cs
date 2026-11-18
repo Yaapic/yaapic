@@ -98,14 +98,22 @@ internal sealed class PostmanItems(ImportContext context)
             _descriptions++;
         }
 
+        var headers = ReadHeaders(request["header"], path);
+        var contentType = headers.Find(h => h.Enabled && h.Key.Equals("Content-Type", StringComparison.OrdinalIgnoreCase))?.Value;
+        var (body, addedContentType) = PostmanBodies.Map(request["body"], path, context.Report, contentType);
+        if (addedContentType is not null)
+        {
+            headers.Add(new KeyValueEntry("Content-Type", addedContentType));
+        }
+
         return new HttpRequestDefinition(
             context.NewId(),
             ImportHelpers.SafeName(item.GetString("name"), ImportHelpers.DescribeRequest(method, url)),
             method,
             url,
             query,
-            ReadHeaders(request["header"], path),
-            RequestBody.None,
+            headers,
+            body,
             RequestAuth.None,
             RequestSettings.Default,
             ScriptSet.Empty);

@@ -539,5 +539,9 @@
   "import.orderLost": "Yaapic sorts folders and requests by name; the order of the source is not kept.",
   "import.postman.droppedExamples": "Saved response examples ({0}) were not imported.",
   "import.descriptionsDropped": "Descriptions of {0} requests were not imported.",
+  "import.postman.fileMissing": "The file field \"{1}\" has no path and was dropped.",
+  "import.postman.graphQl": "The GraphQL body was converted to a JSON body.",
+  "import.postman.bodyModeUnsupported": "The body mode \"{1}\" is not supported; the request has no body.",
+  "import.fileReference": "This request reads the local file \"{1}\" when it is sent. Check the path.",
   "import.postman.displayName": "Postman collection"
 }

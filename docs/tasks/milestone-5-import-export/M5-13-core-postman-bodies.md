@@ -1,6 +1,6 @@
 # M5-13: Core: Postman import, request bodies
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-12
 
@@ -33,9 +33,9 @@ Auth, scripts, variables.
 
 ## Acceptance criteria
 
-- [ ] Tests (`PostmanBodiesTests` and importer-level): each mode with exact expected `RequestBody` values, the language mapping including the header fallback, a disabled urlencoded field, a file field with `src` string and array, a file field without `src` (dropped + Warning), `file` mode, GraphQL with and without variables and
+- [x] Tests (`PostmanBodiesTests` and importer-level): each mode with exact expected `RequestBody` values, the language mapping including the header fallback, a disabled urlencoded field, a file field with `src` string and array, a file field without `src` (dropped + Warning), `file` mode, GraphQL with and without variables and
   with invalid variables, an unknown mode, `$randomUUID` in a raw body, the file-reference Warning count, the added `Content-Type` for GraphQL only when absent.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

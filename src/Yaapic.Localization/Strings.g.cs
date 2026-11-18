@@ -651,6 +651,10 @@ public static class Strings
     public static string ImportFileNotFound(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("File not found: {0}", "Fichier introuvable : {0}"), a0);
 
+    /// <summary>This request reads the local file "{1}" when it is sent. Check the path.</summary>
+    public static string ImportFileReference(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("This request reads the local file \"{1}\" when it is sent. Check the path.", "Cette requête lit le fichier local \"{1}\" à l'envoi. Vérifiez le chemin."), a0, a1);
+
     /// <summary>{0} is larger than 50 MB and cannot be imported.</summary>
     public static string ImportFileTooLarge(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} is larger than 50 MB and cannot be imported.", "{0} dépasse 50 Mo et ne peut pas être importé."), a0);
@@ -692,12 +696,23 @@ public static class Strings
     /// <summary>Yaapic sorts folders and requests by name; the order of the source is not kept.</summary>
     public static string ImportOrderLost => Localizer.Pick("Yaapic sorts folders and requests by name; the order of the source is not kept.", "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.");
 
+    /// <summary>The body mode "{1}" is not supported; the request has no body.</summary>
+    public static string ImportPostmanBodyModeUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The body mode \"{1}\" is not supported; the request has no body.", "Le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps."), a0, a1);
+
     /// <summary>Postman collection</summary>
     public static string ImportPostmanDisplayName => Localizer.Pick("Postman collection", "Collection Postman");
 
     /// <summary>Saved response examples ({0}) were not imported.</summary>
     public static string ImportPostmanDroppedExamples(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved response examples ({0}) were not imported.", "Les exemples de réponses enregistrés ({0}) n'ont pas été importés."), a0);
+
+    /// <summary>The file field "{1}" has no path and was dropped.</summary>
+    public static string ImportPostmanFileMissing(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file field \"{1}\" has no path and was dropped.", "Le champ fichier \"{1}\" n'a pas de chemin et a été ignoré."), a0, a1);
+
+    /// <summary>The GraphQL body was converted to a JSON body.</summary>
+    public static string ImportPostmanGraphQl => Localizer.Pick("The GraphQL body was converted to a JSON body.", "Le corps GraphQL a été converti en corps JSON.");
 
     /// <summary>"{0}" is neither a folder nor a request and was skipped.</summary>
     public static string ImportPostmanItemUnknown(object? a0) =>

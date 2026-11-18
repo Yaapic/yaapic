@@ -539,5 +539,9 @@
   "import.orderLost": "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.",
   "import.postman.droppedExamples": "Les exemples de réponses enregistrés ({0}) n'ont pas été importés.",
   "import.descriptionsDropped": "Les descriptions de {0} requêtes n'ont pas été importées.",
+  "import.postman.fileMissing": "Le champ fichier \"{1}\" n'a pas de chemin et a été ignoré.",
+  "import.postman.graphQl": "Le corps GraphQL a été converti en corps JSON.",
+  "import.postman.bodyModeUnsupported": "Le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps.",
+  "import.fileReference": "Cette requête lit le fichier local \"{1}\" à l'envoi. Vérifiez le chemin.",
   "import.postman.displayName": "Collection Postman"
 }
