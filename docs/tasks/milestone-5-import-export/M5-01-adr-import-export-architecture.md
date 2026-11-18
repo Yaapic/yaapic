@@ -1,6 +1,6 @@
 # M5-01: ADR 0016: import and export architecture
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -61,9 +61,9 @@ Code, UI.
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0016-import-export-architecture.md` contains every decision above (status Accepted, options considered: typed DTOs per format versus `DataNode`, one importer per file versus
+- [x] `docs/adr/0016-import-export-architecture.md` contains every decision above (status Accepted, options considered: typed DTOs per format versus `DataNode`, one importer per file versus
   per format, rollback versus best effort apply); the ADR index in `docs/adr/README.md` lists it.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 
