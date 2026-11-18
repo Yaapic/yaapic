@@ -517,5 +517,7 @@
   "relative.days": "{0} jours",
 
   "import.invalidJson": "Le fichier n'est pas du JSON valide : {0}",
-  "import.invalidYaml": "Le fichier n'est pas du YAML valide : {0}"
+  "import.invalidYaml": "Le fichier n'est pas du YAML valide : {0}",
+  "import.methodUnsupported": "La méthode HTTP {0} n'est pas prise en charge, la requête a été ignorée.",
+  "import.dynamicVariableUnsupported": "La variable dynamique {{{{{0}}}}} n'existe pas dans Yaapic et a été laissée telle quelle."
 }

@@ -635,6 +635,10 @@ public static class Strings
     /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
     public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
 
+    /// <summary>The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.</summary>
+    public static string ImportDynamicVariableUnsupported(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.", "La variable dynamique {{{{{0}}}}} n'existe pas dans Yaapic et a été laissée telle quelle."), a0);
+
     /// <summary>The file is not valid JSON: {0}</summary>
     public static string ImportInvalidJson(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid JSON: {0}", "Le fichier n'est pas du JSON valide : {0}"), a0);
@@ -642,6 +646,10 @@ public static class Strings
     /// <summary>The file is not valid YAML: {0}</summary>
     public static string ImportInvalidYaml(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid YAML: {0}", "Le fichier n'est pas du YAML valide : {0}"), a0);
+
+    /// <summary>The HTTP method {0} is not supported, the request was skipped.</summary>
+    public static string ImportMethodUnsupported(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The HTTP method {0} is not supported, the request was skipped.", "La méthode HTTP {0} n'est pas prise en charge, la requête a été ignorée."), a0);
 
     /// <summary>Time claims</summary>
     public static string JwtClaimsLabel => Localizer.Pick("Time claims", "Dates des claims");

@@ -1,6 +1,6 @@
 # M5-06: Core: import helpers (methods, URLs, names, dynamic variables)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04
 
@@ -34,11 +34,11 @@ Format specific parsing, auth, scripts.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Import/ImportHelpersTests`: every method name in mixed case, `TRACE` and `CONNECT` and empty rejected; `SafeName` cases (newline, long name, empty); `DescribeRequest` for
+- [x] Tests in `Yaapic.Core.Tests/Import/ImportHelpersTests`: every method name in mixed case, `TRACE` and `CONNECT` and empty rejected; `SafeName` cases (newline, long name, empty); `DescribeRequest` for
   `https://api.example.com/users?x=1#top`, `{{baseUrl}}/users`, empty, a 200 character path; `SplitUrl` with query, without, with fragment, with `{{var}}` in the query; `SubstitutePathVariables` with a value, without, with a port, with `:id` in the query (untouched);
   `ContentTypeFromMime` for `application/json; charset=utf-8`, `application/vnd.api+json`, `text/xml`, `text/html`, `application/javascript`, `text/plain`, null; `IsManagedHeader` for each name and `:authority`;
   `TranslateDynamicVariables` for `$randomUUID`, `$guid`, `$randomFirstName` twice (one warning), text without variables, `{{normal}}`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
