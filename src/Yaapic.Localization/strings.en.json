@@ -546,5 +546,8 @@
   "import.authUnsupported": "Authentication type \"{1}\" is not supported; the request was imported without authentication.",
   "import.authPlainText": "Credentials of the imported requests are stored as plain text in the workspace files. Move them to secret variables.",
   "import.authInherited": "{0} requests got the authentication of their folder or collection copied onto them.",
+  "import.postman.scriptType": "The script of \"{0}\" has the type \"{1}\" (only JavaScript is supported) and was skipped.",
+  "import.scriptFinding": "{0}: {1} script, {2} (line {3}): {4}",
+  "import.scriptsReview": "{0} scripts were imported. Review them before sending: scripts run with access to your variables.",
   "import.postman.displayName": "Postman collection"
 }

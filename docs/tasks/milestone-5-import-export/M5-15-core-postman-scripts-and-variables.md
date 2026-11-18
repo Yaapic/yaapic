@@ -1,6 +1,6 @@
 # M5-15: Core: Postman import, scripts and collection variables
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-12
 
@@ -29,9 +29,9 @@ Bodies and auth; converting Postman `pm.sendRequest` flows beyond what `ScriptCo
 
 ## Acceptance criteria
 
-- [ ] Tests: pre-request and test events on the collection, a folder and a request land in the right `Scripts`; `exec` array and string forms; two prerequest events joined; disabled event skipped; non-JavaScript `script.type` skipped with the entry; a `pm.environment.set(...)` converted to `yaapic.environment.set(...)`;
+- [x] Tests: pre-request and test events on the collection, a folder and a request land in the right `Scripts`; `exec` array and string forms; two prerequest events joined; disabled event skipped; non-JavaScript `script.type` skipped with the entry; a `pm.environment.set(...)` converted to `yaapic.environment.set(...)`;
   an unsupported member (`pm.execution.skipRequest`) produces a `Warning` with member and line; the aggregated review warning appears once; empty scripts add nothing; collection variables incl. disabled, null value and a numeric value; a secret collection variable gets `IsSecret`; nested folder variables are kept.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

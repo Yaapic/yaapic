@@ -14,6 +14,7 @@ internal sealed class PostmanItems(ImportContext context)
     private int _examples;
     private int _descriptions;
     private int _inherited;
+    private int _scripts;
 
     /// <summary>Reads a description given as a string or as an object with a <c>content</c> member.</summary>
     /// <param name="node">The description node, possibly null.</param>
@@ -47,7 +48,8 @@ internal sealed class PostmanItems(ImportContext context)
                     continue;
                 }
 
-                var folder = new FolderDefinition(context.NewId(), ImportHelpers.SafeName(name, "Folder"), Text(item["description"]), []);
+                var folder = new FolderDefinition(context.NewId(), ImportHelpers.SafeName(name, "Folder"), Text(item["description"]),
+                    ReadVariables(item["variable"], itemPath, false), ReadScripts(item["event"], itemPath));
                 result.Add(new ImportFolder(folder, ReadItems(children, itemPath, depth + 1, PostmanAuth.Map(item["auth"], itemPath, context.Report) ?? inherited)));
             }
             else if (item["request"] is { IsNull: false } request)
@@ -66,9 +68,53 @@ internal sealed class PostmanItems(ImportContext context)
         return result;
     }
 
+    /// <summary>Maps the <c>event</c> scripts of an owner and counts the non-empty ones.</summary>
+    /// <param name="events">The <c>event</c> node, possibly null.</param>
+    /// <param name="path">The report path of the owner.</param>
+    /// <returns>The converted scripts.</returns>
+    internal ScriptSet ReadScripts(DataNode? events, string path)
+    {
+        var set = PostmanScripts.Map(events, path, context.Report);
+        _scripts += (set.PreRequest.IsEmpty ? 0 : 1) + (set.PostResponse.IsEmpty ? 0 : 1);
+        return set;
+    }
+
+    /// <summary>Maps a <c>variable</c> array of the collection or of a folder.</summary>
+    /// <param name="node">The <c>variable</c> node, possibly null.</param>
+    /// <param name="path">The report path of the owner.</param>
+    /// <param name="allowSecret">Whether a <c>secret</c> type sets <see cref="KeyValueEntry.IsSecret"/> (collection level only).</param>
+    /// <returns>The variables, in source order.</returns>
+    internal List<KeyValueEntry> ReadVariables(DataNode? node, string path, bool allowSecret)
+    {
+        List<KeyValueEntry> result = [];
+        if (node is not { IsArray: true })
+        {
+            return result;
+        }
+
+        foreach (var v in node.Items)
+        {
+            if (v.GetString("key") is { Length: > 0 } key)
+            {
+                result.Add(new KeyValueEntry(
+                    key,
+                    Translate(v.GetString("value") ?? "", path),
+                    v.GetBool("disabled") != true,
+                    allowSecret && v.GetString("type") == "secret"));
+            }
+        }
+
+        return result;
+    }
+
     /// <summary>Adds the report entries that are counted over the whole collection.</summary>
     internal void Finish()
     {
+        if (_scripts > 0)
+        {
+            context.Report.Warning("", Strings.ImportScriptsReview(_scripts));
+        }
+
         if (_examples > 0)
         {
             context.Report.Info("", Strings.ImportPostmanDroppedExamples(_examples));
@@ -133,7 +179,7 @@ internal sealed class PostmanItems(ImportContext context)
             body,
             auth,
             RequestSettings.Default,
-            ScriptSet.Empty);
+            ReadScripts(item["event"], path));
     }
 
     private (string Url, List<KeyValueEntry> Query) ReadUrl(DataNode? node, string path)

@@ -546,5 +546,8 @@
   "import.authUnsupported": "Le type d'authentification \"{1}\" n'est pas pris en charge ; la requête a été importée sans authentification.",
   "import.authPlainText": "Les identifiants des requêtes importées sont stockés en clair dans les fichiers de l'espace de travail. Déplacez-les dans des variables secrètes.",
   "import.authInherited": "{0} requêtes ont reçu une copie de l'authentification de leur dossier ou de leur collection.",
+  "import.postman.scriptType": "Le script de \"{0}\" est de type \"{1}\" (seul JavaScript est pris en charge) et a été ignoré.",
+  "import.scriptFinding": "{0} : script {1}, {2} (ligne {3}) : {4}",
+  "import.scriptsReview": "{0} scripts ont été importés. Relisez-les avant d'envoyer : les scripts s'exécutent avec accès à vos variables.",
   "import.postman.displayName": "Collection Postman"
 }

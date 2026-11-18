@@ -732,6 +732,10 @@ public static class Strings
     /// <summary>This file is not a Postman collection (no "info" or "item").</summary>
     public static string ImportPostmanNotACollection => Localizer.Pick("This file is not a Postman collection (no \"info\" or \"item\").", "Ce fichier n'est pas une collection Postman (ni \"info\" ni \"item\").");
 
+    /// <summary>The script of "{0}" has the type "{1}" (only JavaScript is supported) and was skipped.</summary>
+    public static string ImportPostmanScriptType(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The script of \"{0}\" has the type \"{1}\" (only JavaScript is supported) and was skipped.", "Le script de \"{0}\" est de type \"{1}\" (seul JavaScript est pris en charge) et a été ignoré."), a0, a1);
+
     /// <summary>"{0}" already exists, the import was named "{1}".</summary>
     public static string ImportRenamed(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" already exists, the import was named \"{1}\".", "\"{0}\" existe déjà, l'import a été nommé \"{1}\"."), a0, a1);
@@ -739,6 +743,14 @@ public static class Strings
     /// <summary>Could not save "{0}": {1}</summary>
     public static string ImportSaveFailed(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Could not save \"{0}\": {1}", "Impossible d'enregistrer \"{0}\" : {1}"), a0, a1);
+
+    /// <summary>{0}: {1} script, {2} (line {3}): {4}</summary>
+    public static string ImportScriptFinding(object? a0, object? a1, object? a2, object? a3, object? a4) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: {1} script, {2} (line {3}): {4}", "{0} : script {1}, {2} (ligne {3}) : {4}"), a0, a1, a2, a3, a4);
+
+    /// <summary>{0} scripts were imported. Review them before sending: scripts run with access to your variables.</summary>
+    public static string ImportScriptsReview(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were imported. Review them before sending: scripts run with access to your variables.", "{0} scripts ont été importés. Relisez-les avant d'envoyer : les scripts s'exécutent avec accès à vos variables."), a0);
 
     /// <summary>{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.</summary>
     public static string ImportSecretsDropped(object? a0) =>

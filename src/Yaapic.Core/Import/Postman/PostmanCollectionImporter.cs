@@ -62,8 +62,9 @@ public sealed class PostmanCollectionImporter : IImporter
         }
 
         var name = ImportHelpers.SafeName(info.GetString("name"), input.Name);
-        var folder = new FolderDefinition(context.NewId(), name, PostmanItems.Text(info["description"]), []);
         var walk = new PostmanItems(context);
+        var folder = new FolderDefinition(context.NewId(), name, PostmanItems.Text(info["description"]),
+            walk.ReadVariables(root["variable"], name, true), walk.ReadScripts(root["event"], name));
         var children = walk.ReadItems(items, name, 1, PostmanAuth.Map(root["auth"], name, context.Report));
         walk.Finish();
         return new ImportBundle(new ImportFolder(folder, children), [], [], [], context.Report);

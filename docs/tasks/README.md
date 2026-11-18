@@ -535,7 +535,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-12](milestone-5-import-export/M5-12-core-postman-collection-requests.md) | Core: Postman collection import, folders, requests, URLs and headers | any | M5-05, M5-06 | done |
 | [M5-13](milestone-5-import-export/M5-13-core-postman-bodies.md) | Core: Postman import, request bodies | any | M5-12 | done |
 | [M5-14](milestone-5-import-export/M5-14-core-postman-auth.md) | Core: Postman import, authentication | any | M5-12 | done |
-| [M5-15](milestone-5-import-export/M5-15-core-postman-scripts-and-variables.md) | Core: Postman import, scripts and collection variables | any | M5-12 | todo |
+| [M5-15](milestone-5-import-export/M5-15-core-postman-scripts-and-variables.md) | Core: Postman import, scripts and collection variables | any | M5-12 | done |
 | [M5-16](milestone-5-import-export/M5-16-core-postman-environment-import.md) | Core: Postman environment and globals import | any | M5-04, M5-05 | todo |
 | [M5-17](milestone-5-import-export/M5-17-core-curl-tokenizer.md) | Core: cURL command tokenizer | any | M5-04 | todo |
 | [M5-18](milestone-5-import-export/M5-18-core-curl-importer.md) | Core: cURL importer | any | M5-06, M5-17 | todo |
