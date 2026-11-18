@@ -1,6 +1,6 @@
 # M5-20: Core: OpenAPI import, operations, servers and parameters
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-06, M5-19
 
@@ -36,10 +36,10 @@ Bodies, security, schemas, Swagger 2.0, responses (never imported).
 
 ## Acceptance criteria
 
-- [ ] Tests with a YAML-free inline JSON document and `SequentialIds`: two tags and an untagged operation (folder structure, names, descriptions of folders); name fallbacks (summary, operationId, method+path); URL with `{id}` and the `id` collection variable; one and three servers (variable `baseUrl`, two scoped environments with names);
+- [x] Tests with a YAML-free inline JSON document and `SequentialIds`: two tags and an untagged operation (folder structure, names, descriptions of folders); name fallbacks (summary, operationId, method+path); URL with `{id}` and the `id` collection variable; one and three servers (variable `baseUrl`, two scoped environments with names);
   server variables with and without default; relative server; query parameters required (enabled) and optional (disabled), sample value sources in the stated order, header params and the three ignored names, path-level parameters overridden by operation-level ones, `$ref` parameters from `components/parameters`, cookie params counted, `trace` skipped,
   deprecated `Info`, `$ref` path item, an empty `paths` (empty bundle with only the collection folder).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

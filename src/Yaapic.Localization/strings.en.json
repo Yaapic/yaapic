@@ -566,5 +566,10 @@
   "import.openapi.versionUntested": "OpenAPI version {0} is newer than the versions Yaapic knows; it is read as 3.1.",
   "import.openapi.externalRef": "{0}: the external reference \"{1}\" is not followed.",
   "import.openapi.brokenRef": "{0}: the reference \"{1}\" does not exist.",
-  "import.openapi.refCycle": "{0}: the reference \"{1}\" is circular."
+  "import.openapi.refCycle": "{0}: the reference \"{1}\" is circular.",
+  "import.openapi.serverVariable": "Server variable {0} has no default; the URL keeps the placeholder.",
+  "import.openapi.relativeServer": "The server URL \"{0}\" is relative: set the baseUrl variable of the collection before sending.",
+  "import.openapi.localServers": "Servers declared on paths or operations are ignored; the first global server is used.",
+  "import.openapi.cookiesIgnored": "{0} cookie parameters were ignored.",
+  "import.openapi.deprecated": "{0} is marked deprecated in the source."
 }

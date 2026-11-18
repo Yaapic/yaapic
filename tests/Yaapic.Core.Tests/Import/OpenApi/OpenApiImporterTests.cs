@@ -52,7 +52,7 @@ public class OpenApiImporterTests
     [Fact]
     public void Json_document_names_the_collection_from_the_title()
     {
-        var bundle = Run("""{"openapi":"3.0.3","info":{"title":"Pets\nAPI","description":"d"},"paths":{}}""", out var context);
+        var bundle = Run("""{"openapi":"3.0.3","info":{"title":"Pets\nAPI","description":"d"},"servers":[{"url":"https://a"}],"paths":{}}""", out var context);
         var folder = Assert.IsType<ImportFolder>(bundle.Collection).Folder;
         Assert.Equal("Pets API", folder.Name);
         Assert.Equal("d", folder.Description);
@@ -86,7 +86,7 @@ public class OpenApiImporterTests
     [Fact]
     public void Other_3_x_version_is_accepted_with_an_info()
     {
-        Run("""{"openapi":"3.2.0","paths":{}}""", out var context);
+        Run("""{"openapi":"3.2.0","servers":[{"url":"https://a"}],"paths":{}}""", out var context);
         Assert.Equal(ImportSeverity.Info, Assert.Single(context.Report.Entries).Severity);
     }
 

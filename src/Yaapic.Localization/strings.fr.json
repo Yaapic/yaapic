@@ -566,5 +566,10 @@
   "import.openapi.versionUntested": "La version {0} d'OpenAPI est plus récente que celles connues de Yaapic ; elle est lue comme la 3.1.",
   "import.openapi.externalRef": "{0} : la référence externe \"{1}\" n'est pas suivie.",
   "import.openapi.brokenRef": "{0} : la référence \"{1}\" n'existe pas.",
-  "import.openapi.refCycle": "{0} : la référence \"{1}\" est circulaire."
+  "import.openapi.refCycle": "{0} : la référence \"{1}\" est circulaire.",
+  "import.openapi.serverVariable": "La variable de serveur {0} n'a pas de valeur par défaut ; l'URL garde le marqueur.",
+  "import.openapi.relativeServer": "L'URL de serveur \"{0}\" est relative : renseignez la variable baseUrl de la collection avant d'envoyer.",
+  "import.openapi.localServers": "Les serveurs déclarés sur des chemins ou des opérations sont ignorés ; le premier serveur global est utilisé.",
+  "import.openapi.cookiesIgnored": "{0} paramètres de cookie ont été ignorés.",
+  "import.openapi.deprecated": "{0} est marqué comme obsolète dans la source."
 }

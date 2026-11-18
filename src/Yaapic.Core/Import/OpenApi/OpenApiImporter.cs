@@ -1,5 +1,4 @@
 using System.Text.RegularExpressions;
-using Yaapic.Domain.Collections;
 using Yaapic.Localization;
 
 namespace Yaapic.Core.Import.OpenApi;
@@ -63,8 +62,9 @@ public sealed partial class OpenApiImporter(StructuredTextReader reader) : IImpo
 
         var info = root["info"];
         var name = ImportHelpers.SafeName(info?.GetString("title"), input.Name);
-        var folder = new FolderDefinition(context.NewId(), name, info?.GetString("description") ?? string.Empty, [], null!);
-        return new ImportBundle(new ImportFolder(folder, []), [], [], [], context.Report);
+        var (collection, environments) = new OpenApiOperations(root, new OpenApiRefResolver(root, context.Report), context)
+            .Build(name, info?.GetString("description") ?? string.Empty);
+        return new ImportBundle(collection, [], environments, [], context.Report);
     }
 
     private static void CheckVersion(string version, bool swagger, ImportReport report)

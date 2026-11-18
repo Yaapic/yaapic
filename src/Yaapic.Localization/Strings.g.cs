@@ -734,6 +734,14 @@ public static class Strings
     public static string ImportOpenapiBrokenRef(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" does not exist.", "{0} : la référence \"{1}\" n'existe pas."), a0, a1);
 
+    /// <summary>{0} cookie parameters were ignored.</summary>
+    public static string ImportOpenapiCookiesIgnored(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} cookie parameters were ignored.", "{0} paramètres de cookie ont été ignorés."), a0);
+
+    /// <summary>{0} is marked deprecated in the source.</summary>
+    public static string ImportOpenapiDeprecated(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} is marked deprecated in the source.", "{0} est marqué comme obsolète dans la source."), a0);
+
     /// <summary>OpenAPI</summary>
     public static string ImportOpenapiDisplayName => Localizer.Pick("OpenAPI", "OpenAPI");
 
@@ -741,12 +749,23 @@ public static class Strings
     public static string ImportOpenapiExternalRef(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the external reference \"{1}\" is not followed.", "{0} : la référence externe \"{1}\" n'est pas suivie."), a0, a1);
 
+    /// <summary>Servers declared on paths or operations are ignored; the first global server is used.</summary>
+    public static string ImportOpenapiLocalServers => Localizer.Pick("Servers declared on paths or operations are ignored; the first global server is used.", "Les serveurs déclarés sur des chemins ou des opérations sont ignorés ; le premier serveur global est utilisé.");
+
     /// <summary>This file is not an OpenAPI document (no "openapi" version or "paths").</summary>
     public static string ImportOpenapiNotADocument => Localizer.Pick("This file is not an OpenAPI document (no \"openapi\" version or \"paths\").", "Ce fichier n'est pas un document OpenAPI (ni version \"openapi\" ni \"paths\").");
 
     /// <summary>{0}: the reference "{1}" is circular.</summary>
     public static string ImportOpenapiRefCycle(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" is circular.", "{0} : la référence \"{1}\" est circulaire."), a0, a1);
+
+    /// <summary>The server URL "{0}" is relative: set the baseUrl variable of the collection before sending.</summary>
+    public static string ImportOpenapiRelativeServer(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The server URL \"{0}\" is relative: set the baseUrl variable of the collection before sending.", "L'URL de serveur \"{0}\" est relative : renseignez la variable baseUrl de la collection avant d'envoyer."), a0);
+
+    /// <summary>Server variable {0} has no default; the URL keeps the placeholder.</summary>
+    public static string ImportOpenapiServerVariable(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Server variable {0} has no default; the URL keeps the placeholder.", "La variable de serveur {0} n'a pas de valeur par défaut ; l'URL garde le marqueur."), a0);
 
     /// <summary>OpenAPI version {0} is not supported.</summary>
     public static string ImportOpenapiVersion(object? a0) =>
