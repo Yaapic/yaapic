@@ -718,6 +718,9 @@ public static class Strings
     public static string ImportPostmanDroppedExamples(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved response examples ({0}) were not imported.", "Les exemples de réponses enregistrés ({0}) n'ont pas été importés."), a0);
 
+    /// <summary>Postman environment or globals</summary>
+    public static string ImportPostmanEnvironmentDisplayName => Localizer.Pick("Postman environment or globals", "Environnement ou globales Postman");
+
     /// <summary>The file field "{1}" has no path and was dropped.</summary>
     public static string ImportPostmanFileMissing(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file field \"{1}\" has no path and was dropped.", "Le champ fichier \"{1}\" n'a pas de chemin et a été ignoré."), a0, a1);
@@ -731,6 +734,9 @@ public static class Strings
 
     /// <summary>This file is not a Postman collection (no "info" or "item").</summary>
     public static string ImportPostmanNotACollection => Localizer.Pick("This file is not a Postman collection (no \"info\" or \"item\").", "Ce fichier n'est pas une collection Postman (ni \"info\" ni \"item\").");
+
+    /// <summary>This file is not a Postman environment or globals file (no "values").</summary>
+    public static string ImportPostmanNotAnEnvironment => Localizer.Pick("This file is not a Postman environment or globals file (no \"values\").", "Ce fichier n'est pas un fichier d'environnement ou de globales Postman (pas de \"values\").");
 
     /// <summary>The script of "{0}" has the type "{1}" (only JavaScript is supported) and was skipped.</summary>
     public static string ImportPostmanScriptType(object? a0, object? a1) =>

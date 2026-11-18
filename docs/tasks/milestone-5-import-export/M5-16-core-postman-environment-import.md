@@ -1,6 +1,6 @@
 # M5-16: Core: Postman environment and globals import
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04, M5-05
 
@@ -25,8 +25,8 @@ Exporting environments (M5-41), Postman vault references.
 
 ## Acceptance criteria
 
-- [ ] Tests: sniff cases; an environment with default, secret and disabled rows (exact rows); a globals file lands in `Globals`; a missing `values` throws `ImportException`; a missing `name` falls back to the input name; non-string values (`1`, `true`) become text; rows without key dropped; no `Collection`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests: sniff cases; an environment with default, secret and disabled rows (exact rows); a globals file lands in `Globals`; a missing `values` throws `ImportException`; a missing `name` falls back to the input name; non-string values (`1`, `true`) become text; rows without key dropped; no `Collection`.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

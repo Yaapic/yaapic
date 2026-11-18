@@ -549,5 +549,7 @@
   "import.postman.scriptType": "The script of \"{0}\" has the type \"{1}\" (only JavaScript is supported) and was skipped.",
   "import.scriptFinding": "{0}: {1} script, {2} (line {3}): {4}",
   "import.scriptsReview": "{0} scripts were imported. Review them before sending: scripts run with access to your variables.",
-  "import.postman.displayName": "Postman collection"
+  "import.postman.displayName": "Postman collection",
+  "import.postman.notAnEnvironment": "This file is not a Postman environment or globals file (no \"values\").",
+  "import.postman.environmentDisplayName": "Postman environment or globals"
 }
