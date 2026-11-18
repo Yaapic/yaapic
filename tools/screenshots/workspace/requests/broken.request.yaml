@@ -13,7 +13,7 @@ scripts:
   preRequest:
     language: javascript
     source: |
-      const token = pm.environment.get("apiToken");
+      const token = yaapic.environment.get("apiToken");
       if (!token) {
         throw new Error("apiToken is not set");
       }

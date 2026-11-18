@@ -1,0 +1,40 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:req="using:Yaapic.ViewModels.Requests"
+    x:Class="Yaapic.App.Avalonia.Views.AwsV4EditorView"
+    x:DataType="req:AwsV4EditorViewModel">
+  <StackPanel Spacing="12">
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.AwsFieldAccessKeyId}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding AccessKeyId, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.AwsFieldSecretAccessKey}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" PasswordChar="●"
+               Text="{Binding SecretAccessKey, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.AwsFieldSessionToken}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" PasswordChar="●"
+               Text="{Binding SessionToken, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.AwsFieldRegion}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding Region, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.AwsFieldService}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding Service, Mode=TwoWay}" />
+    </StackPanel>
+
+    <ItemsControl ItemsSource="{Binding Hints}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="x:String">
+          <TextBlock Classes="bodySmall" TextWrapping="Wrap" Margin="0,0,0,6" Text="{Binding}"
+                     Foreground="{DynamicResource YaapicWarningBrush}" />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </StackPanel>
+</UserControl>

@@ -1,0 +1,110 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:req="using:Yaapic.ViewModels.Requests"
+    x:Class="Yaapic.App.Avalonia.Views.OAuth2EditorView"
+    x:DataType="req:OAuth2EditorViewModel">
+  <StackPanel Spacing="12">
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldGrant}" />
+      <ComboBox x:Name="GrantBox" MinWidth="200" AutomationProperties.Name="{x:Static loc:Strings.Oauth2FieldGrant}"
+                SelectionChanged="OnGrantChanged">
+        <ComboBoxItem Content="{x:Static loc:Strings.Oauth2GrantClientCredentials}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.Oauth2GrantAuthorizationCode}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.Oauth2GrantPassword}" />
+      </ComboBox>
+    </StackPanel>
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldTokenUrl}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding TokenUrl, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6" IsVisible="{Binding ShowAuthorizationUrl}">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldAuthorizationUrl}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding AuthorizationUrl, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6" IsVisible="{Binding ShowRedirectUri}">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldRedirectUri}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding RedirectUri, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldClientId}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding ClientId, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldClientSecret}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" PasswordChar="●"
+               Text="{Binding ClientSecret, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="12" IsVisible="{Binding ShowUserCredentials}">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldUsername}" />
+        <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding Username, Mode=TwoWay}" />
+      </StackPanel>
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldPassword}" />
+        <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" PasswordChar="●"
+                 Text="{Binding Password, Mode=TwoWay}" />
+      </StackPanel>
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldScope}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding Scope, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldAudience}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding Audience, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldClientAuthentication}" />
+      <ComboBox x:Name="ClientAuthBox" MinWidth="200" AutomationProperties.Name="{x:Static loc:Strings.Oauth2FieldClientAuthentication}"
+                SelectionChanged="OnClientAuthChanged">
+        <ComboBoxItem Content="{x:Static loc:Strings.Oauth2ClientAuthBasic}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.Oauth2ClientAuthBody}" />
+      </ComboBox>
+    </StackPanel>
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldPlacement}" />
+      <ComboBox x:Name="PlacementBox" MinWidth="200" AutomationProperties.Name="{x:Static loc:Strings.Oauth2FieldPlacement}"
+                SelectionChanged="OnPlacementChanged">
+        <ComboBoxItem Content="{x:Static loc:Strings.AuthLocationHeader}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.AuthLocationQuery}" />
+      </ComboBox>
+    </StackPanel>
+    <StackPanel Spacing="6" IsVisible="{Binding ShowHeaderPrefix}">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldHeaderPrefix}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding HeaderPrefix, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6" IsVisible="{Binding ShowQueryParameterName}">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.Oauth2FieldQueryParameterName}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding QueryParameterName, Mode=TwoWay}" />
+    </StackPanel>
+
+    <ItemsControl ItemsSource="{Binding Hints}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="x:String">
+          <TextBlock Classes="bodySmall" TextWrapping="Wrap" Margin="0,0,0,6" Text="{Binding}"
+                     Foreground="{DynamicResource YaapicWarningBrush}" />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <StackPanel Spacing="8">
+      <TextBlock Classes="bodySmall" TextWrapping="Wrap" Text="{Binding TokenStatusText}"
+                 Foreground="{DynamicResource YaapicTextTertiaryBrush}" />
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Classes="accent" Content="{x:Static loc:Strings.Oauth2GetNewToken}" Command="{Binding GetNewTokenCommand}" />
+        <Button Content="{x:Static loc:Strings.CommonCancel}" Command="{Binding CancelGetTokenCommand}"
+                IsVisible="{Binding IsGettingToken}" />
+        <Button Content="{x:Static loc:Strings.Oauth2ClearToken}" Command="{Binding ClearTokenCommand}" />
+      </StackPanel>
+      <StackPanel Orientation="Horizontal" Spacing="8" IsVisible="{Binding IsGettingToken}">
+        <ProgressBar IsIndeterminate="True" Width="80" AutomationProperties.Name="{x:Static loc:Strings.Oauth2WaitingForBrowser}" />
+        <TextBlock Classes="bodySmall" Text="{x:Static loc:Strings.Oauth2WaitingForBrowser}" />
+      </StackPanel>
+      <TextBlock Classes="bodySmall" TextWrapping="Wrap" Text="{Binding TokenError}"
+                 Foreground="{DynamicResource YaapicDangerBrush}"
+                 IsVisible="{Binding TokenError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+    </StackPanel>
+  </StackPanel>
+</UserControl>

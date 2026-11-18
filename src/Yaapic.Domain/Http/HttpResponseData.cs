@@ -15,6 +15,12 @@ public sealed record HttpResponseData(
     TimeSpan Duration,
     string FinalUrl)
 {
+    /// <summary>Gets the timing phases of the request, or <see langword="null"/> when not measured.</summary>
+    public RequestTimings? Timings { get; init; }
+
+    /// <summary>Gets the HTTP version used (for example <c>HTTP/2</c>); empty when unknown.</summary>
+    public string Protocol { get; init; } = "";
+
     /// <summary>Gets the body size in bytes.</summary>
     public long SizeBytes => Body.LongLength;
 

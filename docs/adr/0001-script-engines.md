@@ -25,5 +25,5 @@ supported RID and kept up to date.
 
 ## Decision
 
-Option 1. JavaScript (QuickJS-NG, Postman-compatible `pm.*` API) and Lua 5.4, both behind one `IScriptEngine` port in
+Option 1. JavaScript (QuickJS-NG, Postman-compatible `yaapic.*` API) and Lua 5.4, both behind one `IScriptEngine` port in
 `Yaapic.Core`. No C# and no Python scripting. Engines were wired in milestone 3 (`Yaapic.Scripting`).

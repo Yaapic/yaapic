@@ -4,11 +4,17 @@ namespace Yaapic.Architecture.Tests;
 
 // A source-text scan, not a compiler check: it flags a literal that reads like an English sentence (a capitalised
 // word followed by another word) in Yaapic.ViewModels and Yaapic.Core. User-visible text must come from Strings.
-// Exception messages are developer-facing and stay English; comments and script samples (pm.) are skipped.
+// Exception messages are developer-facing and stay English; comments and script samples (yaapic. and yaapic.) are skipped.
 public partial class LocalizationRulesTests
 {
-    // Texts that are deliberately not translated: they are returned to scripts (script API).
-    private static readonly string[] Allowed = ["Request failed"];
+    // Texts that are deliberately not translated: they are returned to scripts (script API) or emitted as comments in
+    // generated source code (code generation notes).
+    private static readonly string[] Allowed =
+    [
+        "Request failed",
+        "Digest authentication must be computed by the caller (RFC 7616).",
+        "AWS Signature v4 must be computed by the caller.",
+    ];
 
     [GeneratedRegex("""\$?"[A-Z][a-z]+ [A-Za-z.'{}]+""")]
     private static partial Regex Sentence();
@@ -36,7 +42,7 @@ public partial class LocalizationRulesTests
                     if (line.TrimStart().StartsWith("//", StringComparison.Ordinal)
                         || line.Contains("Exception(", StringComparison.Ordinal)
                         || line.Contains("nameof(", StringComparison.Ordinal)
-                        || line.Contains("pm.", StringComparison.Ordinal)
+                        || line.Contains("yaapic.", StringComparison.Ordinal) || line.Contains("yaapic.", StringComparison.Ordinal)
                         || Allowed.Any(a => line.Contains($"\"{a}\"", StringComparison.Ordinal)))
                         continue;
 

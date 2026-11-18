@@ -1,6 +1,6 @@
 namespace Yaapic.Scripting.QuickJs;
 
-/// <summary>The JavaScript <c>pm</c> prelude, part 3: <c>pm.test</c>, <c>AssertionError</c> and the core Chai-style <c>pm.expect</c> assertions.</summary>
+/// <summary>The JavaScript <c>yaapic</c> prelude, part 3: <c>yaapic.test</c>, <c>AssertionError</c> and the core Chai-style <c>yaapic.expect</c> assertions.</summary>
 internal static class PmTestPrelude
 {
     /// <summary>The prelude source, evaluated as its own script after <see cref="PmRequestResponsePrelude.Source"/>.</summary>
@@ -8,7 +8,7 @@ internal static class PmTestPrelude
         (() => {
           'use strict';
           const host = globalThis.__host;
-          const pm = globalThis.pm;
+          const yaapic = globalThis.yaapic;
           const define = (target, name, value) => Object.defineProperty(target, name, { value, enumerable: true });
 
           // ---- inspect: Chai-like value rendering, depth 2, 80 characters at most ----
@@ -550,7 +550,7 @@ internal static class PmTestPrelude
             return this;
           });
 
-          // ---- pm.response.to: Postman's response assertions, one fresh chain per access ----
+          // ---- yaapic.response.to: Postman's response assertions, one fresh chain per access ----
           class ResponseAssertion {
             constructor(dto) {
               Object.defineProperty(this, flagsKey, { value: { dto, not: false } });
@@ -672,20 +672,20 @@ internal static class PmTestPrelude
             return this;
           });
           rmethod('jsonSchema', () => {
-            throw new Error('pm.response.to.have.jsonSchema is not supported in Yaapic');
+            throw new Error('yaapic.response.to.have.jsonSchema is not supported in Yaapic');
           });
           Object.freeze(rproto);
           Object.defineProperty(globalThis, '__responseTo', { value: (dto) => new ResponseAssertion(dto) });
           Object.freeze(proto);
 
-          // ---- pm.expect ----
+          // ---- yaapic.expect ----
           const expect = (value, message) => new Assertion(value, message === undefined ? undefined : String(message));
           expect.fail = (message) => {
             throw new AssertionError(message === undefined ? 'expect.fail()' : String(message));
           };
-          define(pm, 'expect', Object.freeze(expect));
+          define(yaapic, 'expect', Object.freeze(expect));
 
-          // ---- pm.test ----
+          // ---- yaapic.test ----
           let recorded = 0;
           let pending = 0;
           // The engine reads this after the block: a test that has not settled by then can never settle (no timers).
@@ -740,7 +740,7 @@ internal static class PmTestPrelude
             host('console', { level: 'info', text: 'skipped ' + String(name) });
           };
           test.index = () => recorded;
-          define(pm, 'test', Object.freeze(test));
+          define(yaapic, 'test', Object.freeze(test));
         })();
         """;
 }

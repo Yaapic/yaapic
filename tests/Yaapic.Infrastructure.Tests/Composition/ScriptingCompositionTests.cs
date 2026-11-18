@@ -78,7 +78,7 @@ public sealed class ScriptingCompositionTests : IDisposable
         await shell.InitializeAsync();
         var tab = shell.Tabs.ActiveTab!;
         tab.Url = server.BaseUrl + "/echo";
-        tab.Scripts.PostResponse.Source = "pm.test('status is ok', () => {});";
+        tab.Scripts.PostResponse.Source = "yaapic.test('status is ok', () => {});";
 
         await tab.SendCommand.ExecuteAsync(null);
 
@@ -98,7 +98,7 @@ public sealed class ScriptingCompositionTests : IDisposable
         Assert.SkipWhen(unavailable is not null, "The QuickJS-NG native library is not available: " + unavailable);
         var tab = shell.Tabs.ActiveTab!;
         tab.Url = server.BaseUrl + "/echo";
-        tab.Scripts.PostResponse.Source = "console.log('from quickjs'); pm.test('ok', function () { pm.expect(pm.response.code).to.equal(200); });";
+        tab.Scripts.PostResponse.Source = "console.log('from quickjs'); yaapic.test('ok', function () { yaapic.expect(yaapic.response.code).to.equal(200); });";
 
         await tab.SendCommand.ExecuteAsync(null);
 

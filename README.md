@@ -60,7 +60,7 @@ failure.
 | `src/Yaapic.Domain` | Plain models and enums, no dependencies |
 | `src/Yaapic.Core` | Use cases and ports (HTTP, storage, variables, scripting, secrets) |
 | `src/Yaapic.Infrastructure` | Port implementations (HTTP client, YAML workspace files, encrypted secret vault) |
-| `src/Yaapic.Scripting` | Script engines (QuickJS-NG for JavaScript, Lua 5.4) and the `pm` API preludes |
+| `src/Yaapic.Scripting` | Script engines (QuickJS-NG for JavaScript, Lua 5.4) and the `yaapic` / `yaapic` API preludes |
 | `src/Yaapic.UI.Abstractions` | UI-facing interfaces (dialogs, code editor) |
 | `src/Yaapic.ViewModels` | MVVM view models, shared by both front-ends |
 | `src/Yaapic.Composition` | Wires the object graph for the App projects |
@@ -69,13 +69,13 @@ failure.
 | `tests/` | One test project per library, plus `Yaapic.Architecture.Tests` |
 | `native/` | Build script and pinned sources for the native script engines |
 | `design/`, `tools/` | Design assets and tokens; screenshot tooling |
-| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [task cards](docs/tasks/README.md) |
+| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [authentication](docs/authentication.md), [response tools](docs/response-tools.md), [task cards](docs/tasks/README.md) |
 
 ## Scripts and secrets
 
 Requests, folders and collections can have a pre-request and a post-response script, each in JavaScript or Lua, written
-against a Postman-style `pm.*` API (`pm.variables`, `pm.environment`, `pm.request`, `pm.response`, `pm.test`, `pm.expect`,
-`pm.sendRequest`, `console`). A collection script runs first, then its folders, then the request, in both phases; a
+against the `yaapic.*` API (`yaapic.variables`, `yaapic.environment`, `yaapic.request`, `yaapic.response`, `yaapic.test`,
+`yaapic.expect`, `yaapic.sendRequest`, `console`); scripts written for Postman use `pm` and need converting to `yaapic` (a converter is planned). A collection script runs first, then its folders, then the request, in both phases; a
 pre-request error cancels the send, a post-response error keeps the response. Each block runs in its own sandbox (no file
 system, no timers, 5 s and 64 MiB per block). The console panel and the response "Tests" tab show the output. What is
 supported and what differs from Postman: [docs/scripting-compatibility.md](docs/scripting-compatibility.md); the design is
@@ -86,6 +86,16 @@ and workspace, outside the workspace (`%APPDATA%\Yaapic\vaults\<workspace id>.va
 `~/Library/Application Support/Yaapic/vaults` on macOS, `$XDG_DATA_HOME/Yaapic/vaults` or `~/.local/share/Yaapic/vaults` on Linux), so it
 never reaches Git. The vault key is protected by DPAPI (Windows), the Keychain (macOS), the Secret Service (Linux) or a
 passphrase. See [ADR 0010](docs/adr/0010-secret-vault.md) and [docs/file-format.md](docs/file-format.md).
+
+## Authentication and response tools
+
+Besides Basic, Bearer and API key, a request can use **OAuth 2.0** (client credentials, authorization code with PKCE, password,
+automatic refresh), **JWT** signing (HS, RS and ES algorithms), **Digest** and **AWS Signature v4**: see
+[docs/authentication.md](docs/authentication.md). **Client certificates** (mTLS) are configured per host and kept outside the
+workspace. Each response has a **Timing** tab (DNS, connect, TLS, waiting, download) and shows the HTTP version used, which you
+can choose per request (HTTP/3 is experimental). A **Diff** tab compares the response with the previous one or a pinned baseline,
+**Generate code** turns a request into cURL, JavaScript, Python, C#, PowerShell or Go, and **Decode JWT** inspects a token. See
+[docs/response-tools.md](docs/response-tools.md).
 
 ## Language and accent colour
 

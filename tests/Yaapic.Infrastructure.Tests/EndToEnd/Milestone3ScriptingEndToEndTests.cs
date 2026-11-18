@@ -36,7 +36,7 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
             "",
             "Mutate",
             Url("/{{seg}}?a=1"),
-            pre: "pm.variables.set('seg', 'echo');\npm.request.headers.add({ key: 'X-Added', value: 'yes' });\npm.request.url.query.upsert({ key: 'a', value: '9' });");
+            pre: "yaapic.variables.set('seg', 'echo');\nyaapic.request.headers.add({ key: 'X-Added', value: 'yes' });\nyaapic.request.url.query.upsert({ key: 'a', value: '9' });");
         var shell = await _fx.NewShellAsync();
         var tab = Open(shell, id);
 
@@ -54,7 +54,7 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
     public async Task TokenSavedByOneRequestIsStoredOnDiskAndSentByTheNext()
     {
         _fx.WriteEnvironment("Dev");
-        var a = _fx.WriteRequest("", "Login", Url("/json"), post: "pm.environment.set('token', pm.response.json().token);");
+        var a = _fx.WriteRequest("", "Login", Url("/json"), post: "yaapic.environment.set('token', yaapic.response.json().token);");
         var b = _fx.WriteRequest("", "Use token", Url("/headers?t={{token}}"), headers: ("Authorization", "Bearer {{token}}"));
         var shell = await _fx.NewShellAsync();
         ActivateEnvironment(shell, "Dev");
@@ -97,11 +97,11 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
             "Tests",
             Url("/echo"),
             post: """
-                pm.test('one', () => { pm.expect(1).to.equal(1); });
-                pm.test('two', () => { pm.expect(pm.response.code).to.equal(200); });
-                pm.test('three', () => { pm.expect([1, 2]).to.have.lengthOf(2); });
-                pm.test('four', () => { pm.expect(1).to.equal(2); });
-                pm.test('five', () => { pm.expect('abc').to.include('z'); });
+                yaapic.test('one', () => { yaapic.expect(1).to.equal(1); });
+                yaapic.test('two', () => { yaapic.expect(yaapic.response.code).to.equal(200); });
+                yaapic.test('three', () => { yaapic.expect([1, 2]).to.have.lengthOf(2); });
+                yaapic.test('four', () => { yaapic.expect(1).to.equal(2); });
+                yaapic.test('five', () => { yaapic.expect('abc').to.include('z'); });
                 """);
         var shell = await _fx.NewShellAsync();
         var tab = Open(shell, id);
@@ -170,11 +170,11 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
             "Chained",
             Url("/echo"),
             pre: WithBase("""
-                const first = await pm.sendRequest('BASE/json');
-                pm.request.headers.add({ key: 'X-Token', value: first.json().token });
-                pm.sendRequest('BASE/json', (err, res) => { pm.request.headers.add({ key: 'X-Callback', value: String(res.code) }); });
+                const first = await yaapic.sendRequest('BASE/json');
+                yaapic.request.headers.add({ key: 'X-Token', value: first.json().token });
+                yaapic.sendRequest('BASE/json', (err, res) => { yaapic.request.headers.add({ key: 'X-Callback', value: String(res.code) }); });
                 for (let i = 0; i < 19; i++) {
-                  pm.sendRequest('BASE/count', (err, res) => { if (err) { console.log('err:' + (err.message ?? err)); } });
+                  yaapic.sendRequest('BASE/count', (err, res) => { if (err) { console.log('err:' + (err.message ?? err)); } });
                 }
                 """));
         var shell = await _fx.NewShellAsync();
@@ -200,8 +200,8 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
             "acme",
             "Scopes",
             Url("/echo"),
-            pre: "pm.globals.set('g', '1');\npm.collectionVariables.set('c', '2');\npm.environment.set('e', '3');\npm.variables.set('l', '4');",
-            post: "console.log('l=' + pm.variables.get('l'));");
+            pre: "yaapic.globals.set('g', '1');\nyaapic.collectionVariables.set('c', '2');\nyaapic.environment.set('e', '3');\nyaapic.variables.set('l', '4');",
+            post: "console.log('l=' + yaapic.variables.get('l'));");
         var shell = await _fx.NewShellAsync();
         ActivateEnvironment(shell, "Dev");
         var tab = Open(shell, id);
@@ -224,7 +224,7 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
         Assert.Contains("l=undefined", Messages(shell, ConsoleLineKind.Log));
 
         shell.Environments.ActiveEnvironment = null;
-        tab.Scripts.PreRequest.Source = "pm.environment.set('x', '1');";
+        tab.Scripts.PreRequest.Source = "yaapic.environment.set('x', '1');";
         await tab.SendCommand.ExecuteAsync(null);
 
         Assert.Contains(shell.Console.Lines, l => l.Kind == ConsoleLineKind.Warn && l.Message.Contains("No active environment", StringComparison.Ordinal));
@@ -238,8 +238,8 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
             "",
             "Cookies",
             Url("/set-cookie"),
-            pre: "console.log('pre:' + pm.cookies.has('a') + pm.cookies.has('b'));",
-            post: "console.log('post:' + pm.cookies.get('a') + pm.cookies.get('b'));\ntry { pm.cookies.jar(); } catch (e) { console.log('jar:' + e.message); }");
+            pre: "console.log('pre:' + yaapic.cookies.has('a') + yaapic.cookies.has('b'));",
+            post: "console.log('post:' + yaapic.cookies.get('a') + yaapic.cookies.get('b'));\ntry { yaapic.cookies.jar(); } catch (e) { console.log('jar:' + e.message); }");
         var shell = await _fx.NewShellAsync();
         var tab = Open(shell, id);
 
@@ -256,7 +256,7 @@ public sealed class Milestone3ScriptingEndToEndTests : IClassFixture<LoopbackSer
         var id = _fx.WriteRequest("", "Persisted", Url("/echo"));
         var shell = await _fx.NewShellAsync();
         var tab = Open(shell, id);
-        tab.Scripts.PreRequest.Source = "pm.request.headers.add({ key: 'X-Persisted', value: 'pre' });";
+        tab.Scripts.PreRequest.Source = "yaapic.request.headers.add({ key: 'X-Persisted', value: 'pre' });";
         tab.Scripts.PostResponse.Source = "console.log('persisted post');";
 
         Assert.True(await shell.Tabs.SaveAsync(tab));

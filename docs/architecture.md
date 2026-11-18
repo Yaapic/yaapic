@@ -62,11 +62,11 @@ leaves the report. `VariableScopeProvider` implements `IScriptVariableApplier`; 
 `IScriptEngine`, `IScriptHost`, `ScriptInvocation`, `ScriptLimits` and `ScriptEngineRegistry` are in `Yaapic.Core.Scripting`.
 `Yaapic.Scripting` holds the adapters: `QuickJs.QuickJsEngine` (QuickJS-NG) and `Lua.LuaEngine` (Lua 5.4), both bound with
 `LibraryImport` to native libraries built by `native/Build-Natives.ps1` (see [dependencies.md](dependencies.md)). A script
-sees one native function, `__host(op, argsJson) -> resultJson`; `pm`, `console` and `expect` are preludes written in the
+sees one native function, `__host(op, argsJson) -> resultJson`; `yaapic`, `console` and `expect` are preludes written in the
 script language (C# `const string`s). `HostBridge` decodes the arguments with the source-generated `HostJsonContext`,
 calls the typed `IScriptHost` and answers `{"ok":...}` or `{"err":"..."}`. The operations (`HostOps`) are `var.*`
 (get, set, unset, has, clear, list, replace), `req.get`/`req.set`, `res.get`, `info.get`, `console`, `console.plain`, `test`,
-`send` (`pm.sendRequest`), `cookies` and `unsupported`. `Yaapic.Composition` registers both engines; a library that cannot
+`send` (`yaapic.sendRequest`), `cookies` and `unsupported`. `Yaapic.Composition` registers both engines; a library that cannot
 be loaded makes that language report itself unavailable, the rest of the app keeps working.
 
 ## Secret vault
@@ -99,6 +99,39 @@ moves), `IGlobalsStore` and `IHistoryStore`. `Infrastructure` implements them in
 append-only JSON Lines file (`FileHistoryStore`); see [file-format.md](file-format.md) and
 [ADR 0008](adr/0008-collections-globals-history-storage.md). `Composition.AppComposition.CreateShell` wires the whole
 graph for every App project.
+It builds once and shares the M4 services: the OAuth 2.0 token service (in-memory cache, loopback redirect receiver,
+system browser), the request authenticator, the client certificate provider and store, the HTTP/3 support probe and the
+six code generators. The `HttpClientTransport` and the certificate provider are owned by the shell and disposed when it
+closes; the shell creates the certificates and JWT decoder view models on demand (`CreateCertificates`, `CreateJwtDecoder`).
+
+## Authentication, transport and response tools (milestone 4)
+
+Decisions: [ADR 0013](adr/0013-advanced-authentication.md), [ADR 0014](adr/0014-transport-certificates-timings.md),
+[ADR 0015](adr/0015-response-diff-and-code-generation.md); user level: [authentication.md](authentication.md) and
+[response-tools.md](response-tools.md).
+
+```
+RequestSender
+  -> RequestResolver          Basic, Bearer, API key resolved at once; OAuth 2.0, JWT, Digest and AWS v4 are
+                              substituted and kept in ResolvedRequest.PendingAuth
+  -> IRequestAuthenticator    (Core: RequestAuthenticator, one IAuthMethod per kind: JwtAuthMethod, DigestAuthMethod,
+                               AwsV4AuthMethod, OAuth2AuthMethod; an error is SendFailureKind.AuthenticationFailed)
+       |-- OAuth2AuthMethod -> IOAuth2TokenService -> IOAuth2TokenCache (memory), IExternalBrowser,
+       |                       ILoopbackRedirectReceiver (authorization code with PKCE)
+       `-- DigestAuthMethod -> IHttpTransport (the body-less probe)
+  -> IHttpTransport           (HttpClientTransport)
+       |-- IClientCertificateProvider  host pattern match, certificate cache, one HttpClient per certificate (mTLS)
+       |-- TimingCollector             per-request, in HttpRequestMessage.Options; ConnectCallback times DNS and
+       |                               connect, PlaintextStreamFilter ends TLS; Wait and Download from the headers
+       `-- HttpVersionMapping          HttpVersionPreference -> version and policy (IHttpVersionSupport for HTTP/3)
+  -> HttpResponseData         status, body, Protocol, Timings (RequestTimings)
+```
+
+Response side: `ResponseDiffer` and `LineDiff` (Core.Diff, Myers) compare two `ResponseSnapshot`s for
+`ResponseDiffViewModel`; `JwtDecoder` (Core.Auth.Jwt) feeds `JwtDecoderViewModel`; `CodeRequestFactory` turns a `ResolvedRequest`
+into a `CodeRequest` and `CodeGeneratorRegistry` offers the six `ICodeGenerator`s (cURL, JavaScript, Python, C#, PowerShell, Go)
+to `CodeGenerationViewModel`. Client certificates are listed in `ICertificateStore` (`FileCertificateStore`,
+`certificates.json` outside the workspace) and their passphrases are vault entries of kind `Certificate`.
 
 ## Search and command palette
 

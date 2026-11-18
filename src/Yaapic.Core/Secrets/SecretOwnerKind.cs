@@ -11,4 +11,7 @@ public enum SecretOwnerKind
 
     /// <summary>The workspace globals.</summary>
     Globals,
+
+    /// <summary>A client certificate.</summary>
+    Certificate,
 }

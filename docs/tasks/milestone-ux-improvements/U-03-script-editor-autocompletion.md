@@ -1,12 +1,12 @@
 # U-03: Script editor autocompletion
 
-Status: done (the `pm` API; the `yaapic` names join the catalogue with U-02)
+Status: done
 Platform: any
 Depends on: U-02
 
 ## Goal
 
-Typing `yaapic.` (or `pm.`) in a script editor proposes the API members with a one-line description, and each member proposes its own
+Typing `yaapic.` in a script editor proposes the API members with a one-line description, and each member proposes its own
 members (`yaapic.variables.` offers `get`, `set`, `has`, `unset`...). It works for JavaScript and Lua, in the request Scripts tab and in
 the folder and collection scripts window, on WinUI and Avalonia.
 

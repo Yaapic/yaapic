@@ -74,7 +74,7 @@
 
       <!-- Completed -->
       <Panel IsVisible="{Binding State, Converter={x:Static p:ResponseMap.IsCompleted}}">
-        <TabControl Classes="panel" Padding="0">
+        <TabControl x:Name="PanelTabs" Classes="panel" Padding="0">
           <TabItem>
             <TabItem.Header>
               <TextBlock Text="{x:Static loc:Strings.RequestTabBody}" />
@@ -215,6 +215,171 @@
                   <MultiBinding Converter="{x:Static p:ResponseMap.NeitherFlag}">
                     <Binding Path="Tests.HasTests" />
                     <Binding Path="Tests.HasErrors" />
+                  </MultiBinding>
+                </TextBlock.IsVisible>
+              </TextBlock>
+            </Grid>
+          </TabItem>
+          <TabItem AutomationProperties.Name="{x:Static loc:Strings.ResponseTabTiming}">
+            <TabItem.Header>
+              <TextBlock Text="{x:Static loc:Strings.ResponseTabTiming}" />
+            </TabItem.Header>
+            <Panel>
+              <StackPanel Margin="16,12" Spacing="8" IsVisible="{Binding HasTimings}">
+                <StackPanel Orientation="Horizontal" Spacing="16">
+                  <TextBlock Text="{Binding ProtocolText}" Classes="bodyStrong" />
+                  <TextBlock Text="{Binding ConnectionText}" Classes="body"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                  <TextBlock Text="{Binding TotalText}" Classes="codeSmall" VerticalAlignment="Center"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                </StackPanel>
+                <ItemsControl ItemsSource="{Binding Timings}">
+                  <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="rsp:TimingRow">
+                      <Grid ColumnDefinitions="140,*,72" ColumnSpacing="12" Margin="0,0,0,6">
+                        <TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                        <Grid Grid.Column="1" Height="14" VerticalAlignment="Center">
+                          <Grid.ColumnDefinitions>
+                            <ColumnDefinition>
+                              <ColumnDefinition.Width>
+                                <MultiBinding Converter="{x:Static p:TimingBarMap.Lead}">
+                                  <Binding Path="IsMeasured" />
+                                  <Binding Path="OffsetFraction" />
+                                </MultiBinding>
+                              </ColumnDefinition.Width>
+                            </ColumnDefinition>
+                            <ColumnDefinition>
+                              <ColumnDefinition.Width>
+                                <MultiBinding Converter="{x:Static p:TimingBarMap.Bar}">
+                                  <Binding Path="IsMeasured" />
+                                  <Binding Path="Fraction" />
+                                </MultiBinding>
+                              </ColumnDefinition.Width>
+                            </ColumnDefinition>
+                            <ColumnDefinition>
+                              <ColumnDefinition.Width>
+                                <MultiBinding Converter="{x:Static p:TimingBarMap.Rest}">
+                                  <Binding Path="IsMeasured" />
+                                  <Binding Path="OffsetFraction" />
+                                  <Binding Path="Fraction" />
+                                </MultiBinding>
+                              </ColumnDefinition.Width>
+                            </ColumnDefinition>
+                          </Grid.ColumnDefinitions>
+                          <Border Grid.Column="1" MinWidth="2" CornerRadius="2" IsVisible="{Binding IsMeasured}"
+                                  Background="{Binding Label, Converter={x:Static p:TimingBarMap.BarBrush}}" />
+                          <Line Grid.ColumnSpan="3" StartPoint="0,0" EndPoint="400,0" Stretch="Fill" VerticalAlignment="Center"
+                                StrokeThickness="1" StrokeDashArray="3,3" Stroke="{DynamicResource YaapicBorderSubtleBrush}"
+                                IsVisible="{Binding !IsMeasured}" />
+                        </Grid>
+                        <TextBlock Grid.Column="2" Text="{Binding DurationText}" Classes="codeSmall"
+                                   HorizontalAlignment="Right" VerticalAlignment="Center"
+                                   Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                      </Grid>
+                    </DataTemplate>
+                  </ItemsControl.ItemTemplate>
+                </ItemsControl>
+              </StackPanel>
+              <TextBlock Margin="16,12" TextWrapping="Wrap" Text="{x:Static loc:Strings.TimingNone}"
+                         Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                         IsVisible="{Binding !HasTimings}" />
+            </Panel>
+          </TabItem>
+          <TabItem AutomationProperties.Name="{x:Static loc:Strings.ResponseTabDiff}">
+            <TabItem.Header>
+              <TextBlock Text="{x:Static loc:Strings.ResponseTabDiff}" />
+            </TabItem.Header>
+            <Grid RowDefinitions="Auto,Auto,*" DataContext="{Binding Diff}" x:DataType="rsp:ResponseDiffViewModel">
+              <StackPanel Margin="16,8" Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="12" IsVisible="{Binding HasComparison}">
+                  <TextBlock Text="{Binding SummaryText}" Classes="bodyStrong" VerticalAlignment="Center" />
+                  <TextBlock Text="{Binding StatusLine}" Classes="codeSmall" VerticalAlignment="Center"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                  <ComboBox MinWidth="180" VerticalAlignment="Center"
+                            SelectedIndex="{Binding UseBaseline, Mode=OneWay, Converter={x:Static p:DiffMap.CompareIndex}}"
+                            SelectionChanged="OnDiffCompareChanged">
+                    <ComboBoxItem Content="{x:Static loc:Strings.DiffCompareWithPrevious}" />
+                    <ComboBoxItem Content="{x:Static loc:Strings.DiffCompareWithBaseline}" IsEnabled="{Binding HasBaseline}" />
+                  </ComboBox>
+                  <Button Content="{x:Static loc:Strings.DiffPin}" Command="{Binding PinCommand}" VerticalAlignment="Center" />
+                  <Button Content="{x:Static loc:Strings.DiffUnpin}" Command="{Binding UnpinCommand}" VerticalAlignment="Center"
+                          IsVisible="{Binding HasBaseline}" />
+                  <TextBlock Text="{Binding PinnedText}" Classes="body" VerticalAlignment="Center"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="12">
+                  <ToggleSwitch OnContent="{x:Static loc:Strings.DiffIgnoreWhitespace}" OffContent="{x:Static loc:Strings.DiffIgnoreWhitespace}"
+                                IsChecked="{Binding IgnoreWhitespace}" />
+                  <ToggleSwitch OnContent="{x:Static loc:Strings.DiffIgnoreVolatileHeaders}" OffContent="{x:Static loc:Strings.DiffIgnoreVolatileHeaders}"
+                                IsChecked="{Binding IgnoreVolatileHeaders}" />
+                  <ToggleSwitch OnContent="{x:Static loc:Strings.DiffExpandAll}" OffContent="{x:Static loc:Strings.DiffExpandAll}"
+                                IsChecked="{Binding ExpandFolds}" />
+                </StackPanel>
+              </StackPanel>
+              <ItemsControl Grid.Row="1" Margin="16,6" MaxHeight="160" ItemsSource="{Binding Headers}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="rsp:HeaderDiffItem">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                      <TextBlock Text="{Binding Name}" Classes="codeSmall" Foreground="{DynamicResource YaapicSyntaxKeyBrush}" />
+                      <TextBlock Text="{Binding OldValue}" Classes="codeSmall" TextDecorations="Strikethrough"
+                                 Foreground="{DynamicResource YaapicDangerBrush}"
+                                 IsVisible="{Binding OldValue, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                      <TextBlock Text="{Binding NewValue}" Classes="codeSmall"
+                                 Foreground="{DynamicResource YaapicSuccessBrush}"
+                                 IsVisible="{Binding NewValue, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                    </StackPanel>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <ListBox Grid.Row="2" ItemsSource="{Binding BodyLines}" Background="Transparent">
+                <ListBox.IsVisible>
+                  <MultiBinding Converter="{x:Static p:DiffMap.Comparable}">
+                    <Binding Path="HasComparison" />
+                    <Binding Path="UnavailableReason" />
+                  </MultiBinding>
+                </ListBox.IsVisible>
+                <ListBox.ItemsPanel>
+                  <ItemsPanelTemplate>
+                    <VirtualizingStackPanel />
+                  </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.Styles>
+                  <Style Selector="ListBoxItem">
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="MinHeight" Value="0" />
+                    <Setter Property="Height" Value="20" />
+                    <Setter Property="Focusable" Value="False" />
+                  </Style>
+                </ListBox.Styles>
+                <ListBox.ItemTemplate>
+                  <DataTemplate x:DataType="rsp:DiffItem">
+                    <Grid Height="20" ColumnDefinitions="48,48,16,*" ColumnSpacing="8"
+                          Background="{Binding Op, Converter={x:Static p:DiffMap.Background}}">
+                      <TextBlock Text="{Binding OldNumber}" HorizontalAlignment="Right" Classes="codeSmall"
+                                 Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                      <TextBlock Grid.Column="1" Text="{Binding NewNumber}" HorizontalAlignment="Right" Classes="codeSmall"
+                                 Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
+                      <TextBlock Grid.Column="2" Text="{Binding Op, Converter={x:Static p:DiffMap.Marker}}" Classes="codeSmall"
+                                 IsVisible="{Binding !IsFold}" />
+                      <TextBlock Grid.Column="3" Text="{Binding Text}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                                 Classes="codeSmall" IsVisible="{Binding !IsFold}" />
+                      <TextBlock Grid.ColumnSpan="4" Text="{Binding Text}" HorizontalAlignment="Center" FontStyle="Italic"
+                                 Classes="body" Foreground="{DynamicResource YaapicTextSecondaryBrush}" IsVisible="{Binding IsFold}" />
+                    </Grid>
+                  </DataTemplate>
+                </ListBox.ItemTemplate>
+              </ListBox>
+              <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap" Classes="body"
+                         Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding UnavailableReason}"
+                         IsVisible="{Binding UnavailableReason, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+              <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap" Classes="body"
+                         Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.DiffNeedTwo}">
+                <TextBlock.IsVisible>
+                  <MultiBinding Converter="{x:Static p:DiffMap.NeedTwo}">
+                    <Binding Path="HasComparison" />
+                    <Binding Path="UnavailableReason" />
                   </MultiBinding>
                 </TextBlock.IsVisible>
               </TextBlock>

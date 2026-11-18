@@ -112,7 +112,7 @@ public class ScriptSendRequestTests
         await Run(engine, transport);
 
         Assert.All(results.Take(20), r => Assert.Null(r.Error));
-        Assert.Equal("pm.sendRequest limit of 20 per run reached", results[20].Error);
+        Assert.Equal("yaapic.sendRequest limit of 20 per run reached", results[20].Error);
         Assert.Equal(21, transport.Requests.Count); // 20 sub-requests + the main one
     }
 
@@ -132,7 +132,7 @@ public class ScriptSendRequestTests
         Assert.Single(report.Runs);
         Assert.Equal(3, report.NetworkLog.Count);
         Assert.Equal(ConsoleSource.Network, report.NetworkLog[0].Source);
-        Assert.Equal("pm.sendRequest", report.NetworkLog[0].Origin);
+        Assert.Equal("yaapic.sendRequest", report.NetworkLog[0].Origin);
         Assert.Equal(ConsoleLevel.Warn, report.NetworkLog[1].Level);
         Assert.Contains("missing", report.NetworkLog[1].Message);
         Assert.Null(report.NetworkLog[2].Origin);

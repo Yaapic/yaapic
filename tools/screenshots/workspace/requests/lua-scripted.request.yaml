@@ -13,16 +13,16 @@ scripts:
   preRequest:
     language: lua
     source: |
-      pm.request.headers.add({ key = "X-Lang", value = "lua" })
+      yaapic.request.headers.add({ key = "X-Lang", value = "lua" })
   postResponse:
     language: lua
     source: |
       -- Runs after the response arrives.
-      local users = pm.response.json()
-      pm.test("Has users", function()
-        pm.expect(#users).to.equal(2)
+      local users = yaapic.response.json()
+      yaapic.test("Has users", function()
+        yaapic.expect(#users).to.equal(2)
       end)
       for i, user in ipairs(users) do
         console.log("user " .. i .. ": " .. user.name)
       end
-      pm.environment.set("lastUser", users[#users].name)
+      yaapic.environment.set("lastUser", users[#users].name)

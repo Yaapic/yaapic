@@ -159,6 +159,73 @@ public sealed class FileSecretVaultTests : IDisposable
     }
 
     [Fact]
+    public async Task CertificatePassphraseRoundTripsAndRemoves()
+    {
+        var vault = Faked();
+        await vault.CreateAsync("fake", null, Ct);
+        var cert = SecretRef.Certificate(Owner);
+        await vault.SetAsync(cert, "cert-pass", Ct);
+        Assert.Contains("cert-pass", vault.GetSecretValues());
+
+        var reloaded = Faked();
+        await reloaded.InitializeAsync(Ct);
+        Assert.True(reloaded.TryGet(cert, out var value));
+        Assert.Equal("cert-pass", value);
+
+        await reloaded.RemoveOwnerAsync(SecretOwnerKind.Certificate, Owner, Ct);
+        Assert.False(reloaded.TryGet(cert, out _));
+        Assert.Empty(reloaded.GetSecretValues());
+    }
+
+    [Fact]
+    public async Task CertificateEntryCannotBeRelabelledAsEnvironment()
+    {
+        var vault = Faked();
+        await vault.CreateAsync("fake", null, Ct);
+        await vault.SetAsync(SecretRef.Certificate(Owner), "cert-pass", Ct);
+        Edit(root => Entry(root, "passphrase")["kind"] = nameof(SecretOwnerKind.Environment));
+
+        var reloaded = Faked();
+        await reloaded.InitializeAsync(Ct);
+
+        Assert.False(reloaded.TryGet(new SecretRef(SecretOwnerKind.Environment, Owner, "passphrase"), out _));
+        Assert.Single(reloaded.LoadWarnings);
+    }
+
+    [Fact]
+    public async Task UnknownKindStillFailsToLoad()
+    {
+        var vault = Faked();
+        await vault.CreateAsync("fake", null, Ct);
+        await vault.SetAsync(SecretRef.Certificate(Owner), "cert-pass", Ct);
+        Edit(root => Entry(root, "passphrase")["kind"] = "Bogus");
+
+        var reloaded = Faked();
+        await reloaded.InitializeAsync(Ct);
+
+        Assert.False(reloaded.TryGet(SecretRef.Certificate(Owner), out _));
+        Assert.Single(reloaded.LoadWarnings);
+    }
+
+    [Fact]
+    public async Task EntriesWrittenBeforeTheCertificateKindStillOpen()
+    {
+        var vault = Faked();
+        await vault.CreateAsync("fake", null, Ct);
+        await vault.SetAsync(Ref("old"), "old-value", Ct);
+        await vault.SetAsync(SecretRef.Globals("g"), "global-value", Ct);
+
+        var reloaded = Faked();
+        await reloaded.InitializeAsync(Ct);
+
+        Assert.Empty(reloaded.LoadWarnings);
+        Assert.True(reloaded.TryGet(Ref("old"), out var old));
+        Assert.Equal("old-value", old);
+        var kinds = JsonNode.Parse(File.ReadAllText(VaultPath))!["entries"]!.AsArray().Select(e => e!["kind"]!.GetValue<string>());
+        Assert.Equal(["Environment", "Globals"], kinds.Order());
+    }
+
+    [Fact]
     public async Task SwappedEntriesFailTheAadCheck()
     {
         var vault = Faked();

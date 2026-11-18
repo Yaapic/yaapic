@@ -10,4 +10,4 @@ scripts:
   postResponse:
     language: javascript
     source: |
-      pm.test("Admin call succeeds", () => pm.response.to.have.status(200));
+      yaapic.test("Admin call succeeds", () => yaapic.response.to.have.status(200));

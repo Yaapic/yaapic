@@ -1,0 +1,55 @@
+<ContentDialog
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.JwtDecoderDialog"
+               xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+               xmlns:p="using:Yaapic.App.WinUI.Presentation"
+               xmlns:v="using:Yaapic.App.WinUI.Views"
+               xmlns:t="using:Yaapic.ViewModels.Tools"
+               Title="{x:Bind loc:Strings.JwtDecoderTitle}"
+               CloseButtonText="{x:Bind loc:Strings.CommonClose}" DefaultButton="Close" CloseButtonStyle="{StaticResource YaapicDialogButtonStyle}">
+  <ScrollViewer MaxHeight="600" VerticalScrollBarVisibility="Auto">
+    <StackPanel Width="560" Spacing="10" Margin="0,0,12,0">
+      <TextBox AcceptsReturn="True" TextWrapping="Wrap" MinHeight="90" MaxHeight="140"
+               PlaceholderText="{x:Bind loc:Strings.JwtDecoderPlaceholder}" AutomationProperties.Name="{x:Bind loc:Strings.JwtDecoderPlaceholder}"
+               Text="{x:Bind ViewModel.Input, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+      <StackPanel Orientation="Horizontal" Spacing="8">
+        <Button Content="{x:Bind loc:Strings.JwtPaste}" Click="OnPasteClick"/>
+        <TextBlock VerticalAlignment="Center" AutomationProperties.LiveSetting="Polite"
+                   Style="{StaticResource YaapicBodyStrongTextStyle}"
+                   Foreground="{x:Bind p:BrushMap.JwtStatus(ViewModel.StatusKind), Mode=OneWay}"
+                   Text="{x:Bind ViewModel.StatusText, Mode=OneWay}"/>
+      </StackPanel>
+      <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicDangerBrush}"
+                 Text="{x:Bind ViewModel.ErrorText, Mode=OneWay}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.ErrorText), Mode=OneWay}"/>
+      <StackPanel Spacing="10" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsValid), Mode=OneWay}">
+        <TextBlock Text="{x:Bind loc:Strings.JwtHeaderLabel}" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+        <v:CodeEditorView Height="110" IsReadOnly="True" EditorLanguage="json" Text="{x:Bind ViewModel.HeaderText, Mode=OneWay}"/>
+        <TextBlock Text="{x:Bind loc:Strings.JwtFieldPayload}" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+        <v:CodeEditorView Height="170" IsReadOnly="True" EditorLanguage="json" Text="{x:Bind ViewModel.PayloadText, Mode=OneWay}"/>
+        <TextBlock Text="{x:Bind loc:Strings.JwtClaimsLabel}" Style="{StaticResource YaapicBodyStrongTextStyle}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Claims.Count), Mode=OneWay}"/>
+        <ItemsControl ItemsSource="{x:Bind p:ListMap.Claims(ViewModel.Claims), Mode=OneWay}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="t:JwtClaimRow">
+              <Grid ColumnSpacing="12" Margin="0,2">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="48"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{x:Bind Name}" Style="{StaticResource YaapicCodeTextStyle}"/>
+                <TextBlock Grid.Column="1" Text="{x:Bind LocalTimeText}" IsTextSelectionEnabled="True"/>
+                <TextBlock Grid.Column="2" Text="{x:Bind RelativeText}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+              </Grid>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True" Style="{StaticResource YaapicCodeTextStyle}"
+                   Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind ViewModel.SignatureText, Mode=OneWay}"/>
+      </StackPanel>
+      <TextBlock TextWrapping="Wrap" Style="{StaticResource YaapicBodySmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                 Text="{x:Bind ViewModel.NotVerifiedNote}"/>
+    </StackPanel>
+  </ScrollViewer>
+</ContentDialog>

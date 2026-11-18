@@ -22,7 +22,7 @@ public sealed class FilePreferencesStoreTests : IDisposable
     [Fact]
     public async Task Preferences_round_trip()
     {
-        var preferences = new UserPreferences(AppLanguage.French, "#A1B2C3");
+        var preferences = new UserPreferences(AppLanguage.French, "#A1B2C3", "python");
 
         await new FilePreferencesStore(_dir).SaveAsync(preferences, Ct);
 

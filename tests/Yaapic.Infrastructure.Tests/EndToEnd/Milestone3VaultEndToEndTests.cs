@@ -196,10 +196,10 @@ public sealed class Milestone3VaultEndToEndTests : IClassFixture<LoopbackServer>
             "",
             "Read",
             Url("/echo"),
-            post: "console.log(pm.environment.get('apiKey'));\npm.test('leaks ' + 'it', () => { throw new Error('bad ' + pm.environment.get('apiKey')); });");
-        var error = _fx.WriteRequest("", "Error", Url("/echo"), post: "throw new Error('oops ' + pm.environment.get('apiKey'));");
-        var write = _fx.WriteRequest("", "Write", Url("/echo"), post: "pm.environment.set('apiKey', 'new-secret-9');");
-        var pre = _fx.WriteRequest("", "Pre", Url("/echo"), pre: "pm.request.headers.add({ key: 'X-From-Script', value: pm.environment.get('apiKey') });");
+            post: "console.log(yaapic.environment.get('apiKey'));\nyaapic.test('leaks ' + 'it', () => { throw new Error('bad ' + yaapic.environment.get('apiKey')); });");
+        var error = _fx.WriteRequest("", "Error", Url("/echo"), post: "throw new Error('oops ' + yaapic.environment.get('apiKey'));");
+        var write = _fx.WriteRequest("", "Write", Url("/echo"), post: "yaapic.environment.set('apiKey', 'new-secret-9');");
+        var pre = _fx.WriteRequest("", "Pre", Url("/echo"), pre: "yaapic.request.headers.add({ key: 'X-From-Script', value: yaapic.environment.get('apiKey') });");
         var shell = await NewShellAsync();
         await SetUpVaultAsync(shell);
         var env = await SeedAsync(shell, inner);

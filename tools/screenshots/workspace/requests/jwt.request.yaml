@@ -1,0 +1,24 @@
+version: 1
+id: 11111111-0000-0000-0000-00000000000f
+name: JWT RS256
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+auth:
+  type: jwt
+  jwt:
+    algorithm: RS256
+    privateKey: |
+      __JWT_PEM__
+    payload: |
+      {"sub":"demo-user","iss":"yaapic-screenshots"}
+    headers: ""
+    addIssuedAt: true
+    expiresIn: 3600
+    placement: header
+    headerPrefix: Bearer

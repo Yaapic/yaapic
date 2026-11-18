@@ -81,7 +81,7 @@ public sealed class FileCollectionStoreTests : IDisposable
     }
 
     private static readonly ScriptSet Scripts = new(
-        new ScriptBlock(ScriptLanguage.JavaScript, "pm.environment.set('a', '1');"),
+        new ScriptBlock(ScriptLanguage.JavaScript, "yaapic.environment.set('a', '1');"),
         new ScriptBlock(ScriptLanguage.Lua, "print('x')"));
 
     [Fact]

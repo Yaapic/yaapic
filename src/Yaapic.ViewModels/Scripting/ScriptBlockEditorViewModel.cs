@@ -70,13 +70,13 @@ public sealed partial class ScriptBlockEditorViewModel : ObservableObject
     private static string TemplateFor(ScriptLanguage language, ScriptPhase phase) => (language, phase) switch
     {
         (ScriptLanguage.Lua, ScriptPhase.PreRequest) =>
-            "-- " + Strings.ScriptTemplatePreRequest + "\n-- pm.environment.set(\"requestId\", pm.variables.replace_in(\"{{$guid}}\"))",
+            "-- " + Strings.ScriptTemplatePreRequest + "\n-- yaapic.environment.set(\"requestId\", yaapic.variables.replace_in(\"{{$guid}}\"))",
         (ScriptLanguage.Lua, _) =>
-            "-- " + Strings.ScriptTemplatePostResponse + "\n-- pm.test(\"Status is 200\", function() pm.response.to.have.status(200) end)",
+            "-- " + Strings.ScriptTemplatePostResponse + "\n-- yaapic.test(\"Status is 200\", function() yaapic.response.to.have.status(200) end)",
         (_, ScriptPhase.PreRequest) =>
-            "// " + Strings.ScriptTemplatePreRequest + "\n// pm.environment.set(\"requestId\", pm.variables.replaceIn(\"{{$guid}}\"));",
+            "// " + Strings.ScriptTemplatePreRequest + "\n// yaapic.environment.set(\"requestId\", yaapic.variables.replaceIn(\"{{$guid}}\"));",
         _ =>
-            "// " + Strings.ScriptTemplatePostResponse + "\n// pm.test(\"Status is 200\", () => pm.response.to.have.status(200));",
+            "// " + Strings.ScriptTemplatePostResponse + "\n// yaapic.test(\"Status is 200\", () => yaapic.response.to.have.status(200));",
     };
 
     // An untouched (blank or template) source follows the language, so the editor shows the new language's template.

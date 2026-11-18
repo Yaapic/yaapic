@@ -3,6 +3,9 @@
     <TargetFramework>net11.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <InternalsVisibleTo Include="Yaapic.Core.Tests" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Yaapic.Domain\Yaapic.Domain.csproj" />
     <ProjectReference Include="..\Yaapic.Localization\Yaapic.Localization.csproj" />
   </ItemGroup>

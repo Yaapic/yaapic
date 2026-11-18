@@ -152,6 +152,26 @@
                            Value="{Binding TimeoutSeconds, Converter={x:Static p:EditorMap.TimeoutValue}, Mode=OneWay}"
                            ValueChanged="OnTimeoutChanged" />
           </StackPanel>
+          <StackPanel Spacing="6" Width="260">
+            <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.RequestSettingsHttpVersion}" />
+            <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding HttpVersionChoices}"
+                      AutomationProperties.Name="{x:Static loc:Strings.RequestSettingsHttpVersion}"
+                      SelectedIndex="{Binding HttpVersion, Converter={x:Static p:EditorMap.HttpVersionIndex}, Mode=OneWay}"
+                      SelectionChanged="OnHttpVersionChanged">
+              <ComboBox.Styles>
+                <Style Selector="ComboBoxItem" x:DataType="req:HttpVersionChoice">
+                  <Setter Property="IsEnabled" Value="{Binding IsAvailable}" />
+                </Style>
+              </ComboBox.Styles>
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="req:HttpVersionChoice">
+                  <TextBlock Text="{Binding Label}" />
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <TextBlock Classes="bodySmall" TextWrapping="Wrap" Text="{Binding HttpVersionNote}"
+                       IsVisible="{Binding HttpVersionNote, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          </StackPanel>
         </StackPanel>
       </TabItem>
     </TabControl>

@@ -9,9 +9,9 @@ namespace Yaapic.Scripting;
 /// <summary>
 /// Turns the JSON calls of <c>__host(op, argsJson)</c> into calls on <see cref="IScriptHost"/>. The result is
 /// <c>{"ok":&lt;json&gt;}</c> or <c>{"err":"message"}</c>; <see cref="Invoke"/> never throws. <c>req.set</c> takes the whole
-/// request: the prelude keeps a local copy of <c>pm.request</c> and flushes its mutations in one call.
+/// request: the prelude keeps a local copy of <c>yaapic.request</c> and flushes its mutations in one call.
 /// </summary>
-/// <param name="host">The application side of the <c>pm</c> API.</param>
+/// <param name="host">The application side of the <c>yaapic</c> API.</param>
 /// <param name="collector">Receives console lines and test results.</param>
 internal sealed class HostBridge(IScriptHost host, RunCollector collector)
 {
@@ -109,7 +109,7 @@ internal sealed class HostBridge(IScriptHost host, RunCollector collector)
             case HostOps.Cookies:
                 return Json(host.ResponseCookies.Select(ToDto).ToList(), HostJsonContext.Default.ListCookieDto);
             case HostOps.Unsupported:
-                throw new NotSupportedException($"pm.{Args(argsJson, HostJsonContext.Default.String)} is not supported in Yaapic");
+                throw new NotSupportedException($"yaapic.{Args(argsJson, HostJsonContext.Default.String)} is not supported in Yaapic");
             default:
                 throw new InvalidOperationException($"Unknown host op '{op}'");
         }

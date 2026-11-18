@@ -19,16 +19,16 @@ public sealed class RequestEditorScriptsTests
     public static TheoryData<ScriptSet> Sets => new()
     {
         ScriptSet.Empty,
-        new ScriptSet(new ScriptBlock(ScriptLanguage.JavaScript, "pm.test('a')"), new ScriptBlock(ScriptLanguage.Lua, "pm.test('b')")),
+        new ScriptSet(new ScriptBlock(ScriptLanguage.JavaScript, "yaapic.test('a')"), new ScriptBlock(ScriptLanguage.Lua, "yaapic.test('b')")),
         new ScriptSet(new ScriptBlock(ScriptLanguage.Lua, "print(1)"), new ScriptBlock(ScriptLanguage.JavaScript, "")),
     };
 
     public static TheoryData<ScriptLanguage, ScriptPhase, string> Placeholders => new()
     {
-        { ScriptLanguage.JavaScript, ScriptPhase.PreRequest, "// Runs before the request is sent.\n// pm.environment.set(\"requestId\", pm.variables.replaceIn(\"{{$guid}}\"));" },
-        { ScriptLanguage.JavaScript, ScriptPhase.PostResponse, "// Runs after the response arrives.\n// pm.test(\"Status is 200\", () => pm.response.to.have.status(200));" },
-        { ScriptLanguage.Lua, ScriptPhase.PreRequest, "-- Runs before the request is sent.\n-- pm.environment.set(\"requestId\", pm.variables.replace_in(\"{{$guid}}\"))" },
-        { ScriptLanguage.Lua, ScriptPhase.PostResponse, "-- Runs after the response arrives.\n-- pm.test(\"Status is 200\", function() pm.response.to.have.status(200) end)" },
+        { ScriptLanguage.JavaScript, ScriptPhase.PreRequest, "// Runs before the request is sent.\n// yaapic.environment.set(\"requestId\", yaapic.variables.replaceIn(\"{{$guid}}\"));" },
+        { ScriptLanguage.JavaScript, ScriptPhase.PostResponse, "// Runs after the response arrives.\n// yaapic.test(\"Status is 200\", () => yaapic.response.to.have.status(200));" },
+        { ScriptLanguage.Lua, ScriptPhase.PreRequest, "-- Runs before the request is sent.\n-- yaapic.environment.set(\"requestId\", yaapic.variables.replace_in(\"{{$guid}}\"))" },
+        { ScriptLanguage.Lua, ScriptPhase.PostResponse, "-- Runs after the response arrives.\n-- yaapic.test(\"Status is 200\", function() yaapic.response.to.have.status(200) end)" },
     };
 
     [Theory]
@@ -59,7 +59,7 @@ public sealed class RequestEditorScriptsTests
         var editor = Editor();
         Assert.False(editor.IsDirty);
 
-        editor.Scripts.PostResponse.Source = "pm.test('x')";
+        editor.Scripts.PostResponse.Source = "yaapic.test('x')";
 
         Assert.True(editor.IsDirty);
         Assert.EndsWith(" •", editor.Title);
@@ -142,7 +142,7 @@ public sealed class RequestEditorScriptsTests
 
     [Theory]
     [InlineData("")]
-    [InlineData("// Runs after the response arrives.\n// pm.test(\"Status is 200\", () => pm.response.to.have.status(200));")]
+    [InlineData("// Runs after the response arrives.\n// yaapic.test(\"Status is 200\", () => yaapic.response.to.have.status(200));")]
     public void LoadingAnEmptyBlockShowsTheTemplateAndRoundTripsEmpty(string source)
     {
         var block = new ScriptBlockEditorViewModel(ScriptPhase.PostResponse);
@@ -157,11 +157,11 @@ public sealed class RequestEditorScriptsTests
     public void TypingReplacesTheTemplateAndCountsAsAScript()
     {
         var scripts = new ScriptsEditorViewModel();
-        scripts.PreRequest.Source = "pm.test('x')";
+        scripts.PreRequest.Source = "yaapic.test('x')";
 
         Assert.False(scripts.PreRequest.IsEmpty);
         Assert.Equal(1, scripts.FilledCount);
-        Assert.Equal("pm.test('x')", scripts.ToSet().PreRequest.Source);
+        Assert.Equal("yaapic.test('x')", scripts.ToSet().PreRequest.Source);
     }
 
     [Fact]

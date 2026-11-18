@@ -12,7 +12,9 @@ using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Settings;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Updates;
 using Yaapic.ViewModels.Vault;
 
@@ -189,6 +191,53 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
     /// <summary>Asks the views to open the environments dialog.</summary>
     public void RequestEnvironments() => EnvironmentsRequested?.Invoke(this, EventArgs.Empty);
 
+    /// <summary>Raised when the user asks for the JWT decoder; the views open their decoder dialog.</summary>
+    public event EventHandler? JwtDecoderRequested;
+
+    /// <summary>Asks the views to open the JWT decoder dialog.</summary>
+    public void RequestJwtDecoder() => JwtDecoderRequested?.Invoke(this, EventArgs.Empty);
+
+    /// <summary>Raised when the user asks to manage client certificates; the views open their certificates dialog.</summary>
+    public event EventHandler? CertificatesRequested;
+
+    /// <summary>Asks the views to open the client certificates dialog.</summary>
+    public void RequestCertificates() => CertificatesRequested?.Invoke(this, EventArgs.Empty);
+
+    private readonly List<IDisposable> _ownedResources = [];
+    private Func<CertificatesViewModel>? _createCertificates;
+    private Func<JwtDecoderViewModel>? _createJwtDecoder;
+
+    /// <summary>Hands the shell the factories of the tool dialogs; the composition root calls it once.</summary>
+    /// <param name="certificates">Creates the client certificates view model.</param>
+    /// <param name="jwtDecoder">Creates the JWT decoder view model.</param>
+    public void AttachTools(Func<CertificatesViewModel> certificates, Func<JwtDecoderViewModel> jwtDecoder)
+    {
+        ArgumentNullException.ThrowIfNull(certificates);
+        ArgumentNullException.ThrowIfNull(jwtDecoder);
+        _createCertificates = certificates;
+        _createJwtDecoder = jwtDecoder;
+    }
+
+    /// <summary>Makes the shell dispose a resource when the application closes (after the close was confirmed).</summary>
+    /// <param name="resource">The resource.</param>
+    public void Own(IDisposable resource)
+    {
+        ArgumentNullException.ThrowIfNull(resource);
+        _ownedResources.Add(resource);
+    }
+
+    /// <summary>Creates the view model of the client certificates dialog.</summary>
+    /// <returns>A new view model.</returns>
+    /// <exception cref="InvalidOperationException"><see cref="AttachTools"/> was not called.</exception>
+    public CertificatesViewModel CreateCertificates() =>
+        (_createCertificates ?? throw new InvalidOperationException("The tools are not attached.")).Invoke();
+
+    /// <summary>Creates the view model of the JWT decoder dialog.</summary>
+    /// <returns>A new view model.</returns>
+    /// <exception cref="InvalidOperationException"><see cref="AttachTools"/> was not called.</exception>
+    public JwtDecoderViewModel CreateJwtDecoder() =>
+        (_createJwtDecoder ?? throw new InvalidOperationException("The tools are not attached.")).Invoke();
+
     /// <summary>Loads the stores and restores the saved session; opens one new tab when none is restored.</summary>
     /// <returns>A task that completes when the shell is ready.</returns>
     public async Task InitializeAsync()
@@ -270,6 +319,11 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         QueueSave();
         await _drain;
         Updates.Dispose();
+        foreach (var resource in _ownedResources)
+        {
+            resource.Dispose();
+        }
+
         return true;
     }
 

@@ -2,7 +2,8 @@
     xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.AuthEditorView"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:p="using:Yaapic.App.WinUI.Presentation">
+    xmlns:p="using:Yaapic.App.WinUI.Presentation"
+    xmlns:local="using:Yaapic.App.WinUI.Views">
   <StackPanel Spacing="12" MaxWidth="480" HorizontalAlignment="Left">
     <ComboBox x:Name="KindBox" Header="{x:Bind loc:Strings.CommonType}" MinWidth="200" AutomationProperties.Name="{x:Bind loc:Strings.AuthType}"
               SelectionChanged="OnKindChanged">
@@ -10,20 +11,26 @@
       <ComboBoxItem Content="Basic Auth"/>
       <ComboBoxItem Content="Bearer Token"/>
       <ComboBoxItem Content="API Key"/>
+      <ComboBoxItem Content="{x:Bind loc:Strings.AuthKindOAuth2}"/>
+      <ComboBoxItem Content="{x:Bind loc:Strings.AuthKindJwt}"/>
+      <ComboBoxItem Content="{x:Bind loc:Strings.AuthKindDigest}"/>
+      <ComboBoxItem Content="{x:Bind loc:Strings.AuthKindAwsV4}"/>
     </ComboBox>
 
     <TextBlock Text="{x:Bind loc:Strings.AuthNone}" Style="{StaticResource YaapicBodySmallTextStyle}"
                Visibility="{x:Bind p:VisibilityMap.WhenNoAuth(ViewModel.Kind), Mode=OneWay}"/>
 
-    <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenBasicAuth(ViewModel.Kind), Mode=OneWay}">
+    <StackPanel Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenUserPasswordAuth(ViewModel.Kind), Mode=OneWay}">
       <TextBox Header="{x:Bind loc:Strings.AuthUsername}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}"
                Text="{x:Bind ViewModel.Username, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-      <PasswordBox Header="{x:Bind loc:Strings.AuthPassword}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+      <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.AuthPassword}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                    Password="{x:Bind ViewModel.Password, Mode=TwoWay}"/>
+      <TextBlock Text="{x:Bind loc:Strings.AuthDigestHint}" TextWrapping="Wrap" Style="{StaticResource YaapicBodySmallTextStyle}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenDigestAuth(ViewModel.Kind), Mode=OneWay}"/>
     </StackPanel>
 
-    <PasswordBox Header="{x:Bind loc:Strings.AuthToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
+    <PasswordBox BorderThickness="1" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}" Header="{x:Bind loc:Strings.AuthToken}" PlaceholderText="{x:Bind loc:Strings.EditingVariableHint}"
                  Password="{x:Bind ViewModel.Token, Mode=TwoWay}"
                  Visibility="{x:Bind p:VisibilityMap.WhenBearerAuth(ViewModel.Kind), Mode=OneWay}"/>
 
@@ -39,5 +46,12 @@
         <ComboBoxItem Content="{x:Bind loc:Strings.AuthLocationQuery}"/>
       </ComboBox>
     </StackPanel>
+
+    <local:OAuth2EditorView ViewModel="{x:Bind ViewModel.OAuth2, Mode=OneWay}"
+                            Visibility="{x:Bind p:VisibilityMap.WhenOAuth2Auth(ViewModel.Kind), Mode=OneWay}"/>
+    <local:JwtEditorView ViewModel="{x:Bind ViewModel.Jwt, Mode=OneWay}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenJwtAuth(ViewModel.Kind), Mode=OneWay}"/>
+    <local:AwsV4EditorView ViewModel="{x:Bind ViewModel.AwsV4, Mode=OneWay}"
+                           Visibility="{x:Bind p:VisibilityMap.WhenAwsV4Auth(ViewModel.Kind), Mode=OneWay}"/>
   </StackPanel>
 </UserControl>

@@ -37,6 +37,21 @@ public static class Strings
     /// <summary>API key location</summary>
     public static string AuthApiKeyLocation => Localizer.Pick("API key location", "Emplacement de la clé d'API");
 
+    /// <summary>The first request is a probe without a body; the server's challenge is then answered.</summary>
+    public static string AuthDigestHint => Localizer.Pick("The first request is a probe without a body; the server's challenge is then answered.", "La première requête est une sonde sans corps ; le défi du serveur reçoit ensuite une réponse.");
+
+    /// <summary>AWS Signature v4</summary>
+    public static string AuthKindAwsV4 => Localizer.Pick("AWS Signature v4", "AWS Signature v4");
+
+    /// <summary>Digest</summary>
+    public static string AuthKindDigest => Localizer.Pick("Digest", "Digest");
+
+    /// <summary>JWT</summary>
+    public static string AuthKindJwt => Localizer.Pick("JWT", "JWT");
+
+    /// <summary>OAuth 2.0</summary>
+    public static string AuthKindOAuth2 => Localizer.Pick("OAuth 2.0", "OAuth 2.0");
+
     /// <summary>Header</summary>
     public static string AuthLocationHeader => Localizer.Pick("Header", "En-tête");
 
@@ -46,8 +61,15 @@ public static class Strings
     /// <summary>This request does not use any authentication.</summary>
     public static string AuthNone => Localizer.Pick("This request does not use any authentication.", "Cette requête n'utilise aucune authentification.");
 
+    /// <summary>This authentication type is not available.</summary>
+    public static string AuthNotAvailable => Localizer.Pick("This authentication type is not available.", "Ce type d’authentification n’est pas disponible.");
+
     /// <summary>Password</summary>
     public static string AuthPassword => Localizer.Pick("Password", "Mot de passe");
+
+    /// <summary>{0} is stored as plain text in the request. Use a secret variable instead.</summary>
+    public static string AuthSecretLiteralHint(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} is stored as plain text in the request. Use a secret variable instead.", "{0} est stocké en clair dans la requête. Utilisez plutôt une variable secrète."), a0);
 
     /// <summary>Token</summary>
     public static string AuthToken => Localizer.Pick("Token", "Jeton");
@@ -57,6 +79,35 @@ public static class Strings
 
     /// <summary>Username</summary>
     public static string AuthUsername => Localizer.Pick("Username", "Nom d'utilisateur");
+
+    /// <summary>Access key ID</summary>
+    public static string AwsFieldAccessKeyId => Localizer.Pick("Access key ID", "Identifiant de clé d'accès");
+
+    /// <summary>The AWS {0} is empty.</summary>
+    public static string AwsFieldMissing(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The AWS {0} is empty.", "Le champ AWS « {0} » est vide."), a0);
+
+    /// <summary>Region</summary>
+    public static string AwsFieldRegion => Localizer.Pick("Region", "Région");
+
+    /// <summary>Secret access key</summary>
+    public static string AwsFieldSecretAccessKey => Localizer.Pick("Secret access key", "Clé d'accès secrète");
+
+    /// <summary>Service</summary>
+    public static string AwsFieldService => Localizer.Pick("Service", "Service");
+
+    /// <summary>Session token</summary>
+    public static string AwsFieldSessionToken => Localizer.Pick("Session token", "Jeton de session");
+
+    /// <summary>Cannot read the request body file '{0}'.</summary>
+    public static string AwsPayloadUnreadable(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot read the request body file '{0}'.", "Impossible de lire le fichier du corps de la requête « {0} »."), a0);
+
+    /// <summary>Enter the AWS access key, secret key, region and service.</summary>
+    public static string AwsSettingsMissing => Localizer.Pick("Enter the AWS access key, secret key, region and service.", "Saisissez la clé d’accès, la clé secrète, la région et le service AWS.");
+
+    /// <summary>AWS Signature v4 needs an absolute http or https URL.</summary>
+    public static string AwsUrlInvalid => Localizer.Pick("AWS Signature v4 needs an absolute http or https URL.", "AWS Signature v4 nécessite une URL http ou https absolue.");
 
     /// <summary>Binary</summary>
     public static string BodyBinary => Localizer.Pick("Binary", "Binaire");
@@ -78,6 +129,118 @@ public static class Strings
 
     /// <summary>Select file</summary>
     public static string BodySelectFile => Localizer.Pick("Select file", "Sélectionner un fichier");
+
+    /// <summary>Certificate file</summary>
+    public static string CertificateFieldCertificatePath => Localizer.Pick("Certificate file", "Fichier du certificat");
+
+    /// <summary>Format</summary>
+    public static string CertificateFieldFormat => Localizer.Pick("Format", "Format");
+
+    /// <summary>Host pattern</summary>
+    public static string CertificateFieldHostPattern => Localizer.Pick("Host pattern", "Motif d'hôte");
+
+    /// <summary>Key file</summary>
+    public static string CertificateFieldKeyPath => Localizer.Pick("Key file", "Fichier de la clé");
+
+    /// <summary>Name</summary>
+    public static string CertificateFieldName => Localizer.Pick("Name", "Nom");
+
+    /// <summary>Passphrase</summary>
+    public static string CertificateFieldPassphrase => Localizer.Pick("Passphrase", "Phrase secrète");
+
+    /// <summary>The client certificate file was not found: {0}</summary>
+    public static string CertificateFileMissing(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate file was not found: {0}", "Le fichier du certificat client est introuvable : {0}"), a0);
+
+    /// <summary>The certificate file is required.</summary>
+    public static string CertificateIssueCertificatePathEmpty => Localizer.Pick("The certificate file is required.", "Le fichier du certificat est obligatoire.");
+
+    /// <summary>The host pattern must be a host, a wildcard host such as *.example.com, or a host with a port.</summary>
+    public static string CertificateIssueHostPatternInvalid => Localizer.Pick("The host pattern must be a host, a wildcard host such as *.example.com, or a host with a port.", "Le motif d'hôte doit être un hôte, un hôte avec joker comme *.example.com, ou un hôte avec un port.");
+
+    /// <summary>The key file is required.</summary>
+    public static string CertificateIssueKeyPathRequired => Localizer.Pick("The key file is required.", "Le fichier de la clé est obligatoire.");
+
+    /// <summary>The name is required.</summary>
+    public static string CertificateIssueNameEmpty => Localizer.Pick("The name is required.", "Le nom est obligatoire.");
+
+    /// <summary>The client certificate "{0}" could not be loaded. Check the file format and the passphrase.</summary>
+    public static string CertificateLoadFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate \"{0}\" could not be loaded. Check the file format and the passphrase.", "Le certificat client « {0} » n'a pas pu être chargé. Vérifiez le format du fichier et la phrase secrète."), a0);
+
+    /// <summary>New certificate</summary>
+    public static string CertificateNewName => Localizer.Pick("New certificate", "Nouveau certificat");
+
+    /// <summary>The client certificate "{0}" has no private key.</summary>
+    public static string CertificateNoPrivateKey(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The client certificate \"{0}\" has no private key.", "Le certificat client « {0} » n'a pas de clé privée."), a0);
+
+    /// <summary>No passphrase is stored for the client certificate "{0}".</summary>
+    public static string CertificatePassphraseMissing(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No passphrase is stored for the client certificate \"{0}\".", "Aucune phrase secrète n'est enregistrée pour le certificat client « {0} »."), a0);
+
+    /// <summary>Remove the stored passphrase</summary>
+    public static string CertificateRemovePassphrase => Localizer.Pick("Remove the stored passphrase", "Supprimer la phrase secrète enregistrée");
+
+    /// <summary>Unlock the vault to use the client certificate "{0}".</summary>
+    public static string CertificateVaultLocked(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unlock the vault to use the client certificate \"{0}\".", "Déverrouillez le coffre pour utiliser le certificat client « {0} »."), a0);
+
+    /// <summary>Unlock the vault to store or remove a certificate passphrase.</summary>
+    public static string CertificateVaultLockedForPassphrase => Localizer.Pick("Unlock the vault to store or remove a certificate passphrase.", "Déverrouillez le coffre pour enregistrer ou supprimer la phrase secrète d'un certificat.");
+
+    /// <summary>Add a certificate</summary>
+    public static string CertificatesAdd => Localizer.Pick("Add a certificate", "Ajouter un certificat");
+
+    /// <summary>PEM</summary>
+    public static string CertificatesFormatPem => Localizer.Pick("PEM", "PEM");
+
+    /// <summary>PFX</summary>
+    public static string CertificatesFormatPfx => Localizer.Pick("PFX", "PFX");
+
+    /// <summary>api.example.com or *.example.com:8443</summary>
+    public static string CertificatesHostPatternPlaceholder => Localizer.Pick("api.example.com or *.example.com:8443", "api.example.com ou *.example.com:8443");
+
+    /// <summary>Leave empty to keep the current one</summary>
+    public static string CertificatesKeepCurrent => Localizer.Pick("Leave empty to keep the current one", "Laisser vide pour conserver l'actuelle");
+
+    /// <summary>Move down</summary>
+    public static string CertificatesMoveDown => Localizer.Pick("Move down", "Descendre");
+
+    /// <summary>Move up</summary>
+    public static string CertificatesMoveUp => Localizer.Pick("Move up", "Monter");
+
+    /// <summary>Remove the certificate</summary>
+    public static string CertificatesRemove => Localizer.Pick("Remove the certificate", "Supprimer le certificat");
+
+    /// <summary>Add a certificate or select one to edit it.</summary>
+    public static string CertificatesSelectHint => Localizer.Pick("Add a certificate or select one to edit it.", "Ajoutez un certificat ou sélectionnez-en un pour le modifier.");
+
+    /// <summary>Client certificates</summary>
+    public static string CertificatesTitle => Localizer.Pick("Client certificates", "Certificats clients");
+
+    /// <summary>Copied</summary>
+    public static string CodeGenerationCopied => Localizer.Pick("Copied", "Copié");
+
+    /// <summary>Copy</summary>
+    public static string CodeGenerationCopy => Localizer.Pick("Copy", "Copier");
+
+    /// <summary>Cannot generate the code: {0}</summary>
+    public static string CodeGenerationFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot generate the code: {0}", "Impossible de générer le code : {0}"), a0);
+
+    /// <summary>Language</summary>
+    public static string CodeGenerationLanguage => Localizer.Pick("Language", "Langage");
+
+    /// <summary>The generated code may contain secrets (variables are resolved). Do not share it carelessly.</summary>
+    public static string CodeGenerationSecretWarning => Localizer.Pick("The generated code may contain secrets (variables are resolved). Do not share it carelessly.", "Le code généré peut contenir des secrets (les variables sont résolues). Ne le partagez pas à la légère.");
+
+    /// <summary>Generate code</summary>
+    public static string CodeGenerationTitle => Localizer.Pick("Generate code", "Générer du code");
+
+    /// <summary>Unresolved variables: {0}</summary>
+    public static string CodeGenerationUnresolved(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Unresolved variables: {0}", "Variables non résolues : {0}"), a0);
 
     /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
     public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");
@@ -287,6 +450,51 @@ public static class Strings
     public static string DialogSaveChangesTitle(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Save changes to '{0}'?", "Enregistrer les modifications de « {0} » ?"), a0);
 
+    /// <summary>Pinned baseline</summary>
+    public static string DiffCompareWithBaseline => Localizer.Pick("Pinned baseline", "Référence épinglée");
+
+    /// <summary>Previous response</summary>
+    public static string DiffCompareWithPrevious => Localizer.Pick("Previous response", "Réponse précédente");
+
+    /// <summary>Show unchanged lines</summary>
+    public static string DiffExpandAll => Localizer.Pick("Show unchanged lines", "Afficher les lignes inchangées");
+
+    /// <summary>{0} unchanged lines</summary>
+    public static string DiffFolded(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} unchanged lines", "{0} lignes inchangées"), a0);
+
+    /// <summary>Ignore volatile headers</summary>
+    public static string DiffIgnoreVolatileHeaders => Localizer.Pick("Ignore volatile headers", "Ignorer les en-têtes volatils");
+
+    /// <summary>Ignore whitespace</summary>
+    public static string DiffIgnoreWhitespace => Localizer.Pick("Ignore whitespace", "Ignorer les espaces");
+
+    /// <summary>Send this request twice to compare two responses.</summary>
+    public static string DiffNeedTwo => Localizer.Pick("Send this request twice to compare two responses.", "Envoyez cette requête deux fois pour comparer deux réponses.");
+
+    /// <summary>No differences</summary>
+    public static string DiffNoDifferences => Localizer.Pick("No differences", "Aucune différence");
+
+    /// <summary>Pin as baseline</summary>
+    public static string DiffPin => Localizer.Pick("Pin as baseline", "Épingler comme référence");
+
+    /// <summary>Baseline pinned at {0}</summary>
+    public static string DiffPinnedAt(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Baseline pinned at {0}", "Référence épinglée à {0}"), a0);
+
+    /// <summary>{0} added, {1} removed, {2} header changes</summary>
+    public static string DiffSummary(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} added, {1} removed, {2} header changes", "{0} ajoutées, {1} supprimées, {2} en-têtes modifiés"), a0, a1, a2);
+
+    /// <summary>Too large or binary to compare</summary>
+    public static string DiffTooLarge => Localizer.Pick("Too large or binary to compare", "Trop volumineux ou binaire pour être comparé");
+
+    /// <summary>Unpin baseline</summary>
+    public static string DiffUnpin => Localizer.Pick("Unpin baseline", "Retirer la référence");
+
+    /// <summary>Enter a username and a password for Digest authentication.</summary>
+    public static string DigestCredentialsMissing => Localizer.Pick("Enter a username and a password for Digest authentication.", "Saisissez un nom d’utilisateur et un mot de passe pour l’authentification Digest.");
+
     /// <summary>Unlock the vault to use secrets</summary>
     public static string EditingSecretToggleLocked => Localizer.Pick("Unlock the vault to use secrets", "Déverrouillez le coffre pour utiliser les secrets");
 
@@ -412,6 +620,123 @@ public static class Strings
     /// <summary>Yesterday</summary>
     public static string HistoryYesterday => Localizer.Pick("Yesterday", "Hier");
 
+    /// <summary>Automatic (HTTP/1.1 or HTTP/2)</summary>
+    public static string HttpVersionAuto => Localizer.Pick("Automatic (HTTP/1.1 or HTTP/2)", "Automatique (HTTP/1.1 ou HTTP/2)");
+
+    /// <summary>HTTP/1.1</summary>
+    public static string HttpVersionHttp1 => Localizer.Pick("HTTP/1.1", "HTTP/1.1");
+
+    /// <summary>HTTP/2</summary>
+    public static string HttpVersionHttp2 => Localizer.Pick("HTTP/2", "HTTP/2");
+
+    /// <summary>HTTP/3 (experimental)</summary>
+    public static string HttpVersionHttp3 => Localizer.Pick("HTTP/3 (experimental)", "HTTP/3 (expérimental)");
+
+    /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
+    public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
+
+    /// <summary>Time claims</summary>
+    public static string JwtClaimsLabel => Localizer.Pick("Time claims", "Dates des claims");
+
+    /// <summary>The header or payload is not valid Base64URL-encoded JSON.</summary>
+    public static string JwtDecodeErrorEncoding => Localizer.Pick("The header or payload is not valid Base64URL-encoded JSON.", "L’en-tête ou la charge utile n’est pas du JSON encodé en Base64URL valide.");
+
+    /// <summary>The header and the payload must be JSON objects.</summary>
+    public static string JwtDecodeErrorNotObject => Localizer.Pick("The header and the payload must be JSON objects.", "L’en-tête et la charge utile doivent être des objets JSON.");
+
+    /// <summary>A JWT needs exactly three dot-separated parts.</summary>
+    public static string JwtDecodeErrorParts => Localizer.Pick("A JWT needs exactly three dot-separated parts.", "Un JWT comporte exactement trois parties séparées par des points.");
+
+    /// <summary>Paste a JWT</summary>
+    public static string JwtDecoderPlaceholder => Localizer.Pick("Paste a JWT", "Collez un JWT");
+
+    /// <summary>Decode JWT</summary>
+    public static string JwtDecoderTitle => Localizer.Pick("Decode JWT", "Décoder un JWT");
+
+    /// <summary>Add the issued-at (iat) claim</summary>
+    public static string JwtFieldAddIssuedAt => Localizer.Pick("Add the issued-at (iat) claim", "Ajouter la revendication d'émission (iat)");
+
+    /// <summary>Algorithm</summary>
+    public static string JwtFieldAlgorithm => Localizer.Pick("Algorithm", "Algorithme");
+
+    /// <summary>Expires in (seconds, 0 for never)</summary>
+    public static string JwtFieldExpiresInSeconds => Localizer.Pick("Expires in (seconds, 0 for never)", "Expire dans (secondes, 0 pour jamais)");
+
+    /// <summary>Extra header fields</summary>
+    public static string JwtFieldExtraHeaders => Localizer.Pick("Extra header fields", "Champs d'en-tête supplémentaires");
+
+    /// <summary>Header prefix</summary>
+    public static string JwtFieldHeaderPrefix => Localizer.Pick("Header prefix", "Préfixe de l'en-tête");
+
+    /// <summary>Payload</summary>
+    public static string JwtFieldPayload => Localizer.Pick("Payload", "Charge utile");
+
+    /// <summary>Add token to</summary>
+    public static string JwtFieldPlacement => Localizer.Pick("Add token to", "Ajouter le jeton à");
+
+    /// <summary>Private key (PEM)</summary>
+    public static string JwtFieldPrivateKey => Localizer.Pick("Private key (PEM)", "Clé privée (PEM)");
+
+    /// <summary>Query parameter name</summary>
+    public static string JwtFieldQueryParameterName => Localizer.Pick("Query parameter name", "Nom du paramètre de requête");
+
+    /// <summary>Secret</summary>
+    public static string JwtFieldSecret => Localizer.Pick("Secret", "Secret");
+
+    /// <summary>Secret is Base64 encoded</summary>
+    public static string JwtFieldSecretIsBase64 => Localizer.Pick("Secret is Base64 encoded", "Le secret est encodé en Base64");
+
+    /// <summary>Header</summary>
+    public static string JwtHeaderLabel => Localizer.Pick("Header", "En-tête");
+
+    /// <summary>The extra JWT headers must be a JSON object.</summary>
+    public static string JwtHeadersInvalid => Localizer.Pick("The extra JWT headers must be a JSON object.", "Les en-têtes JWT supplémentaires doivent être un objet JSON.");
+
+    /// <summary>The JWT secret or private key is empty.</summary>
+    public static string JwtKeyMissing => Localizer.Pick("The JWT secret or private key is empty.", "Le secret ou la clé privée du JWT est vide.");
+
+    /// <summary>The signature is never verified. Do not trust these claims.</summary>
+    public static string JwtNotVerifiedNote => Localizer.Pick("The signature is never verified. Do not trust these claims.", "La signature n’est jamais vérifiée. Ne faites pas confiance à ces claims.");
+
+    /// <summary>Paste</summary>
+    public static string JwtPaste => Localizer.Pick("Paste", "Coller");
+
+    /// <summary>The JWT payload must be a JSON object.</summary>
+    public static string JwtPayloadInvalid => Localizer.Pick("The JWT payload must be a JSON object.", "Le contenu du JWT doit être un objet JSON.");
+
+    /// <summary>Authorization header</summary>
+    public static string JwtPlacementHeader => Localizer.Pick("Authorization header", "En-tête Authorization");
+
+    /// <summary>Query parameter</summary>
+    public static string JwtPlacementQuery => Localizer.Pick("Query parameter", "Paramètre de requête");
+
+    /// <summary>Paste a PEM private key or use {{variable}}</summary>
+    public static string JwtPrivateKeyPlaceholder => Localizer.Pick("Paste a PEM private key or use {{variable}}", "Collez une clé privée PEM ou utilisez {{variable}}");
+
+    /// <summary>The JWT secret is not valid Base64.</summary>
+    public static string JwtSecretInvalid => Localizer.Pick("The JWT secret is not valid Base64.", "Le secret du JWT n’est pas du Base64 valide.");
+
+    /// <summary>Signature (not verified)</summary>
+    public static string JwtSignatureNotVerified => Localizer.Pick("Signature (not verified)", "Signature (non vérifiée)");
+
+    /// <summary>Expired {0}</summary>
+    public static string JwtStatusExpired(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Expired {0}", "Expiré {0}"), a0);
+
+    /// <summary>No expiry</summary>
+    public static string JwtStatusNoExpiry => Localizer.Pick("No expiry", "Sans expiration");
+
+    /// <summary>Not valid yet, starts {0}</summary>
+    public static string JwtStatusNotYetValid(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Not valid yet, starts {0}", "Pas encore valide, commence {0}"), a0);
+
+    /// <summary>Valid, expires {0}</summary>
+    public static string JwtStatusValid(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Valid, expires {0}", "Valide, expire {0}"), a0);
+
+    /// <summary>Unsigned token (no signature)</summary>
+    public static string JwtUnsigned => Localizer.Pick("Unsigned token (no signature)", "Jeton non signé (sans signature)");
+
     /// <summary>English</summary>
     public static string LanguageEnglish => Localizer.Pick("English", "Anglais");
 
@@ -423,6 +748,126 @@ public static class Strings
 
     /// <summary>Show the response beside or below the request</summary>
     public static string LayoutToggleTip => Localizer.Pick("Show the response beside or below the request", "Afficher la réponse à côté de la requête ou en dessous");
+
+    /// <summary>No redirect was received within 3 minutes. Try again.</summary>
+    public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
+
+    /// <summary>Enter an absolute http or https authorization URL.</summary>
+    public static string Oauth2AuthorizationUrlMissing => Localizer.Pick("Enter an absolute http or https authorization URL.", "Saisissez une URL d'autorisation absolue en http ou https.");
+
+    /// <summary>Could not open the browser. Try again, or check that a default browser is configured.</summary>
+    public static string Oauth2BrowserFailed => Localizer.Pick("Could not open the browser. Try again, or check that a default browser is configured.", "Impossible d'ouvrir le navigateur. Réessayez, ou vérifiez qu'un navigateur par défaut est configuré.");
+
+    /// <summary>Clear token</summary>
+    public static string Oauth2ClearToken => Localizer.Pick("Clear token", "Effacer le jeton");
+
+    /// <summary>Send as Basic auth header</summary>
+    public static string Oauth2ClientAuthBasic => Localizer.Pick("Send as Basic auth header", "Envoyer en en-tête Basic");
+
+    /// <summary>Send in the request body</summary>
+    public static string Oauth2ClientAuthBody => Localizer.Pick("Send in the request body", "Envoyer dans le corps de la requête");
+
+    /// <summary>Enter the OAuth 2.0 client ID.</summary>
+    public static string Oauth2ClientIdMissing => Localizer.Pick("Enter the OAuth 2.0 client ID.", "Saisissez l'identifiant client OAuth 2.0.");
+
+    /// <summary>Audience</summary>
+    public static string Oauth2FieldAudience => Localizer.Pick("Audience", "Audience");
+
+    /// <summary>Authorization URL</summary>
+    public static string Oauth2FieldAuthorizationUrl => Localizer.Pick("Authorization URL", "URL d'autorisation");
+
+    /// <summary>Client authentication</summary>
+    public static string Oauth2FieldClientAuthentication => Localizer.Pick("Client authentication", "Authentification du client");
+
+    /// <summary>Client ID</summary>
+    public static string Oauth2FieldClientId => Localizer.Pick("Client ID", "Identifiant client");
+
+    /// <summary>Client secret</summary>
+    public static string Oauth2FieldClientSecret => Localizer.Pick("Client secret", "Secret client");
+
+    /// <summary>Grant type</summary>
+    public static string Oauth2FieldGrant => Localizer.Pick("Grant type", "Type d'octroi");
+
+    /// <summary>Header prefix</summary>
+    public static string Oauth2FieldHeaderPrefix => Localizer.Pick("Header prefix", "Préfixe de l'en-tête");
+
+    /// <summary>Password</summary>
+    public static string Oauth2FieldPassword => Localizer.Pick("Password", "Mot de passe");
+
+    /// <summary>Add token to</summary>
+    public static string Oauth2FieldPlacement => Localizer.Pick("Add token to", "Ajouter le jeton à");
+
+    /// <summary>Query parameter name</summary>
+    public static string Oauth2FieldQueryParameterName => Localizer.Pick("Query parameter name", "Nom du paramètre de requête");
+
+    /// <summary>Redirect URI</summary>
+    public static string Oauth2FieldRedirectUri => Localizer.Pick("Redirect URI", "URI de redirection");
+
+    /// <summary>Scope</summary>
+    public static string Oauth2FieldScope => Localizer.Pick("Scope", "Portée");
+
+    /// <summary>Access token URL</summary>
+    public static string Oauth2FieldTokenUrl => Localizer.Pick("Access token URL", "URL du jeton d'accès");
+
+    /// <summary>Username</summary>
+    public static string Oauth2FieldUsername => Localizer.Pick("Username", "Nom d'utilisateur");
+
+    /// <summary>Get new token</summary>
+    public static string Oauth2GetNewToken => Localizer.Pick("Get new token", "Obtenir un nouveau jeton");
+
+    /// <summary>Get a token first: this grant needs an interactive sign-in.</summary>
+    public static string Oauth2GetTokenFirst => Localizer.Pick("Get a token first: this grant needs an interactive sign-in.", "Obtenez d'abord un jeton : ce flux nécessite une connexion interactive.");
+
+    /// <summary>Authorization code (PKCE)</summary>
+    public static string Oauth2GrantAuthorizationCode => Localizer.Pick("Authorization code (PKCE)", "Code d'autorisation (PKCE)");
+
+    /// <summary>Client credentials</summary>
+    public static string Oauth2GrantClientCredentials => Localizer.Pick("Client credentials", "Identifiants client");
+
+    /// <summary>Password</summary>
+    public static string Oauth2GrantPassword => Localizer.Pick("Password", "Mot de passe");
+
+    /// <summary>The token endpoint answered with an unexpected response (HTTP {0}).</summary>
+    public static string Oauth2InvalidResponse(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The token endpoint answered with an unexpected response (HTTP {0}).", "Le point de terminaison de jeton a renvoyé une réponse inattendue (HTTP {0})."), a0);
+
+    /// <summary>No token</summary>
+    public static string Oauth2NoToken => Localizer.Pick("No token", "Aucun jeton");
+
+    /// <summary>Interactive OAuth 2.0 sign-in is not available yet.</summary>
+    public static string Oauth2NotAvailable => Localizer.Pick("Interactive OAuth 2.0 sign-in is not available yet.", "La connexion interactive OAuth 2.0 n'est pas encore disponible.");
+
+    /// <summary>The loopback port {0} is already in use. Free it or change the redirect URI port.</summary>
+    public static string Oauth2PortBusy(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The loopback port {0} is already in use. Free it or change the redirect URI port.", "Le port de boucle locale {0} est déjà utilisé. Libérez-le ou changez le port de l'URI de redirection."), a0);
+
+    /// <summary>The redirect URI must be http://127.0.0.1:&lt;port&gt;/&lt;path&gt; or http://localhost:&lt;port&gt;/&lt;path&gt;.</summary>
+    public static string Oauth2RedirectUriInvalid => Localizer.Pick("The redirect URI must be http://127.0.0.1:<port>/<path> or http://localhost:<port>/<path>.", "L'URI de redirection doit être http://127.0.0.1:<port>/<chemin> ou http://localhost:<port>/<chemin>.");
+
+    /// <summary>The authorization response does not match the request (state mismatch). Try again.</summary>
+    public static string Oauth2StateMismatch => Localizer.Pick("The authorization response does not match the request (state mismatch). Try again.", "La réponse d'autorisation ne correspond pas à la demande (state différent). Réessayez.");
+
+    /// <summary>OAuth 2.0: </summary>
+    public static string Oauth2TokenError => Localizer.Pick("OAuth 2.0: ", "OAuth 2.0 : ");
+
+    /// <summary>Token expired</summary>
+    public static string Oauth2TokenExpired => Localizer.Pick("Token expired", "Jeton expiré");
+
+    /// <summary>Token never expires</summary>
+    public static string Oauth2TokenNeverExpires => Localizer.Pick("Token never expires", "Le jeton n'expire pas");
+
+    /// <summary>Enter an absolute http or https token URL.</summary>
+    public static string Oauth2TokenUrlMissing => Localizer.Pick("Enter an absolute http or https token URL.", "Saisissez une URL de jeton absolue en http ou https.");
+
+    /// <summary>Valid until {0}</summary>
+    public static string Oauth2TokenValidUntil(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Valid until {0}", "Valide jusqu'au {0}"), a0);
+
+    /// <summary>Enter the OAuth 2.0 username.</summary>
+    public static string Oauth2UsernameMissing => Localizer.Pick("Enter the OAuth 2.0 username.", "Saisissez le nom d'utilisateur OAuth 2.0.");
+
+    /// <summary>Waiting for the browser sign-in…</summary>
+    public static string Oauth2WaitingForBrowser => Localizer.Pick("Waiting for the browser sign-in…", "En attente de la connexion dans le navigateur…");
 
     /// <summary>Active</summary>
     public static string PaletteActive => Localizer.Pick("Active", "Actif");
@@ -457,8 +902,23 @@ public static class Strings
     /// <summary>Clear history</summary>
     public static string PaletteClearHistory => Localizer.Pick("Clear history", "Effacer l'historique");
 
+    /// <summary>Clear OAuth 2.0 tokens</summary>
+    public static string PaletteClearOAuthTokens => Localizer.Pick("Clear OAuth 2.0 tokens", "Effacer les jetons OAuth 2.0");
+
+    /// <summary>Client certificates...</summary>
+    public static string PaletteClientCertificates => Localizer.Pick("Client certificates...", "Certificats clients...");
+
     /// <summary>Close tab</summary>
     public static string PaletteCloseTab => Localizer.Pick("Close tab", "Fermer l'onglet");
+
+    /// <summary>Compare response with previous</summary>
+    public static string PaletteCompareResponse => Localizer.Pick("Compare response with previous", "Comparer la réponse avec la précédente");
+
+    /// <summary>Decode JWT</summary>
+    public static string PaletteDecodeJwt => Localizer.Pick("Decode JWT", "Décoder un JWT");
+
+    /// <summary>Generate code for this request</summary>
+    public static string PaletteGenerateCode => Localizer.Pick("Generate code for this request", "Générer le code de cette requête");
 
     /// <summary>Go to tab: {0}</summary>
     public static string PaletteGoToTab(object? a0) =>
@@ -481,6 +941,9 @@ public static class Strings
 
     /// <summary>No matching commands</summary>
     public static string PaletteNoMatch => Localizer.Pick("No matching commands", "Aucune commande correspondante");
+
+    /// <summary>Pin response as baseline</summary>
+    public static string PalettePinBaseline => Localizer.Pick("Pin response as baseline", "Épingler la réponse comme référence");
 
     /// <summary>Type a command or search requests</summary>
     public static string PalettePlaceholder => Localizer.Pick("Type a command or search requests", "Saisissez une commande ou recherchez des requêtes");
@@ -531,6 +994,37 @@ public static class Strings
     /// <summary>Unlock the vault...</summary>
     public static string PaletteVaultUnlock => Localizer.Pick("Unlock the vault...", "Déverrouiller le coffre...");
 
+    /// <summary>{0} day</summary>
+    public static string RelativeDay(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} day", "{0} jour"), a0);
+
+    /// <summary>{0} days</summary>
+    public static string RelativeDays(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} days", "{0} jours"), a0);
+
+    /// <summary>{0} h</summary>
+    public static string RelativeHours(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} h", "{0} h"), a0);
+
+    /// <summary>in {0}</summary>
+    public static string RelativeInFuture(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("in {0}", "dans {0}"), a0);
+
+    /// <summary>{0} ago</summary>
+    public static string RelativeInPast(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} ago", "il y a {0}"), a0);
+
+    /// <summary>{0} min</summary>
+    public static string RelativeMinutes(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} min", "{0} min"), a0);
+
+    /// <summary>now</summary>
+    public static string RelativeNow => Localizer.Pick("now", "maintenant");
+
+    /// <summary>{0} s</summary>
+    public static string RelativeSeconds(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} s", "{0} s"), a0);
+
     /// <summary>Request canceled</summary>
     public static string RequestCanceled => Localizer.Pick("Request canceled", "Requête annulée");
 
@@ -558,6 +1052,9 @@ public static class Strings
 
     /// <summary>Send</summary>
     public static string RequestSend => Localizer.Pick("Send", "Envoyer");
+
+    /// <summary>HTTP version</summary>
+    public static string RequestSettingsHttpVersion => Localizer.Pick("HTTP version", "Version HTTP");
 
     /// <summary>Auth</summary>
     public static string RequestTabAuth => Localizer.Pick("Auth", "Auth");
@@ -619,14 +1116,50 @@ public static class Strings
     /// <summary>Sending</summary>
     public static string ResponseSending => Localizer.Pick("Sending", "Envoi en cours");
 
+    /// <summary>Diff</summary>
+    public static string ResponseTabDiff => Localizer.Pick("Diff", "Différences");
+
     /// <summary>Tests</summary>
     public static string ResponseTabTests => Localizer.Pick("Tests", "Tests");
+
+    /// <summary>Timing</summary>
+    public static string ResponseTabTiming => Localizer.Pick("Timing", "Durées");
 
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
 
-    /// <summary>Variables, tests and requests: pm.* (JavaScript and Lua)</summary>
-    public static string ScriptHint => Localizer.Pick("Variables, tests and requests: pm.* (JavaScript and Lua)", "Variables, tests et requêtes : pm.* (JavaScript et Lua)");
+    /// <summary>Paste Postman/Bruno...</summary>
+    public static string ScriptConvert => Localizer.Pick("Paste Postman/Bruno...", "Coller Postman/Bruno...");
+
+    /// <summary>Written for</summary>
+    public static string ScriptConvertDialect => Localizer.Pick("Written for", "Écrit pour");
+
+    /// <summary>To check by hand</summary>
+    public static string ScriptConvertFindings => Localizer.Pick("To check by hand", "À vérifier à la main");
+
+    /// <summary>Insert</summary>
+    public static string ScriptConvertInsert => Localizer.Pick("Insert", "Insérer");
+
+    /// <summary>line</summary>
+    public static string ScriptConvertLine => Localizer.Pick("line", "ligne");
+
+    /// <summary>Everything was converted.</summary>
+    public static string ScriptConvertNone => Localizer.Pick("Everything was converted.", "Tout a été converti.");
+
+    /// <summary>Postman and Bruno scripts are JavaScript: switch the editor to JavaScript to convert one</summary>
+    public static string ScriptConvertNotJs => Localizer.Pick("Postman and Bruno scripts are JavaScript: switch the editor to JavaScript to convert one", "Les scripts Postman et Bruno sont en JavaScript : passez l’éditeur en JavaScript pour en convertir un");
+
+    /// <summary>Result</summary>
+    public static string ScriptConvertPreview => Localizer.Pick("Result", "Résultat");
+
+    /// <summary>Pasted script</summary>
+    public static string ScriptConvertSource => Localizer.Pick("Pasted script", "Script collé");
+
+    /// <summary>Convert a Postman or Bruno script</summary>
+    public static string ScriptConvertTitle => Localizer.Pick("Convert a Postman or Bruno script", "Convertir un script Postman ou Bruno");
+
+    /// <summary>Variables, tests and requests: yaapic.* (JavaScript and Lua)</summary>
+    public static string ScriptHint => Localizer.Pick("Variables, tests and requests: yaapic.* (JavaScript and Lua)", "Variables, tests et requêtes : yaapic.* (JavaScript et Lua)");
 
     /// <summary>Script language</summary>
     public static string ScriptLanguage => Localizer.Pick("Script language", "Langage du script");
@@ -645,6 +1178,12 @@ public static class Strings
 
     /// <summary>Script phase</summary>
     public static string ScriptPhase => Localizer.Pick("Script phase", "Phase du script");
+
+    /// <summary>Snippets</summary>
+    public static string ScriptSnippets => Localizer.Pick("Snippets", "Extraits");
+
+    /// <summary>No snippet for this language and phase</summary>
+    public static string ScriptSnippetsEmpty => Localizer.Pick("No snippet for this language and phase", "Aucun extrait pour ce langage et cette phase");
 
     /// <summary>Canceled</summary>
     public static string ScriptStatusCanceled => Localizer.Pick("Canceled", "Annulé");
@@ -795,8 +1334,8 @@ public static class Strings
     /// <summary>Test filter</summary>
     public static string TestsFilter => Localizer.Pick("Test filter", "Filtre des tests");
 
-    /// <summary>No tests ran. Add pm.test(...) to the post-response script.</summary>
-    public static string TestsNone => Localizer.Pick("No tests ran. Add pm.test(...) to the post-response script.", "Aucun test exécuté. Ajoutez pm.test(...) au script post-réponse.");
+    /// <summary>No tests ran. Add yaapic.test(...) to the post-response script.</summary>
+    public static string TestsNone => Localizer.Pick("No tests ran. Add yaapic.test(...) to the post-response script.", "Aucun test exécuté. Ajoutez yaapic.test(...) au script post-réponse.");
 
     /// <summary>Passed</summary>
     public static string TestsPassed => Localizer.Pick("Passed", "Réussi");
@@ -822,6 +1361,33 @@ public static class Strings
 
     /// <summary>System theme</summary>
     public static string ThemeSystemTheme => Localizer.Pick("System theme", "Thème du système");
+
+    /// <summary>Connection reused</summary>
+    public static string TimingConnectionReused => Localizer.Pick("Connection reused", "Connexion réutilisée");
+
+    /// <summary>DNS lookup</summary>
+    public static string TimingDns => Localizer.Pick("DNS lookup", "Résolution DNS");
+
+    /// <summary>Download</summary>
+    public static string TimingDownload => Localizer.Pick("Download", "Téléchargement");
+
+    /// <summary>New connection</summary>
+    public static string TimingNewConnection => Localizer.Pick("New connection", "Nouvelle connexion");
+
+    /// <summary>No timing data for this response.</summary>
+    public static string TimingNone => Localizer.Pick("No timing data for this response.", "Aucune donnée de durée pour cette réponse.");
+
+    /// <summary>n/a</summary>
+    public static string TimingNotAvailable => Localizer.Pick("n/a", "n/d");
+
+    /// <summary>TCP connect</summary>
+    public static string TimingTcp => Localizer.Pick("TCP connect", "Connexion TCP");
+
+    /// <summary>TLS handshake</summary>
+    public static string TimingTls => Localizer.Pick("TLS handshake", "Négociation TLS");
+
+    /// <summary>Waiting (TTFB)</summary>
+    public static string TimingWaiting => Localizer.Pick("Waiting (TTFB)", "Attente (TTFB)");
 
     /// <summary>Update available</summary>
     public static string UpdateAvailable => Localizer.Pick("Update available", "Mise à jour disponible");

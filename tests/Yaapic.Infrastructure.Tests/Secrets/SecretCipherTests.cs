@@ -158,4 +158,27 @@ public sealed class SecretCipherTests
         w.Bytes[20] ^= 1;
         Assert.Throws<VaultException>(() => PassphraseKdf.Unwrap(w, "p"));
     }
+
+    [Fact]
+    public void AssociatedDataBindsTheKindAndStaysStableForOldKinds()
+    {
+        var key = DataKey.Generate();
+        var old = SecretCipher.Encrypt(key, Ref, "v");
+        var certificate = SecretCipher.Encrypt(key, new SecretRef(SecretOwnerKind.Certificate, Owner, "token"), "v");
+
+        Assert.Throws<VaultException>(() => SecretCipher.Decrypt(key, new SecretRef(SecretOwnerKind.Certificate, Owner, "token"), old));
+        Assert.Throws<VaultException>(() => SecretCipher.Decrypt(key, Ref, certificate));
+
+        // Entry sealed by hand with the pre-M4-32 associated data layout.
+        var nonce = new byte[SecretCipher.NonceSize];
+        var data = "v"u8.ToArray();
+        var cipher = new byte[data.Length];
+        var tag = new byte[SecretCipher.TagSize];
+        using (var aes = new AesGcm(key, SecretCipher.TagSize))
+        {
+            aes.Encrypt(nonce, data, cipher, tag, Encoding.UTF8.GetBytes($"yaapic-vault-v1|Environment|{Owner:D}|token"));
+        }
+
+        Assert.Equal("v", SecretCipher.Decrypt(key, Ref, new EncryptedSecret(nonce, cipher, tag)));
+    }
 }

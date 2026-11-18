@@ -49,9 +49,9 @@ body:
       kind: text       # text | file
   file: ""             # binary: path of the file to send
 auth:
-  type: none           # none | basic | bearer | apikey
-  username: ""         # basic
-  password: ""         # basic
+  type: none           # none | basic | bearer | apikey | oauth2 | jwt | digest | awsv4
+  username: ""         # basic, digest
+  password: ""         # basic, digest
   token: ""            # bearer
   key: ""              # apikey
   value: ""            # apikey
@@ -59,11 +59,12 @@ auth:
 settings:
   followRedirects: true
   timeoutSeconds: 0    # 0 = application default (30 s)
+  httpVersion: http2   # optional, milestone 4: http1 | http2 | http3; omitted when default
 scripts:               # optional on read, see ADR 0009
   preRequest:
     language: javascript   # javascript | lua
     source: |
-      pm.environment.set("ts", Date.now().toString());
+      yaapic.environment.set("ts", Date.now().toString());
   postResponse:
     language: javascript
     source: ""
@@ -132,6 +133,80 @@ committed; the file is replaced atomically (temp file, then move) and is `0600` 
 `protector` is `passphrase`, `dpapi`, `keychain` or `secret-service`; `kdf` is `null` unless the protector is
 `passphrase`. `kind` is `Environment`, `Collection` (top-level folder id) or `Globals` (owner is the empty GUID).
 A different `version` is refused.
+
+## Authentication (milestone 4)
+
+The `oauth2`, `jwt`, `digest` and `awsv4` authentication kinds are described in
+[ADR 0013](adr/0013-advanced-authentication.md).
+
+`auth.type: oauth2` adds a nested `auth.oauth2` mapping, written only for that type (ignored on read for any other
+type). A missing key reads as the default, and an unknown `grant`, `clientAuth` or `placement` value reads as the
+default without error:
+
+```yaml
+auth:
+  type: oauth2
+  oauth2:
+    grant: client_credentials   # client_credentials | authorization_code | password
+    tokenUrl: https://idp.example.com/token
+    authorizationUrl: ""        # authorization_code only
+    clientId: "{{clientId}}"
+    clientSecret: "{{clientSecret}}"
+    scope: read write
+    audience: ""
+    username: ""                # password grant only
+    password: ""
+    redirectUri: http://127.0.0.1:8742/callback
+    clientAuth: basic           # basic | body
+    placement: header           # header | query
+    headerPrefix: Bearer
+    queryParameter: access_token
+```
+
+Like the other auth fields these are plain text: write `{{variables}}` (secret variables) for `clientSecret` and
+`password`, never the literal value.
+
+`auth.type: jwt` adds `auth.jwt` and `auth.type: awsv4` adds `auth.awsv4`, each written only for its type (missing keys read
+as the defaults shown, an unknown `algorithm` or `placement` reads as the default):
+
+```yaml
+auth:
+  type: jwt
+  jwt:
+    algorithm: HS256            # HS256|HS384|HS512|RS256|RS384|RS512|ES256|ES384|ES512
+    secret: "{{jwtSecret}}"     # HS*; UTF-8 text, or Base64 when secretIsBase64
+    secretIsBase64: false
+    privateKey: ""              # RS* and ES*: PEM text, or {{variable}}
+    payload: "{}"               # JSON object text
+    headers: ""                 # optional JSON object merged into the JWT header
+    addIssuedAt: true           # adds iat when the payload has none
+    expiresIn: 0                # seconds, > 0 adds exp when the payload has none
+    placement: header           # header | query
+    headerPrefix: Bearer
+    queryParameter: token
+```
+
+```yaml
+auth:
+  type: awsv4
+  awsv4:
+    accessKeyId: "{{awsKey}}"
+    secretAccessKey: "{{awsSecret}}"
+    sessionToken: ""
+    region: eu-west-1
+    service: s3
+```
+
+`auth.type: digest` has no nested mapping: it reuses `auth.username` and `auth.password`. As with every auth field, keep
+secrets in `{{variables}}`. OAuth 2.0 tokens are never written to the workspace (they live in memory only). User guide:
+[authentication.md](authentication.md).
+
+## Client certificates (milestone 4)
+
+Client certificates (mTLS) are **not part of the workspace**: they live in the per-user file
+`<user data dir>/Yaapic/certificates.json` because their paths are machine specific, and their passphrases are in the
+vault. See [ADR 0014](adr/0014-transport-certificates-timings.md). The per-request `settings.httpVersion` key
+(`default` is never written; a missing or unknown value reads as `default`) selects the HTTP version.
 
 ## Variable precedence
 

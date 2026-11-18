@@ -282,6 +282,21 @@ public class ScriptedRequestSenderTests
     }
 
     [Fact]
+    public async Task Scripted_send_keeps_timings_and_protocol_of_the_transport_response()
+    {
+        var timings = new RequestTimings(null, TimeSpan.FromMilliseconds(3), null, TimeSpan.FromMilliseconds(40), TimeSpan.FromMilliseconds(7), true);
+        var response = Response() with { Timings = timings, Protocol = "HTTP/2" };
+        var (sender, _) = BuildWith(FakeScriptEngine.FromQueue(), SendResult.Success(response));
+        var chain = Chain(("req", Pre() with { PostResponse = Code }));
+
+        var report = await sender.SendAsync(Input(Req(), chain), CancellationToken.None);
+
+        var kept = report.Report!.Result.Response!;
+        Assert.Equal(timings, kept.Timings);
+        Assert.Equal("HTTP/2", kept.Protocol);
+    }
+
+    [Fact]
     public async Task Post_blocks_run_in_order_after_a_response_and_see_response_request_and_variables()
     {
         List<(string Origin, int Code, string Url, string Event, bool ReadOnly, string? Var)> seen = [];

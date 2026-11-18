@@ -39,7 +39,7 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
             "",
             "Mutate",
             Url("/{{seg}}?a=1"),
-            pre: "pm.variables.set('seg', 'echo')\npm.request.headers.add{ key = 'X-Added', value = 'yes' }\npm.request.url.query.upsert{ key = 'a', value = '9' }",
+            pre: "yaapic.variables.set('seg', 'echo')\nyaapic.request.headers.add{ key = 'X-Added', value = 'yes' }\nyaapic.request.url.query.upsert{ key = 'a', value = '9' }",
             preLanguage: Lua);
         var shell = await _fx.NewShellAsync(withLua: true);
         var tab = Open(shell, id);
@@ -58,7 +58,7 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
     public async Task TokenSavedByOneRequestIsStoredOnDiskAndSentByTheNext()
     {
         _fx.WriteEnvironment("Dev");
-        var a = _fx.WriteRequest("", "Login", Url("/json"), post: "pm.environment.set('token', pm.response.json().token)", postLanguage: Lua);
+        var a = _fx.WriteRequest("", "Login", Url("/json"), post: "yaapic.environment.set('token', yaapic.response.json().token)", postLanguage: Lua);
         var b = _fx.WriteRequest("", "Use token", Url("/headers?t={{token}}"), headers: ("Authorization", "Bearer {{token}}"));
         var shell = await _fx.NewShellAsync(withLua: true);
         ActivateEnvironment(shell, "Dev");
@@ -101,11 +101,11 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
             "Tests",
             Url("/echo"),
             post: """
-                pm.test('one', function() pm.expect(1).to.equal(1) end)
-                pm.test('two', function() pm.expect(pm.response.code).to.equal(200) end)
-                pm.test('three', function() pm.expect({ 1, 2 }).to.have.length(2) end)
-                pm.test('four', function() pm.expect(1).to.equal(2) end)
-                pm.test('five', function() pm.expect('abc').to.include('z') end)
+                yaapic.test('one', function() yaapic.expect(1).to.equal(1) end)
+                yaapic.test('two', function() yaapic.expect(yaapic.response.code).to.equal(200) end)
+                yaapic.test('three', function() yaapic.expect({ 1, 2 }).to.have.length(2) end)
+                yaapic.test('four', function() yaapic.expect(1).to.equal(2) end)
+                yaapic.test('five', function() yaapic.expect('abc').to.include('z') end)
                 """,
             postLanguage: Lua);
         var shell = await _fx.NewShellAsync(withLua: true);
@@ -175,12 +175,12 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
             "Chained",
             Url("/echo"),
             pre: WithBase("""
-                local first, firstErr = pm.sendRequest('BASE/json')
+                local first, firstErr = yaapic.sendRequest('BASE/json')
                 console.log('firstErr:' .. tostring(firstErr))
-                pm.request.headers.add{ key = 'X-Token', value = first.json().token }
-                pm.sendRequest('BASE/json', function(err, res) pm.request.headers.add{ key = 'X-Callback', value = tostring(res.code) } end)
+                yaapic.request.headers.add{ key = 'X-Token', value = first.json().token }
+                yaapic.sendRequest('BASE/json', function(err, res) yaapic.request.headers.add{ key = 'X-Callback', value = tostring(res.code) } end)
                 for i = 1, 19 do
-                  local res, err = pm.sendRequest('BASE/count')
+                  local res, err = yaapic.sendRequest('BASE/count')
                   if err then console.log('err:' .. tostring(err)) end
                 end
                 """),
@@ -209,8 +209,8 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
             "acme",
             "Scopes",
             Url("/echo"),
-            pre: "pm.globals.set('g', '1')\npm.collectionVariables.set('c', '2')\npm.environment.set('e', '3')\npm.variables.set('l', '4')",
-            post: "console.log('l=' .. tostring(pm.variables.get('l')))",
+            pre: "yaapic.globals.set('g', '1')\nyaapic.collectionVariables.set('c', '2')\nyaapic.environment.set('e', '3')\nyaapic.variables.set('l', '4')",
+            post: "console.log('l=' .. tostring(yaapic.variables.get('l')))",
             preLanguage: Lua,
             postLanguage: Lua);
         var shell = await _fx.NewShellAsync(withLua: true);
@@ -235,7 +235,7 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
         Assert.Contains("l=nil", Messages(shell, ConsoleLineKind.Log));
 
         shell.Environments.ActiveEnvironment = null;
-        tab.Scripts.PreRequest.Source = "pm.environment.set('x', '1')";
+        tab.Scripts.PreRequest.Source = "yaapic.environment.set('x', '1')";
         await tab.SendCommand.ExecuteAsync(null);
 
         Assert.Contains(shell.Console.Lines, l => l.Kind == ConsoleLineKind.Warn && l.Message.Contains("No active environment", StringComparison.Ordinal));
@@ -249,8 +249,8 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
             "",
             "Cookies",
             Url("/set-cookie"),
-            pre: "console.log('pre:' .. tostring(pm.cookies.has('a')) .. tostring(pm.cookies.has('b')))",
-            post: "console.log('post:' .. pm.cookies.get('a') .. pm.cookies.get('b'))\nlocal ok, e = pcall(pm.cookies.jar)\nconsole.log('jar:' .. (tostring(e):gsub('^.-:%d+: ', '')))",
+            pre: "console.log('pre:' .. tostring(yaapic.cookies.has('a')) .. tostring(yaapic.cookies.has('b')))",
+            post: "console.log('post:' .. yaapic.cookies.get('a') .. yaapic.cookies.get('b'))\nlocal ok, e = pcall(yaapic.cookies.jar)\nconsole.log('jar:' .. (tostring(e):gsub('^.-:%d+: ', '')))",
             preLanguage: Lua,
             postLanguage: Lua);
         var shell = await _fx.NewShellAsync(withLua: true);
@@ -269,7 +269,7 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
         var id = _fx.WriteRequest("", "Persisted", Url("/echo"), preLanguage: Lua, postLanguage: Lua);
         var shell = await _fx.NewShellAsync(withLua: true);
         var tab = Open(shell, id);
-        tab.Scripts.PreRequest.Source = "pm.request.headers.add{ key = 'X-Persisted', value = 'pre' }";
+        tab.Scripts.PreRequest.Source = "yaapic.request.headers.add{ key = 'X-Persisted', value = 'pre' }";
         tab.Scripts.PostResponse.Source = "console.log('persisted post')";
 
         Assert.True(await shell.Tabs.SaveAsync(tab));
@@ -312,19 +312,19 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
         _fx.WriteFolder(
             "acme",
             "Acme",
-            pre: "pm.variables.set('shared', 'from-js');\nconsole.log('pre:collection:js');",
-            post: "pm.test('status is 200', function() pm.expect(pm.response.code).to.equal(200) end)\nconsole.log('post:collection:lua')",
+            pre: "yaapic.variables.set('shared', 'from-js');\nconsole.log('pre:collection:js');",
+            post: "yaapic.test('status is 200', function() yaapic.expect(yaapic.response.code).to.equal(200) end)\nconsole.log('post:collection:lua')",
             postLanguage: Lua);
         _fx.WriteFolder(
             "acme/users",
             "Users",
-            pre: "console.log('pre:folder:lua ' .. pm.variables.get('shared'))\npm.request.headers.add{ key = 'X-From-Lua', value = pm.variables.get('shared') }\npm.variables.set('lua_written', 'lua-value')",
+            pre: "console.log('pre:folder:lua ' .. yaapic.variables.get('shared'))\nyaapic.request.headers.add{ key = 'X-From-Lua', value = yaapic.variables.get('shared') }\nyaapic.variables.set('lua_written', 'lua-value')",
             preLanguage: Lua);
         var id = _fx.WriteRequest(
             "acme/users",
             "Mixed",
             Url("/echo"),
-            post: "pm.test('echo has the header and the Lua variable', () => {\n  pm.expect(pm.response.json().headers['X-From-Lua']).to.equal('from-js');\n  pm.expect(pm.variables.get('lua_written')).to.equal('lua-value');\n});\nconsole.log('post:request:js');");
+            post: "yaapic.test('echo has the header and the Lua variable', () => {\n  yaapic.expect(yaapic.response.json().headers['X-From-Lua']).to.equal('from-js');\n  yaapic.expect(yaapic.variables.get('lua_written')).to.equal('lua-value');\n});\nconsole.log('post:request:js');");
         var shell = await _fx.NewShellAsync(withLua: true);
         var tab = Open(shell, id);
 
@@ -344,7 +344,7 @@ public sealed class Milestone3LuaEndToEndTests : IClassFixture<LoopbackServer>, 
     public async Task MissingLuaLibraryAbortsLuaSendsWithEngineUnavailableWhileJavaScriptStillWorks()
     {
         var lua = _fx.WriteRequest("", "Lua only", Url("/lua-marker"), pre: "console.log('never')", preLanguage: Lua);
-        var js = _fx.WriteRequest("", "Js only", Url("/echo"), pre: "pm.request.headers.add({ key: 'X-Js', value: 'ok' });");
+        var js = _fx.WriteRequest("", "Js only", Url("/echo"), pre: "yaapic.request.headers.add({ key: 'X-Js', value: 'ok' });");
         var shell = await _fx.NewShellAsync();
 
         Assert.Contains(shell.ScriptEngineWarnings, w => w.StartsWith("Lua", StringComparison.Ordinal));

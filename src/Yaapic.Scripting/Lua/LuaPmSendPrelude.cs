@@ -1,7 +1,7 @@
 namespace Yaapic.Scripting.Lua;
 
 /// <summary>
-/// The Lua <c>pm</c> prelude, part 5: <c>pm.sendRequest</c> (synchronous, returns <c>res, err</c>) and <c>pm.cookies</c>
+/// The Lua <c>yaapic</c> prelude, part 5: <c>yaapic.sendRequest</c> (synchronous, returns <c>res, err</c>) and <c>yaapic.cookies</c>
 /// (and the cookie list behind <c>res.cookies</c>). The Lua twin of the JavaScript send prelude.
 /// </summary>
 internal static class LuaPmSendPrelude
@@ -10,7 +10,7 @@ internal static class LuaPmSendPrelude
     internal const string Source = """
         do
           local hostCall, define = __hostCall, __pmDefine
-          local NULL, json = pm.null, pm.json
+          local NULL, json = yaapic.null, yaapic.json
           local type, error, ipairs, pairs, tostring, rawequal, pcall = type, error, ipairs, pairs, tostring, rawequal, pcall
           local sort, upper = table.sort, string.upper
 
@@ -81,7 +81,7 @@ internal static class LuaPmSendPrelude
           end
           __cookieList = cookieList
 
-          -- pm.cookies reads the host on every call (empty in pre-request).
+          -- yaapic.cookies reads the host on every call (empty in pre-request).
           local live = {}
           for _, name in ipairs({ 'get', 'has', 'to_object', 'toObject', 'count', 'all', 'each' }) do
             live[name] = function(...) return cookieList(hostCall('cookies'))[name](...) end
@@ -117,7 +117,7 @@ internal static class LuaPmSendPrelude
           local function toDto(input)
             local options = type(input) == 'string' and { url = input } or input
             if type(options) ~= 'table' or present(options.url) == nil then
-              error('pm.sendRequest: expected a URL or an options table with a url', 3)
+              error('yaapic.sendRequest: expected a URL or an options table with a url', 3)
             end
             local dto = {
               method = upper(tostring(options.method or 'GET')),
@@ -139,7 +139,7 @@ internal static class LuaPmSendPrelude
                 dto.bodyMode = 'urlencoded'
                 dto.urlEncoded = rows(body.urlencoded)
               else
-                error("pm.sendRequest body mode '" .. tostring(mode) .. "' is not supported", 3)
+                error("yaapic.sendRequest body mode '" .. tostring(mode) .. "' is not supported", 3)
               end
             end
             return dto
@@ -148,7 +148,7 @@ internal static class LuaPmSendPrelude
           -- Blocking: returns res, err (exactly one is nil). A callback runs first, as callback(err, res); its errors propagate.
           local function sendRequest(input, callback)
             if callback ~= nil and type(callback) ~= 'function' then
-              error('pm.sendRequest: callback must be a function', 2)
+              error('yaapic.sendRequest: callback must be a function', 2)
             end
             local dto = toDto(input)
             local ok, reply = pcall(hostCall, 'send', dto)

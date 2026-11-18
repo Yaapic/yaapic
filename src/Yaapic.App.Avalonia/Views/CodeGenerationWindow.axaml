@@ -1,0 +1,40 @@
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:r="using:Yaapic.ViewModels.Requests"
+    xmlns:v="using:Yaapic.App.Avalonia.Views"
+    x:Class="Yaapic.App.Avalonia.Views.CodeGenerationWindow"
+    x:DataType="r:CodeGenerationViewModel"
+    Title="{x:Static loc:Strings.CodeGenerationTitle}"
+    Width="720" Height="520" MinWidth="480" MinHeight="360" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+    Classes="dialog">
+  <Grid RowDefinitions="*,Auto">
+    <Grid Margin="24,24,24,12" RowDefinitions="Auto,Auto,Auto,Auto,*" RowSpacing="8">
+      <StackPanel Spacing="4">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.CodeGenerationLanguage}" />
+        <ComboBox HorizontalAlignment="Stretch" ItemsSource="{Binding Targets}" SelectedItem="{Binding SelectedTarget, Mode=TwoWay}"
+                  AutomationProperties.Name="{x:Static loc:Strings.CodeGenerationLanguage}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="r:CodeTarget">
+              <TextBlock Text="{Binding DisplayName}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+      <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="{DynamicResource YaapicWarningBrush}" Text="{Binding SecretWarning}" />
+      <TextBlock Grid.Row="2" TextWrapping="Wrap" Foreground="{DynamicResource YaapicWarningBrush}" Text="{Binding UnresolvedWarning}"
+                 IsVisible="{Binding UnresolvedWarning, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+      <TextBlock Grid.Row="3" TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding Error}"
+                 IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+      <Border Grid.Row="4" BorderThickness="1" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
+        <v:CodeEditorView IsReadOnly="True" EditorLanguage="{Binding EditorLanguage}" Text="{Binding Code, Mode=OneWay}" />
+      </Border>
+    </Grid>
+    <Border Grid.Row="1" Classes="dialogCommands">
+      <UniformGrid Rows="1">
+        <Button x:Name="CopyButton" Classes="accent" Content="{x:Static loc:Strings.CodeGenerationCopy}" Command="{Binding CopyCommand}" Click="OnCopyClick" />
+        <Button IsDefault="True" IsCancel="True" Content="{x:Static loc:Strings.CommonClose}" Click="OnClose" />
+      </UniformGrid>
+    </Border>
+  </Grid>
+</Window>

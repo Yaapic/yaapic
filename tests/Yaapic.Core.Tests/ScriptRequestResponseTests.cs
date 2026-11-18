@@ -106,7 +106,7 @@ public class ScriptRequestResponseTests
         foreach (var mutation in mutations)
         {
             var ex = Assert.Throws<InvalidOperationException>(mutation);
-            Assert.Equal("pm.request is read-only in post-response scripts", ex.Message);
+            Assert.Equal("yaapic.request is read-only in post-response scripts", ex.Message);
         }
     }
 

@@ -108,6 +108,32 @@ public static class VisibilityMap
     /// <returns>The visibility.</returns>
     public static Visibility WhenApiKeyAuth(AuthKind kind) => kind == AuthKind.ApiKey ? Visibility.Visible : Visibility.Collapsed;
 
+    /// <summary>Gets <see cref="Visibility.Visible"/> for OAuth 2.0 authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenOAuth2Auth(AuthKind kind) => kind == AuthKind.OAuth2 ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for the username and password kinds (Basic and Digest).</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenUserPasswordAuth(AuthKind kind) =>
+        kind is AuthKind.Basic or AuthKind.Digest ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for Digest authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenDigestAuth(AuthKind kind) => kind == AuthKind.Digest ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for JWT authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenJwtAuth(AuthKind kind) => kind == AuthKind.Jwt ? Visibility.Visible : Visibility.Collapsed;
+
+    /// <summary>Gets <see cref="Visibility.Visible"/> for AWS Signature v4 authentication.</summary>
+    /// <param name="kind">The authentication kind.</param>
+    /// <returns>The visibility.</returns>
+    public static Visibility WhenAwsV4Auth(AuthKind kind) => kind == AuthKind.AwsV4 ? Visibility.Visible : Visibility.Collapsed;
+
     /// <summary>Gets <see cref="Visibility.Visible"/> when the panel shows a response.</summary>
     /// <param name="state">The panel state.</param>
     /// <returns>The visibility.</returns>

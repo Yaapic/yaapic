@@ -12,6 +12,7 @@ public partial class XamlLiteralRulesTests
     [
         "Yaapic", "&#x2022;", "Ctrl", "Enter", "Esc", "Ctrl+Enter", "Ctrl+S", "Ctrl+T", "Ctrl+Shift+F",
         "JSON", "XML", "HTML", "JavaScript", "API Key", "Basic Auth", "Bearer Token", "form-data", "x-www-form-urlencoded",
+        "HS256", "HS384", "HS512", "RS256", "RS384", "RS512", "ES256", "ES384", "ES512",
     ];
 
     [GeneratedRegex(""""(?<![\w.])(Content|Text|Header|Title|PlaceholderText|Watermark|ToolTipService\.ToolTip|ToolTip\.Tip|AutomationProperties\.Name|PrimaryButtonText|SecondaryButtonText|CloseButtonText|OnContent|OffContent)="([^"{][^"]*|\{\}[^"]*)"""")]

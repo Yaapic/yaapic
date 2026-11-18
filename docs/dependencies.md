@@ -21,6 +21,14 @@ Milestone 2 (editor, collections, environments, history, command palette) added 
 
 Milestone 3 (scripting, secret vault): added QuickJS-NG v0.18.0, Lua 5.4.8 (native libraries built from pinned sources, plus the Lua shim) and `System.Security.Cryptography.ProtectedData` 10.0.14. AES-GCM, PBKDF2 and `System.Text.Json` come from the framework. `LoomEditor.*` 0.6.0 is the Milestone 2 package at a newer version (bundled Lua grammar).
 
+Milestone 4 (advanced authentication, mTLS, timings, diff, code generation): **no new package**. OAuth 2.0, JWT, Digest and AWS
+Signature v4 use `System.Security.Cryptography`, `HttpClient` and `System.Text.Json` from the framework; the loopback redirect
+receiver is a `TcpListener`; client certificates use `X509CertificateLoader`; timings use `SocketsHttpHandler` callbacks; the
+diff is our own Myers implementation; the code generators build strings. The end-to-end tests may optionally use external tools
+when present (`curl`, `node`, `python`, `pwsh`, `gofmt`) to check generated code; they are skipped when a tool is missing and
+none is needed to build or run Yaapic. `LoomEditor.*` stays at 0.6.0 (no grammar for shell, PowerShell and Go, see
+[ADR 0015](adr/0015-response-diff-and-code-generation.md)).
+
 ## Native libraries (M3-15)
 
 `native/versions.json` pins, for QuickJS-NG and Lua, the source URL, the tag, the SHA-256 of the source archive and the

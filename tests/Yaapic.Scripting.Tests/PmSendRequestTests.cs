@@ -8,7 +8,7 @@ using Yaapic.TestDoubles;
 
 namespace Yaapic.Scripting.Tests;
 
-/// <summary><c>pm.sendRequest</c> and <c>pm.cookies</c> on the real QuickJS engine, with a recording host and the real sender.</summary>
+/// <summary><c>yaapic.sendRequest</c> and <c>yaapic.cookies</c> on the real QuickJS engine, with a recording host and the real sender.</summary>
 public sealed class PmSendRequestTests
 {
     private const string Origin = "post-response · Users API";
@@ -61,7 +61,7 @@ public sealed class PmSendRequestTests
     public async Task String_form_sends_a_get_and_the_callback_gets_a_response()
     {
         var (run, host) = await RunWithHost(
-            "pm.sendRequest('https://sub.test/x', (err, res) => { console.log(String(err), res.code, res.json().ok, res.status); });");
+            "yaapic.sendRequest('https://sub.test/x', (err, res) => { console.log(String(err), res.code, res.json().ok, res.status); });");
 
         Assert.True(run.Succeeded, run.Error?.Message);
         var sent = Assert.Single(host.Sent);
@@ -74,7 +74,7 @@ public sealed class PmSendRequestTests
     public async Task Options_form_with_header_array_and_raw_json_body()
     {
         var (run, host) = await RunWithHost("""
-            pm.sendRequest({
+            yaapic.sendRequest({
               url: 'https://sub.test/users',
               method: 'post',
               header: [{ key: 'X-A', value: '1' }, { key: 'X-Off', value: '2', disabled: true }],
@@ -95,8 +95,8 @@ public sealed class PmSendRequestTests
     public async Task Options_form_with_header_object_and_urlencoded_body_and_url_object()
     {
         var (run, host) = await RunWithHost("""
-            pm.sendRequest({
-              url: pm.request.url,
+            yaapic.sendRequest({
+              url: yaapic.request.url,
               method: 'PUT',
               header: { 'X-B': 'two' },
               body: { mode: 'urlencoded', urlencoded: [{ key: 'k', value: 'v' }] },
@@ -115,7 +115,7 @@ public sealed class PmSendRequestTests
     public async Task Code_after_the_call_runs_before_the_callback()
     {
         var (run, _) = await RunWithHost("""
-            pm.sendRequest('https://sub.test/x', () => console.log('callback'));
+            yaapic.sendRequest('https://sub.test/x', () => console.log('callback'));
             console.log('after');
             """);
 
@@ -127,8 +127,8 @@ public sealed class PmSendRequestTests
     public async Task Promise_form_resolves_with_the_response_and_supports_to_assertions()
     {
         var (run, _) = await RunWithHost("""
-            const res = await pm.sendRequest('https://sub.test/x');
-            pm.test('sub', () => { res.to.have.status(201); pm.expect(res.json().ok).to.be.true; });
+            const res = await yaapic.sendRequest('https://sub.test/x');
+            yaapic.test('sub', () => { res.to.have.status(201); yaapic.expect(res.json().ok).to.be.true; });
             """);
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -139,8 +139,8 @@ public sealed class PmSendRequestTests
     public async Task Failed_send_gives_an_error_in_the_callback_and_a_rejection_in_the_promise()
     {
         var (run, _) = await RunWithHost("""
-            pm.sendRequest('https://sub.test/x', (err, res) => console.log(err.message, res === undefined));
-            try { await pm.sendRequest('https://sub.test/y'); } catch (e) { console.log('rejected', e instanceof Error, e.message); }
+            yaapic.sendRequest('https://sub.test/x', (err, res) => console.log(err.message, res === undefined));
+            try { await yaapic.sendRequest('https://sub.test/y'); } catch (e) { console.log('rejected', e instanceof Error, e.message); }
             """, _ => new(null, "boom"));
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -151,19 +151,19 @@ public sealed class PmSendRequestTests
     public async Task Twenty_first_send_fails_with_the_host_limit_message()
     {
         var (report, _) = await RunReal("""
-            for (let i = 0; i < 20; i++) { await pm.sendRequest('https://sub.test/' + i); }
-            try { await pm.sendRequest('https://sub.test/21'); } catch (e) { console.log(e.message); }
+            for (let i = 0; i < 20; i++) { await yaapic.sendRequest('https://sub.test/' + i); }
+            try { await yaapic.sendRequest('https://sub.test/21'); } catch (e) { console.log(e.message); }
             """);
 
         var run = Assert.Single(report.Runs);
         Assert.True(run.Succeeded, run.Error?.Message);
-        Assert.Equal("pm.sendRequest limit of 20 per run reached", Logged(run));
+        Assert.Equal("yaapic.sendRequest limit of 20 per run reached", Logged(run));
     }
 
     [Fact]
     public async Task Throwing_callback_fails_the_run()
     {
-        var (run, _) = await RunWithHost("pm.sendRequest('https://sub.test/x', () => { throw new Error('in callback'); });");
+        var (run, _) = await RunWithHost("yaapic.sendRequest('https://sub.test/x', () => { throw new Error('in callback'); });");
 
         Assert.Equal(ScriptRunStatus.Failed, run.Status);
         Assert.Equal("in callback", run.Error?.Message);
@@ -173,9 +173,9 @@ public sealed class PmSendRequestTests
     public async Task Real_sender_resolves_variables_in_the_url_and_body()
     {
         var (report, transport) = await RunReal("""
-            pm.variables.set('h', 'sub.test');
-            pm.variables.set('n', 'Ada');
-            await pm.sendRequest({ url: 'https://{{h}}/hi', method: 'POST', body: { mode: 'raw', raw: '{"n":"{{n}}"}' } });
+            yaapic.variables.set('h', 'sub.test');
+            yaapic.variables.set('n', 'Ada');
+            await yaapic.sendRequest({ url: 'https://{{h}}/hi', method: 'POST', body: { mode: 'raw', raw: '{"n":"{{n}}"}' } });
             """);
 
         Assert.True(Assert.Single(report.Runs).Succeeded, report.Runs[0].Error?.Message);
@@ -188,8 +188,8 @@ public sealed class PmSendRequestTests
     public async Task Real_sender_response_exposes_json_and_to()
     {
         var (report, _) = await RunReal("""
-            const res = await pm.sendRequest('https://sub.test/x');
-            pm.test('real', () => { res.to.have.status(201); pm.expect(res.json()).to.eql({ ok: true }); });
+            const res = await yaapic.sendRequest('https://sub.test/x');
+            yaapic.test('real', () => { res.to.have.status(201); yaapic.expect(res.json()).to.eql({ ok: true }); });
             """);
 
         var run = Assert.Single(report.Runs);
@@ -200,10 +200,10 @@ public sealed class PmSendRequestTests
     [Fact]
     public async Task Unsupported_body_mode_throws()
     {
-        var (run, host) = await RunWithHost("pm.sendRequest({ url: 'https://sub.test', body: { mode: 'formdata' } }, () => {});");
+        var (run, host) = await RunWithHost("yaapic.sendRequest({ url: 'https://sub.test', body: { mode: 'formdata' } }, () => {});");
 
         Assert.Equal(ScriptRunStatus.Failed, run.Status);
-        Assert.Equal("pm.sendRequest body mode 'formdata' is not supported", run.Error?.Message);
+        Assert.Equal("yaapic.sendRequest body mode 'formdata' is not supported", run.Error?.Message);
         Assert.Empty(host.Sent);
     }
 
@@ -212,10 +212,10 @@ public sealed class PmSendRequestTests
     {
         var response = ScriptResponse.FromData(Reply("{}", "sid=abc; Path=/; HttpOnly; Secure", "theme=dark; Domain=example.com"));
         var (run, _) = await RunWithHost("""
-            console.log(pm.cookies.get('sid'), pm.cookies.has('theme'), pm.cookies.has('x'), pm.cookies.get('x'), pm.cookies.count());
-            console.log(JSON.stringify(pm.cookies.toObject()));
-            const names = []; pm.cookies.each((c) => names.push(c.name));
-            console.log(names.join(','), JSON.stringify(pm.cookies.all()[0]));
+            console.log(yaapic.cookies.get('sid'), yaapic.cookies.has('theme'), yaapic.cookies.has('x'), yaapic.cookies.get('x'), yaapic.cookies.count());
+            console.log(JSON.stringify(yaapic.cookies.toObject()));
+            const names = []; yaapic.cookies.each((c) => names.push(c.name));
+            console.log(names.join(','), JSON.stringify(yaapic.cookies.all()[0]));
             """, response: response, cookies: response.Cookies);
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -228,7 +228,7 @@ public sealed class PmSendRequestTests
     public async Task Cookies_are_empty_in_pre_request_and_jar_throws()
     {
         var (run, _) = await RunWithHost(
-            "console.log(pm.cookies.count(), pm.cookies.get('a')); try { pm.cookies.jar(); } catch (e) { console.log(e.message); }",
+            "console.log(yaapic.cookies.count(), yaapic.cookies.get('a')); try { yaapic.cookies.jar(); } catch (e) { console.log(e.message); }",
             phase: ScriptPhase.PreRequest);
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -239,7 +239,7 @@ public sealed class PmSendRequestTests
     public async Task Send_request_response_has_cookies()
     {
         var (run, _) = await RunWithHost(
-            "const res = await pm.sendRequest('https://sub.test/x'); console.log(res.cookies.get('a'), res.cookies.count());",
+            "const res = await yaapic.sendRequest('https://sub.test/x'); console.log(res.cookies.get('a'), res.cookies.count());",
             _ => new(ScriptResponse.FromData(Reply("{}", "a=1; Path=/")), null));
 
         Assert.True(run.Succeeded, run.Error?.Message);

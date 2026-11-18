@@ -120,6 +120,10 @@
                            Foreground="{x:Bind p:BrushMap.TestOutcome(ViewModel.Tests.AllPassed), Mode=OneWay}"/>
               </StackPanel>
             </ToggleButton>
+            <ToggleButton x:Name="TimingTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
+                          Click="OnTabClick" Content="{x:Bind loc:Strings.ResponseTabTiming}"/>
+            <ToggleButton x:Name="DiffTab" Style="{StaticResource YaapicPanelToggleTabStyle}" Height="35" VerticalAlignment="Top"
+                          Click="OnTabClick" Content="{x:Bind loc:Strings.ResponseTabDiff}"/>
           </StackPanel>
           <StackPanel Orientation="Horizontal" Spacing="10" HorizontalAlignment="Right" VerticalAlignment="Center">
             <Border Style="{StaticResource YaapicChipBorderStyle}" VerticalAlignment="Center"
@@ -323,6 +327,144 @@
                        Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                        Text="{x:Bind loc:Strings.TestsNone}"
                        Visibility="{x:Bind p:VisibilityMap.WhenNeitherFlag(ViewModel.Tests.HasTests, ViewModel.Tests.HasErrors), Mode=OneWay}"/>
+          </Grid>
+          <Grid x:Name="TimingPane" Visibility="Collapsed">
+            <!-- Scrolls: the waterfall is taller than a short response pane. -->
+            <ScrollViewer VerticalScrollBarVisibility="Auto" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasTimings), Mode=OneWay}">
+            <StackPanel Padding="16,12" Spacing="8">
+              <StackPanel Orientation="Horizontal" Spacing="16">
+                <TextBlock Text="{x:Bind ViewModel.ProtocolText, Mode=OneWay}" Style="{StaticResource YaapicBodyStrongTextStyle}"/>
+                <TextBlock Text="{x:Bind ViewModel.ConnectionText, Mode=OneWay}" Style="{StaticResource YaapicBodyTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                <TextBlock Text="{x:Bind ViewModel.TotalText, Mode=OneWay}" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" VerticalAlignment="Center"/>
+              </StackPanel>
+              <ItemsControl ItemsSource="{x:Bind p:ListMap.Timings(ViewModel.Timings), Mode=OneWay}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="r:TimingRow">
+                    <Grid ColumnSpacing="12" Margin="0,0,0,6">
+                      <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="140"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="72"/>
+                      </Grid.ColumnDefinitions>
+                      <TextBlock Text="{x:Bind Label}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center"
+                                 Style="{StaticResource YaapicBodyTextStyle}"/>
+                      <Grid Grid.Column="1" Height="14" VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                          <ColumnDefinition Width="{x:Bind p:TimingMap.Lead(IsMeasured, OffsetFraction)}"/>
+                          <ColumnDefinition Width="{x:Bind p:TimingMap.Bar(IsMeasured, Fraction)}"/>
+                          <ColumnDefinition Width="{x:Bind p:TimingMap.Rest(IsMeasured, OffsetFraction, Fraction)}"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Grid.Column="1" MinWidth="2" CornerRadius="2"
+                                Background="{x:Bind p:TimingMap.BarBrush(Label)}"
+                                Visibility="{x:Bind p:TimingMap.WhenMeasured(IsMeasured)}"/>
+                        <Border Grid.ColumnSpan="3" Height="1" VerticalAlignment="Center"
+                                BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1"
+                                Visibility="{x:Bind p:TimingMap.WhenUnmeasured(IsMeasured)}"/>
+                      </Grid>
+                      <TextBlock Grid.Column="2" Text="{x:Bind DurationText}" HorizontalAlignment="Right" VerticalAlignment="Center"
+                                 Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                    </Grid>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+            </ScrollViewer>
+            <TextBlock Margin="16,12" TextWrapping="Wrap" Style="{StaticResource YaapicBodyTextStyle}"
+                       Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="{x:Bind loc:Strings.TimingNone}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.HasTimings), Mode=OneWay}"/>
+          </Grid>
+          <Grid x:Name="DiffPane" Visibility="Collapsed">
+            <Grid.RowDefinitions>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="Auto"/>
+              <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <StackPanel Padding="16,8" Spacing="8" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,0,1">
+              <StackPanel Orientation="Horizontal" Spacing="12" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Diff.HasComparison), Mode=OneWay}">
+                <TextBlock Text="{x:Bind ViewModel.Diff.SummaryText, Mode=OneWay}" Style="{StaticResource YaapicBodyStrongTextStyle}" VerticalAlignment="Center"/>
+                <TextBlock Text="{x:Bind ViewModel.Diff.StatusLine, Mode=OneWay}" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" VerticalAlignment="Center"/>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <ComboBox x:Name="DiffCompare" MinWidth="180" SelectionChanged="OnDiffCompareChanged" VerticalAlignment="Center">
+                  <ComboBoxItem Content="{x:Bind loc:Strings.DiffCompareWithPrevious}"/>
+                  <ComboBoxItem Content="{x:Bind loc:Strings.DiffCompareWithBaseline}" IsEnabled="{x:Bind ViewModel.Diff.HasBaseline, Mode=OneWay}"/>
+                </ComboBox>
+                <Button Content="{x:Bind loc:Strings.DiffPin}" Command="{x:Bind ViewModel.Diff.PinCommand, Mode=OneWay}" VerticalAlignment="Center"/>
+                <Button Content="{x:Bind loc:Strings.DiffUnpin}" Command="{x:Bind ViewModel.Diff.UnpinCommand, Mode=OneWay}" VerticalAlignment="Center"
+                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Diff.HasBaseline), Mode=OneWay}"/>
+                <TextBlock Text="{x:Bind ViewModel.Diff.PinnedText, Mode=OneWay}" Style="{StaticResource YaapicBodyTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" VerticalAlignment="Center"/>
+              </StackPanel>
+              <StackPanel Orientation="Horizontal" Spacing="12">
+                <ToggleSwitch OnContent="{x:Bind loc:Strings.DiffIgnoreWhitespace}" OffContent="{x:Bind loc:Strings.DiffIgnoreWhitespace}"
+                              IsOn="{x:Bind ViewModel.Diff.IgnoreWhitespace, Mode=TwoWay}"/>
+                <ToggleSwitch OnContent="{x:Bind loc:Strings.DiffIgnoreVolatileHeaders}" OffContent="{x:Bind loc:Strings.DiffIgnoreVolatileHeaders}"
+                              IsOn="{x:Bind ViewModel.Diff.IgnoreVolatileHeaders, Mode=TwoWay}"/>
+                <ToggleSwitch OnContent="{x:Bind loc:Strings.DiffExpandAll}" OffContent="{x:Bind loc:Strings.DiffExpandAll}"
+                              IsOn="{x:Bind ViewModel.Diff.ExpandFolds, Mode=TwoWay}"/>
+              </StackPanel>
+            </StackPanel>
+            <ItemsControl Grid.Row="1" Padding="16,6" MaxHeight="160"
+                          ItemsSource="{x:Bind p:ListMap.DiffHeaders(ViewModel.Diff.Headers), Mode=OneWay}"
+                          Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.Diff.Headers.Count), Mode=OneWay}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="r:HeaderDiffItem">
+                  <StackPanel Orientation="Horizontal" Spacing="12">
+                    <TextBlock Text="{x:Bind Name}" Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicSyntaxKeyBrush}"/>
+                    <TextBlock Text="{x:Bind OldValue}" TextDecorations="Strikethrough" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                               Foreground="{ThemeResource YaapicDangerBrush}" Visibility="{x:Bind p:VisibilityMap.WhenText(OldValue)}"/>
+                    <TextBlock Text="{x:Bind NewValue}" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                               Foreground="{ThemeResource YaapicSuccessBrush}" Visibility="{x:Bind p:VisibilityMap.WhenText(NewValue)}"/>
+                  </StackPanel>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <ListView Grid.Row="2" SelectionMode="None"
+                      ItemsSource="{x:Bind p:ListMap.DiffLines(ViewModel.Diff.BodyLines), Mode=OneWay}"
+                      Visibility="{x:Bind p:DiffMap.WhenComparable(ViewModel.Diff.HasComparison, ViewModel.Diff.UnavailableReason), Mode=OneWay}">
+              <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem" BasedOn="{StaticResource DefaultListViewItemStyle}">
+                  <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                  <Setter Property="MinHeight" Value="0"/>
+                  <Setter Property="Height" Value="20"/>
+                  <Setter Property="Padding" Value="0"/>
+                </Style>
+              </ListView.ItemContainerStyle>
+              <ListView.ItemTemplate>
+                <DataTemplate x:DataType="r:DiffItem">
+                  <Grid Height="20" Background="{x:Bind p:DiffMap.Background(Op)}" ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="48"/>
+                      <ColumnDefinition Width="48"/>
+                      <ColumnDefinition Width="16"/>
+                      <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind OldNumber}" HorizontalAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                               Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                    <TextBlock Grid.Column="1" Text="{x:Bind NewNumber}" HorizontalAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                               Foreground="{ThemeResource YaapicTextSecondaryBrush}"/>
+                    <TextBlock Grid.Column="2" Text="{x:Bind p:DiffMap.Marker(Op, IsFold)}" Style="{StaticResource YaapicCodeSmallTextStyle}"/>
+                    <TextBlock Grid.Column="3" Text="{x:Bind Text}" TextWrapping="NoWrap" TextTrimming="CharacterEllipsis"
+                               Style="{StaticResource YaapicCodeSmallTextStyle}" Visibility="{x:Bind p:DiffMap.WhenLine(IsFold)}"/>
+                    <TextBlock Grid.ColumnSpan="4" Text="{x:Bind Text}" HorizontalAlignment="Center" FontStyle="Italic"
+                               Style="{StaticResource YaapicBodyTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                               Visibility="{x:Bind p:DiffMap.WhenFold(IsFold)}"/>
+                  </Grid>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+            <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap" Style="{StaticResource YaapicBodyTextStyle}"
+                       Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="{x:Bind ViewModel.Diff.UnavailableReason, Mode=OneWay}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Diff.UnavailableReason), Mode=OneWay}"/>
+            <TextBlock Grid.Row="2" Margin="16,12" TextWrapping="Wrap" Style="{StaticResource YaapicBodyTextStyle}"
+                       Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="{x:Bind loc:Strings.DiffNeedTwo}"
+                       Visibility="{x:Bind p:DiffMap.WhenNeedTwo(ViewModel.Diff.HasComparison, ViewModel.Diff.UnavailableReason), Mode=OneWay}"/>
           </Grid>
         </Grid>
       </Grid>

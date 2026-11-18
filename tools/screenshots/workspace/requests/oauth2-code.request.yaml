@@ -1,0 +1,24 @@
+version: 1
+id: 11111111-0000-0000-0000-00000000000e
+name: OAuth2 authorization code
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+auth:
+  type: oauth2
+  oauth2:
+    grant: authorization_code
+    tokenUrl: "{{baseUrl}}/token"
+    authorizationUrl: "{{baseUrl}}/authorize"
+    clientId: demo-client
+    clientSecret: "{{clientSecret}}"
+    scope: openid profile
+    redirectUri: http://127.0.0.1:8742/callback
+    clientAuth: body
+    placement: header
+    headerPrefix: Bearer

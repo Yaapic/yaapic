@@ -21,6 +21,7 @@ param(
     [string]$Request = 'create-user',
     [string[]]$Steps = @(),
     [switch]$Screen,
+    [switch]$Certificates,
     [switch]$NoTabs,
     [switch]$NoStub,
     [string]$Crop = '',
@@ -72,7 +73,13 @@ try {
               'slow' = '11111111-0000-0000-0000-000000000005'
               'upload-avatar' = '11111111-0000-0000-0000-000000000006'; 'secure-call' = '11111111-0000-0000-0000-000000000007'
               'big' = '11111111-0000-0000-0000-000000000008'; 'scripted' = '11111111-0000-0000-0000-000000000009'
-              'noisy' = '11111111-0000-0000-0000-00000000000a'; 'lua-scripted' = '11111111-0000-0000-0000-00000000000b'; 'broken' = '11111111-0000-0000-0000-00000000000c' }
+              'noisy' = '11111111-0000-0000-0000-00000000000a'; 'lua-scripted' = '11111111-0000-0000-0000-00000000000b'; 'broken' = '11111111-0000-0000-0000-00000000000c'
+              'oauth2' = '11111111-0000-0000-0000-00000000000d'; 'oauth2-code' = '11111111-0000-0000-0000-00000000000e'; 'jwt' = '11111111-0000-0000-0000-00000000000f'
+              'aws' = '11111111-0000-0000-0000-000000000010'; 'changing' = '11111111-0000-0000-0000-000000000011' }
+    # Throw-away RSA key for the jwt request, generated now and deleted with the temp folder (never a real key).
+    $jwtFile = Join-Path $temp 'requests\jwt.request.yaml'
+    $pem = ([Security.Cryptography.RSA]::Create(2048)).ExportPkcs8PrivateKeyPem() -split "`r?`n" | Where-Object { $_ }
+    [IO.File]::WriteAllText($jwtFile, ([IO.File]::ReadAllText($jwtFile) -replace '__JWT_PEM__', ($pem -join "`n      ")), [Text.UTF8Encoding]::new($false))
     $session = Join-Path $temp '.yaapic\session.yaml'
     $open = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$open`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))
@@ -97,6 +104,17 @@ try {
                 elseif ($p -eq '/users') { $body = '[{"id":1,"name":"Ada"},{"id":2,"name":"Grace"}]' }
                 elseif ($p -match '^/status/(\d+)$') { $code = [int]$Matches[1]; $body = '{"title":"Problem","status":' + $code + '}' }
                 elseif ($p -eq '/big') { $body = '[' + ((1..65000 | ForEach-Object { '{"id":' + $_ + ',"name":"item number ' + $_ + '","active":true,"score":1.5,"tags":["a","b"]}' }) -join ",`n") + ']' }
+                elseif ($p -eq '/token') { $body = '{"access_token":"fake-access-token-0000","token_type":"Bearer","expires_in":3600,"scope":"read write"}' }
+                elseif ($p -eq '/changing') {
+                    $script:n++
+                    $o = [ordered]@{ id = 7; name = 'Ada Lovelace'; role = $(if ($script:n -gt 1) { 'admin' } else { 'user' }); version = "1.$($script:n)" }
+                    foreach ($i in 1..24) { $o["field$i"] = "stable value $i" }
+                    $o.logins = 10 + $script:n
+                    if ($script:n -gt 1) { $o.lastSeen = '2026-11-17T09:00:00Z' }
+                    $body = $o | ConvertTo-Json -Depth 4
+                    $c.Response.Headers.Add('X-Request-Count', "$($script:n)")
+                    $c.Response.Headers.Add('ETag', '"v' + $script:n + '"')
+                }
                 elseif ($p -match '^/delay/(\d+)$') { Start-Sleep -Milliseconds ([int]$Matches[1]); $body = '{"delayed":true}' }
                 $b = [Text.Encoding]::UTF8.GetBytes($body)
                 $c.Response.StatusCode = $code; $c.Response.ContentType = 'application/json'
@@ -114,6 +132,24 @@ try {
         if ($Language) { $prefs.language = $Language }
         if ($Accent) { $prefs.accent = $Accent }
         $prefs | ConvertTo-Json | Set-Content "$temp-data\Yaapic\preferences.json" -Encoding utf8
+    }
+
+    if ($Certificates) {
+        # Two throw-away self-signed certificates (a PFX and a PEM pair) listed in certificates.json; no passphrase, nothing real.
+        $dir = "$temp-data\Yaapic"; New-Item -ItemType Directory -Force $dir | Out-Null
+        # The certificate files sit in a short folder at the drive root so that the dialog's path fields show no user name; it is deleted below.
+        $certDir = Join-Path $env:SystemDrive 'yaapic-shot-certs'; New-Item -ItemType Directory -Force $certDir | Out-Null
+        $mk = { $rsa = [Security.Cryptography.RSA]::Create(2048)
+            $req = [Security.Cryptography.X509Certificates.CertificateRequest]::new('CN=yaapic-demo', $rsa, [Security.Cryptography.HashAlgorithmName]::SHA256, [Security.Cryptography.RSASignaturePadding]::Pkcs1)
+            $req.CreateSelfSigned([DateTimeOffset]::UtcNow, [DateTimeOffset]::UtcNow.AddDays(30)) }
+        $c1 = & $mk; $c2 = & $mk
+        [IO.File]::WriteAllBytes("$certDir\demo.pfx", $c1.Export('Pfx'))
+        [IO.File]::WriteAllText("$certDir\demo.pem", $c2.ExportCertificatePem())
+        [IO.File]::WriteAllText("$certDir\demo.key", [Security.Cryptography.X509Certificates.RSACertificateExtensions]::GetRSAPrivateKey($c2).ExportPkcs8PrivateKeyPem())
+        $j = [ordered]@{ version = 1; certificates = @(
+            [ordered]@{ id = '33333333-0000-0000-0000-000000000001'; name = 'Staging mTLS'; hostPattern = '*.staging.example.test'; format = 'pfx'; certificatePath = "$certDir\demo.pfx"; keyPath = ''; hasPassphrase = $false },
+            [ordered]@{ id = '33333333-0000-0000-0000-000000000002'; name = 'Partner API'; hostPattern = 'api.partner.example.test'; format = 'pem'; certificatePath = "$certDir\demo.pem"; keyPath = "$certDir\demo.key"; hasPassphrase = $false }) }
+        $j | ConvertTo-Json -Depth 4 | Set-Content "$dir\certificates.json" -Encoding utf8
     }
 
     $appArgs = @('--workspace', "`"$temp`"", '--data-dir', "`"$temp-data`"", '--theme', $Theme)
@@ -256,7 +292,7 @@ finally {
     if ($proc -and -not $proc.HasExited) { Stop-Process -Id $proc.Id -Force }
     # GetContext blocks inside the runspace: do not wait for it, the process exit ends it.
     if ($ps) { [void]$ps.BeginStop($null, $null) }
-    foreach ($d in $temp, "$temp-data") { if (Test-Path $d) { Remove-Item $d -Recurse -Force } } # the data dir holds the throw-away vault: the real %APPDATA%\Yaapic is never touched
+    foreach ($d in $temp, "$temp-data", (Join-Path $env:SystemDrive 'yaapic-shot-certs')) { if (Test-Path $d) { Remove-Item $d -Recurse -Force } } # the data dir holds the throw-away vault: the real %APPDATA%\Yaapic is never touched
 }
 # The blocked stub-server runspace would keep the host alive for minutes: leave explicitly.
 [Environment]::Exit([int]$failed)

@@ -1,8 +1,8 @@
 namespace Yaapic.Scripting.Lua;
 
 /// <summary>
-/// The Lua <c>pm</c> prelude, part 3: <c>pm.request</c> (read and, in pre-request, write through setter functions) and
-/// <c>pm.response</c> (post-response). The Lua twin of the JavaScript request/response prelude.
+/// The Lua <c>yaapic</c> prelude, part 3: <c>yaapic.request</c> (read and, in pre-request, write through setter functions) and
+/// <c>yaapic.response</c> (post-response). The Lua twin of the JavaScript request/response prelude.
 /// </summary>
 internal static class LuaPmRequestResponsePrelude
 {
@@ -10,7 +10,7 @@ internal static class LuaPmRequestResponsePrelude
     internal const string Source = """
         do
           local hostCall, define = __hostCall, __pmDefine
-          local NULL, json = pm.null, pm.json
+          local NULL, json = yaapic.null, yaapic.json
           local type, error, ipairs, setmetatable, tostring, tonumber, rawequal, pcall = type, error, ipairs, setmetatable, tostring, tonumber, rawequal, pcall
           local find, sub, match, gsub, format, lower, upper, char, byte = string.find, string.sub, string.match, string.gsub, string.format, string.lower, string.upper, string.char, string.byte
           local concat = table.concat
@@ -283,7 +283,7 @@ internal static class LuaPmRequestResponsePrelude
           end
 
           local queryList = newList(
-            'pm.request.url.query',
+            'yaapic.request.url.query',
             function() return readQuery(parse(currentUrl()).query) end,
             function(list)
               local p = parse(currentUrl())
@@ -343,20 +343,20 @@ internal static class LuaPmRequestResponsePrelude
                 return queryList
               end
             end,
-            __newindex = function(_, member) readOnly('pm.request.url', member, 'update') end,
+            __newindex = function(_, member) readOnly('yaapic.request.url', member, 'update') end,
             __tostring = currentUrl,
-            __metatable = 'pm.request.url is protected',
+            __metatable = 'yaapic.request.url is protected',
           })
 
-          -- ---- pm.request.body
+          -- ---- yaapic.request.body
           local settableModes = { none = true, raw = true, urlencoded = true }
           local urlencoded = newList(
-            'pm.request.body.urlencoded',
+            'yaapic.request.body.urlencoded',
             function() return items(hostCall('req.get').urlEncoded) end,
             function(list) mutate(function(dto) dto.urlEncoded = rows(list) end) end,
             false)
           local formdata = newList(
-            'pm.request.body.formdata',
+            'yaapic.request.body.formdata',
             function() return items(hostCall('req.get').formData) end,
             nil,
             false)
@@ -365,17 +365,17 @@ internal static class LuaPmRequestResponsePrelude
           function bodyMethods.get_mode() return hostCall('req.get').bodyMode end
           function bodyMethods.set_mode(mode)
             if mode == 'formdata' or mode == 'binary' then
-              error("pm.request.body mode '" .. mode .. "' cannot be set from a script", 2)
+              error("yaapic.request.body mode '" .. mode .. "' cannot be set from a script", 2)
             end
             if not settableModes[mode] then
-              error("pm.request.body mode '" .. tostring(mode) .. "' is not valid", 2)
+              error("yaapic.request.body mode '" .. tostring(mode) .. "' is not valid", 2)
             end
             mutate(function(dto) dto.bodyMode = mode end)
           end
           function bodyMethods.get_raw() return hostCall('req.get').bodyText end
           function bodyMethods.set_raw(value)
             if type(value) ~= 'string' then
-              error('pm.request.body.raw must be a string', 2)
+              error('yaapic.request.body.raw must be a string', 2)
             end
             mutate(function(dto) dto.bodyText = value end)
           end
@@ -399,16 +399,16 @@ internal static class LuaPmRequestResponsePrelude
               end
             end,
             __newindex = function(_, member)
-              readOnly('pm.request.body', member, (member == 'mode' or member == 'raw') and 'set_' .. member or nil)
+              readOnly('yaapic.request.body', member, (member == 'mode' or member == 'raw') and 'set_' .. member or nil)
             end,
             __tostring = bodyMethods.to_string,
-            __metatable = 'pm.request.body is protected',
+            __metatable = 'yaapic.request.body is protected',
           })
 
-          -- ---- pm.request
+          -- ---- yaapic.request
           local info = hostCall('info.get')
           local headers = newList(
-            'pm.request.headers',
+            'yaapic.request.headers',
             function() return items(hostCall('req.get').headers) end,
             function(list) mutate(function(dto) dto.headers = rows(list) end) end,
             true)
@@ -417,20 +417,20 @@ internal static class LuaPmRequestResponsePrelude
           function requestMethods.get_method() return hostCall('req.get').method end
           function requestMethods.set_method(method)
             if type(method) ~= 'string' then
-              error('pm.request.method must be a string', 2)
+              error('yaapic.request.method must be a string', 2)
             end
             mutate(function(dto) dto.method = upper(method) end)
           end
           function requestMethods.set_url(value)
             if type(value) ~= 'string' then
-              error('pm.request.url must be a string', 2)
+              error('yaapic.request.url must be a string', 2)
             end
             flushUrl(value)
           end
           requestMethods.getMethod, requestMethods.setMethod, requestMethods.setUrl =
             requestMethods.get_method, requestMethods.set_method, requestMethods.set_url
 
-          local stubs = { auth = unsupported('pm.request.auth'), certificate = unsupported('pm.request.certificate') }
+          local stubs = { auth = unsupported('yaapic.request.auth'), certificate = unsupported('yaapic.request.certificate') }
           local request = setmetatable({}, {
             __index = function(_, member)
               if requestMethods[member] then
@@ -451,13 +451,13 @@ internal static class LuaPmRequestResponsePrelude
               return stubs[member]
             end,
             __newindex = function(_, member)
-              readOnly('pm.request', member, (member == 'method' and 'set_method') or (member == 'url' and 'set_url') or nil)
+              readOnly('yaapic.request', member, (member == 'method' and 'set_method') or (member == 'url' and 'set_url') or nil)
             end,
-            __metatable = 'pm.request is protected',
+            __metatable = 'yaapic.request is protected',
           })
           define('request', request)
 
-          -- ---- pm.response (post-response only; the snapshot is immutable, so it is built once)
+          -- ---- yaapic.response (post-response only; the snapshot is immutable, so it is built once)
           local response
           local function buildResponse(dto)
             local result = {
@@ -466,7 +466,7 @@ internal static class LuaPmRequestResponsePrelude
               response_time = dto.time, responseTime = dto.time,
               response_size = dto.size, responseSize = dto.size,
               headers = newList(
-                'pm.response.headers',
+                'yaapic.response.headers',
                 function() return items(dto.headers) end,
                 nil,
                 true),
@@ -481,8 +481,8 @@ internal static class LuaPmRequestResponsePrelude
             end
             function result.reason() return dto.status end
             function result.size() return { body = dto.size, header = 0, total = dto.size } end
-            -- pm.response.to is a fresh assertion chain per access, defined by the test prelude.
-            -- pm.response.cookies is a fresh read-only list per access, defined by the send prelude.
+            -- yaapic.response.to is a fresh assertion chain per access, defined by the test prelude.
+            -- yaapic.response.cookies is a fresh read-only list per access, defined by the send prelude.
             return setmetatable(result, { __index = function(_, member)
               if member == 'to' then
                 return __responseTo(dto)
@@ -496,7 +496,7 @@ internal static class LuaPmRequestResponsePrelude
             if response == nil then
               local dto = hostCall('res.get')
               if rawequal(dto, NULL) then
-                error('pm.response is only available in post-response scripts', 3)
+                error('yaapic.response is only available in post-response scripts', 3)
               end
               response = buildResponse(dto)
             end
@@ -504,8 +504,8 @@ internal static class LuaPmRequestResponsePrelude
           end
           define('response', setmetatable({}, {
             __index = function(_, member) return current()[member] end,
-            __newindex = function(_, member) readOnly('pm.response', member) end,
-            __metatable = 'pm.response is protected',
+            __newindex = function(_, member) readOnly('yaapic.response', member) end,
+            __metatable = 'yaapic.response is protected',
           }))
         end
         """;

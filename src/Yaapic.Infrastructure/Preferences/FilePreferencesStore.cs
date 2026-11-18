@@ -28,7 +28,8 @@ public sealed class FilePreferencesStore(string? userDataDirectory = null) : IPr
                 ? UserPreferences.Default
                 : new UserPreferences(
                     Enum.TryParse<AppLanguage>(dto.Language, ignoreCase: true, out var language) && Enum.IsDefined(language) ? language : AppLanguage.System,
-                    AccentChoice.IsValid(dto.Accent) ? dto.Accent! : AccentChoice.Default);
+                    AccentChoice.IsValid(dto.Accent) ? dto.Accent! : AccentChoice.Default,
+                    string.IsNullOrWhiteSpace(dto.CodegenTarget) ? "curl" : dto.CodegenTarget);
         }
         catch (Exception ex) when (ex is JsonException or IOException or UnauthorizedAccessException)
         {
@@ -40,7 +41,7 @@ public sealed class FilePreferencesStore(string? userDataDirectory = null) : IPr
     public async Task SaveAsync(UserPreferences preferences, CancellationToken ct)
     {
         ArgumentNullException.ThrowIfNull(preferences);
-        var dto = new PreferencesDto { Language = preferences.Language.ToString().ToLowerInvariant(), Accent = preferences.Accent };
+        var dto = new PreferencesDto { Language = preferences.Language.ToString().ToLowerInvariant(), Accent = preferences.Accent, CodegenTarget = preferences.CodegenTarget };
         try
         {
             await WorkspaceFiles.WriteAtomicAsync(_path, JsonSerializer.Serialize(dto, PreferencesJsonContext.Default.PreferencesDto) + "\n", ct);
@@ -57,6 +58,8 @@ internal sealed class PreferencesDto
     public string? Language { get; set; }
 
     public string? Accent { get; set; }
+
+    public string? CodegenTarget { get; set; }
 }
 
 [JsonSourceGenerationOptions(PropertyNamingPolicy = JsonKnownNamingPolicy.CamelCase, WriteIndented = true, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)]

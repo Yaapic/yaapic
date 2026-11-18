@@ -1,6 +1,6 @@
 namespace Yaapic.Scripting.Lua;
 
-/// <summary>The Lua <c>pm</c> prelude, part 1: <c>pm.null</c>, the JSON codec <c>pm.json</c> and the typed host wrapper <c>__hostCall</c>.</summary>
+/// <summary>The Lua <c>yaapic</c> prelude, part 1: <c>yaapic.null</c>, the JSON codec <c>yaapic.json</c> and the typed host wrapper <c>__hostCall</c>.</summary>
 internal static class LuaPmJsonPrelude
 {
     /// <summary>The prelude source, evaluated as its own chunk after <see cref="LuaPrelude.Core"/>.</summary>
@@ -18,7 +18,7 @@ internal static class LuaPmJsonPrelude
           -- The JSON null sentinel: frozen, prints as "null".
           local NULL = setmetatable({}, {
             __tostring = function() return 'null' end,
-            __newindex = function() error('pm.null is read-only', 2) end,
+            __newindex = function() error('yaapic.null is read-only', 2) end,
           })
 
           -- Marks tables that are JSON arrays even when empty; decoded arrays carry it.
@@ -348,7 +348,7 @@ internal static class LuaPmJsonPrelude
           end
 
           __hostCall = hostCall
-          pm = { null = NULL, json = { encode = json.encode, decode = json.decode, array = json.array } }
+          yaapic = { null = NULL, json = { encode = json.encode, decode = json.decode, array = json.array } }
         end
         """;
 }

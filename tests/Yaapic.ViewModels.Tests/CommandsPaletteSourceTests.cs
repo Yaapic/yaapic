@@ -1,4 +1,6 @@
+using Yaapic.Core.CodeGeneration;
 using Yaapic.Core.Http;
+using Yaapic.Core.Preferences;
 using Yaapic.Domain.Http;
 using Yaapic.TestDoubles;
 using Yaapic.ViewModels.Collections;
@@ -13,12 +15,13 @@ namespace Yaapic.ViewModels.Tests;
 
 public sealed class CommandsPaletteSourceTests
 {
-    private static readonly string[] Always = ["New request", "New collection", "Manage environments", "Show collections", "Show history", "Toggle request layout (side by side or stacked)", "Toggle console", "Clear console", "Set up the secret vault...", "Settings", "Change language", "Change accent colour"];
+    private static readonly string[] Always = ["New request", "New collection", "Manage environments", "Show collections", "Show history", "Toggle request layout (side by side or stacked)", "Toggle console", "Clear console", "Decode JWT", "Client certificates...", "Set up the secret vault...", "Settings", "Change language", "Change accent colour"];
 
     private static readonly HttpResponseData Ok = new(200, "OK", [], [], TimeSpan.FromMilliseconds(5), "https://x.test");
 
     private readonly InMemoryHistoryStore _historyStore = new();
     private TaskCompletionSource<SendResult>? _gate;
+    private CodeGenerationServices? _codeGeneration;
 
     private ShellViewModel CreateShell(ShellParts? parts = null)
     {
@@ -29,7 +32,7 @@ public sealed class CommandsPaletteSourceTests
         var tabs = new TabsViewModel(
             requests,
             dialogs,
-            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew));
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew, codeGeneration: _codeGeneration));
         return new ShellViewModel(
             tabs,
             new RequestListViewModel(requests, tabs, dialogs),
@@ -183,6 +186,69 @@ public sealed class CommandsPaletteSourceTests
         await Find(source, "command:vault-setup").Execute();
         Assert.True(setup);
         Assert.Equal("Ctrl+`", Find(source, "command:toggle-console").Shortcut);
+    }
+
+    private static readonly string[] M4OnOpenRequest = ["Generate code for this request"];
+    private static readonly string[] M4OnResponse = ["Compare response with previous", "Pin response as baseline"];
+
+    private ShellViewModel ShellWithRequest()
+    {
+        _codeGeneration = new CodeGenerationServices(new CodeGeneratorRegistry([]), new InMemoryPreferencesStore(), new FakeDialogService());
+        var shell = CreateShell();
+        shell.Tabs.NewTab();
+        return shell;
+    }
+
+    [Fact]
+    public void M4_entries_that_need_a_request_or_a_response_follow_availability()
+    {
+        var empty = CreateShell();
+        Assert.DoesNotContain("Generate code for this request", Titles(empty));
+
+        var shell = ShellWithRequest();
+        Assert.Contains(M4OnOpenRequest[0], Titles(shell));
+        Assert.DoesNotContain(M4OnResponse[0], Titles(shell));
+        Assert.DoesNotContain(M4OnResponse[1], Titles(shell));
+
+        shell.Tabs.ActiveTab!.Response.ShowReport(new SendReport(SendResult.Success(Ok), []));
+
+        Assert.All(M4OnResponse, t => Assert.Contains(t, Titles(shell)));
+    }
+
+    [Fact]
+    public async Task M4_entries_raise_their_event_or_call_their_service_once()
+    {
+        var shell = ShellWithRequest();
+        var tab = shell.Tabs.ActiveTab!;
+        tab.Response.ShowReport(new SendReport(SendResult.Success(Ok), []));
+        var tokens = new FakeOAuth2TokenService();
+        var source = new CommandsPaletteSource(shell, tokens);
+        int code = 0, jwt = 0, certs = 0, diff = 0;
+        tab.CodeGenerationRequested += (_, _) => code++;
+        shell.JwtDecoderRequested += (_, _) => jwt++;
+        shell.CertificatesRequested += (_, _) => certs++;
+        tab.Response.ShowDiffRequested += (_, _) => diff++;
+
+        await Find(source, "command:generate-code").Execute();
+        await Find(source, "command:decode-jwt").Execute();
+        await Find(source, "command:client-certificates").Execute();
+        await Find(source, "command:compare-response").Execute();
+        await Find(source, "command:pin-baseline").Execute();
+        await Find(source, "command:clear-oauth-tokens").Execute();
+
+        Assert.Equal([1, 1, 1, 1], [code, jwt, certs, diff]);
+        Assert.True(tab.Response.Diff.HasBaseline);
+        Assert.Equal(1, tokens.ClearAllCount);
+        Assert.All(source.GetItems().Where(i => i.Id.StartsWith("command:decode", StringComparison.Ordinal)), i => Assert.Null(i.Shortcut));
+    }
+
+    [Fact]
+    public void Clear_tokens_is_offered_only_with_a_token_service()
+    {
+        var shell = CreateShell();
+
+        Assert.DoesNotContain("Clear OAuth 2.0 tokens", Titles(shell));
+        Assert.Contains("Clear OAuth 2.0 tokens", new CommandsPaletteSource(shell, new FakeOAuth2TokenService()).GetItems().Select(i => i.Title));
     }
 
     [Fact]

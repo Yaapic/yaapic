@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Vault;
 
 namespace Yaapic.App.WinUI.Presentation;
@@ -27,8 +28,38 @@ public static class ListMap
     /// <returns>An observable collection of the errors.</returns>
     public static ObservableCollection<ScriptErrorItemViewModel> ScriptErrors(IReadOnlyList<ScriptErrorItemViewModel> items) => new(items);
 
+    /// <summary>Copies timing rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The waterfall rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<TimingRow> Timings(IReadOnlyList<TimingRow> items) => new(items);
+
+    /// <summary>Copies diff body rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<DiffItem> DiffLines(IReadOnlyList<DiffItem> items) => new(items);
+
+    /// <summary>Copies header diff rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<HeaderDiffItem> DiffHeaders(IReadOnlyList<HeaderDiffItem> items) => new(items);
+
     /// <summary>Copies vault protector choices into an observable collection (see <see cref="Entries"/> for why).</summary>
     /// <param name="items">The protectors to offer.</param>
     /// <returns>An observable collection of the choices.</returns>
     public static ObservableCollection<VaultProtectorChoice> Protectors(IReadOnlyList<VaultProtectorChoice> items) => new(items);
+
+    /// <summary>Copies code generation targets into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The targets to offer.</param>
+    /// <returns>An observable collection of the targets.</returns>
+    public static ObservableCollection<CodeTarget> Targets(IReadOnlyList<CodeTarget> items) => new(items);
+
+    /// <summary>Copies JWT claim rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The rows to show.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<JwtClaimRow> Claims(IReadOnlyList<JwtClaimRow> items) => new(items);
+
+    /// <summary>Copies text lines into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The lines to show, or <see langword="null"/> when nothing is selected.</param>
+    /// <returns>An observable collection of the lines.</returns>
+    public static ObservableCollection<string> Lines(IReadOnlyList<string>? items) => new(items ?? []);
 }

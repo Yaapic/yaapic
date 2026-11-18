@@ -1,0 +1,22 @@
+version: 1
+id: 11111111-0000-0000-0000-00000000000d
+name: OAuth2 client credentials
+method: GET
+url: "{{baseUrl}}/users"
+params: []
+headers: []
+body:
+  type: none
+  contentType: json
+  text: ""
+auth:
+  type: oauth2
+  oauth2:
+    grant: client_credentials
+    tokenUrl: "{{baseUrl}}/token"
+    clientId: demo-client
+    clientSecret: "{{clientSecret}}"
+    scope: read write
+    clientAuth: basic
+    placement: header
+    headerPrefix: Bearer

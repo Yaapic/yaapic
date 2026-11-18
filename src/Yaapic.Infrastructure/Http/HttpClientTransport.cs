@@ -1,6 +1,9 @@
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Net.Http.Headers;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using Yaapic.Core.Certificates;
 using Yaapic.Core.Http;
 using Yaapic.Domain.Http;
 
@@ -10,29 +13,101 @@ namespace Yaapic.Infrastructure.Http;
 /// <param name="client">The client following redirects; its own timeout should be infinite.</param>
 /// <param name="noRedirectClient">The client used when a request does not follow redirects.</param>
 /// <param name="timeout">The default maximum time to wait for the whole response, body included.</param>
-public sealed class HttpClientTransport(HttpClient client, HttpClient noRedirectClient, TimeSpan timeout) : IHttpTransport
+/// <param name="certificates">Finds the client certificate to present (mTLS); <see langword="null"/> presents none.</param>
+/// <param name="support">Tells whether HTTP/3 can be used; <see langword="null"/> means it cannot.</param>
+/// <param name="configureHandler">Tests only: applied to every per-certificate handler the transport creates (e.g. to accept a self-signed server certificate); the composition passes <see langword="null"/>.</param>
+public sealed class HttpClientTransport(
+    HttpClient client,
+    HttpClient noRedirectClient,
+    TimeSpan timeout,
+    IClientCertificateProvider? certificates = null,
+    Action<SocketsHttpHandler>? configureHandler = null,
+    IHttpVersionSupport? support = null) : IHttpTransport, IDisposable
 {
+    private sealed record CertificateClients(X509Certificate2 Certificate, HttpClient Follow, HttpClient NoFollow);
+
+    private readonly ConcurrentDictionary<string, CertificateClients> _certificateClients = new();
+
+    /// <summary>The number of per-certificate client pairs currently cached.</summary>
+    internal int CachedCertificateClients => _certificateClients.Count;
+
+    /// <summary>Disposes the per-certificate clients; the default clients belong to the caller.</summary>
+    public void Dispose()
+    {
+        foreach (var key in _certificateClients.Keys)
+            if (_certificateClients.TryRemove(key, out var pair))
+                DisposePair(pair);
+    }
+
+    private static void DisposePair(CertificateClients pair)
+    {
+        pair.Follow.Dispose();
+        pair.NoFollow.Dispose();
+    }
+
+    private CertificateClients GetClients(string key, X509Certificate2 certificate)
+    {
+        if (_certificateClients.TryGetValue(key, out var existing))
+        {
+            if (ReferenceEquals(existing.Certificate, certificate))
+                return existing;
+            if (_certificateClients.TryRemove(new KeyValuePair<string, CertificateClients>(key, existing)))
+                DisposePair(existing);
+        }
+
+        var created = new CertificateClients(
+            certificate,
+            DefaultHttpClient.Create(certificate, configureHandler),
+            DefaultHttpClient.CreateNonRedirecting(certificate, configureHandler));
+        var winner = _certificateClients.GetOrAdd(key, created);
+        if (!ReferenceEquals(winner, created))
+            DisposePair(created);
+        return winner;
+    }
+
     /// <inheritdoc/>
     public async Task<SendResult> SendAsync(ResolvedRequest request, CancellationToken ct)
     {
         if (!Uri.TryCreate(request.Url, UriKind.Absolute, out var uri) || uri.Scheme is not ("http" or "https"))
             return SendResult.Fail(SendFailureKind.InvalidUrl, $"Invalid URL: {request.Url}");
 
+        var followClient = client;
+        var noFollowClient = noRedirectClient;
+        if (certificates is not null)
+        {
+            var lookup = await certificates.FindAsync(uri, ct);
+            if (lookup.Error is not null || (lookup.CacheKey is not null && lookup.Certificate is null))
+                return SendResult.Fail(SendFailureKind.ClientCertificateError, lookup.Error ?? "The client certificate could not be loaded");
+            if (lookup is { CacheKey: { } key, Certificate: { } certificate })
+            {
+                var pair = GetClients(key, certificate);
+                followClient = pair.Follow;
+                noFollowClient = pair.NoFollow;
+            }
+        }
+
         var message = BuildMessage(request, uri, out var unreadable);
         if (unreadable is not null)
             return unreadable;
+
+        HttpVersionMapping.Apply(message, request.HttpVersion, support?.IsHttp3Supported ?? false);
 
         using var _ = message;
         var effectiveTimeout = request.TimeoutSeconds > 0 ? TimeSpan.FromSeconds(request.TimeoutSeconds) : timeout;
         using var cts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         cts.CancelAfter(effectiveTimeout);
-        var http = request.FollowRedirects ? client : noRedirectClient;
+        var http = request.FollowRedirects ? followClient : noFollowClient;
 
         try
         {
+            var collector = new TimingCollector();
+            message.Options.Set(TimingCollector.Key, collector);
             var watch = Stopwatch.StartNew();
+            collector.Start();
             using var response = await http.SendAsync(message, HttpCompletionOption.ResponseHeadersRead, cts.Token);
+            collector.HeadersReceived();
             var body = await response.Content.ReadAsByteArrayAsync(cts.Token);
+            collector.BodyEnded();
             watch.Stop();
 
             var headers = response.Headers.Concat(response.Content.Headers)
@@ -44,7 +119,11 @@ public sealed class HttpClientTransport(HttpClient client, HttpClient noRedirect
                 headers,
                 body,
                 watch.Elapsed,
-                response.RequestMessage!.RequestUri!.AbsoluteUri));
+                response.RequestMessage!.RequestUri!.AbsoluteUri)
+            {
+                Timings = collector.Build(),
+                Protocol = HttpVersionMapping.ProtocolText(response.Version),
+            });
         }
         catch (OperationCanceledException)
         {

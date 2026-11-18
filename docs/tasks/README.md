@@ -354,9 +354,10 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
 | [U-01](milestone-ux-improvements/U-01-request-response-layout.md) | Request / response layout toggle (stacked or side by side) | any | none | done |
-| [U-02](milestone-ux-improvements/U-02-script-api-yaapic-namespace.md) | `yaapic` script namespace with `pm` as an alias | any | none | todo |
+| [U-02](milestone-ux-improvements/U-02-script-api-yaapic-namespace.md) | `yaapic` script namespace replaces `pm` | any | none | done |
 | [U-03](milestone-ux-improvements/U-03-script-editor-autocompletion.md) | Script editor autocompletion | any | U-02 | done |
-| [U-04](milestone-ux-improvements/U-04-script-snippets.md) | Script snippets | any | U-02, U-03 | todo |
+| [U-04](milestone-ux-improvements/U-04-script-snippets.md) | Script snippets | any | U-02, U-03 | done |
+| [U-05](milestone-ux-improvements/U-05-script-converter-postman-bruno.md) | Convert Postman and Bruno scripts to `yaapic` | any | U-02 | done |
 
 ## Personalization: language and accent colour
 
@@ -376,13 +377,140 @@ the update UI on macOS and Linux, and signing (no certificate yet).
 | [P-12](milestone-personalization/P-12-avalonia-settings-window.md) | Avalonia: Settings window | unix | P-09, P-10, P-11 | done |
 | [P-13](milestone-personalization/P-13-end-to-end-and-docs.md) | End-to-end tests and docs | any | P-05, P-06, P-11, P-12 | done |
 
+## Milestone 4: Advanced authentication and response tools
+
+Scope: OAuth 2.0 (client credentials, authorization code with PKCE, password, refresh), JWT signing, Digest and AWS Signature v4 authentication; mTLS
+client certificates; request timings and the HTTP version (with HTTP/3 opt-in); response diff; code generation (cURL, JavaScript, Python, C#,
+PowerShell, Go); a JWT decoder. The decisions are in [ADR 0013](../adr/0013-advanced-authentication.md), [ADR 0014](../adr/0014-transport-certificates-timings.md)
+and [ADR 0015](../adr/0015-response-diff-and-code-generation.md) (written by M4-01, M4-03 and M4-04, read them first). Build order: `any` cards
+(Domain, YAML, Core, Infrastructure, ViewModels, composition), then `windows`, then `unix` cards, then the end-to-end tests and docs.
+
+Slices: M4-01 to M4-04 the ADRs and the timing spike; M4-05 to M4-28 authentication (domain and YAML M4-05 to M4-08, the authenticator pipeline M4-09 and
+M4-10, JWT M4-11 to M4-14, Digest M4-15 and M4-16, AWS M4-17 and M4-18, OAuth 2.0 M4-19 to M4-27); M4-29 to M4-37 client certificates, timings and TLS;
+M4-38 and M4-39 the HTTP version; M4-40 to M4-49, M4-59 and M4-60 the view models; M4-46 to M4-48 the diff; M4-50 to M4-58 code generation; M4-61 the
+composition; M4-62 to M4-69 WinUI; M4-70 to M4-77 Avalonia; M4-78 and M4-79 end-to-end tests; M4-80 docs; M4-81 the WinUI visual check.
+
+Blocked (product decisions, each card states the question): M4-28 auth inherited from folders and collections, M4-37 skipping TLS verification or a custom CA,
+M4-55 more code generation languages. No other card depends on them. Cards added after an answer are numbered after M4-81.
+
+Sonnet-sized cards: each card is one session; the card text holds every decision (field names, algorithms, file shapes, strings, test vectors), so no card needs a design choice.
+
+| Card | Title | Platform | Depends on | Status |
+|---|---|---|---|---|
+| [M4-01](milestone-4-advanced-auth-response/M4-01-adr-advanced-authentication.md) | ADR 0013: advanced authentication | any | none | done |
+| [M4-02](milestone-4-advanced-auth-response/M4-02-spike-request-timing-capture.md) | Spike: which request phases .NET can report | any | none | done |
+| [M4-03](milestone-4-advanced-auth-response/M4-03-adr-transport-certificates-timings.md) | ADR 0014: transport, client certificates, timings and HTTP version | any | M4-02 | done |
+| [M4-04](milestone-4-advanced-auth-response/M4-04-adr-response-diff-and-code-generation.md) | ADR 0015: response diff and code generation | any | none | done |
+| [M4-05](milestone-4-advanced-auth-response/M4-05-domain-oauth2-settings.md) | Domain: OAuth 2.0 settings and the new auth kinds | any | M4-01 | done |
+| [M4-06](milestone-4-advanced-auth-response/M4-06-domain-jwt-and-aws-settings.md) | Domain: JWT and AWS Signature v4 settings | any | M4-05 | done |
+| [M4-07](milestone-4-advanced-auth-response/M4-07-yaml-request-oauth2.md) | YAML request serializer: OAuth 2.0 | any | M4-05 | done |
+| [M4-08](milestone-4-advanced-auth-response/M4-08-yaml-request-jwt-digest-aws.md) | YAML request serializer: JWT, Digest and AWS Signature v4 | any | M4-06, M4-07 | done |
+| [M4-09](milestone-4-advanced-auth-response/M4-09-core-resolved-advanced-auth.md) | Core: resolved advanced authentication | any | M4-06 | done |
+| [M4-10](milestone-4-advanced-auth-response/M4-10-core-authenticator-port-and-pipeline.md) | Core: authenticator port and send pipeline stage | any | M4-09 | done |
+| [M4-11](milestone-4-advanced-auth-response/M4-11-core-jwt-hmac-signing.md) | Core: JWT signing with HMAC | any | M4-01 | done |
+| [M4-12](milestone-4-advanced-auth-response/M4-12-core-jwt-rsa-ecdsa-signing.md) | Core: JWT signing with RSA and ECDSA | any | M4-11 | done |
+| [M4-13](milestone-4-advanced-auth-response/M4-13-core-jwt-authenticator.md) | Core: JWT authenticator | any | M4-10, M4-12 | done |
+| [M4-14](milestone-4-advanced-auth-response/M4-14-core-jwt-decoder.md) | Core: JWT decoder | any | M4-11 | done |
+| [M4-15](milestone-4-advanced-auth-response/M4-15-core-digest-challenge-and-response.md) | Core: Digest challenge parsing and response computation | any | M4-01 | done |
+| [M4-16](milestone-4-advanced-auth-response/M4-16-core-digest-authenticator.md) | Core: Digest authenticator | any | M4-10, M4-15 | done |
+| [M4-17](milestone-4-advanced-auth-response/M4-17-core-aws-sigv4-signer.md) | Core: AWS Signature v4 signer | any | M4-01 | done |
+| [M4-18](milestone-4-advanced-auth-response/M4-18-core-aws-sigv4-authenticator.md) | Core: AWS Signature v4 authenticator | any | M4-10, M4-17 | done |
+| [M4-19](milestone-4-advanced-auth-response/M4-19-core-oauth2-token-model-and-cache.md) | Core: OAuth 2.0 token model and in-memory cache | any | M4-05 | done |
+| [M4-20](milestone-4-advanced-auth-response/M4-20-core-oauth2-token-requests-and-parsing.md) | Core: OAuth 2.0 token requests and response parsing | any | M4-19 | done |
+| [M4-21](milestone-4-advanced-auth-response/M4-21-core-oauth2-token-client.md) | Core: OAuth 2.0 token client (client credentials, password, refresh) | any | M4-20 | done |
+| [M4-22](milestone-4-advanced-auth-response/M4-22-core-pkce-and-authorization-url.md) | Core: PKCE and the authorization request URL | any | M4-05, M4-11 | done |
+| [M4-23](milestone-4-advanced-auth-response/M4-23-core-oauth2-authorization-code-flow.md) | Core: authorization-code flow ports and orchestration | any | M4-21, M4-22 | done |
+| [M4-24](milestone-4-advanced-auth-response/M4-24-infra-loopback-redirect-receiver.md) | Infrastructure: loopback redirect receiver | any | M4-23 | done |
+| [M4-25](milestone-4-advanced-auth-response/M4-25-infra-system-browser-launcher.md) | Infrastructure: system browser launcher | any | M4-23 | done |
+| [M4-26](milestone-4-advanced-auth-response/M4-26-core-oauth2-auth-method.md) | Core: OAuth 2.0 authentication method | any | M4-10, M4-21 | done |
+| [M4-27](milestone-4-advanced-auth-response/M4-27-core-composite-authenticator.md) | Core: the composite authenticator | any | M4-13, M4-16, M4-18, M4-26 | done |
+| [M4-28](milestone-4-advanced-auth-response/M4-28-auth-inheritance-from-folders-and-collections.md) | Authentication inherited from folders and collections | any | M4-27 | blocked |
+| [M4-29](milestone-4-advanced-auth-response/M4-29-domain-client-certificate.md) | Domain: client certificate model | any | M4-03 | done |
+| [M4-30](milestone-4-advanced-auth-response/M4-30-core-client-certificate-matching.md) | Core: client certificate matching and provider port | any | M4-29 | done |
+| [M4-31](milestone-4-advanced-auth-response/M4-31-infra-certificate-settings-store.md) | Infrastructure: the client certificate list store | any | M4-29 | done |
+| [M4-32](milestone-4-advanced-auth-response/M4-32-vault-certificate-owner-kind.md) | Vault: certificate passphrases | any | M4-29 | done |
+| [M4-33](milestone-4-advanced-auth-response/M4-33-infra-client-certificate-loader.md) | Infrastructure: client certificate loader and provider | any | M4-30, M4-31, M4-32 | done |
+| [M4-34](milestone-4-advanced-auth-response/M4-34-infra-transport-client-certificates.md) | Infrastructure: send with a client certificate (mTLS) | any | M4-33 | done |
+| [M4-35](milestone-4-advanced-auth-response/M4-35-domain-request-timings.md) | Domain: request timings | any | M4-03 | done |
+| [M4-36](milestone-4-advanced-auth-response/M4-36-infra-capture-timings.md) | Infrastructure: capture request timings in the transport | any | M4-34, M4-35 | done |
+| [M4-37](milestone-4-advanced-auth-response/M4-37-tls-verification-and-custom-ca.md) | Server certificate verification: skip or custom CA | any | M4-34 | blocked |
+| [M4-38](milestone-4-advanced-auth-response/M4-38-domain-yaml-http-version.md) | Domain and YAML: HTTP version preference | any | M4-03 | done |
+| [M4-39](milestone-4-advanced-auth-response/M4-39-infra-transport-http-version.md) | Infrastructure: send with the chosen HTTP version | any | M4-36, M4-38 | done |
+| [M4-40](milestone-4-advanced-auth-response/M4-40-viewmodel-oauth2-editor.md) | ViewModel: OAuth 2.0 editor | any | M4-05, M4-22 | done |
+| [M4-41](milestone-4-advanced-auth-response/M4-41-viewmodel-oauth2-token-actions.md) | ViewModel: OAuth 2.0 token actions and status | any | M4-21, M4-23, M4-40 | done |
+| [M4-42](milestone-4-advanced-auth-response/M4-42-viewmodel-jwt-digest-aws-editors.md) | ViewModel: JWT and AWS Signature v4 editors | any | M4-06, M4-40 | done |
+| [M4-43](milestone-4-advanced-auth-response/M4-43-viewmodel-auth-editor-integration.md) | ViewModel: the auth editor offers the new kinds | any | M4-08, M4-41, M4-42 | done |
+| [M4-44](milestone-4-advanced-auth-response/M4-44-viewmodel-certificates.md) | ViewModel: client certificates settings | any | M4-31, M4-32 | done |
+| [M4-45](milestone-4-advanced-auth-response/M4-45-viewmodel-response-timings.md) | ViewModel: response timings and protocol | any | M4-36, M4-39 | done |
+| [M4-46](milestone-4-advanced-auth-response/M4-46-core-text-line-diff.md) | Core: line diff (Myers) | any | M4-04 | done |
+| [M4-47](milestone-4-advanced-auth-response/M4-47-core-response-differ.md) | Core: response differ (headers and body) | any | M4-46 | done |
+| [M4-48](milestone-4-advanced-auth-response/M4-48-viewmodel-response-diff.md) | ViewModel: response diff | any | M4-45, M4-47 | done |
+| [M4-49](milestone-4-advanced-auth-response/M4-49-viewmodel-jwt-decoder.md) | ViewModel: JWT decoder | any | M4-14 | done |
+| [M4-50](milestone-4-advanced-auth-response/M4-50-core-code-generation-model-and-registry.md) | Core: code generation model, registry and shared samples | any | M4-04, M4-09 | done |
+| [M4-51](milestone-4-advanced-auth-response/M4-51-core-codegen-curl.md) | Core: code generator, cURL | any | M4-50 | done |
+| [M4-52](milestone-4-advanced-auth-response/M4-52-core-codegen-javascript-fetch.md) | Core: code generator, JavaScript (fetch) | any | M4-50 | done |
+| [M4-53](milestone-4-advanced-auth-response/M4-53-core-codegen-python-requests.md) | Core: code generator, Python (requests) | any | M4-50 | done |
+| [M4-54](milestone-4-advanced-auth-response/M4-54-core-codegen-csharp-httpclient.md) | Core: code generator, C# (HttpClient) | any | M4-50 | done |
+| [M4-55](milestone-4-advanced-auth-response/M4-55-more-code-generation-languages.md) | More code generation languages | any | M4-50 | blocked |
+| [M4-56](milestone-4-advanced-auth-response/M4-56-core-codegen-powershell.md) | Core: code generator, PowerShell (Invoke-RestMethod) | any | M4-50 | done |
+| [M4-57](milestone-4-advanced-auth-response/M4-57-core-codegen-go.md) | Core: code generator, Go (net/http) | any | M4-50 | done |
+| [M4-58](milestone-4-advanced-auth-response/M4-58-viewmodel-code-generation.md) | ViewModel: code generation dialog | any | M4-51, M4-52, M4-53, M4-54, M4-56, M4-57 | done |
+| [M4-59](milestone-4-advanced-auth-response/M4-59-viewmodel-http-version-setting.md) | ViewModel: HTTP version in the request settings | any | M4-38, M4-39 | done |
+| [M4-60](milestone-4-advanced-auth-response/M4-60-viewmodel-palette-and-shell-entries.md) | ViewModel: palette commands and shell entries for the M4 tools | any | M4-41, M4-44, M4-48, M4-49, M4-58 | done |
+| [M4-61](milestone-4-advanced-auth-response/M4-61-composition-m4-wiring.md) | Composition: wire the M4 services | any | M4-27, M4-24, M4-25, M4-33, M4-36, M4-39, M4-41, M4-43, M4-58, M4-59, M4-60 | done |
+| [M4-62](milestone-4-advanced-auth-response/M4-62-winui-auth-oauth2.md) | WinUI: OAuth 2.0 in the Auth tab | windows | M4-43, M4-61 | done |
+| [M4-63](milestone-4-advanced-auth-response/M4-63-winui-auth-jwt-digest-aws.md) | WinUI: JWT, Digest and AWS Signature v4 in the Auth tab | windows | M4-62 | done |
+| [M4-64](milestone-4-advanced-auth-response/M4-64-winui-certificates-dialog.md) | WinUI: client certificates dialog | windows | M4-44, M4-61 | done |
+| [M4-65](milestone-4-advanced-auth-response/M4-65-winui-jwt-decoder-dialog.md) | WinUI: JWT decoder dialog | windows | M4-49, M4-61 | done |
+| [M4-66](milestone-4-advanced-auth-response/M4-66-winui-response-timings-tab.md) | WinUI: response Timing tab | windows | M4-45, M4-61 | done |
+| [M4-67](milestone-4-advanced-auth-response/M4-67-winui-response-diff-tab.md) | WinUI: response Diff tab | windows | M4-48, M4-61 | done |
+| [M4-68](milestone-4-advanced-auth-response/M4-68-winui-code-generation-dialog.md) | WinUI: code generation dialog | windows | M4-58, M4-61 | done |
+| [M4-69](milestone-4-advanced-auth-response/M4-69-winui-http-version-setting.md) | WinUI: HTTP version in the Settings tab | windows | M4-59, M4-61 | done |
+| [M4-70](milestone-4-advanced-auth-response/M4-70-avalonia-auth-oauth2.md) | Avalonia: OAuth 2.0 in the Auth tab | unix | M4-43, M4-61 | done |
+| [M4-71](milestone-4-advanced-auth-response/M4-71-avalonia-auth-jwt-digest-aws.md) | Avalonia: JWT, Digest and AWS Signature v4 in the Auth tab | unix | M4-70 | done |
+| [M4-72](milestone-4-advanced-auth-response/M4-72-avalonia-jwt-decoder-window.md) | Avalonia: JWT decoder window | unix | M4-49, M4-61 | done |
+| [M4-73](milestone-4-advanced-auth-response/M4-73-avalonia-certificates-window.md) | Avalonia: client certificates window | unix | M4-44, M4-61 | done |
+| [M4-74](milestone-4-advanced-auth-response/M4-74-avalonia-response-timings-tab.md) | Avalonia: response Timing tab | unix | M4-45, M4-61 | done |
+| [M4-75](milestone-4-advanced-auth-response/M4-75-avalonia-response-diff-tab.md) | Avalonia: response Diff tab | unix | M4-48, M4-61 | done |
+| [M4-76](milestone-4-advanced-auth-response/M4-76-avalonia-code-generation-window.md) | Avalonia: code generation window | unix | M4-58, M4-61 | done |
+| [M4-77](milestone-4-advanced-auth-response/M4-77-avalonia-http-version-setting.md) | Avalonia: HTTP version in the Settings tab | unix | M4-59, M4-61 | done |
+| [M4-78](milestone-4-advanced-auth-response/M4-78-end-to-end-authentication.md) | End-to-end tests: authentication | any | M4-27, M4-61 | done |
+| [M4-79](milestone-4-advanced-auth-response/M4-79-end-to-end-mtls-timings-and-http-version.md) | End-to-end tests: mTLS, timings, HTTP version, diff and code generation | any | M4-39, M4-48, M4-58, M4-61 | done |
+| [M4-80](milestone-4-advanced-auth-response/M4-80-milestone-docs.md) | Milestone 4 docs | any | M4-78, M4-79, M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69, M4-70, M4-71, M4-72, M4-73, M4-74, M4-75, M4-76, M4-77 | done |
+| [M4-81](milestone-4-advanced-auth-response/M4-81-winui-visual-verification.md) | WinUI visual verification of the milestone 4 views | windows | M4-62, M4-63, M4-64, M4-65, M4-66, M4-67, M4-68, M4-69 | done |
+
+### Milestone 4 summary
+
+Delivered: authentication beyond Basic, Bearer and API key, resolved through an `IRequestAuthenticator` pipeline (`PendingAuth` on
+the resolved request): OAuth 2.0 (client credentials, authorization code with PKCE through a loopback redirect receiver and the
+system browser, password, automatic refresh, in-memory token cache), JWT signing (HS, RS and ES 256/384/512), Digest (RFC 7616,
+body-less probe) and AWS Signature v4. Client certificates (mTLS) matched by host pattern, stored outside the workspace with
+passphrases in the vault. Per-phase response timings (DNS, connect, TLS, waiting, download, reused connection) and the protocol
+used, the per-request HTTP version (HTTP/3 opt-in), a response diff (previous response or pinned baseline), code generation (cURL,
+JavaScript, Python, C#, PowerShell, Go) and a JWT decoder, on both front-ends, with palette entries. End-to-end tests:
+`Milestone4AuthenticationEndToEndTests` and `Milestone4TransportEndToEndTests`. Documentation:
+[authentication.md](../authentication.md), [response-tools.md](../response-tools.md), [architecture.md](../architecture.md),
+[file-format.md](../file-format.md) and ADRs [0013](../adr/0013-advanced-authentication.md),
+[0014](../adr/0014-transport-certificates-timings.md), [0015](../adr/0015-response-diff-and-code-generation.md). No new
+dependency (see [dependencies.md](../dependencies.md)).
+
+Deferred: auth inherited from folders and collections, tokens persisted across restarts, presigned AWS URLs and signed multipart
+payloads, Digest `auth-int`, PS256, EdDSA and JWE, OAuth Implicit, Device Code and DPoP, a custom CA or skipping TLS
+verification, proxy settings, diff against history entries, importing from cURL (M5).
+
+Open (blocked, product decisions): M4-28 auth inheritance, M4-37 TLS verification and custom CA, M4-55 more code generation
+languages.
+
+Runtime checks not run by hand: HTTP/3 against a real QUIC server and the Avalonia views on macOS and Linux; the WinUI visual
+check is M4-81.
+
 ## Milestones 2 to 10
 
 | Milestone | Scope | Status |
 |---|---|---|
 | M2 | Full request editor, collections, environments, history, command palette | detailed (77 cards, see above) |
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above) |
-| M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | planned |
+| M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | detailed (81 cards, see above) |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | planned |
 | M6 | Automation (Runner, load tests, mock servers, monitors) | planned |
 | M7 | Protocols (WebSocket, SSE, Socket.IO, GraphQL, gRPC, MQTT, SOAP) | planned |

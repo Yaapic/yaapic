@@ -1,0 +1,90 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:req="using:Yaapic.ViewModels.Requests"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    x:Class="Yaapic.App.Avalonia.Views.JwtEditorView"
+    x:DataType="req:JwtEditorViewModel">
+  <StackPanel Spacing="12">
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldAlgorithm}" />
+      <ComboBox x:Name="AlgorithmBox" MinWidth="200" AutomationProperties.Name="{x:Static loc:Strings.JwtFieldAlgorithm}"
+                SelectionChanged="OnAlgorithmChanged">
+        <ComboBoxItem Content="HS256" />
+        <ComboBoxItem Content="HS384" />
+        <ComboBoxItem Content="HS512" />
+        <ComboBoxItem Content="RS256" />
+        <ComboBoxItem Content="RS384" />
+        <ComboBoxItem Content="RS512" />
+        <ComboBoxItem Content="ES256" />
+        <ComboBoxItem Content="ES384" />
+        <ComboBoxItem Content="ES512" />
+      </ComboBox>
+    </StackPanel>
+
+    <StackPanel Spacing="12" IsVisible="{Binding UsesSecret}">
+      <StackPanel Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldSecret}" />
+        <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" PasswordChar="●"
+                 Text="{Binding Secret, Mode=TwoWay}" />
+      </StackPanel>
+      <CheckBox Content="{x:Static loc:Strings.JwtFieldSecretIsBase64}" IsChecked="{Binding SecretIsBase64, Mode=TwoWay}" />
+    </StackPanel>
+
+    <StackPanel Spacing="6" IsVisible="{Binding UsesPrivateKey}">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldPrivateKey}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.JwtPrivateKeyPlaceholder}" AcceptsReturn="True" TextWrapping="NoWrap"
+               MinHeight="130" MaxHeight="130" FontFamily="{DynamicResource YaapicMonoFont}"
+               Text="{Binding PrivateKey, Mode=TwoWay}" />
+    </StackPanel>
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldPayload}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" AcceptsReturn="True" TextWrapping="NoWrap"
+               MinHeight="130" MaxHeight="130" FontFamily="{DynamicResource YaapicMonoFont}"
+               Text="{Binding Payload, Mode=TwoWay}" />
+    </StackPanel>
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldExtraHeaders}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" AcceptsReturn="True" TextWrapping="NoWrap"
+               MinHeight="70" MaxHeight="70" FontFamily="{DynamicResource YaapicMonoFont}"
+               Text="{Binding ExtraHeaders, Mode=TwoWay}" />
+    </StackPanel>
+
+    <CheckBox Content="{x:Static loc:Strings.JwtFieldAddIssuedAt}" IsChecked="{Binding AddIssuedAt, Mode=TwoWay}" />
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldExpiresInSeconds}" />
+      <NumericUpDown x:Name="ExpiresBox" Minimum="0" Increment="60" FormatString="0" MinWidth="200" HorizontalAlignment="Left"
+                     AutomationProperties.Name="{x:Static loc:Strings.JwtFieldExpiresInSeconds}"
+                     Value="{Binding ExpiresInSeconds, Converter={x:Static p:EditorMap.TimeoutValue}, Mode=OneWay}"
+                     ValueChanged="OnExpiresChanged" />
+    </StackPanel>
+
+    <StackPanel Spacing="6">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldPlacement}" />
+      <ComboBox x:Name="PlacementBox" MinWidth="200" AutomationProperties.Name="{x:Static loc:Strings.JwtFieldPlacement}"
+                SelectionChanged="OnPlacementChanged">
+        <ComboBoxItem Content="{x:Static loc:Strings.JwtPlacementHeader}" />
+        <ComboBoxItem Content="{x:Static loc:Strings.JwtPlacementQuery}" />
+      </ComboBox>
+    </StackPanel>
+    <StackPanel Spacing="6" IsVisible="{Binding ShowHeaderPrefix}">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldHeaderPrefix}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding HeaderPrefix, Mode=TwoWay}" />
+    </StackPanel>
+    <StackPanel Spacing="6" IsVisible="{Binding ShowQueryParameter}">
+      <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.JwtFieldQueryParameterName}" />
+      <TextBox PlaceholderText="{x:Static loc:Strings.EditingVariableHint}" Text="{Binding QueryParameterName, Mode=TwoWay}" />
+    </StackPanel>
+
+    <ItemsControl ItemsSource="{Binding Hints}">
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="x:String">
+          <TextBlock Classes="bodySmall" TextWrapping="Wrap" Margin="0,0,0,6" Text="{Binding}"
+                     Foreground="{DynamicResource YaapicWarningBrush}" />
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+  </StackPanel>
+</UserControl>

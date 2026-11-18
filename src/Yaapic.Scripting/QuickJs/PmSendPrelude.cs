@@ -1,6 +1,6 @@
 namespace Yaapic.Scripting.QuickJs;
 
-/// <summary>The JavaScript <c>pm</c> prelude, part 4: <c>pm.sendRequest</c> and <c>pm.cookies</c> (and the cookie list behind <c>res.cookies</c>).</summary>
+/// <summary>The JavaScript <c>yaapic</c> prelude, part 4: <c>yaapic.sendRequest</c> and <c>yaapic.cookies</c> (and the cookie list behind <c>res.cookies</c>).</summary>
 internal static class PmSendPrelude
 {
     /// <summary>The prelude source, evaluated as its own script after <see cref="PmTestPrelude.Source"/>.</summary>
@@ -8,7 +8,7 @@ internal static class PmSendPrelude
         (() => {
           'use strict';
           const host = globalThis.__host;
-          const pm = globalThis.pm;
+          const yaapic = globalThis.yaapic;
 
           // Read-only cookie access over a list of host cookies (the current response, or a sendRequest response).
           class CookieList {
@@ -56,7 +56,7 @@ internal static class PmSendPrelude
             }
           }
           Object.defineProperty(globalThis, '__cookieList', { value: (cookies) => new CookieList(() => cookies) });
-          Object.defineProperty(pm, 'cookies', { value: new CookieList(() => host('cookies')), enumerable: true });
+          Object.defineProperty(yaapic, 'cookies', { value: new CookieList(() => host('cookies')), enumerable: true });
 
           const toRows = (headers) => {
             if (headers === undefined || headers === null) {
@@ -72,7 +72,7 @@ internal static class PmSendPrelude
           const toDto = (input) => {
             const options = typeof input === 'string' ? { url: input } : input;
             if (typeof options !== 'object' || options === null || options.url === undefined || options.url === null) {
-              throw new TypeError('pm.sendRequest: expected a URL or an options object with a url');
+              throw new TypeError('yaapic.sendRequest: expected a URL or an options object with a url');
             }
             const dto = {
               method: String(options.method ?? 'GET').toUpperCase(),
@@ -94,17 +94,17 @@ internal static class PmSendPrelude
                 dto.bodyMode = 'urlencoded';
                 dto.urlEncoded = toPairs(body.urlencoded);
               } else {
-                throw new Error("pm.sendRequest body mode '" + mode + "' is not supported");
+                throw new Error("yaapic.sendRequest body mode '" + mode + "' is not supported");
               }
             }
             return dto;
           };
 
-          Object.defineProperty(pm, 'sendRequest', {
+          Object.defineProperty(yaapic, 'sendRequest', {
             enumerable: true,
             value: (input, callback) => {
               if (callback !== undefined && typeof callback !== 'function') {
-                throw new TypeError('pm.sendRequest: callback must be a function');
+                throw new TypeError('yaapic.sendRequest: callback must be a function');
               }
               const dto = toDto(input);
               // The blocking host call happens now; only the delivery is asynchronous.

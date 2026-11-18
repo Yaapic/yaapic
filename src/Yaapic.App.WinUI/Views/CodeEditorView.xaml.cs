@@ -74,12 +74,25 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         set => SetValue(EditorLanguageProperty, value);
     }
 
-    /// <summary>Gets or sets whether typing <c>pm.</c> or <c>console.</c> offers the script API; for script editors only.</summary>
+    /// <summary>Gets or sets whether typing <c>yaapic.</c> or <c>console.</c> offers the script API; for script editors only.</summary>
     public bool EnableScriptCompletion
     {
         get => (bool)GetValue(EnableScriptCompletionProperty);
         set => SetValue(EnableScriptCompletionProperty, value);
     }
+
+    /// <summary>Gets or sets what tells the phase the editor shows, to filter the snippets offered by completion; null offers every snippet.</summary>
+    public Func<ScriptSnippetPhase>? SnippetPhaseSource { get; set; }
+
+    /// <summary>Inserts a snippet template (TextMate syntax) at the caret, as one undo step; Tab moves between its tab stops.</summary>
+    /// <param name="template">The template.</param>
+    public void InsertSnippet(string template)
+    {
+        Editor.Focus(FocusState.Programmatic);
+        Editor.InsertSnippet(template);
+    }
+
+    private ScriptSnippetPhase CurrentSnippetPhase() => SnippetPhaseSource?.Invoke() ?? ScriptSnippetPhase.Any;
 
     /// <inheritdoc/>
     string ICodeEditor.Language
@@ -99,8 +112,8 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         _scriptProviders.Clear();
         if (EnableScriptCompletion && Editor.LanguageFeatures is { } features)
         {
-            _scriptProviders.Add(features.CompletionProviders.Register("javascript", new ScriptCompletionProvider(lua: false)));
-            _scriptProviders.Add(features.CompletionProviders.Register("lua", new ScriptCompletionProvider(lua: true)));
+            _scriptProviders.Add(features.CompletionProviders.Register("javascript", new ScriptCompletionProvider(lua: false, CurrentSnippetPhase)));
+            _scriptProviders.Add(features.CompletionProviders.Register("lua", new ScriptCompletionProvider(lua: true, CurrentSnippetPhase)));
         }
     }
 
@@ -144,7 +157,9 @@ public sealed partial class CodeEditorView : UserControl, ICodeEditor
         "xml" => "xml",
         "javascript" => "javascript",
         "lua" => "lua",
-        _ => "plaintext",
+        "csharp" => "csharp",
+        "python" => "python",
+        _ => "plaintext", // no shell, PowerShell or Go grammar ships with LoomEditor 0.6.0
     };
 
     private void ApplyTheme()

@@ -13,13 +13,13 @@ scripts:
   preRequest:
     language: javascript
     source: |
-      pm.request.headers.add({ key: "X-Trace", value: "scripted" });
-      pm.environment.set("startedAt", Date.now().toString());
+      yaapic.request.headers.add({ key: "X-Trace", value: "scripted" });
+      yaapic.environment.set("startedAt", Date.now().toString());
   postResponse:
     language: javascript
     source: |
-      pm.test("Status is 200", () => pm.response.to.have.status(200));
-      pm.test("Responds with JSON", () => pm.response.to.be.json);
-      pm.test("Has two users", () => pm.expect(pm.response.json().length).to.equal(2));
-      pm.test("Fails on purpose", () => pm.expect(1).to.equal(2));
-      pm.test("Fails on a header", () => pm.response.to.have.header("X-Missing"));
+      yaapic.test("Status is 200", () => yaapic.response.to.have.status(200));
+      yaapic.test("Responds with JSON", () => yaapic.response.to.be.json);
+      yaapic.test("Has two users", () => yaapic.expect(yaapic.response.json().length).to.equal(2));
+      yaapic.test("Fails on purpose", () => yaapic.expect(1).to.equal(2));
+      yaapic.test("Fails on a header", () => yaapic.response.to.have.header("X-Missing"));

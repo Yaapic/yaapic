@@ -1,6 +1,6 @@
 # U-04: Script snippets
 
-Status: todo
+Status: done
 Platform: any
 Depends on: U-02, U-03
 
@@ -24,9 +24,9 @@ User snippets, sharing snippets, snippets of other kinds than scripts.
 
 ## Acceptance criteria
 
-- [ ] Catalogue with at least ten snippets per language; a test runs each one against the real engine and expects no error.
-- [ ] Snippets button and completion entries on both front-ends, filtered by language and phase.
-- [ ] Insertion is a single undo step.
+- [x] Catalogue with at least ten snippets per language; a test runs each one against the real engine and expects no error.
+- [x] Snippets button and completion entries on both front-ends, filtered by language and phase.
+- [x] Insertion is a single undo step.
 
 ## Suggested commit message
 

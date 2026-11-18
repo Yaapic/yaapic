@@ -1,8 +1,13 @@
 using System.Reflection;
+using Yaapic.Core.Auth;
+using Yaapic.Core.Auth.OAuth2;
+using Yaapic.Core.CodeGeneration;
 using Yaapic.Core.Http;
 using Yaapic.Core.Scripting;
 using Yaapic.Core.Secrets;
 using Yaapic.Core.Updates;
+using Yaapic.Infrastructure.Auth;
+using Yaapic.Infrastructure.Certificates;
 using Yaapic.Infrastructure.Http;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
@@ -16,8 +21,10 @@ using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Settings;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
+using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Updates;
 using Yaapic.ViewModels.Vault;
 
@@ -45,8 +52,8 @@ public static class AppComposition
     /// <exception cref="Yaapic.Core.Storage.StorageException">The workspace cannot be created.</exception>
     public static ShellViewModel CreateShell(string workspaceRoot, IDialogService dialogs, IKeyProtectorFactory? platformProtectors = null, string? userDataDirectory = null, string? updateDemo = null) =>
         updateDemo is null
-            ? CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateSettings: new FileUpdateSettingsStore(userDataDirectory))
-            : CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateService: new UpdateDemoService(updateDemo), updateSettings: new UpdateDemoService(updateDemo));
+            ? CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateSettings: new FileUpdateSettingsStore(userDataDirectory), userDataDirectory: userDataDirectory)
+            : CreateShell(workspaceRoot, dialogs, platformProtectors, new DefaultVaultLocation(userDataDirectory), [new QuickJsEngine(), new LuaEngine()], updateService: new UpdateDemoService(updateDemo), updateSettings: new UpdateDemoService(updateDemo), userDataDirectory: userDataDirectory);
 
     // The seam of the tests: another vault location, other engines and other script limits.
     internal static ShellViewModel CreateShell(
@@ -57,7 +64,9 @@ public static class AppComposition
         IEnumerable<IScriptEngine> scriptEngines,
         ScriptLimits? limits = null,
         IUpdateService? updateService = null,
-        IUpdateSettingsStore? updateSettings = null)
+        IUpdateSettingsStore? updateSettings = null,
+        string? userDataDirectory = null,
+        IHttpTransport? transport = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workspaceRoot);
         ArgumentNullException.ThrowIfNull(dialogs);
@@ -65,10 +74,26 @@ public static class AppComposition
         Workspace.EnsureCreated(workspaceRoot);
         var requestStore = new FileRequestStore(workspaceRoot);
         var sessionStore = new FileSessionStore(workspaceRoot);
-        var sender = new RequestSender(new HttpClientTransport(DefaultHttpClient.Create(), DefaultHttpClient.CreateNonRedirecting(), TimeSpan.FromSeconds(30)));
-
         var protectors = platformProtectors ?? new PassphraseKeyProtectorFactory();
         var vault = new FileSecretVault(workspaceRoot, vaultLocation, protectors);
+
+        var time = TimeProvider.System;
+        var certificateStore = new FileCertificateStore(userDataDirectory);
+        var certificates = new ClientCertificateProvider(certificateStore, vault);
+        var versionSupport = new QuicHttpVersionSupport();
+        var realTransport = new HttpClientTransport(
+            DefaultHttpClient.Create(), DefaultHttpClient.CreateNonRedirecting(), TimeSpan.FromSeconds(30), certificates, support: versionSupport);
+        var httpTransport = transport ?? realTransport;
+        var tokens = new OAuth2TokenService(httpTransport, new InMemoryOAuth2TokenCache(), time, new TcpLoopbackRedirectReceiver(), new SystemBrowserLauncher());
+        var sender = new RequestSender(httpTransport, RequestAuthenticator.CreateDefault(httpTransport, tokens, time));
+        var codeGeneration = new CodeGenerationServices(
+            new CodeGeneratorRegistry(
+            [
+                new CurlCodeGenerator(), new JavaScriptFetchCodeGenerator(), new PythonRequestsCodeGenerator(),
+                new CSharpHttpClientCodeGenerator(), new PowerShellCodeGenerator(), new GoCodeGenerator(),
+            ]),
+            AppPreferences.CreateStore(userDataDirectory),
+            dialogs);
         var reloader = new DeferredReloader();
         var vaultViewModel = new VaultViewModel(vault, protectors, reloader);
 
@@ -91,7 +116,7 @@ public static class AppComposition
             dialogs,
             (definition, isNew) =>
             {
-                var editor = RequestEditorViewModel.FromDefinition(definition, sender, scopes!, isNew, dialogs, scripting);
+                var editor = RequestEditorViewModel.FromDefinition(definition, sender, scopes!, isNew, dialogs, scripting, tokens, codeGeneration, versionSupport);
                 editor.Layout = layout;
                 editor.Sent += (_, e) => _ = history!.RecordAsync(e.Request, e.Report);
                 return editor;
@@ -105,9 +130,12 @@ public static class AppComposition
         var updates = new UpdateViewModel(updateService ?? new VelopackUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), new UpdateScheduler(TimeProvider.System), console);
         var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates, layout);
         reloader.Target = shell;
+        shell.AttachTools(() => new CertificatesViewModel(certificateStore, vault, dialogs), () => new JwtDecoderViewModel(time));
+        shell.Own(realTransport);
+        shell.Own(certificates);
         shell.AttachPalette(new CommandPaletteViewModel(
         [
-            new CommandsPaletteSource(shell),
+            new CommandsPaletteSource(shell, tokens),
             new RequestsPaletteSource(collections),
             new EnvironmentsPaletteSource(environments),
             new TabsPaletteSource(tabs),

@@ -3,7 +3,7 @@ namespace Yaapic.Core.Scripting;
 /// <summary>The limits an engine enforces on a script run (ADR 0009).</summary>
 /// <param name="Timeout">The wall-clock limit of one block.</param>
 /// <param name="MemoryLimitBytes">The memory limit of one run.</param>
-/// <param name="MaxSendRequests">The number of <c>pm.sendRequest</c> calls allowed per run.</param>
+/// <param name="MaxSendRequests">The number of <c>yaapic.sendRequest</c> calls allowed per run.</param>
 /// <param name="MaxConsoleEntries">The number of console entries kept per send.</param>
 /// <param name="MaxConsoleEntryLength">The characters kept per console entry (truncated with an ellipsis).</param>
 public sealed record ScriptLimits(

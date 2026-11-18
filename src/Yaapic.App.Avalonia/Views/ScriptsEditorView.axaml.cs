@@ -1,5 +1,7 @@
 using Avalonia.Controls;
 using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
+using Yaapic.UI.Abstractions.Editing;
 using Yaapic.ViewModels.Scripting;
 
 namespace Yaapic.App.Avalonia.Views;
@@ -15,9 +17,53 @@ public sealed partial class ScriptsEditorView : UserControl
         {
             ScriptLanguageBox.Items.Add(new ComboBoxItem { Content = choice.Label });
         }
+
+        ScriptEditor.SnippetPhaseSource = CurrentPhase;
     }
 
     private ScriptsEditorViewModel? Scripts => DataContext as ScriptsEditorViewModel;
+
+    private ScriptSnippetPhase CurrentPhase() =>
+        Scripts?.SelectedPhase == ScriptPhase.PostResponse ? ScriptSnippetPhase.PostResponse : ScriptSnippetPhase.PreRequest;
+
+    // The menu lists the snippets of the language and phase being edited; a pick is inserted at the caret.
+    private void OnSnippetsOpening(object? sender, EventArgs e)
+    {
+        if (sender is not MenuFlyout flyout || Scripts is not { } scripts)
+        {
+            return;
+        }
+
+        flyout.Items.Clear();
+        var lua = scripts.Selected.Language == ScriptLanguage.Lua;
+        foreach (var snippet in ScriptSnippetCatalogue.For(lua, CurrentPhase()))
+        {
+            var template = snippet.Template(lua)!;
+            var item = new MenuItem { Header = snippet.Name };
+            item.Click += (_, _) => ScriptEditor.InsertSnippet(template);
+            flyout.Items.Add(item);
+        }
+
+        if (flyout.Items.Count == 0)
+        {
+            flyout.Items.Add(new MenuItem { Header = Strings.ScriptSnippetsEmpty, IsEnabled = false });
+        }
+    }
+
+    private async void OnConvertClick(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (Scripts is not { } scripts || TopLevel.GetTopLevel(this) is not Window owner)
+        {
+            return;
+        }
+
+        var converted = await new ConvertScriptWindow(scripts.Selected.Language).ShowDialog<string?>(owner);
+        if (!string.IsNullOrEmpty(converted))
+        {
+            var current = scripts.Selected.Source;
+            scripts.Selected.Source = current.Length == 0 ? converted : current.TrimEnd() + "\n" + converted;
+        }
+    }
 
     // Index based, like the body kind: the position is the one in the picker items.
     private void OnScriptPhaseChanged(object? sender, SelectionChangedEventArgs e)

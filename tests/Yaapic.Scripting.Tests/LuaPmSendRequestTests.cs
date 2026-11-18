@@ -8,7 +8,7 @@ using Yaapic.TestDoubles;
 
 namespace Yaapic.Scripting.Tests;
 
-/// <summary>The Lua <c>pm.sendRequest</c> and <c>pm.cookies</c> on the real Lua engine, with a recording host and the real sender.</summary>
+/// <summary>The Lua <c>yaapic.sendRequest</c> and <c>yaapic.cookies</c> on the real Lua engine, with a recording host and the real sender.</summary>
 public sealed class LuaPmSendRequestTests
 {
     private const string Origin = "post-response · Users API";
@@ -61,7 +61,7 @@ public sealed class LuaPmSendRequestTests
     public async Task String_form_sends_a_get_and_returns_the_response()
     {
         var (run, host) = await RunWithHost(
-            "local res, err = pm.sendRequest('https://sub.test/x') console.log(tostring(err), res.code, res.json().ok, res.status, res.response_time)");
+            "local res, err = yaapic.sendRequest('https://sub.test/x') console.log(tostring(err), res.code, res.json().ok, res.status, res.response_time)");
 
         Assert.True(run.Succeeded, run.Error?.Message);
         var sent = Assert.Single(host.Sent);
@@ -74,7 +74,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Snake_case_alias_and_response_read_api()
     {
         var (run, _) = await RunWithHost("""
-            local res = pm.send_request('https://sub.test/x')
+            local res = yaapic.send_request('https://sub.test/x')
             console.log(res.text(), res.reason(), res.size().body, res.responseSize == res.response_size, res.headers.get('content-type'))
             """);
 
@@ -86,7 +86,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Table_form_with_header_array_and_raw_json_body()
     {
         var (run, host) = await RunWithHost("""
-            pm.sendRequest({
+            yaapic.sendRequest({
               url = 'https://sub.test/users',
               method = 'post',
               header = { { key = 'X-A', value = '1' }, { key = 'X-Off', value = '2', disabled = true } },
@@ -107,8 +107,8 @@ public sealed class LuaPmSendRequestTests
     public async Task Table_form_with_header_map_and_urlencoded_body_and_url_object()
     {
         var (run, host) = await RunWithHost("""
-            pm.sendRequest({
-              url = pm.request.url,
+            yaapic.sendRequest({
+              url = yaapic.request.url,
               method = 'PUT',
               header = { ['X-B'] = 'two' },
               body = { mode = 'urlencoded', urlencoded = { { key = 'k', value = 'v' } } },
@@ -127,7 +127,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Failed_send_returns_nil_and_an_error_string()
     {
         var (run, _) = await RunWithHost(
-            "local res, err = pm.sendRequest('https://sub.test/x') console.log(tostring(res), err, type(err))",
+            "local res, err = yaapic.sendRequest('https://sub.test/x') console.log(tostring(res), err, type(err))",
             _ => new(null, "boom"));
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -138,7 +138,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Callback_runs_before_the_call_returns_with_err_then_res()
     {
         var (run, _) = await RunWithHost("""
-            local res, err = pm.sendRequest('https://sub.test/x', function(e, r) console.log('callback', tostring(e), r.code) end)
+            local res, err = yaapic.sendRequest('https://sub.test/x', function(e, r) console.log('callback', tostring(e), r.code) end)
             console.log('after', res.code, tostring(err))
             """);
 
@@ -150,7 +150,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Callback_gets_the_error_of_a_failed_send()
     {
         var (run, _) = await RunWithHost(
-            "local res, err = pm.sendRequest('https://sub.test/x', function(e, r) console.log(e, tostring(r)) end) console.log(tostring(res), err)",
+            "local res, err = yaapic.sendRequest('https://sub.test/x', function(e, r) console.log(e, tostring(r)) end) console.log(tostring(res), err)",
             _ => new(null, "boom"));
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -160,7 +160,7 @@ public sealed class LuaPmSendRequestTests
     [Fact]
     public async Task Callback_error_propagates_as_a_script_error()
     {
-        var (run, _) = await RunWithHost("pm.sendRequest('https://sub.test/x', function() error('in callback', 0) end) console.log('unreachable')");
+        var (run, _) = await RunWithHost("yaapic.sendRequest('https://sub.test/x', function() error('in callback', 0) end) console.log('unreachable')");
 
         Assert.Equal(ScriptRunStatus.Failed, run.Status);
         Assert.Equal("in callback", run.Error?.Message);
@@ -170,20 +170,20 @@ public sealed class LuaPmSendRequestTests
     [Fact]
     public async Task Callback_must_be_a_function()
     {
-        var (run, host) = await RunWithHost("pm.sendRequest('https://sub.test/x', 5)");
+        var (run, host) = await RunWithHost("yaapic.sendRequest('https://sub.test/x', 5)");
 
         Assert.Equal(ScriptRunStatus.Failed, run.Status);
-        Assert.Contains("pm.sendRequest: callback must be a function", run.Error?.Message, StringComparison.Ordinal);
+        Assert.Contains("yaapic.sendRequest: callback must be a function", run.Error?.Message, StringComparison.Ordinal);
         Assert.Empty(host.Sent);
     }
 
     [Fact]
     public async Task Invalid_input_raises()
     {
-        var (run, host) = await RunWithHost("pm.sendRequest({ method = 'GET' })");
+        var (run, host) = await RunWithHost("yaapic.sendRequest({ method = 'GET' })");
 
         Assert.Equal(ScriptRunStatus.Failed, run.Status);
-        Assert.Contains("pm.sendRequest: expected a URL or an options table with a url", run.Error?.Message, StringComparison.Ordinal);
+        Assert.Contains("yaapic.sendRequest: expected a URL or an options table with a url", run.Error?.Message, StringComparison.Ordinal);
         Assert.Empty(host.Sent);
     }
 
@@ -191,23 +191,23 @@ public sealed class LuaPmSendRequestTests
     public async Task Twenty_first_send_returns_the_host_limit_message()
     {
         var (report, _) = await RunReal("""
-            for i = 1, 20 do assert(pm.sendRequest('https://sub.test/' .. i)) end
-            local res, err = pm.sendRequest('https://sub.test/21')
+            for i = 1, 20 do assert(yaapic.sendRequest('https://sub.test/' .. i)) end
+            local res, err = yaapic.sendRequest('https://sub.test/21')
             console.log(tostring(res), err)
             """);
 
         var run = Assert.Single(report.Runs);
         Assert.True(run.Succeeded, run.Error?.Message);
-        Assert.Equal("nil pm.sendRequest limit of 20 per run reached", Logged(run));
+        Assert.Equal("nil yaapic.sendRequest limit of 20 per run reached", Logged(run));
     }
 
     [Fact]
     public async Task Real_sender_resolves_variables_in_the_url_and_body()
     {
         var (report, transport) = await RunReal("""
-            pm.variables.set('h', 'sub.test')
-            pm.variables.set('n', 'Ada')
-            pm.sendRequest({ url = 'https://{{h}}/hi', method = 'POST', body = { mode = 'raw', raw = '{"n":"{{n}}"}' } })
+            yaapic.variables.set('h', 'sub.test')
+            yaapic.variables.set('n', 'Ada')
+            yaapic.sendRequest({ url = 'https://{{h}}/hi', method = 'POST', body = { mode = 'raw', raw = '{"n":"{{n}}"}' } })
             """);
 
         Assert.True(Assert.Single(report.Runs).Succeeded, report.Runs[0].Error?.Message);
@@ -220,10 +220,10 @@ public sealed class LuaPmSendRequestTests
     public async Task Real_sender_response_exposes_json_and_to()
     {
         var (report, _) = await RunReal("""
-            local res = pm.sendRequest('https://sub.test/x')
-            pm.test('real', function()
+            local res = yaapic.sendRequest('https://sub.test/x')
+            yaapic.test('real', function()
               res.to.have.status(201)
-              pm.expect(res.json().ok).to.equal(true)
+              yaapic.expect(res.json().ok).to.equal(true)
             end)
             """);
 
@@ -235,10 +235,10 @@ public sealed class LuaPmSendRequestTests
     [Fact]
     public async Task Unsupported_body_mode_raises()
     {
-        var (run, host) = await RunWithHost("pm.sendRequest({ url = 'https://sub.test', body = { mode = 'formdata' } })");
+        var (run, host) = await RunWithHost("yaapic.sendRequest({ url = 'https://sub.test', body = { mode = 'formdata' } })");
 
         Assert.Equal(ScriptRunStatus.Failed, run.Status);
-        Assert.Contains("pm.sendRequest body mode 'formdata' is not supported", run.Error?.Message, StringComparison.Ordinal);
+        Assert.Contains("yaapic.sendRequest body mode 'formdata' is not supported", run.Error?.Message, StringComparison.Ordinal);
         Assert.Empty(host.Sent);
     }
 
@@ -247,13 +247,13 @@ public sealed class LuaPmSendRequestTests
     {
         var response = ScriptResponse.FromData(Reply("{}", "sid=abc; Path=/; HttpOnly; Secure", "theme=dark; Domain=example.com"));
         var (run, _) = await RunWithHost("""
-            console.log(pm.cookies.get('sid'), pm.cookies.has('theme'), pm.cookies.has('x'), tostring(pm.cookies.get('x')), pm.cookies.count())
-            console.log(pm.json.encode(pm.cookies.to_object()) == pm.json.encode(pm.cookies.toObject()))
+            console.log(yaapic.cookies.get('sid'), yaapic.cookies.has('theme'), yaapic.cookies.has('x'), tostring(yaapic.cookies.get('x')), yaapic.cookies.count())
+            console.log(yaapic.json.encode(yaapic.cookies.to_object()) == yaapic.json.encode(yaapic.cookies.toObject()))
             local names = {}
-            pm.cookies.each(function(c) names[#names + 1] = c.name end)
-            local first = pm.cookies.all()[1]
+            yaapic.cookies.each(function(c) names[#names + 1] = c.name end)
+            local first = yaapic.cookies.all()[1]
             console.log(table.concat(names, ','), first.name, first.value, first.path, tostring(first.domain), first.http_only, first.httpOnly, first.secure)
-            console.log(pm.cookies.to_object().theme, #pm.cookies.all())
+            console.log(yaapic.cookies.to_object().theme, #yaapic.cookies.all())
             """, response: response, cookies: response.Cookies);
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -266,7 +266,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Post_response_cookies_are_also_on_pm_response()
     {
         var response = ScriptResponse.FromData(Reply("{}", "sid=abc"));
-        var (run, _) = await RunWithHost("console.log(pm.response.cookies.get('sid'), pm.response.cookies.count())", response: response, cookies: response.Cookies);
+        var (run, _) = await RunWithHost("console.log(yaapic.response.cookies.get('sid'), yaapic.response.cookies.count())", response: response, cookies: response.Cookies);
 
         Assert.True(run.Succeeded, run.Error?.Message);
         Assert.Equal("abc 1", Logged(run));
@@ -276,7 +276,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Cookies_are_empty_in_pre_request_and_jar_raises()
     {
         var (run, _) = await RunWithHost(
-            "console.log(pm.cookies.count(), tostring(pm.cookies.get('a'))) local ok, e = pcall(pm.cookies.jar) console.log(ok, (tostring(e):gsub('^.-:%d+: ', '')))",
+            "console.log(yaapic.cookies.count(), tostring(yaapic.cookies.get('a'))) local ok, e = pcall(yaapic.cookies.jar) console.log(ok, (tostring(e):gsub('^.-:%d+: ', '')))",
             phase: ScriptPhase.PreRequest);
 
         Assert.True(run.Succeeded, run.Error?.Message);
@@ -287,7 +287,7 @@ public sealed class LuaPmSendRequestTests
     public async Task Send_request_response_has_cookies_and_a_jar_that_raises()
     {
         var (run, _) = await RunWithHost(
-            "local res = pm.sendRequest('https://sub.test/x') console.log(res.cookies.get('a'), res.cookies.count(), pcall(res.cookies.jar))",
+            "local res = yaapic.sendRequest('https://sub.test/x') console.log(res.cookies.get('a'), res.cookies.count(), pcall(res.cookies.jar))",
             _ => new(ScriptResponse.FromData(Reply("{}", "a=1; Path=/")), null));
 
         Assert.True(run.Succeeded, run.Error?.Message);

@@ -42,4 +42,23 @@ public class HttpResponseDataTests
         Assert.Null(r.Response);
         Assert.Equal(new SendFailure(SendFailureKind.Timeout, "slow"), r.Failure);
     }
+
+    [Fact]
+    public void Timings_and_protocol_default_to_unknown()
+    {
+        var r = Make();
+        Assert.Null(r.Timings);
+        Assert.Equal("", r.Protocol);
+    }
+
+    [Fact]
+    public void Equality_includes_timings_and_protocol()
+    {
+        var body = new byte[] { 1 };
+        HttpResponseData Build() => new(200, "OK", [], body, TimeSpan.Zero, "http://x");
+        Assert.Equal(Build(), Build());
+        Assert.NotEqual(Build(), Build() with { Timings = RequestTimings.Empty });
+        Assert.NotEqual(Build(), Build() with { Protocol = "HTTP/2" });
+        Assert.Equal(Build() with { Timings = RequestTimings.Empty, Protocol = "HTTP/2" }, Build() with { Timings = RequestTimings.Empty, Protocol = "HTTP/2" });
+    }
 }
