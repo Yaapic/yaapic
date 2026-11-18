@@ -1,6 +1,6 @@
 # M5-03: ADR 0017: supported formats, mappings and losses
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-01, M5-02
 
@@ -46,8 +46,8 @@ Code, UI, field-level tables (they are in the format cards).
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0017-import-export-formats.md` contains the table and every decision above (status Accepted); the ADR index lists it.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] `docs/adr/0017-import-export-formats.md` contains the table and every decision above (status Accepted); the ADR index lists it.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 
