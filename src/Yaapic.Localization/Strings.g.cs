@@ -649,6 +649,26 @@ public static class Strings
     /// <summary>This looks like the Windows cmd form of cURL. Copy the command as "cURL (bash)" and paste it again.</summary>
     public static string ImportCurlCmdSyntax => Localizer.Pick("This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again.", "Cette commande ressemble à la forme cmd de Windows de cURL. Copiez-la au format \"cURL (bash)\" puis collez-la à nouveau.");
 
+    /// <summary>cURL command</summary>
+    public static string ImportCurlDisplayName => Localizer.Pick("cURL command", "Commande cURL");
+
+    /// <summary>The extra argument "{0}" was ignored.</summary>
+    public static string ImportCurlExtraArgument(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The extra argument \"{0}\" was ignored.", "L'argument supplémentaire \"{0}\" a été ignoré."), a0);
+
+    /// <summary>-k (skip TLS verification) is not supported in Yaapic; the request keeps normal certificate checks.</summary>
+    public static string ImportCurlInsecure => Localizer.Pick("-k (skip TLS verification) is not supported in Yaapic; the request keeps normal certificate checks.", "-k (ignorer la vérification TLS) n'est pas pris en charge dans Yaapic ; la requête conserve la vérification normale des certificats.");
+
+    /// <summary>No curl command was found.</summary>
+    public static string ImportCurlNoCommand => Localizer.Pick("No curl command was found.", "Aucune commande curl n'a été trouvée.");
+
+    /// <summary>The command has no URL.</summary>
+    public static string ImportCurlNoUrl => Localizer.Pick("The command has no URL.", "La commande n'a pas d'URL.");
+
+    /// <summary>The option {0} is not supported and was ignored.</summary>
+    public static string ImportCurlOptionIgnored(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The option {0} is not supported and was ignored.", "L'option {0} n'est pas prise en charge et a été ignorée."), a0);
+
     /// <summary>The command has an unterminated quote.</summary>
     public static string ImportCurlUnterminatedQuote => Localizer.Pick("The command has an unterminated quote.", "La commande contient un guillemet non fermé.");
 

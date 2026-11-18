@@ -1,6 +1,6 @@
 # M5-18: Core: cURL importer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-06, M5-17
 
@@ -58,10 +58,10 @@ Pasting into the URL box (blocked M5-48), cmd and PowerShell forms, `@file` read
 
 ## Acceptance criteria
 
-- [ ] Tests with exact `HttpRequestDefinition` expectations: minimal `curl URL`; `-X POST` + JSON `-H` + `-d`; the browser bash form with `$'...'` and `--compressed`; no Content-Type with `a=b&c=d` (UrlEncoded) and with free text (Raw Text + added header); `--data-urlencode` pairs; `-F` with a file and `;type=`;
+- [x] Tests with exact `HttpRequestDefinition` expectations: minimal `curl URL`; `-X POST` + JSON `-H` + `-d`; the browser bash form with `$'...'` and `--compressed`; no Content-Type with `a=b&c=d` (UrlEncoded) and with free text (Raw Text + added header); `--data-urlencode` pairs; `-F` with a file and `;type=`;
   `-u user:pass`, `--digest -u`, `--oauth2-bearer`; `-A`, `-e`, `-b`; `-I`; `-G -d a=b` (query); `-m 2.5` (3); `--max-redirs 0`; `--http2`; `-sSL` expansion; `--opt=value`; `-k` Warning; `--proxy x` Warning; an unknown option Warning; a second URL Warning; TRACE skipped; no URL skipped; two commands in one text give two requests;
   query params split; a `curl` text that is the output of `CurlCodeGenerator` for 3 `CodeSamples` imports back to equivalent method, URL, headers and body; sniff cases.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

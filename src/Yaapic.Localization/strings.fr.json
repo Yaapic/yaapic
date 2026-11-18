@@ -553,5 +553,11 @@
   "import.postman.notAnEnvironment": "Ce fichier n'est pas un fichier d'environnement ou de globales Postman (pas de \"values\").",
   "import.postman.environmentDisplayName": "Environnement ou globales Postman",
   "import.curl.unterminatedQuote": "La commande contient un guillemet non fermé.",
-  "import.curl.cmdSyntax": "Cette commande ressemble à la forme cmd de Windows de cURL. Copiez-la au format \"cURL (bash)\" puis collez-la à nouveau."
+  "import.curl.cmdSyntax": "Cette commande ressemble à la forme cmd de Windows de cURL. Copiez-la au format \"cURL (bash)\" puis collez-la à nouveau.",
+  "import.curl.displayName": "Commande cURL",
+  "import.curl.noCommand": "Aucune commande curl n'a été trouvée.",
+  "import.curl.noUrl": "La commande n'a pas d'URL.",
+  "import.curl.insecure": "-k (ignorer la vérification TLS) n'est pas pris en charge dans Yaapic ; la requête conserve la vérification normale des certificats.",
+  "import.curl.optionIgnored": "L'option {0} n'est pas prise en charge et a été ignorée.",
+  "import.curl.extraArgument": "L'argument supplémentaire \"{0}\" a été ignoré."
 }

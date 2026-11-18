@@ -553,5 +553,11 @@
   "import.postman.notAnEnvironment": "This file is not a Postman environment or globals file (no \"values\").",
   "import.postman.environmentDisplayName": "Postman environment or globals",
   "import.curl.unterminatedQuote": "The command has an unterminated quote.",
-  "import.curl.cmdSyntax": "This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again."
+  "import.curl.cmdSyntax": "This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again.",
+  "import.curl.displayName": "cURL command",
+  "import.curl.noCommand": "No curl command was found.",
+  "import.curl.noUrl": "The command has no URL.",
+  "import.curl.insecure": "-k (skip TLS verification) is not supported in Yaapic; the request keeps normal certificate checks.",
+  "import.curl.optionIgnored": "The option {0} is not supported and was ignored.",
+  "import.curl.extraArgument": "The extra argument \"{0}\" was ignored."
 }
