@@ -522,7 +522,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
 | [M5-01](milestone-5-import-export/M5-01-adr-import-export-architecture.md) | ADR 0016: import and export architecture | any | none | done |
-| [M5-02](milestone-5-import-export/M5-02-spike-yaml-tree-under-aot.md) | Spike: read arbitrary YAML into a tree under Native AOT | any | none | todo |
+| [M5-02](milestone-5-import-export/M5-02-spike-yaml-tree-under-aot.md) | Spike: read arbitrary YAML into a tree under Native AOT | any | none | done |
 | [M5-03](milestone-5-import-export/M5-03-adr-import-export-formats.md) | ADR 0017: supported formats, mappings and losses | any | M5-01, M5-02 | todo |
 | [M5-04](milestone-5-import-export/M5-04-core-import-model.md) | Core: import model, report and importer contract | any | M5-01 | todo |
 | [M5-05](milestone-5-import-export/M5-05-core-data-node-and-json.md) | Core: DataNode tree, JSON reading and writing | any | M5-01 | todo |

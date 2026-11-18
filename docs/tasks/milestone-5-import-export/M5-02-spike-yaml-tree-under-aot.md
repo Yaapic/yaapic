@@ -1,6 +1,6 @@
 # M5-02: Spike: read arbitrary YAML into a tree under Native AOT
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -33,8 +33,8 @@ Writing YAML (M5-08), Yaapic code, the real `VYamlTreeReader` (M5-07).
 
 ## Acceptance criteria
 
-- [ ] The spike program and `docs/spikes/m5-yaml-tree.md` committed; the document lists the AOT publish result and the five decisions.
-- [ ] `Yaapic.sln` unchanged (the spike is not referenced), build still 0 warnings; no process left running.
+- [x] The spike program and `docs/spikes/m5-yaml-tree.md` committed; the document lists the AOT publish result and the five decisions.
+- [x] `Yaapic.sln` unchanged (the spike is not referenced), build still 0 warnings; no process left running.
 
 ## Suggested commit message
 
