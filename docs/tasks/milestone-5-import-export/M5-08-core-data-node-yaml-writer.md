@@ -1,6 +1,6 @@
 # M5-08: Core: DataNode YAML writer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05
 
@@ -26,10 +26,10 @@ Comments, flow style, line folding.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Import/DataNodeYamlTests` with exact expected texts written by hand: a nested object with arrays of objects and arrays of arrays, empty `{}` and `[]`, keys needing quotes, strings with quotes, backslashes, newline,
+- [x] Tests in `Yaapic.Core.Tests/Import/DataNodeYamlTests` with exact expected texts written by hand: a nested object with arrays of objects and arrays of arrays, empty `{}` and `[]`, keys needing quotes, strings with quotes, backslashes, newline,
   tab, unicode, a string that looks like a number or `true` (still quoted), numbers `1.50` and `-3`, null, root scalar, root array, trailing newline.
-- [ ] The round trip through `VYamlTreeReader` (M5-07) is checked by the OpenAPI YAML export test of M5-43 and by M5-66, not here (this card does not depend on M5-07).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] The round trip through `VYamlTreeReader` (M5-07) is checked by the OpenAPI YAML export test of M5-43 and by M5-66, not here (this card does not depend on M5-07).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -528,7 +528,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-05](milestone-5-import-export/M5-05-core-data-node-and-json.md) | Core: DataNode tree, JSON reading and writing | any | M5-01 | done |
 | [M5-06](milestone-5-import-export/M5-06-core-import-helpers.md) | Core: import helpers (methods, URLs, names, dynamic variables) | any | M5-04 | done |
 | [M5-07](milestone-5-import-export/M5-07-infra-vyaml-tree-reader.md) | Infrastructure: YAML tree reader (VYaml) | any | M5-02, M5-05 | done |
-| [M5-08](milestone-5-import-export/M5-08-core-data-node-yaml-writer.md) | Core: DataNode YAML writer | any | M5-05 | todo |
+| [M5-08](milestone-5-import-export/M5-08-core-data-node-yaml-writer.md) | Core: DataNode YAML writer | any | M5-05 | done |
 | [M5-09](milestone-5-import-export/M5-09-core-import-applier.md) | Core: import applier | any | M5-04 | todo |
 | [M5-10](milestone-5-import-export/M5-10-core-importer-registry-and-service.md) | Core: importer registry, import service and input reader port | any | M5-04, M5-09 | todo |
 | [M5-11](milestone-5-import-export/M5-11-infra-import-input-reader.md) | Infrastructure: import input reader (file and folder) | any | M5-10 | todo |
