@@ -13,9 +13,9 @@ namespace Yaapic.Infrastructure.Certificates;
 /// <param name="vault">The vault holding the certificate passphrases.</param>
 public sealed class ClientCertificateProvider(ICertificateStore store, ISecretVault vault) : IClientCertificateProvider, IDisposable
 {
-    // Windows SChannel cannot use ephemeral keys for TLS client authentication.
+    // Windows SChannel cannot use ephemeral keys for TLS client authentication, and macOS does not support them at all.
     private static readonly X509KeyStorageFlags PfxFlags =
-        OperatingSystem.IsWindows() ? X509KeyStorageFlags.DefaultKeySet : X509KeyStorageFlags.EphemeralKeySet;
+        OperatingSystem.IsLinux() ? X509KeyStorageFlags.EphemeralKeySet : X509KeyStorageFlags.DefaultKeySet;
 
     private readonly Lock _gate = new();
     private readonly Dictionary<Guid, X509Certificate2> _certificates = [];

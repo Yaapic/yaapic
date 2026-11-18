@@ -11,6 +11,9 @@ public sealed class FakeLoopbackRedirectReceiver : ILoopbackRedirectReceiver
     /// <summary>Gets or sets the target to return; receives the <c>state</c> sent in the browser URL when a browser is linked.</summary>
     public Func<string> Target { get; set; } = () => "/callback?code=c1";
 
+    /// <summary>Gets or sets a browser whose opening is awaited before the target is returned.</summary>
+    public FakeExternalBrowser? Browser { get; set; }
+
     /// <summary>Gets or sets an exception to throw instead of returning a target.</summary>
     public Exception? Failure { get; set; }
 
@@ -43,7 +46,15 @@ public sealed class FakeLoopbackRedirectReceiver : ILoopbackRedirectReceiver
             await gate.WaitAsync(ct).ConfigureAwait(false);
         }
 
-        await Task.Yield();
+        if (Browser is { } browser)
+        {
+            await browser.WhenOpened.WaitAsync(ct).ConfigureAwait(false);
+        }
+        else
+        {
+            await Task.Yield();
+        }
+
         return Target();
     }
 }

@@ -21,6 +21,7 @@ public class OAuth2AuthorizationCodeFlowTests
         var log = new List<string>();
         _receiver.Log = log;
         _browser.Log = log;
+        _receiver.Browser = _browser;
         _receiver.Target = () => $"/callback?code=c1&state={Query("state")}";
     }
 

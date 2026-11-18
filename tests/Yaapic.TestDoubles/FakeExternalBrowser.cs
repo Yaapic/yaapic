@@ -11,11 +11,17 @@ public sealed class FakeExternalBrowser : IExternalBrowser
     /// <summary>Gets the URLs opened so far.</summary>
     public List<Uri> Opened { get; } = [];
 
+    /// <summary>Gets a task that completes once a URL has been opened.</summary>
+    public Task WhenOpened => _opened.Task;
+
+    private readonly TaskCompletionSource _opened = new(TaskCreationOptions.RunContinuationsAsynchronously);
+
     /// <inheritdoc/>
     public Task OpenAsync(Uri url, CancellationToken ct)
     {
         Log.Add("open");
         Opened.Add(url);
+        _opened.TrySetResult();
         return Task.CompletedTask;
     }
 }
