@@ -524,5 +524,9 @@
   "import.renamed": "\"{0}\" already exists, the import was named \"{1}\".",
   "import.globalsSkipped": "{0} global variables already exist and were left unchanged.",
   "import.saveFailed": "Could not save \"{0}\": {1}",
-  "import.subtreeSkipped": "\"{0}\" could not be saved, its {1} requests were skipped."
+  "import.subtreeSkipped": "\"{0}\" could not be saved, its {1} requests were skipped.",
+  "import.formatNotRecognized": "The format of this file was not recognized. Choose the format manually.",
+  "import.failed": "The {0} import failed: {1}",
+  "import.tooLarge": "This import has {0} requests; the limit is 20000.",
+  "import.nothingFound": "No request, environment or variable was found in this {0} source."
 }

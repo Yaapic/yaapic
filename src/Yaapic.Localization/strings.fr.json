@@ -524,5 +524,9 @@
   "import.renamed": "\"{0}\" existe déjà, l'import a été nommé \"{1}\".",
   "import.globalsSkipped": "{0} variables globales existent déjà et n'ont pas été modifiées.",
   "import.saveFailed": "Impossible d'enregistrer \"{0}\" : {1}",
-  "import.subtreeSkipped": "\"{0}\" n'a pas pu être enregistré, ses {1} requêtes ont été ignorées."
+  "import.subtreeSkipped": "\"{0}\" n'a pas pu être enregistré, ses {1} requêtes ont été ignorées.",
+  "import.formatNotRecognized": "Le format de ce fichier n'a pas été reconnu. Choisissez le format manuellement.",
+  "import.failed": "L'import {0} a échoué : {1}",
+  "import.tooLarge": "Cet import contient {0} requêtes ; la limite est de 20000.",
+  "import.nothingFound": "Aucune requête, aucun environnement ni aucune variable n'a été trouvé dans cette source {0}."
 }

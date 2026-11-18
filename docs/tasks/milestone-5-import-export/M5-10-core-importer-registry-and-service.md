@@ -1,6 +1,6 @@
 # M5-10: Core: importer registry, import service and input reader port
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04, M5-09
 
@@ -30,9 +30,9 @@ The concrete importers, file access, UI.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Import/ImportServiceTests` with fake importers: `Detect` ordering (`Certain` before `Possible`, ties by registration order), a throwing `Sniff` ignored, `Find`; `Preview` with an explicit id and with detection, nothing recognized throws `ImportException`,
+- [x] Tests in `Yaapic.Core.Tests/Import/ImportServiceTests` with fake importers: `Detect` ordering (`Certain` before `Possible`, ties by registration order), a throwing `Sniff` ignored, `Find`; `Preview` with an explicit id and with detection, nothing recognized throws `ImportException`,
   an importer throwing `FormatException` becomes `ImportException` with the importer name, an `ImportException` passes through unchanged, cancellation passes through, more than 20000 requests throws, empty bundle gets the `Warning`; `ApplyAsync` writes through in-memory stores.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
