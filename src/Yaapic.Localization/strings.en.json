@@ -551,5 +551,7 @@
   "import.scriptsReview": "{0} scripts were imported. Review them before sending: scripts run with access to your variables.",
   "import.postman.displayName": "Postman collection",
   "import.postman.notAnEnvironment": "This file is not a Postman environment or globals file (no \"values\").",
-  "import.postman.environmentDisplayName": "Postman environment or globals"
+  "import.postman.environmentDisplayName": "Postman environment or globals",
+  "import.curl.unterminatedQuote": "The command has an unterminated quote.",
+  "import.curl.cmdSyntax": "This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again."
 }

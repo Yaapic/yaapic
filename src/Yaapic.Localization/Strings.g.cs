@@ -646,6 +646,12 @@ public static class Strings
     public static string ImportAuthUnsupported(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Authentication type \"{1}\" is not supported; the request was imported without authentication.", "Le type d'authentification \"{1}\" n'est pas pris en charge ; la requête a été importée sans authentification."), a0, a1);
 
+    /// <summary>This looks like the Windows cmd form of cURL. Copy the command as "cURL (bash)" and paste it again.</summary>
+    public static string ImportCurlCmdSyntax => Localizer.Pick("This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again.", "Cette commande ressemble à la forme cmd de Windows de cURL. Copiez-la au format \"cURL (bash)\" puis collez-la à nouveau.");
+
+    /// <summary>The command has an unterminated quote.</summary>
+    public static string ImportCurlUnterminatedQuote => Localizer.Pick("The command has an unterminated quote.", "La commande contient un guillemet non fermé.");
+
     /// <summary>Descriptions of {0} requests were not imported.</summary>
     public static string ImportDescriptionsDropped(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Descriptions of {0} requests were not imported.", "Les descriptions de {0} requêtes n'ont pas été importées."), a0);

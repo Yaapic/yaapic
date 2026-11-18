@@ -1,6 +1,6 @@
 # M5-17: Core: cURL command tokenizer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04
 
@@ -30,9 +30,9 @@ Option meaning (M5-18), variable expansion, PowerShell syntax.
 
 ## Acceptance criteria
 
-- [ ] Tests with exact word lists: simple command; single and double quotes with an embedded other quote; `\"` inside double quotes; backslash-newline continuation (several lines); `$'...'` with `\n`, `\'`, `é`, `\x41`, octal; adjacent pieces; a `#` comment line and an inline comment; two commands separated by newline and by `;` before `curl`;
+- [x] Tests with exact word lists: simple command; single and double quotes with an embedded other quote; `\"` inside double quotes; backslash-newline continuation (several lines); `$'...'` with `\n`, `\'`, `é`, `\x41`, octal; adjacent pieces; a `#` comment line and an inline comment; two commands separated by newline and by `;` before `curl`;
   `a;b` inside a word stays; a prompt `$ curl`; `curl.exe`; a text without curl returns empty; an unterminated quote throws; a `^"` command throws; the output of `CurlCodeGenerator` for `CodeSamples` entries (M4-50) tokenizes back to the expected method, URL, header and body words (use two or three samples).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
