@@ -543,5 +543,8 @@
   "import.postman.graphQl": "The GraphQL body was converted to a JSON body.",
   "import.postman.bodyModeUnsupported": "The body mode \"{1}\" is not supported; the request has no body.",
   "import.fileReference": "This request reads the local file \"{1}\" when it is sent. Check the path.",
+  "import.authUnsupported": "Authentication type \"{1}\" is not supported; the request was imported without authentication.",
+  "import.authPlainText": "Credentials of the imported requests are stored as plain text in the workspace files. Move them to secret variables.",
+  "import.authInherited": "{0} requests got the authentication of their folder or collection copied onto them.",
   "import.postman.displayName": "Postman collection"
 }

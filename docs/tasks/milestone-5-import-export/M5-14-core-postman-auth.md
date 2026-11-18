@@ -1,6 +1,6 @@
 # M5-14: Core: Postman import, authentication
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-12
 
@@ -40,9 +40,9 @@ Scripts, variables, bodies.
 
 ## Acceptance criteria
 
-- [ ] Tests: one case per type of the table with the exact `RequestAuth` produced (including the OAuth 2 grants, client authentication, token placement, the JWT defaults and `isSecretBase64Encoded`), v2.0 object form, array form, unknown grant, unknown JWT algorithm, `ntlm`, absent auth,
+- [x] Tests: one case per type of the table with the exact `RequestAuth` produced (including the OAuth 2 grants, client authentication, token placement, the JWT defaults and `isSecretBase64Encoded`), v2.0 object form, array form, unknown grant, unknown JWT algorithm, `ntlm`, absent auth,
   inheritance (collection -> folder -> request, folder `noauth` stops the inheritance, request override), the aggregated entries (inherited count, plain-text `Info` only when a literal credential is present), a `{{token}}` value does not trigger the plain-text `Info`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

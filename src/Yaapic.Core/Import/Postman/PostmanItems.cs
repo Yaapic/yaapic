@@ -13,6 +13,7 @@ internal sealed class PostmanItems(ImportContext context)
 
     private int _examples;
     private int _descriptions;
+    private int _inherited;
 
     /// <summary>Reads a description given as a string or as an object with a <c>content</c> member.</summary>
     /// <param name="node">The description node, possibly null.</param>
@@ -24,8 +25,9 @@ internal sealed class PostmanItems(ImportContext context)
     /// <param name="items">The <c>item</c> array.</param>
     /// <param name="path">The report path of the parent.</param>
     /// <param name="depth">The folder depth, 1 for the collection level.</param>
+    /// <param name="inherited">The authentication of the nearest ancestor that has one, or null.</param>
     /// <returns>The folders and requests, in source order.</returns>
-    internal List<ImportItem> ReadItems(DataNode items, string path, int depth)
+    internal List<ImportItem> ReadItems(DataNode items, string path, int depth, RequestAuth? inherited = null)
     {
         List<ImportItem> result = [];
         if (items.Items.Count > 1)
@@ -46,11 +48,11 @@ internal sealed class PostmanItems(ImportContext context)
                 }
 
                 var folder = new FolderDefinition(context.NewId(), ImportHelpers.SafeName(name, "Folder"), Text(item["description"]), []);
-                result.Add(new ImportFolder(folder, ReadItems(children, itemPath, depth + 1)));
+                result.Add(new ImportFolder(folder, ReadItems(children, itemPath, depth + 1, PostmanAuth.Map(item["auth"], itemPath, context.Report) ?? inherited)));
             }
             else if (item["request"] is { IsNull: false } request)
             {
-                if (ReadRequest(item, request, itemPath) is { } mapped)
+                if (ReadRequest(item, request, itemPath, inherited) is { } mapped)
                 {
                     result.Add(new ImportRequest(mapped));
                 }
@@ -72,13 +74,18 @@ internal sealed class PostmanItems(ImportContext context)
             context.Report.Info("", Strings.ImportPostmanDroppedExamples(_examples));
         }
 
+        if (_inherited > 0)
+        {
+            context.Report.Info("", Strings.ImportAuthInherited(_inherited));
+        }
+
         if (_descriptions > 0)
         {
             context.Report.Info("", Strings.ImportDescriptionsDropped(_descriptions));
         }
     }
 
-    private HttpRequestDefinition? ReadRequest(DataNode item, DataNode request, string path)
+    private HttpRequestDefinition? ReadRequest(DataNode item, DataNode request, string path, RequestAuth? inherited)
     {
         var methodText = request.IsString ? "GET" : request.GetString("method") ?? "GET";
         if (!ImportHelpers.TryParseMethod(methodText, out var method))
@@ -106,6 +113,16 @@ internal sealed class PostmanItems(ImportContext context)
             headers.Add(new KeyValueEntry("Content-Type", addedContentType));
         }
 
+        var auth = PostmanAuth.Map(request["auth"], path, context.Report);
+        if (auth is null)
+        {
+            auth = inherited ?? RequestAuth.None;
+            if (inherited is { Kind: not AuthKind.None })
+            {
+                _inherited++;
+            }
+        }
+
         return new HttpRequestDefinition(
             context.NewId(),
             ImportHelpers.SafeName(item.GetString("name"), ImportHelpers.DescribeRequest(method, url)),
@@ -114,7 +131,7 @@ internal sealed class PostmanItems(ImportContext context)
             query,
             headers,
             body,
-            RequestAuth.None,
+            auth,
             RequestSettings.Default,
             ScriptSet.Empty);
     }

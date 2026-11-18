@@ -635,6 +635,17 @@ public static class Strings
     /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
     public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
 
+    /// <summary>{0} requests got the authentication of their folder or collection copied onto them.</summary>
+    public static string ImportAuthInherited(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests got the authentication of their folder or collection copied onto them.", "{0} requêtes ont reçu une copie de l'authentification de leur dossier ou de leur collection."), a0);
+
+    /// <summary>Credentials of the imported requests are stored as plain text in the workspace files. Move them to secret variables.</summary>
+    public static string ImportAuthPlainText => Localizer.Pick("Credentials of the imported requests are stored as plain text in the workspace files. Move them to secret variables.", "Les identifiants des requêtes importées sont stockés en clair dans les fichiers de l'espace de travail. Déplacez-les dans des variables secrètes.");
+
+    /// <summary>Authentication type "{1}" is not supported; the request was imported without authentication.</summary>
+    public static string ImportAuthUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Authentication type \"{1}\" is not supported; the request was imported without authentication.", "Le type d'authentification \"{1}\" n'est pas pris en charge ; la requête a été importée sans authentification."), a0, a1);
+
     /// <summary>Descriptions of {0} requests were not imported.</summary>
     public static string ImportDescriptionsDropped(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Descriptions of {0} requests were not imported.", "Les descriptions de {0} requêtes n'ont pas été importées."), a0);

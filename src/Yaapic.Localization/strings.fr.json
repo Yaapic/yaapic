@@ -543,5 +543,8 @@
   "import.postman.graphQl": "Le corps GraphQL a été converti en corps JSON.",
   "import.postman.bodyModeUnsupported": "Le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps.",
   "import.fileReference": "Cette requête lit le fichier local \"{1}\" à l'envoi. Vérifiez le chemin.",
+  "import.authUnsupported": "Le type d'authentification \"{1}\" n'est pas pris en charge ; la requête a été importée sans authentification.",
+  "import.authPlainText": "Les identifiants des requêtes importées sont stockés en clair dans les fichiers de l'espace de travail. Déplacez-les dans des variables secrètes.",
+  "import.authInherited": "{0} requêtes ont reçu une copie de l'authentification de leur dossier ou de leur collection.",
   "import.postman.displayName": "Collection Postman"
 }
