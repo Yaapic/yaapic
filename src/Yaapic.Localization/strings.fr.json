@@ -528,5 +528,10 @@
   "import.formatNotRecognized": "Le format de ce fichier n'a pas été reconnu. Choisissez le format manuellement.",
   "import.failed": "L'import {0} a échoué : {1}",
   "import.tooLarge": "Cet import contient {0} requêtes ; la limite est de 20000.",
-  "import.nothingFound": "Aucune requête, aucun environnement ni aucune variable n'a été trouvé dans cette source {0}."
+  "import.nothingFound": "Aucune requête, aucun environnement ni aucune variable n'a été trouvé dans cette source {0}.",
+  "import.fileNotFound": "Fichier introuvable : {0}",
+  "import.fileTooLarge": "{0} dépasse 50 Mo et ne peut pas être importé.",
+  "import.folderTooLarge": "Ce dossier contient plus de 5000 fichiers ou 200 Mo de données.",
+  "import.folderEmpty": "Aucun fichier importable dans {0}.",
+  "import.fileUnreadable": "Impossible de lire {0} : {1}"
 }

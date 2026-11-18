@@ -1,6 +1,6 @@
 # M5-11: Infrastructure: import input reader (file and folder)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-10
 
@@ -27,9 +27,9 @@ Reading from a URL, zip files, drag and drop.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests/Import/FileImportInputReaderTests` on a temporary directory: a UTF-8 file with BOM, a missing file, an oversize file (use a sparse or generated 51 MiB file and delete it), folder listing order and relative `/` paths, filtering by
+- [x] Tests in `Yaapic.Infrastructure.Tests/Import/FileImportInputReaderTests` on a temporary directory: a UTF-8 file with BOM, a missing file, an oversize file (use a sparse or generated 51 MiB file and delete it), folder listing order and relative `/` paths, filtering by
   extension, skipped `.git` and `node_modules`, more than 5000 files (generate 5001 empty `.bru` files) throws, an empty folder throws, a file with invalid UTF-8 bytes does not throw, cancellation. A test for the reparse point skip is added only if the OS allows creating a symbolic link without privileges (skip otherwise).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

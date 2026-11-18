@@ -643,6 +643,25 @@ public static class Strings
     public static string ImportFailed(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The {0} import failed: {1}", "L'import {0} a échoué : {1}"), a0, a1);
 
+    /// <summary>File not found: {0}</summary>
+    public static string ImportFileNotFound(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("File not found: {0}", "Fichier introuvable : {0}"), a0);
+
+    /// <summary>{0} is larger than 50 MB and cannot be imported.</summary>
+    public static string ImportFileTooLarge(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} is larger than 50 MB and cannot be imported.", "{0} dépasse 50 Mo et ne peut pas être importé."), a0);
+
+    /// <summary>Cannot read {0}: {1}</summary>
+    public static string ImportFileUnreadable(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot read {0}: {1}", "Impossible de lire {0} : {1}"), a0, a1);
+
+    /// <summary>No importable file in {0}.</summary>
+    public static string ImportFolderEmpty(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No importable file in {0}.", "Aucun fichier importable dans {0}."), a0);
+
+    /// <summary>This folder has more than 5000 files or 200 MB of data.</summary>
+    public static string ImportFolderTooLarge => Localizer.Pick("This folder has more than 5000 files or 200 MB of data.", "Ce dossier contient plus de 5000 fichiers ou 200 Mo de données.");
+
     /// <summary>The format of this file was not recognized. Choose the format manually.</summary>
     public static string ImportFormatNotRecognized => Localizer.Pick("The format of this file was not recognized. Choose the format manually.", "Le format de ce fichier n'a pas été reconnu. Choisissez le format manuellement.");
 
