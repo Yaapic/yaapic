@@ -514,5 +514,8 @@
   "relative.minutes": "{0} min",
   "relative.hours": "{0} h",
   "relative.day": "{0} jour",
-  "relative.days": "{0} jours"
+  "relative.days": "{0} jours",
+
+  "import.invalidJson": "Le fichier n'est pas du JSON valide : {0}",
+  "import.invalidYaml": "Le fichier n'est pas du YAML valide : {0}"
 }

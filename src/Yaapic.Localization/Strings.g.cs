@@ -635,6 +635,14 @@ public static class Strings
     /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
     public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
 
+    /// <summary>The file is not valid JSON: {0}</summary>
+    public static string ImportInvalidJson(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid JSON: {0}", "Le fichier n'est pas du JSON valide : {0}"), a0);
+
+    /// <summary>The file is not valid YAML: {0}</summary>
+    public static string ImportInvalidYaml(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid YAML: {0}", "Le fichier n'est pas du YAML valide : {0}"), a0);
+
     /// <summary>Time claims</summary>
     public static string JwtClaimsLabel => Localizer.Pick("Time claims", "Dates des claims");
 

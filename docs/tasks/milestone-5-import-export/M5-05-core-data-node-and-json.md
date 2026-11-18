@@ -1,6 +1,6 @@
 # M5-05: Core: DataNode tree, JSON reading and writing
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-01
 
@@ -37,11 +37,11 @@ The YAML reader (M5-07), the YAML writer (M5-08).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Import`: parse an object with nested arrays, numbers `1`, `1.0`, `12345678901234567890` (text preserved), strings with unicode and escapes, `null`, `true`; comments and a trailing comma accepted;
+- [x] Tests in `Yaapic.Core.Tests/Import`: parse an object with nested arrays, numbers `1`, `1.0`, `12345678901234567890` (text preserved), strings with unicode and escapes, `null`, `true`; comments and a trailing comma accepted;
   duplicate keys (last wins in the indexer, both in `Members`); depth 65 throws `FormatException`; invalid JSON throws `FormatException`; the accessor behaviour on wrong kinds (`AsString` of an Array is null, `this[0]` of an Object is null);
   `Write` round trip of a tree (indented output compared with an exact expected string, compact output too, a number such as `1.50` stays `1.50`); non-ASCII characters are not escaped; `StructuredTextReader` picks JSON for `{` and `[`,
   and calls a fake `IYamlTreeReader` otherwise.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
