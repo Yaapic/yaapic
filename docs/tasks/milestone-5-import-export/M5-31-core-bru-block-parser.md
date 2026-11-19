@@ -1,6 +1,6 @@
 # M5-31: Core: Bruno `.bru` block parser
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04
 
@@ -74,9 +74,9 @@ Mapping blocks (M5-32 onward), writing Bru (M5-45).
 
 ## Acceptance criteria
 
-- [ ] Tests with the sample above and more: meta, verb block, params with a disabled entry, headers with a URL value containing colons, auth block, `body:json` with nested braces and indentation (text without the two-space indent; deeper indentation kept), `vars:secret` list, script block, `'''` multi-line value, CRLF input, an unterminated block,
+- [x] Tests with the sample above and more: meta, verb block, params with a disabled entry, headers with a URL value containing colons, auth block, `body:json` with nested braces and indentation (text without the two-space indent; deeper indentation kept), `vars:secret` list, script block, `'''` multi-line value, CRLF input, an unterminated block,
   a `body:text` containing a line `}` indented (not a terminator because it is not at column 0), text before the first block ignored, `Get` and `GetAll("auth:")`, an empty file.
-- [ ] Architecture tests green, 0 warnings, XML docs where public, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs where public, all tests green.
 
 ## Suggested commit message
 
