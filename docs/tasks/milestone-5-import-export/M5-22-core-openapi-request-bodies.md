@@ -1,6 +1,6 @@
 # M5-22: Core: OpenAPI import, request bodies
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-20, M5-21
 
@@ -38,9 +38,9 @@ Security, response bodies, `encoding` objects of multipart.
 
 ## Acceptance criteria
 
-- [ ] Tests: media type choice order with several keys; JSON from `example`, from `examples`, from a schema, from a string example; urlencoded from sample and from properties only; multipart with a binary property; octet-stream; XML example string and XML object schema (the placeholder + `Info`);
+- [x] Tests: media type choice order with several keys; JSON from `example`, from `examples`, from a schema, from a string example; urlencoded from sample and from properties only; multipart with a binary property; octet-stream; XML example string and XML object schema (the placeholder + `Info`);
   `application/vnd.api+json` adds the header while `application/json` does not; `required` ignored; no `requestBody` gives `None`; `$ref` request body from `components/requestBodies`; the other-media-types `Info`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -572,5 +572,9 @@
   "import.openapi.localServers": "Les serveurs déclarés sur des chemins ou des opérations sont ignorés ; le premier serveur global est utilisé.",
   "import.openapi.cookiesIgnored": "{0} paramètres de cookie ont été ignorés.",
   "import.openapi.deprecated": "{0} est marqué comme obsolète dans la source.",
-  "import.openapi.sampleTruncated": "Certains corps d'exemple ont été coupés car le schéma est récursif ou très volumineux."
+  "import.openapi.sampleTruncated": "Certains corps d'exemple ont été coupés car le schéma est récursif ou très volumineux.",
+  "import.openapi.xmlSample": "{0} : aucun exemple XML n'a pu être généré à partir du schéma.",
+  "import.openapi.fileField": "{0} : le champ fichier \"{1}\" n'a pas de chemin ; choisissez un fichier avant l'envoi.",
+  "import.openapi.binaryBody": "{0} : le corps binaire n'a pas de fichier ; choisissez un fichier avant l'envoi.",
+  "import.openapi.otherMediaTypes": "{0} : {1} autres formats de corps n'ont pas été importés."
 }

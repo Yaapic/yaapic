@@ -572,5 +572,9 @@
   "import.openapi.localServers": "Servers declared on paths or operations are ignored; the first global server is used.",
   "import.openapi.cookiesIgnored": "{0} cookie parameters were ignored.",
   "import.openapi.deprecated": "{0} is marked deprecated in the source.",
-  "import.openapi.sampleTruncated": "Some example bodies were cut because the schema is recursive or very large."
+  "import.openapi.sampleTruncated": "Some example bodies were cut because the schema is recursive or very large.",
+  "import.openapi.xmlSample": "{0}: no XML example could be generated from the schema.",
+  "import.openapi.fileField": "{0}: the file field \"{1}\" has no path; choose a file before sending.",
+  "import.openapi.binaryBody": "{0}: the binary body has no file; choose a file before sending.",
+  "import.openapi.otherMediaTypes": "{0}: {1} other body formats were not imported."
 }

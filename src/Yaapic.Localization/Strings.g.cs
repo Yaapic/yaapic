@@ -730,6 +730,10 @@ public static class Strings
     public static string ImportNothingFound(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No request, environment or variable was found in this {0} source.", "Aucune requête, aucun environnement ni aucune variable n'a été trouvé dans cette source {0}."), a0);
 
+    /// <summary>{0}: the binary body has no file; choose a file before sending.</summary>
+    public static string ImportOpenapiBinaryBody(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the binary body has no file; choose a file before sending.", "{0} : le corps binaire n'a pas de fichier ; choisissez un fichier avant l'envoi."), a0);
+
     /// <summary>{0}: the reference "{1}" does not exist.</summary>
     public static string ImportOpenapiBrokenRef(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" does not exist.", "{0} : la référence \"{1}\" n'existe pas."), a0, a1);
@@ -749,11 +753,19 @@ public static class Strings
     public static string ImportOpenapiExternalRef(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the external reference \"{1}\" is not followed.", "{0} : la référence externe \"{1}\" n'est pas suivie."), a0, a1);
 
+    /// <summary>{0}: the file field "{1}" has no path; choose a file before sending.</summary>
+    public static string ImportOpenapiFileField(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the file field \"{1}\" has no path; choose a file before sending.", "{0} : le champ fichier \"{1}\" n'a pas de chemin ; choisissez un fichier avant l'envoi."), a0, a1);
+
     /// <summary>Servers declared on paths or operations are ignored; the first global server is used.</summary>
     public static string ImportOpenapiLocalServers => Localizer.Pick("Servers declared on paths or operations are ignored; the first global server is used.", "Les serveurs déclarés sur des chemins ou des opérations sont ignorés ; le premier serveur global est utilisé.");
 
     /// <summary>This file is not an OpenAPI document (no "openapi" version or "paths").</summary>
     public static string ImportOpenapiNotADocument => Localizer.Pick("This file is not an OpenAPI document (no \"openapi\" version or \"paths\").", "Ce fichier n'est pas un document OpenAPI (ni version \"openapi\" ni \"paths\").");
+
+    /// <summary>{0}: {1} other body formats were not imported.</summary>
+    public static string ImportOpenapiOtherMediaTypes(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: {1} other body formats were not imported.", "{0} : {1} autres formats de corps n'ont pas été importés."), a0, a1);
 
     /// <summary>{0}: the reference "{1}" is circular.</summary>
     public static string ImportOpenapiRefCycle(object? a0, object? a1) =>
@@ -777,6 +789,10 @@ public static class Strings
     /// <summary>OpenAPI version {0} is newer than the versions Yaapic knows; it is read as 3.1.</summary>
     public static string ImportOpenapiVersionUntested(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("OpenAPI version {0} is newer than the versions Yaapic knows; it is read as 3.1.", "La version {0} d'OpenAPI est plus récente que celles connues de Yaapic ; elle est lue comme la 3.1."), a0);
+
+    /// <summary>{0}: no XML example could be generated from the schema.</summary>
+    public static string ImportOpenapiXmlSample(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: no XML example could be generated from the schema.", "{0} : aucun exemple XML n'a pu être généré à partir du schéma."), a0);
 
     /// <summary>Yaapic sorts folders and requests by name; the order of the source is not kept.</summary>
     public static string ImportOrderLost => Localizer.Pick("Yaapic sorts folders and requests by name; the order of the source is not kept.", "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.");

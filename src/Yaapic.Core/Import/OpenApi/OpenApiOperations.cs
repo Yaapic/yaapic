@@ -17,6 +17,7 @@ internal sealed class OpenApiOperations(DataNode root, OpenApiRefResolver refs, 
     private static readonly string[] PathItemKeys = ["parameters", "summary", "description", "servers", "$ref"];
     private static readonly string[] IgnoredHeaders = ["Accept", "Content-Type", "Authorization"];
 
+    private readonly OpenApiSchemaSampler _sampler = new(refs, context.Report);
     private readonly List<KeyValueEntry> _variables = [];
     private readonly List<ImportItem> _children = [];
     private readonly Dictionary<string, List<ImportItem>> _folders = new(StringComparer.Ordinal);
@@ -200,6 +201,12 @@ internal sealed class OpenApiOperations(DataNode root, OpenApiRefResolver refs, 
         }
 
         var (query, headers) = ReadParameters(label, item, operation);
+        var (body, contentType) = OpenApiBodies.Map(operation["requestBody"], refs, _sampler, label, context.Report);
+        if (contentType is not null)
+        {
+            headers.Add(new KeyValueEntry("Content-Type", contentType));
+        }
+
         var request = new HttpRequestDefinition(
             context.NewId(),
             ImportHelpers.SafeName(operation.GetString("summary"), ImportHelpers.SafeName(operation.GetString("operationId"), label)),
@@ -207,7 +214,7 @@ internal sealed class OpenApiOperations(DataNode root, OpenApiRefResolver refs, 
             "{{baseUrl}}" + ToVariables(path),
             query,
             headers,
-            RequestBody.None,
+            body,
             RequestAuth.None,
             RequestSettings.Default,
             ScriptSet.Empty);
