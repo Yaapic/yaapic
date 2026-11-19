@@ -793,6 +793,9 @@ public static class Strings
     public static string ImportOpenapiServerVariable(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Server variable {0} has no default; the URL keeps the placeholder.", "La variable de serveur {0} n'a pas de valeur par défaut ; l'URL garde le marqueur."), a0);
 
+    /// <summary>Swagger 2.0 document converted to OpenAPI 3 before import.</summary>
+    public static string ImportOpenapiSwaggerConverted => Localizer.Pick("Swagger 2.0 document converted to OpenAPI 3 before import.", "Document Swagger 2.0 converti en OpenAPI 3 avant l'import.");
+
     /// <summary>OpenAPI version {0} is not supported.</summary>
     public static string ImportOpenapiVersion(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("OpenAPI version {0} is not supported.", "La version {0} d'OpenAPI n'est pas prise en charge."), a0);

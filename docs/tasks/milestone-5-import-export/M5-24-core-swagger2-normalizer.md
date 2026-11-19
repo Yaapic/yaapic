@@ -1,6 +1,6 @@
 # M5-24: Core: Swagger 2.0 normalization
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-19
 
@@ -29,10 +29,10 @@ OpenAPI 3.1 specific handling, Swagger 1.2.
 
 ## Acceptance criteria
 
-- [ ] Tests: a Swagger 2 document (inline JSON) converted and compared with the expected compact JSON for: servers from host + basePath + two schemes, no host with basePath, a body parameter with consumes, formData without and with a file, query/header/path params moved under `schema`, path-item level parameters, `$ref` to `#/parameters/...` inlined,
+- [x] Tests: a Swagger 2 document (inline JSON) converted and compared with the expected compact JSON for: servers from host + basePath + two schemes, no host with basePath, a body parameter with consumes, formData without and with a file, query/header/path params moved under `schema`, path-item level parameters, `$ref` to `#/parameters/...` inlined,
   `definitions` renamed and refs rewritten, the four oauth2 flows, basic and apiKey, top-level `security`.
-- [ ] End-to-end through the importer (with M5-20 done at that point or a fake): a Swagger 2 document imports to the same requests as its 3.0 equivalent (compare names, URLs, parameters and body kinds). If M5-20, M5-22 and M5-23 are not all `done`, test only the normalizer output and say so in the Notes.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] End-to-end through the importer (with M5-20 done at that point or a fake): a Swagger 2 document imports to the same requests as its 3.0 equivalent (compare names, URLs, parameters and body kinds). If M5-20, M5-22 and M5-23 are not all `done`, test only the normalizer output and say so in the Notes.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

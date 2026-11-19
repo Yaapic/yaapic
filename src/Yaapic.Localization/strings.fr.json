@@ -564,6 +564,7 @@
   "import.openapi.notADocument": "Ce fichier n'est pas un document OpenAPI (ni version \"openapi\" ni \"paths\").",
   "import.openapi.version": "La version {0} d'OpenAPI n'est pas prise en charge.",
   "import.openapi.versionUntested": "La version {0} d'OpenAPI est plus récente que celles connues de Yaapic ; elle est lue comme la 3.1.",
+  "import.openapi.swaggerConverted": "Document Swagger 2.0 converti en OpenAPI 3 avant l'import.",
   "import.openapi.externalRef": "{0} : la référence externe \"{1}\" n'est pas suivie.",
   "import.openapi.brokenRef": "{0} : la référence \"{1}\" n'existe pas.",
   "import.openapi.refCycle": "{0} : la référence \"{1}\" est circulaire.",

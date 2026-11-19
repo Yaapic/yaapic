@@ -59,6 +59,10 @@ public sealed partial class OpenApiImporter(StructuredTextReader reader) : IImpo
         }
 
         CheckVersion(version, root["openapi"] is null, context.Report);
+        if (root["openapi"] is null)
+        {
+            root = SwaggerNormalizer.ToOpenApi3(root, context.Report);
+        }
 
         var info = root["info"];
         var name = ImportHelpers.SafeName(info?.GetString("title"), input.Name);
