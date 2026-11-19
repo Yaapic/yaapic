@@ -586,5 +586,10 @@
   "import.har.noUrl": "L'entrée {0} n'a pas d'URL et a été ignorée.",
   "import.har.fileField": "{0} : le fichier \"{2}\" du champ \"{1}\" n'est pas dans le HAR ; choisissez-le à nouveau avant l'envoi.",
   "import.har.responsesIgnored": "Les réponses, les durées et les cookies de {0} entrées n'ont pas été importés.",
-  "import.har.base64Body": "{0} : le corps est encodé en base64 et a été ignoré."
+  "import.har.base64Body": "{0} : le corps est encodé en base64 et a été ignoré.",
+  "import.har.skippedStatic": "{0} ressources statiques (images, polices, styles, médias) ont été ignorées.",
+  "import.har.skippedPreflight": "{0} requêtes CORS preflight ont été ignorées.",
+  "import.har.skippedSocket": "{0} entrées WebSocket ou flux d'événements ont été ignorées.",
+  "import.har.skippedDataUrl": "{0} URL data et blob ont été ignorées.",
+  "import.har.duplicates": "{0} requêtes en double ont été supprimées."
 }

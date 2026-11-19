@@ -721,6 +721,10 @@ public static class Strings
     /// <summary>HAR</summary>
     public static string ImportHarDisplayName => Localizer.Pick("HAR", "HAR");
 
+    /// <summary>{0} duplicate requests were removed.</summary>
+    public static string ImportHarDuplicates(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} duplicate requests were removed.", "{0} requêtes en double ont été supprimées."), a0);
+
     /// <summary>{0}: the file "{2}" of the field "{1}" is not in the HAR; choose it again before sending.</summary>
     public static string ImportHarFileField(object? a0, object? a1, object? a2) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the file \"{2}\" of the field \"{1}\" is not in the HAR; choose it again before sending.", "{0} : le fichier \"{2}\" du champ \"{1}\" n'est pas dans le HAR ; choisissez-le à nouveau avant l'envoi."), a0, a1, a2);
@@ -735,6 +739,22 @@ public static class Strings
     /// <summary>Responses, timings and cookies of {0} entries were not imported.</summary>
     public static string ImportHarResponsesIgnored(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Responses, timings and cookies of {0} entries were not imported.", "Les réponses, les durées et les cookies de {0} entrées n'ont pas été importés."), a0);
+
+    /// <summary>{0} data and blob URLs were skipped.</summary>
+    public static string ImportHarSkippedDataUrl(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} data and blob URLs were skipped.", "{0} URL data et blob ont été ignorées."), a0);
+
+    /// <summary>{0} CORS preflight requests were skipped.</summary>
+    public static string ImportHarSkippedPreflight(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} CORS preflight requests were skipped.", "{0} requêtes CORS preflight ont été ignorées."), a0);
+
+    /// <summary>{0} WebSocket or event stream entries were skipped.</summary>
+    public static string ImportHarSkippedSocket(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} WebSocket or event stream entries were skipped.", "{0} entrées WebSocket ou flux d'événements ont été ignorées."), a0);
+
+    /// <summary>{0} static resources (images, fonts, styles, media) were skipped.</summary>
+    public static string ImportHarSkippedStatic(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} static resources (images, fonts, styles, media) were skipped.", "{0} ressources statiques (images, polices, styles, médias) ont été ignorées."), a0);
 
     /// <summary>The file is not valid JSON: {0}</summary>
     public static string ImportInvalidJson(object? a0) =>

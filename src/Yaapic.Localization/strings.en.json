@@ -586,5 +586,10 @@
   "import.har.noUrl": "Entry {0} has no URL and was skipped.",
   "import.har.fileField": "{0}: the file \"{2}\" of the field \"{1}\" is not in the HAR; choose it again before sending.",
   "import.har.responsesIgnored": "Responses, timings and cookies of {0} entries were not imported.",
-  "import.har.base64Body": "{0}: the body is base64-encoded and was dropped."
+  "import.har.base64Body": "{0}: the body is base64-encoded and was dropped.",
+  "import.har.skippedStatic": "{0} static resources (images, fonts, styles, media) were skipped.",
+  "import.har.skippedPreflight": "{0} CORS preflight requests were skipped.",
+  "import.har.skippedSocket": "{0} WebSocket or event stream entries were skipped.",
+  "import.har.skippedDataUrl": "{0} data and blob URLs were skipped.",
+  "import.har.duplicates": "{0} duplicate requests were removed."
 }

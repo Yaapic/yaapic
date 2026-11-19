@@ -1,6 +1,6 @@
 # M5-26: Core: HAR import, static resources, preflights and duplicates
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-25
 
@@ -30,9 +30,9 @@ A UI toggle for `IncludeStaticResources` (M5-51 exposes it), filtering by domain
 
 ## Acceptance criteria
 
-- [ ] Tests: each skip reason with and without `_resourceType`; `IncludeStaticResources = true` keeps static ones but never preflights, sockets, data urls; a `script` and a `document` entry are kept; aggregated `Info` appears once per reason with the right count; duplicates (same request twice, same URL different body kept,
+- [x] Tests: each skip reason with and without `_resourceType`; `IncludeStaticResources = true` keeps static ones but never preflights, sockets, data urls; a `script` and a `document` entry are kept; aggregated `Info` appears once per reason with the right count; duplicates (same request twice, same URL different body kept,
   header order and value compared, header name case ignored); the source index used in a later `Skipped` message after filtered entries.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

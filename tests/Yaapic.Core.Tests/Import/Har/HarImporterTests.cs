@@ -204,4 +204,93 @@ public class HarImporterTests
         Assert.Equal(ImportSeverity.Info, info.Severity);
         Assert.Contains("2 entries", info.Message);
     }
+
+    private static string Typed(string url, string? type = null, string method = "GET", string headers = "", string? mime = null, string? post = null) =>
+        "{" + (type is null ? "" : "\"_resourceType\":\"" + type + "\",")
+        + "\"request\":{\"method\":\"" + method + "\",\"url\":\"" + url + "\",\"headers\":[" + headers + "]"
+        + (post is null ? "" : ",\"postData\":{\"mimeType\":\"text/plain\",\"text\":\"" + post + "\"}") + "}"
+        + (mime is null ? "" : ",\"response\":{\"content\":{\"mimeType\":\"" + mime + "\"}}") + "}";
+
+    private static int Count(ImportContext context, string fragment) =>
+        context.Report.Entries.Count(e => e.Severity == ImportSeverity.Info && e.Message.Contains(fragment, StringComparison.Ordinal));
+
+    [Theory]
+    [InlineData("stylesheet")]
+    [InlineData("image")]
+    [InlineData("media")]
+    [InlineData("font")]
+    [InlineData("texttrack")]
+    [InlineData("manifest")]
+    public void Static_resource_types_are_skipped(string type)
+    {
+        var bundle = Run(Har(Typed("https://a.test/x", type), Typed("https://a.test/x", "script"), Typed("https://a.test/y", "document")), out var context);
+
+        Assert.Equal(2, Requests(bundle).Count);
+        Assert.Equal(1, Count(context, "1 static resources"));
+    }
+
+    [Theory]
+    [InlineData("image/png")]
+    [InlineData("font/woff2")]
+    [InlineData("audio/mp3")]
+    [InlineData("video/mp4")]
+    [InlineData("text/css")]
+    public void Static_mime_without_resource_type_is_skipped(string mime)
+    {
+        var bundle = Run(Har(Typed("https://a.test/x", mime: mime), Typed("https://a.test/y", mime: "application/json")), out _);
+
+        Assert.Single(Requests(bundle));
+    }
+
+    [Fact]
+    public void Include_static_keeps_static_but_never_noise()
+    {
+        var context = new ImportContext(SequentialIds.Create(), ImportOptions.Default with { IncludeStaticResources = true });
+        var bundle = Importer.Import(
+            ImportInput.FromText("c", Har(
+                Typed("https://a.test/a.png", "image"),
+                Typed("https://a.test/p", method: "OPTIONS", headers: "{\"name\":\"access-control-request-method\",\"value\":\"POST\"}"),
+                Typed("https://a.test/s", "websocket"),
+                Typed("wss://a.test/s"),
+                Typed("data:text/plain,hi"),
+                Typed("blob:https://a.test/1"))),
+            context);
+
+        Assert.Single(Requests(bundle));
+        Assert.Equal(1, Count(context, "1 CORS preflight"));
+        Assert.Equal(1, Count(context, "2 WebSocket"));
+        Assert.Equal(1, Count(context, "2 data and blob"));
+        Assert.Equal(0, Count(context, "static resources"));
+    }
+
+    [Fact]
+    public void Options_without_preflight_header_is_kept()
+    {
+        var bundle = Run(Har(Typed("https://a.test/p", method: "OPTIONS")), out _);
+
+        Assert.Single(Requests(bundle));
+    }
+
+    [Fact]
+    public void Duplicates_are_removed_and_counted()
+    {
+        var bundle = Run(
+            Har(
+                Typed("https://a.test/x", post: "a", headers: "{\"name\":\"X\",\"value\":\"1\"}"),
+                Typed("https://a.test/x", post: "a", headers: "{\"name\":\"x\",\"value\":\"1\"}"),
+                Typed("https://a.test/x", post: "b", headers: "{\"name\":\"X\",\"value\":\"1\"}"),
+                Typed("https://a.test/x", post: "a", headers: "{\"name\":\"X\",\"value\":\"2\"}")),
+            out var context);
+
+        Assert.Equal(3, Requests(bundle).Count);
+        Assert.Equal(1, Count(context, "1 duplicate requests"));
+    }
+
+    [Fact]
+    public void Skipped_message_uses_the_source_index()
+    {
+        Run(Har(Typed("https://a.test/a.png", "image"), "{\"request\":{\"method\":\"GET\"}}"), out var context);
+
+        Assert.Contains(context.Report.Entries, e => e.Severity == ImportSeverity.Skipped && e.Path == "entries[1]");
+    }
 }
