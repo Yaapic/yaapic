@@ -767,6 +767,9 @@ public static class Strings
     public static string ImportOpenapiOtherMediaTypes(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: {1} other body formats were not imported.", "{0} : {1} autres formats de corps n'ont pas été importés."), a0, a1);
 
+    /// <summary>Only the first security requirement of each operation is imported.</summary>
+    public static string ImportOpenapiOtherSecurity => Localizer.Pick("Only the first security requirement of each operation is imported.", "Seule la première exigence de sécurité de chaque opération est importée.");
+
     /// <summary>{0}: the reference "{1}" is circular.</summary>
     public static string ImportOpenapiRefCycle(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" is circular.", "{0} : la référence \"{1}\" est circulaire."), a0, a1);
@@ -777,6 +780,14 @@ public static class Strings
 
     /// <summary>Some example bodies were cut because the schema is recursive or very large.</summary>
     public static string ImportOpenapiSampleTruncated => Localizer.Pick("Some example bodies were cut because the schema is recursive or very large.", "Certains corps d'exemple ont été coupés car le schéma est récursif ou très volumineux.");
+
+    /// <summary>Authentication values were replaced by empty variables (for example {0}); fill them in the collection variables.</summary>
+    public static string ImportOpenapiSecurityPlaceholders(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Authentication values were replaced by empty variables (for example {0}); fill them in the collection variables.", "Les valeurs d'authentification ont été remplacées par des variables vides (par exemple {0}) ; renseignez-les dans les variables de la collection."), a0);
+
+    /// <summary>{0}: the security scheme "{1}" is not defined.</summary>
+    public static string ImportOpenapiSecurityUnknown(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the security scheme \"{1}\" is not defined.", "{0} : le schéma de sécurité \"{1}\" n'est pas défini."), a0, a1);
 
     /// <summary>Server variable {0} has no default; the URL keeps the placeholder.</summary>
     public static string ImportOpenapiServerVariable(object? a0) =>

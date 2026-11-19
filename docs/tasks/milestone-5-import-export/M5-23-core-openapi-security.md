@@ -1,6 +1,6 @@
 # M5-23: Core: OpenAPI import, security schemes to authentication
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-20
 
@@ -36,9 +36,9 @@ Applying scopes per flow, mutual TLS schemes, OpenAPI 3.1 `mutualTLS`.
 
 ## Acceptance criteria
 
-- [ ] Tests: each row of the table with the exact `RequestAuth` and the variables created (names with a space or dash sanitized, created once even with 10 operations); operation `security: []` overrides the global; global security applies to operations without their own; scopes joined; OAuth flow order;
+- [x] Tests: each row of the table with the exact `RequestAuth` and the variables created (names with a space or dash sanitized, created once even with 10 operations); operation `security: []` overrides the global; global security applies to operations without their own; scopes joined; OAuth flow order;
   implicit-only warns; openIdConnect warns; unknown scheme warns; `apiKey` in cookie warns; the other-security `Info` once; no security at all gives `RequestAuth.None` and no variables.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -576,5 +576,8 @@
   "import.openapi.xmlSample": "{0}: no XML example could be generated from the schema.",
   "import.openapi.fileField": "{0}: the file field \"{1}\" has no path; choose a file before sending.",
   "import.openapi.binaryBody": "{0}: the binary body has no file; choose a file before sending.",
-  "import.openapi.otherMediaTypes": "{0}: {1} other body formats were not imported."
+  "import.openapi.otherMediaTypes": "{0}: {1} other body formats were not imported.",
+  "import.openapi.otherSecurity": "Only the first security requirement of each operation is imported.",
+  "import.openapi.securityUnknown": "{0}: the security scheme \"{1}\" is not defined.",
+  "import.openapi.securityPlaceholders": "Authentication values were replaced by empty variables (for example {0}); fill them in the collection variables."
 }

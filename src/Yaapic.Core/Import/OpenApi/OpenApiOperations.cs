@@ -21,6 +21,7 @@ internal sealed class OpenApiOperations(DataNode root, OpenApiRefResolver refs, 
     private readonly List<KeyValueEntry> _variables = [];
     private readonly List<ImportItem> _children = [];
     private readonly Dictionary<string, List<ImportItem>> _folders = new(StringComparer.Ordinal);
+    private readonly List<string> _authVariables = [];
     private int _cookies;
     private int _descriptions;
 
@@ -38,6 +39,12 @@ internal sealed class OpenApiOperations(DataNode root, OpenApiRefResolver refs, 
             {
                 ReadPathItem(path, value);
             }
+        }
+
+        if (_authVariables.Count > 0)
+        {
+            _variables.AddRange(_authVariables.Select(v => new KeyValueEntry(v, "")));
+            context.Report.Info("", Strings.ImportOpenapiSecurityPlaceholders("{{" + _authVariables[0] + "}}"));
         }
 
         if (_cookies > 0)
@@ -215,7 +222,7 @@ internal sealed class OpenApiOperations(DataNode root, OpenApiRefResolver refs, 
             query,
             headers,
             body,
-            RequestAuth.None,
+            OpenApiSecurity.Map(operation, root, refs, label, context.Report, _authVariables),
             RequestSettings.Default,
             ScriptSet.Empty);
         TargetFolder(operation).Add(new ImportRequest(request));

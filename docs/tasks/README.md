@@ -543,7 +543,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-20](milestone-5-import-export/M5-20-core-openapi-operations-and-parameters.md) | Core: OpenAPI import, operations, servers and parameters | any | M5-06, M5-19 | done |
 | [M5-21](milestone-5-import-export/M5-21-core-openapi-schema-examples.md) | Core: OpenAPI schema example generator | any | M5-19 | done |
 | [M5-22](milestone-5-import-export/M5-22-core-openapi-request-bodies.md) | Core: OpenAPI import, request bodies | any | M5-20, M5-21 | done |
-| [M5-23](milestone-5-import-export/M5-23-core-openapi-security.md) | Core: OpenAPI import, security schemes to authentication | any | M5-20 | todo |
+| [M5-23](milestone-5-import-export/M5-23-core-openapi-security.md) | Core: OpenAPI import, security schemes to authentication | any | M5-20 | done |
 | [M5-24](milestone-5-import-export/M5-24-core-swagger2-normalizer.md) | Core: Swagger 2.0 normalization | any | M5-19 | todo |
 | [M5-25](milestone-5-import-export/M5-25-core-har-entries.md) | Core: HAR import, entries to requests | any | M5-05, M5-06 | todo |
 | [M5-26](milestone-5-import-export/M5-26-core-har-filtering-and-duplicates.md) | Core: HAR import, static resources, preflights and duplicates | any | M5-25 | todo |
