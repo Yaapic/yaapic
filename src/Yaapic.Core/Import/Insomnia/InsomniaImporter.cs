@@ -74,7 +74,9 @@ public sealed class InsomniaImporter : IImporter
         var children = walk.ReadRoot(name);
         walk.Finish();
 
-        var folder = new FolderDefinition(context.NewId(), name, workspace?.GetString("description") ?? "", [], ScriptSet.Empty);
-        return new ImportBundle(new ImportFolder(folder, children), [], [], [], context.Report);
+        var folderId = context.NewId();
+        var (variables, environments) = InsomniaEnvironments.Read(resources.Items, workspace?.GetString("_id"), folderId, context, name);
+        var folder = new FolderDefinition(folderId, name, workspace?.GetString("description") ?? "", variables, ScriptSet.Empty);
+        return new ImportBundle(new ImportFolder(folder, children), [], environments, [], context.Report);
     }
 }

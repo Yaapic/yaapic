@@ -1,6 +1,6 @@
 # M5-29: Core: Insomnia import, environments
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-27, M5-28
 
@@ -26,9 +26,9 @@ Insomnia vault, `isPrivate` handling, cookie jars.
 
 ## Acceptance criteria
 
-- [ ] Tests: base environment variables land in the collection folder (exact rows, including a flattened `api.host`, a number, a boolean, null, an array as JSON, a template string translated); two sub environments scoped to the collection id in order; two base environments merged with a replaced key; an orphan environment attached;
+- [x] Tests: base environment variables land in the collection folder (exact rows, including a flattened `api.host`, a number, a boolean, null, an array as JSON, a template string translated); two sub environments scoped to the collection id in order; two base environments merged with a replaced key; an orphan environment attached;
   empty `data`; depth-5 object written as JSON at the limit; the importer end to end on a small export with workspace, folder, request, base and sub environment.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
