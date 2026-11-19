@@ -1,6 +1,6 @@
 # M5-21: Core: OpenAPI schema example generator
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-19
 
@@ -31,9 +31,9 @@ Choosing a body or content type (M5-22), `pattern` regex generation, `xml` objec
 
 ## Acceptance criteria
 
-- [ ] Tests: each rule with an exact `DataNodeJson.Write(compact)` expectation: example/default/enum/const priority; objects with nested arrays; `readOnly` omitted; every string format; `minLength` padding; integer `minimum`; allOf merge with a replaced key; oneOf; 3.1 `type: ["string","null"]`; schema through `$ref`;
+- [x] Tests: each rule with an exact `DataNodeJson.Write(compact)` expectation: example/default/enum/const priority; objects with nested arrays; `readOnly` omitted; every string format; `minLength` padding; integer `minimum`; allOf merge with a replaced key; oneOf; 3.1 `type: ["string","null"]`; schema through `$ref`;
   a self-referencing schema stops with `null` and adds the `Info` once; depth 7 cut; the node cap on a wide array of objects schema; missing schema.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -763,6 +763,9 @@ public static class Strings
     public static string ImportOpenapiRelativeServer(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The server URL \"{0}\" is relative: set the baseUrl variable of the collection before sending.", "L'URL de serveur \"{0}\" est relative : renseignez la variable baseUrl de la collection avant d'envoyer."), a0);
 
+    /// <summary>Some example bodies were cut because the schema is recursive or very large.</summary>
+    public static string ImportOpenapiSampleTruncated => Localizer.Pick("Some example bodies were cut because the schema is recursive or very large.", "Certains corps d'exemple ont été coupés car le schéma est récursif ou très volumineux.");
+
     /// <summary>Server variable {0} has no default; the URL keeps the placeholder.</summary>
     public static string ImportOpenapiServerVariable(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Server variable {0} has no default; the URL keeps the placeholder.", "La variable de serveur {0} n'a pas de valeur par défaut ; l'URL garde le marqueur."), a0);

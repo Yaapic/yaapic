@@ -571,5 +571,6 @@
   "import.openapi.relativeServer": "The server URL \"{0}\" is relative: set the baseUrl variable of the collection before sending.",
   "import.openapi.localServers": "Servers declared on paths or operations are ignored; the first global server is used.",
   "import.openapi.cookiesIgnored": "{0} cookie parameters were ignored.",
-  "import.openapi.deprecated": "{0} is marked deprecated in the source."
+  "import.openapi.deprecated": "{0} is marked deprecated in the source.",
+  "import.openapi.sampleTruncated": "Some example bodies were cut because the schema is recursive or very large."
 }
