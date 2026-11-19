@@ -1,6 +1,6 @@
 # M5-33: Core: Bruno import, collection structure and auth inheritance
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-32
 
@@ -31,9 +31,9 @@ Scripts, variables (M5-34), environments (M5-35), OpenCollection YAML.
 
 ## Acceptance criteria
 
-- [ ] Tests with in-memory `ImportInput` files: a collection with `bruno.json`, two nested folders with `folder.bru` names, requests; folder name fallback to the directory name; a directory with no requests omitted; `ignore` honoured; header inheritance from collection and folder with a replaced header and the `Info` count;
+- [x] Tests with in-memory `ImportInput` files: a collection with `bruno.json`, two nested folders with `folder.bru` names, requests; folder name fallback to the directory name; a directory with no requests omitted; `ignore` honoured; header inheritance from collection and folder with a replaced header and the `Info` count;
   auth inheritance (folder over collection, request override, transparent folder) with exact `RequestAuth`; unparsable request skipped and the rest imported; a single `.bru` file imports as one unfiled request; no `bruno.json` uses the input name; sniff cases; `seq` order `Info`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

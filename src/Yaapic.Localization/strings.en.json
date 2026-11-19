@@ -604,5 +604,7 @@
   "import.bruno.processEnv": "{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.",
   "import.bruno.graphQl": "A GraphQL body was converted to a JSON body.",
   "import.bruno.bodyModeUnsupported": "{0}: the body mode \"{1}\" is not supported; the request has no body.",
-  "import.bruno.assertDropped": "{0} assertion blocks (assert) were not imported."
+  "import.bruno.assertDropped": "{0} assertion blocks (assert) were not imported.",
+  "import.bruno.displayName": "Bruno collection",
+  "import.bruno.headersInherited": "{0} requests got the headers of their folder or collection copied onto them."
 }

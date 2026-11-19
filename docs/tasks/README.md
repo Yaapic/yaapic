@@ -553,7 +553,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-30](milestone-5-import-export/M5-30-insomnia-5-yaml-import.md) | Insomnia 5 YAML import | any | M5-07, M5-27 | blocked |
 | [M5-31](milestone-5-import-export/M5-31-core-bru-block-parser.md) | Core: Bruno `.bru` block parser | any | M5-04 | done |
 | [M5-32](milestone-5-import-export/M5-32-core-bruno-requests.md) | Core: Bruno import, request files | any | M5-06, M5-31 | done |
-| [M5-33](milestone-5-import-export/M5-33-core-bruno-collection-structure.md) | Core: Bruno import, collection structure and auth inheritance | any | M5-32 | todo |
+| [M5-33](milestone-5-import-export/M5-33-core-bruno-collection-structure.md) | Core: Bruno import, collection structure and auth inheritance | any | M5-32 | done |
 | [M5-34](milestone-5-import-export/M5-34-core-bruno-scripts-vars-and-tests.md) | Core: Bruno import, scripts, variables and tests | any | M5-33 | todo |
 | [M5-35](milestone-5-import-export/M5-35-core-bruno-environments.md) | Core: Bruno import, environments | any | M5-31, M5-33 | todo |
 | [M5-36](milestone-5-import-export/M5-36-core-export-model-and-source-reader.md) | Core: export model, contract, registry and source reader | any | M5-04 | todo |

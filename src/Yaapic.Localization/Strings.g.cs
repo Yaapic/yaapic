@@ -654,8 +654,15 @@ public static class Strings
     public static string ImportBrunoBodyModeUnsupported(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the body mode \"{1}\" is not supported; the request has no body.", "{0} : le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps."), a0, a1);
 
+    /// <summary>Bruno collection</summary>
+    public static string ImportBrunoDisplayName => Localizer.Pick("Bruno collection", "Collection Bruno");
+
     /// <summary>A GraphQL body was converted to a JSON body.</summary>
     public static string ImportBrunoGraphQl => Localizer.Pick("A GraphQL body was converted to a JSON body.", "Un corps GraphQL a été converti en corps JSON.");
+
+    /// <summary>{0} requests got the headers of their folder or collection copied onto them.</summary>
+    public static string ImportBrunoHeadersInherited(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests got the headers of their folder or collection copied onto them.", "{0} requêtes ont reçu une copie des en-têtes de leur dossier ou de leur collection."), a0);
 
     /// <summary>{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.</summary>
     public static string ImportBrunoProcessEnv => Localizer.Pick("{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.", "Les variables {{process.env.*}} n'existent pas dans Yaapic ; définissez-les plutôt comme variables d'environnement.");

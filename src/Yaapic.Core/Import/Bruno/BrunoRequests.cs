@@ -1,7 +1,6 @@
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
-using Yaapic.Core.Import.Insomnia;
 using Yaapic.Domain.Collections;
 using Yaapic.Domain.Http;
 using Yaapic.Localization;
@@ -76,7 +75,7 @@ internal static class BrunoRequests
         var url = ImportHelpers.SubstitutePathVariables(baseUrl, pathValues);
         var headers = Entries(file.Get("headers"));
         var body = ReadBody(file, Value(verbBlock, "body"), path, report, headers);
-        var auth = ReadAuth(file, Value(verbBlock, "auth"), path, report, out authMode);
+        var auth = BrunoAuth.Map(file, Value(verbBlock, "auth"), path, report, out authMode);
 
         if (file.Blocks.Where(b => !IsCode(b.Name)).Any(Mentions))
         {
@@ -243,100 +242,5 @@ internal static class BrunoRequests
         {
             return false;
         }
-    }
-
-    private static RequestAuth ReadAuth(BruFile file, string? mode, string path, ImportReport report, out BruAuthMode authMode)
-    {
-        authMode = BruAuthMode.None;
-        if (mode is null or "" or "none")
-        {
-            return RequestAuth.None;
-        }
-
-        if (mode == "inherit")
-        {
-            authMode = BruAuthMode.Inherit;
-            return RequestAuth.None;
-        }
-
-        var block = file.Get("auth:" + mode);
-        string S(string key) => Value(block, key) ?? "";
-
-        RequestAuth? mapped = mode switch
-        {
-            "basic" => RequestAuth.None with { Kind = AuthKind.Basic, Username = S("username"), Password = S("password") },
-            "digest" => RequestAuth.None with { Kind = AuthKind.Digest, Username = S("username"), Password = S("password") },
-            "bearer" => RequestAuth.None with { Kind = AuthKind.Bearer, Token = S("token") },
-            "awsv4" => RequestAuth.None with
-            {
-                Kind = AuthKind.AwsV4,
-                AwsV4 = new AwsV4Settings(S("accessKeyId"), S("secretAccessKey"), S("sessionToken"), S("region"), S("service")),
-            },
-            "apikey" => RequestAuth.None with
-            {
-                Kind = AuthKind.ApiKey,
-                Key = S("key"),
-                Value = S("value"),
-                Location = S("placement") == "queryparams" ? ApiKeyLocation.Query : ApiKeyLocation.Header,
-            },
-            "oauth2" => OAuth2(S, path, report),
-            _ => null,
-        };
-
-        if (mapped is null)
-        {
-            if (mode != "oauth2")
-            {
-                report.Warning(path, Strings.ImportAuthUnsupported(path, mode));
-            }
-
-            return RequestAuth.None;
-        }
-
-        authMode = BruAuthMode.Mapped;
-        if (InsomniaAuth.HasLiteralCredential(mapped))
-        {
-            report.AddOnce(ImportSeverity.Info, "", Strings.ImportAuthPlainText);
-        }
-
-        return mapped;
-    }
-
-    private static RequestAuth? OAuth2(Func<string, string> s, string path, ImportReport report)
-    {
-        var grantName = s("grant_type");
-        OAuth2Grant? grant = grantName switch
-        {
-            "client_credentials" => OAuth2Grant.ClientCredentials,
-            "authorization_code" => OAuth2Grant.AuthorizationCode,
-            "password" => OAuth2Grant.Password,
-            _ => null,
-        };
-        if (grant is null)
-        {
-            report.Warning(path, Strings.ImportAuthUnsupported(path, "oauth2 " + grantName));
-            return null;
-        }
-
-        var d = OAuth2Settings.Default;
-        return RequestAuth.None with
-        {
-            Kind = AuthKind.OAuth2,
-            OAuth2 = new OAuth2Settings(
-                grant.Value,
-                s("access_token_url"),
-                s("authorization_url"),
-                s("client_id"),
-                s("client_secret"),
-                s("scope"),
-                "",
-                s("username"),
-                s("password"),
-                s("callback_url"),
-                s("credentials_placement") == "body" ? OAuth2ClientAuthentication.RequestBody : OAuth2ClientAuthentication.BasicHeader,
-                s("token_placement") == "query" ? OAuth2TokenPlacement.Query : OAuth2TokenPlacement.Header,
-                s("token_header_prefix") is { Length: > 0 } prefix ? prefix : d.HeaderPrefix,
-                s("token_query_key") is { Length: > 0 } key ? key : d.QueryParameterName),
-        };
     }
 }
