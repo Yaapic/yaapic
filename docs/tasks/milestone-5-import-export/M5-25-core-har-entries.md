@@ -1,6 +1,6 @@
 # M5-25: Core: HAR import, entries to requests
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05, M5-06
 
@@ -33,9 +33,9 @@ Filtering and duplicates (M5-26), importing responses.
 
 ## Acceptance criteria
 
-- [ ] Tests with inline HAR JSON: sniff; two entries with GET and POST JSON (exact requests, header filtering of `Host`, `Content-Length`, `:authority`, `Accept-Encoding`, kept `Cookie` and `User-Agent`); urlencoded with `params` and from `text`; multipart with a file field and the dropped content-type; raw XML;
+- [x] Tests with inline HAR JSON: sniff; two entries with GET and POST JSON (exact requests, header filtering of `Host`, `Content-Length`, `:authority`, `Accept-Encoding`, kept `Cookie` and `User-Agent`); urlencoded with `params` and from `text`; multipart with a file field and the dropped content-type; raw XML;
   an exotic mimeType adds the header; a missing url skipped with its index; `TRACE` skipped; query params split; not a HAR throws; an empty entries array gives the folder only; the responses `Info` count; names via `DescribeRequest`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

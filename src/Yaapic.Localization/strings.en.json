@@ -580,5 +580,11 @@
   "import.openapi.otherMediaTypes": "{0}: {1} other body formats were not imported.",
   "import.openapi.otherSecurity": "Only the first security requirement of each operation is imported.",
   "import.openapi.securityUnknown": "{0}: the security scheme \"{1}\" is not defined.",
-  "import.openapi.securityPlaceholders": "Authentication values were replaced by empty variables (for example {0}); fill them in the collection variables."
+  "import.openapi.securityPlaceholders": "Authentication values were replaced by empty variables (for example {0}); fill them in the collection variables.",
+  "import.har.displayName": "HAR",
+  "import.har.notAHar": "This file is not a HAR file (no \"log.entries\").",
+  "import.har.noUrl": "Entry {0} has no URL and was skipped.",
+  "import.har.fileField": "{0}: the file \"{2}\" of the field \"{1}\" is not in the HAR; choose it again before sending.",
+  "import.har.responsesIgnored": "Responses, timings and cookies of {0} entries were not imported.",
+  "import.har.base64Body": "{0}: the body is base64-encoded and was dropped."
 }

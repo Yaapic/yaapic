@@ -714,6 +714,28 @@ public static class Strings
     public static string ImportGlobalsSkipped(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} global variables already exist and were left unchanged.", "{0} variables globales existent déjà et n'ont pas été modifiées."), a0);
 
+    /// <summary>{0}: the body is base64-encoded and was dropped.</summary>
+    public static string ImportHarBase64Body(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the body is base64-encoded and was dropped.", "{0} : le corps est encodé en base64 et a été ignoré."), a0);
+
+    /// <summary>HAR</summary>
+    public static string ImportHarDisplayName => Localizer.Pick("HAR", "HAR");
+
+    /// <summary>{0}: the file "{2}" of the field "{1}" is not in the HAR; choose it again before sending.</summary>
+    public static string ImportHarFileField(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the file \"{2}\" of the field \"{1}\" is not in the HAR; choose it again before sending.", "{0} : le fichier \"{2}\" du champ \"{1}\" n'est pas dans le HAR ; choisissez-le à nouveau avant l'envoi."), a0, a1, a2);
+
+    /// <summary>Entry {0} has no URL and was skipped.</summary>
+    public static string ImportHarNoUrl(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Entry {0} has no URL and was skipped.", "L'entrée {0} n'a pas d'URL et a été ignorée."), a0);
+
+    /// <summary>This file is not a HAR file (no "log.entries").</summary>
+    public static string ImportHarNotAHar => Localizer.Pick("This file is not a HAR file (no \"log.entries\").", "Ce fichier n'est pas un fichier HAR (pas de \"log.entries\").");
+
+    /// <summary>Responses, timings and cookies of {0} entries were not imported.</summary>
+    public static string ImportHarResponsesIgnored(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Responses, timings and cookies of {0} entries were not imported.", "Les réponses, les durées et les cookies de {0} entrées n'ont pas été importés."), a0);
+
     /// <summary>The file is not valid JSON: {0}</summary>
     public static string ImportInvalidJson(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid JSON: {0}", "Le fichier n'est pas du JSON valide : {0}"), a0);
