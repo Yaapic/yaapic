@@ -756,6 +756,32 @@ public static class Strings
     public static string ImportHarSkippedStatic(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} static resources (images, fonts, styles, media) were skipped.", "{0} ressources statiques (images, polices, styles, médias) ont été ignorées."), a0);
 
+    /// <summary>Insomnia</summary>
+    public static string ImportInsomniaDisplayName => Localizer.Pick("Insomnia", "Insomnia");
+
+    /// <summary>{0} cookie jars, API specs and test suites were ignored.</summary>
+    public static string ImportInsomniaIgnoredTypes(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} cookie jars, API specs and test suites were ignored.", "{0} jars de cookies, spécifications d'API et suites de tests ont été ignorés."), a0);
+
+    /// <summary>This file is not an Insomnia export (no "resources").</summary>
+    public static string ImportInsomniaNotAnExport => Localizer.Pick("This file is not an Insomnia export (no \"resources\").", "Ce fichier n'est pas un export Insomnia (pas de \"resources\").");
+
+    /// <summary>{0} other workspaces were not imported; export them separately.</summary>
+    public static string ImportInsomniaOtherWorkspaces(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} other workspaces were not imported; export them separately.", "{0} autres espaces de travail n'ont pas été importés ; exportez-les séparément."), a0);
+
+    /// <summary>{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide.</summary>
+    public static string ImportInsomniaScripts(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide.", "{0} scripts Insomnia n'ont pas été importés : ils utilisent l'API insomnia, que Yaapic ne fournit pas."), a0);
+
+    /// <summary>{0} gRPC and WebSocket requests are not supported yet.</summary>
+    public static string ImportInsomniaUnsupportedTypes(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} gRPC and WebSocket requests are not supported yet.", "{0} requêtes gRPC et WebSocket ne sont pas encore prises en charge."), a0);
+
+    /// <summary>Insomnia export format {0} is not supported (3 and 4 are).</summary>
+    public static string ImportInsomniaVersion(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Insomnia export format {0} is not supported (3 and 4 are).", "Le format d'export Insomnia {0} n'est pas pris en charge (3 et 4 le sont)."), a0);
+
     /// <summary>The file is not valid JSON: {0}</summary>
     public static string ImportInvalidJson(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid JSON: {0}", "Le fichier n'est pas du JSON valide : {0}"), a0);

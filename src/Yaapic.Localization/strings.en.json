@@ -591,5 +591,12 @@
   "import.har.skippedPreflight": "{0} CORS preflight requests were skipped.",
   "import.har.skippedSocket": "{0} WebSocket or event stream entries were skipped.",
   "import.har.skippedDataUrl": "{0} data and blob URLs were skipped.",
-  "import.har.duplicates": "{0} duplicate requests were removed."
+  "import.har.duplicates": "{0} duplicate requests were removed.",
+  "import.insomnia.displayName": "Insomnia",
+  "import.insomnia.version": "Insomnia export format {0} is not supported (3 and 4 are).",
+  "import.insomnia.notAnExport": "This file is not an Insomnia export (no \"resources\").",
+  "import.insomnia.otherWorkspaces": "{0} other workspaces were not imported; export them separately.",
+  "import.insomnia.unsupportedTypes": "{0} gRPC and WebSocket requests are not supported yet.",
+  "import.insomnia.ignoredTypes": "{0} cookie jars, API specs and test suites were ignored.",
+  "import.insomnia.scripts": "{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide."
 }

@@ -1,6 +1,6 @@
 # M5-27: Core: Insomnia v4 import, workspace, folders, requests and bodies
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05, M5-06
 
@@ -38,10 +38,14 @@ Auth and template tags (M5-28), environments (M5-29), Insomnia 5 (blocked M5-30)
 
 ## Acceptance criteria
 
-- [ ] Tests with inline JSON: sniff; workspace and two folder levels; request with `parameters` on a URL that also has a query; disabled header and param; each body mimeType; multipart with file; octet-stream; graphql; unknown mime with header added; redirect settings; unsupported method; grpc request aggregated entry; unknown parent attaches to the collection;
+- [x] Tests with inline JSON: sniff; workspace and two folder levels; request with `parameters` on a URL that also has a query; disabled header and param; each body mimeType; multipart with file; octet-stream; graphql; unknown mime with header added; redirect settings; unsupported method; grpc request aggregated entry; unknown parent attaches to the collection;
   a version 2 export throws; two workspaces; scripts warning; ignored types `Info`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
 `feat(core): import Insomnia folders, requests and bodies`
+
+## Notes
+
+No real Insomnia export was available: fixtures are written by hand from the card.

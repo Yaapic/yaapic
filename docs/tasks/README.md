@@ -547,7 +547,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-24](milestone-5-import-export/M5-24-core-swagger2-normalizer.md) | Core: Swagger 2.0 normalization | any | M5-19 | done |
 | [M5-25](milestone-5-import-export/M5-25-core-har-entries.md) | Core: HAR import, entries to requests | any | M5-05, M5-06 | done |
 | [M5-26](milestone-5-import-export/M5-26-core-har-filtering-and-duplicates.md) | Core: HAR import, static resources, preflights and duplicates | any | M5-25 | done |
-| [M5-27](milestone-5-import-export/M5-27-core-insomnia-requests.md) | Core: Insomnia v4 import, workspace, folders, requests and bodies | any | M5-05, M5-06 | todo |
+| [M5-27](milestone-5-import-export/M5-27-core-insomnia-requests.md) | Core: Insomnia v4 import, workspace, folders, requests and bodies | any | M5-05, M5-06 | done |
 | [M5-28](milestone-5-import-export/M5-28-core-insomnia-auth-and-template-tags.md) | Core: Insomnia import, authentication and template tags | any | M5-27 | todo |
 | [M5-29](milestone-5-import-export/M5-29-core-insomnia-environments.md) | Core: Insomnia import, environments | any | M5-27, M5-28 | todo |
 | [M5-30](milestone-5-import-export/M5-30-insomnia-5-yaml-import.md) | Insomnia 5 YAML import | any | M5-07, M5-27 | blocked |
