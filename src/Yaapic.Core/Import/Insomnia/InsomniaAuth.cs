@@ -117,7 +117,7 @@ internal static class InsomniaAuth
         };
     }
 
-    private static bool HasLiteralCredential(RequestAuth a) =>
+    internal static bool HasLiteralCredential(RequestAuth a) =>
         new[]
         {
             a.Username, a.Password, a.Token, a.Value,

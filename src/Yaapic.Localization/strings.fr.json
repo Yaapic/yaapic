@@ -599,5 +599,10 @@
   "import.insomnia.unsupportedTypes": "{0} requêtes gRPC et WebSocket ne sont pas encore prises en charge.",
   "import.insomnia.ignoredTypes": "{0} jars de cookies, spécifications d'API et suites de tests ont été ignorés.",
   "import.insomnia.scripts": "{0} scripts Insomnia n'ont pas été importés : ils utilisent l'API insomnia, que Yaapic ne fournit pas.",
-  "import.insomnia.templateTag": "Le modèle Insomnia \"{0}\" n'a pas d'équivalent dans Yaapic et a été laissé tel quel."
+  "import.insomnia.templateTag": "Le modèle Insomnia \"{0}\" n'a pas d'équivalent dans Yaapic et a été laissé tel quel.",
+  "import.bruno.typeUnsupported": "{0} : les requêtes de type \"{1}\" ne sont pas encore prises en charge.",
+  "import.bruno.processEnv": "Les variables {{process.env.*}} n'existent pas dans Yaapic ; définissez-les plutôt comme variables d'environnement.",
+  "import.bruno.graphQl": "Un corps GraphQL a été converti en corps JSON.",
+  "import.bruno.bodyModeUnsupported": "{0} : le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps.",
+  "import.bruno.assertDropped": "{0} blocs d'assertions (assert) n'ont pas été importés."
 }

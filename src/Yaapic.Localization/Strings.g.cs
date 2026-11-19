@@ -646,6 +646,24 @@ public static class Strings
     public static string ImportAuthUnsupported(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Authentication type \"{1}\" is not supported; the request was imported without authentication.", "Le type d'authentification \"{1}\" n'est pas pris en charge ; la requête a été importée sans authentification."), a0, a1);
 
+    /// <summary>{0} assertion blocks (assert) were not imported.</summary>
+    public static string ImportBrunoAssertDropped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} assertion blocks (assert) were not imported.", "{0} blocs d'assertions (assert) n'ont pas été importés."), a0);
+
+    /// <summary>{0}: the body mode "{1}" is not supported; the request has no body.</summary>
+    public static string ImportBrunoBodyModeUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the body mode \"{1}\" is not supported; the request has no body.", "{0} : le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps."), a0, a1);
+
+    /// <summary>A GraphQL body was converted to a JSON body.</summary>
+    public static string ImportBrunoGraphQl => Localizer.Pick("A GraphQL body was converted to a JSON body.", "Un corps GraphQL a été converti en corps JSON.");
+
+    /// <summary>{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.</summary>
+    public static string ImportBrunoProcessEnv => Localizer.Pick("{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.", "Les variables {{process.env.*}} n'existent pas dans Yaapic ; définissez-les plutôt comme variables d'environnement.");
+
+    /// <summary>{0}: requests of type "{1}" are not supported yet.</summary>
+    public static string ImportBrunoTypeUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: requests of type \"{1}\" are not supported yet.", "{0} : les requêtes de type \"{1}\" ne sont pas encore prises en charge."), a0, a1);
+
     /// <summary>This looks like the Windows cmd form of cURL. Copy the command as "cURL (bash)" and paste it again.</summary>
     public static string ImportCurlCmdSyntax => Localizer.Pick("This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again.", "Cette commande ressemble à la forme cmd de Windows de cURL. Copiez-la au format \"cURL (bash)\" puis collez-la à nouveau.");
 

@@ -599,5 +599,10 @@
   "import.insomnia.unsupportedTypes": "{0} gRPC and WebSocket requests are not supported yet.",
   "import.insomnia.ignoredTypes": "{0} cookie jars, API specs and test suites were ignored.",
   "import.insomnia.scripts": "{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide.",
-  "import.insomnia.templateTag": "The Insomnia template \"{0}\" has no Yaapic equivalent and was left as written."
+  "import.insomnia.templateTag": "The Insomnia template \"{0}\" has no Yaapic equivalent and was left as written.",
+  "import.bruno.typeUnsupported": "{0}: requests of type \"{1}\" are not supported yet.",
+  "import.bruno.processEnv": "{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.",
+  "import.bruno.graphQl": "A GraphQL body was converted to a JSON body.",
+  "import.bruno.bodyModeUnsupported": "{0}: the body mode \"{1}\" is not supported; the request has no body.",
+  "import.bruno.assertDropped": "{0} assertion blocks (assert) were not imported."
 }

@@ -1,6 +1,6 @@
 # M5-32: Core: Bruno import, request files
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-06, M5-31
 
@@ -53,9 +53,9 @@ Collection and folder files, inheritance (M5-33), scripts, variables, environmen
 
 ## Acceptance criteria
 
-- [ ] Tests (parse a Bru text, then map): the sample request of M5-31 with exact result; each verb; unsupported verb; each body mode with exact body (json, text, xml, sparql with header, graphql with and without vars, form-urlencoded with a disabled pair, multipart with `@file(...)`, file, none, unknown mode);
+- [x] Tests (parse a Bru text, then map): the sample request of M5-31 with exact result; each verb; unsupported verb; each body mode with exact body (json, text, xml, sparql with header, graphql with and without vars, form-urlencoded with a disabled pair, multipart with `@file(...)`, file, none, unknown mode);
   `params:query` overriding a URL query; `params:path` substitution and a missing path value; `process.env` warned once; each auth mode of the table with exact `RequestAuth`; `inherit` returns `authMode = Inherit`; `meta.type: grpc` skipped; graphql `meta.type` accepted; the assert and docs entries; name fallback.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
