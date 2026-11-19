@@ -1,6 +1,6 @@
 # M5-28: Core: Insomnia import, authentication and template tags
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-27
 
@@ -32,9 +32,9 @@ Environments (M5-29), scripts.
 
 ## Acceptance criteria
 
-- [ ] Tests: each auth type of the table with exact `RequestAuth`; disabled auth; empty type; unsupported grant and `ntlm` warn; bearer prefix warning; template conversions (`_.name`, `_['name']`, nested, spacing variants, `uuid`, `now` formats, `response` tag warned once per distinct tag, plain text unchanged);
+- [x] Tests: each auth type of the table with exact `RequestAuth`; disabled auth; empty type; unsupported grant and `ntlm` warn; bearer prefix warning; template conversions (`_.name`, `_['name']`, nested, spacing variants, `uuid`, `now` formats, `response` tag warned once per distinct tag, plain text unchanged);
   a request with `{{ _.baseUrl }}/users` imports as `{{baseUrl}}/users`; the plain-text `Info` appears once and not for `{{token}}` values.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

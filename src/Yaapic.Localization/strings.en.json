@@ -598,5 +598,6 @@
   "import.insomnia.otherWorkspaces": "{0} other workspaces were not imported; export them separately.",
   "import.insomnia.unsupportedTypes": "{0} gRPC and WebSocket requests are not supported yet.",
   "import.insomnia.ignoredTypes": "{0} cookie jars, API specs and test suites were ignored.",
-  "import.insomnia.scripts": "{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide."
+  "import.insomnia.scripts": "{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide.",
+  "import.insomnia.templateTag": "The Insomnia template \"{0}\" has no Yaapic equivalent and was left as written."
 }

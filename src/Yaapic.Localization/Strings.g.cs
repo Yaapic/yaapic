@@ -774,6 +774,10 @@ public static class Strings
     public static string ImportInsomniaScripts(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide.", "{0} scripts Insomnia n'ont pas été importés : ils utilisent l'API insomnia, que Yaapic ne fournit pas."), a0);
 
+    /// <summary>The Insomnia template "{0}" has no Yaapic equivalent and was left as written.</summary>
+    public static string ImportInsomniaTemplateTag(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The Insomnia template \"{0}\" has no Yaapic equivalent and was left as written.", "Le modèle Insomnia \"{0}\" n'a pas d'équivalent dans Yaapic et a été laissé tel quel."), a0);
+
     /// <summary>{0} gRPC and WebSocket requests are not supported yet.</summary>
     public static string ImportInsomniaUnsupportedTypes(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} gRPC and WebSocket requests are not supported yet.", "{0} requêtes gRPC et WebSocket ne sont pas encore prises en charge."), a0);

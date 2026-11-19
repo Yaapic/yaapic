@@ -598,5 +598,6 @@
   "import.insomnia.otherWorkspaces": "{0} autres espaces de travail n'ont pas été importés ; exportez-les séparément.",
   "import.insomnia.unsupportedTypes": "{0} requêtes gRPC et WebSocket ne sont pas encore prises en charge.",
   "import.insomnia.ignoredTypes": "{0} jars de cookies, spécifications d'API et suites de tests ont été ignorés.",
-  "import.insomnia.scripts": "{0} scripts Insomnia n'ont pas été importés : ils utilisent l'API insomnia, que Yaapic ne fournit pas."
+  "import.insomnia.scripts": "{0} scripts Insomnia n'ont pas été importés : ils utilisent l'API insomnia, que Yaapic ne fournit pas.",
+  "import.insomnia.templateTag": "Le modèle Insomnia \"{0}\" n'a pas d'équivalent dans Yaapic et a été laissé tel quel."
 }

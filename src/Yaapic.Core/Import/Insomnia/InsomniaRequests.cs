@@ -61,9 +61,11 @@ internal sealed class InsomniaRequests
 
     private static string Type(DataNode resource) => resource.GetString("_type") ?? "";
 
-    private static List<KeyValueEntry> Entries(DataNode? node) =>
+    private string T(string? text, string path) => InsomniaTemplates.Translate(text ?? "", path, _context.Report);
+
+    private List<KeyValueEntry> Entries(DataNode? node, string path) =>
         [.. (node?.Items ?? [])
-            .Select(h => new KeyValueEntry(h.GetString("name") ?? "", h.GetString("value") ?? "", h.GetBool("disabled") != true))
+            .Select(h => new KeyValueEntry(T(h.GetString("name"), path), T(h.GetString("value"), path), h.GetBool("disabled") != true))
             .Where(e => e.Key.Length > 0 || e.Value.Length > 0)];
 
     private void CountOtherTypes()
@@ -126,9 +128,9 @@ internal sealed class InsomniaRequests
             return null;
         }
 
-        var (url, query) = ImportHelpers.SplitUrl(node.GetString("url") ?? "");
-        List<KeyValueEntry> entries = [.. query, .. Entries(node["parameters"])];
-        var headers = Entries(node["headers"]);
+        var (url, query) = ImportHelpers.SplitUrl(T(node.GetString("url"), path));
+        List<KeyValueEntry> entries = [.. query, .. Entries(node["parameters"], path)];
+        var headers = Entries(node["headers"], path);
         var body = ReadBody(node["body"], path, headers);
 
         if (!string.IsNullOrEmpty(node.GetString("description")))
@@ -148,7 +150,7 @@ internal sealed class InsomniaRequests
             entries,
             headers,
             body,
-            RequestAuth.None,
+            InsomniaAuth.Map(node["authentication"], path, _context.Report),
             settings);
     }
 
@@ -161,11 +163,11 @@ internal sealed class InsomniaRequests
 
         var mimeText = body.GetString("mimeType") ?? "";
         var mime = mimeText.Split(';')[0].Trim().ToLowerInvariant();
-        var text = body.GetString("text");
+        var text = body.GetString("text") is { } raw ? T(raw, path) : null;
         switch (mime)
         {
             case "application/x-www-form-urlencoded":
-                return RequestBody.UrlEncoded([.. Entries(body["params"]).Select(e => new FormField(e.Key, e.Value, e.Enabled))]);
+                return RequestBody.UrlEncoded([.. Entries(body["params"], path).Select(e => new FormField(e.Key, e.Value, e.Enabled))]);
             case "multipart/form-data":
                 return RequestBody.FormData(FormData(body["params"], path));
             case "application/octet-stream" when body.GetString("fileName") is { Length: > 0 } file:
@@ -201,7 +203,7 @@ internal sealed class InsomniaRequests
         List<FormField> fields = [];
         foreach (var p in parameters?.Items ?? [])
         {
-            var key = p.GetString("name") ?? "";
+            var key = T(p.GetString("name"), path);
             var enabled = p.GetBool("disabled") != true;
             if (p.GetString("type") == "file")
             {
@@ -211,7 +213,7 @@ internal sealed class InsomniaRequests
             }
             else
             {
-                fields.Add(new FormField(key, p.GetString("value") ?? "", enabled));
+                fields.Add(new FormField(key, T(p.GetString("value"), path), enabled));
             }
         }
 

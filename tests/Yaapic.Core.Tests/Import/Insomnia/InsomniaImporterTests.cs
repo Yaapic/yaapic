@@ -261,4 +261,17 @@ public class InsomniaImporterTests
         Assert.Contains("2", warning.Message);
         Assert.Contains(context.Report.Entries, e => e.Severity == ImportSeverity.Info && e.Message.Contains('1'));
     }
+
+    [Fact]
+    public void Templates_and_authentication_are_imported()
+    {
+        var request = One(
+            "\"name\":\"R\",\"method\":\"GET\",\"url\":\"{{ _.baseUrl }}/users\",\"authentication\":{\"type\":\"bearer\",\"token\":\"{{ _.token }}\"}",
+            out var context);
+
+        Assert.Equal("{{baseUrl}}/users", request.Url);
+        Assert.Equal(AuthKind.Bearer, request.Auth.Kind);
+        Assert.Equal("{{token}}", request.Auth.Token);
+        Assert.DoesNotContain(context.Report.Entries, e => e.Severity == ImportSeverity.Info && e.Path == "" && e.Message.Contains("plain", StringComparison.OrdinalIgnoreCase));
+    }
 }
