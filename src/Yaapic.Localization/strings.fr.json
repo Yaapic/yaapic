@@ -615,5 +615,8 @@
   "export.postman.luaScript": "{0} : un script Lua ne peut pas être exporté vers Postman et a été laissé de côté.",
   "export.scriptsRewritten": "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman.",
   "export.nothingToExport": "Il n'y a rien à exporter.",
-  "export.postmanEnvironment.displayName": "Environnement Postman"
+  "export.postmanEnvironment.displayName": "Environnement Postman",
+  "export.openApi.inferred": "Ce document OpenAPI a été déduit des requêtes : les réponses et les schémas sont inconnus et sont restés génériques.",
+  "export.openApi.unresolvedServer": "La variable d'URL de base \"{0}\" n'a pas de valeur ; le serveur a été défini sur \"/\".",
+  "export.openApi.duplicateOperation": "{0} {1} apparaît plusieurs fois ; seule la première requête a été exportée."
 }

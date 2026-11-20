@@ -599,6 +599,17 @@ public static class Strings
     /// <summary>There is nothing to export.</summary>
     public static string ExportNothingToExport => Localizer.Pick("There is nothing to export.", "Il n'y a rien à exporter.");
 
+    /// <summary>{0} {1} appears more than once; only the first request was exported.</summary>
+    public static string ExportOpenApiDuplicateOperation(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} {1} appears more than once; only the first request was exported.", "{0} {1} apparaît plusieurs fois ; seule la première requête a été exportée."), a0, a1);
+
+    /// <summary>This OpenAPI document was inferred from the requests: responses and schemas are not known and were left generic.</summary>
+    public static string ExportOpenApiInferred => Localizer.Pick("This OpenAPI document was inferred from the requests: responses and schemas are not known and were left generic.", "Ce document OpenAPI a été déduit des requêtes : les réponses et les schémas sont inconnus et sont restés génériques.");
+
+    /// <summary>The base URL variable "{0}" has no value; the server was set to "/".</summary>
+    public static string ExportOpenApiUnresolvedServer(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The base URL variable \"{0}\" has no value; the server was set to \"/\".", "La variable d'URL de base \"{0}\" n'a pas de valeur ; le serveur a été défini sur \"/\"."), a0);
+
     /// <summary>Postman collection (v2.1)</summary>
     public static string ExportPostmanDisplayName => Localizer.Pick("Postman collection (v2.1)", "Postman collection (v2.1)");
 

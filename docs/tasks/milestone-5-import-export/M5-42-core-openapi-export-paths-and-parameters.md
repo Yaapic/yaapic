@@ -1,6 +1,6 @@
 # M5-42: Core: OpenAPI export, info, servers, paths, operations and parameters
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05, M5-36
 
@@ -34,9 +34,9 @@ Request bodies, security, the exporters themselves (M5-43), response schemas.
 
 ## Acceptance criteria
 
-- [ ] Tests comparing `DataNodeJson.Write(compact)` with exact expected text: a collection with `{{baseUrl}}/users/{{id}}` (baseUrl variable set) and a literal `https://other.example.com/v2/items?x=1`; two servers in first-seen order; unresolved variable origin -> `/` + Warning; `:id` style path; operations of several methods under one path;
+- [x] Tests comparing `DataNodeJson.Write(compact)` with exact expected text: a collection with `{{baseUrl}}/users/{{id}}` (baseUrl variable set) and a literal `https://other.example.com/v2/items?x=1`; two servers in first-seen order; unresolved variable origin -> `/` + Warning; `:id` style path; operations of several methods under one path;
   duplicate operation skipped + Warning; operationId generation and uniqueness; tags from nested folders joined with ` / `; tag descriptions; query param required/optional with example; header filtering; path parameter example from a collection variable; the `Info`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
