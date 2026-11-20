@@ -609,5 +609,7 @@
   "import.bruno.headersInherited": "{0} requests got the headers of their folder or collection copied onto them.",
   "import.bruno.secretsEmpty": "{0} secret variables were created empty: Bruno does not export their values.",
   "export.collectionNotFound": "The collection to export no longer exists.",
-  "export.secretsOmitted": "{0} secret values were not exported (secret values never leave the vault)."
+  "export.secretsOmitted": "{0} secret values were not exported (secret values never leave the vault).",
+  "export.fileReference": "{0} requests reference local files by path; the paths are exported as they are.",
+  "export.postman.displayName": "Postman collection (v2.1)"
 }

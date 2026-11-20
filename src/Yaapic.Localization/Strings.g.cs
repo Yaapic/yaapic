@@ -592,6 +592,13 @@ public static class Strings
     /// <summary>The collection to export no longer exists.</summary>
     public static string ExportCollectionNotFound => Localizer.Pick("The collection to export no longer exists.", "La collection à exporter n'existe plus.");
 
+    /// <summary>{0} requests reference local files by path; the paths are exported as they are.</summary>
+    public static string ExportFileReference(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests reference local files by path; the paths are exported as they are.", "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels."), a0);
+
+    /// <summary>Postman collection (v2.1)</summary>
+    public static string ExportPostmanDisplayName => Localizer.Pick("Postman collection (v2.1)", "Postman collection (v2.1)");
+
     /// <summary>{0} secret values were not exported (secret values never leave the vault).</summary>
     public static string ExportSecretsOmitted(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not exported (secret values never leave the vault).", "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre)."), a0);

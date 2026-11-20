@@ -558,7 +558,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-35](milestone-5-import-export/M5-35-core-bruno-environments.md) | Core: Bruno import, environments | any | M5-31, M5-33 | done |
 | [M5-36](milestone-5-import-export/M5-36-core-export-model-and-source-reader.md) | Core: export model, contract, registry and source reader | any | M5-04 | done |
 | [M5-37](milestone-5-import-export/M5-37-core-export-packager.md) | Core: export packager (zip) | any | M5-36 | done |
-| [M5-38](milestone-5-import-export/M5-38-core-postman-export-requests.md) | Core: Postman collection export, folders, requests, URLs, headers and bodies | any | M5-05, M5-36 | todo |
+| [M5-38](milestone-5-import-export/M5-38-core-postman-export-requests.md) | Core: Postman collection export, folders, requests, URLs, headers and bodies | any | M5-05, M5-36 | done |
 | [M5-39](milestone-5-import-export/M5-39-core-postman-export-auth-and-variables.md) | Core: Postman export, authentication and collection variables | any | M5-38 | todo |
 | [M5-40](milestone-5-import-export/M5-40-core-postman-export-scripts.md) | Core: Postman export, scripts | any | M5-39 | todo |
 | [M5-41](milestone-5-import-export/M5-41-core-postman-environment-export.md) | Core: Postman environment and globals export | any | M5-05, M5-36 | todo |

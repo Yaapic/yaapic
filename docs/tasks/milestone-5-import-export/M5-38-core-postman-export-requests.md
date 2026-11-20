@@ -1,6 +1,6 @@
 # M5-38: Core: Postman collection export, folders, requests, URLs, headers and bodies
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05, M5-36
 
@@ -32,10 +32,10 @@ Auth, scripts, variables, environments (M5-39 to M5-41).
 
 ## Acceptance criteria
 
-- [ ] Tests with exact expected JSON (indented text compared literally): a collection with a nested folder, a GET with params (one disabled) and headers, a POST with each body kind, URLs `https://api.example.com:8080/v1/users/1?x=1`, `{{baseUrl}}/users/{{id}}`, `http://localhost`, a URL with a fragment, a host with `{{a.b}}`;
+- [x] Tests with exact expected JSON (indented text compared literally): a collection with a nested folder, a GET with params (one disabled) and headers, a POST with each body kind, URLs `https://api.example.com:8080/v1/users/1?x=1`, `{{baseUrl}}/users/{{id}}`, `http://localhost`, a URL with a fragment, a host with `{{a.b}}`;
   description present and absent; the file-reference `Info`; byte output starts without BOM and ends with `\n`; `Id`, extension, file name.
-- [ ] A round-trip test using `PostmanCollectionImporter` (M5-12, M5-13): export then import gives equal names, methods, URLs, params, headers and bodies (ids differ). If the importer cards are not `done`, leave this test to M5-66 and say so in the Notes.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] A round-trip test using `PostmanCollectionImporter` (M5-12, M5-13): export then import gives equal names, methods, URLs, params, headers and bodies (ids differ). If the importer cards are not `done`, leave this test to M5-66 and say so in the Notes.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

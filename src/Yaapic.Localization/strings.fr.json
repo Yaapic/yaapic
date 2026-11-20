@@ -609,5 +609,7 @@
   "import.bruno.headersInherited": "{0} requêtes ont reçu une copie des en-têtes de leur dossier ou de leur collection.",
   "import.bruno.secretsEmpty": "{0} variables secrètes ont été créées vides : Bruno n'exporte pas leurs valeurs.",
   "export.collectionNotFound": "La collection à exporter n'existe plus.",
-  "export.secretsOmitted": "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre)."
+  "export.secretsOmitted": "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre).",
+  "export.fileReference": "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels.",
+  "export.postman.displayName": "Postman collection (v2.1)"
 }
