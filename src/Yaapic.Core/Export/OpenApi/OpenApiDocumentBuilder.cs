@@ -11,7 +11,7 @@ internal static partial class OpenApiDocumentBuilder
 {
     private static readonly string[] SkippedHeaders = ["Content-Type", "Accept", "Authorization"];
 
-    /// <summary>Builds the document: <c>openapi</c>, <c>info</c>, <c>servers</c>, <c>tags</c> and <c>paths</c>.</summary>
+    /// <summary>Builds the document: <c>openapi</c>, <c>info</c>, <c>servers</c>, <c>tags</c>, <c>paths</c> and <c>components</c>.</summary>
     /// <param name="source">The export source; its collection is required.</param>
     /// <param name="report">Receives the warnings and the inference note.</param>
     /// <returns>The document as an object node, members in OpenAPI order.</returns>
@@ -28,6 +28,7 @@ internal static partial class OpenApiDocumentBuilder
         List<(string Name, string Description)> tags = [];
         List<(string Path, List<(string Method, DataNode Operation)> Operations)> paths = [];
         HashSet<string> operationIds = [];
+        var security = new OpenApiSecurityWriter(root);
 
         Walk(root.Children, [], "");
 
@@ -49,6 +50,7 @@ internal static partial class OpenApiDocumentBuilder
         }
 
         document.Add(("paths", DataNodeJson.Obj([.. paths.Select(p => (p.Path, DataNodeJson.Obj([.. p.Operations.Select(o => (o.Method, o.Operation))])))])));
+        if (security.Components() is { } components) document.Add(("components", components));
         return DataNodeJson.Obj([.. document]);
 
         string ServerUrl(string origin)
@@ -93,7 +95,9 @@ internal static partial class OpenApiDocumentBuilder
 
             var parameters = Parameters(request, path);
             if (parameters.Length > 0) operation.Add(("parameters", DataNodeJson.Arr(parameters)));
+            if (OpenApiBodyWriter.Write(request.Body) is { } requestBody) operation.Add(("requestBody", requestBody));
             operation.Add(("responses", DataNodeJson.Obj(("default", DataNodeJson.Obj(("description", DataNodeJson.Str("Response")))))));
+            if (security.Requirement(request.Auth) is { } requirement) operation.Add(("security", requirement));
 
             if (index < 0)
             {

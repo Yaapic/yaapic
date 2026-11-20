@@ -563,7 +563,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-40](milestone-5-import-export/M5-40-core-postman-export-scripts.md) | Core: Postman export, scripts | any | M5-39 | done |
 | [M5-41](milestone-5-import-export/M5-41-core-postman-environment-export.md) | Core: Postman environment and globals export | any | M5-05, M5-36 | done |
 | [M5-42](milestone-5-import-export/M5-42-core-openapi-export-paths-and-parameters.md) | Core: OpenAPI export, info, servers, paths, operations and parameters | any | M5-05, M5-36 | done |
-| [M5-43](milestone-5-import-export/M5-43-core-openapi-export-bodies-security-and-exporters.md) | Core: OpenAPI export, bodies, security and the JSON and YAML exporters | any | M5-42, M5-08 | todo |
+| [M5-43](milestone-5-import-export/M5-43-core-openapi-export-bodies-security-and-exporters.md) | Core: OpenAPI export, bodies, security and the JSON and YAML exporters | any | M5-42, M5-08 | done |
 | [M5-44](milestone-5-import-export/M5-44-core-insomnia-export.md) | Core: Insomnia v4 export | any | M5-05, M5-36 | todo |
 | [M5-45](milestone-5-import-export/M5-45-core-bruno-export-request-files.md) | Core: Bruno export, request files | any | M5-36 | todo |
 | [M5-46](milestone-5-import-export/M5-46-core-bruno-export-collection-and-zip.md) | Core: Bruno export, collection layout, environments and the exporter | any | M5-45, M5-37 | todo |

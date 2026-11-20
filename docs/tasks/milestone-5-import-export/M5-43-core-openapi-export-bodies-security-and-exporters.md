@@ -1,6 +1,6 @@
 # M5-43: Core: OpenAPI export, bodies, security and the JSON and YAML exporters
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-42, M5-08
 
@@ -41,10 +41,10 @@ Response schemas, `components/schemas` deduplication, examples of several media 
 
 ## Acceptance criteria
 
-- [ ] Tests: a collection with a JSON body (valid, and with `{{var}}` making it invalid), urlencoded, multipart with a file, binary, XML text; `InferSchema` for nested objects, arrays, ints, decimals, booleans, null, depth limit; each security row; two ApiKey auths with different names get `apiKeyAuth` and `apiKeyAuth2`; Bearer plus Jwt naming;
+- [x] Tests: a collection with a JSON body (valid, and with `{{var}}` making it invalid), urlencoded, multipart with a file, binary, XML text; `InferSchema` for nested objects, arrays, ints, decimals, booleans, null, depth limit; each security row; two ApiKey auths with different names get `apiKeyAuth` and `apiKeyAuth2`; Bearer plus Jwt naming;
   OAuth2 scopes in the requirement; no auth means no `components`; JSON and YAML exporters produce the same document (read the YAML back with `VYamlTreeReader` in `Yaapic.Infrastructure.Tests` and compare the compact JSON; if M5-07 is not `done`, leave that comparison to M5-66 and say so in the Notes); file names, extensions, no BOM.
-- [ ] Round trip with `OpenApiImporter` (M5-20, M5-22, M5-23): export then import preserves methods, names (via summary), paths (`{{baseUrl}}` appears as the server variable) and body kinds; if those cards are not `done`, leave it to M5-66.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Round trip with `OpenApiImporter` (M5-20, M5-22, M5-23): export then import preserves methods, names (via summary), paths (`{{baseUrl}}` appears as the server variable) and body kinds; if those cards are not `done`, leave it to M5-66.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
