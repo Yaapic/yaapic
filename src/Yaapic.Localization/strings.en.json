@@ -628,5 +628,16 @@
   "export.bruno.luaScript": "{0}: a Lua script cannot be exported to Bruno and was left out.",
   "export.bruno.authUnsupported": "{0}: authentication type {1} has no Bruno equivalent and was left out.",
   "export.bruno.displayName": "Bruno collection (.zip)",
-  "export.bruno.globalsIgnored": "Global variables were not exported: Bruno has no equivalent."
+  "export.bruno.globalsIgnored": "Global variables were not exported: Bruno has no equivalent.",
+
+  "import.severity.info": "Note",
+  "import.severity.warning": "Warning",
+  "import.severity.skipped": "Skipped",
+  "import.report.summary": "{0} warnings, {1} skipped, {2} notes",
+  "import.report.empty": "Nothing to report.",
+  "import.report.title": "Report",
+  "import.report.copy": "Copy report",
+  "import.report.showInfo": "Notes",
+  "import.report.showWarnings": "Warnings",
+  "import.report.showSkipped": "Skipped"
 }

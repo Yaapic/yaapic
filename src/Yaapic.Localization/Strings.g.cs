@@ -1026,6 +1026,28 @@ public static class Strings
     public static string ImportRenamed(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" already exists, the import was named \"{1}\".", "\"{0}\" existe déjà, l'import a été nommé \"{1}\"."), a0, a1);
 
+    /// <summary>Copy report</summary>
+    public static string ImportReportCopy => Localizer.Pick("Copy report", "Copier le rapport");
+
+    /// <summary>Nothing to report.</summary>
+    public static string ImportReportEmpty => Localizer.Pick("Nothing to report.", "Rien à signaler.");
+
+    /// <summary>Notes</summary>
+    public static string ImportReportShowInfo => Localizer.Pick("Notes", "Notes");
+
+    /// <summary>Skipped</summary>
+    public static string ImportReportShowSkipped => Localizer.Pick("Skipped", "Ignorés");
+
+    /// <summary>Warnings</summary>
+    public static string ImportReportShowWarnings => Localizer.Pick("Warnings", "Avertissements");
+
+    /// <summary>{0} warnings, {1} skipped, {2} notes</summary>
+    public static string ImportReportSummary(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} warnings, {1} skipped, {2} notes", "{0} avertissements, {1} ignorés, {2} notes"), a0, a1, a2);
+
+    /// <summary>Report</summary>
+    public static string ImportReportTitle => Localizer.Pick("Report", "Rapport");
+
     /// <summary>Could not save "{0}": {1}</summary>
     public static string ImportSaveFailed(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Could not save \"{0}\": {1}", "Impossible d'enregistrer \"{0}\" : {1}"), a0, a1);
@@ -1041,6 +1063,15 @@ public static class Strings
     /// <summary>{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.</summary>
     public static string ImportSecretsDropped(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.", "{0} valeurs secrètes n'ont pas été importées car le coffre est verrouillé. Déverrouillez le coffre et saisissez-les à nouveau."), a0);
+
+    /// <summary>Note</summary>
+    public static string ImportSeverityInfo => Localizer.Pick("Note", "Note");
+
+    /// <summary>Skipped</summary>
+    public static string ImportSeveritySkipped => Localizer.Pick("Skipped", "Ignoré");
+
+    /// <summary>Warning</summary>
+    public static string ImportSeverityWarning => Localizer.Pick("Warning", "Avertissement");
 
     /// <summary>"{0}" could not be saved, its {1} requests were skipped.</summary>
     public static string ImportSubtreeSkipped(object? a0, object? a1) =>

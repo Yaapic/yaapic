@@ -1,6 +1,6 @@
 # M5-50: ViewModel: import report
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04
 
@@ -26,8 +26,8 @@ Views (M5-56, M5-61), the import view model.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests/Import`: load with the three severities (counts, summary, labels), empty report, null clears, each filter toggle changes `VisibleRows` (and raises property changed), `AsText` exact text (with and without path), copy puts it on the `FakeDialogService` clipboard, copy disabled when empty.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests in `Yaapic.ViewModels.Tests/Import`: load with the three severities (counts, summary, labels), empty report, null clears, each filter toggle changes `VisibleRows` (and raises property changed), `AsText` exact text (with and without path), copy puts it on the `FakeDialogService` clipboard, copy disabled when empty.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
