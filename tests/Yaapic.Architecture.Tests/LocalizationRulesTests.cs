@@ -14,6 +14,7 @@ public partial class LocalizationRulesTests
         "Request failed",
         "Digest authentication must be computed by the caller (RFC 7616).",
         "AWS Signature v4 must be computed by the caller.",
+        "Base Environment", // the fixed name Insomnia gives to the base environment of an export
     ];
 
     [GeneratedRegex("""\$?"[A-Z][a-z]+ [A-Za-z.'{}]+""")]

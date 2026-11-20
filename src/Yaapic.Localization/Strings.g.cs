@@ -596,6 +596,21 @@ public static class Strings
     public static string ExportFileReference(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests reference local files by path; the paths are exported as they are.", "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels."), a0);
 
+    /// <summary>{0}: authentication type {1} has no Insomnia equivalent and was left out.</summary>
+    public static string ExportInsomniaAuthUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: authentication type {1} has no Insomnia equivalent and was left out.", "{0} : le type d'authentification {1} n'a pas d'équivalent Insomnia et a été laissé de côté."), a0, a1);
+
+    /// <summary>Insomnia (v4 JSON)</summary>
+    public static string ExportInsomniaDisplayName => Localizer.Pick("Insomnia (v4 JSON)", "Insomnia (JSON v4)");
+
+    /// <summary>The dynamic variable {{{{{0}}}}} has no Insomnia equivalent and was left as written.</summary>
+    public static string ExportInsomniaDynamicVariable(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The dynamic variable {{{{{0}}}}} has no Insomnia equivalent and was left as written.", "La variable dynamique {{{{{0}}}}} n'a pas d'équivalent Insomnia et a été laissée telle quelle."), a0);
+
+    /// <summary>{0} scripts were not exported: Insomnia uses a different scripting API.</summary>
+    public static string ExportInsomniaScripts(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were not exported: Insomnia uses a different scripting API.", "{0} scripts n'ont pas été exportés : Insomnia utilise une autre API de script."), a0);
+
     /// <summary>There is nothing to export.</summary>
     public static string ExportNothingToExport => Localizer.Pick("There is nothing to export.", "Il n'y a rien à exporter.");
 

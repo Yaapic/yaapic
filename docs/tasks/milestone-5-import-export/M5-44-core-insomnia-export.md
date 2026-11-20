@@ -1,6 +1,6 @@
 # M5-44: Core: Insomnia v4 export
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05, M5-36
 
@@ -37,9 +37,9 @@ Cookie jars, Insomnia v5, API specs.
 
 ## Acceptance criteria
 
-- [ ] Tests comparing exact JSON for a collection with a nested folder, a base environment with enabled and disabled rows, two sub environments, requests with every body kind and every auth kind, disabled param and header; template translation cases (plain, dotted, odd name, each dynamic variable); the JWT and scripts warnings; resource ids and order; trailing `\n`.
-- [ ] Round trip with `InsomniaImporter` (M5-27 to M5-29): export then import gives equal names, methods, URLs, params, headers, bodies, auth (except Jwt), variables and scoped environments; if those cards are not `done`, leave it to M5-66.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests comparing exact JSON for a collection with a nested folder, a base environment with enabled and disabled rows, two sub environments, requests with every body kind and every auth kind, disabled param and header; template translation cases (plain, dotted, odd name, each dynamic variable); the JWT and scripts warnings; resource ids and order; trailing `\n`.
+- [x] Round trip with `InsomniaImporter` (M5-27 to M5-29): export then import gives equal names, methods, URLs, params, headers, bodies, auth (except Jwt), variables and scoped environments; if those cards are not `done`, leave it to M5-66.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -618,5 +618,9 @@
   "export.postmanEnvironment.displayName": "Postman environment",
   "export.openApi.inferred": "This OpenAPI document was inferred from the requests: responses and schemas are not known and were left generic.",
   "export.openApi.unresolvedServer": "The base URL variable \"{0}\" has no value; the server was set to \"/\".",
-  "export.openApi.duplicateOperation": "{0} {1} appears more than once; only the first request was exported."
+  "export.openApi.duplicateOperation": "{0} {1} appears more than once; only the first request was exported.",
+  "export.insomnia.displayName": "Insomnia (v4 JSON)",
+  "export.insomnia.authUnsupported": "{0}: authentication type {1} has no Insomnia equivalent and was left out.",
+  "export.insomnia.dynamicVariable": "The dynamic variable {{{{{0}}}}} has no Insomnia equivalent and was left as written.",
+  "export.insomnia.scripts": "{0} scripts were not exported: Insomnia uses a different scripting API."
 }
