@@ -607,5 +607,7 @@
   "import.bruno.assertDropped": "{0} assertion blocks (assert) were not imported.",
   "import.bruno.displayName": "Bruno collection",
   "import.bruno.headersInherited": "{0} requests got the headers of their folder or collection copied onto them.",
-  "import.bruno.secretsEmpty": "{0} secret variables were created empty: Bruno does not export their values."
+  "import.bruno.secretsEmpty": "{0} secret variables were created empty: Bruno does not export their values.",
+  "export.collectionNotFound": "The collection to export no longer exists.",
+  "export.secretsOmitted": "{0} secret values were not exported (secret values never leave the vault)."
 }

@@ -1,6 +1,6 @@
 # M5-36: Core: export model, contract, registry and source reader
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-04
 
@@ -30,9 +30,9 @@ Exporters (M5-38 onward), packaging (M5-37), UI.
 
 ## Acceptance criteria
 
-- [ ] Tests with in-memory stores: the collection is found by id; a nested folder id is refused; secret rows blanked in collection variables, in environments and in globals while non-secret rows keep their values (use stores pre-filled with values and flags); the report `Info` count; environment selection by ids and the empty list;
+- [x] Tests with in-memory stores: the collection is found by id; a nested folder id is refused; secret rows blanked in collection variables, in environments and in globals while non-secret rows keep their values (use stores pre-filled with values and flags); the report `Info` count; environment selection by ids and the empty list;
   `includeGlobals` false gives no globals; registry find and order; a collection with a nested tree is rebuilt with the same shape.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

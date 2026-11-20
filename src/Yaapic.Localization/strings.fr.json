@@ -607,5 +607,7 @@
   "import.bruno.assertDropped": "{0} blocs d'assertions (assert) n'ont pas été importés.",
   "import.bruno.displayName": "Collection Bruno",
   "import.bruno.headersInherited": "{0} requêtes ont reçu une copie des en-têtes de leur dossier ou de leur collection.",
-  "import.bruno.secretsEmpty": "{0} variables secrètes ont été créées vides : Bruno n'exporte pas leurs valeurs."
+  "import.bruno.secretsEmpty": "{0} variables secrètes ont été créées vides : Bruno n'exporte pas leurs valeurs.",
+  "export.collectionNotFound": "La collection à exporter n'existe plus.",
+  "export.secretsOmitted": "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre)."
 }

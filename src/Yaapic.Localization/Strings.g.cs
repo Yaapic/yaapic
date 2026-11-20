@@ -589,6 +589,13 @@ public static class Strings
     /// <summary>1 variable</summary>
     public static string EnvironmentsVariableOne => Localizer.Pick("1 variable", "1 variable");
 
+    /// <summary>The collection to export no longer exists.</summary>
+    public static string ExportCollectionNotFound => Localizer.Pick("The collection to export no longer exists.", "La collection à exporter n'existe plus.");
+
+    /// <summary>{0} secret values were not exported (secret values never leave the vault).</summary>
+    public static string ExportSecretsOmitted(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not exported (secret values never leave the vault).", "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre)."), a0);
+
     /// <summary>All files</summary>
     public static string FilesAll => Localizer.Pick("All files", "Tous les fichiers");
 
