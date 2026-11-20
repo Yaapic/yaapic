@@ -1,6 +1,6 @@
 # M5-34: Core: Bruno import, scripts, variables and tests
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-33
 
@@ -29,9 +29,9 @@ Converting `assert` blocks to tests (dropped, M5-32), Bruno `docs`, CommonJS `re
 
 ## Acceptance criteria
 
-- [ ] Tests: pre-request vars + script combined with exact converted text (`bru.setVar` -> `yaapic.variables.set`); post-response vars with `res.body.id` -> the converted expression; tests block appended after the post-response script; a disabled var skipped; an unsupported member (`bru.runRequest`) warned with member and line;
+- [x] Tests: pre-request vars + script combined with exact converted text (`bru.setVar` -> `yaapic.variables.set`); post-response vars with `res.body.id` -> the converted expression; tests block appended after the post-response script; a disabled var skipped; an unsupported member (`bru.runRequest`) warned with member and line;
   empty file gives `ScriptSet.Empty`; the review warning once; collection and folder scripts land on the folders; request scripts on requests.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -16,6 +16,7 @@ internal sealed class BrunoCollection(ImportInput input, ImportContext context)
     private readonly ImportReport _report = context.Report;
     private int _headerCopies;
     private int _authCopies;
+    private int _scripts;
     private bool _hasSeq;
 
     /// <summary>Tells whether a path is a <c>bruno.json</c> manifest.</summary>
@@ -54,6 +55,7 @@ internal sealed class BrunoCollection(ImportInput input, ImportContext context)
 
         var collectionFile = tree.FolderFile is { } c ? Parse(c) : null;
         NoteSeq(collectionFile);
+        var collectionScripts = Scripts(collectionFile, "");
         var auth = Auth(collectionFile, "", RequestAuth.None);
         var children = ReadDir(tree, [], Headers(collectionFile), auth, 1);
 
@@ -72,8 +74,24 @@ internal sealed class BrunoCollection(ImportInput input, ImportContext context)
             _report.Info("", Strings.ImportOrderLost);
         }
 
-        var folder = new FolderDefinition(context.NewId(), ImportHelpers.SafeName(name, input.Name), "", [], ScriptSet.Empty);
+        NoteScripts();
+        var folder = new FolderDefinition(context.NewId(), ImportHelpers.SafeName(name, input.Name), "", [], collectionScripts);
         return new ImportBundle(new ImportFolder(folder, children), [], [], [], _report);
+    }
+
+    private ScriptSet Scripts(BruFile? file, string path)
+    {
+        var set = file is null ? ScriptSet.Empty : BrunoScripts.Map(file, path, _report);
+        _scripts += BrunoScripts.Count(set);
+        return set;
+    }
+
+    private void NoteScripts()
+    {
+        if (_scripts > 0)
+        {
+            _report.Warning("", Strings.ImportScriptsReview(_scripts));
+        }
     }
 
     private static BruFile Parse(ImportFile file) => BruParser.Parse(file.Text);
@@ -126,6 +144,8 @@ internal sealed class BrunoCollection(ImportInput input, ImportContext context)
             _report.Info("", Strings.ImportOrderLost);
         }
 
+        _scripts += BrunoScripts.Count(request.Scripts);
+        NoteScripts();
         return new ImportBundle(null, [request], [], [], _report);
     }
 
@@ -158,10 +178,11 @@ internal sealed class BrunoCollection(ImportInput input, ImportContext context)
             NoteSeq(folderFile);
             var folderName = ImportHelpers.SafeName(Value(folderFile?.Get("meta"), "name"), sub.Name);
             string[] path = [.. names, folderName];
+            var folderScripts = Scripts(folderFile, ImportPath.Join(path));
             var children = ReadDir(sub, path, Merge(headers, Headers(folderFile)), Auth(folderFile, ImportPath.Join(path), auth), depth + 1);
             if (children.Count > 0)
             {
-                items.Add(new ImportFolder(new FolderDefinition(context.NewId(), folderName, "", [], ScriptSet.Empty), children));
+                items.Add(new ImportFolder(new FolderDefinition(context.NewId(), folderName, "", [], folderScripts), children));
             }
         }
 
@@ -176,6 +197,7 @@ internal sealed class BrunoCollection(ImportInput input, ImportContext context)
                 continue;
             }
 
+            _scripts += BrunoScripts.Count(request.Scripts);
             if (mode == BruAuthMode.Inherit && auth.Kind != AuthKind.None)
             {
                 request = request with { Auth = auth };

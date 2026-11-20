@@ -101,7 +101,8 @@ internal static class BrunoRequests
             headers,
             body,
             auth,
-            RequestSettings.Default);
+            RequestSettings.Default,
+            BrunoScripts.Map(file, path, report));
     }
 
     private static string? Value(BruBlock? block, string key) =>
