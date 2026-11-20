@@ -48,7 +48,58 @@ internal static class BruWriter
             blocks.Add(bodyBlock);
         }
 
-        foreach (var (name, block) in new[] { ("script:pre-request", request.Scripts.PreRequest), ("script:post-response", request.Scripts.PostResponse) })
+        AddScripts(blocks, request.Scripts, path, report);
+
+        return string.Join("\n\n", blocks) + "\n";
+    }
+
+    /// <summary>Writes a <c>folder.bru</c>.</summary>
+    /// <param name="name">The folder name.</param>
+    /// <param name="seq">The 1-based position among the sibling folders.</param>
+    /// <param name="scripts">The folder scripts.</param>
+    /// <param name="path">The report path of the folder.</param>
+    /// <param name="report">Receives the warnings.</param>
+    /// <returns>The file text.</returns>
+    internal static string WriteFolder(string name, int seq, ScriptSet scripts, string path, ImportReport report)
+    {
+        List<string> blocks = [Dictionary("meta", [("name", name), ("seq", seq.ToString(CultureInfo.InvariantCulture))])];
+        AddScripts(blocks, scripts, path, report);
+        return string.Join("\n\n", blocks) + "\n";
+    }
+
+    /// <summary>Writes a <c>collection.bru</c> holding the collection variables and scripts.</summary>
+    /// <param name="variables">The collection variables; only the enabled rows are written.</param>
+    /// <param name="scripts">The collection scripts.</param>
+    /// <param name="path">The report path of the collection.</param>
+    /// <param name="report">Receives the warnings.</param>
+    /// <returns>The file text, or <see langword="null"/> when there is nothing to write.</returns>
+    internal static string? WriteCollection(IEnumerable<KeyValueEntry> variables, ScriptSet scripts, string path, ImportReport report)
+    {
+        List<string> blocks = [];
+        AddIfAny(blocks, "vars:pre-request", variables.Where(v => v.Enabled).Select(v => (v.Key, v.Value)));
+        AddScripts(blocks, scripts, path, report);
+        return blocks.Count == 0 ? null : string.Join("\n\n", blocks) + "\n";
+    }
+
+    /// <summary>Writes an <c>environments/*.bru</c> file.</summary>
+    /// <param name="rows">The variables; secret rows contribute their name only.</param>
+    /// <returns>The file text.</returns>
+    internal static string WriteEnvironment(IReadOnlyList<KeyValueEntry> rows)
+    {
+        List<string> blocks = [];
+        AddIfAny(blocks, "vars", rows.Where(r => !r.IsSecret).Select(r => (r.Enabled ? r.Key : "~" + r.Key, r.Value)));
+        var secrets = rows.Where(r => r.IsSecret).Select(r => Indent + r.Key).ToList();
+        if (secrets.Count > 0)
+        {
+            blocks.Add("vars:secret [\n" + string.Join(",\n", secrets) + "\n]");
+        }
+
+        return string.Join("\n\n", blocks) + "\n";
+    }
+
+    private static void AddScripts(List<string> blocks, ScriptSet scripts, string path, ImportReport report)
+    {
+        foreach (var (name, block) in new[] { ("script:pre-request", scripts.PreRequest), ("script:post-response", scripts.PostResponse) })
         {
             if (block.IsEmpty)
             {
@@ -63,8 +114,6 @@ internal static class BruWriter
 
             blocks.Add(Text(name, ScriptComment + "\n" + block.Source));
         }
-
-        return string.Join("\n\n", blocks) + "\n";
     }
 
     private static (string Mode, string? Block) Body(RequestBody body, string path, ImportReport report)

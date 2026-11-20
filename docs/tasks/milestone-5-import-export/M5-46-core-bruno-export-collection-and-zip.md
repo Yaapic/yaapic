@@ -1,6 +1,6 @@
 # M5-46: Core: Bruno export, collection layout, environments and the exporter
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-45, M5-37
 
@@ -28,10 +28,10 @@ Importing zips, OpenCollection YAML.
 
 ## Acceptance criteria
 
-- [ ] Tests: the file list and paths of a nested collection (exact list, in order: `bruno.json`, `collection.bru`, folders depth first with `folder.bru` before their requests, then `environments/*`); slug uniqueness (two requests named `Get users`, a request named `folder`); `bruno.json` content; `collection.bru` with variables and scripts;
+- [x] Tests: the file list and paths of a nested collection (exact list, in order: `bruno.json`, `collection.bru`, folders depth first with `folder.bru` before their requests, then `environments/*`); slug uniqueness (two requests named `Get users`, a request named `folder`); `bruno.json` content; `collection.bru` with variables and scripts;
   environments with secret names list; globals ignored with the `Info`; seq numbering; an empty collection yields `bruno.json` only; packaging with `ExportPackager.Package` gives a zip whose entries equal the paths.
-- [ ] Round trip with `BrunoImporter` (M5-33 to M5-35): export, build an `ImportInput` from the files (relative paths without the root directory), import: equal names, methods, URLs, params, headers, bodies, auth (except Jwt), folder structure, environments and secret names; collection variables come back as script lines (documented in M5-34), so compare them as `yaapic.variables.set` calls; if the import cards are not `done`, leave it to M5-66.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Round trip with `BrunoImporter` (M5-33 to M5-35): export, build an `ImportInput` from the files (relative paths without the root directory), import: equal names, methods, URLs, params, headers, bodies, auth (except Jwt), folder structure, environments and secret names; collection variables come back as script lines (documented in M5-34), so compare them as `yaapic.variables.set` calls; if the import cards are not `done`, leave it to M5-66.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

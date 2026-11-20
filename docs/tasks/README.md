@@ -566,7 +566,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-43](milestone-5-import-export/M5-43-core-openapi-export-bodies-security-and-exporters.md) | Core: OpenAPI export, bodies, security and the JSON and YAML exporters | any | M5-42, M5-08 | done |
 | [M5-44](milestone-5-import-export/M5-44-core-insomnia-export.md) | Core: Insomnia v4 export | any | M5-05, M5-36 | done |
 | [M5-45](milestone-5-import-export/M5-45-core-bruno-export-request-files.md) | Core: Bruno export, request files | any | M5-36 | done |
-| [M5-46](milestone-5-import-export/M5-46-core-bruno-export-collection-and-zip.md) | Core: Bruno export, collection layout, environments and the exporter | any | M5-45, M5-37 | todo |
+| [M5-46](milestone-5-import-export/M5-46-core-bruno-export-collection-and-zip.md) | Core: Bruno export, collection layout, environments and the exporter | any | M5-45, M5-37 | done |
 | [M5-47](milestone-5-import-export/M5-47-har-export.md) | HAR export | any | M5-36 | blocked |
 | [M5-48](milestone-5-import-export/M5-48-paste-curl-into-url-box.md) | Paste a cURL command into the URL box | any | M5-18 | blocked |
 | [M5-49](milestone-5-import-export/M5-49-ui-abstractions-pick-folder.md) | UI abstractions: pick a folder | any | M5-01 | todo |

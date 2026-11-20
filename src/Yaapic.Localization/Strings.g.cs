@@ -597,6 +597,12 @@ public static class Strings
     public static string ExportBrunoBinaryBody(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a binary body cannot be exported to Bruno and was left out.", "{0} : un corps binaire ne peut pas être exporté vers Bruno et a été laissé de côté."), a0);
 
+    /// <summary>Bruno collection (.zip)</summary>
+    public static string ExportBrunoDisplayName => Localizer.Pick("Bruno collection (.zip)", "Collection Bruno (.zip)");
+
+    /// <summary>Global variables were not exported: Bruno has no equivalent.</summary>
+    public static string ExportBrunoGlobalsIgnored => Localizer.Pick("Global variables were not exported: Bruno has no equivalent.", "Les variables globales n'ont pas été exportées : Bruno n'a pas d'équivalent.");
+
     /// <summary>{0}: a Lua script cannot be exported to Bruno and was left out.</summary>
     public static string ExportBrunoLuaScript(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a Lua script cannot be exported to Bruno and was left out.", "{0} : un script Lua ne peut pas être exporté vers Bruno et a été laissé de côté."), a0);

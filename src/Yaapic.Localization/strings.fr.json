@@ -626,5 +626,7 @@
   "export.bruno.binaryBody": "{0} : un corps binaire ne peut pas être exporté vers Bruno et a été laissé de côté.",
   "export.bruno.scripts": "{0} scripts ont été exportés tels quels : ils utilisent l'API yaapic, pas celle de Bruno.",
   "export.bruno.luaScript": "{0} : un script Lua ne peut pas être exporté vers Bruno et a été laissé de côté.",
-  "export.bruno.authUnsupported": "{0} : le type d'authentification {1} n'a pas d'équivalent Bruno et a été laissé de côté."
+  "export.bruno.authUnsupported": "{0} : le type d'authentification {1} n'a pas d'équivalent Bruno et a été laissé de côté.",
+  "export.bruno.displayName": "Collection Bruno (.zip)",
+  "export.bruno.globalsIgnored": "Les variables globales n'ont pas été exportées : Bruno n'a pas d'équivalent."
 }
