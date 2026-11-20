@@ -656,5 +656,16 @@
   "import.counts": "{0} folders, {1} requests, {2} environments, {3} global variables",
   "import.result": "Imported {0} requests in {1} folders and {2} environments.",
   "import.detected": "Detected: {0}",
-  "import.busy": "Reading..."
+  "import.busy": "Reading...",
+  "export.title": "Export",
+  "export.collection": "Collection",
+  "export.format": "Format",
+  "export.environments": "Environments",
+  "export.includeGlobals": "Include global variables",
+  "export.export": "Export...",
+  "export.saved": "Saved {0}",
+  "export.failed": "The export failed: {0}",
+  "export.close": "Close",
+  "export.noCollections": "There is no collection to export yet.",
+  "export.secretsNote": "Secret values are never exported."
 }

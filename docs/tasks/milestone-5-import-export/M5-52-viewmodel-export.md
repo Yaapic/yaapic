@@ -1,6 +1,6 @@
 # M5-52: ViewModel: export
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-36, M5-37, M5-49
 
@@ -26,9 +26,9 @@ The dialogs, palette (M5-53), composition (M5-54).
 
 ## Acceptance criteria
 
-- [ ] Tests with fake exporters (one needing a collection, one not), in-memory stores and `FakeDialogService`: `LoadAsync` lists collections and environments, preselection; export of a collection format writes one file (name and bytes) through `SaveFileAsync`; several files produce a zip name; cancelled save leaves `Saved` false without an error;
+- [x] Tests with fake exporters (one needing a collection, one not), in-memory stores and `FakeDialogService`: `LoadAsync` lists collections and environments, preselection; export of a collection format writes one file (name and bytes) through `SaveFileAsync`; several files produce a zip name; cancelled save leaves `Saved` false without an error;
   the environment exporter uses the selected environments and `IncludeGlobals`; the command is disabled without a collection / without environments; `ExportException` and unexpected exceptions set `Error`; secrets blanked (a secret row never reaches the exporter: assert on the `ExportSource` a fake exporter receives); the report is loaded (reader secrets `Info` + exporter entries).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

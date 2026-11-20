@@ -656,5 +656,16 @@
   "import.counts": "{0} dossiers, {1} requêtes, {2} environnements, {3} variables globales",
   "import.result": "{0} requêtes importées dans {1} dossiers et {2} environnements.",
   "import.detected": "Détecté : {0}",
-  "import.busy": "Lecture..."
+  "import.busy": "Lecture...",
+  "export.title": "Exporter",
+  "export.collection": "Collection",
+  "export.format": "Format",
+  "export.environments": "Environnements",
+  "export.includeGlobals": "Inclure les variables globales",
+  "export.export": "Exporter...",
+  "export.saved": "{0} enregistré",
+  "export.failed": "L'export a échoué : {0}",
+  "export.close": "Fermer",
+  "export.noCollections": "Il n'y a pas encore de collection à exporter.",
+  "export.secretsNote": "Les valeurs secrètes ne sont jamais exportées."
 }

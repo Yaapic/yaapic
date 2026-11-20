@@ -611,12 +611,34 @@ public static class Strings
     public static string ExportBrunoScripts(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were exported unchanged: they use the yaapic API, not Bruno's.", "{0} scripts ont été exportés tels quels : ils utilisent l'API yaapic, pas celle de Bruno."), a0);
 
+    /// <summary>Close</summary>
+    public static string ExportClose => Localizer.Pick("Close", "Fermer");
+
+    /// <summary>Collection</summary>
+    public static string ExportCollection => Localizer.Pick("Collection", "Collection");
+
     /// <summary>The collection to export no longer exists.</summary>
     public static string ExportCollectionNotFound => Localizer.Pick("The collection to export no longer exists.", "La collection à exporter n'existe plus.");
+
+    /// <summary>Environments</summary>
+    public static string ExportEnvironments => Localizer.Pick("Environments", "Environnements");
+
+    /// <summary>Export...</summary>
+    public static string ExportExport => Localizer.Pick("Export...", "Exporter...");
+
+    /// <summary>The export failed: {0}</summary>
+    public static string ExportFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The export failed: {0}", "L'export a échoué : {0}"), a0);
 
     /// <summary>{0} requests reference local files by path; the paths are exported as they are.</summary>
     public static string ExportFileReference(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests reference local files by path; the paths are exported as they are.", "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels."), a0);
+
+    /// <summary>Format</summary>
+    public static string ExportFormat => Localizer.Pick("Format", "Format");
+
+    /// <summary>Include global variables</summary>
+    public static string ExportIncludeGlobals => Localizer.Pick("Include global variables", "Inclure les variables globales");
 
     /// <summary>{0}: authentication type {1} has no Insomnia equivalent and was left out.</summary>
     public static string ExportInsomniaAuthUnsupported(object? a0, object? a1) =>
@@ -632,6 +654,9 @@ public static class Strings
     /// <summary>{0} scripts were not exported: Insomnia uses a different scripting API.</summary>
     public static string ExportInsomniaScripts(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were not exported: Insomnia uses a different scripting API.", "{0} scripts n'ont pas été exportés : Insomnia utilise une autre API de script."), a0);
+
+    /// <summary>There is no collection to export yet.</summary>
+    public static string ExportNoCollections => Localizer.Pick("There is no collection to export yet.", "Il n'y a pas encore de collection à exporter.");
 
     /// <summary>There is nothing to export.</summary>
     public static string ExportNothingToExport => Localizer.Pick("There is nothing to export.", "Il n'y a rien à exporter.");
@@ -657,12 +682,22 @@ public static class Strings
     /// <summary>Postman environment</summary>
     public static string ExportPostmanEnvironmentDisplayName => Localizer.Pick("Postman environment", "Environnement Postman");
 
+    /// <summary>Saved {0}</summary>
+    public static string ExportSaved(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved {0}", "{0} enregistré"), a0);
+
     /// <summary>Scripts were exported with the yaapic API renamed to pm; check them in Postman.</summary>
     public static string ExportScriptsRewritten => Localizer.Pick("Scripts were exported with the yaapic API renamed to pm; check them in Postman.", "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman.");
+
+    /// <summary>Secret values are never exported.</summary>
+    public static string ExportSecretsNote => Localizer.Pick("Secret values are never exported.", "Les valeurs secrètes ne sont jamais exportées.");
 
     /// <summary>{0} secret values were not exported (secret values never leave the vault).</summary>
     public static string ExportSecretsOmitted(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not exported (secret values never leave the vault).", "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre)."), a0);
+
+    /// <summary>Export</summary>
+    public static string ExportTitle => Localizer.Pick("Export", "Exporter");
 
     /// <summary>All files</summary>
     public static string FilesAll => Localizer.Pick("All files", "Tous les fichiers");
