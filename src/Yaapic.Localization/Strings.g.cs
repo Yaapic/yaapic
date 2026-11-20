@@ -596,12 +596,18 @@ public static class Strings
     public static string ExportFileReference(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests reference local files by path; the paths are exported as they are.", "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels."), a0);
 
+    /// <summary>There is nothing to export.</summary>
+    public static string ExportNothingToExport => Localizer.Pick("There is nothing to export.", "Il n'y a rien à exporter.");
+
     /// <summary>Postman collection (v2.1)</summary>
     public static string ExportPostmanDisplayName => Localizer.Pick("Postman collection (v2.1)", "Postman collection (v2.1)");
 
     /// <summary>{0}: a Lua script cannot be exported to Postman and was left out.</summary>
     public static string ExportPostmanLuaScript(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a Lua script cannot be exported to Postman and was left out.", "{0} : un script Lua ne peut pas être exporté vers Postman et a été laissé de côté."), a0);
+
+    /// <summary>Postman environment</summary>
+    public static string ExportPostmanEnvironmentDisplayName => Localizer.Pick("Postman environment", "Environnement Postman");
 
     /// <summary>Scripts were exported with the yaapic API renamed to pm; check them in Postman.</summary>
     public static string ExportScriptsRewritten => Localizer.Pick("Scripts were exported with the yaapic API renamed to pm; check them in Postman.", "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman.");

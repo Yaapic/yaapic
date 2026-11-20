@@ -613,5 +613,7 @@
   "export.fileReference": "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels.",
   "export.postman.displayName": "Postman collection (v2.1)",
   "export.postman.luaScript": "{0} : un script Lua ne peut pas être exporté vers Postman et a été laissé de côté.",
-  "export.scriptsRewritten": "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman."
+  "export.scriptsRewritten": "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman.",
+  "export.nothingToExport": "Il n'y a rien à exporter.",
+  "export.postmanEnvironment.displayName": "Environnement Postman"
 }

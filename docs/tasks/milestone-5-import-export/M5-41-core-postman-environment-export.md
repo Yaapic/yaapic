@@ -1,6 +1,6 @@
 # M5-41: Core: Postman environment and globals export
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-05, M5-36
 
@@ -24,9 +24,9 @@ Collection-scoped environments of other tools, Postman vault.
 
 ## Acceptance criteria
 
-- [ ] Tests with exact JSON: two environments with default, secret and disabled rows; a globals file; both together give three files with unique names (two environments with the same name get `-2`); no data throws `ExportException`; deterministic globals id; no BOM, trailing `\n`.
-- [ ] Round trip with `PostmanEnvironmentImporter` (M5-16): export then import gives equal rows and a `Globals` list; if M5-16 is not `done`, leave it to M5-66.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests with exact JSON: two environments with default, secret and disabled rows; a globals file; both together give three files with unique names (two environments with the same name get `-2`); no data throws `ExportException`; deterministic globals id; no BOM, trailing `\n`.
+- [x] Round trip with `PostmanEnvironmentImporter` (M5-16): export then import gives equal rows and a `Globals` list; if M5-16 is not `done`, leave it to M5-66.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
