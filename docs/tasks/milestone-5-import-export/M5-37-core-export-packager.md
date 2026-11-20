@@ -1,6 +1,6 @@
 # M5-37: Core: export packager (zip)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-36
 
@@ -25,9 +25,9 @@ Reading zips, other archive formats.
 
 ## Acceptance criteria
 
-- [ ] Tests: single file returned as is with its path as the name; three files give a zip (read it back with `ZipArchive`: names, contents, order, the fixed timestamp); two calls give byte-identical zips; a path with `..`, a rooted path and a backslash are refused; no file throws;
+- [x] Tests: single file returned as is with its path as the name; three files give a zip (read it back with `ZipArchive`: names, contents, order, the fixed timestamp); two calls give byte-identical zips; a path with `..`, a rooted path and a backslash are refused; no file throws;
   `SafeFileName("My API (v2)!")` = `my-api-v2`, empty -> `export`, 80 characters cut to 60; `UniquePath` clash handling ignoring case.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
