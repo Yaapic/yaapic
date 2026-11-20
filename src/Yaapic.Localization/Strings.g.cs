@@ -667,6 +667,10 @@ public static class Strings
     /// <summary>{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.</summary>
     public static string ImportBrunoProcessEnv => Localizer.Pick("{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.", "Les variables {{process.env.*}} n'existent pas dans Yaapic ; définissez-les plutôt comme variables d'environnement.");
 
+    /// <summary>{0} secret variables were created empty: Bruno does not export their values.</summary>
+    public static string ImportBrunoSecretsEmpty(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret variables were created empty: Bruno does not export their values.", "{0} variables secrètes ont été créées vides : Bruno n'exporte pas leurs valeurs."), a0);
+
     /// <summary>{0}: requests of type "{1}" are not supported yet.</summary>
     public static string ImportBrunoTypeUnsupported(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: requests of type \"{1}\" are not supported yet.", "{0} : les requêtes de type \"{1}\" ne sont pas encore prises en charge."), a0, a1);

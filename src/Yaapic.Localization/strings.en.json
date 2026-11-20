@@ -606,5 +606,6 @@
   "import.bruno.bodyModeUnsupported": "{0}: the body mode \"{1}\" is not supported; the request has no body.",
   "import.bruno.assertDropped": "{0} assertion blocks (assert) were not imported.",
   "import.bruno.displayName": "Bruno collection",
-  "import.bruno.headersInherited": "{0} requests got the headers of their folder or collection copied onto them."
+  "import.bruno.headersInherited": "{0} requests got the headers of their folder or collection copied onto them.",
+  "import.bruno.secretsEmpty": "{0} secret variables were created empty: Bruno does not export their values."
 }

@@ -166,4 +166,45 @@ public class BrunoImporterTests
         Assert.Equal(ImportConfidence.None, importer.Sniff(Input("a.json")));
         Assert.Equal("bruno", importer.Id);
     }
+
+    [Fact]
+    public void Imports_environments_scoped_to_the_collection()
+    {
+        var bundle = Run(
+            ("bruno.json", """{"name": "Shop"}"""),
+            ("a.bru", Req("a")),
+            ("environments/Local.bru", "vars {\r\n  host: http://l.test\r\n  ~off: 1\r\n  keep: {{process.env.X}}\r\n}\r\nvars:secret [\r\n  token,\r\n  keep\r\n]\r\n"),
+            ("environments/Empty.bru", ""),
+            ("environments/sub/Ignored.bru", "vars {\n  a: 1\n}\n"));
+
+        Assert.Equal(["Local", "Empty"], bundle.Environments.Select(e => e.Name));
+        Assert.All(bundle.Environments, e => Assert.Equal(bundle.Collection!.Folder.Id, e.CollectionId));
+        Assert.Equal(
+            [
+                new KeyValueEntry("host", "http://l.test"),
+                new KeyValueEntry("off", "1", false),
+                new KeyValueEntry("keep", "", true, true),
+                new KeyValueEntry("token", "", true, true),
+            ],
+            bundle.Environments[0].Variables);
+        Assert.Empty(bundle.Environments[1].Variables);
+        Assert.Single(bundle.Report.Entries, e => e.Message == Strings.ImportBrunoSecretsEmpty(2));
+        Assert.Equal(1, bundle.RequestCount);
+    }
+
+    [Fact]
+    public void A_collection_without_environments_directory_has_none()
+    {
+        Assert.Empty(Run(("bruno.json", "{}"), ("a.bru", Req("a"))).Environments);
+    }
+
+    [Fact]
+    public void Warns_once_about_process_env_in_environment_values()
+    {
+        var bundle = Run(
+            ("bruno.json", "{}"),
+            ("environments/A.bru", "vars {\n  k: {{process.env.X}}\n}\n"));
+
+        Assert.Single(bundle.Report.Entries, e => e.Message == Strings.ImportBrunoProcessEnv);
+    }
 }

@@ -1,6 +1,6 @@
 # M5-35: Core: Bruno import, environments
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-31, M5-33
 
@@ -25,8 +25,8 @@ Global environments (Bruno app-level), dotenv files.
 
 ## Acceptance criteria
 
-- [ ] Tests: two environments (names from file names, exact rows, scope = the collection folder id); a disabled var; `vars:secret` with a name absent from `vars` (new empty secret row) and one present (flagged in place); the `Info` count; an empty file; an environment file with CRLF; a collection without an `environments` directory; end to end with `BrunoImporter` (the environments land in the bundle).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests: two environments (names from file names, exact rows, scope = the collection folder id); a disabled var; `vars:secret` with a name absent from `vars` (new empty secret row) and one present (flagged in place); the `Info` count; an empty file; an environment file with CRLF; a collection without an `environments` directory; end to end with `BrunoImporter` (the environments land in the bundle).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

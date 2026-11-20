@@ -606,5 +606,6 @@
   "import.bruno.bodyModeUnsupported": "{0} : le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps.",
   "import.bruno.assertDropped": "{0} blocs d'assertions (assert) n'ont pas été importés.",
   "import.bruno.displayName": "Collection Bruno",
-  "import.bruno.headersInherited": "{0} requêtes ont reçu une copie des en-têtes de leur dossier ou de leur collection."
+  "import.bruno.headersInherited": "{0} requêtes ont reçu une copie des en-têtes de leur dossier ou de leur collection.",
+  "import.bruno.secretsEmpty": "{0} variables secrètes ont été créées vides : Bruno n'exporte pas leurs valeurs."
 }

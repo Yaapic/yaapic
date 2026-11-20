@@ -76,7 +76,8 @@ internal sealed class BrunoCollection(ImportInput input, ImportContext context)
 
         NoteScripts();
         var folder = new FolderDefinition(context.NewId(), ImportHelpers.SafeName(name, input.Name), "", [], collectionScripts);
-        return new ImportBundle(new ImportFolder(folder, children), [], [], [], _report);
+        var environments = BrunoEnvironments.Map(input, root, folder.Id, context.NewId, _report);
+        return new ImportBundle(new ImportFolder(folder, children), [], environments, [], _report);
     }
 
     private ScriptSet Scripts(BruFile? file, string path)
