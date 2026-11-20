@@ -1,6 +1,6 @@
 # M5-49: UI abstractions: pick a folder
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-01
 
@@ -21,8 +21,8 @@ The WinUI and Avalonia pickers.
 
 ## Acceptance criteria
 
-- [ ] A test in `Yaapic.ViewModels.Tests` (or `Yaapic.Core.Tests`, wherever `FakeDialogService` is already tested) that the fake records the title and returns the scripted path, and that a minimal `IDialogService` implementation that does not override the method returns null.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green; both App projects still build (the default method means no change there).
+- [x] A test in `Yaapic.ViewModels.Tests` (or `Yaapic.Core.Tests`, wherever `FakeDialogService` is already tested) that the fake records the title and returns the scripted path, and that a minimal `IDialogService` implementation that does not override the method returns null.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green; both App projects still build (the default method means no change there).
 
 ## Suggested commit message
 
