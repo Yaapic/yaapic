@@ -1,6 +1,6 @@
 # M5-45: Core: Bruno export, request files
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-36
 
@@ -31,10 +31,16 @@ The collection layout, environments and the zip (M5-46).
 
 ## Acceptance criteria
 
-- [ ] Tests with exact expected `.bru` text for: a GET with params (one disabled) and headers; a POST with JSON body (multi-line, indented); urlencoded and multipart with a file; each auth mode; a script pair with the comment line; `Binary` dropped with the Warning; Jwt auth warning; a multi-line header value;
+- [x] Tests with exact expected `.bru` text for: a GET with params (one disabled) and headers; a POST with JSON body (multi-line, indented); urlencoded and multipart with a file; each auth mode; a script pair with the comment line; `Binary` dropped with the Warning; Jwt auth warning; a multi-line header value;
   the output re-read by `BruParser` (M5-31) gives the same blocks and pairs (a parser round-trip test; if M5-31 is not `done`, state it in the Notes and leave the test to M5-66).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
 `feat(core): write Bruno request files`
+
+## Notes
+
+- M5-31 is `done`: the parser round-trip test is in `BruWriterTests`.
+- Multi-line pair values put their content lines at the block indent (2 spaces), which is what `BruParser` un-indents; this keeps the round trip exact.
+- The one-per-export `ExportBrunoScripts(count)` warning is emitted by the exporter (M5-46), which sees every request; the string is added here. Extra string `export.bruno.authUnsupported` covers the Jwt warning.

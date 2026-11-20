@@ -622,5 +622,9 @@
   "export.insomnia.displayName": "Insomnia (JSON v4)",
   "export.insomnia.authUnsupported": "{0} : le type d'authentification {1} n'a pas d'équivalent Insomnia et a été laissé de côté.",
   "export.insomnia.dynamicVariable": "La variable dynamique {{{{{0}}}}} n'a pas d'équivalent Insomnia et a été laissée telle quelle.",
-  "export.insomnia.scripts": "{0} scripts n'ont pas été exportés : Insomnia utilise une autre API de script."
+  "export.insomnia.scripts": "{0} scripts n'ont pas été exportés : Insomnia utilise une autre API de script.",
+  "export.bruno.binaryBody": "{0} : un corps binaire ne peut pas être exporté vers Bruno et a été laissé de côté.",
+  "export.bruno.scripts": "{0} scripts ont été exportés tels quels : ils utilisent l'API yaapic, pas celle de Bruno.",
+  "export.bruno.luaScript": "{0} : un script Lua ne peut pas être exporté vers Bruno et a été laissé de côté.",
+  "export.bruno.authUnsupported": "{0} : le type d'authentification {1} n'a pas d'équivalent Bruno et a été laissé de côté."
 }

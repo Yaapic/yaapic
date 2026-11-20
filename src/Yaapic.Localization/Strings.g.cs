@@ -589,6 +589,22 @@ public static class Strings
     /// <summary>1 variable</summary>
     public static string EnvironmentsVariableOne => Localizer.Pick("1 variable", "1 variable");
 
+    /// <summary>{0}: authentication type {1} has no Bruno equivalent and was left out.</summary>
+    public static string ExportBrunoAuthUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: authentication type {1} has no Bruno equivalent and was left out.", "{0} : le type d'authentification {1} n'a pas d'équivalent Bruno et a été laissé de côté."), a0, a1);
+
+    /// <summary>{0}: a binary body cannot be exported to Bruno and was left out.</summary>
+    public static string ExportBrunoBinaryBody(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a binary body cannot be exported to Bruno and was left out.", "{0} : un corps binaire ne peut pas être exporté vers Bruno et a été laissé de côté."), a0);
+
+    /// <summary>{0}: a Lua script cannot be exported to Bruno and was left out.</summary>
+    public static string ExportBrunoLuaScript(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a Lua script cannot be exported to Bruno and was left out.", "{0} : un script Lua ne peut pas être exporté vers Bruno et a été laissé de côté."), a0);
+
+    /// <summary>{0} scripts were exported unchanged: they use the yaapic API, not Bruno's.</summary>
+    public static string ExportBrunoScripts(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were exported unchanged: they use the yaapic API, not Bruno's.", "{0} scripts ont été exportés tels quels : ils utilisent l'API yaapic, pas celle de Bruno."), a0);
+
     /// <summary>The collection to export no longer exists.</summary>
     public static string ExportCollectionNotFound => Localizer.Pick("The collection to export no longer exists.", "La collection à exporter n'existe plus.");
 
