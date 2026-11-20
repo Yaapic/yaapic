@@ -611,5 +611,7 @@
   "export.collectionNotFound": "La collection à exporter n'existe plus.",
   "export.secretsOmitted": "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre).",
   "export.fileReference": "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels.",
-  "export.postman.displayName": "Postman collection (v2.1)"
+  "export.postman.displayName": "Postman collection (v2.1)",
+  "export.postman.luaScript": "{0} : un script Lua ne peut pas être exporté vers Postman et a été laissé de côté.",
+  "export.scriptsRewritten": "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman."
 }

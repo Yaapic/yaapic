@@ -599,6 +599,13 @@ public static class Strings
     /// <summary>Postman collection (v2.1)</summary>
     public static string ExportPostmanDisplayName => Localizer.Pick("Postman collection (v2.1)", "Postman collection (v2.1)");
 
+    /// <summary>{0}: a Lua script cannot be exported to Postman and was left out.</summary>
+    public static string ExportPostmanLuaScript(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a Lua script cannot be exported to Postman and was left out.", "{0} : un script Lua ne peut pas être exporté vers Postman et a été laissé de côté."), a0);
+
+    /// <summary>Scripts were exported with the yaapic API renamed to pm; check them in Postman.</summary>
+    public static string ExportScriptsRewritten => Localizer.Pick("Scripts were exported with the yaapic API renamed to pm; check them in Postman.", "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman.");
+
     /// <summary>{0} secret values were not exported (secret values never leave the vault).</summary>
     public static string ExportSecretsOmitted(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not exported (secret values never leave the vault).", "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre)."), a0);

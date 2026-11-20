@@ -1,6 +1,6 @@
 # M5-40: Core: Postman export, scripts
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-39
 
@@ -26,10 +26,10 @@ Reverse conversion of other APIs, Lua to JavaScript, `console` differences.
 
 ## Acceptance criteria
 
-- [ ] Tests for the rewriter: `yaapic.environment.set("a", 1)` -> `pm.environment.set(...)`; the word inside a string, a comment, a template literal text unchanged; `myyaapic.x` and `a.yaapic.b` unchanged; `yaapic` without a dot unchanged; two statements; `yaapic.test("x", () => {})`; empty text; text without `yaapic`.
-- [ ] Tests for events: both phases, only one, empty, Lua skipped with the Warning, multi-line source split, CRLF; the three levels in a full export compared with exact JSON; the aggregated `Info`.
-- [ ] Round trip with `PostmanScripts` (M5-15): export then import gives the original JavaScript for a script that uses only members both sides know; if M5-15 is not `done`, leave it to M5-66.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests for the rewriter: `yaapic.environment.set("a", 1)` -> `pm.environment.set(...)`; the word inside a string, a comment, a template literal text unchanged; `myyaapic.x` and `a.yaapic.b` unchanged; `yaapic` without a dot unchanged; two statements; `yaapic.test("x", () => {})`; empty text; text without `yaapic`.
+- [x] Tests for events: both phases, only one, empty, Lua skipped with the Warning, multi-line source split, CRLF; the three levels in a full export compared with exact JSON; the aggregated `Info`.
+- [x] Round trip with `PostmanScripts` (M5-15): export then import gives the original JavaScript for a script that uses only members both sides know; if M5-15 is not `done`, leave it to M5-66.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
