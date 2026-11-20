@@ -24,6 +24,11 @@ internal static class PostmanRequestWriter
         }
 
         members.Add(("url", Url(request.Url, request.QueryParams)));
+        if (PostmanAuthWriter.Write(request.Auth) is { } auth)
+        {
+            members.Add(("auth", auth));
+        }
+
         return DataNodeJson.Obj([.. members]);
     }
 

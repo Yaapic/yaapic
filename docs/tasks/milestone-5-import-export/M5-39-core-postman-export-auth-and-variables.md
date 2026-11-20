@@ -1,6 +1,6 @@
 # M5-39: Core: Postman export, authentication and collection variables
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-38
 
@@ -34,9 +34,9 @@ Scripts (M5-40).
 
 ## Acceptance criteria
 
-- [ ] Tests with exact expected JSON per kind (each row of the table, including OAuth 2 grants and placements, JWT base64 flag); `None` writes no `auth`; collection variables incl. disabled and secret rows; empty variables omit the member.
-- [ ] A round-trip test with `PostmanCollectionImporter` + M5-14 for every auth kind (export, import, equal `RequestAuth`); if M5-14 is not `done`, leave it to M5-66 and say so in the Notes.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests with exact expected JSON per kind (each row of the table, including OAuth 2 grants and placements, JWT base64 flag); `None` writes no `auth`; collection variables incl. disabled and secret rows; empty variables omit the member.
+- [x] A round-trip test with `PostmanCollectionImporter` + M5-14 for every auth kind (export, import, equal `RequestAuth`); if M5-14 is not `done`, leave it to M5-66 and say so in the Notes.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

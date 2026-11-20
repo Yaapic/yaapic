@@ -2,6 +2,7 @@ using System.Globalization;
 using System.Text;
 using Yaapic.Core.Import;
 using Yaapic.Domain.Collections;
+using Yaapic.Domain.Http;
 using Yaapic.Localization;
 
 namespace Yaapic.Core.Export.Postman;
@@ -39,12 +40,22 @@ public sealed class PostmanCollectionExporter : IExporter
         if (root.Folder!.Description.Length > 0) info.Add(("description", DataNodeJson.Str(root.Folder.Description)));
         info.Add(("schema", DataNodeJson.Str(Schema)));
 
-        var tree = DataNodeJson.Obj(("info", DataNodeJson.Obj([.. info])), ("item", Items(root.Children)));
+        List<(string, DataNode)> top = [("info", DataNodeJson.Obj([.. info])), ("item", Items(root.Children))];
+        if (root.Folder.Variables.Count > 0) top.Add(("variable", Variables(root.Folder.Variables)));
+        var tree = DataNodeJson.Obj([.. top]);
         if (fileRequests > 0) report.Info("", Strings.ExportFileReference(fileRequests));
 
         var text = DataNodeJson.Write(tree, indented: true) + "\n";
         var name = ExportPackager.SafeFileName(source.Name) + ".postman_collection.json";
         return new ExportResult([new ExportFile(name, new UTF8Encoding(false).GetBytes(text))], report);
+
+        static DataNode Variables(IReadOnlyList<KeyValueEntry> variables) => DataNodeJson.Arr([.. variables.Select(v =>
+        {
+            List<(string, DataNode)> members = [("key", DataNodeJson.Str(v.Key)), ("value", DataNodeJson.Str(v.Value))];
+            members.Add(("type", DataNodeJson.Str(v.IsSecret ? "secret" : "string")));
+            if (!v.Enabled) members.Add(("disabled", DataNode.Bool(true)));
+            return DataNodeJson.Obj([.. members]);
+        })]);
 
         DataNode Items(IReadOnlyList<CollectionNode> nodes) => DataNodeJson.Arr([.. nodes.Select(Item)]);
 
