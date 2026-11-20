@@ -750,6 +750,28 @@ public static class Strings
     public static string ImportBrunoTypeUnsupported(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: requests of type \"{1}\" are not supported yet.", "{0} : les requêtes de type \"{1}\" ne sont pas encore prises en charge."), a0, a1);
 
+    /// <summary>Reading...</summary>
+    public static string ImportBusy => Localizer.Pick("Reading...", "Lecture...");
+
+    /// <summary>Choose a file...</summary>
+    public static string ImportChooseFile => Localizer.Pick("Choose a file...", "Choisir un fichier...");
+
+    /// <summary>Choose a file to import</summary>
+    public static string ImportChooseFileTitle => Localizer.Pick("Choose a file to import", "Choisissez un fichier à importer");
+
+    /// <summary>Choose a folder...</summary>
+    public static string ImportChooseFolder => Localizer.Pick("Choose a folder...", "Choisir un dossier...");
+
+    /// <summary>Choose a Bruno collection folder</summary>
+    public static string ImportChooseFolderTitle => Localizer.Pick("Choose a Bruno collection folder", "Choisissez un dossier de collection Bruno");
+
+    /// <summary>Close</summary>
+    public static string ImportClose => Localizer.Pick("Close", "Fermer");
+
+    /// <summary>{0} folders, {1} requests, {2} environments, {3} global variables</summary>
+    public static string ImportCounts(object? a0, object? a1, object? a2, object? a3) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} folders, {1} requests, {2} environments, {3} global variables", "{0} dossiers, {1} requêtes, {2} environnements, {3} variables globales"), a0, a1, a2, a3);
+
     /// <summary>This looks like the Windows cmd form of cURL. Copy the command as "cURL (bash)" and paste it again.</summary>
     public static string ImportCurlCmdSyntax => Localizer.Pick("This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again.", "Cette commande ressemble à la forme cmd de Windows de cURL. Copiez-la au format \"cURL (bash)\" puis collez-la à nouveau.");
 
@@ -779,6 +801,10 @@ public static class Strings
     /// <summary>Descriptions of {0} requests were not imported.</summary>
     public static string ImportDescriptionsDropped(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Descriptions of {0} requests were not imported.", "Les descriptions de {0} requêtes n'ont pas été importées."), a0);
+
+    /// <summary>Detected: {0}</summary>
+    public static string ImportDetected(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Detected: {0}", "Détecté : {0}"), a0);
 
     /// <summary>The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.</summary>
     public static string ImportDynamicVariableUnsupported(object? a0) =>
@@ -810,6 +836,12 @@ public static class Strings
 
     /// <summary>This folder has more than 5000 files or 200 MB of data.</summary>
     public static string ImportFolderTooLarge => Localizer.Pick("This folder has more than 5000 files or 200 MB of data.", "Ce dossier contient plus de 5000 fichiers ou 200 Mo de données.");
+
+    /// <summary>Format</summary>
+    public static string ImportFormat => Localizer.Pick("Format", "Format");
+
+    /// <summary>Detect automatically</summary>
+    public static string ImportFormatAuto => Localizer.Pick("Detect automatically", "Détecter automatiquement");
 
     /// <summary>The format of this file was not recognized. Choose the format manually.</summary>
     public static string ImportFormatNotRecognized => Localizer.Pick("The format of this file was not recognized. Choose the format manually.", "Le format de ce fichier n'a pas été reconnu. Choisissez le format manuellement.");
@@ -859,6 +891,12 @@ public static class Strings
     /// <summary>{0} static resources (images, fonts, styles, media) were skipped.</summary>
     public static string ImportHarSkippedStatic(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} static resources (images, fonts, styles, media) were skipped.", "{0} ressources statiques (images, polices, styles, médias) ont été ignorées."), a0);
+
+    /// <summary>Import</summary>
+    public static string ImportImport => Localizer.Pick("Import", "Importer");
+
+    /// <summary>Include images, fonts and styles</summary>
+    public static string ImportIncludeStatic => Localizer.Pick("Include images, fonts and styles", "Inclure les images, polices et styles");
 
     /// <summary>Insomnia</summary>
     public static string ImportInsomniaDisplayName => Localizer.Pick("Insomnia", "Insomnia");
@@ -987,6 +1025,12 @@ public static class Strings
     /// <summary>Yaapic sorts folders and requests by name; the order of the source is not kept.</summary>
     public static string ImportOrderLost => Localizer.Pick("Yaapic sorts folders and requests by name; the order of the source is not kept.", "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.");
 
+    /// <summary>...or paste a cURL command or the content of a file</summary>
+    public static string ImportPasteHint => Localizer.Pick("...or paste a cURL command or the content of a file", "...ou collez une commande cURL ou le contenu d'un fichier");
+
+    /// <summary>Pasted text</summary>
+    public static string ImportPastedText => Localizer.Pick("Pasted text", "Texte collé");
+
     /// <summary>The body mode "{1}" is not supported; the request has no body.</summary>
     public static string ImportPostmanBodyModeUnsupported(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The body mode \"{1}\" is not supported; the request has no body.", "Le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps."), a0, a1);
@@ -1022,6 +1066,9 @@ public static class Strings
     public static string ImportPostmanScriptType(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The script of \"{0}\" has the type \"{1}\" (only JavaScript is supported) and was skipped.", "Le script de \"{0}\" est de type \"{1}\" (seul JavaScript est pris en charge) et a été ignoré."), a0, a1);
 
+    /// <summary>Preview</summary>
+    public static string ImportPreview => Localizer.Pick("Preview", "Aperçu");
+
     /// <summary>"{0}" already exists, the import was named "{1}".</summary>
     public static string ImportRenamed(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" already exists, the import was named \"{1}\".", "\"{0}\" existe déjà, l'import a été nommé \"{1}\"."), a0, a1);
@@ -1047,6 +1094,10 @@ public static class Strings
 
     /// <summary>Report</summary>
     public static string ImportReportTitle => Localizer.Pick("Report", "Rapport");
+
+    /// <summary>Imported {0} requests in {1} folders and {2} environments.</summary>
+    public static string ImportResult(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Imported {0} requests in {1} folders and {2} environments.", "{0} requêtes importées dans {1} dossiers et {2} environnements."), a0, a1, a2);
 
     /// <summary>Could not save "{0}": {1}</summary>
     public static string ImportSaveFailed(object? a0, object? a1) =>
@@ -1076,6 +1127,9 @@ public static class Strings
     /// <summary>"{0}" could not be saved, its {1} requests were skipped.</summary>
     public static string ImportSubtreeSkipped(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" could not be saved, its {1} requests were skipped.", "\"{0}\" n'a pas pu être enregistré, ses {1} requêtes ont été ignorées."), a0, a1);
+
+    /// <summary>Import</summary>
+    public static string ImportTitle => Localizer.Pick("Import", "Importer");
 
     /// <summary>This import has {0} requests; the limit is 20000.</summary>
     public static string ImportTooLarge(object? a0) =>

@@ -639,5 +639,22 @@
   "import.report.copy": "Copier le rapport",
   "import.report.showInfo": "Notes",
   "import.report.showWarnings": "Avertissements",
-  "import.report.showSkipped": "Ignorés"
+  "import.report.showSkipped": "Ignorés",
+  "import.title": "Importer",
+  "import.formatAuto": "Détecter automatiquement",
+  "import.format": "Format",
+  "import.pastedText": "Texte collé",
+  "import.chooseFileTitle": "Choisissez un fichier à importer",
+  "import.chooseFolderTitle": "Choisissez un dossier de collection Bruno",
+  "import.chooseFile": "Choisir un fichier...",
+  "import.chooseFolder": "Choisir un dossier...",
+  "import.pasteHint": "...ou collez une commande cURL ou le contenu d'un fichier",
+  "import.preview": "Aperçu",
+  "import.includeStatic": "Inclure les images, polices et styles",
+  "import.import": "Importer",
+  "import.close": "Fermer",
+  "import.counts": "{0} dossiers, {1} requêtes, {2} environnements, {3} variables globales",
+  "import.result": "{0} requêtes importées dans {1} dossiers et {2} environnements.",
+  "import.detected": "Détecté : {0}",
+  "import.busy": "Lecture..."
 }

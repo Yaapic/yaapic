@@ -1,6 +1,6 @@
 # M5-51: ViewModel: import
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-10, M5-49, M5-50
 
@@ -31,9 +31,9 @@ The dialogs, palette entries (M5-53), composition (M5-54).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests/Import` with fake importers, `InMemory*` stores, `FakeDialogService` and a fake `IImportInputReader`: Auto lists importers; choose file (preview counts and report, detected name); canceled picker; reader exception sets `Error`; pasted text preview; unrecognized text sets `Error`, then choosing a format by hand previews;
+- [x] Tests in `Yaapic.ViewModels.Tests/Import` with fake importers, `InMemory*` stores, `FakeDialogService` and a fake `IImportInputReader`: Auto lists importers; choose file (preview counts and report, detected name); canceled picker; reader exception sets `Error`; pasted text preview; unrecognized text sets `Error`, then choosing a format by hand previews;
   toggling `IncludeStaticResources` re-previews and `ShowStaticResourcesOption` only for `har`; import applies, calls `reloadWorkspace`, replaces the report with the outcome report, sets `IsDone`/`ResultSummary`, raises `Imported`; import disabled with an empty bundle; `Reset`; a newer preview cancels the older one (use a gated fake importer).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

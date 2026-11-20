@@ -639,5 +639,22 @@
   "import.report.copy": "Copy report",
   "import.report.showInfo": "Notes",
   "import.report.showWarnings": "Warnings",
-  "import.report.showSkipped": "Skipped"
+  "import.report.showSkipped": "Skipped",
+  "import.title": "Import",
+  "import.formatAuto": "Detect automatically",
+  "import.format": "Format",
+  "import.pastedText": "Pasted text",
+  "import.chooseFileTitle": "Choose a file to import",
+  "import.chooseFolderTitle": "Choose a Bruno collection folder",
+  "import.chooseFile": "Choose a file...",
+  "import.chooseFolder": "Choose a folder...",
+  "import.pasteHint": "...or paste a cURL command or the content of a file",
+  "import.preview": "Preview",
+  "import.includeStatic": "Include images, fonts and styles",
+  "import.import": "Import",
+  "import.close": "Close",
+  "import.counts": "{0} folders, {1} requests, {2} environments, {3} global variables",
+  "import.result": "Imported {0} requests in {1} folders and {2} environments.",
+  "import.detected": "Detected: {0}",
+  "import.busy": "Reading..."
 }
