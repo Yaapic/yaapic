@@ -1,6 +1,6 @@
 # M5-59: WinUI: import and export entry points
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M5-53, M5-57, M5-58
 
@@ -24,9 +24,9 @@ Keyboard shortcuts (none are defined for import and export).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke on the published exe: the `+` flyout shows Import; the folder context menu shows Export on a top-level folder only; the palette finds "Import" and "Export"; each opens the right dialog; after an import the sidebar shows the new collection; an exported file re-imports. Record anything not run.
-- [ ] Strings in EN and FR exist (M5-53); 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke on the published exe: the `+` flyout shows Import; the folder context menu shows Export on a top-level folder only; the palette finds "Import" and "Export"; each opens the right dialog; after an import the sidebar shows the new collection; an exported file re-imports. Record anything not run. Run: published exe starts and stays alive. Not run (no UI driving): flyout, context menu, palette, dialogs, import/export round trip; deferred to M5-68.
+- [x] Strings in EN and FR exist (M5-53); 0 warnings, all tests green.
 
 ## Suggested commit message
 

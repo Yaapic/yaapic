@@ -579,7 +579,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-56](milestone-5-import-export/M5-56-winui-import-report-view.md) | WinUI: import report view | windows | M5-50, M5-54 | done |
 | [M5-57](milestone-5-import-export/M5-57-winui-import-dialog.md) | WinUI: import dialog | windows | M5-51, M5-55, M5-56 | done |
 | [M5-58](milestone-5-import-export/M5-58-winui-export-dialog.md) | WinUI: export dialog | windows | M5-52, M5-55, M5-56 | done |
-| [M5-59](milestone-5-import-export/M5-59-winui-import-export-entry-points.md) | WinUI: import and export entry points | windows | M5-53, M5-57, M5-58 | todo |
+| [M5-59](milestone-5-import-export/M5-59-winui-import-export-entry-points.md) | WinUI: import and export entry points | windows | M5-53, M5-57, M5-58 | done |
 | [M5-60](milestone-5-import-export/M5-60-avalonia-pick-folder.md) | Avalonia: folder picker | unix | M5-49, M5-54, M5-55 | todo |
 | [M5-61](milestone-5-import-export/M5-61-avalonia-import-report-view.md) | Avalonia: import report view | unix | M5-50, M5-54, M5-56 | todo |
 | [M5-62](milestone-5-import-export/M5-62-avalonia-import-window.md) | Avalonia: import window | unix | M5-51, M5-57, M5-60, M5-61 | todo |

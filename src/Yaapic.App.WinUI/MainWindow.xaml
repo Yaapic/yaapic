@@ -203,6 +203,7 @@
               <MenuFlyout>
                 <MenuFlyoutItem Text="{x:Bind loc:Strings.PaletteNewRequest}" Command="{x:Bind ViewModel.Collections.NewRequestCommand, Mode=OneWay}"/>
                 <MenuFlyoutItem Text="{x:Bind loc:Strings.CollectionsNewCollection}" Command="{x:Bind ViewModel.Collections.NewCollectionCommand, Mode=OneWay}"/>
+                <MenuFlyoutItem Text="{x:Bind loc:Strings.CollectionsImport}" Click="OnImportClick"/>
               </MenuFlyout>
             </Button.Flyout>
           </Button>
