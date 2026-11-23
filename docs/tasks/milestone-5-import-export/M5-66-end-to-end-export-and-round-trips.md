@@ -1,6 +1,6 @@
 # M5-66: End-to-end tests: export and round trips
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-54
 
@@ -28,10 +28,16 @@ HAR export (blocked), UI tests.
 
 ## Acceptance criteria
 
-- [ ] The test class passes locally; no external network.
-- [ ] The round-trip tests deferred by the export cards are all present here (list them in the Notes).
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] The test class passes locally; no external network.
+- [x] The round-trip tests deferred by the export cards are all present here (list them in the Notes).
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `test: add end-to-end tests for export and round trips`
+
+## Notes
+
+- `ModelSnapshot` (with `SnapshotIgnore` listing, per format, what the format cannot carry) renders a tree without ids for the comparisons.
+- Round trips present here: Postman collection (exact model), Postman environment (rows, blanked secret), Insomnia (exact for Billing, scripts dropped for Shop API), Bruno (exact for Library, collection variables become `yaapic.variables.set` lines for Shop API), OpenAPI JSON and YAML (names, methods, folders, body kinds, `{{baseUrl}}` and path variables). The round-trip bullets of M5-40, M5-41, M5-43, M5-44 and M5-46 were already covered by their own cards.
+- A re-imported environment is numbered on a name clash (`Staging (2)`), so those tests match on the name prefix.

@@ -586,7 +586,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-63](milestone-5-import-export/M5-63-avalonia-export-window.md) | Avalonia: export window | unix | M5-52, M5-58, M5-60, M5-61 | done |
 | [M5-64](milestone-5-import-export/M5-64-avalonia-import-export-entry-points.md) | Avalonia: import and export entry points | unix | M5-53, M5-59, M5-62, M5-63 | done |
 | [M5-65](milestone-5-import-export/M5-65-end-to-end-import.md) | End-to-end tests: import | any | M5-54 | done |
-| [M5-66](milestone-5-import-export/M5-66-end-to-end-export-and-round-trips.md) | End-to-end tests: export and round trips | any | M5-54 | todo |
+| [M5-66](milestone-5-import-export/M5-66-end-to-end-export-and-round-trips.md) | End-to-end tests: export and round trips | any | M5-54 | done |
 | [M5-67](milestone-5-import-export/M5-67-milestone-docs.md) | Milestone 5 docs | any | M5-65, M5-66, M5-57, M5-58, M5-59, M5-62, M5-63, M5-64 | todo |
 | [M5-68](milestone-5-import-export/M5-68-winui-visual-verification.md) | WinUI visual verification of the milestone 5 views | windows | M5-56, M5-57, M5-58, M5-59 | todo |
 
