@@ -62,6 +62,25 @@ public sealed class AvaloniaDialogService : IDialogService
     }
 
     /// <inheritdoc />
+    public async Task<string?> PickFolderAsync(string title)
+    {
+        if (_owner() is not { } owner)
+        {
+            return null;
+        }
+
+        try
+        {
+            var folders = await owner.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions { Title = title, AllowMultiple = false });
+            return folders.Count > 0 ? folders[0].TryGetLocalPath() : null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<bool> SaveFileAsync(string suggestedName, byte[] content)
     {
         if (_owner() is not { } owner)

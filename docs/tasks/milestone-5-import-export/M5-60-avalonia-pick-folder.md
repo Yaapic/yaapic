@@ -1,6 +1,6 @@
 # M5-60: Avalonia: folder picker
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M5-49, M5-54, M5-55
 
@@ -19,8 +19,8 @@ The import window (M5-62).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
-- [ ] 0 warnings, all tests green; note that no UI reaches the picker until M5-62.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
+- [x] 0 warnings, all tests green; note that no UI reaches the picker until M5-62.
 
 ## Suggested commit message
 
