@@ -582,7 +582,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-59](milestone-5-import-export/M5-59-winui-import-export-entry-points.md) | WinUI: import and export entry points | windows | M5-53, M5-57, M5-58 | done |
 | [M5-60](milestone-5-import-export/M5-60-avalonia-pick-folder.md) | Avalonia: folder picker | unix | M5-49, M5-54, M5-55 | done |
 | [M5-61](milestone-5-import-export/M5-61-avalonia-import-report-view.md) | Avalonia: import report view | unix | M5-50, M5-54, M5-56 | done |
-| [M5-62](milestone-5-import-export/M5-62-avalonia-import-window.md) | Avalonia: import window | unix | M5-51, M5-57, M5-60, M5-61 | todo |
+| [M5-62](milestone-5-import-export/M5-62-avalonia-import-window.md) | Avalonia: import window | unix | M5-51, M5-57, M5-60, M5-61 | done |
 | [M5-63](milestone-5-import-export/M5-63-avalonia-export-window.md) | Avalonia: export window | unix | M5-52, M5-58, M5-60, M5-61 | todo |
 | [M5-64](milestone-5-import-export/M5-64-avalonia-import-export-entry-points.md) | Avalonia: import and export entry points | unix | M5-53, M5-59, M5-62, M5-63 | todo |
 | [M5-65](milestone-5-import-export/M5-65-end-to-end-import.md) | End-to-end tests: import | any | M5-54 | todo |

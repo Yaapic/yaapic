@@ -1,6 +1,6 @@
 # M5-62: Avalonia: import window
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M5-51, M5-57, M5-60, M5-61
 
@@ -22,10 +22,14 @@ Entry points (M5-64).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
 - [ ] Runtime smoke on macOS or Linux as in M5-57 (all five sources, folder picker, report list, Copy); if not possible, say so in the Notes and tick only the build and AOT items.
-- [ ] Strings exist in EN and FR; 0 warnings, all tests green.
+- [x] Strings exist in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the import window`
+
+## Notes
+
+Runtime smoke of the five sources was not possible here (Windows host; card flagged unix). Verified: Release build 0 warnings, AOT publish clean, exe starts. Counts and detected text use new `Presentation/TextMap` converters.
