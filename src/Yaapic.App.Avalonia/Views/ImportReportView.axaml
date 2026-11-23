@@ -1,0 +1,51 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="using:Yaapic.ViewModels.Import"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    x:Class="Yaapic.App.Avalonia.Views.ImportReportView"
+    x:DataType="i:ImportReportViewModel"
+    x:CompileBindings="True"
+    MinHeight="160">
+  <Grid RowDefinitions="Auto,*" RowSpacing="8">
+    <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto" ColumnSpacing="8">
+      <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" Classes="bodyStrong" Text="{Binding Summary}"
+                 AutomationProperties.LiveSetting="Polite" />
+      <ToggleButton Grid.Column="1" Content="{x:Static loc:Strings.ImportReportShowInfo}"
+                    AutomationProperties.Name="{x:Static loc:Strings.ImportReportShowInfo}"
+                    IsChecked="{Binding ShowInfo, Mode=TwoWay}" />
+      <ToggleButton Grid.Column="2" Content="{x:Static loc:Strings.ImportReportShowWarnings}"
+                    AutomationProperties.Name="{x:Static loc:Strings.ImportReportShowWarnings}"
+                    IsChecked="{Binding ShowWarnings, Mode=TwoWay}" />
+      <ToggleButton Grid.Column="3" Content="{x:Static loc:Strings.ImportReportShowSkipped}"
+                    AutomationProperties.Name="{x:Static loc:Strings.ImportReportShowSkipped}"
+                    IsChecked="{Binding ShowSkipped, Mode=TwoWay}" />
+      <Button Grid.Column="4" Content="{x:Static loc:Strings.ImportReportCopy}"
+              AutomationProperties.Name="{x:Static loc:Strings.ImportReportCopy}" Command="{Binding CopyCommand}" />
+    </Grid>
+    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" IsVisible="{Binding HasRows}">
+      <ItemsControl ItemsSource="{Binding VisibleRows}">
+        <ItemsControl.ItemTemplate>
+          <DataTemplate x:DataType="i:ImportReportRow">
+            <Grid ColumnDefinitions="84,*" ColumnSpacing="10" Margin="0,4">
+              <Border VerticalAlignment="Top" HorizontalAlignment="Left" CornerRadius="4" Padding="6,2"
+                      Background="{Binding Severity, Converter={x:Static p:BrushMap.SeverityBackground}}">
+                <TextBlock Text="{Binding SeverityLabel}" Classes="bodySmall"
+                           Foreground="{Binding Severity, Converter={x:Static p:BrushMap.Severity}}" />
+              </Border>
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{Binding Path}" TextWrapping="Wrap" Classes="code"
+                           Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                           IsVisible="{Binding Path, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                <TextBlock Text="{Binding Message}" TextWrapping="Wrap" />
+              </StackPanel>
+            </Grid>
+          </DataTemplate>
+        </ItemsControl.ItemTemplate>
+      </ItemsControl>
+    </ScrollViewer>
+    <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{x:Static loc:Strings.ImportReportEmpty}"
+               Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+               IsVisible="{Binding !HasRows}" />
+  </Grid>
+</UserControl>

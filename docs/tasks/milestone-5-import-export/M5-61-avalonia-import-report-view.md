@@ -1,6 +1,6 @@
 # M5-61: Avalonia: import report view
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M5-50, M5-54, M5-56
 
@@ -21,8 +21,8 @@ The window (M5-62).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
