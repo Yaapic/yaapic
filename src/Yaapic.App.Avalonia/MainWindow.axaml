@@ -177,6 +177,7 @@
                 <MenuFlyout>
                   <MenuItem Header="{x:Static loc:Strings.PaletteNewRequest}" Command="{Binding Collections.NewRequestCommand}" />
                   <MenuItem Header="{x:Static loc:Strings.CollectionsNewCollection}" Command="{Binding Collections.NewCollectionCommand}" />
+                  <MenuItem Header="{x:Static loc:Strings.CollectionsImport}" Click="OnImportMenuClick" />
                 </MenuFlyout>
               </Button.Flyout>
             </Button>

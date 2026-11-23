@@ -23,6 +23,7 @@ public sealed partial class MainWindow : Window
     private bool _updatesOpen;
     private bool _jwtOpen;
     private bool _certificatesOpen;
+    private bool _importExportOpen;
     private const double ConsoleReservedHeight = 300;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
@@ -161,6 +162,8 @@ public sealed partial class MainWindow : Window
             _shellSubscribed.EnvironmentsRequested -= OnEnvironmentsRequested;
             _shellSubscribed.JwtDecoderRequested -= OnJwtDecoderRequested;
             _shellSubscribed.CertificatesRequested -= OnCertificatesRequested;
+            _shellSubscribed.ImportRequested -= OnImportRequested;
+            _shellSubscribed.ExportRequested -= OnExportRequested;
             _shellSubscribed.Vault.SetupRequested -= OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested -= OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested -= OnUpdatesRequested;
@@ -177,6 +180,8 @@ public sealed partial class MainWindow : Window
             _shellSubscribed.EnvironmentsRequested += OnEnvironmentsRequested;
             _shellSubscribed.JwtDecoderRequested += OnJwtDecoderRequested;
             _shellSubscribed.CertificatesRequested += OnCertificatesRequested;
+            _shellSubscribed.ImportRequested += OnImportRequested;
+            _shellSubscribed.ExportRequested += OnExportRequested;
             _shellSubscribed.Vault.SetupRequested += OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested += OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested += OnUpdatesRequested;
@@ -238,6 +243,46 @@ public sealed partial class MainWindow : Window
         finally
         {
             _jwtOpen = false;
+        }
+    }
+
+    private void OnImportMenuClick(object? sender, global::Avalonia.Interactivity.RoutedEventArgs e) => Shell?.RequestImport();
+
+    private async void OnImportRequested(object? sender, EventArgs e)
+    {
+        if (Shell is not { } shell || _importExportOpen)
+        {
+            return;
+        }
+
+        _importExportOpen = true;
+        try
+        {
+            await new Views.ImportWindow(shell.CreateImport()).ShowDialog(this);
+        }
+        finally
+        {
+            _importExportOpen = false;
+        }
+    }
+
+    private async void OnExportRequested(object? sender, Guid? collectionId)
+    {
+        if (Shell is not { } shell || _importExportOpen)
+        {
+            return;
+        }
+
+        _importExportOpen = true;
+        try
+        {
+            var export = shell.CreateExport();
+            await export.LoadAsync(collectionId);
+            await new Views.ExportWindow(export).ShowDialog(this);
+        }
+        finally
+        {
+            _importExportOpen = false;
         }
     }
 
@@ -339,6 +384,10 @@ public sealed partial class MainWindow : Window
             AddItem(menu.Items, Strings.CommonRename, tree.RenameFolderCommand, node);
             AddItem(menu.Items, Strings.SettingsTitle, tree.EditSettingsCommand, node);
             AddItem(menu.Items, Strings.CommonDelete, tree.DeleteFolderCommand, node);
+            if (node.IsCollection)
+            {
+                AddItem(menu.Items, Strings.CollectionsExport, shell.ExportCollectionCommand, node);
+            }
         }
         else
         {
