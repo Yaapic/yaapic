@@ -194,6 +194,18 @@ try {
         $byId = { param($n) $root.FindFirst([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::AutomationIdProperty, $n))) }
         switch ($kind) {
             'wait' { Start-Sleep -Milliseconds ([int]$arg) }
+            'savepath' {
+                # savepath:<file>: fills the system Save dialog (file name edit, AutomationId 1001) of the picker process, then Enter.
+                # The system picker runs in a PickerHost process of its own, never in the app process.
+                $hostIds = @(Get-Process PickerHost -ErrorAction SilentlyContinue | ForEach-Object Id)
+                $idCond = { param($i) New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::AutomationIdProperty, $i) }
+                $edit = $null
+                foreach ($e in [Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Descendants, (& $idCond '1001'))) { if ($e.Current.ProcessId -in $hostIds -and $e.Current.ClassName -eq 'Edit') { $edit = $e; break } }
+                if (-not $edit) { throw "Step '$step': Save dialog not found." }
+                # The dialog owns the foreground and opens with the file name box focused: type the path and press Enter.
+                [Windows.Forms.SendKeys]::SendWait('^a' + [regex]::Replace($arg, '[+^%~(){}\[\]]', '{$0}')); Start-Sleep -Milliseconds 300
+                [Windows.Forms.SendKeys]::SendWait('{ENTER}'); Start-Sleep -Milliseconds 1500
+            }
             { $_ -in 'invoke', 'toggle', 'focus', 'select' } {
                 $el = & $byId $arg; if (-not $el) { $el = & $byName $arg }; if (-not $el) { throw "Step '$step': element not found." }
                 $pat = $null

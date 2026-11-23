@@ -4,7 +4,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="using:Yaapic.App.WinUI.Presentation"
     xmlns:i="using:Yaapic.ViewModels.Import">
-  <Grid MinHeight="160" RowSpacing="8">
+  <UserControl.Resources>
+    <!-- A checked toggle otherwise takes the system accent (blue), not the Yaapic accent. -->
+    <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{ThemeResource YaapicAccentFillColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{ThemeResource YaapicAccentFillHoverColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{ThemeResource YaapicAccentFillPressedColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{ThemeResource YaapicAccentFillColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{ThemeResource YaapicAccentFillHoverColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{ThemeResource YaapicAccentFillPressedColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{ThemeResource YaapicAccentOnColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{ThemeResource YaapicAccentOnColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="{ThemeResource YaapicAccentOnColor}"/>
+  </UserControl.Resources>
+  <Grid MinHeight="100" RowSpacing="8">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="*"/>

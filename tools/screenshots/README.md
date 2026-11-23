@@ -55,3 +55,6 @@ Milestone 4 additions: `Capture-M4.ps1` (the 20 M4 screenshots, see `docs/screen
 throw-away `certificates.json` with two self-signed certificates in `C:\yaapic-shot-certs`, deleted afterwards), the fixture requests
 `oauth2`, `oauth2-code`, `jwt` (a throw-away RSA key is generated per run), `aws` and `changing`, and the stub endpoints `/token` and
 `/changing`.
+
+Milestone 5 additions: `Capture-M5.ps1` (the 16 M5 screenshots, see `docs/screenshots/m5/README.md`) and the `savepath:<file>` step, which fills the
+system *Save* dialog (a `PickerHost` process) through UI Automation.

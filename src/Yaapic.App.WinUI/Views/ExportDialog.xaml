@@ -9,7 +9,7 @@
   <ContentDialog.Resources>
     <x:Double x:Key="ContentDialogMaxWidth">680</x:Double>
   </ContentDialog.Resources>
-  <Grid Width="640" Height="520" RowSpacing="10">
+  <Grid Width="620" Height="480" RowSpacing="10">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>

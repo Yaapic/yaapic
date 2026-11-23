@@ -1,6 +1,6 @@
 # M5-68: WinUI visual verification of the milestone 5 views
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M5-56, M5-57, M5-58, M5-59
 
@@ -32,9 +32,9 @@ Avalonia screenshots, redesigns.
 
 ## Acceptance criteria
 
-- [ ] Sixteen PNGs (eight screens, two themes) under `docs/screenshots/m5/`, each under 500 KB, captured from the Native AOT build; the capture script changes are committed.
-- [ ] `docs/screenshots/m5/README.md` exists and lists the differences.
-- [ ] No process left running (the published exe is killed); 0 warnings, all tests green.
+- [x] Sixteen PNGs (eight screens, two themes) under `docs/screenshots/m5/`, each under 500 KB, captured from the Native AOT build; the capture script changes are committed.
+- [x] `docs/screenshots/m5/README.md` exists and lists the differences.
+- [x] No process left running (the published exe is killed); 0 warnings, all tests green.
 
 ## Suggested commit message
 

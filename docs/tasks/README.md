@@ -588,7 +588,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-65](milestone-5-import-export/M5-65-end-to-end-import.md) | End-to-end tests: import | any | M5-54 | done |
 | [M5-66](milestone-5-import-export/M5-66-end-to-end-export-and-round-trips.md) | End-to-end tests: export and round trips | any | M5-54 | done |
 | [M5-67](milestone-5-import-export/M5-67-milestone-docs.md) | Milestone 5 docs | any | M5-65, M5-66, M5-57, M5-58, M5-59, M5-62, M5-63, M5-64 | done |
-| [M5-68](milestone-5-import-export/M5-68-winui-visual-verification.md) | WinUI visual verification of the milestone 5 views | windows | M5-56, M5-57, M5-58, M5-59 | todo |
+| [M5-68](milestone-5-import-export/M5-68-winui-visual-verification.md) | WinUI visual verification of the milestone 5 views | windows | M5-56, M5-57, M5-58, M5-59 | done |
 
 ### Milestone 5 summary
 
@@ -608,7 +608,7 @@ gRPC, GraphQL and WebSocket items (milestone 7), Postman v1, WSDL/SOAP, Bruno Op
 Open (blocked, product decisions): M5-30 Insomnia 5 YAML import, M5-47 HAR export, M5-48 pasting a cURL command into the URL box.
 
 Runtime checks not run by hand: the Avalonia views on macOS and Linux, and imports of real exports (the Insomnia fixtures are
-written by hand); the WinUI visual check is M5-68.
+written by hand). The WinUI visual check is done: [screenshots](../screenshots/m5/README.md).
 
 ## Milestones 2 to 10
 

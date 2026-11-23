@@ -10,7 +10,7 @@
     <!-- The default 548 px cap clips a 720 px body. -->
     <x:Double x:Key="ContentDialogMaxWidth">760</x:Double>
   </ContentDialog.Resources>
-  <Grid Width="720" Height="560" RowSpacing="10">
+  <Grid Width="700" Height="500" RowSpacing="10">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
       <RowDefinition Height="Auto"/>
