@@ -1,6 +1,6 @@
 # M5-67: Milestone 5 docs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-65, M5-66, M5-57, M5-58, M5-59, M5-62, M5-63, M5-64
 
@@ -26,9 +26,9 @@ Screenshots (M5-68).
 
 ## Acceptance criteria
 
-- [ ] The documents above are updated and their relative links work (open each).
-- [ ] The summary lists the blocked cards still open (M5-30, M5-47, M5-48) and anything deferred (undo of an import, import from a URL, drag and drop, history export, Postman cloud, gRPC/GraphQL/WebSocket items).
-- [ ] No code changed; the build still has 0 warnings.
+- [x] The documents above are updated and their relative links work (open each).
+- [x] The summary lists the blocked cards still open (M5-30, M5-47, M5-48) and anything deferred (undo of an import, import from a URL, drag and drop, history export, Postman cloud, gRPC/GraphQL/WebSocket items).
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

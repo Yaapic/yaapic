@@ -69,7 +69,7 @@ failure.
 | `tests/` | One test project per library, plus `Yaapic.Architecture.Tests` |
 | `native/` | Build script and pinned sources for the native script engines |
 | `design/`, `tools/` | Design assets and tokens; screenshot tooling |
-| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [authentication](docs/authentication.md), [response tools](docs/response-tools.md), [task cards](docs/tasks/README.md) |
+| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [authentication](docs/authentication.md), [response tools](docs/response-tools.md), [import and export](docs/import-export.md), [task cards](docs/tasks/README.md) |
 
 ## Scripts and secrets
 
@@ -96,6 +96,13 @@ workspace. Each response has a **Timing** tab (DNS, connect, TLS, waiting, downl
 can choose per request (HTTP/3 is experimental). A **Diff** tab compares the response with the previous one or a pinned baseline,
 **Generate code** turns a request into cURL, JavaScript, Python, C#, PowerShell or Go, and **Decode JWT** inspects a token. See
 [docs/response-tools.md](docs/response-tools.md).
+
+## Import and export
+
+**Import** collections, environments and requests from Postman (v2.0 and v2.1), OpenAPI 3.x and Swagger 2.0 (JSON or YAML), cURL
+commands, HAR files, Insomnia v4 exports and Bruno collection folders; a preview lists what was converted, skipped or lost
+before anything is written. **Export** to Postman v2.1, OpenAPI 3.0 (inferred), Insomnia v4 and Bruno (zip); secret values are
+never exported. See [docs/import-export.md](docs/import-export.md).
 
 ## Language and accent colour
 

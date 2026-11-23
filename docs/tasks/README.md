@@ -587,8 +587,28 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-64](milestone-5-import-export/M5-64-avalonia-import-export-entry-points.md) | Avalonia: import and export entry points | unix | M5-53, M5-59, M5-62, M5-63 | done |
 | [M5-65](milestone-5-import-export/M5-65-end-to-end-import.md) | End-to-end tests: import | any | M5-54 | done |
 | [M5-66](milestone-5-import-export/M5-66-end-to-end-export-and-round-trips.md) | End-to-end tests: export and round trips | any | M5-54 | done |
-| [M5-67](milestone-5-import-export/M5-67-milestone-docs.md) | Milestone 5 docs | any | M5-65, M5-66, M5-57, M5-58, M5-59, M5-62, M5-63, M5-64 | todo |
+| [M5-67](milestone-5-import-export/M5-67-milestone-docs.md) | Milestone 5 docs | any | M5-65, M5-66, M5-57, M5-58, M5-59, M5-62, M5-63, M5-64 | done |
 | [M5-68](milestone-5-import-export/M5-68-winui-visual-verification.md) | WinUI visual verification of the milestone 5 views | windows | M5-56, M5-57, M5-58, M5-59 | todo |
+
+### Milestone 5 summary
+
+Delivered: import of Postman (collections v2.0 and v2.1, environments and globals), OpenAPI 3.x and Swagger 2.0 (JSON or YAML),
+cURL, HAR, Insomnia v4 and Bruno folders, through a neutral `DataNode` tree (JSON from the framework, YAML through VYaml), with a
+preview and a report (Info, Warning, Skipped) before the `ImportApplier` writes anything through the secret-aware stores; export
+to Postman v2.1 (collection and environment), OpenAPI 3.0 (inferred, JSON or YAML), Insomnia v4 and Bruno (zip), with secret
+values never exported; import and export windows, report view, sidebar, context-menu and palette entries on both front-ends.
+End-to-end tests: `Milestone5ImportEndToEndTests` and `Milestone5ExportEndToEndTests` (with the round trips).
+Documentation: [import-export.md](../import-export.md), [architecture.md](../architecture.md), [file-format.md](../file-format.md),
+[scripting-compatibility.md](../scripting-compatibility.md) and ADRs [0016](../adr/0016-import-export-architecture.md),
+[0017](../adr/0017-import-export-formats.md). No new dependency (see [dependencies.md](../dependencies.md)).
+
+Deferred: undo of an import, import from a URL, drag and drop of files, history export, the Postman cloud API, OpenAPI editing,
+gRPC, GraphQL and WebSocket items (milestone 7), Postman v1, WSDL/SOAP, Bruno OpenCollection YAML.
+
+Open (blocked, product decisions): M5-30 Insomnia 5 YAML import, M5-47 HAR export, M5-48 pasting a cURL command into the URL box.
+
+Runtime checks not run by hand: the Avalonia views on macOS and Linux, and imports of real exports (the Insomnia fixtures are
+written by hand); the WinUI visual check is M5-68.
 
 ## Milestones 2 to 10
 

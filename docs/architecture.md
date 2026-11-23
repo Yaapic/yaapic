@@ -133,6 +133,36 @@ into a `CodeRequest` and `CodeGeneratorRegistry` offers the six `ICodeGenerator`
 to `CodeGenerationViewModel`. Client certificates are listed in `ICertificateStore` (`FileCertificateStore`,
 `certificates.json` outside the workspace) and their passphrases are vault entries of kind `Certificate`.
 
+## Import and export (milestone 5)
+
+Decisions: [ADR 0016](adr/0016-import-export-architecture.md), [ADR 0017](adr/0017-import-export-formats.md), the
+[YAML spike](spikes/m5-yaml-tree.md); user level: [import-export.md](import-export.md).
+
+```
+Import:
+IImportInputReader (Infrastructure: file, folder, pasted text; size limits)
+  -> ImportService.Preview     detects the format through ImporterRegistry (Sniff), runs one IImporter, writes nothing
+       |-- importers (Core.Import.<Format>): PostmanImporter, PostmanEnvironmentImporter, CurlImporter, OpenApiImporter
+       |   (SwaggerNormalizer first), HarImporter, InsomniaImporter, BrunoImporter
+       |-- DataNode                the neutral tree every importer reads (DataNodeJson from JsonDocument,
+       |                           DataNodeYaml through StructuredTextReader and IYamlTreeReader, VYaml in Infrastructure)
+       `-- ImportHelpers, ScriptConverter (Postman and Bruno scripts)
+  -> ImportBundle + ImportReport (ImportEntry: Info, Warning, Skipped)
+  -> ImportService.Apply -> ImportApplier -> ICollectionStore, IEnvironmentStore, IGlobalsStore (secret-aware, vault)
+
+Export:
+ExportSourceReader (reads the stores, blanks every secret value, reports the count)
+  -> IExporter (ExporterRegistry): Postman collection and environment, OpenAPI JSON and YAML, Insomnia, Bruno
+  -> ExportResult (ExportFile list + report) -> ExportPackager (one file as is, several as a .zip)
+  -> IDialogService.SaveFileAsync
+```
+
+`ImportViewModel` (source, format override, preview, `ImportReportViewModel` rows with a severity filter) and `ExportViewModel`
+(collection, format, environments, globals) live in `Yaapic.ViewModels`; the shell opens them from the sidebar, the context
+menu of a top-level folder and the palette (`RequestImport`, `RequestExport`). Both front-ends only render them (WinUI and
+Avalonia import and export windows). Importers and exporters are pure Core code: no file access, no network, no reflection.
+`IDialogService` gains `PickFolderAsync` for Bruno folders.
+
 ## Search and command palette
 
 `Core.Search.FuzzyMatcher` ranks and highlights matches. `CommandPaletteViewModel` aggregates `IPaletteSource`s

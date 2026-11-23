@@ -155,8 +155,8 @@ printed in the console. A fix starts as a new case in the conformance suite.
 
 The *Paste Postman/Bruno...* button of the script editor opens a dialog: paste a script, check the dialect (guessed from the
 code, `pm.`/`postman.` versus `bru.`/`req.`/`res.`, and overridable), read the preview and the list of findings, then insert
-the result at the end of the script. The same `ScriptConverter` (`Yaapic.Core`) is meant for the collection importers of
-milestone 5. It rewrites JavaScript only; strings, comments and the text of template literals are never touched.
+the result at the end of the script. The collection importers of milestone 5 reuse the same `ScriptConverter` (`Yaapic.Core`),
+and the exports rewrite `yaapic.` to `pm.` for Postman only (see [import-export.md](import-export.md)). It rewrites JavaScript only; strings, comments and the text of template literals are never touched.
 
 - **Postman.** `pm.` becomes `yaapic.`; `postman.setEnvironmentVariable`, `getEnvironmentVariable`, `clearEnvironmentVariable` and the
   global equivalents map to `yaapic.environment.*` / `yaapic.globals.*`. Members from the tables above marked unsupported
