@@ -1,6 +1,6 @@
 # M5-55: WinUI: folder picker
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M5-49, M5-54
 
@@ -20,9 +20,9 @@ The import dialog (M5-57).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
-- [ ] Manual smoke on the published exe is part of M5-57 (the picker is opened from the import dialog); note here that no UI reaches it yet.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] Manual smoke on the published exe is part of M5-57 (the picker is opened from the import dialog); no UI reaches it yet.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 

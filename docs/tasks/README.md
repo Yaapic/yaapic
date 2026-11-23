@@ -575,7 +575,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M5-52](milestone-5-import-export/M5-52-viewmodel-export.md) | ViewModel: export | any | M5-36, M5-37, M5-49 | done |
 | [M5-53](milestone-5-import-export/M5-53-viewmodel-palette-and-shell-entries.md) | ViewModel: palette commands and shell entries for import and export | any | M5-51, M5-52 | done |
 | [M5-54](milestone-5-import-export/M5-54-composition-m5-wiring.md) | Composition: wire the M5 services | any | M5-07, M5-08, M5-09, M5-10, M5-11, M5-13, M5-14, M5-15, M5-16, M5-18, M5-22, M5-23, M5-24, M5-26, M5-29, M5-34, M5-35, M5-37, M5-40, M5-41, M5-43, M5-44, M5-46, M5-53 | done |
-| [M5-55](milestone-5-import-export/M5-55-winui-pick-folder.md) | WinUI: folder picker | windows | M5-49, M5-54 | todo |
+| [M5-55](milestone-5-import-export/M5-55-winui-pick-folder.md) | WinUI: folder picker | windows | M5-49, M5-54 | done |
 | [M5-56](milestone-5-import-export/M5-56-winui-import-report-view.md) | WinUI: import report view | windows | M5-50, M5-54 | todo |
 | [M5-57](milestone-5-import-export/M5-57-winui-import-dialog.md) | WinUI: import dialog | windows | M5-51, M5-55, M5-56 | todo |
 | [M5-58](milestone-5-import-export/M5-58-winui-export-dialog.md) | WinUI: export dialog | windows | M5-52, M5-55, M5-56 | todo |

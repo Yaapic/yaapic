@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using Yaapic.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -88,6 +89,22 @@ public sealed class WinUIDialogService : IDialogService
         picker.FileTypeFilter.Add("*");
         InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(_window));
         return (await picker.PickSingleFileAsync())?.Path;
+    }
+
+    /// <inheritdoc/>
+    public async Task<string?> PickFolderAsync(string title)
+    {
+        try
+        {
+            var picker = new FolderPicker { CommitButtonText = title, SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
+            picker.FileTypeFilter.Add("*");
+            InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(_window));
+            return (await picker.PickSingleFolderAsync())?.Path;
+        }
+        catch (Exception e) when (e is COMException or InvalidOperationException or ArgumentException)
+        {
+            return null;
+        }
     }
 
     /// <inheritdoc/>
