@@ -1,6 +1,6 @@
 # M5-56: WinUI: import report view
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M5-50, M5-54
 
@@ -23,9 +23,14 @@ The import dialog (M5-57), the export result display (M5-58 reuses this view).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards). The view is not reachable yet, so the check that matters (a non-empty list under AOT) happens in M5-57: state that in the Notes.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards). The view is not reachable yet, so the check that matters (a non-empty list under AOT) happens in M5-57: state that in the Notes.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the import report view`
+
+## Notes
+
+- AOT publish of `Yaapic.App.WinUI` (win-x64): 0 IL2xxx/IL3xxx warnings, the exe starts and was killed afterwards.
+- The view is not reachable yet: the check that matters (a non-empty list under AOT, through `ListMap.ReportRows`) happens in M5-57.

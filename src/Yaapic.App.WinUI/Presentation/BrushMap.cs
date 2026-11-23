@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
+using Yaapic.Core.Import;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Responses;
@@ -42,6 +43,26 @@ public static class BrushMap
         JwtStatusKind.NotYetValid => "YaapicWarningBrush",
         _ => "YaapicTextSecondaryBrush",
     });
+
+    /// <summary>Gets the text brush of an import report severity chip.</summary>
+    /// <param name="severity">The severity of the entry.</param>
+    /// <returns>Neutral for a note, amber for a warning, red for a skipped item.</returns>
+    public static Brush Severity(ImportSeverity severity) => Get(severity switch
+    {
+        ImportSeverity.Warning => "YaapicWarningBrush",
+        ImportSeverity.Skipped => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    });
+
+    /// <summary>Gets the background brush of an import report severity chip.</summary>
+    /// <param name="severity">The severity of the entry.</param>
+    /// <returns>The matching background brush, or a transparent brush for a note.</returns>
+    public static Brush SeverityBackground(ImportSeverity severity) => severity switch
+    {
+        ImportSeverity.Warning => Get("YaapicWarningBackgroundBrush"),
+        ImportSeverity.Skipped => Get("YaapicDangerBackgroundBrush"),
+        _ => new SolidColorBrush(Microsoft.UI.Colors.Transparent),
+    };
 
     /// <summary>Gets the text brush of the status chip.</summary>
     /// <param name="category">The class of the status code.</param>
