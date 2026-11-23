@@ -1,6 +1,6 @@
 # M5-58: WinUI: export dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M5-52, M5-55, M5-56
 
@@ -27,9 +27,9 @@ Entry points (M5-59).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke on the published exe: export a collection as Postman JSON, OpenAPI YAML, Insomnia, Bruno zip; the save dialog proposes the right name and extension; the exported files open in a text editor (check the JSON); the Postman environment format shows the environment list and globals box; secrets note visible; the report appears after the export. Record anything not run.
-- [ ] Strings in EN and FR exist (M5-52); 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [ ] Manual smoke (not run: dialog entry point is M5-59; the exe starts; deferred to M5-59/M5-68).
+- [x] Strings in EN and FR exist (M5-52); 0 warnings, all tests green.
 
 ## Suggested commit message
 
