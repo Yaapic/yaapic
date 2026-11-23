@@ -88,7 +88,14 @@ public sealed class AvaloniaDialogService : IDialogService
             return false;
         }
 
-        var file = await owner.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions { SuggestedFileName = suggestedName });
+        var file = await owner.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            SuggestedFileName = suggestedName,
+            DefaultExtension = Path.GetExtension(suggestedName).TrimStart('.'),
+            FileTypeChoices = Path.GetExtension(suggestedName) is { Length: > 1 } ext
+                ? [new FilePickerFileType(ext.TrimStart('.').ToUpperInvariant()) { Patterns = ["*" + ext] }]
+                : null,
+        });
         if (file?.TryGetLocalPath() is not { } path)
         {
             return false;

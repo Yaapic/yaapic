@@ -1,6 +1,6 @@
 # M5-63: Avalonia: export window
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M5-52, M5-58, M5-60, M5-61
 
@@ -21,9 +21,9 @@ Entry points (M5-64).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] Runtime smoke on macOS or Linux as in M5-58; if not possible, say so in the Notes and tick only the build and AOT items.
-- [ ] Strings exist in EN and FR; 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [ ] Runtime smoke on macOS or Linux as in M5-58 (not run: Windows host; the AOT exe starts and stays alive, the window entry point is M5-64).
+- [x] Strings exist in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 

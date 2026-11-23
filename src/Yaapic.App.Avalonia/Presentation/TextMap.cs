@@ -12,4 +12,11 @@ public static class TextMap
     /// <summary>Gets the "{0} folders, {1} requests, ..." counts line from folders, requests, environments and global variables.</summary>
     public static FuncMultiValueConverter<object?, string> ImportCounts { get; } =
         new(v => v.ToArray() is [var folders, var requests, var environments, var globals] ? Strings.ImportCounts(folders, requests, environments, globals) : "");
+
+    /// <summary>Gets the "no collections" line of the export window from the format's need for a collection and the collection count.</summary>
+    public static FuncMultiValueConverter<object?, string> ExportEmpty { get; } =
+        new(v => v.ToArray() is [bool requires, int count] && requires && count == 0 ? Strings.ExportNoCollections : "");
+
+    /// <summary>Gets the "saved" line shown after an export, empty when nothing was saved.</summary>
+    public static FuncValueConverter<string?, string> ExportSaved { get; } = new(n => n is null ? "" : Strings.ExportSaved(n));
 }
