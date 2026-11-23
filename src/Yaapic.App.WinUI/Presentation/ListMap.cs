@@ -68,4 +68,9 @@ public static class ListMap
     /// <param name="items">The rows to show, or <see langword="null"/> before a view model is set.</param>
     /// <returns>An observable collection of the rows.</returns>
     public static ObservableCollection<ImportReportRow> ReportRows(IReadOnlyList<ImportReportRow>? items) => new(items ?? []);
+
+    /// <summary>Copies import format choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The formats to offer.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<ImportFormatChoice> ImportFormats(IReadOnlyList<ImportFormatChoice> items) => new(items);
 }

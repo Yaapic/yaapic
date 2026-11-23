@@ -18,6 +18,19 @@ public static class TextMap
     /// <returns>The joined text.</returns>
     public static string Prefixed(string prefix, string value) => prefix + value;
 
+    /// <summary>Gets the counts line of an import preview.</summary>
+    /// <param name="folders">The folder count.</param>
+    /// <param name="requests">The request count.</param>
+    /// <param name="environments">The environment count.</param>
+    /// <param name="globals">The global variable count.</param>
+    /// <returns>The localized counts line.</returns>
+    public static string ImportCounts(int folders, int requests, int environments, int globals) => Strings.ImportCounts(folders, requests, environments, globals);
+
+    /// <summary>Gets the "detected format" line of an import preview.</summary>
+    /// <param name="format">The detected format name, or <see langword="null"/> when none.</param>
+    /// <returns>The localized line, or an empty string.</returns>
+    public static string ImportDetected(string? format) => format is null ? "" : Strings.ImportDetected(format);
+
     /// <summary>Gets the hint shown for a method whose requests carry no body.</summary>
     /// <param name="methodText">The upper-case method name.</param>
     /// <returns>The hint.</returns>

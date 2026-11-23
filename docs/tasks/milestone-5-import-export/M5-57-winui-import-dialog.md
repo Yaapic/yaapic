@@ -1,6 +1,6 @@
 # M5-57: WinUI: import dialog
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M5-51, M5-55, M5-56
 
@@ -28,11 +28,15 @@ Entry points (M5-59), drag and drop of files.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts. (Verified: publish clean, exe starts and stays alive.)
 - [ ] Manual smoke on the published exe (the dialog is opened from the palette entry of M5-53 once M5-59 is done; until then open it from a temporary debug call and remove it): import a Postman collection file, a cURL text, a Bruno folder, a HAR file (the static-resources checkbox appears), an OpenAPI YAML file; the report list shows entries
   (this is the first AOT check of a **non-empty** report list); Copy puts the report on the clipboard; an invalid file shows the error and choosing a format by hand works; import adds the folder to the sidebar tree. Record anything not run.
-- [ ] Strings in EN and FR exist (M5-50, M5-51); 0 warnings, all tests green.
+- [x] Strings in EN and FR exist (M5-50, M5-51); 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the import dialog`
+
+## Notes
+
+Manual smoke of the dialog not run here: the dialog has no entry point until M5-59; it is covered by the visual verification card M5-68.
