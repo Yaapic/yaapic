@@ -667,5 +667,10 @@
   "export.failed": "The export failed: {0}",
   "export.close": "Close",
   "export.noCollections": "There is no collection to export yet.",
-  "export.secretsNote": "Secret values are never exported."
+  "export.secretsNote": "Secret values are never exported.",
+  "palette.import": "Import a collection or request...",
+  "palette.export": "Export a collection...",
+  "palette.exportThisCollection": "Export collection \"{0}\"...",
+  "collections.import": "Import...",
+  "collections.export": "Export..."
 }

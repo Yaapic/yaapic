@@ -10,6 +10,7 @@ using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
+using Yaapic.ViewModels.Import;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Settings;
@@ -202,6 +203,73 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
 
     /// <summary>Asks the views to open the client certificates dialog.</summary>
     public void RequestCertificates() => CertificatesRequested?.Invoke(this, EventArgs.Empty);
+
+    private Func<ImportViewModel>? _createImport;
+    private Func<ExportViewModel>? _createExport;
+
+    /// <summary>Gets a value indicating whether <see cref="AttachImportExport"/> was called.</summary>
+    public bool CanImportExport => _createImport is not null;
+
+    /// <summary>Raised when the user asks to import; the views open their import dialog.</summary>
+    public event EventHandler? ImportRequested;
+
+    /// <summary>Asks the views to open the import dialog; does nothing when import and export are not attached.</summary>
+    public void RequestImport()
+    {
+        if (CanImportExport)
+        {
+            ImportRequested?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    /// <summary>Raised when the user asks to export; the argument is the collection to preselect, or null.</summary>
+    public event EventHandler<Guid?>? ExportRequested;
+
+    /// <summary>Asks the views to open the export dialog; does nothing when import and export are not attached.</summary>
+    /// <param name="collectionId">The collection to preselect; null for none.</param>
+    public void RequestExport(Guid? collectionId = null)
+    {
+        if (CanImportExport)
+        {
+            ExportRequested?.Invoke(this, collectionId);
+        }
+    }
+
+    /// <summary>Exports a collection of the tree; only top-level folders can be exported.</summary>
+    /// <param name="node">The tree row.</param>
+    [RelayCommand(CanExecute = nameof(CanExportCollection))]
+    private void ExportCollection(CollectionNodeViewModel? node) => RequestExport(node?.Id);
+
+    private static bool CanExportCollection(CollectionNodeViewModel? node) => node is { IsCollection: true };
+
+    /// <summary>Hands the shell the factories of the import and export dialogs; the composition root calls it once.</summary>
+    /// <param name="import">Creates the import view model.</param>
+    /// <param name="export">Creates the export view model.</param>
+    /// <exception cref="InvalidOperationException">Already attached.</exception>
+    public void AttachImportExport(Func<ImportViewModel> import, Func<ExportViewModel> export)
+    {
+        ArgumentNullException.ThrowIfNull(import);
+        ArgumentNullException.ThrowIfNull(export);
+        if (CanImportExport)
+        {
+            throw new InvalidOperationException("Import and export are already attached.");
+        }
+
+        _createImport = import;
+        _createExport = export;
+    }
+
+    /// <summary>Creates the view model of the import dialog.</summary>
+    /// <returns>A new view model.</returns>
+    /// <exception cref="InvalidOperationException"><see cref="AttachImportExport"/> was not called.</exception>
+    public ImportViewModel CreateImport() =>
+        (_createImport ?? throw new InvalidOperationException("Import and export are not attached.")).Invoke();
+
+    /// <summary>Creates the view model of the export dialog.</summary>
+    /// <returns>A new view model.</returns>
+    /// <exception cref="InvalidOperationException"><see cref="AttachImportExport"/> was not called.</exception>
+    public ExportViewModel CreateExport() =>
+        (_createExport ?? throw new InvalidOperationException("Import and export are not attached.")).Invoke();
 
     private readonly List<IDisposable> _ownedResources = [];
     private Func<CertificatesViewModel>? _createCertificates;

@@ -248,6 +248,9 @@ public static class Strings
     /// <summary>What is this collection for?</summary>
     public static string CollectionsDescriptionPlaceholder => Localizer.Pick("What is this collection for?", "À quoi sert cette collection ?");
 
+    /// <summary>Export...</summary>
+    public static string CollectionsExport => Localizer.Pick("Export...", "Exporter...");
+
     /// <summary>Filter requests</summary>
     public static string CollectionsFilter => Localizer.Pick("Filter requests", "Filtrer les requêtes");
 
@@ -257,6 +260,9 @@ public static class Strings
 
     /// <summary>Runs for every request in this folder, before the request's own script.</summary>
     public static string CollectionsFolderScriptsHint => Localizer.Pick("Runs for every request in this folder, before the request's own script.", "S'exécute pour chaque requête de ce dossier, avant le script propre à la requête.");
+
+    /// <summary>Import...</summary>
+    public static string CollectionsImport => Localizer.Pick("Import...", "Importer...");
 
     /// <summary>Move to</summary>
     public static string CollectionsMoveTo => Localizer.Pick("Move to", "Déplacer vers");
@@ -1452,12 +1458,22 @@ public static class Strings
     /// <summary>Decode JWT</summary>
     public static string PaletteDecodeJwt => Localizer.Pick("Decode JWT", "Décoder un JWT");
 
+    /// <summary>Export a collection...</summary>
+    public static string PaletteExport => Localizer.Pick("Export a collection...", "Exporter une collection...");
+
+    /// <summary>Export collection "{0}"...</summary>
+    public static string PaletteExportThisCollection(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Export collection \"{0}\"...", "Exporter la collection \"{0}\"..."), a0);
+
     /// <summary>Generate code for this request</summary>
     public static string PaletteGenerateCode => Localizer.Pick("Generate code for this request", "Générer le code de cette requête");
 
     /// <summary>Go to tab: {0}</summary>
     public static string PaletteGoToTab(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Go to tab: {0}", "Aller à l'onglet : {0}"), a0);
+
+    /// <summary>Import a collection or request...</summary>
+    public static string PaletteImport => Localizer.Pick("Import a collection or request...", "Importer une collection ou une requête...");
 
     /// <summary>Manage environments</summary>
     public static string PaletteManageEnvironments => Localizer.Pick("Manage environments", "Gérer les environnements");

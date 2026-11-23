@@ -77,6 +77,16 @@ public sealed class CommandsPaletteSource : IPaletteSource
         items.Add(Item("clear-console", Strings.PaletteClearConsole, null, _shell.ClearConsoleCommand));
         items.Add(Item("decode-jwt", Strings.PaletteDecodeJwt, null, () => _shell.RequestJwtDecoder()));
         items.Add(Item("client-certificates", Strings.PaletteClientCertificates, null, () => _shell.RequestCertificates()));
+        if (_shell.CanImportExport)
+        {
+            items.Add(Item("import", Strings.PaletteImport, null, () => _shell.RequestImport()));
+            items.Add(Item("export-collection", Strings.PaletteExport, null, () => _shell.RequestExport(null)));
+            if (active is not null && _shell.Collections.FindCollection(active.Id) is { } collection)
+            {
+                items.Add(Item("export-this-collection", Strings.PaletteExportThisCollection(collection.Name), null, () => _shell.RequestExport(collection.Id)));
+            }
+        }
+
         if (_oauth2Tokens is not null)
         {
             items.Add(Item("clear-oauth-tokens", Strings.PaletteClearOAuthTokens, null, () => _oauth2Tokens.ClearAllTokens()));

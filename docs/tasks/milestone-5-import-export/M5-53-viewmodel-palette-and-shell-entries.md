@@ -1,6 +1,6 @@
 # M5-53: ViewModel: palette commands and shell entries for import and export
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-51, M5-52
 
@@ -25,9 +25,9 @@ Dialogs and menus (M5-57 to M5-59, M5-62 to M5-64), composition (M5-54).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests`: `RequestImport` and `RequestExport(id)` raise their events with the id; not attached: nothing raised and entries absent; attach twice throws; `CreateImport`/`CreateExport` call the factories; palette lists `import` and `export-collection`, adds `export-this-collection` for a tab inside a collection with the right name and not for an unfiled request;
+- [x] Tests in `Yaapic.ViewModels.Tests`: `RequestImport` and `RequestExport(id)` raise their events with the id; not attached: nothing raised and entries absent; attach twice throws; `CreateImport`/`CreateExport` call the factories; palette lists `import` and `export-collection`, adds `export-this-collection` for a tab inside a collection with the right name and not for an unfiled request;
   running an entry raises the event; `ExportCollectionCommand` raises with the folder id and is disabled for a nested folder and a request node.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
