@@ -1,6 +1,6 @@
 # M5-54: Composition: wire the M5 services
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-07, M5-08, M5-09, M5-10, M5-11, M5-13, M5-14, M5-15, M5-16, M5-18, M5-22, M5-23, M5-24, M5-26, M5-29, M5-34, M5-35, M5-37, M5-40, M5-41, M5-43, M5-44, M5-46, M5-53
 
@@ -26,11 +26,11 @@ Views, docs.
 
 ## Acceptance criteria
 
-- [ ] A test in `Yaapic.Infrastructure.Tests` (where the shell composition is tested, as for M4-61) that a shell built on a temporary workspace: lists the seven importers and six exporters in order; `CreateImport()` previews a small Postman collection text pasted through `PreviewPastedCommand`, imports it, the collection tree contains the new folder and requests (`Collections.RefreshAsync` ran);
+- [x] A test in `Yaapic.Infrastructure.Tests` (where the shell composition is tested, as for M4-61) that a shell built on a temporary workspace: lists the seven importers and six exporters in order; `CreateImport()` previews a small Postman collection text pasted through `PreviewPastedCommand`, imports it, the collection tree contains the new folder and requests (`Collections.RefreshAsync` ran);
   `CreateExport()` exports that collection as Postman JSON to the `FakeDialogService` `SavedFiles` and the bytes parse back with `DataNodeJson.Parse`; the palette lists the Import and Export entries.
-- [ ] A test that the secrets policy is wired: with a locked vault a Postman environment with a secret row imports with a blank value and the report `Warning`; with an unlocked vault the value reaches the vault (use the existing test vault helpers of the milestone 3 end-to-end tests).
-- [ ] AOT publish of `Yaapic.App.WinUI` (or the host-RID app that M4-61 used): 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] A test that the secrets policy is wired: with a locked vault a Postman environment with a secret row imports with a blank value and the report `Warning`; with an unlocked vault the value reaches the vault (use the existing test vault helpers of the milestone 3 end-to-end tests).
+- [x] AOT publish of `Yaapic.App.WinUI` (or the host-RID app that M4-61 used): 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
