@@ -1,6 +1,6 @@
 # M5-65: End-to-end tests: import
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M5-54
 
@@ -26,8 +26,8 @@ UI tests, exports (M5-66).
 
 ## Acceptance criteria
 
-- [ ] The test class with the scenarios above passes locally and in CI configuration (no external network).
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] The test class with the scenarios above passes locally and in CI configuration (no external network).
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 
