@@ -673,5 +673,8 @@
   "palette.export": "Export a collection...",
   "palette.exportThisCollection": "Export collection \"{0}\"...",
   "collections.import": "Import...",
-  "collections.export": "Export..."
+  "collections.export": "Export...",
+  "runner.dataTooManyFields": "Line {0} has more fields than the header.",
+  "runner.dataUnclosedQuote": "Line {0} has a quote that is never closed.",
+  "runner.dataTooLarge": "The data file is too large (10 MiB, 100000 rows and 1000 columns at most)."
 }

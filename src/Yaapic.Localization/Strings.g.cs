@@ -1679,6 +1679,17 @@ public static class Strings
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
 
+    /// <summary>The data file is too large (10 MiB, 100000 rows and 1000 columns at most).</summary>
+    public static string RunnerDataTooLarge => Localizer.Pick("The data file is too large (10 MiB, 100000 rows and 1000 columns at most).", "Le fichier de données est trop volumineux (10 Mio, 100000 lignes et 1000 colonnes au maximum).");
+
+    /// <summary>Line {0} has more fields than the header.</summary>
+    public static string RunnerDataTooManyFields(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Line {0} has more fields than the header.", "La ligne {0} contient plus de champs que l'en-tête."), a0);
+
+    /// <summary>Line {0} has a quote that is never closed.</summary>
+    public static string RunnerDataUnclosedQuote(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Line {0} has a quote that is never closed.", "La ligne {0} contient un guillemet jamais fermé."), a0);
+
     /// <summary>Paste Postman/Bruno...</summary>
     public static string ScriptConvert => Localizer.Pick("Paste Postman/Bruno...", "Coller Postman/Bruno...");
 
