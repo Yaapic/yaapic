@@ -1,6 +1,6 @@
 # M6-08: Core: JSON iteration data and the data file reader
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-07
 
@@ -33,10 +33,10 @@ Picking the file (M6-20), the runner.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Runner/`: JSON rows with every value kind; key order; not an array; an element not an object;
+- [x] Tests in `Yaapic.Core.Tests/Runner/`: JSON rows with every value kind; key order; not an array; an element not an object;
   invalid JSON; `IterationDataReader` picks CSV or JSON by extension and by content; a leading U+FEFF removed; over 10 MiB refused;
   `Columns` union in first-seen order.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

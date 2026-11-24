@@ -1679,6 +1679,17 @@ public static class Strings
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
 
+    /// <summary>Invalid JSON: {0}</summary>
+    public static string RunnerDataInvalidJson(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Invalid JSON: {0}", "JSON invalide : {0}"), a0);
+
+    /// <summary>A JSON data file must contain an array of objects.</summary>
+    public static string RunnerDataJsonNotArray => Localizer.Pick("A JSON data file must contain an array of objects.", "Un fichier de données JSON doit contenir un tableau d'objets.");
+
+    /// <summary>Item {0} of the data file is not an object.</summary>
+    public static string RunnerDataJsonNotObject(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Item {0} of the data file is not an object.", "L'élément {0} du fichier de données n'est pas un objet."), a0);
+
     /// <summary>The data file is too large (10 MiB, 100000 rows and 1000 columns at most).</summary>
     public static string RunnerDataTooLarge => Localizer.Pick("The data file is too large (10 MiB, 100000 rows and 1000 columns at most).", "Le fichier de données est trop volumineux (10 Mio, 100000 lignes et 1000 colonnes au maximum).");
 

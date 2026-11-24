@@ -676,5 +676,8 @@
   "collections.export": "Export...",
   "runner.dataTooManyFields": "Line {0} has more fields than the header.",
   "runner.dataUnclosedQuote": "Line {0} has a quote that is never closed.",
-  "runner.dataTooLarge": "The data file is too large (10 MiB, 100000 rows and 1000 columns at most)."
+  "runner.dataTooLarge": "The data file is too large (10 MiB, 100000 rows and 1000 columns at most).",
+  "runner.dataJsonNotArray": "A JSON data file must contain an array of objects.",
+  "runner.dataJsonNotObject": "Item {0} of the data file is not an object.",
+  "runner.dataInvalidJson": "Invalid JSON: {0}"
 }

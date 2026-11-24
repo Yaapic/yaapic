@@ -676,5 +676,8 @@
   "collections.export": "Exporter...",
   "runner.dataTooManyFields": "La ligne {0} contient plus de champs que l'en-tête.",
   "runner.dataUnclosedQuote": "La ligne {0} contient un guillemet jamais fermé.",
-  "runner.dataTooLarge": "Le fichier de données est trop volumineux (10 Mio, 100000 lignes et 1000 colonnes au maximum)."
+  "runner.dataTooLarge": "Le fichier de données est trop volumineux (10 Mio, 100000 lignes et 1000 colonnes au maximum).",
+  "runner.dataJsonNotArray": "Un fichier de données JSON doit contenir un tableau d'objets.",
+  "runner.dataJsonNotObject": "L'élément {0} du fichier de données n'est pas un objet.",
+  "runner.dataInvalidJson": "JSON invalide : {0}"
 }
