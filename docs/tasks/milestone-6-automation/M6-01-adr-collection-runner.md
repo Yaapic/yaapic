@@ -13,8 +13,9 @@ results, reports, UI). Docs only. The decisions below are final.
 
 - **Layers.** The runner is pure code in `Yaapic.Core.Runner` (no file access, no UI). It sends through the existing
   `ScriptedRequestSender` (ADR 0009), so authentication, certificates, timings, redaction and script limits behave exactly
-  as in the request editor. Data files are read by the view model through `IDialogService.PickFileAsync` and
-  `File.ReadAllBytesAsync` is **not** used in Core: Core parses bytes (`IterationDataReader.Read(string fileName, byte[] bytes)`).
+  as in the request editor. Data files are picked with `IDialogService.PickFileAsync` and read with the existing
+  `IImportInputReader.ReadFileAsync` (M5: UTF-8 decoding, BOM removal, size limit); Core only parses the text
+  (`IterationDataReader.Read(string fileName, string text)`).
   View models in `Yaapic.ViewModels.Runner`. No new NuGet package (`System.Xml` `XmlWriter` and `Utf8JsonWriter` come from the framework).
 - **What runs.** A run targets one folder (a top-level folder is a collection, a nested folder is allowed). Its requests are
   listed depth first in tree order (`CollectionNode` order: sub-folders first, then requests, each by name), each with its
