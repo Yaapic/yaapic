@@ -144,7 +144,7 @@ public static class AppComposition
         var collections = new CollectionTreeViewModel(collectionStore, requestStore, tabs, dialogs, vaultViewModel);
         scopes = new VariableScopeProvider(environments, globals, collections);
         scripting = new ScriptSendServices(scriptedSender, new CollectionTreeScriptChainProvider(collections), console, scopes, limits);
-        var updates = new UpdateViewModel(updateService ?? new VelopackUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), new UpdateScheduler(TimeProvider.System), console);
+        var updates = new UpdateViewModel(updateService ?? new VelopackUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), TimeProvider.System, console);
         var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates, layout);
         reloader.Target = shell;
         shell.AttachTools(() => new CertificatesViewModel(certificateStore, vault, dialogs), () => new JwtDecoderViewModel(time));

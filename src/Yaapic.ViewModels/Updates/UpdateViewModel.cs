@@ -38,9 +38,13 @@ public enum UpdateState
 /// <summary>The state machine behind the update banner and the update settings.</summary>
 public sealed partial class UpdateViewModel : ObservableObject, IDisposable
 {
+    /// <summary>The time between two automatic checks while the app keeps running.</summary>
+    public static readonly TimeSpan CheckInterval = TimeSpan.FromHours(1);
+
     private readonly IUpdateService _service;
     private readonly IUpdateSettingsStore _store;
-    private readonly UpdateScheduler _scheduler;
+    private readonly TimeProvider _clock;
+    private Task? _hourlyChecks;
     private readonly ConsoleViewModel? _console;
     private readonly CancellationTokenSource _lifetime = new();
     private CancellationTokenSource? _download;
@@ -86,17 +90,17 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     /// <param name="service">The update service.</param>
     /// <param name="store">The per-user update preferences.</param>
     /// <param name="app">The running application.</param>
-    /// <param name="scheduler">Decides when an automatic check is due.</param>
+    /// <param name="clock">The clock the hourly check and the last-check time use.</param>
     /// <param name="console">Receives the update failures; <see langword="null"/> logs nothing.</param>
-    public UpdateViewModel(IUpdateService service, IUpdateSettingsStore store, IAppInfo app, UpdateScheduler scheduler, ConsoleViewModel? console = null)
+    public UpdateViewModel(IUpdateService service, IUpdateSettingsStore store, IAppInfo app, TimeProvider clock, ConsoleViewModel? console = null)
     {
         ArgumentNullException.ThrowIfNull(service);
         ArgumentNullException.ThrowIfNull(store);
         ArgumentNullException.ThrowIfNull(app);
-        ArgumentNullException.ThrowIfNull(scheduler);
+        ArgumentNullException.ThrowIfNull(clock);
         _service = service;
         _store = store;
-        _scheduler = scheduler;
+        _clock = clock;
         _console = console;
         CurrentVersion = app.Version;
         _channel = app.Channel;
@@ -164,7 +168,7 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
     public bool IsBannerVisible =>
         State is UpdateState.Available or UpdateState.Downloading or UpdateState.ReadyToRestart && _update is not null && _update.Version != _dismissed;
 
-    /// <summary>Loads the preferences and runs the automatic check when it is due; never throws, never blocks start-up.</summary>
+    /// <summary>Loads the preferences, runs the launch check when automatic checks are on and starts the hourly check; never throws, never blocks start-up.</summary>
     /// <returns>A task completing when the check ended.</returns>
     public async Task InitializeAsync()
     {
@@ -181,9 +185,36 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
             _loading = false;
         }
 
-        if (IsSupported && _scheduler.IsCheckDue(_settings))
+        if (!IsSupported)
+        {
+            return;
+        }
+
+        _hourlyChecks ??= RunHourlyChecksAsync();
+        if (_settings.CheckAutomatically)
         {
             await CheckAsync(manual: false);
+        }
+    }
+
+    // Re-reads the setting at every tick; CheckAsync skips while a check or download runs and once the update is ready.
+    private async Task RunHourlyChecksAsync()
+    {
+        var ct = _lifetime.Token;
+        using var timer = new PeriodicTimer(CheckInterval, _clock);
+        try
+        {
+            while (await timer.WaitForNextTickAsync(ct))
+            {
+                if (CheckAutomatically)
+                {
+                    await CheckAsync(manual: false);
+                }
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            // Disposed: the loop ends.
         }
     }
 
@@ -314,7 +345,7 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
             result = new UpdateCheckResult.Failed(ex.Message);
         }
 
-        await SaveAsync(_scheduler.MarkChecked(_settings));
+        await SaveAsync(_settings with { LastCheckUtc = _clock.GetUtcNow() });
         switch (result)
         {
             case UpdateCheckResult.Available available:

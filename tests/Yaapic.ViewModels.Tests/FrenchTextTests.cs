@@ -28,7 +28,7 @@ public sealed class FrenchTextTests : IDisposable
     public async Task The_update_banner_is_in_french()
     {
         var service = new FakeUpdateService { Result = new UpdateCheckResult.Available(new(AppVersion.Parse("2.0.0"), "notes")) };
-        var vm = new UpdateViewModel(service, new InMemoryUpdateSettingsStore(), new AppInfo(AppVersion.Parse("1.0.0")), new UpdateScheduler(TimeProvider.System), new ConsoleViewModel());
+        var vm = new UpdateViewModel(service, new InMemoryUpdateSettingsStore(), new AppInfo(AppVersion.Parse("1.0.0")), TimeProvider.System, new ConsoleViewModel());
 
         await vm.InitializeAsync();
 

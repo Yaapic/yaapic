@@ -41,7 +41,7 @@ The fallback (MSIX on Windows) is therefore not needed now; R-04 and R-08 stand 
   default is the channel of the running version. `preview` users also see stable releases newer than their version.
 - **Version**: taken from the tag through the `YaapicVersion` MSBuild property; local builds are `0.0.0-dev` and
   are never offered an update (`IsSupported` is false when not installed).
-- **Flow**: check at startup at most once per 24 hours and on demand; download in the background; apply on the next
+- **Flow**: check at every launch, then every hour while the app runs (when "check automatically" is on), and on demand; download in the background; apply on the next
   restart, never forced; a failed check is silent in the UI and logged in the console log.
 - **Signing**: Authenticode (Windows) and notarization (macOS) run only when their secrets exist; unsigned builds are
   allowed and documented. No secret is committed or printed.

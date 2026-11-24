@@ -24,7 +24,7 @@ Decisions: [ADR 0011](adr/0011-distribution-and-updates.md). The workflow is `.g
    named `Yaapic <version>`: Windows `Setup.exe` and portable zip, the macOS bundle package, the Linux AppImage, the full and delta
    packages, the `releases.<os>.json` feed files and `SHA256SUMS-<rid>.txt`.
 4. Open the release, check the assets (three `SHA256SUMS`, one `releases.*.json` per OS) (the notes come from `RELEASE_NOTES.md`). Installed
-   apps find it on their next check (once a day, or "Check for updates"). The `preview` channel sees pre-releases and stable
+   apps find it on their next check (at launch, every hour while they run, or "Check for updates"). The `preview` channel sees pre-releases and stable
    releases, the `stable` channel only stable ones.
 
 A bad release is withdrawn by deleting (or un-publishing) the GitHub release: apps only ever look at the published list.
