@@ -37,6 +37,9 @@ internal static class ConformanceRunner
         public int Sends { get; init; } = 1;
         public double TimeoutSeconds { get; init; } = 10;
 
+        /// <summary>The Runner context of the send; null is a single send outside the Runner.</summary>
+        public ScriptRunContext? RunContext { get; init; }
+
         /// <summary>Expected tests, as <c>name|P</c> or <c>name|F|message</c>; null skips the check.</summary>
         public string[]? Tests { get; init; }
 
@@ -111,7 +114,7 @@ internal static class ConformanceRunner
         ScriptedSendReport report = null!;
         for (var i = 0; i < c.Sends; i++)
         {
-            report = await sender.SendAsync(new(request, scopes, chain, true, true) { Limits = limits }, TestContext.Current.CancellationToken);
+            report = await sender.SendAsync(new(request, scopes, chain, true, true) { Limits = limits, Run = c.RunContext }, TestContext.Current.CancellationToken);
             scopes = Apply(scopes, report.Changes);
         }
 

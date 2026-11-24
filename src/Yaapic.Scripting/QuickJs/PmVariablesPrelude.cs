@@ -107,8 +107,8 @@ internal static class PmVariablesPrelude
             eventName: info.eventName,
             requestName: info.requestName,
             requestId: info.requestId,
-            iteration: 0,
-            iterationCount: 1,
+            iteration: info.iteration,
+            iterationCount: info.iterationCount,
           }));
           define(yaapic, 'variables', scope('yaapic.variables', 'layered', 'local'));
           const environment = scope('yaapic.environment', 'environment', 'environment');
@@ -126,9 +126,46 @@ internal static class PmVariablesPrelude
           }));
           define(yaapic, 'collectionVariables', collectionVariables);
           define(yaapic, 'globals', globals);
-          for (const name of ['execution', 'iterationData', 'vault', 'visualizer', 'require']) {
+          for (const name of ['vault', 'visualizer', 'require']) {
             define(yaapic, name, unsupported('yaapic.' + name));
           }
+
+          // The data row is read once per script run and cached; a missing value reads as undefined.
+          let row;
+          const dataRow = () => (row ??= new Map(host('iter.get').map((entry) => [entry.key, entry.value])));
+          define(yaapic, 'iterationData', Object.freeze({
+            get(name) {
+              checkName('yaapic.iterationData', 'get', name);
+              return dataRow().get(name);
+            },
+            has(name) {
+              checkName('yaapic.iterationData', 'has', name);
+              return dataRow().has(name);
+            },
+            toObject() {
+              return Object.fromEntries(dataRow());
+            },
+            toJSON() {
+              return Object.fromEntries(dataRow());
+            },
+          }));
+
+          const setNextRequest = (nameOrId) => {
+            if (nameOrId !== null && nameOrId !== undefined && typeof nameOrId !== 'string') {
+              throw new TypeError('yaapic.execution.setNextRequest: expected a request name, id or null');
+            }
+            host('exec.next', { value: nameOrId ?? null });
+          };
+          define(yaapic, 'execution', Object.freeze({
+            setNextRequest,
+            skipRequest() {
+              host('exec.skip');
+            },
+            get location() {
+              throw new Error('yaapic.execution.location is not supported in Yaapic');
+            },
+            runRequest: unsupported('yaapic.execution.runRequest'),
+          }));
           Object.defineProperty(globalThis, 'yaapic', { value: yaapic, writable: false, configurable: false });
 
           const postman = {};
@@ -138,7 +175,7 @@ internal static class PmVariablesPrelude
           define(postman, 'setGlobalVariable', (key, value) => globals.set(key, value));
           define(postman, 'getGlobalVariable', (key) => globals.get(key));
           define(postman, 'clearGlobalVariable', (key) => globals.unset(key));
-          define(postman, 'setNextRequest', unsupported('postman.setNextRequest'));
+          define(postman, 'setNextRequest', setNextRequest);
           define(postman, 'visualizer', unsupported('postman.visualizer'));
           Object.defineProperty(globalThis, 'postman', { value: Object.freeze(postman), writable: false, configurable: false });
           // Node-style imports and the bundled libraries are not available: fail loudly instead of "x is not defined".
