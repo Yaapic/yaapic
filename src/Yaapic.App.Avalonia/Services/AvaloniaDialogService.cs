@@ -62,6 +62,25 @@ public sealed class AvaloniaDialogService : IDialogService
     }
 
     /// <inheritdoc />
+    public async Task<string?> PickFolderAsync(string title)
+    {
+        if (_owner() is not { } owner)
+        {
+            return null;
+        }
+
+        try
+        {
+            var folders = await owner.StorageProvider.OpenFolderPickerAsync(new FolderPickerOpenOptions { Title = title, AllowMultiple = false });
+            return folders.Count > 0 ? folders[0].TryGetLocalPath() : null;
+        }
+        catch (Exception)
+        {
+            return null;
+        }
+    }
+
+    /// <inheritdoc />
     public async Task<bool> SaveFileAsync(string suggestedName, byte[] content)
     {
         if (_owner() is not { } owner)
@@ -69,7 +88,14 @@ public sealed class AvaloniaDialogService : IDialogService
             return false;
         }
 
-        var file = await owner.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions { SuggestedFileName = suggestedName });
+        var file = await owner.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
+        {
+            SuggestedFileName = suggestedName,
+            DefaultExtension = Path.GetExtension(suggestedName).TrimStart('.'),
+            FileTypeChoices = Path.GetExtension(suggestedName) is { Length: > 1 } ext
+                ? [new FilePickerFileType(ext.TrimStart('.').ToUpperInvariant()) { Patterns = ["*" + ext] }]
+                : null,
+        });
         if (file?.TryGetLocalPath() is not { } path)
         {
             return false;

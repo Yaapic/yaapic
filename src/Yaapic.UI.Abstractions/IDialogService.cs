@@ -25,6 +25,11 @@ public interface IDialogService
     /// <returns>The chosen file path, or <see langword="null"/> when canceled.</returns>
     Task<string?> PickFileAsync(string title) => Task.FromResult<string?>(null);
 
+    /// <summary>Asks for an existing folder. The default does nothing; platforms override it.</summary>
+    /// <param name="title">The dialog title.</param>
+    /// <returns>The chosen folder path, or <see langword="null"/> when canceled.</returns>
+    Task<string?> PickFolderAsync(string title) => Task.FromResult<string?>(null);
+
     /// <summary>Asks for a destination and writes the bytes there. The default does nothing; platforms override it.</summary>
     /// <param name="suggestedName">The suggested file name.</param>
     /// <param name="content">The bytes to write.</param>

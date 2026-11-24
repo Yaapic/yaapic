@@ -2,13 +2,27 @@ using System.Reflection;
 using Yaapic.Core.Auth;
 using Yaapic.Core.Auth.OAuth2;
 using Yaapic.Core.CodeGeneration;
+using Yaapic.Core.Export;
+using Yaapic.Core.Export.Bruno;
+using Yaapic.Core.Export.Insomnia;
+using Yaapic.Core.Export.OpenApi;
+using Yaapic.Core.Export.Postman;
 using Yaapic.Core.Http;
+using Yaapic.Core.Import;
+using Yaapic.Core.Import.Bruno;
+using Yaapic.Core.Import.Curl;
+using Yaapic.Core.Import.Har;
+using Yaapic.Core.Import.Insomnia;
+using Yaapic.Core.Import.OpenApi;
+using Yaapic.Core.Import.Postman;
 using Yaapic.Core.Scripting;
 using Yaapic.Core.Secrets;
+using Yaapic.Core.Storage;
 using Yaapic.Core.Updates;
 using Yaapic.Infrastructure.Auth;
 using Yaapic.Infrastructure.Certificates;
 using Yaapic.Infrastructure.Http;
+using Yaapic.Infrastructure.Import;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
 using Yaapic.Infrastructure.Updates;
@@ -19,6 +33,7 @@ using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
+using Yaapic.ViewModels.Import;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Settings;
@@ -105,8 +120,11 @@ public static class AppComposition
 
         var scriptedSender = new ScriptedRequestSender(sender, engines, TimeProvider.System, new SecretRedactor(vault));
         var console = new ConsoleViewModel(dialogs);
-        var environments = new EnvironmentsViewModel(new SecretAwareEnvironmentStore(new FileEnvironmentStore(workspaceRoot), vault), dialogs, vaultViewModel);
-        var globals = new GlobalsViewModel(new SecretAwareGlobalsStore(new FileGlobalsStore(workspaceRoot), vault), vaultViewModel);
+        var environmentStore = new SecretAwareEnvironmentStore(new FileEnvironmentStore(workspaceRoot), vault);
+        var globalsStore = new SecretAwareGlobalsStore(new FileGlobalsStore(workspaceRoot), vault);
+        var collectionStore = new SecretAwareCollectionStore(new FileCollectionStore(workspaceRoot), vault);
+        var environments = new EnvironmentsViewModel(environmentStore, dialogs, vaultViewModel);
+        var globals = new GlobalsViewModel(globalsStore, vaultViewModel);
         VariableScopeProvider? scopes = null;
         HistoryViewModel? history = null;
         ScriptSendServices? scripting = null;
@@ -123,14 +141,14 @@ public static class AppComposition
             });
         history = new HistoryViewModel(new FileHistoryStore(workspaceRoot), TimeProvider.System, tabs, dialogs);
         var requests = new RequestListViewModel(requestStore, tabs, dialogs);
-        var collections = new CollectionTreeViewModel(
-            new SecretAwareCollectionStore(new FileCollectionStore(workspaceRoot), vault), requestStore, tabs, dialogs, vaultViewModel);
+        var collections = new CollectionTreeViewModel(collectionStore, requestStore, tabs, dialogs, vaultViewModel);
         scopes = new VariableScopeProvider(environments, globals, collections);
         scripting = new ScriptSendServices(scriptedSender, new CollectionTreeScriptChainProvider(collections), console, scopes, limits);
         var updates = new UpdateViewModel(updateService ?? new VelopackUpdateService(), updateSettings ?? new FileUpdateSettingsStore(), CreateAppInfo(), new UpdateScheduler(TimeProvider.System), console);
         var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates, layout);
         reloader.Target = shell;
         shell.AttachTools(() => new CertificatesViewModel(certificateStore, vault, dialogs), () => new JwtDecoderViewModel(time));
+        AttachImportExport(shell, dialogs, vault, requestStore, collectionStore, environmentStore, globalsStore);
         shell.Own(realTransport);
         shell.Own(certificates);
         shell.AttachPalette(new CommandPaletteViewModel(
@@ -141,6 +159,30 @@ public static class AppComposition
             new TabsPaletteSource(tabs),
         ]));
         return shell;
+    }
+
+    // Importers register in tie-break order of ImporterRegistry.Detect; each dialog opening gets a new view model.
+    private static void AttachImportExport(
+        ShellViewModel shell, IDialogService dialogs, ISecretVault vault, IRequestStore requestStore,
+        ICollectionStore collectionStore, IEnvironmentStore environmentStore, IGlobalsStore globalsStore)
+    {
+        var structured = new StructuredTextReader(new VYamlTreeReader());
+        var importers = new ImporterRegistry(
+        [
+            new PostmanCollectionImporter(), new PostmanEnvironmentImporter(), new OpenApiImporter(structured),
+            new InsomniaImporter(), new HarImporter(), new BrunoImporter(), new CurlImporter(),
+        ]);
+        var service = new ImportService(importers, new ImportApplier(requestStore, collectionStore, environmentStore, globalsStore, () => vault.State == VaultState.Unlocked));
+        var inputReader = new FileImportInputReader();
+        var exporters = new ExporterRegistry(
+        [
+            new PostmanCollectionExporter(), new PostmanEnvironmentExporter(), new OpenApiJsonExporter(),
+            new OpenApiYamlExporter(), new InsomniaExporter(), new BrunoExporter(),
+        ]);
+        var sourceReader = new ExportSourceReader(collectionStore, environmentStore, globalsStore);
+        shell.AttachImportExport(
+            () => new ImportViewModel(service, importers, inputReader, dialogs, shell.ReloadAsync),
+            () => new ExportViewModel(exporters, sourceReader, collectionStore, environmentStore, dialogs));
     }
 
     // The vault view model needs the reloader before the shell exists.

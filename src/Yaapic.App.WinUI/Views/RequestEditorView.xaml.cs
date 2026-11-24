@@ -1,4 +1,3 @@
-using Yaapic.Localization;
 using System.ComponentModel;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -7,6 +6,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Yaapic.App.WinUI.Presentation;
 using Yaapic.Domain.Http;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Requests;
 
 namespace Yaapic.App.WinUI.Views;

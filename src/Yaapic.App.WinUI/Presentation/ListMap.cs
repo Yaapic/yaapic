@@ -1,5 +1,6 @@
 using System.Collections.ObjectModel;
 using Yaapic.Domain.Http;
+using Yaapic.ViewModels.Import;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Tools;
@@ -62,4 +63,29 @@ public static class ListMap
     /// <param name="items">The lines to show, or <see langword="null"/> when nothing is selected.</param>
     /// <returns>An observable collection of the lines.</returns>
     public static ObservableCollection<string> Lines(IReadOnlyList<string>? items) => new(items ?? []);
+
+    /// <summary>Copies import report rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The rows to show, or <see langword="null"/> before a view model is set.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<ImportReportRow> ReportRows(IReadOnlyList<ImportReportRow>? items) => new(items ?? []);
+
+    /// <summary>Copies import format choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The formats to offer.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<ImportFormatChoice> ImportFormats(IReadOnlyList<ImportFormatChoice> items) => new(items);
+
+    /// <summary>Copies exportable collections into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The collections to offer.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<ExportChoice> ExportChoices(IReadOnlyList<ExportChoice> items) => new(items);
+
+    /// <summary>Copies export formats into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The formats to offer.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<ExportFormatChoice> ExportFormats(IReadOnlyList<ExportFormatChoice> items) => new(items);
+
+    /// <summary>Copies export environment choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The environments to offer; the items are observable, so their check boxes bind two-way.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<ExportEnvironmentChoice> ExportEnvironmentChoices(IReadOnlyList<ExportEnvironmentChoice> items) => new(items);
 }

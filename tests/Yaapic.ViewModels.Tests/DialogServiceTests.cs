@@ -19,6 +19,7 @@ public sealed class DialogServiceTests
 
         Assert.Null(await dialogs.PromptTextAsync("t", "l", "i"));
         Assert.Null(await dialogs.PickFileAsync("t"));
+        Assert.Null(await dialogs.PickFolderAsync("t"));
         Assert.False(await dialogs.SaveFileAsync("a.txt", [1]));
         await dialogs.SetClipboardTextAsync("x");
     }
@@ -49,5 +50,14 @@ public sealed class DialogServiceTests
         Assert.Equal("out.txt", saved.Name);
         Assert.Equal<byte>([1, 2], saved.Content);
         Assert.Equal(["copied"], fake.ClipboardTexts);
+    }
+
+    [Fact]
+    public async Task Fake_records_folder_titles_and_returns_the_scripted_path()
+    {
+        var fake = new FakeDialogService { PickFolderAnswer = "/a/bruno" };
+
+        Assert.Equal("/a/bruno", await fake.PickFolderAsync("Pick"));
+        Assert.Equal(["Pick"], fake.PickFolderTitles);
     }
 }

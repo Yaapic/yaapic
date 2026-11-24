@@ -240,6 +240,13 @@ A request outside any collection is offered the environments without a `collecti
 Keys: `version: 1`, `openRequests` (list of GUID strings), `activeRequest` (GUID or empty), `activeEnvironment`
 (GUID or empty).
 
+## Imports and exports
+
+An import writes ordinary workspace files (a new top-level folder, requests, environments, globals) through the usual
+stores: it adds **no key** to the format. Credentials found in the source (auth blocks, headers) are stored as plain text like
+any typed value; only rows the importer marks as secret go to the vault, and only when it is unlocked. Secret values are never
+exported. See [import-export.md](import-export.md).
+
 ## Rules
 
 - UTF-8 without BOM, `\n` line endings.

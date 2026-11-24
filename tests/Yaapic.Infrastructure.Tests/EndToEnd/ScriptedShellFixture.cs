@@ -28,6 +28,9 @@ internal sealed class ScriptedShellFixture : IDisposable
 
     public string Root { get; }
 
+    /// <summary>Gets the dialog service of every shell composed by this fixture; tests set its picker answers.</summary>
+    public FakeDialogService Dialogs { get; } = new();
+
     public void Dispose()
     {
         TempWorkspace.Delete(Root);
@@ -72,7 +75,7 @@ internal sealed class ScriptedShellFixture : IDisposable
     public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null, bool withLua = false, IKeyProtectorFactory? protectors = null)
     {
         IScriptEngine[] engines = withLua ? [new QuickJsEngine(), new LuaEngine()] : [new QuickJsEngine()];
-        var shell = AppComposition.CreateShell(Root, new FakeDialogService(), protectors, new TempVaultLocation(_vaults), engines, limits);
+        var shell = AppComposition.CreateShell(Root, Dialogs, protectors, new TempVaultLocation(_vaults), engines, limits);
         await shell.InitializeAsync();
         var unavailable = shell.ScriptEngineWarnings.FirstOrDefault(w => w.StartsWith("JavaScript", StringComparison.Ordinal) || (withLua && w.StartsWith("Lua", StringComparison.Ordinal)));
         Assert.True(

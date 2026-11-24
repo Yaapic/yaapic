@@ -1,0 +1,80 @@
+<Window
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:i="using:Yaapic.ViewModels.Import"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:v="using:Yaapic.App.Avalonia.Views"
+    x:Class="Yaapic.App.Avalonia.Views.ExportWindow"
+    x:DataType="i:ExportViewModel"
+    x:CompileBindings="True"
+    Title="{x:Static loc:Strings.ExportTitle}"
+    Width="640" Height="520" MinWidth="520" MinHeight="440" WindowStartupLocation="CenterOwner" ShowInTaskbar="False"
+    Classes="dialog">
+  <Grid RowDefinitions="*,Auto">
+    <Grid Margin="24,24,24,12" RowDefinitions="Auto,Auto,Auto,Auto,Auto,*,Auto" RowSpacing="10">
+      <StackPanel Spacing="4" IsVisible="{Binding RequiresCollection}">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.ExportCollection}" />
+        <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.ExportCollection}"
+                  ItemsSource="{Binding Collections}" SelectedItem="{Binding SelectedCollection, Mode=TwoWay}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="i:ExportChoice">
+              <TextBlock Text="{Binding Name}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+      <TextBlock Grid.Row="1" TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextSecondaryBrush}">
+        <TextBlock.Text>
+          <MultiBinding Converter="{x:Static p:TextMap.ExportEmpty}">
+            <Binding Path="RequiresCollection" />
+            <Binding Path="Collections.Count" />
+          </MultiBinding>
+        </TextBlock.Text>
+      </TextBlock>
+      <StackPanel Grid.Row="2" Spacing="4">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.ExportFormat}" />
+        <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.ExportFormat}"
+                  ItemsSource="{Binding Formats}" SelectedItem="{Binding SelectedFormat, Mode=TwoWay}">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="i:ExportFormatChoice">
+              <TextBlock Text="{Binding DisplayName}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+      <StackPanel Grid.Row="3" Spacing="6" IsVisible="{Binding ShowEnvironments}">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.ExportEnvironments}" />
+        <ListBox MaxHeight="120" SelectionMode="Multiple" AutomationProperties.Name="{x:Static loc:Strings.ExportEnvironments}"
+                 ItemsSource="{Binding EnvironmentChoices}">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="i:ExportEnvironmentChoice">
+              <CheckBox Content="{Binding Name}" AutomationProperties.Name="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <CheckBox Content="{x:Static loc:Strings.ExportIncludeGlobals}" AutomationProperties.Name="{x:Static loc:Strings.ExportIncludeGlobals}"
+                  IsChecked="{Binding IncludeGlobals, Mode=TwoWay}" />
+      </StackPanel>
+      <TextBlock Grid.Row="4" TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                 Text="{x:Static loc:Strings.ExportSecretsNote}" />
+      <v:ImportReportView Grid.Row="5" DataContext="{Binding Report}" />
+      <Grid Grid.Row="6" ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{DynamicResource YaapicDangerBrush}"
+                   Text="{Binding Error}" IsVisible="{Binding HasError}" />
+        <ProgressBar Grid.Column="1" Width="120" IsIndeterminate="True" IsVisible="{Binding IsBusy}" />
+      </Grid>
+    </Grid>
+    <Border Grid.Row="1" Classes="dialogCommands">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite"
+                   Text="{Binding SavedName, Converter={x:Static p:TextMap.ExportSaved}}" />
+        <UniformGrid Grid.Column="1" Rows="1">
+          <Button Classes="accent" Content="{x:Static loc:Strings.ExportExport}" AutomationProperties.Name="{x:Static loc:Strings.ExportExport}"
+                  Command="{Binding ExportCommand}" />
+          <Button IsCancel="True" Content="{x:Static loc:Strings.ExportClose}" AutomationProperties.Name="{x:Static loc:Strings.ExportClose}"
+                  Click="OnClose" />
+        </UniformGrid>
+      </Grid>
+    </Border>
+  </Grid>
+</Window>

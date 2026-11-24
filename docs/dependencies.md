@@ -29,6 +29,12 @@ when present (`curl`, `node`, `python`, `pwsh`, `gofmt`) to check generated code
 none is needed to build or run Yaapic. `LoomEditor.*` stays at 0.6.0 (no grammar for shell, PowerShell and Go, see
 [ADR 0015](adr/0015-response-diff-and-code-generation.md)).
 
+Milestone 5 (import and export): **no new package**. JSON reading and writing use `System.Text.Json` (`JsonDocument`,
+`Utf8JsonWriter`), the Bruno zip export uses `System.IO.Compression`, and the importers' patterns use regex source
+generation, all from the framework. VYaml (already referenced) reads YAML into the neutral `DataNode` tree; the YAML writer of
+the OpenAPI export is our own code (see [ADR 0016](adr/0016-import-export-architecture.md) and the
+[YAML spike](spikes/m5-yaml-tree.md)).
+
 ## Native libraries (M3-15)
 
 `native/versions.json` pins, for QuickJS-NG and Lua, the source URL, the tag, the SHA-256 of the source archive and the

@@ -1,10 +1,10 @@
-using Yaapic.Localization;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Windows.System;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;
@@ -81,6 +81,8 @@ public sealed partial class MainWindow : Window
                 _viewModel.EnvironmentsRequested -= OnEnvironmentsRequested;
                 _viewModel.CertificatesRequested -= OnCertificatesRequested;
                 _viewModel.JwtDecoderRequested -= OnJwtDecoderRequested;
+                _viewModel.ImportRequested -= OnImportRequested;
+                _viewModel.ExportRequested -= OnExportRequested;
                 _viewModel.Vault.SetupRequested -= OnVaultRequested;
                 _viewModel.Vault.UnlockRequested -= OnVaultRequested;
                 _viewModel.Updates.SettingsRequested -= OnUpdatesRequested;
@@ -94,6 +96,8 @@ public sealed partial class MainWindow : Window
                 _viewModel.EnvironmentsRequested += OnEnvironmentsRequested;
                 _viewModel.CertificatesRequested += OnCertificatesRequested;
                 _viewModel.JwtDecoderRequested += OnJwtDecoderRequested;
+                _viewModel.ImportRequested += OnImportRequested;
+                _viewModel.ExportRequested += OnExportRequested;
                 _viewModel.Vault.SetupRequested += OnVaultRequested;
                 _viewModel.Vault.UnlockRequested += OnVaultRequested;
                 _viewModel.Updates.SettingsRequested += OnUpdatesRequested;
@@ -195,6 +199,10 @@ public sealed partial class MainWindow : Window
             AddItem(menu, Strings.CommonRename, tree.RenameFolderCommand, node);
             AddItem(menu, Strings.SettingsTitle, tree.EditSettingsCommand, node);
             AddItem(menu, Strings.CommonDelete, tree.DeleteFolderCommand, node);
+            if (node.IsCollection)
+            {
+                AddItem(menu, Strings.CollectionsExport, _viewModel.ExportCollectionCommand, node);
+            }
         }
         else
         {
@@ -461,6 +469,46 @@ public sealed partial class MainWindow : Window
         try
         {
             await new Views.JwtDecoderDialog(shell.CreateJwtDecoder()) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
+        }
+        finally
+        {
+            _dialogOpen = false;
+        }
+    }
+
+    private void OnImportClick(object sender, RoutedEventArgs e) => _viewModel?.RequestImport();
+
+    private async void OnImportRequested(object? sender, EventArgs e)
+    {
+        if (_viewModel is not { } shell || _dialogOpen)
+        {
+            return;
+        }
+
+        _dialogOpen = true;
+        try
+        {
+            await new Views.ImportDialog(shell.CreateImport()) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
+        }
+        finally
+        {
+            _dialogOpen = false;
+        }
+    }
+
+    private async void OnExportRequested(object? sender, Guid? collectionId)
+    {
+        if (_viewModel is not { } shell || _dialogOpen)
+        {
+            return;
+        }
+
+        _dialogOpen = true;
+        try
+        {
+            var export = shell.CreateExport();
+            await export.LoadAsync(collectionId);
+            await new Views.ExportDialog(export) { XamlRoot = Root.XamlRoot, RequestedTheme = Root.RequestedTheme }.ShowAsync();
         }
         finally
         {

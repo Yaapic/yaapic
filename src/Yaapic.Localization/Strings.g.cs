@@ -248,6 +248,9 @@ public static class Strings
     /// <summary>What is this collection for?</summary>
     public static string CollectionsDescriptionPlaceholder => Localizer.Pick("What is this collection for?", "À quoi sert cette collection ?");
 
+    /// <summary>Export...</summary>
+    public static string CollectionsExport => Localizer.Pick("Export...", "Exporter...");
+
     /// <summary>Filter requests</summary>
     public static string CollectionsFilter => Localizer.Pick("Filter requests", "Filtrer les requêtes");
 
@@ -257,6 +260,9 @@ public static class Strings
 
     /// <summary>Runs for every request in this folder, before the request's own script.</summary>
     public static string CollectionsFolderScriptsHint => Localizer.Pick("Runs for every request in this folder, before the request's own script.", "S'exécute pour chaque requête de ce dossier, avant le script propre à la requête.");
+
+    /// <summary>Import...</summary>
+    public static string CollectionsImport => Localizer.Pick("Import...", "Importer...");
 
     /// <summary>Move to</summary>
     public static string CollectionsMoveTo => Localizer.Pick("Move to", "Déplacer vers");
@@ -589,6 +595,116 @@ public static class Strings
     /// <summary>1 variable</summary>
     public static string EnvironmentsVariableOne => Localizer.Pick("1 variable", "1 variable");
 
+    /// <summary>{0}: authentication type {1} has no Bruno equivalent and was left out.</summary>
+    public static string ExportBrunoAuthUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: authentication type {1} has no Bruno equivalent and was left out.", "{0} : le type d'authentification {1} n'a pas d'équivalent Bruno et a été laissé de côté."), a0, a1);
+
+    /// <summary>{0}: a binary body cannot be exported to Bruno and was left out.</summary>
+    public static string ExportBrunoBinaryBody(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a binary body cannot be exported to Bruno and was left out.", "{0} : un corps binaire ne peut pas être exporté vers Bruno et a été laissé de côté."), a0);
+
+    /// <summary>Bruno collection (.zip)</summary>
+    public static string ExportBrunoDisplayName => Localizer.Pick("Bruno collection (.zip)", "Collection Bruno (.zip)");
+
+    /// <summary>Global variables were not exported: Bruno has no equivalent.</summary>
+    public static string ExportBrunoGlobalsIgnored => Localizer.Pick("Global variables were not exported: Bruno has no equivalent.", "Les variables globales n'ont pas été exportées : Bruno n'a pas d'équivalent.");
+
+    /// <summary>{0}: a Lua script cannot be exported to Bruno and was left out.</summary>
+    public static string ExportBrunoLuaScript(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a Lua script cannot be exported to Bruno and was left out.", "{0} : un script Lua ne peut pas être exporté vers Bruno et a été laissé de côté."), a0);
+
+    /// <summary>{0} scripts were exported unchanged: they use the yaapic API, not Bruno's.</summary>
+    public static string ExportBrunoScripts(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were exported unchanged: they use the yaapic API, not Bruno's.", "{0} scripts ont été exportés tels quels : ils utilisent l'API yaapic, pas celle de Bruno."), a0);
+
+    /// <summary>Close</summary>
+    public static string ExportClose => Localizer.Pick("Close", "Fermer");
+
+    /// <summary>Collection</summary>
+    public static string ExportCollection => Localizer.Pick("Collection", "Collection");
+
+    /// <summary>The collection to export no longer exists.</summary>
+    public static string ExportCollectionNotFound => Localizer.Pick("The collection to export no longer exists.", "La collection à exporter n'existe plus.");
+
+    /// <summary>Environments</summary>
+    public static string ExportEnvironments => Localizer.Pick("Environments", "Environnements");
+
+    /// <summary>Export...</summary>
+    public static string ExportExport => Localizer.Pick("Export...", "Exporter...");
+
+    /// <summary>The export failed: {0}</summary>
+    public static string ExportFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The export failed: {0}", "L'export a échoué : {0}"), a0);
+
+    /// <summary>{0} requests reference local files by path; the paths are exported as they are.</summary>
+    public static string ExportFileReference(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests reference local files by path; the paths are exported as they are.", "{0} requêtes référencent des fichiers locaux par leur chemin ; les chemins sont exportés tels quels."), a0);
+
+    /// <summary>Format</summary>
+    public static string ExportFormat => Localizer.Pick("Format", "Format");
+
+    /// <summary>Include global variables</summary>
+    public static string ExportIncludeGlobals => Localizer.Pick("Include global variables", "Inclure les variables globales");
+
+    /// <summary>{0}: authentication type {1} has no Insomnia equivalent and was left out.</summary>
+    public static string ExportInsomniaAuthUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: authentication type {1} has no Insomnia equivalent and was left out.", "{0} : le type d'authentification {1} n'a pas d'équivalent Insomnia et a été laissé de côté."), a0, a1);
+
+    /// <summary>Insomnia (v4 JSON)</summary>
+    public static string ExportInsomniaDisplayName => Localizer.Pick("Insomnia (v4 JSON)", "Insomnia (JSON v4)");
+
+    /// <summary>The dynamic variable {{{{{0}}}}} has no Insomnia equivalent and was left as written.</summary>
+    public static string ExportInsomniaDynamicVariable(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The dynamic variable {{{{{0}}}}} has no Insomnia equivalent and was left as written.", "La variable dynamique {{{{{0}}}}} n'a pas d'équivalent Insomnia et a été laissée telle quelle."), a0);
+
+    /// <summary>{0} scripts were not exported: Insomnia uses a different scripting API.</summary>
+    public static string ExportInsomniaScripts(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were not exported: Insomnia uses a different scripting API.", "{0} scripts n'ont pas été exportés : Insomnia utilise une autre API de script."), a0);
+
+    /// <summary>There is no collection to export yet.</summary>
+    public static string ExportNoCollections => Localizer.Pick("There is no collection to export yet.", "Il n'y a pas encore de collection à exporter.");
+
+    /// <summary>There is nothing to export.</summary>
+    public static string ExportNothingToExport => Localizer.Pick("There is nothing to export.", "Il n'y a rien à exporter.");
+
+    /// <summary>{0} {1} appears more than once; only the first request was exported.</summary>
+    public static string ExportOpenApiDuplicateOperation(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} {1} appears more than once; only the first request was exported.", "{0} {1} apparaît plusieurs fois ; seule la première requête a été exportée."), a0, a1);
+
+    /// <summary>This OpenAPI document was inferred from the requests: responses and schemas are not known and were left generic.</summary>
+    public static string ExportOpenApiInferred => Localizer.Pick("This OpenAPI document was inferred from the requests: responses and schemas are not known and were left generic.", "Ce document OpenAPI a été déduit des requêtes : les réponses et les schémas sont inconnus et sont restés génériques.");
+
+    /// <summary>The base URL variable "{0}" has no value; the server was set to "/".</summary>
+    public static string ExportOpenApiUnresolvedServer(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The base URL variable \"{0}\" has no value; the server was set to \"/\".", "La variable d'URL de base \"{0}\" n'a pas de valeur ; le serveur a été défini sur \"/\"."), a0);
+
+    /// <summary>Postman collection (v2.1)</summary>
+    public static string ExportPostmanDisplayName => Localizer.Pick("Postman collection (v2.1)", "Postman collection (v2.1)");
+
+    /// <summary>{0}: a Lua script cannot be exported to Postman and was left out.</summary>
+    public static string ExportPostmanLuaScript(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: a Lua script cannot be exported to Postman and was left out.", "{0} : un script Lua ne peut pas être exporté vers Postman et a été laissé de côté."), a0);
+
+    /// <summary>Postman environment</summary>
+    public static string ExportPostmanEnvironmentDisplayName => Localizer.Pick("Postman environment", "Environnement Postman");
+
+    /// <summary>Saved {0}</summary>
+    public static string ExportSaved(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved {0}", "{0} enregistré"), a0);
+
+    /// <summary>Scripts were exported with the yaapic API renamed to pm; check them in Postman.</summary>
+    public static string ExportScriptsRewritten => Localizer.Pick("Scripts were exported with the yaapic API renamed to pm; check them in Postman.", "Les scripts ont été exportés avec l'API yaapic renommée en pm ; vérifiez-les dans Postman.");
+
+    /// <summary>Secret values are never exported.</summary>
+    public static string ExportSecretsNote => Localizer.Pick("Secret values are never exported.", "Les valeurs secrètes ne sont jamais exportées.");
+
+    /// <summary>{0} secret values were not exported (secret values never leave the vault).</summary>
+    public static string ExportSecretsOmitted(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not exported (secret values never leave the vault).", "{0} valeurs secrètes n'ont pas été exportées (les valeurs secrètes ne quittent jamais le coffre)."), a0);
+
+    /// <summary>Export</summary>
+    public static string ExportTitle => Localizer.Pick("Export", "Exporter");
+
     /// <summary>All files</summary>
     public static string FilesAll => Localizer.Pick("All files", "Tous les fichiers");
 
@@ -634,6 +750,431 @@ public static class Strings
 
     /// <summary>HTTP/3 is not available on this machine; HTTP/2 is used.</summary>
     public static string HttpVersionHttp3Unavailable => Localizer.Pick("HTTP/3 is not available on this machine; HTTP/2 is used.", "HTTP/3 n'est pas disponible sur cette machine ; HTTP/2 est utilisé.");
+
+    /// <summary>{0} requests got the authentication of their folder or collection copied onto them.</summary>
+    public static string ImportAuthInherited(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests got the authentication of their folder or collection copied onto them.", "{0} requêtes ont reçu une copie de l'authentification de leur dossier ou de leur collection."), a0);
+
+    /// <summary>Credentials of the imported requests are stored as plain text in the workspace files. Move them to secret variables.</summary>
+    public static string ImportAuthPlainText => Localizer.Pick("Credentials of the imported requests are stored as plain text in the workspace files. Move them to secret variables.", "Les identifiants des requêtes importées sont stockés en clair dans les fichiers de l'espace de travail. Déplacez-les dans des variables secrètes.");
+
+    /// <summary>Authentication type "{1}" is not supported; the request was imported without authentication.</summary>
+    public static string ImportAuthUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Authentication type \"{1}\" is not supported; the request was imported without authentication.", "Le type d'authentification \"{1}\" n'est pas pris en charge ; la requête a été importée sans authentification."), a0, a1);
+
+    /// <summary>{0} assertion blocks (assert) were not imported.</summary>
+    public static string ImportBrunoAssertDropped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} assertion blocks (assert) were not imported.", "{0} blocs d'assertions (assert) n'ont pas été importés."), a0);
+
+    /// <summary>{0}: the body mode "{1}" is not supported; the request has no body.</summary>
+    public static string ImportBrunoBodyModeUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the body mode \"{1}\" is not supported; the request has no body.", "{0} : le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps."), a0, a1);
+
+    /// <summary>Bruno collection</summary>
+    public static string ImportBrunoDisplayName => Localizer.Pick("Bruno collection", "Collection Bruno");
+
+    /// <summary>A GraphQL body was converted to a JSON body.</summary>
+    public static string ImportBrunoGraphQl => Localizer.Pick("A GraphQL body was converted to a JSON body.", "Un corps GraphQL a été converti en corps JSON.");
+
+    /// <summary>{0} requests got the headers of their folder or collection copied onto them.</summary>
+    public static string ImportBrunoHeadersInherited(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} requests got the headers of their folder or collection copied onto them.", "{0} requêtes ont reçu une copie des en-têtes de leur dossier ou de leur collection."), a0);
+
+    /// <summary>{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.</summary>
+    public static string ImportBrunoProcessEnv => Localizer.Pick("{{process.env.*}} variables are not available in Yaapic; define them as environment variables instead.", "Les variables {{process.env.*}} n'existent pas dans Yaapic ; définissez-les plutôt comme variables d'environnement.");
+
+    /// <summary>{0} secret variables were created empty: Bruno does not export their values.</summary>
+    public static string ImportBrunoSecretsEmpty(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret variables were created empty: Bruno does not export their values.", "{0} variables secrètes ont été créées vides : Bruno n'exporte pas leurs valeurs."), a0);
+
+    /// <summary>{0}: requests of type "{1}" are not supported yet.</summary>
+    public static string ImportBrunoTypeUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: requests of type \"{1}\" are not supported yet.", "{0} : les requêtes de type \"{1}\" ne sont pas encore prises en charge."), a0, a1);
+
+    /// <summary>Reading...</summary>
+    public static string ImportBusy => Localizer.Pick("Reading...", "Lecture...");
+
+    /// <summary>Choose a file...</summary>
+    public static string ImportChooseFile => Localizer.Pick("Choose a file...", "Choisir un fichier...");
+
+    /// <summary>Choose a file to import</summary>
+    public static string ImportChooseFileTitle => Localizer.Pick("Choose a file to import", "Choisissez un fichier à importer");
+
+    /// <summary>Choose a folder...</summary>
+    public static string ImportChooseFolder => Localizer.Pick("Choose a folder...", "Choisir un dossier...");
+
+    /// <summary>Choose a Bruno collection folder</summary>
+    public static string ImportChooseFolderTitle => Localizer.Pick("Choose a Bruno collection folder", "Choisissez un dossier de collection Bruno");
+
+    /// <summary>Close</summary>
+    public static string ImportClose => Localizer.Pick("Close", "Fermer");
+
+    /// <summary>{0} folders, {1} requests, {2} environments, {3} global variables</summary>
+    public static string ImportCounts(object? a0, object? a1, object? a2, object? a3) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} folders, {1} requests, {2} environments, {3} global variables", "{0} dossiers, {1} requêtes, {2} environnements, {3} variables globales"), a0, a1, a2, a3);
+
+    /// <summary>This looks like the Windows cmd form of cURL. Copy the command as "cURL (bash)" and paste it again.</summary>
+    public static string ImportCurlCmdSyntax => Localizer.Pick("This looks like the Windows cmd form of cURL. Copy the command as \"cURL (bash)\" and paste it again.", "Cette commande ressemble à la forme cmd de Windows de cURL. Copiez-la au format \"cURL (bash)\" puis collez-la à nouveau.");
+
+    /// <summary>cURL command</summary>
+    public static string ImportCurlDisplayName => Localizer.Pick("cURL command", "Commande cURL");
+
+    /// <summary>The extra argument "{0}" was ignored.</summary>
+    public static string ImportCurlExtraArgument(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The extra argument \"{0}\" was ignored.", "L'argument supplémentaire \"{0}\" a été ignoré."), a0);
+
+    /// <summary>-k (skip TLS verification) is not supported in Yaapic; the request keeps normal certificate checks.</summary>
+    public static string ImportCurlInsecure => Localizer.Pick("-k (skip TLS verification) is not supported in Yaapic; the request keeps normal certificate checks.", "-k (ignorer la vérification TLS) n'est pas pris en charge dans Yaapic ; la requête conserve la vérification normale des certificats.");
+
+    /// <summary>No curl command was found.</summary>
+    public static string ImportCurlNoCommand => Localizer.Pick("No curl command was found.", "Aucune commande curl n'a été trouvée.");
+
+    /// <summary>The command has no URL.</summary>
+    public static string ImportCurlNoUrl => Localizer.Pick("The command has no URL.", "La commande n'a pas d'URL.");
+
+    /// <summary>The option {0} is not supported and was ignored.</summary>
+    public static string ImportCurlOptionIgnored(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The option {0} is not supported and was ignored.", "L'option {0} n'est pas prise en charge et a été ignorée."), a0);
+
+    /// <summary>The command has an unterminated quote.</summary>
+    public static string ImportCurlUnterminatedQuote => Localizer.Pick("The command has an unterminated quote.", "La commande contient un guillemet non fermé.");
+
+    /// <summary>Descriptions of {0} requests were not imported.</summary>
+    public static string ImportDescriptionsDropped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Descriptions of {0} requests were not imported.", "Les descriptions de {0} requêtes n'ont pas été importées."), a0);
+
+    /// <summary>Detected: {0}</summary>
+    public static string ImportDetected(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Detected: {0}", "Détecté : {0}"), a0);
+
+    /// <summary>The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.</summary>
+    public static string ImportDynamicVariableUnsupported(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The dynamic variable {{{{{0}}}}} does not exist in Yaapic and was left as written.", "La variable dynamique {{{{{0}}}}} n'existe pas dans Yaapic et a été laissée telle quelle."), a0);
+
+    /// <summary>The {0} import failed: {1}</summary>
+    public static string ImportFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The {0} import failed: {1}", "L'import {0} a échoué : {1}"), a0, a1);
+
+    /// <summary>File not found: {0}</summary>
+    public static string ImportFileNotFound(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("File not found: {0}", "Fichier introuvable : {0}"), a0);
+
+    /// <summary>This request reads the local file "{1}" when it is sent. Check the path.</summary>
+    public static string ImportFileReference(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("This request reads the local file \"{1}\" when it is sent. Check the path.", "Cette requête lit le fichier local \"{1}\" à l'envoi. Vérifiez le chemin."), a0, a1);
+
+    /// <summary>{0} is larger than 50 MB and cannot be imported.</summary>
+    public static string ImportFileTooLarge(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} is larger than 50 MB and cannot be imported.", "{0} dépasse 50 Mo et ne peut pas être importé."), a0);
+
+    /// <summary>Cannot read {0}: {1}</summary>
+    public static string ImportFileUnreadable(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Cannot read {0}: {1}", "Impossible de lire {0} : {1}"), a0, a1);
+
+    /// <summary>No importable file in {0}.</summary>
+    public static string ImportFolderEmpty(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No importable file in {0}.", "Aucun fichier importable dans {0}."), a0);
+
+    /// <summary>This folder has more than 5000 files or 200 MB of data.</summary>
+    public static string ImportFolderTooLarge => Localizer.Pick("This folder has more than 5000 files or 200 MB of data.", "Ce dossier contient plus de 5000 fichiers ou 200 Mo de données.");
+
+    /// <summary>Format</summary>
+    public static string ImportFormat => Localizer.Pick("Format", "Format");
+
+    /// <summary>Detect automatically</summary>
+    public static string ImportFormatAuto => Localizer.Pick("Detect automatically", "Détecter automatiquement");
+
+    /// <summary>The format of this file was not recognized. Choose the format manually.</summary>
+    public static string ImportFormatNotRecognized => Localizer.Pick("The format of this file was not recognized. Choose the format manually.", "Le format de ce fichier n'a pas été reconnu. Choisissez le format manuellement.");
+
+    /// <summary>{0} global variables already exist and were left unchanged.</summary>
+    public static string ImportGlobalsSkipped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} global variables already exist and were left unchanged.", "{0} variables globales existent déjà et n'ont pas été modifiées."), a0);
+
+    /// <summary>{0}: the body is base64-encoded and was dropped.</summary>
+    public static string ImportHarBase64Body(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the body is base64-encoded and was dropped.", "{0} : le corps est encodé en base64 et a été ignoré."), a0);
+
+    /// <summary>HAR</summary>
+    public static string ImportHarDisplayName => Localizer.Pick("HAR", "HAR");
+
+    /// <summary>{0} duplicate requests were removed.</summary>
+    public static string ImportHarDuplicates(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} duplicate requests were removed.", "{0} requêtes en double ont été supprimées."), a0);
+
+    /// <summary>{0}: the file "{2}" of the field "{1}" is not in the HAR; choose it again before sending.</summary>
+    public static string ImportHarFileField(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the file \"{2}\" of the field \"{1}\" is not in the HAR; choose it again before sending.", "{0} : le fichier \"{2}\" du champ \"{1}\" n'est pas dans le HAR ; choisissez-le à nouveau avant l'envoi."), a0, a1, a2);
+
+    /// <summary>Entry {0} has no URL and was skipped.</summary>
+    public static string ImportHarNoUrl(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Entry {0} has no URL and was skipped.", "L'entrée {0} n'a pas d'URL et a été ignorée."), a0);
+
+    /// <summary>This file is not a HAR file (no "log.entries").</summary>
+    public static string ImportHarNotAHar => Localizer.Pick("This file is not a HAR file (no \"log.entries\").", "Ce fichier n'est pas un fichier HAR (pas de \"log.entries\").");
+
+    /// <summary>Responses, timings and cookies of {0} entries were not imported.</summary>
+    public static string ImportHarResponsesIgnored(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Responses, timings and cookies of {0} entries were not imported.", "Les réponses, les durées et les cookies de {0} entrées n'ont pas été importés."), a0);
+
+    /// <summary>{0} data and blob URLs were skipped.</summary>
+    public static string ImportHarSkippedDataUrl(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} data and blob URLs were skipped.", "{0} URL data et blob ont été ignorées."), a0);
+
+    /// <summary>{0} CORS preflight requests were skipped.</summary>
+    public static string ImportHarSkippedPreflight(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} CORS preflight requests were skipped.", "{0} requêtes CORS preflight ont été ignorées."), a0);
+
+    /// <summary>{0} WebSocket or event stream entries were skipped.</summary>
+    public static string ImportHarSkippedSocket(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} WebSocket or event stream entries were skipped.", "{0} entrées WebSocket ou flux d'événements ont été ignorées."), a0);
+
+    /// <summary>{0} static resources (images, fonts, styles, media) were skipped.</summary>
+    public static string ImportHarSkippedStatic(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} static resources (images, fonts, styles, media) were skipped.", "{0} ressources statiques (images, polices, styles, médias) ont été ignorées."), a0);
+
+    /// <summary>Import</summary>
+    public static string ImportImport => Localizer.Pick("Import", "Importer");
+
+    /// <summary>Include images, fonts and styles</summary>
+    public static string ImportIncludeStatic => Localizer.Pick("Include images, fonts and styles", "Inclure les images, polices et styles");
+
+    /// <summary>Insomnia</summary>
+    public static string ImportInsomniaDisplayName => Localizer.Pick("Insomnia", "Insomnia");
+
+    /// <summary>{0} cookie jars, API specs and test suites were ignored.</summary>
+    public static string ImportInsomniaIgnoredTypes(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} cookie jars, API specs and test suites were ignored.", "{0} jars de cookies, spécifications d'API et suites de tests ont été ignorés."), a0);
+
+    /// <summary>This file is not an Insomnia export (no "resources").</summary>
+    public static string ImportInsomniaNotAnExport => Localizer.Pick("This file is not an Insomnia export (no \"resources\").", "Ce fichier n'est pas un export Insomnia (pas de \"resources\").");
+
+    /// <summary>{0} other workspaces were not imported; export them separately.</summary>
+    public static string ImportInsomniaOtherWorkspaces(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} other workspaces were not imported; export them separately.", "{0} autres espaces de travail n'ont pas été importés ; exportez-les séparément."), a0);
+
+    /// <summary>{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide.</summary>
+    public static string ImportInsomniaScripts(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} Insomnia scripts were not imported: they use the insomnia API, which Yaapic does not provide.", "{0} scripts Insomnia n'ont pas été importés : ils utilisent l'API insomnia, que Yaapic ne fournit pas."), a0);
+
+    /// <summary>The Insomnia template "{0}" has no Yaapic equivalent and was left as written.</summary>
+    public static string ImportInsomniaTemplateTag(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The Insomnia template \"{0}\" has no Yaapic equivalent and was left as written.", "Le modèle Insomnia \"{0}\" n'a pas d'équivalent dans Yaapic et a été laissé tel quel."), a0);
+
+    /// <summary>{0} gRPC and WebSocket requests are not supported yet.</summary>
+    public static string ImportInsomniaUnsupportedTypes(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} gRPC and WebSocket requests are not supported yet.", "{0} requêtes gRPC et WebSocket ne sont pas encore prises en charge."), a0);
+
+    /// <summary>Insomnia export format {0} is not supported (3 and 4 are).</summary>
+    public static string ImportInsomniaVersion(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Insomnia export format {0} is not supported (3 and 4 are).", "Le format d'export Insomnia {0} n'est pas pris en charge (3 et 4 le sont)."), a0);
+
+    /// <summary>The file is not valid JSON: {0}</summary>
+    public static string ImportInvalidJson(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid JSON: {0}", "Le fichier n'est pas du JSON valide : {0}"), a0);
+
+    /// <summary>The file is not valid YAML: {0}</summary>
+    public static string ImportInvalidYaml(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file is not valid YAML: {0}", "Le fichier n'est pas du YAML valide : {0}"), a0);
+
+    /// <summary>The HTTP method {0} is not supported, the request was skipped.</summary>
+    public static string ImportMethodUnsupported(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The HTTP method {0} is not supported, the request was skipped.", "La méthode HTTP {0} n'est pas prise en charge, la requête a été ignorée."), a0);
+
+    /// <summary>No request, environment or variable was found in this {0} source.</summary>
+    public static string ImportNothingFound(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("No request, environment or variable was found in this {0} source.", "Aucune requête, aucun environnement ni aucune variable n'a été trouvé dans cette source {0}."), a0);
+
+    /// <summary>{0}: the binary body has no file; choose a file before sending.</summary>
+    public static string ImportOpenapiBinaryBody(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the binary body has no file; choose a file before sending.", "{0} : le corps binaire n'a pas de fichier ; choisissez un fichier avant l'envoi."), a0);
+
+    /// <summary>{0}: the reference "{1}" does not exist.</summary>
+    public static string ImportOpenapiBrokenRef(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" does not exist.", "{0} : la référence \"{1}\" n'existe pas."), a0, a1);
+
+    /// <summary>{0} cookie parameters were ignored.</summary>
+    public static string ImportOpenapiCookiesIgnored(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} cookie parameters were ignored.", "{0} paramètres de cookie ont été ignorés."), a0);
+
+    /// <summary>{0} is marked deprecated in the source.</summary>
+    public static string ImportOpenapiDeprecated(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} is marked deprecated in the source.", "{0} est marqué comme obsolète dans la source."), a0);
+
+    /// <summary>OpenAPI</summary>
+    public static string ImportOpenapiDisplayName => Localizer.Pick("OpenAPI", "OpenAPI");
+
+    /// <summary>{0}: the external reference "{1}" is not followed.</summary>
+    public static string ImportOpenapiExternalRef(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the external reference \"{1}\" is not followed.", "{0} : la référence externe \"{1}\" n'est pas suivie."), a0, a1);
+
+    /// <summary>{0}: the file field "{1}" has no path; choose a file before sending.</summary>
+    public static string ImportOpenapiFileField(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the file field \"{1}\" has no path; choose a file before sending.", "{0} : le champ fichier \"{1}\" n'a pas de chemin ; choisissez un fichier avant l'envoi."), a0, a1);
+
+    /// <summary>Servers declared on paths or operations are ignored; the first global server is used.</summary>
+    public static string ImportOpenapiLocalServers => Localizer.Pick("Servers declared on paths or operations are ignored; the first global server is used.", "Les serveurs déclarés sur des chemins ou des opérations sont ignorés ; le premier serveur global est utilisé.");
+
+    /// <summary>This file is not an OpenAPI document (no "openapi" version or "paths").</summary>
+    public static string ImportOpenapiNotADocument => Localizer.Pick("This file is not an OpenAPI document (no \"openapi\" version or \"paths\").", "Ce fichier n'est pas un document OpenAPI (ni version \"openapi\" ni \"paths\").");
+
+    /// <summary>{0}: {1} other body formats were not imported.</summary>
+    public static string ImportOpenapiOtherMediaTypes(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: {1} other body formats were not imported.", "{0} : {1} autres formats de corps n'ont pas été importés."), a0, a1);
+
+    /// <summary>Only the first security requirement of each operation is imported.</summary>
+    public static string ImportOpenapiOtherSecurity => Localizer.Pick("Only the first security requirement of each operation is imported.", "Seule la première exigence de sécurité de chaque opération est importée.");
+
+    /// <summary>{0}: the reference "{1}" is circular.</summary>
+    public static string ImportOpenapiRefCycle(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the reference \"{1}\" is circular.", "{0} : la référence \"{1}\" est circulaire."), a0, a1);
+
+    /// <summary>The server URL "{0}" is relative: set the baseUrl variable of the collection before sending.</summary>
+    public static string ImportOpenapiRelativeServer(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The server URL \"{0}\" is relative: set the baseUrl variable of the collection before sending.", "L'URL de serveur \"{0}\" est relative : renseignez la variable baseUrl de la collection avant d'envoyer."), a0);
+
+    /// <summary>Some example bodies were cut because the schema is recursive or very large.</summary>
+    public static string ImportOpenapiSampleTruncated => Localizer.Pick("Some example bodies were cut because the schema is recursive or very large.", "Certains corps d'exemple ont été coupés car le schéma est récursif ou très volumineux.");
+
+    /// <summary>Authentication values were replaced by empty variables (for example {0}); fill them in the collection variables.</summary>
+    public static string ImportOpenapiSecurityPlaceholders(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Authentication values were replaced by empty variables (for example {0}); fill them in the collection variables.", "Les valeurs d'authentification ont été remplacées par des variables vides (par exemple {0}) ; renseignez-les dans les variables de la collection."), a0);
+
+    /// <summary>{0}: the security scheme "{1}" is not defined.</summary>
+    public static string ImportOpenapiSecurityUnknown(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: the security scheme \"{1}\" is not defined.", "{0} : le schéma de sécurité \"{1}\" n'est pas défini."), a0, a1);
+
+    /// <summary>Server variable {0} has no default; the URL keeps the placeholder.</summary>
+    public static string ImportOpenapiServerVariable(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Server variable {0} has no default; the URL keeps the placeholder.", "La variable de serveur {0} n'a pas de valeur par défaut ; l'URL garde le marqueur."), a0);
+
+    /// <summary>Swagger 2.0 document converted to OpenAPI 3 before import.</summary>
+    public static string ImportOpenapiSwaggerConverted => Localizer.Pick("Swagger 2.0 document converted to OpenAPI 3 before import.", "Document Swagger 2.0 converti en OpenAPI 3 avant l'import.");
+
+    /// <summary>OpenAPI version {0} is not supported.</summary>
+    public static string ImportOpenapiVersion(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("OpenAPI version {0} is not supported.", "La version {0} d'OpenAPI n'est pas prise en charge."), a0);
+
+    /// <summary>OpenAPI version {0} is newer than the versions Yaapic knows; it is read as 3.1.</summary>
+    public static string ImportOpenapiVersionUntested(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("OpenAPI version {0} is newer than the versions Yaapic knows; it is read as 3.1.", "La version {0} d'OpenAPI est plus récente que celles connues de Yaapic ; elle est lue comme la 3.1."), a0);
+
+    /// <summary>{0}: no XML example could be generated from the schema.</summary>
+    public static string ImportOpenapiXmlSample(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: no XML example could be generated from the schema.", "{0} : aucun exemple XML n'a pu être généré à partir du schéma."), a0);
+
+    /// <summary>Yaapic sorts folders and requests by name; the order of the source is not kept.</summary>
+    public static string ImportOrderLost => Localizer.Pick("Yaapic sorts folders and requests by name; the order of the source is not kept.", "Yaapic trie les dossiers et les requêtes par nom ; l'ordre de la source n'est pas conservé.");
+
+    /// <summary>...or paste a cURL command or the content of a file</summary>
+    public static string ImportPasteHint => Localizer.Pick("...or paste a cURL command or the content of a file", "...ou collez une commande cURL ou le contenu d'un fichier");
+
+    /// <summary>Pasted text</summary>
+    public static string ImportPastedText => Localizer.Pick("Pasted text", "Texte collé");
+
+    /// <summary>The body mode "{1}" is not supported; the request has no body.</summary>
+    public static string ImportPostmanBodyModeUnsupported(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The body mode \"{1}\" is not supported; the request has no body.", "Le mode de corps \"{1}\" n'est pas pris en charge ; la requête n'a pas de corps."), a0, a1);
+
+    /// <summary>Postman collection</summary>
+    public static string ImportPostmanDisplayName => Localizer.Pick("Postman collection", "Collection Postman");
+
+    /// <summary>Saved response examples ({0}) were not imported.</summary>
+    public static string ImportPostmanDroppedExamples(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved response examples ({0}) were not imported.", "Les exemples de réponses enregistrés ({0}) n'ont pas été importés."), a0);
+
+    /// <summary>Postman environment or globals</summary>
+    public static string ImportPostmanEnvironmentDisplayName => Localizer.Pick("Postman environment or globals", "Environnement ou globales Postman");
+
+    /// <summary>The file field "{1}" has no path and was dropped.</summary>
+    public static string ImportPostmanFileMissing(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The file field \"{1}\" has no path and was dropped.", "Le champ fichier \"{1}\" n'a pas de chemin et a été ignoré."), a0, a1);
+
+    /// <summary>The GraphQL body was converted to a JSON body.</summary>
+    public static string ImportPostmanGraphQl => Localizer.Pick("The GraphQL body was converted to a JSON body.", "Le corps GraphQL a été converti en corps JSON.");
+
+    /// <summary>"{0}" is neither a folder nor a request and was skipped.</summary>
+    public static string ImportPostmanItemUnknown(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" is neither a folder nor a request and was skipped.", "\"{0}\" n'est ni un dossier ni une requête et a été ignoré."), a0);
+
+    /// <summary>This file is not a Postman collection (no "info" or "item").</summary>
+    public static string ImportPostmanNotACollection => Localizer.Pick("This file is not a Postman collection (no \"info\" or \"item\").", "Ce fichier n'est pas une collection Postman (ni \"info\" ni \"item\").");
+
+    /// <summary>This file is not a Postman environment or globals file (no "values").</summary>
+    public static string ImportPostmanNotAnEnvironment => Localizer.Pick("This file is not a Postman environment or globals file (no \"values\").", "Ce fichier n'est pas un fichier d'environnement ou de globales Postman (pas de \"values\").");
+
+    /// <summary>The script of "{0}" has the type "{1}" (only JavaScript is supported) and was skipped.</summary>
+    public static string ImportPostmanScriptType(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("The script of \"{0}\" has the type \"{1}\" (only JavaScript is supported) and was skipped.", "Le script de \"{0}\" est de type \"{1}\" (seul JavaScript est pris en charge) et a été ignoré."), a0, a1);
+
+    /// <summary>Preview</summary>
+    public static string ImportPreview => Localizer.Pick("Preview", "Aperçu");
+
+    /// <summary>"{0}" already exists, the import was named "{1}".</summary>
+    public static string ImportRenamed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" already exists, the import was named \"{1}\".", "\"{0}\" existe déjà, l'import a été nommé \"{1}\"."), a0, a1);
+
+    /// <summary>Copy report</summary>
+    public static string ImportReportCopy => Localizer.Pick("Copy report", "Copier le rapport");
+
+    /// <summary>Nothing to report.</summary>
+    public static string ImportReportEmpty => Localizer.Pick("Nothing to report.", "Rien à signaler.");
+
+    /// <summary>Notes</summary>
+    public static string ImportReportShowInfo => Localizer.Pick("Notes", "Notes");
+
+    /// <summary>Skipped</summary>
+    public static string ImportReportShowSkipped => Localizer.Pick("Skipped", "Ignorés");
+
+    /// <summary>Warnings</summary>
+    public static string ImportReportShowWarnings => Localizer.Pick("Warnings", "Avertissements");
+
+    /// <summary>{0} warnings, {1} skipped, {2} notes</summary>
+    public static string ImportReportSummary(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} warnings, {1} skipped, {2} notes", "{0} avertissements, {1} ignorés, {2} notes"), a0, a1, a2);
+
+    /// <summary>Report</summary>
+    public static string ImportReportTitle => Localizer.Pick("Report", "Rapport");
+
+    /// <summary>Imported {0} requests in {1} folders and {2} environments.</summary>
+    public static string ImportResult(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Imported {0} requests in {1} folders and {2} environments.", "{0} requêtes importées dans {1} dossiers et {2} environnements."), a0, a1, a2);
+
+    /// <summary>Could not save "{0}": {1}</summary>
+    public static string ImportSaveFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Could not save \"{0}\": {1}", "Impossible d'enregistrer \"{0}\" : {1}"), a0, a1);
+
+    /// <summary>{0}: {1} script, {2} (line {3}): {4}</summary>
+    public static string ImportScriptFinding(object? a0, object? a1, object? a2, object? a3, object? a4) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: {1} script, {2} (line {3}): {4}", "{0} : script {1}, {2} (ligne {3}) : {4}"), a0, a1, a2, a3, a4);
+
+    /// <summary>{0} scripts were imported. Review them before sending: scripts run with access to your variables.</summary>
+    public static string ImportScriptsReview(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} scripts were imported. Review them before sending: scripts run with access to your variables.", "{0} scripts ont été importés. Relisez-les avant d'envoyer : les scripts s'exécutent avec accès à vos variables."), a0);
+
+    /// <summary>{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.</summary>
+    public static string ImportSecretsDropped(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} secret values were not imported because the vault is locked. Unlock the vault and enter them again.", "{0} valeurs secrètes n'ont pas été importées car le coffre est verrouillé. Déverrouillez le coffre et saisissez-les à nouveau."), a0);
+
+    /// <summary>Note</summary>
+    public static string ImportSeverityInfo => Localizer.Pick("Note", "Note");
+
+    /// <summary>Skipped</summary>
+    public static string ImportSeveritySkipped => Localizer.Pick("Skipped", "Ignoré");
+
+    /// <summary>Warning</summary>
+    public static string ImportSeverityWarning => Localizer.Pick("Warning", "Avertissement");
+
+    /// <summary>"{0}" could not be saved, its {1} requests were skipped.</summary>
+    public static string ImportSubtreeSkipped(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("\"{0}\" could not be saved, its {1} requests were skipped.", "\"{0}\" n'a pas pu être enregistré, ses {1} requêtes ont été ignorées."), a0, a1);
+
+    /// <summary>Import</summary>
+    public static string ImportTitle => Localizer.Pick("Import", "Importer");
+
+    /// <summary>This import has {0} requests; the limit is 20000.</summary>
+    public static string ImportTooLarge(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("This import has {0} requests; the limit is 20000.", "Cet import contient {0} requêtes ; la limite est de 20000."), a0);
 
     /// <summary>Time claims</summary>
     public static string JwtClaimsLabel => Localizer.Pick("Time claims", "Dates des claims");
@@ -917,12 +1458,22 @@ public static class Strings
     /// <summary>Decode JWT</summary>
     public static string PaletteDecodeJwt => Localizer.Pick("Decode JWT", "Décoder un JWT");
 
+    /// <summary>Export a collection...</summary>
+    public static string PaletteExport => Localizer.Pick("Export a collection...", "Exporter une collection...");
+
+    /// <summary>Export collection "{0}"...</summary>
+    public static string PaletteExportThisCollection(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Export collection \"{0}\"...", "Exporter la collection \"{0}\"..."), a0);
+
     /// <summary>Generate code for this request</summary>
     public static string PaletteGenerateCode => Localizer.Pick("Generate code for this request", "Générer le code de cette requête");
 
     /// <summary>Go to tab: {0}</summary>
     public static string PaletteGoToTab(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Go to tab: {0}", "Aller à l'onglet : {0}"), a0);
+
+    /// <summary>Import a collection or request...</summary>
+    public static string PaletteImport => Localizer.Pick("Import a collection or request...", "Importer une collection ou une requête...");
 
     /// <summary>Manage environments</summary>
     public static string PaletteManageEnvironments => Localizer.Pick("Manage environments", "Gérer les environnements");

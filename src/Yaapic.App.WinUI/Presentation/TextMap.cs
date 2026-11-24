@@ -18,6 +18,31 @@ public static class TextMap
     /// <returns>The joined text.</returns>
     public static string Prefixed(string prefix, string value) => prefix + value;
 
+    /// <summary>Gets the counts line of an import preview.</summary>
+    /// <param name="folders">The folder count.</param>
+    /// <param name="requests">The request count.</param>
+    /// <param name="environments">The environment count.</param>
+    /// <param name="globals">The global variable count.</param>
+    /// <returns>The localized counts line.</returns>
+    public static string ImportCounts(int folders, int requests, int environments, int globals) => Strings.ImportCounts(folders, requests, environments, globals);
+
+    /// <summary>Gets the "detected format" line of an import preview.</summary>
+    /// <param name="format">The detected format name, or <see langword="null"/> when none.</param>
+    /// <returns>The localized line, or an empty string.</returns>
+    public static string ImportDetected(string? format) => format is null ? "" : Strings.ImportDetected(format);
+
+    /// <summary>Gets the "nothing to export" line shown when a collection is required but none exists.</summary>
+    /// <param name="requiresCollection">Whether the selected format needs a collection.</param>
+    /// <param name="collectionCount">The number of collections.</param>
+    /// <returns>The localized line, or an empty string.</returns>
+    public static string ExportEmpty(bool requiresCollection, int collectionCount) =>
+        requiresCollection && collectionCount == 0 ? Strings.ExportNoCollections : "";
+
+    /// <summary>Gets the "saved" line shown after an export.</summary>
+    /// <param name="savedName">The saved file name, or <see langword="null"/> when nothing was saved.</param>
+    /// <returns>The localized line, or an empty string.</returns>
+    public static string ExportSaved(string? savedName) => savedName is null ? "" : Strings.ExportSaved(savedName);
+
     /// <summary>Gets the hint shown for a method whose requests carry no body.</summary>
     /// <param name="methodText">The upper-case method name.</param>
     /// <returns>The hint.</returns>

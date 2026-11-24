@@ -40,6 +40,12 @@ public sealed class FakeDialogService : IDialogService
     /// <summary>Gets or sets the answer to <see cref="PickFileAsync"/>.</summary>
     public string? PickFileAnswer { get; set; }
 
+    /// <summary>Gets or sets the answer to <see cref="PickFolderAsync"/>.</summary>
+    public string? PickFolderAnswer { get; set; }
+
+    /// <summary>Gets the titles passed to <see cref="PickFolderAsync"/>.</summary>
+    public List<string> PickFolderTitles { get; } = [];
+
     /// <summary>Gets or sets the answer to <see cref="SaveFileAsync"/>.</summary>
     public bool SaveFileAnswer { get; set; }
 
@@ -58,6 +64,13 @@ public sealed class FakeDialogService : IDialogService
 
     /// <inheritdoc/>
     public Task<string?> PickFileAsync(string title) => Task.FromResult(PickFileAnswer);
+
+    /// <inheritdoc/>
+    public Task<string?> PickFolderAsync(string title)
+    {
+        PickFolderTitles.Add(title);
+        return Task.FromResult(PickFolderAnswer);
+    }
 
     /// <inheritdoc/>
     public Task<bool> SaveFileAsync(string suggestedName, byte[] content)

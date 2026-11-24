@@ -3,6 +3,7 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Yaapic.Core.Import;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
@@ -24,6 +25,22 @@ public static class BrushMap
         JwtStatusKind.NotYetValid => "YaapicWarningBrush",
         _ => "YaapicTextSecondaryBrush",
     }));
+
+    /// <summary>Converts an import severity to the brush of its label.</summary>
+    public static FuncValueConverter<ImportSeverity, IBrush?> Severity { get; } = new(s => Get(s switch
+    {
+        ImportSeverity.Warning => "YaapicWarningBrush",
+        ImportSeverity.Skipped => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    }));
+
+    /// <summary>Converts an import severity to the brush behind its chip.</summary>
+    public static FuncValueConverter<ImportSeverity, IBrush?> SeverityBackground { get; } = new(s => s switch
+    {
+        ImportSeverity.Warning => Get("YaapicWarningBackgroundBrush"),
+        ImportSeverity.Skipped => Get("YaapicDangerBackgroundBrush"),
+        _ => null,
+    });
 
     /// <summary>Converts a history row's status category and failure flag to the brush of its status text.</summary>
     public static FuncMultiValueConverter<object?, IBrush?> HistoryStatus { get; } = new(values =>

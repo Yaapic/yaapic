@@ -1,0 +1,76 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" x:Class="Yaapic.App.WinUI.Views.ImportReportView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.WinUI.Presentation"
+    xmlns:i="using:Yaapic.ViewModels.Import">
+  <UserControl.Resources>
+    <!-- A checked toggle otherwise takes the system accent (blue), not the Yaapic accent. -->
+    <SolidColorBrush x:Key="ToggleButtonBackgroundChecked" Color="{ThemeResource YaapicAccentFillColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPointerOver" Color="{ThemeResource YaapicAccentFillHoverColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBackgroundCheckedPressed" Color="{ThemeResource YaapicAccentFillPressedColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushChecked" Color="{ThemeResource YaapicAccentFillColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPointerOver" Color="{ThemeResource YaapicAccentFillHoverColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonBorderBrushCheckedPressed" Color="{ThemeResource YaapicAccentFillPressedColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonForegroundChecked" Color="{ThemeResource YaapicAccentOnColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPointerOver" Color="{ThemeResource YaapicAccentOnColor}"/>
+    <SolidColorBrush x:Key="ToggleButtonForegroundCheckedPressed" Color="{ThemeResource YaapicAccentOnColor}"/>
+  </UserControl.Resources>
+  <Grid MinHeight="100" RowSpacing="8">
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <Grid ColumnSpacing="8">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="*"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+      </Grid.ColumnDefinitions>
+      <TextBlock VerticalAlignment="Center" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite"
+                 Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind ViewModel.Summary, Mode=OneWay}"/>
+      <ToggleButton Grid.Column="1" Content="{x:Bind loc:Strings.ImportReportShowInfo}"
+                    AutomationProperties.Name="{x:Bind loc:Strings.ImportReportShowInfo}"
+                    IsChecked="{x:Bind ViewModel.ShowInfo, Mode=TwoWay, FallbackValue=True}"/>
+      <ToggleButton Grid.Column="2" Content="{x:Bind loc:Strings.ImportReportShowWarnings}"
+                    AutomationProperties.Name="{x:Bind loc:Strings.ImportReportShowWarnings}"
+                    IsChecked="{x:Bind ViewModel.ShowWarnings, Mode=TwoWay, FallbackValue=True}"/>
+      <ToggleButton Grid.Column="3" Content="{x:Bind loc:Strings.ImportReportShowSkipped}"
+                    AutomationProperties.Name="{x:Bind loc:Strings.ImportReportShowSkipped}"
+                    IsChecked="{x:Bind ViewModel.ShowSkipped, Mode=TwoWay, FallbackValue=True}"/>
+      <Button Grid.Column="4" Content="{x:Bind loc:Strings.ImportReportCopy}"
+              AutomationProperties.Name="{x:Bind loc:Strings.ImportReportCopy}"
+              Command="{x:Bind ViewModel.CopyCommand, Mode=OneWay}"/>
+    </Grid>
+    <ListView Grid.Row="1" SelectionMode="None"
+              ItemsSource="{x:Bind p:ListMap.ReportRows(ViewModel.VisibleRows), Mode=OneWay}"
+              Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.HasRows), Mode=OneWay}">
+      <ListView.ItemTemplate>
+        <DataTemplate x:DataType="i:ImportReportRow">
+          <Grid ColumnSpacing="10" Margin="0,4">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="84"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Border VerticalAlignment="Top" HorizontalAlignment="Left" CornerRadius="4" Padding="6,2"
+                    Background="{x:Bind p:BrushMap.SeverityBackground(Severity)}">
+              <TextBlock Text="{x:Bind SeverityLabel}" Style="{StaticResource YaapicBodySmallTextStyle}"
+                         Foreground="{x:Bind p:BrushMap.Severity(Severity)}"/>
+            </Border>
+            <StackPanel Grid.Column="1" Spacing="2">
+              <TextBlock Text="{x:Bind Path}" TextWrapping="Wrap" Style="{StaticResource YaapicCodeTextStyle}"
+                         Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                         Visibility="{x:Bind p:VisibilityMap.WhenText(Path)}"/>
+              <TextBlock Text="{x:Bind Message}" TextWrapping="Wrap" IsTextSelectionEnabled="True"/>
+            </StackPanel>
+          </Grid>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+    <TextBlock Grid.Row="1" Foreground="{ThemeResource YaapicTextSecondaryBrush}" TextWrapping="Wrap"
+               Text="{x:Bind loc:Strings.ImportReportEmpty}"
+               Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.HasRows), Mode=OneWay}"/>
+  </Grid>
+</UserControl>
