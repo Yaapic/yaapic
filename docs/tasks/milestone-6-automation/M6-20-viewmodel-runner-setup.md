@@ -41,7 +41,7 @@ data file (ADR 0018, "UI").
 
 ## Out of scope
 
-Running and results (M6-21), the window (M6-43, M6-49).
+Running and results (M6-21), the windows (M6-44, M6-51).
 
 ## Acceptance criteria
 

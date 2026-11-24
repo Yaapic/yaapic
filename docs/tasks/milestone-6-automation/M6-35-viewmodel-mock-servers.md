@@ -44,7 +44,7 @@ Depends on: M6-21, M6-31, M6-34
 
 ## Out of scope
 
-Shell entries (M6-41), windows (M6-47, M6-53).
+Shell entries (M6-41), windows (M6-47, M6-54).
 
 ## Acceptance criteria
 

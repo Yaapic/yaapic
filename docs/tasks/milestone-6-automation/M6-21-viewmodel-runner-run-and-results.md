@@ -45,7 +45,7 @@ Depends on: M6-17, M6-18, M6-19, M6-20
 
 ## Out of scope
 
-Shell entries and status bar (M6-40), composition (M6-41), the windows.
+Shell entries and status bar (M6-41), composition (M6-42), the windows.
 
 ## Acceptance criteria
 

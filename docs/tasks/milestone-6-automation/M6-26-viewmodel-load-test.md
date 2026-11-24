@@ -22,7 +22,7 @@ Depends on: M6-20, M6-21, M6-25
   - `StartCommand` (async; enabled when valid and not running): builds the plan (selected items, data rows of the setup); the
     first start of this view model instance asks for confirmation through a new `IDialogService` member
     `Task<bool> ConfirmAsync(string title, string message)` (default implementation returns `Task.FromResult(true)`; the platforms
-    implement it in M6-45 and M6-51; `FakeDialogService` gets a settable `ConfirmAnswer`, default true, and records the messages).
+    implement it in M6-43 and M6-50; `FakeDialogService` gets a settable `ConfirmAnswer`, default true, and records the messages).
     The title is `Strings.LoadConfirmTitle`, the message is `Strings.LoadConfirm(hosts)` with `VirtualUserSchedule.DescribeHosts(plan, url => VariableResolver.Resolve(url,
     scopes.GetScopes(firstItemId).CreateSource()).Text)`. Declined: nothing starts. Then `IsRunning`, run with a
     `ContextProgress<LoadSnapshot>`; `StopCommand` cancels.
@@ -46,7 +46,7 @@ Depends on: M6-20, M6-21, M6-25
 
 ## Out of scope
 
-Shell entries (M6-40), windows (M6-45, M6-51).
+Shell entries (M6-41), windows (M6-46, M6-53).
 
 ## Acceptance criteria
 

@@ -26,7 +26,9 @@ the shell, as M5-54 did for import and export.
     environmentStore (secret-aware), runSource, step, time)`, `MonitorsViewModel(...)`; `scheduler.Start()` after the shell is built and
     `monitors.LoadAsync()` fire-and-forget (errors to the console).
   - `shell.AttachAutomation(runner, load, mocks, monitors)`; `shell.OwnAsync(mockService)`; `shell.OwnAsync(scheduler)`.
-  - Use the same `TimeProvider` instance the shell already uses (`TimeProvider.System` in the app).
+  - Use one `TimeProvider` for every M6 service: the internal `CreateShell` overload gains an optional `TimeProvider? time = null`
+    parameter (null = the instance the shell already uses, `TimeProvider.System` in the app) so that the end-to-end tests of M6-59 can pass a
+    `ManualTimeProvider`.
 - The mock host and the scheduler must not start any socket or run during the existing composition tests unless those tests ask for it:
   `scheduler.Start()` runs a first tick at once, which is harmless on an empty workspace (no monitors).
 - No new package; `docs/dependencies.md` unchanged.
