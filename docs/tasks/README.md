@@ -626,7 +626,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-02](milestone-6-automation/M6-02-spike-concurrent-scripted-sends.md) | Spike: concurrent scripted sends under load | any | none | done |
 | [M6-03](milestone-6-automation/M6-03-adr-load-tests.md) | ADR 0019: load tests | any | M6-01, M6-02 | done |
 | [M6-04](milestone-6-automation/M6-04-adr-mock-servers.md) | ADR 0020: mock servers | any | none | done |
-| [M6-05](milestone-6-automation/M6-05-adr-monitors.md) | ADR 0021: monitors | any | M6-01 | todo |
+| [M6-05](milestone-6-automation/M6-05-adr-monitors.md) | ADR 0021: monitors | any | M6-01 | done |
 | [M6-06](milestone-6-automation/M6-06-core-data-variable-layer.md) | Core: data variable layer | any | M6-01 | todo |
 | [M6-07](milestone-6-automation/M6-07-core-csv-iteration-data.md) | Core: CSV iteration data parser | any | M6-01 | todo |
 | [M6-08](milestone-6-automation/M6-08-core-json-iteration-data-and-reader.md) | Core: JSON iteration data and the data file reader | any | M6-07 | todo |
