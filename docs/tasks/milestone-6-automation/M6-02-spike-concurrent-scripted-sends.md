@@ -1,6 +1,6 @@
 # M6-02: Spike: concurrent scripted sends under load
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -40,8 +40,8 @@ Yaapic production code, the load-test runner (M6-24).
 
 ## Acceptance criteria
 
-- [ ] The spike program and `docs/spikes/m6-load.md` committed; the document lists the measurements and the four decisions.
-- [ ] `Yaapic.sln` unchanged, build still 0 warnings; no process left running (the spike and its server are stopped).
+- [x] The spike program and `docs/spikes/m6-load.md` committed; the document lists the measurements and the four decisions.
+- [x] `Yaapic.sln` unchanged, build still 0 warnings; no process left running (the spike and its server are stopped).
 
 ## Suggested commit message
 
