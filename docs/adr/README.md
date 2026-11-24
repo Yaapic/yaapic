@@ -19,6 +19,7 @@
 | [0015](0015-response-diff-and-code-generation.md) | Response diff and code generation | Accepted |
 | [0016](0016-import-export-architecture.md) | Import and export architecture | Accepted |
 | [0017](0017-import-export-formats.md) | Import and export formats, mappings and losses | Accepted |
+| [0018](0018-collection-runner.md) | Collection runner, iteration data and run reports | Accepted |
 
 Each ADR has a status, the options considered, the Native AOT risks and the decision. A "Proposed" ADR is confirmed by
 the card that first needs it.
