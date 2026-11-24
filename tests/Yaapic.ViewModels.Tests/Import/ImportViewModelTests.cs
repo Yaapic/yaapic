@@ -87,7 +87,7 @@ public sealed class ImportViewModelTests
     public async Task Choosing_a_file_previews_counts_report_and_detected_format()
     {
         var vm = Make();
-        _dialogs.PickFileAnswer = @"C:\data\api.json";
+        _dialogs.PickFileAnswer = Path.Combine("data", "api.json");
 
         await vm.ChooseFileCommand.ExecuteAsync(null);
 
@@ -138,7 +138,7 @@ public sealed class ImportViewModelTests
     public async Task Choosing_a_folder_reads_the_folder()
     {
         var vm = Make();
-        _dialogs.PickFolderAnswer = @"C:\data\bruno\";
+        _dialogs.PickFolderAnswer = Path.Combine("data", "bruno") + Path.DirectorySeparatorChar;
 
         await vm.ChooseFolderCommand.ExecuteAsync(null);
 
