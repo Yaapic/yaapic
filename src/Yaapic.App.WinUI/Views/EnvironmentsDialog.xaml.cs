@@ -1,6 +1,6 @@
-using Yaapic.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Environments;
 
 namespace Yaapic.App.WinUI.Views;

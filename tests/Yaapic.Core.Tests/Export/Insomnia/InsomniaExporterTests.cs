@@ -81,7 +81,7 @@ public class InsomniaExporterTests
     [Fact]
     public void EmptyBaseEnvironmentIsStillWritten()
     {
-        var resources = DataNodeJson.Parse(Text(Run(Root([])))) ["resources"]!;
+        var resources = DataNodeJson.Parse(Text(Run(Root([]))))["resources"]!;
         Assert.Equal("{}", Compact(resources[1]!["data"]));
     }
 
@@ -131,8 +131,17 @@ public class InsomniaExporterTests
 
         var oauth = OAuth2Settings.Default with
         {
-            Grant = OAuth2Grant.AuthorizationCode, TokenUrl = "t", AuthorizationUrl = "a", ClientId = "i", ClientSecret = "s", Scope = "x y",
-            Audience = "au", Username = "u", Password = "p", RedirectUri = "r", ClientAuthentication = OAuth2ClientAuthentication.RequestBody,
+            Grant = OAuth2Grant.AuthorizationCode,
+            TokenUrl = "t",
+            AuthorizationUrl = "a",
+            ClientId = "i",
+            ClientSecret = "s",
+            Scope = "x y",
+            Audience = "au",
+            Username = "u",
+            Password = "p",
+            RedirectUri = "r",
+            ClientAuthentication = OAuth2ClientAuthentication.RequestBody,
         };
         Assert.Equal(
             "{\"type\":\"oauth2\",\"grantType\":\"authorization_code\",\"accessTokenUrl\":\"t\",\"authorizationUrl\":\"a\",\"clientId\":\"i\",\"clientSecret\":\"s\","

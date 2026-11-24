@@ -1,7 +1,7 @@
-using Yaapic.Localization;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Text;
+using Microsoft.UI.Xaml.Media;
 using Windows.UI.Text;
+using Yaapic.Localization;
 
 namespace Yaapic.App.WinUI.Presentation;
 

@@ -1,7 +1,7 @@
 using Yaapic.Core.Import;
 using Yaapic.Core.Secrets;
-using Yaapic.Infrastructure.Secrets;
 using Yaapic.Domain.Http;
+using Yaapic.Infrastructure.Secrets;
 using Yaapic.Localization;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Console;

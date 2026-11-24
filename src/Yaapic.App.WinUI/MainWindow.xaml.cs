@@ -1,10 +1,10 @@
-using Yaapic.Localization;
 using Microsoft.UI.Windowing;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Windows.System;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Shell;

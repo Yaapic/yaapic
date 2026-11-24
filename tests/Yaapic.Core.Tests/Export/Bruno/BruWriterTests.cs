@@ -70,7 +70,13 @@ public class BruWriterTests
     {
         var auth = RequestAuth.None with
         {
-            Kind = kind, Username = "u", Password = "p", Token = "t", Key = "k", Value = "v", Location = ApiKeyLocation.Query,
+            Kind = kind,
+            Username = "u",
+            Password = "p",
+            Token = "t",
+            Key = "k",
+            Value = "v",
+            Location = ApiKeyLocation.Query,
         };
 
         var text = Write(Req(auth: auth));
@@ -94,8 +100,15 @@ public class BruWriterTests
     {
         var o = OAuth2Settings.Default with
         {
-            Grant = OAuth2Grant.Password, TokenUrl = "https://t", AuthorizationUrl = "https://a", ClientId = "c", ClientSecret = "s",
-            Scope = "r w", Username = "u", Password = "p", Placement = OAuth2TokenPlacement.Query,
+            Grant = OAuth2Grant.Password,
+            TokenUrl = "https://t",
+            AuthorizationUrl = "https://a",
+            ClientId = "c",
+            ClientSecret = "s",
+            Scope = "r w",
+            Username = "u",
+            Password = "p",
+            Placement = OAuth2TokenPlacement.Query,
             ClientAuthentication = OAuth2ClientAuthentication.RequestBody,
         };
 
