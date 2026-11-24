@@ -631,7 +631,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-07](milestone-6-automation/M6-07-core-csv-iteration-data.md) | Core: CSV iteration data parser | any | M6-01 | done |
 | [M6-08](milestone-6-automation/M6-08-core-json-iteration-data-and-reader.md) | Core: JSON iteration data and the data file reader | any | M6-07 | done |
 | [M6-09](milestone-6-automation/M6-09-core-script-run-context.md) | Core: run context for scripts (iteration, data, execution control) | any | M6-06 | done |
-| [M6-10](milestone-6-automation/M6-10-scripting-host-ops-run-context.md) | Scripting: host operations for iteration data and execution control | any | M6-09 | todo |
+| [M6-10](milestone-6-automation/M6-10-scripting-host-ops-run-context.md) | Scripting: host operations for iteration data and execution control | any | M6-09 | done |
 | [M6-11](milestone-6-automation/M6-11-js-iteration-data-and-execution.md) | JavaScript: `yaapic.iterationData` and `yaapic.execution` | any | M6-10 | todo |
 | [M6-12](milestone-6-automation/M6-12-lua-iteration-data-and-execution.md) | Lua: `yaapic.iteration_data` and `yaapic.execution` | any | M6-10 | todo |
 | [M6-13](milestone-6-automation/M6-13-converter-autocompletion-runner-apis.md) | Converter, autocompletion and snippets for the runner APIs | any | M6-11, M6-12 | todo |

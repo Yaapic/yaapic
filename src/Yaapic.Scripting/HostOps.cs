@@ -14,6 +14,9 @@ internal static class HostOps
     public const string ReqSet = "req.set";
     public const string ResGet = "res.get";
     public const string InfoGet = "info.get";
+    public const string IterGet = "iter.get";
+    public const string ExecNext = "exec.next";
+    public const string ExecSkip = "exec.skip";
     public const string Console = "console";
     public const string ConsolePlain = "console.plain";
     public const string Test = "test";
