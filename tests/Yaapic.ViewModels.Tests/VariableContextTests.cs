@@ -89,4 +89,22 @@ public sealed class VariableContextTests
     [InlineData("$guid", false)]
     [InlineData("a}", false)]
     public void CreatableNames(string name, bool expected) => Assert.Equal(expected, VariableContext.IsCreatableName(name));
+
+    [Fact]
+    public void DataVariableShowsIterationDataLabelAndIsNotWritable()
+    {
+        var scopes = new FakeVariableScopeProvider
+        {
+            Scopes = new VariableScopes(null, [], [], null, [new KeyValueEntry("user", "ada")]),
+        };
+        var context = new VariableContext(Guid.NewGuid(), scopes);
+
+        var token = Assert.Single(context.Tokenize("{{user}}"));
+        Assert.Equal(VariableScopeKind.Data, token.Hint.Scope);
+        Assert.Equal("ada", token.Hint.Value);
+        var popup = context.CreatePopup("user");
+        Assert.Equal(Yaapic.Localization.Strings.VariablesScopeData, popup.ScopeLabel);
+        Assert.DoesNotContain(popup.ScopeChoices, c => c.Kind == VariableScopeKind.Data);
+        Assert.Equal(VariableScopeKind.Data, Assert.Single(context.Suggest("us")).Scope);
+    }
 }

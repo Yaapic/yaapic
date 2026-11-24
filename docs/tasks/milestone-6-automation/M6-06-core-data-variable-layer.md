@@ -1,6 +1,6 @@
 # M6-06: Core: data variable layer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-01
 
@@ -35,12 +35,12 @@ Parsing data files (M6-07, M6-08), the script API (M6-09 to M6-12), the runner.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests`: precedence (local beats data, data beats environment, collection and globals), `TryResolve`
+- [x] Tests in `Yaapic.Core.Tests`: precedence (local beats data, data beats environment, collection and globals), `TryResolve`
   reports `Data`, `CreateSource` resolves a request URL `{{user}}` from the data list, `VariableScopes.None` and existing call sites
   unchanged (data null); `ScriptVariableOverlay` layered get/list include data in the right place, `ToScopes()` keeps it, writes
   through `Layered` still go to local and never touch data.
-- [ ] Tests in `Yaapic.ViewModels.Tests`: a hint for a data variable shows the "Iteration data" label and is not writable.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Tests in `Yaapic.ViewModels.Tests`: a hint for a data variable shows the "Iteration data" label and is not writable.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

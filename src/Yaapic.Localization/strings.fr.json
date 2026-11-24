@@ -160,6 +160,7 @@
   "variables.reasonNoGlobals": "Les variables globales ne sont pas disponibles",
   "variables.scopeActiveEnvironment": "Environnement actif",
   "variables.scopeCollection": "Collection",
+  "variables.scopeData": "Données d'itération",
   "variables.scopeDynamic": "Dynamique",
   "variables.scopeEnvironment": "Environnement",
   "variables.scopeGlobals": "Globales",

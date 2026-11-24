@@ -50,4 +50,39 @@ public class VariableScopesTests
         Assert.Equal(VariableScopeKind.Globals, k);
         Assert.False(scopes.TryResolve("", out _, out _));
     }
+
+    static VariableScopes WithData() => new(
+        EnvironmentDefinition.Create("e") with { Variables = [new("a", "env"), new("user", "env")] },
+        [new("a", "col"), new("b", "col")],
+        [new("b", "glob"), new("c", "glob")],
+        [new("loc", "local")],
+        [new("loc", "data"), new("user", "data"), new("c", "data")]);
+
+    [Theory]
+    [InlineData("loc", "local", VariableScopeKind.Local)]
+    [InlineData("user", "data", VariableScopeKind.Data)]
+    [InlineData("c", "data", VariableScopeKind.Data)]
+    [InlineData("a", "env", VariableScopeKind.Environment)]
+    public void Data_sits_between_local_and_environment(string name, string value, VariableScopeKind kind)
+    {
+        var scopes = WithData();
+        Assert.True(scopes.TryResolve(name, out var v, out var k, out var secret));
+        Assert.Equal((value, kind, false), (v, k, secret));
+        Assert.True(scopes.CreateSource().TryGet(name, out var sv));
+        Assert.Equal(value, sv);
+    }
+
+    [Fact]
+    public void Request_placeholder_resolves_from_the_data_list()
+    {
+        var scopes = new VariableScopes(null, [], [], null, [new("user", "ada")]);
+        Assert.Equal("https://x/ada", VariableResolver.Resolve("https://x/{{user}}", scopes.CreateSource()).Text);
+    }
+
+    [Fact]
+    public void Null_data_changes_nothing()
+    {
+        Assert.Null(VariableScopes.None.Data);
+        Assert.False(VariableScopes.None.TryResolve("user", out _, out _));
+    }
 }

@@ -3,16 +3,18 @@ using Yaapic.Domain.Http;
 
 namespace Yaapic.Core.Variables;
 
-/// <summary>The variable scopes a request is resolved against: environment, collection, globals, then dynamic.</summary>
+/// <summary>The variable scopes a request is resolved against: environment, collection, globals, then dynamic (local and iteration data first).</summary>
 /// <param name="Environment">The active environment, or <see langword="null"/> for none.</param>
 /// <param name="Collection">The collection variables.</param>
 /// <param name="Globals">The global variables.</param>
 /// <param name="Local">The variables local to one send; <see langword="null"/> for none. Consulted first.</param>
+/// <param name="Data">The iteration data row of a Runner run; <see langword="null"/> outside a run. Consulted after <paramref name="Local"/>.</param>
 public sealed record VariableScopes(
     EnvironmentDefinition? Environment,
     IReadOnlyList<KeyValueEntry> Collection,
     IReadOnlyList<KeyValueEntry> Globals,
-    IReadOnlyList<KeyValueEntry>? Local = null)
+    IReadOnlyList<KeyValueEntry>? Local = null,
+    IReadOnlyList<KeyValueEntry>? Data = null)
 {
     /// <summary>Gets scopes that define nothing besides the dynamic variables.</summary>
     public static VariableScopes None { get; } = new(null, [], []);
@@ -22,6 +24,7 @@ public sealed record VariableScopes(
     public IVariableSource CreateSource() =>
         new CompositeVariableSource(
             ListSource(Local ?? []),
+            ListSource(Data ?? []),
             new EnvironmentVariableSource(Environment),
             ListSource(Collection),
             ListSource(Globals),
@@ -46,6 +49,7 @@ public sealed record VariableScopes(
         (VariableScopeKind Kind, EnvironmentVariableSource Source)[] ordered =
         [
             (VariableScopeKind.Local, ListSource(Local ?? [])),
+            (VariableScopeKind.Data, ListSource(Data ?? [])),
             (VariableScopeKind.Environment, new EnvironmentVariableSource(Environment)),
             (VariableScopeKind.Collection, ListSource(Collection)),
             (VariableScopeKind.Globals, ListSource(Globals)),

@@ -160,6 +160,7 @@
   "variables.reasonNoGlobals": "Globals are not available",
   "variables.scopeActiveEnvironment": "Active environment",
   "variables.scopeCollection": "Collection",
+  "variables.scopeData": "Iteration data",
   "variables.scopeDynamic": "Dynamic",
   "variables.scopeEnvironment": "Environment",
   "variables.scopeGlobals": "Globals",

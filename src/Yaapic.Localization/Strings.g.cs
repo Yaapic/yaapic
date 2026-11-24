@@ -2027,6 +2027,9 @@ public static class Strings
     /// <summary>Collection</summary>
     public static string VariablesScopeCollection => Localizer.Pick("Collection", "Collection");
 
+    /// <summary>Iteration data</summary>
+    public static string VariablesScopeData => Localizer.Pick("Iteration data", "Données d'itération");
+
     /// <summary>Dynamic</summary>
     public static string VariablesScopeDynamic => Localizer.Pick("Dynamic", "Dynamique");
 
