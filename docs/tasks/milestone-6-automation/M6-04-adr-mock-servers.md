@@ -51,7 +51,7 @@ Docs only. The decisions below are final.
   status), route list editor (add, duplicate, delete, move up/down, enable), response editor (status, headers, body), the log
   with a detail pane, Copy URL. Edits are saved with a Save button; a saved change applies to a running server at its next request
   (the server reads the current definition for each request); changing the port of a running server restarts it.
-- **Out of scope**: binding to other interfaces (blocked card M6-63), HTTPS, matching on query, headers or body, response
+- **Out of scope**: binding to other interfaces (blocked card M6-64), HTTPS, matching on query, headers or body, response
   sequences or scripts, recording a real API, generating mocks from OpenAPI, WebSocket mocks.
 
 ## Out of scope

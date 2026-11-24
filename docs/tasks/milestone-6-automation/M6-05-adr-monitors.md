@@ -12,7 +12,7 @@ decisions below are final.
 ## Design decisions (to record in the ADR)
 
 - **What a monitor is.** A scheduled run of a folder (ADR 0018) **inside Yaapic, while the app is open on this machine**.
-  There is no cloud and no background service (running while the app is closed is the blocked card M6-62).
+  There is no cloud and no background service (running while the app is closed is the blocked card M6-63).
 - **Definition** in the workspace (shared through Git): `monitors/<slug>.monitor.yaml`, VYaml DTOs, `version: 1`: `id`, `name`,
   `folderId` (GUID of the folder to run), `environmentId` (GUID or absent = no environment; never "the active one", so a
   monitor behaves the same whatever the user selects), `intervalMinutes` (one of 5, 10, 15, 30, 60, 180, 360, 720, 1440; default 60),
@@ -39,7 +39,7 @@ decisions below are final.
   folder...") and the status bar item: monitor list (name, folder, environment, interval, enabled toggle, last status and time,
   next run), editor (name, folder, environment, interval), Run now, Delete, and the history of the selected monitor (last 50 runs:
   time, status, duration, requests, failures; selecting a run shows its failures).
-- **Out of scope**: running while the app is closed (M6-62), cron expressions, e-mail/webhook/OS notifications, per-monitor data
+- **Out of scope**: running while the app is closed (M6-63), cron expressions, e-mail/webhook/OS notifications, per-monitor data
   files, regions, uptime charts.
 
 ## Out of scope
