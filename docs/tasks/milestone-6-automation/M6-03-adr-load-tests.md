@@ -1,6 +1,6 @@
 # M6-03: ADR 0019: load tests
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-01, M6-02
 
@@ -49,10 +49,10 @@ Code, UI.
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0019-load-tests.md` contains every decision above with the spike numbers (status Accepted; options considered:
+- [x] `docs/adr/0019-load-tests.md` contains every decision above with the spike numbers (status Accepted; options considered:
   reusing the runner step versus a lighter HTTP-only loop, a chart library versus drawing polylines, storing every sample versus
   histograms); `docs/adr/README.md` lists it; it links `docs/spikes/m6-load.md`.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 
