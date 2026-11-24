@@ -201,8 +201,8 @@ public sealed class LuaPmVariablesTests
     }
 
     [Theory]
-    [InlineData("local _ = yaapic.execution.setNextRequest", "yaapic.execution.setNextRequest")]
-    [InlineData("local _ = yaapic.iterationData.get", "yaapic.iterationData.get")]
+    [InlineData("local _ = yaapic.execution.location", "yaapic.execution.location")]
+    [InlineData("local _ = yaapic.execution.runRequest", "yaapic.execution.runRequest")]
     [InlineData("local _ = yaapic.vault.get", "yaapic.vault.get")]
     [InlineData("local _ = yaapic.visualizer.set", "yaapic.visualizer.set")]
     [InlineData("yaapic.visualizer.x = 1", "yaapic.visualizer.x")]

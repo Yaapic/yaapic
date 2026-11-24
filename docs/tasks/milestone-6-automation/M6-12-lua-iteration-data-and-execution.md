@@ -1,6 +1,6 @@
 # M6-12: Lua: `yaapic.iteration_data` and `yaapic.execution`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-10
 
@@ -29,10 +29,10 @@ JavaScript (M6-11), the converter and autocompletion (M6-13).
 
 ## Acceptance criteria
 
-- [ ] `Yaapic.Scripting.Tests` (real Lua, real `ScriptHost`): the same cases as M6-11, with the Lua aliases; mixed chains (a JavaScript
+- [x] `Yaapic.Scripting.Tests` (real Lua, real `ScriptHost`): the same cases as M6-11, with the Lua aliases; mixed chains (a JavaScript
   collection script and a Lua request script) see the same row and the last `setNextRequest` wins.
-- [ ] The Lua conformance suite moves the same rows from unsupported to supported; all green.
-- [ ] 0 warnings, all tests green; the AOT smoke check still passes.
+- [x] The Lua conformance suite moves the same rows from unsupported to supported; all green.
+- [x] 0 warnings, all tests green; the AOT smoke check still passes.
 
 ## Suggested commit message
 
