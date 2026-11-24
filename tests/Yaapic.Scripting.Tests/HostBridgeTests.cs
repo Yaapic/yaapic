@@ -48,6 +48,16 @@ public class HostBridgeTests
 
         public string ReplaceIn(string template) => template.Replace("{{a}}", "1", StringComparison.Ordinal);
 
+        public IReadOnlyList<KeyValueEntry> IterationData => [];
+
+        public void SetNextRequest(string? nameOrId)
+        {
+        }
+
+        public void SkipRequest()
+        {
+        }
+
         public ScriptSendResult Send(ScriptRequest request)
         {
             Sent = request;

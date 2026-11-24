@@ -286,6 +286,16 @@ public sealed class PmVariablesTests
 
         public string ReplaceIn(string template) => overlay.ReplaceIn(template);
 
+        public IReadOnlyList<KeyValueEntry> IterationData => [];
+
+        public void SetNextRequest(string? nameOrId)
+        {
+        }
+
+        public void SkipRequest()
+        {
+        }
+
         public ScriptSendResult Send(ScriptRequest request) => new(null, "not supported");
     }
 }

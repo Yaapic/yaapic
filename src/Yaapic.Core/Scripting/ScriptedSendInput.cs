@@ -10,10 +10,12 @@ namespace Yaapic.Core.Scripting;
 /// <param name="HasEnvironment">Whether an environment is active, so that scripts can write to it.</param>
 /// <param name="HasCollection">Whether the request belongs to a collection, so that scripts can write to it.</param>
 /// <param name="Limits">The script limits; <see langword="null"/> means <see cref="ScriptLimits.Default"/>.</param>
+/// <param name="Run">The run context; <see langword="null"/> means <see cref="ScriptRunContext.Single"/>.</param>
 public sealed record ScriptedSendInput(
     HttpRequestDefinition Request,
     VariableScopes Scopes,
     ScriptChain Chain,
     bool HasEnvironment,
     bool HasCollection,
-    ScriptLimits? Limits = null);
+    ScriptLimits? Limits = null,
+    ScriptRunContext? Run = null);

@@ -186,6 +186,12 @@ public sealed partial class ResponsePanelViewModel : ObservableObject
                 aborted.Origin,
                 string.IsNullOrEmpty(message) ? ScriptErrorItemViewModel.StatusTextFor(aborted.Status) : message);
         }
+        else if (report.Skipped)
+        {
+            ResetDisplay();
+            State = ResponseState.Failed;
+            ErrorMessage = Strings.ResponseSkippedByScript;
+        }
         else
         {
             ShowReport(report.Report!);

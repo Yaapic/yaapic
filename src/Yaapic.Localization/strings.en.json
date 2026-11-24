@@ -79,6 +79,7 @@
 
   "response.binaryContent": "Binary content, {0}",
   "response.preRequestFailed": "Pre-request script failed — {0}: {1}",
+  "response.skippedByScript": "Request skipped by a script: nothing was sent.",
   "response.tabTiming": "Timing",
   "timing.dns": "DNS lookup",
   "timing.tcp": "TCP connect",
@@ -114,6 +115,8 @@
   "script.line": "line {0}",
   "script.originPostResponse": "post-response · {0}",
   "script.originPreRequest": "pre-request · {0}",
+  "script.setNextRequestOutsideRunner": "yaapic.execution.setNextRequest has no effect outside the Runner",
+  "script.skipRequestPostResponse": "yaapic.execution.skipRequest can only be called in a pre-request script",
   "script.statusCanceled": "Canceled",
   "script.statusError": "Script error",
   "script.statusMemoryLimit": "Memory limit",

@@ -33,8 +33,8 @@ public class ScriptedRequestSenderTests
         return (new ScriptedRequestSender(new RequestSender(transport), registry, TimeProvider.System), transport);
     }
 
-    static ScriptedSendInput Input(HttpRequestDefinition request, ScriptChain chain, VariableScopes? scopes = null) =>
-        new(request, scopes ?? NoScopes(), chain, false, false);
+    static ScriptedSendInput Input(HttpRequestDefinition request, ScriptChain chain, VariableScopes? scopes = null, ScriptRunContext? run = null) =>
+        new(request, scopes ?? NoScopes(), chain, false, false, Run: run);
 
     static ScriptChain Chain(params (string Origin, ScriptSet Set)[] steps) =>
         new([.. steps.Select(s => new ScriptStep(s.Origin, s.Set))]);
@@ -484,5 +484,139 @@ public class ScriptedRequestSenderTests
         Assert.Equal(ConsoleLevel.Warn, report.NetworkLog[1].Level);
         Assert.Equal(ConsoleSource.System, report.NetworkLog[1].Source);
         Assert.Equal("Unresolved variables: x, y", report.NetworkLog[1].Message);
+    }
+
+    static FakeHttpTransport OkTransport() =>
+        new((_, _) => Task.FromResult(SendResult.Success(new HttpResponseData(200, "OK", [], [], TimeSpan.Zero, "http://a/"))));
+
+    static (ScriptedRequestSender Sender, FakeHttpTransport Transport) BuildOk(FakeScriptEngine engine)
+    {
+        var transport = OkTransport();
+        ScriptEngineRegistry registry = new();
+        registry.Add(engine);
+        return (new ScriptedRequestSender(new RequestSender(transport), registry, TimeProvider.System), transport);
+    }
+
+    [Fact]
+    public async Task Skip_in_second_pre_request_block_stops_there_and_keeps_earlier_changes()
+    {
+        var calls = 0;
+        var engine = new FakeScriptEngine(i =>
+        {
+            calls++;
+            if (calls == 1)
+            {
+                i.Host.SetVariable(ScriptScope.Globals, "a", "1");
+            }
+            else if (calls == 2)
+            {
+                i.Host.SkipRequest();
+            }
+
+            return Ok(i);
+        });
+        var (sender, transport) = BuildOk(engine);
+        var chain = Chain(("c", Pre()), ("f", Pre()), ("r", Pre()));
+
+        var report = await sender.SendAsync(Input(Req(), chain), CancellationToken.None);
+
+        Assert.True(report.Skipped);
+        Assert.Null(report.Report);
+        Assert.Null(report.AbortedBy);
+        Assert.Null(report.SentDefinition);
+        Assert.Equal(2, engine.Invocations.Count);
+        Assert.Empty(transport.Requests);
+        Assert.Contains(report.Changes, c => c.Name == "a");
+    }
+
+    [Fact]
+    public async Task Skip_in_post_response_throws_the_message()
+    {
+        InvalidOperationException? thrown = null;
+        var engine = new FakeScriptEngine(i =>
+        {
+            if (i.Phase == ScriptPhase.PostResponse)
+            {
+                thrown = Assert.Throws<InvalidOperationException>(i.Host.SkipRequest);
+            }
+
+            return Ok(i);
+        });
+        var (sender, _) = BuildOk(engine);
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("r", ScriptSet.Empty with { PostResponse = Code }))), CancellationToken.None);
+
+        Assert.False(report.Skipped);
+        Assert.Equal(Yaapic.Localization.Strings.ScriptSkipRequestPostResponse, thrown?.Message);
+    }
+
+    [Fact]
+    public async Task SetNextRequest_in_a_run_last_call_wins_and_null_is_distinguishable()
+    {
+        var engine = new FakeScriptEngine(i =>
+        {
+            i.Host.SetNextRequest("a");
+            i.Host.SetNextRequest(null);
+            return Ok(i);
+        });
+        var (sender, _) = BuildOk(engine);
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("r", Pre())), run: new ScriptRunContext(1, 3, [], true)), CancellationToken.None);
+
+        Assert.True(report.NextRequestSet);
+        Assert.Null(report.NextRequest);
+        Assert.Empty(report.Warnings);
+
+        engine = new FakeScriptEngine(i =>
+        {
+            i.Host.SetNextRequest("a");
+            i.Host.SetNextRequest("b");
+            return Ok(i);
+        });
+        (sender, _) = BuildOk(engine);
+        report = await sender.SendAsync(Input(Req(), Chain(("r", Pre())), run: new ScriptRunContext(1, 3, [], true)), CancellationToken.None);
+        Assert.Equal("b", report.NextRequest);
+    }
+
+    [Fact]
+    public async Task SetNextRequest_outside_a_run_warns_once_and_sets_nothing()
+    {
+        var engine = new FakeScriptEngine(i =>
+        {
+            i.Host.SetNextRequest("a");
+            i.Host.SetNextRequest("b");
+            return Ok(i);
+        });
+        var (sender, _) = BuildOk(engine);
+
+        var report = await sender.SendAsync(Input(Req(), Chain(("r", Pre()))), CancellationToken.None);
+
+        Assert.False(report.NextRequestSet);
+        Assert.Null(report.NextRequest);
+        Assert.Equal([Yaapic.Localization.Strings.ScriptSetNextRequestOutsideRunner], report.Warnings);
+    }
+
+    [Fact]
+    public async Task Info_and_IterationData_reflect_the_run_context_and_single_is_the_default()
+    {
+        ScriptInfo? info = null;
+        IReadOnlyList<KeyValueEntry>? data = null;
+        var engine = new FakeScriptEngine(i =>
+        {
+            info = i.Host.Info;
+            data = i.Host.IterationData;
+            return Ok(i);
+        });
+        var (sender, _) = BuildOk(engine);
+
+        await sender.SendAsync(Input(Req(), Chain(("r", Pre())), run: new ScriptRunContext(2, 5, [new KeyValueEntry("k", "v")], true)), CancellationToken.None);
+        Assert.Equal(2, info!.Iteration);
+        Assert.Equal(5, info.IterationCount);
+        Assert.Equal("k", Assert.Single(data!).Key);
+
+        await sender.SendAsync(Input(Req(), Chain(("r", Pre()))), CancellationToken.None);
+        Assert.Equal(0, info.Iteration);
+        Assert.Equal(1, info.IterationCount);
+        Assert.Empty(data!);
     }
 }

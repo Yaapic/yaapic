@@ -1,4 +1,5 @@
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
 
 namespace Yaapic.Core.Scripting;
 
@@ -8,6 +9,8 @@ internal sealed class ScriptHost(
     ScriptRequest request,
     ScriptResponse? response,
     ScriptInfo info,
+    ScriptRunContext run,
+    ScriptExecutionControl control,
     Func<ScriptRequest, CancellationToken, ScriptSendResult>? send = null) : IScriptHost
 {
     private readonly Func<ScriptRequest, CancellationToken, ScriptSendResult> _send =
@@ -19,7 +22,13 @@ internal sealed class ScriptHost(
     /// </summary>
     public CancellationToken CancellationToken { get; set; }
 
-    public ScriptInfo Info => info;
+    public ScriptInfo Info => info with { Iteration = run.Iteration, IterationCount = run.IterationCount };
+
+    public IReadOnlyList<KeyValueEntry> IterationData => run.Data;
+
+    public void SetNextRequest(string? nameOrId) => control.SetNextRequest(nameOrId, run.InRunner);
+
+    public void SkipRequest() => control.SkipRequest(response is null ? ScriptPhase.PreRequest : ScriptPhase.PostResponse);
 
     public ScriptRequest Request => request;
 

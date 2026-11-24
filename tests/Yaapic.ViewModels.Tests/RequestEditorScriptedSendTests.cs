@@ -111,6 +111,27 @@ public sealed class RequestEditorScriptedSendTests
     }
 
     [Fact]
+    public async Task SkippedByAScriptShowsTheMessageAndTheTestsRaisesNoSentAndKeepsTheChanges()
+    {
+        var test = new TestResult("ran before skip", true, null, TimeSpan.Zero, "request");
+        var editor = Editor(new FakeScriptEngine(i =>
+        {
+            i.Host.SetVariable(ScriptScope.Environment, "token", "abc");
+            i.Host.SkipRequest();
+            return Succeeded(i, test);
+        }));
+
+        await editor.SendCommand.ExecuteAsync(null);
+
+        Assert.Empty(_sent);
+        Assert.Empty(_transport.Requests);
+        Assert.Equal(ResponseState.Failed, editor.Response.State);
+        Assert.Equal(Yaapic.Localization.Strings.ResponseSkippedByScript, editor.Response.ErrorMessage);
+        Assert.Equal(1, editor.Response.Tests.PassedCount);
+        Assert.Single(_applier.Calls);
+    }
+
+    [Fact]
     public async Task PostResponseErrorKeepsTheResponse()
     {
         var editor = Editor(new FakeScriptEngine(i => i.Phase == ScriptPhase.PostResponse ? Failed(i) : Succeeded(i)), post: true);

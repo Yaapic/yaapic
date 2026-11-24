@@ -1667,6 +1667,9 @@ public static class Strings
     /// <summary>Sending</summary>
     public static string ResponseSending => Localizer.Pick("Sending", "Envoi en cours");
 
+    /// <summary>Request skipped by a script: nothing was sent.</summary>
+    public static string ResponseSkippedByScript => Localizer.Pick("Request skipped by a script: nothing was sent.", "Requête ignorée par un script : rien n'a été envoyé.");
+
     /// <summary>Diff</summary>
     public static string ResponseTabDiff => Localizer.Pick("Diff", "Différences");
 
@@ -1751,6 +1754,12 @@ public static class Strings
 
     /// <summary>Script phase</summary>
     public static string ScriptPhase => Localizer.Pick("Script phase", "Phase du script");
+
+    /// <summary>yaapic.execution.setNextRequest has no effect outside the Runner</summary>
+    public static string ScriptSetNextRequestOutsideRunner => Localizer.Pick("yaapic.execution.setNextRequest has no effect outside the Runner", "yaapic.execution.setNextRequest n'a aucun effet en dehors du Runner");
+
+    /// <summary>yaapic.execution.skipRequest can only be called in a pre-request script</summary>
+    public static string ScriptSkipRequestPostResponse => Localizer.Pick("yaapic.execution.skipRequest can only be called in a pre-request script", "yaapic.execution.skipRequest ne peut être appelé que dans un script de pré-requête");
 
     /// <summary>Snippets</summary>
     public static string ScriptSnippets => Localizer.Pick("Snippets", "Extraits");

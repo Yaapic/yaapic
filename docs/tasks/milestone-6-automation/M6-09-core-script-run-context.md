@@ -1,6 +1,6 @@
 # M6-09: Core: run context for scripts (iteration, data, execution control)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-06
 
@@ -48,14 +48,14 @@ The engine side (`HostOps`, preludes: M6-10 to M6-12), the runner (M6-16, M6-17)
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests` with `FakeScriptEngine` replies that call the host: a skip in the second of three pre-request blocks
+- [x] Tests in `Yaapic.Core.Tests` with `FakeScriptEngine` replies that call the host: a skip in the second of three pre-request blocks
   stops there, nothing reaches the transport (`FakeHttpTransport` saw no call), no post-response block runs, `Skipped` is true and earlier
   changes are kept; `SkipRequest` in post-response throws the message; `SetNextRequest` inside a run sets `NextRequest` (last call wins,
   `null` allowed and distinguishable through `NextRequestSet`); outside a run it adds one warning and sets nothing; `Info` and
   `IterationData` reflect the `ScriptRunContext`; `Single` is used when `Run` is null.
-- [ ] Tests in `Yaapic.ViewModels.Tests`: the response panel shows the skipped message and the tests of the runs; the editor records no
+- [x] Tests in `Yaapic.ViewModels.Tests`: the response panel shows the skipped message and the tests of the runs; the editor records no
   history for a skipped send.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

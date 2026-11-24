@@ -331,6 +331,16 @@ public sealed class PmRequestResponseTests
 
         public string ReplaceIn(string template) => template;
 
+        public IReadOnlyList<KeyValueEntry> IterationData => [];
+
+        public void SetNextRequest(string? nameOrId)
+        {
+        }
+
+        public void SkipRequest()
+        {
+        }
+
         public ScriptSendResult Send(ScriptRequest request) => new(null, "not supported");
     }
 }

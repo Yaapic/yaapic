@@ -79,6 +79,7 @@
 
   "response.binaryContent": "Contenu binaire, {0}",
   "response.preRequestFailed": "Le script de pré-requête a échoué — {0} : {1}",
+  "response.skippedByScript": "Requête ignorée par un script : rien n'a été envoyé.",
   "response.tabTiming": "Durées",
   "timing.dns": "Résolution DNS",
   "timing.tcp": "Connexion TCP",
@@ -114,6 +115,8 @@
   "script.line": "ligne {0}",
   "script.originPostResponse": "post-réponse · {0}",
   "script.originPreRequest": "pré-requête · {0}",
+  "script.setNextRequestOutsideRunner": "yaapic.execution.setNextRequest n'a aucun effet en dehors du Runner",
+  "script.skipRequestPostResponse": "yaapic.execution.skipRequest ne peut être appelé que dans un script de pré-requête",
   "script.statusCanceled": "Annulé",
   "script.statusError": "Erreur de script",
   "script.statusMemoryLimit": "Limite de mémoire atteinte",
