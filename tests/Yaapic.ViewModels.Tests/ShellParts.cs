@@ -14,7 +14,7 @@ internal sealed class ShellParts
     {
         Engines = engines ?? new ScriptEngineRegistry();
         Vault = new InMemorySecretVault();
-        Updates = new UpdateViewModel(UpdateService, UpdateSettings, new AppInfo(AppVersion.Parse("1.0.0")), new UpdateScheduler(TimeProvider.System), Console);
+        Updates = new UpdateViewModel(UpdateService, UpdateSettings, new AppInfo(AppVersion.Parse("1.0.0")), TimeProvider.System, Console);
         VaultViewModel = new VaultViewModel(Vault, new FakeKeyProtectorFactory(new FakeKeyProtector("passphrase", requiresPassphrase: true)), new NoReload());
     }
 

@@ -13,9 +13,10 @@ public sealed class UpdateViewModelTests
     private readonly FakeUpdateService _service = new();
     private readonly InMemoryUpdateSettingsStore _store = new();
     private readonly ConsoleViewModel _console = new();
+    private readonly ManualTimeProvider _clock = new(new DateTimeOffset(2026, 11, 12, 8, 0, 0, TimeSpan.Zero));
 
     private UpdateViewModel Create(string version = "1.0.0") =>
-        new(_service, _store, new AppInfo(AppVersion.Parse(version)), new UpdateScheduler(TimeProvider.System), _console);
+        new(_service, _store, new AppInfo(AppVersion.Parse(version)), _clock, _console);
 
     [Fact]
     public async Task The_first_start_checks_and_shows_the_banner()
@@ -33,14 +34,104 @@ public sealed class UpdateViewModelTests
     }
 
     [Fact]
-    public async Task A_second_start_within_a_day_does_not_check()
+    public async Task Every_launch_checks_even_when_a_check_just_ran()
     {
         await Create().InitializeAsync();
+        _clock.Advance(TimeSpan.FromMinutes(5));
         _service.Checks.Clear();
 
         await Create().InitializeAsync();
 
+        Assert.Single(_service.Checks);
+    }
+
+    [Fact]
+    public async Task An_hourly_tick_checks_again()
+    {
+        using var vm = Create();
+        await vm.InitializeAsync();
+
+        _clock.Advance(TimeSpan.FromMinutes(59));
+        await Settle();
+        Assert.Single(_service.Checks);
+
+        _clock.Advance(TimeSpan.FromMinutes(1));
+        await WaitForChecks(2);
+        _clock.Advance(UpdateViewModel.CheckInterval);
+        await WaitForChecks(3);
+    }
+
+    [Fact]
+    public async Task A_tick_does_not_check_while_downloading_or_ready()
+    {
+        TaskCompletionSource gate = new();
+        _service.Result = new UpdateCheckResult.Available(V2);
+        _service.DownloadGate = gate.Task;
+        using var vm = Create();
+        await vm.InitializeAsync();
+
+        var download = vm.DownloadCommand.ExecuteAsync(null);
+        _clock.Advance(UpdateViewModel.CheckInterval);
+        await Settle();
+        Assert.Single(_service.Checks);
+
+        gate.SetResult();
+        await download;
+        Assert.Equal(UpdateState.ReadyToRestart, vm.State);
+        _clock.Advance(UpdateViewModel.CheckInterval);
+        await Settle();
+        Assert.Single(_service.Checks);
+    }
+
+    [Fact]
+    public async Task Turning_automatic_checks_off_stops_the_ticks()
+    {
+        using var vm = Create();
+        await vm.InitializeAsync();
+
+        vm.CheckAutomatically = false;
+        _clock.Advance(UpdateViewModel.CheckInterval);
+        await Settle();
+
+        Assert.Single(_service.Checks);
+    }
+
+    [Fact]
+    public async Task Disposing_stops_the_ticks()
+    {
+        var vm = Create();
+        await vm.InitializeAsync();
+
+        vm.Dispose();
+        _clock.Advance(UpdateViewModel.CheckInterval);
+        await Settle();
+
+        Assert.Single(_service.Checks);
+    }
+
+    [Fact]
+    public async Task An_unsupported_build_never_ticks()
+    {
+        _service.IsSupported = false;
+        using var vm = Create();
+        await vm.InitializeAsync();
+
+        _clock.Advance(UpdateViewModel.CheckInterval);
+        await Settle();
+
         Assert.Empty(_service.Checks);
+    }
+
+    private static Task Settle() => Task.Delay(100);
+
+    private async Task WaitForChecks(int count)
+    {
+        for (var i = 0; i < 200 && _service.Checks.Count < count; i++)
+        {
+            await Task.Delay(10);
+        }
+
+        Assert.Equal(count, _service.Checks.Count);
     }
 
     [Fact]
@@ -145,8 +236,6 @@ public sealed class UpdateViewModelTests
         vm.DismissCommand.Execute(null);
         Assert.False(vm.IsBannerVisible);
 
-        _store.Settings = _store.Settings with { LastCheckUtc = null };
-        await Create().InitializeAsync();
         var again = Create();
         await again.InitializeAsync();
         again.DismissCommand.Execute(null);
@@ -165,7 +254,6 @@ public sealed class UpdateViewModelTests
         await vm.InitializeAsync();
         vm.DismissCommand.Execute(null);
 
-        _store.Settings = _store.Settings with { LastCheckUtc = null };
         await vm.InitializeAsync();
 
         Assert.Equal(UpdateState.Available, vm.State);
@@ -187,7 +275,7 @@ public sealed class UpdateViewModelTests
     }
 
     [Fact]
-    public async Task Disabling_automatic_checks_is_saved_and_stops_the_startup_check()
+    public async Task Disabling_automatic_checks_is_saved_and_stops_the_launch_check()
     {
         var vm = Create();
         await vm.InitializeAsync();
@@ -195,7 +283,6 @@ public sealed class UpdateViewModelTests
         vm.CheckAutomatically = false;
         await Task.Yield();
         _service.Checks.Clear();
-        _store.Settings = _store.Settings with { LastCheckUtc = null };
         await Create().InitializeAsync();
 
         Assert.False(_store.Settings.CheckAutomatically);
