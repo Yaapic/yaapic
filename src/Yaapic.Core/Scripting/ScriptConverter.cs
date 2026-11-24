@@ -37,12 +37,13 @@ public static partial class ScriptConverter
 
     private static readonly string[] PostmanUnsupported =
     [
-        "pm.execution", "pm.iterationData", "pm.vault", "pm.visualizer", "pm.require", "pm.request.auth", "pm.request.certificate",
+        "pm.execution.location", "pm.execution.runRequest", "pm.vault", "pm.visualizer", "pm.require", "pm.request.auth", "pm.request.certificate",
         "pm.environment.name", "pm.cookies.jar", "pm.response.to.have.jsonSchema",
     ];
 
     private static readonly Dictionary<string, string> PostmanLegacy = new(StringComparer.Ordinal)
     {
+        ["postman.setNextRequest"] = "yaapic.execution.setNextRequest",
         ["postman.setEnvironmentVariable"] = "yaapic.environment.set",
         ["postman.getEnvironmentVariable"] = "yaapic.environment.get",
         ["postman.clearEnvironmentVariable"] = "yaapic.environment.unset",
@@ -63,7 +64,9 @@ public static partial class ScriptConverter
         ["bru.setGlobalEnvVar"] = new("yaapic.globals.set"),
         ["bru.getCollectionVar"] = new("yaapic.collectionVariables.get"),
         ["bru.interpolate"] = new("yaapic.variables.replaceIn"),
-        ["bru.setNextRequest"] = new(null, "needs the Runner (milestone 6)"),
+        ["bru.setNextRequest"] = new("yaapic.execution.setNextRequest"),
+        ["bru.runner.skipRequest"] = new("yaapic.execution.skipRequest"),
+        ["bru.runner.stopExecution"] = new(null, "use yaapic.execution.setNextRequest(null)"),
         ["bru.getEnvName"] = new(null, "yaapic.environment.name is not supported in Yaapic"),
         ["req.getHeader"] = new("yaapic.request.headers.get"),
         ["req.setHeader"] = new("yaapic.request.headers.upsert"),
@@ -313,7 +316,7 @@ public static partial class ScriptConverter
                 }
                 else
                 {
-                    _findings.Add(new(line, key, segments[1] == "setNextRequest" ? "needs the Runner (milestone 6)" : "no yaapic equivalent"));
+                    _findings.Add(new(line, key, "no yaapic equivalent"));
                 }
             }
             else if (dialect == ScriptDialect.Bruno && root is "bru" or "req" or "res")

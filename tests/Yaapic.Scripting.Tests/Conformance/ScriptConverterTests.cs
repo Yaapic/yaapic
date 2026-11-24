@@ -11,8 +11,7 @@ public sealed class ScriptConverterTests
 
     public static TheoryData<string> ConformanceCases => [.. JavaScriptConformanceTests.Cases
         .SelectMany(c => new[] { c.Pre, c.Post })
-        // iterationData and execution still convert as unsupported until the converter learns them (M6-13).
-        .Where(s => s is not null && !s.Contains("postman.", StringComparison.Ordinal) && !s.Contains("iterationData", StringComparison.Ordinal) && !s.Contains("execution", StringComparison.Ordinal))
+        .Where(s => s is not null && !s.Contains("postman.", StringComparison.Ordinal))
         .Select(s => s!)];
 
     [Theory]
@@ -52,11 +51,10 @@ public sealed class ScriptConverterTests
     }
 
     [Theory]
-    [InlineData("pm.execution.setNextRequest(null);", "pm.execution.setNextRequest", 1)]
+    [InlineData("pm.execution.location;", "pm.execution.location", 1)]
+    [InlineData("pm.execution.runRequest('x');", "pm.execution.runRequest", 1)]
     [InlineData("\n\npm.vault.get('k');", "pm.vault.get", 3)]
     [InlineData("pm.response.to.have.jsonSchema(s);", "pm.response.to.have.jsonSchema", 1)]
-    [InlineData("pm.iterationData.get('x');", "pm.iterationData.get", 1)]
-    [InlineData("postman.setNextRequest('x');", "postman.setNextRequest", 1)]
     [InlineData("const c = require('crypto-js');", "require", 1)]
     public void Unsupported_members_are_reported(string source, string member, int line)
     {
@@ -106,13 +104,37 @@ public sealed class ScriptConverterTests
         Assert.Single(result.Findings);
     }
 
+    [Theory]
+    [InlineData("pm.iterationData.get('x');", ScriptDialect.Postman, "yaapic.iterationData.get('x');")]
+    [InlineData("pm.execution.setNextRequest('B');", ScriptDialect.Postman, "yaapic.execution.setNextRequest('B');")]
+    [InlineData("postman.setNextRequest(null);", ScriptDialect.Postman, "yaapic.execution.setNextRequest(null);")]
+    [InlineData("pm.execution.skipRequest();", ScriptDialect.Postman, "yaapic.execution.skipRequest();")]
+    [InlineData("bru.setNextRequest('B');", ScriptDialect.Bruno, "yaapic.execution.setNextRequest('B');")]
+    [InlineData("bru.runner.skipRequest();", ScriptDialect.Bruno, "yaapic.execution.skipRequest();")]
+    public void Runner_apis_convert_without_findings(string source, ScriptDialect dialect, string expected)
+    {
+        var result = Js(source, dialect);
+
+        Assert.Equal(expected, result.Text);
+        Assert.Empty(result.Findings);
+    }
+
+    [Fact]
+    public void Bruno_stopExecution_is_reported_with_the_replacement()
+    {
+        var result = Js("bru.runner.stopExecution();", ScriptDialect.Bruno);
+
+        Assert.Equal("bru.runner.stopExecution();", result.Text);
+        Assert.Equal("use yaapic.execution.setNextRequest(null)", Assert.Single(result.Findings).Reason);
+    }
+
     [Fact]
     public void Unknown_Bruno_members_are_reported_and_kept()
     {
         var result = Js("await bru.runRequest('x'); bru.setNextRequest('y');", ScriptDialect.Bruno);
 
-        Assert.Equal("await bru.runRequest('x'); bru.setNextRequest('y');", result.Text);
-        Assert.Equal(["bru.runRequest", "bru.setNextRequest"], result.Findings.Select(f => f.Member));
+        Assert.Equal("await bru.runRequest('x'); yaapic.execution.setNextRequest('y');", result.Text);
+        Assert.Equal(["bru.runRequest"], result.Findings.Select(f => f.Member));
     }
 
     [Fact]

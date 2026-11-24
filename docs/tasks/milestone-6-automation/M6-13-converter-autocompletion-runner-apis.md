@@ -1,6 +1,6 @@
 # M6-13: Converter, autocompletion and snippets for the runner APIs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-11, M6-12
 
@@ -40,11 +40,11 @@ The runner itself, the engines (done).
 
 ## Acceptance criteria
 
-- [ ] Converter tests: Postman `pm.iterationData.get('x')`, `pm.execution.setNextRequest('B')`, `postman.setNextRequest(null)`,
+- [x] Converter tests: Postman `pm.iterationData.get('x')`, `pm.execution.setNextRequest('B')`, `postman.setNextRequest(null)`,
   `pm.execution.skipRequest()` convert with no finding; Bruno `bru.setNextRequest('B')` converts; `pm.execution.location` still reported.
-- [ ] Catalogue tests: completion after `yaapic.` lists `iterationData` and `execution`; after `yaapic.info.` lists `iteration`; Lua names
+- [x] Catalogue tests: completion after `yaapic.` lists `iterationData` and `execution`; after `yaapic.info.` lists `iteration`; Lua names
   match the prelude (assert against the real Lua prelude through an existing catalogue-vs-prelude test if there is one).
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
