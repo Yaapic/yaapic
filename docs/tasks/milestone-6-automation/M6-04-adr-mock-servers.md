@@ -49,9 +49,9 @@ Docs only. The decisions below are final.
 - **UI.** A Mock servers window (non-modal, one at a time) opened from the palette ("Mock servers"), the folder context menu
   ("Create a mock server...") and the status bar item "Mocks: {n} running" (hidden when none run): server list (start/stop, port,
   status), route list editor (add, duplicate, delete, move up/down, enable), response editor (status, headers, body), the log
-  with a detail pane, Copy URL. Edits save to the file; editing a running server applies at once (the server reads the current
-  definition for each request).
-- **Out of scope**: binding to other interfaces (blocked card M6-62), HTTPS, matching on query, headers or body, response
+  with a detail pane, Copy URL. Edits are saved with a Save button; a saved change applies to a running server at its next request
+  (the server reads the current definition for each request); changing the port of a running server restarts it.
+- **Out of scope**: binding to other interfaces (blocked card M6-63), HTTPS, matching on query, headers or body, response
   sequences or scripts, recording a real API, generating mocks from OpenAPI, WebSocket mocks.
 
 ## Out of scope

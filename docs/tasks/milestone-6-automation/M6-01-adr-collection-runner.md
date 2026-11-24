@@ -71,7 +71,7 @@ results, reports, UI). Docs only. The decisions below are final.
   results on the right (summary, iterations, request rows with outcome badges, filter All/Passed/Failed/Skipped, details of the
   selected row: status, time, size, tests, console, error), Run/Stop and Export buttons. Only one run at a time; closing the
   window does not stop the run.
-- **Out of scope for the milestone**: a command-line runner (blocked card M6-60), scheduled runs outside the app (M6-61),
+- **Out of scope for the milestone**: a command-line runner (blocked card M6-61), scheduled runs outside the app (M6-62),
   HTML reports, saving runner configurations, running unfiled requests, parallel runs, "run selected requests" from the tree.
 
 ## Out of scope
