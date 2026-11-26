@@ -1682,6 +1682,18 @@ public static class Strings
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
 
+    /// <summary>Choose a CSV or JSON file...</summary>
+    public static string RunnerChooseData => Localizer.Pick("Choose a CSV or JSON file...", "Choisir un fichier CSV ou JSON...");
+
+    /// <summary>Choose a data file</summary>
+    public static string RunnerChooseDataTitle => Localizer.Pick("Choose a data file", "Choisir un fichier de données");
+
+    /// <summary>Remove</summary>
+    public static string RunnerClearData => Localizer.Pick("Remove", "Retirer");
+
+    /// <summary>Data file</summary>
+    public static string RunnerData => Localizer.Pick("Data file", "Fichier de données");
+
     /// <summary>Invalid JSON: {0}</summary>
     public static string RunnerDataInvalidJson(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Invalid JSON: {0}", "JSON invalide : {0}"), a0);
@@ -1692,6 +1704,10 @@ public static class Strings
     /// <summary>Item {0} of the data file is not an object.</summary>
     public static string RunnerDataJsonNotObject(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Item {0} of the data file is not an object.", "L'élément {0} du fichier de données n'est pas un objet."), a0);
+
+    /// <summary>{0}: {1} rows, {2} columns</summary>
+    public static string RunnerDataSummary(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: {1} rows, {2} columns", "{0} : {1} lignes, {2} colonnes"), a0, a1, a2);
 
     /// <summary>The data file is too large (10 MiB, 100000 rows and 1000 columns at most).</summary>
     public static string RunnerDataTooLarge => Localizer.Pick("The data file is too large (10 MiB, 100000 rows and 1000 columns at most).", "Le fichier de données est trop volumineux (10 Mio, 100000 lignes et 1000 colonnes au maximum).");
@@ -1704,12 +1720,55 @@ public static class Strings
     public static string RunnerDataUnclosedQuote(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Line {0} has a quote that is never closed.", "La ligne {0} contient un guillemet jamais fermé."), a0);
 
+    /// <summary>Delay (ms)</summary>
+    public static string RunnerDelay => Localizer.Pick("Delay (ms)", "Délai (ms)");
+
+    /// <summary>The delay must be between 0 and 60000 ms.</summary>
+    public static string RunnerDelayRange => Localizer.Pick("The delay must be between 0 and 60000 ms.", "Le délai doit être compris entre 0 et 60000 ms.");
+
+    /// <summary>Iterations</summary>
+    public static string RunnerIterations => Localizer.Pick("Iterations", "Itérations");
+
+    /// <summary>Iterations must be between 1 and 10000.</summary>
+    public static string RunnerIterationsRange => Localizer.Pick("Iterations must be between 1 and 10000.", "Le nombre d'itérations doit être compris entre 1 et 10000.");
+
     /// <summary>The run was stopped: more than 1000 requests in one iteration (setNextRequest loop?)</summary>
     public static string RunnerLoopGuard => Localizer.Pick("The run was stopped: more than 1000 requests in one iteration (setNextRequest loop?)", "Le run a été arrêté : plus de 1000 requêtes dans une itération (boucle setNextRequest ?)");
+
+    /// <summary>Move down</summary>
+    public static string RunnerMoveDown => Localizer.Pick("Move down", "Descendre");
+
+    /// <summary>Move up</summary>
+    public static string RunnerMoveUp => Localizer.Pick("Move up", "Monter");
 
     /// <summary>setNextRequest: no request named '{0}' in this run</summary>
     public static string RunnerNextRequestNotFound(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("setNextRequest: no request named '{0}' in this run", "setNextRequest : aucune requête nommée '{0}' dans ce run"), a0);
+
+    /// <summary>Select at least one request.</summary>
+    public static string RunnerNothingSelected => Localizer.Pick("Select at least one request.", "Sélectionnez au moins une requête.");
+
+    /// <summary>Keep variable values</summary>
+    public static string RunnerPersistVariables => Localizer.Pick("Keep variable values", "Conserver les valeurs des variables");
+
+    /// <summary>Requests</summary>
+    public static string RunnerRequests => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Select all</summary>
+    public static string RunnerSelectAll => Localizer.Pick("Select all", "Tout sélectionner");
+
+    /// <summary>Select none</summary>
+    public static string RunnerSelectNone => Localizer.Pick("Select none", "Tout désélectionner");
+
+    /// <summary>{0} of {1} selected</summary>
+    public static string RunnerSelectedCount(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} of {1} selected", "{0} sur {1} sélectionnées"), a0, a1);
+
+    /// <summary>Stop on failure</summary>
+    public static string RunnerStopOnFailure => Localizer.Pick("Stop on failure", "Arrêter en cas d'échec");
+
+    /// <summary>Runner</summary>
+    public static string RunnerTitle => Localizer.Pick("Runner", "Runner");
 
     /// <summary>Paste Postman/Bruno...</summary>
     public static string ScriptConvert => Localizer.Pick("Paste Postman/Bruno...", "Coller Postman/Bruno...");

@@ -1,6 +1,6 @@
 # M6-20: ViewModel: runner setup
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-08, M6-14
 
@@ -45,11 +45,11 @@ Running and results (M6-21), the windows (M6-44, M6-51).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests/Runner/` with `FakeDialogService` and a fake `IImportInputReader`: `Load` order and paths;
+- [x] Tests in `Yaapic.ViewModels.Tests/Runner/` with `FakeDialogService` and a fake `IImportInputReader`: `Load` order and paths;
   move up/down and ends; select all/none and `SelectedCount`; each validation message; data file loads (columns, preview of 5 rows,
   iterations set), canceled picker, reader error and parse error set `DataError`; `ClearData`; `BuildPlan` keeps order and selection,
   throws when it cannot run.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
