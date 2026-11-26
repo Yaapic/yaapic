@@ -638,7 +638,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-14](milestone-6-automation/M6-14-core-run-plan-and-results.md) | Core: run plan and result model | any | M6-07, M6-09 | done |
 | [M6-15](milestone-6-automation/M6-15-core-run-variable-state.md) | Core: run variable state and scope source port | any | M6-06, M6-14 | done |
 | [M6-16](milestone-6-automation/M6-16-core-collection-runner.md) | Core: collection runner (step executor, iterations, delay, stop and cancel) | any | M6-09, M6-15 | done |
-| [M6-17](milestone-6-automation/M6-17-core-runner-flow-control.md) | Core: runner flow control (setNextRequest, skipRequest, loop guard) | any | M6-16 | todo |
+| [M6-17](milestone-6-automation/M6-17-core-runner-flow-control.md) | Core: runner flow control (setNextRequest, skipRequest, loop guard) | any | M6-16 | done |
 | [M6-18](milestone-6-automation/M6-18-core-run-report-json.md) | Core: run report, JSON | any | M6-14 | todo |
 | [M6-19](milestone-6-automation/M6-19-core-run-report-junit.md) | Core: run report, JUnit XML | any | M6-14 | todo |
 | [M6-20](milestone-6-automation/M6-20-viewmodel-runner-setup.md) | ViewModel: runner setup | any | M6-08, M6-14 | todo |

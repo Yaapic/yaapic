@@ -682,5 +682,7 @@
   "runner.dataTooLarge": "The data file is too large (10 MiB, 100000 rows and 1000 columns at most).",
   "runner.dataJsonNotArray": "A JSON data file must contain an array of objects.",
   "runner.dataJsonNotObject": "Item {0} of the data file is not an object.",
-  "runner.dataInvalidJson": "Invalid JSON: {0}"
+  "runner.dataInvalidJson": "Invalid JSON: {0}",
+  "runner.nextRequestNotFound": "setNextRequest: no request named '{0}' in this run",
+  "runner.loopGuard": "The run was stopped: more than 1000 requests in one iteration (setNextRequest loop?)"
 }

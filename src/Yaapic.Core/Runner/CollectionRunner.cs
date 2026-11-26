@@ -1,12 +1,15 @@
 using Yaapic.Core.Scripting;
+using Yaapic.Localization;
 
 namespace Yaapic.Core.Runner;
 
-/// <summary>Runs a <see cref="RunPlan"/> straight through, iteration after iteration (ADR 0018).</summary>
+/// <summary>Runs a <see cref="RunPlan"/> iteration after iteration, honouring <c>setNextRequest</c> and <c>skipRequest</c> (ADR 0018).</summary>
 /// <param name="step">The step executor.</param>
 /// <param name="time">The clock; times the run and the delays.</param>
 public sealed class CollectionRunner(RunStepExecutor step, TimeProvider time)
 {
+    private const int MaxStepsPerIteration = 1000;
+
     /// <summary>Runs every item of every iteration in order.</summary>
     /// <param name="plan">The plan to run.</param>
     /// <param name="progress">Receives a notification after each step; may be <see langword="null"/>.</param>
@@ -21,16 +24,16 @@ public sealed class CollectionRunner(RunStepExecutor step, TimeProvider time)
         DateTimeOffset startedAt = time.GetUtcNow();
         long started = time.GetTimestamp();
         List<RunIterationResult> iterations = [];
-        RunStatus status = RunStatus.Completed;
+        (RunStatus status, string? error) = (RunStatus.Completed, null);
         if (plan.Items.Count > 0)
         {
-            status = await RunIterationsAsync(plan, progress, iterations, ct).ConfigureAwait(false);
+            (status, error) = await RunIterationsAsync(plan, progress, iterations, ct).ConfigureAwait(false);
         }
 
-        return new RunResult(plan.Name, startedAt, time.GetElapsedTime(started), status, null, plan.Options, plan.Data.Count, iterations);
+        return new RunResult(plan.Name, startedAt, time.GetElapsedTime(started), status, error, plan.Options, plan.Data.Count, iterations);
     }
 
-    private async Task<RunStatus> RunIterationsAsync(RunPlan plan, IProgress<RunProgress>? progress, List<RunIterationResult> iterations, CancellationToken ct)
+    private async Task<(RunStatus Status, string? Error)> RunIterationsAsync(RunPlan plan, IProgress<RunProgress>? progress, List<RunIterationResult> iterations, CancellationToken ct)
     {
         RunOptions options = plan.Options;
         var state = new RunVariableState();
@@ -42,31 +45,73 @@ public sealed class CollectionRunner(RunStepExecutor step, TimeProvider time)
             var context = new ScriptRunContext(i, options.Iterations, plan.RowFor(i).Values, InRunner: true);
             List<RunRequestResult> results = [];
             iterations.Add(new RunIterationResult(i, results));
-            foreach (RunItem item in plan.Items)
+            int index = 0;
+            int steps = 0;
+            while (index < plan.Items.Count)
             {
+                if (++steps > MaxStepsPerIteration)
+                {
+                    return (RunStatus.Failed, Strings.RunnerLoopGuard);
+                }
+
+                RunItem item = plan.Items[index];
                 if (!first && options.DelayMs > 0 && !await DelayAsync(options.DelayMs, ct).ConfigureAwait(false))
                 {
-                    return RunStatus.Canceled;
+                    return (RunStatus.Canceled, null);
                 }
 
                 first = false;
                 RunStepResult executed = await step.ExecuteAsync(item, state, context, options.PersistVariables, options.Limits, ct).ConfigureAwait(false);
                 if (executed.IsCanceled || ct.IsCancellationRequested)
                 {
-                    return RunStatus.Canceled;
+                    return (RunStatus.Canceled, null);
                 }
 
                 results.Add(executed.Result);
                 completed++;
-                progress?.Report(new RunProgress(i, options.Iterations, completed, total, executed.Result, executed.Report));
+                progress?.Report(new RunProgress(i, options.Iterations, Math.Min(completed, total), total, executed.Result, executed.Report));
                 if (options.StopOnFailure && executed.Result.Outcome is RunRequestOutcome.Failed or RunRequestOutcome.Error)
                 {
-                    return RunStatus.StoppedOnFailure;
+                    return (RunStatus.StoppedOnFailure, null);
+                }
+
+                if (!executed.Report.NextRequestSet)
+                {
+                    index++;
+                }
+                else if (executed.Report.NextRequest is not { } target)
+                {
+                    return (RunStatus.Stopped, null);
+                }
+                else if ((index = FindTarget(plan.Items, target)) < 0)
+                {
+                    return (RunStatus.Failed, Strings.RunnerNextRequestNotFound(target));
                 }
             }
         }
 
-        return RunStatus.Completed;
+        return (RunStatus.Completed, null);
+    }
+
+    private static int FindTarget(IReadOnlyList<RunItem> items, string target)
+    {
+        for (int n = 0; n < items.Count; n++)
+        {
+            if (string.Equals(items[n].Request.Id.ToString("D"), target, StringComparison.OrdinalIgnoreCase))
+            {
+                return n;
+            }
+        }
+
+        for (int n = 0; n < items.Count; n++)
+        {
+            if (string.Equals(items[n].Request.Name, target, StringComparison.Ordinal))
+            {
+                return n;
+            }
+        }
+
+        return -1;
     }
 
     private async Task<bool> DelayAsync(int ms, CancellationToken ct)

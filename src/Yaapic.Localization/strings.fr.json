@@ -682,5 +682,7 @@
   "runner.dataTooLarge": "Le fichier de données est trop volumineux (10 Mio, 100000 lignes et 1000 colonnes au maximum).",
   "runner.dataJsonNotArray": "Un fichier de données JSON doit contenir un tableau d'objets.",
   "runner.dataJsonNotObject": "L'élément {0} du fichier de données n'est pas un objet.",
-  "runner.dataInvalidJson": "JSON invalide : {0}"
+  "runner.dataInvalidJson": "JSON invalide : {0}",
+  "runner.nextRequestNotFound": "setNextRequest : aucune requête nommée '{0}' dans ce run",
+  "runner.loopGuard": "Le run a été arrêté : plus de 1000 requêtes dans une itération (boucle setNextRequest ?)"
 }

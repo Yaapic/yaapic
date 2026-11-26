@@ -1704,6 +1704,13 @@ public static class Strings
     public static string RunnerDataUnclosedQuote(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Line {0} has a quote that is never closed.", "La ligne {0} contient un guillemet jamais fermé."), a0);
 
+    /// <summary>The run was stopped: more than 1000 requests in one iteration (setNextRequest loop?)</summary>
+    public static string RunnerLoopGuard => Localizer.Pick("The run was stopped: more than 1000 requests in one iteration (setNextRequest loop?)", "Le run a été arrêté : plus de 1000 requêtes dans une itération (boucle setNextRequest ?)");
+
+    /// <summary>setNextRequest: no request named '{0}' in this run</summary>
+    public static string RunnerNextRequestNotFound(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("setNextRequest: no request named '{0}' in this run", "setNextRequest : aucune requête nommée '{0}' dans ce run"), a0);
+
     /// <summary>Paste Postman/Bruno...</summary>
     public static string ScriptConvert => Localizer.Pick("Paste Postman/Bruno...", "Coller Postman/Bruno...");
 

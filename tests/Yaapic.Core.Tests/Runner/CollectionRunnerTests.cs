@@ -284,6 +284,133 @@ public class CollectionRunnerTests
         Assert.Empty(rig.Transport.Requests);
     }
 
+    private static ScriptSet Pre() => ScriptSet.Empty with { PreRequest = Code };
+
+    private static Rig Flow(Action<ScriptInvocation> act)
+    {
+        return new Rig(i =>
+        {
+            act(i);
+            return ScriptRunResult.Skipped(i.Phase, i.Origin, i.Block.Language);
+        });
+    }
+
+    private static string[] Sent(Rig rig) => [.. rig.Transport.Requests.Select(r => r.Url)];
+
+    [Fact]
+    public async Task Set_next_request_jumps_forward_over_the_items_in_between()
+    {
+        var rig = Flow(i => { if (i.Host.Info.RequestName == "a") { i.Host.SetNextRequest("c"); } });
+        RunItem[] items = [Item("a", "http://h/a", Post()), Item("b", "http://h/b"), Item("c", "http://h/c")];
+
+        var result = await rig.Runner.RunAsync(Plan(items), null, CancellationToken.None);
+
+        Assert.Equal(RunStatus.Completed, result.Status);
+        Assert.Equal(["http://h/a", "http://h/c"], Sent(rig));
+    }
+
+    [Fact]
+    public async Task Set_next_request_jumps_back_once_then_continues()
+    {
+        int visits = 0;
+        var rig = Flow(i =>
+        {
+            if (i.Host.Info.RequestName == "b" && ++visits == 1)
+            {
+                i.Host.SetNextRequest("a");
+            }
+        });
+        RunItem[] items = [Item("a", "http://h/a"), Item("b", "http://h/b", Post()), Item("c", "http://h/c")];
+
+        var result = await rig.Runner.RunAsync(Plan(items), null, CancellationToken.None);
+
+        Assert.Equal(RunStatus.Completed, result.Status);
+        Assert.Equal(["http://h/a", "http://h/b", "http://h/a", "http://h/b", "http://h/c"], Sent(rig));
+    }
+
+    [Fact]
+    public async Task Set_next_request_accepts_an_id_in_any_case_and_progress_never_exceeds_the_total()
+    {
+        RunItem[] items = [Item("a", "http://h/a", Post()), Item("b", "http://h/b"), Item("c", "http://h/c")];
+        string id = items[2].Request.Id.ToString("D").ToUpperInvariant();
+        var rig = Flow(i => { if (i.Host.Info.RequestName == "a") { i.Host.SetNextRequest(id); } });
+        List<RunProgress> seen = [];
+
+        await rig.Runner.RunAsync(Plan(items), new SyncProgress(seen), CancellationToken.None);
+
+        Assert.Equal(["http://h/a", "http://h/c"], Sent(rig));
+        Assert.All(seen, p => Assert.True(p.Completed <= p.Total));
+    }
+
+    [Fact]
+    public async Task A_null_next_request_stops_the_run_without_further_iterations()
+    {
+        var rig = Flow(i => { if (i.Host.Info.RequestName == "a") { i.Host.SetNextRequest(null); } });
+
+        var result = await rig.Runner.RunAsync(Plan([Item("a", "http://h/a", Post()), Item("b")], new RunOptions(Iterations: 3)), null, CancellationToken.None);
+
+        Assert.Equal(RunStatus.Stopped, result.Status);
+        Assert.Single(rig.Transport.Requests);
+        Assert.Single(result.Iterations);
+    }
+
+    [Fact]
+    public async Task An_unknown_next_request_fails_the_run_with_the_message()
+    {
+        var rig = Flow(i => i.Host.SetNextRequest("nope"));
+
+        var result = await rig.Runner.RunAsync(Plan([Item("a", scripts: Post()), Item("b")]), null, CancellationToken.None);
+
+        Assert.Equal(RunStatus.Failed, result.Status);
+        Assert.Contains("nope", result.Error);
+        Assert.Single(rig.Transport.Requests);
+    }
+
+    [Fact]
+    public async Task An_infinite_loop_stops_at_1001_steps_with_the_guard_message()
+    {
+        var rig = Flow(i => i.Host.SetNextRequest("a"));
+
+        var result = await rig.Runner.RunAsync(Plan([Item("a", scripts: Post())]), null, CancellationToken.None);
+
+        Assert.Equal(RunStatus.Failed, result.Status);
+        Assert.Contains("1000", result.Error);
+        Assert.Equal(1000, rig.Transport.Requests.Count);
+    }
+
+    [Fact]
+    public async Task A_skipped_request_is_recorded_and_the_next_one_runs_and_stop_on_failure_ignores_it()
+    {
+        var rig = Flow(i => { if (i.Host.Info.RequestName == "a") { i.Host.SkipRequest(); } });
+
+        var result = await rig.Runner.RunAsync(Plan([Item("a", scripts: Pre()), Item("b", "http://h/b")], new RunOptions(StopOnFailure: true)), null, CancellationToken.None);
+
+        Assert.Equal(RunStatus.Completed, result.Status);
+        var requests = result.Iterations[0].Requests;
+        Assert.Equal(RunRequestOutcome.Skipped, requests[0].Outcome);
+        Assert.Null(requests[0].StatusCode);
+        Assert.Equal(["http://h/b"], Sent(rig));
+    }
+
+    [Fact]
+    public async Task A_skip_and_a_next_request_in_the_same_pre_request_jump()
+    {
+        var rig = Flow(i =>
+        {
+            if (i.Host.Info.RequestName == "a")
+            {
+                i.Host.SkipRequest();
+                i.Host.SetNextRequest("c");
+            }
+        });
+
+        var result = await rig.Runner.RunAsync(Plan([Item("a", scripts: Pre()), Item("b", "http://h/b"), Item("c", "http://h/c")]), null, CancellationToken.None);
+
+        Assert.Equal(RunStatus.Completed, result.Status);
+        Assert.Equal(["http://h/c"], Sent(rig));
+        Assert.Equal(RunRequestOutcome.Skipped, result.Iterations[0].Requests[0].Outcome);
+    }
+
     private static async Task Eventually(Func<bool> condition)
     {
         for (int i = 0; i < 500 && !condition(); i++)
