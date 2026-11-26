@@ -1,6 +1,6 @@
 # M6-22: Core: load-test plan and virtual-user schedule
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-03, M6-14
 
@@ -32,10 +32,10 @@ Metrics (M6-23), the runner (M6-24).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/LoadTesting/`: `Validate` bounds; `TargetUsers` for Fixed and RampUp (t = 0, mid-ramp with rounding,
+- [x] Tests in `Yaapic.Core.Tests/LoadTesting/`: `Validate` bounds; `TargetUsers` for Fixed and RampUp (t = 0, mid-ramp with rounding,
   end of ramp, after the duration, negative); `StartOffset` agrees with `TargetUsers` for every user of 7 users over a 10 s ramp; hosts
   listed once in order.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
