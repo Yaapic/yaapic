@@ -1,6 +1,6 @@
 # M6-19: Core: run report, JUnit XML
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-14
 
@@ -38,10 +38,10 @@ JSON (M6-18), saving.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Runner/RunReportJUnitTests.cs`: exact expected XML for a result with passed, failed, error and skipped
+- [x] Tests in `Yaapic.Core.Tests/Runner/RunReportJUnitTests.cs`: exact expected XML for a result with passed, failed, error and skipped
   requests and console lines; counts; escaping of `<&">` and of a control character; the XML parses with `XmlReader`; no BOM.
-- [ ] The AOT analyzers report nothing for `System.Xml` use (0 IL2xxx/IL3xxx in the build of `Yaapic.Core`).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] The AOT analyzers report nothing for `System.Xml` use (0 IL2xxx/IL3xxx in the build of `Yaapic.Core`).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
