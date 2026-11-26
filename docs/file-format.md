@@ -17,6 +17,7 @@ Decision records: [ADR 0005](adr/0005-storage-format.md), [ADR 0008](adr/0008-co
     <slug>.request.yaml           request in the folder
     <sub-slug>/folder.yaml        nested folder
   environments/<slug>.env.yaml    one environment per file
+  mocks/<slug>.mock.yaml          one mock server per file
 ```
 
 A directory under `requests/` without `folder.yaml` is ignored and reported as a listing error. Siblings are sorted
@@ -234,6 +235,35 @@ Keys: `version: 1`, `id`, `name`, `collection` (optional), `variables` (same lis
 `collection` is the id of a collection (top-level folder). An environment with a `collection` is offered only on requests
 of that collection; without it (the key is omitted) it is offered everywhere. A collection that no longer exists is ignored.
 A request outside any collection is offered the environments without a `collection`.
+
+## Mock server file
+
+Decision record: [ADR 0020](adr/0020-mock-servers.md). Keys: `version: 1`, `id`, `name`, `port` (1024 to 65535, default 3000),
+`cors` (default true), `routes`. Each route: `id`, `name`, `enabled` (default true), `method` (`GET`, `POST`, `PUT`, `PATCH`,
+`DELETE`, `HEAD`, `OPTIONS` or `ANY`), `path` (starts with `/`), `status` (100 to 599), `headers` (`key`, `value`, `enabled`),
+`body` (literal block), `delayMs` (0 to 60 000). No secrets in mock files. Slugs fall back to `mock-server`.
+
+```yaml
+version: 1
+id: 11111111-1111-1111-1111-111111111111
+name: Users API
+port: 4000
+cors: false
+routes:
+- id: 22222222-2222-2222-2222-222222222222
+  name: List
+  enabled: true
+  method: GET
+  path: /users
+  status: 200
+  headers:
+  - key: Content-Type
+    value: application/json
+    enabled: true
+  body: |
+    {"users": []}
+  delayMs: 0
+```
 
 ## Session file
 

@@ -649,7 +649,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-25](milestone-6-automation/M6-25-core-load-test-report-json.md) | Core: load-test report, JSON | any | M6-24 | done |
 | [M6-26](milestone-6-automation/M6-26-viewmodel-load-test.md) | ViewModel: load test | any | M6-20, M6-21, M6-25 | done |
 | [M6-27](milestone-6-automation/M6-27-domain-mock-server-model.md) | Domain: mock server model and validation | any | M6-04 | done |
-| [M6-28](milestone-6-automation/M6-28-infra-mock-server-store.md) | Infrastructure: mock server file store | any | M6-27 | todo |
+| [M6-28](milestone-6-automation/M6-28-infra-mock-server-store.md) | Infrastructure: mock server file store | any | M6-27 | done |
 | [M6-29](milestone-6-automation/M6-29-core-mock-route-matcher.md) | Core: mock HTTP types and route matcher | any | M6-27 | todo |
 | [M6-30](milestone-6-automation/M6-30-core-mock-responder.md) | Core: mock responder and templating | any | M6-29 | todo |
 | [M6-31](milestone-6-automation/M6-31-core-mock-from-collection.md) | Core: generate a mock server from a folder | any | M6-14, M6-27 | todo |
