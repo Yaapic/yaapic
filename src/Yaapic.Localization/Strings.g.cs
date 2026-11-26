@@ -1726,6 +1726,32 @@ public static class Strings
     /// <summary>The delay must be between 0 and 60000 ms.</summary>
     public static string RunnerDelayRange => Localizer.Pick("The delay must be between 0 and 60000 ms.", "Le délai doit être compris entre 0 et 60000 ms.");
 
+    /// <summary>Export JUnit XML</summary>
+    public static string RunnerExportJUnit => Localizer.Pick("Export JUnit XML", "Exporter en JUnit XML");
+
+    /// <summary>Export JSON</summary>
+    public static string RunnerExportJson => Localizer.Pick("Export JSON", "Exporter en JSON");
+
+    /// <summary>Saved {0}</summary>
+    public static string RunnerExported(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved {0}", "{0} enregistré"), a0);
+
+    /// <summary>All</summary>
+    public static string RunnerFilterAll => Localizer.Pick("All", "Tous");
+
+    /// <summary>Failed</summary>
+    public static string RunnerFilterFailed => Localizer.Pick("Failed", "Échoués");
+
+    /// <summary>Passed</summary>
+    public static string RunnerFilterPassed => Localizer.Pick("Passed", "Réussis");
+
+    /// <summary>Skipped</summary>
+    public static string RunnerFilterSkipped => Localizer.Pick("Skipped", "Ignorés");
+
+    /// <summary>Iteration {0}</summary>
+    public static string RunnerIteration(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Iteration {0}", "Itération {0}"), a0);
+
     /// <summary>Iterations</summary>
     public static string RunnerIterations => Localizer.Pick("Iterations", "Itérations");
 
@@ -1748,11 +1774,33 @@ public static class Strings
     /// <summary>Select at least one request.</summary>
     public static string RunnerNothingSelected => Localizer.Pick("Select at least one request.", "Sélectionnez au moins une requête.");
 
+    /// <summary>Error</summary>
+    public static string RunnerOutcomeError => Localizer.Pick("Error", "Erreur");
+
+    /// <summary>Failed</summary>
+    public static string RunnerOutcomeFailed => Localizer.Pick("Failed", "Échoué");
+
+    /// <summary>Passed</summary>
+    public static string RunnerOutcomePassed => Localizer.Pick("Passed", "Réussi");
+
+    /// <summary>Skipped</summary>
+    public static string RunnerOutcomeSkipped => Localizer.Pick("Skipped", "Ignoré");
+
     /// <summary>Keep variable values</summary>
     public static string RunnerPersistVariables => Localizer.Pick("Keep variable values", "Conserver les valeurs des variables");
 
     /// <summary>Requests</summary>
     public static string RunnerRequests => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Results</summary>
+    public static string RunnerResults => Localizer.Pick("Results", "Résultats");
+
+    /// <summary>Run</summary>
+    public static string RunnerRun => Localizer.Pick("Run", "Exécuter");
+
+    /// <summary>Running {0}/{1}</summary>
+    public static string RunnerRunning(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Running {0}/{1}", "Exécution {0}/{1}"), a0, a1);
 
     /// <summary>Select all</summary>
     public static string RunnerSelectAll => Localizer.Pick("Select all", "Tout sélectionner");
@@ -1764,8 +1812,31 @@ public static class Strings
     public static string RunnerSelectedCount(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} of {1} selected", "{0} sur {1} sélectionnées"), a0, a1);
 
+    /// <summary>Run canceled</summary>
+    public static string RunnerStatusCanceled => Localizer.Pick("Run canceled", "Exécution annulée");
+
+    /// <summary>Run completed</summary>
+    public static string RunnerStatusCompleted => Localizer.Pick("Run completed", "Exécution terminée");
+
+    /// <summary>Run failed: {0}</summary>
+    public static string RunnerStatusFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Run failed: {0}", "Échec de l'exécution : {0}"), a0);
+
+    /// <summary>Run stopped by a script</summary>
+    public static string RunnerStatusStopped => Localizer.Pick("Run stopped by a script", "Exécution arrêtée par un script");
+
+    /// <summary>Run stopped on the first failure</summary>
+    public static string RunnerStatusStoppedOnFailure => Localizer.Pick("Run stopped on the first failure", "Exécution arrêtée au premier échec");
+
+    /// <summary>Stop</summary>
+    public static string RunnerStop => Localizer.Pick("Stop", "Arrêter");
+
     /// <summary>Stop on failure</summary>
     public static string RunnerStopOnFailure => Localizer.Pick("Stop on failure", "Arrêter en cas d'échec");
+
+    /// <summary>{0} sent, {1} errors, {2} failed, {3} skipped</summary>
+    public static string RunnerSummary(object? a0, object? a1, object? a2, object? a3) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} sent, {1} errors, {2} failed, {3} skipped", "{0} envoyées, {1} erreurs, {2} échouées, {3} ignorées"), a0, a1, a2, a3);
 
     /// <summary>Runner</summary>
     public static string RunnerTitle => Localizer.Pick("Runner", "Runner");

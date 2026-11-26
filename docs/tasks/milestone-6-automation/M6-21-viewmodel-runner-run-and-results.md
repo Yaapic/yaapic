@@ -1,6 +1,6 @@
 # M6-21: ViewModel: runner run and results
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-17, M6-18, M6-19, M6-20
 
@@ -49,12 +49,12 @@ Shell entries and status bar (M6-41), composition (M6-42), the windows.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests/Runner/` with a real `CollectionRunner` over `FakeHttpTransport` and `FakeScriptEngine`, a
+- [x] Tests in `Yaapic.ViewModels.Tests/Runner/` with a real `CollectionRunner` over `FakeHttpTransport` and `FakeScriptEngine`, a
   `FakeVariableScopeProvider` behind `VariableScopeRunSource`, `FakeDialogService`: a run fills rows, summary and status; the console
   received the reports; filters; selection details; stop cancels and shows the canceled status; `Run` disabled while running and
   when the setup cannot run; `Open` during a run does not reset; export JSON and JUnit write the bytes with the suggested names;
   canceled save leaves no message; `UpdateViewModel` tests still pass with `ContextProgress`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
