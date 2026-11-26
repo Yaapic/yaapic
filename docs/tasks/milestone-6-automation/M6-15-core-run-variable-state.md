@@ -1,6 +1,6 @@
 # M6-15: Core: run variable state and scope source port
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-06, M6-14
 
@@ -38,10 +38,10 @@ The runner loop (M6-16), the view-model adapter (M6-21).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Runner/RunVariableStateTests.cs`: set then unset then set again; changes to each scope; environment
+- [x] Tests in `Yaapic.Core.Tests/Runner/RunVariableStateTests.cs`: set then unset then set again; changes to each scope; environment
   absent; existing secret row updated keeps `IsSecret`; disabled row of the same name gets a new enabled value; `Local` changes ignored;
   `Data` taken from the row; overlay does not mutate its input.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

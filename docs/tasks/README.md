@@ -636,7 +636,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-12](milestone-6-automation/M6-12-lua-iteration-data-and-execution.md) | Lua: `yaapic.iteration_data` and `yaapic.execution` | any | M6-10 | done |
 | [M6-13](milestone-6-automation/M6-13-converter-autocompletion-runner-apis.md) | Converter, autocompletion and snippets for the runner APIs | any | M6-11, M6-12 | done |
 | [M6-14](milestone-6-automation/M6-14-core-run-plan-and-results.md) | Core: run plan and result model | any | M6-07, M6-09 | done |
-| [M6-15](milestone-6-automation/M6-15-core-run-variable-state.md) | Core: run variable state and scope source port | any | M6-06, M6-14 | todo |
+| [M6-15](milestone-6-automation/M6-15-core-run-variable-state.md) | Core: run variable state and scope source port | any | M6-06, M6-14 | done |
 | [M6-16](milestone-6-automation/M6-16-core-collection-runner.md) | Core: collection runner (step executor, iterations, delay, stop and cancel) | any | M6-09, M6-15 | todo |
 | [M6-17](milestone-6-automation/M6-17-core-runner-flow-control.md) | Core: runner flow control (setNextRequest, skipRequest, loop guard) | any | M6-16 | todo |
 | [M6-18](milestone-6-automation/M6-18-core-run-report-json.md) | Core: run report, JSON | any | M6-14 | todo |
