@@ -1,6 +1,6 @@
 # M6-14: Core: run plan and result model
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-07, M6-09
 
@@ -45,9 +45,9 @@ Running (M6-16), variable state (M6-15), reports (M6-18, M6-19).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Runner/`: `ListRequests` on a nested tree (order, paths, empty folder); `RowFor` with no data, inside and
+- [x] Tests in `Yaapic.Core.Tests/Runner/`: `ListRequests` on a nested tree (order, paths, empty folder); `RowFor` with no data, inside and
   past the end; `Validate` bounds; `RunSummary.From` on a hand-built result with every outcome; `RunOutcomes.From` for each case.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
