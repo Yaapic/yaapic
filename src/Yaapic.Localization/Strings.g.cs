@@ -1290,6 +1290,99 @@ public static class Strings
     /// <summary>Show the response beside or below the request</summary>
     public static string LayoutToggleTip => Localizer.Pick("Show the response beside or below the request", "Afficher la réponse à côté de la requête ou en dessous");
 
+    /// <summary>Active users</summary>
+    public static string LoadActiveUsers => Localizer.Pick("Active users", "Utilisateurs actifs");
+
+    /// <summary>Average</summary>
+    public static string LoadAverage => Localizer.Pick("Average", "Moyenne");
+
+    /// <summary>Errors per second</summary>
+    public static string LoadChartErrors => Localizer.Pick("Errors per second", "Erreurs par seconde");
+
+    /// <summary>Average response time</summary>
+    public static string LoadChartResponseTime => Localizer.Pick("Average response time", "Temps de réponse moyen");
+
+    /// <summary>Requests per second</summary>
+    public static string LoadChartThroughput => Localizer.Pick("Requests per second", "Requêtes par seconde");
+
+    /// <summary>Virtual users</summary>
+    public static string LoadChartUsers => Localizer.Pick("Virtual users", "Utilisateurs virtuels");
+
+    /// <summary>Start a load test against {0}? Only test servers you are allowed to load.</summary>
+    public static string LoadConfirm(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Start a load test against {0}? Only test servers you are allowed to load.", "Lancer un test de charge contre {0} ? Ne testez que des serveurs que vous avez le droit de charger."), a0);
+
+    /// <summary>Start a load test?</summary>
+    public static string LoadConfirmTitle => Localizer.Pick("Start a load test?", "Lancer un test de charge ?");
+
+    /// <summary>Duration (s)</summary>
+    public static string LoadDuration => Localizer.Pick("Duration (s)", "Durée (s)");
+
+    /// <summary>The duration must be between 10 and 3600 seconds.</summary>
+    public static string LoadDurationRange => Localizer.Pick("The duration must be between 10 and 3600 seconds.", "La durée doit être comprise entre 10 et 3600 secondes.");
+
+    /// <summary>Error rate</summary>
+    public static string LoadErrorRate => Localizer.Pick("Error rate", "Taux d'erreur");
+
+    /// <summary>Errors</summary>
+    public static string LoadErrors => Localizer.Pick("Errors", "Erreurs");
+
+    /// <summary>Export JSON</summary>
+    public static string LoadExport => Localizer.Pick("Export JSON", "Exporter en JSON");
+
+    /// <summary>95th percentile</summary>
+    public static string LoadP95 => Localizer.Pick("95th percentile", "95e centile");
+
+    /// <summary>Profile</summary>
+    public static string LoadProfile => Localizer.Pick("Profile", "Profil");
+
+    /// <summary>Fixed</summary>
+    public static string LoadProfileFixed => Localizer.Pick("Fixed", "Fixe");
+
+    /// <summary>Ramp up</summary>
+    public static string LoadProfileRampUp => Localizer.Pick("Ramp up", "Montée en charge");
+
+    /// <summary>The ramp-up must be between 1 second and the duration.</summary>
+    public static string LoadRampRange => Localizer.Pick("The ramp-up must be between 1 second and the duration.", "La montée en charge doit être comprise entre 1 seconde et la durée.");
+
+    /// <summary>Ramp-up (s)</summary>
+    public static string LoadRampUp => Localizer.Pick("Ramp-up (s)", "Montée (s)");
+
+    /// <summary>Requests</summary>
+    public static string LoadRequests => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Scripts were not run during this load test.</summary>
+    public static string LoadScriptsSkipped => Localizer.Pick("Scripts were not run during this load test.", "Les scripts n'ont pas été exécutés pendant ce test de charge.");
+
+    /// <summary>Start</summary>
+    public static string LoadStart => Localizer.Pick("Start", "Démarrer");
+
+    /// <summary>Stop</summary>
+    public static string LoadStop => Localizer.Pick("Stop", "Arrêter");
+
+    /// <summary>The think time must be between 0 and 10000 ms.</summary>
+    public static string LoadThinkRange => Localizer.Pick("The think time must be between 0 and 10000 ms.", "Le temps de réflexion doit être compris entre 0 et 10000 ms.");
+
+    /// <summary>Think time (ms)</summary>
+    public static string LoadThinkTime => Localizer.Pick("Think time (ms)", "Temps de réflexion (ms)");
+
+    /// <summary>Throughput</summary>
+    public static string LoadThroughput => Localizer.Pick("Throughput", "Débit");
+
+    /// <summary>Load test</summary>
+    public static string LoadTitle => Localizer.Pick("Load test", "Test de charge");
+
+    /// <summary>Percentiles computed on the first {0} samples.</summary>
+    public static string LoadTruncated(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Percentiles computed on the first {0} samples.", "Centiles calculés sur les {0} premiers échantillons."), a0);
+
+    /// <summary>Virtual users</summary>
+    public static string LoadUsers => Localizer.Pick("Virtual users", "Utilisateurs virtuels");
+
+    /// <summary>Virtual users must be between 1 and {0}.</summary>
+    public static string LoadUsersRange(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Virtual users must be between 1 and {0}.", "Les utilisateurs virtuels doivent être entre 1 et {0}."), a0);
+
     /// <summary>No redirect was received within 3 minutes. Try again.</summary>
     public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
 

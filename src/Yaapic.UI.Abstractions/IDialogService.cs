@@ -13,6 +13,12 @@ public interface IDialogService
     /// <returns><see langword="true"/> when the deletion is confirmed.</returns>
     Task<bool> ConfirmDeleteAsync(string itemName);
 
+    /// <summary>Asks the user to confirm an action. The default confirms; platforms override it.</summary>
+    /// <param name="title">The dialog title.</param>
+    /// <param name="message">The question.</param>
+    /// <returns><see langword="true"/> when the user confirms.</returns>
+    Task<bool> ConfirmAsync(string title, string message) => Task.FromResult(true);
+
     /// <summary>Asks for a line of text. The default does nothing; platforms override it.</summary>
     /// <param name="title">The dialog title.</param>
     /// <param name="label">The label of the text box.</param>

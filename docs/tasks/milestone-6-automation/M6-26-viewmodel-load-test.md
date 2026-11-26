@@ -1,6 +1,6 @@
 # M6-26: ViewModel: load test
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-20, M6-21, M6-25
 
@@ -50,11 +50,11 @@ Shell entries (M6-41), windows (M6-46, M6-53).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests/LoadTesting/` with a real `LoadTestRunner` over a fake transport and short durations, or a
+- [x] Tests in `Yaapic.ViewModels.Tests/LoadTesting/` with a real `LoadTestRunner` over a fake transport and short durations, or a
   fake runner wrapper if the real one makes tests slow (keep each test under 3 s): validation messages; confirmation asked once with the
   hosts, declined start does nothing; snapshots update tiles and normalized chart points (values between 0 and 1, X increasing);
   stop cancels; final rows and errors; export bytes and name; `IDialogService.ConfirmAsync` default returns true.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

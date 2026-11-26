@@ -17,6 +17,19 @@ public sealed class FakeDialogService : IDialogService
     /// <summary>Gets the item names passed to <see cref="ConfirmDeleteAsync"/>.</summary>
     public List<string> DeletePrompts { get; } = [];
 
+    /// <summary>Gets or sets the answer to <see cref="ConfirmAsync"/>.</summary>
+    public bool ConfirmAnswer { get; set; } = true;
+
+    /// <summary>Gets the messages passed to <see cref="ConfirmAsync"/>.</summary>
+    public List<string> ConfirmMessages { get; } = [];
+
+    /// <inheritdoc/>
+    public Task<bool> ConfirmAsync(string title, string message)
+    {
+        ConfirmMessages.Add(message);
+        return Task.FromResult(ConfirmAnswer);
+    }
+
     /// <inheritdoc/>
     public Task<UnsavedChoice> ConfirmUnsavedAsync(string itemName)
     {
