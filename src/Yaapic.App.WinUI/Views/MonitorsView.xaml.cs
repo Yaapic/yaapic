@@ -38,6 +38,7 @@ public sealed partial class MonitorsView : UserControl
 
         Bindings.Update();
         SyncSelection();
+        DispatcherQueue.TryEnqueue(SyncChoices);
     }
 
     private void OnViewModelPropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -45,6 +46,47 @@ public sealed partial class MonitorsView : UserControl
         if (e.PropertyName == nameof(MonitorsViewModel.SelectedMonitor))
         {
             SyncSelection();
+        }
+
+        // The choice lists are copied into new collections by the bindings (which clears a combo box selection), so the
+        // folder and environment are re-selected once those bindings have run.
+        if (e.PropertyName is nameof(MonitorsViewModel.SelectedMonitor) or nameof(MonitorsViewModel.SelectedFolder)
+            or nameof(MonitorsViewModel.SelectedEnvironment) or nameof(MonitorsViewModel.FolderChoices)
+            or nameof(MonitorsViewModel.EnvironmentChoices))
+        {
+            DispatcherQueue.TryEnqueue(SyncChoices);
+        }
+    }
+
+    private void SyncChoices()
+    {
+        _syncing = true;
+        try
+        {
+            FolderCombo.SelectedItem = ViewModel?.SelectedFolder;
+            EnvironmentCombo.SelectedItem = ViewModel?.SelectedEnvironment;
+        }
+        finally
+        {
+            _syncing = false;
+        }
+    }
+
+    // Only a user choice reaches the view model; the selection a binding clears is ignored.
+    private void OnChoiceChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_syncing || ViewModel is not { } vm)
+        {
+            return;
+        }
+
+        if (ReferenceEquals(sender, FolderCombo) && FolderCombo.SelectedItem is MonitorFolderChoice folder)
+        {
+            vm.SelectedFolder = folder;
+        }
+        else if (ReferenceEquals(sender, EnvironmentCombo) && EnvironmentCombo.SelectedItem is MonitorEnvironmentChoice environment)
+        {
+            vm.SelectedEnvironment = environment;
         }
     }
 

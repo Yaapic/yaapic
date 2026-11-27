@@ -5,6 +5,15 @@
     xmlns:loc="using:Yaapic.Localization"
     xmlns:p="using:Yaapic.App.WinUI.Presentation"
     xmlns:m="using:Yaapic.ViewModels.Monitors">
+  <UserControl.Resources>
+    <!-- An "on" switch otherwise takes the system accent (blue), not the Yaapic accent. -->
+    <SolidColorBrush x:Key="ToggleSwitchFillOn" Color="{ThemeResource YaapicAccentFillColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchFillOnPointerOver" Color="{ThemeResource YaapicAccentFillHoverColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchFillOnPressed" Color="{ThemeResource YaapicAccentFillPressedColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchStrokeOn" Color="{ThemeResource YaapicAccentFillColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchStrokeOnPointerOver" Color="{ThemeResource YaapicAccentFillHoverColor}"/>
+    <SolidColorBrush x:Key="ToggleSwitchStrokeOnPressed" Color="{ThemeResource YaapicAccentFillPressedColor}"/>
+  </UserControl.Resources>
   <Grid>
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -77,20 +86,20 @@
               <ColumnDefinition Width="*"/>
               <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <ComboBox HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MonitorFolder}"
+            <ComboBox x:Name="FolderCombo" HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MonitorFolder}"
                       AutomationProperties.Name="{x:Bind loc:Strings.MonitorFolder}"
                       ItemsSource="{x:Bind p:ListMap.MonitorFolders(ViewModel.FolderChoices), Mode=OneWay}"
-                      SelectedItem="{x:Bind ViewModel.SelectedFolder, Mode=TwoWay}">
+                      SelectionChanged="OnChoiceChanged">
               <ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="m:MonitorFolderChoice">
                   <TextBlock Text="{x:Bind Path}"/>
                 </DataTemplate>
               </ComboBox.ItemTemplate>
             </ComboBox>
-            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MonitorEnvironment}"
+            <ComboBox x:Name="EnvironmentCombo" Grid.Column="1" HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MonitorEnvironment}"
                       AutomationProperties.Name="{x:Bind loc:Strings.MonitorEnvironment}"
                       ItemsSource="{x:Bind p:ListMap.MonitorEnvironments(ViewModel.EnvironmentChoices), Mode=OneWay}"
-                      SelectedItem="{x:Bind ViewModel.SelectedEnvironment, Mode=TwoWay}">
+                      SelectionChanged="OnChoiceChanged">
               <ComboBox.ItemTemplate>
                 <DataTemplate x:DataType="m:MonitorEnvironmentChoice">
                   <TextBlock Text="{x:Bind Name}"/>
