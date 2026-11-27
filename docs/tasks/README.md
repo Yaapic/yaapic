@@ -616,7 +616,7 @@ Scope: the collection Runner (iterations, CSV and JSON data files, a data variab
 
 Slices: M6-01 to M6-05 the ADRs and the spike; M6-06 to M6-13 the data layer, data files and the script API (host, JavaScript, Lua, converter and completion); M6-14 to M6-21 the Runner (model, variable state, runner, flow control, reports, view models); M6-22 to M6-26 load tests; M6-27 to M6-35 mock servers (model, store, matcher, responder, generator, HTTP/1.1 server, service, view model); M6-36 to M6-40 monitors (model, stores, scheduler, view model); M6-41 the shell entries; M6-42 the composition; M6-43 to M6-49 WinUI; M6-50 to M6-56 Avalonia; M6-57 to M6-59 end-to-end tests; M6-60 docs; M6-61 the WinUI visual check.
 
-Blocked (product decisions, each card states the question): M6-62 a command-line runner, M6-63 monitors while Yaapic is closed, M6-64 mock servers reachable from other devices. No other card depends on them. Cards added after an answer are numbered after M6-64.
+Product decisions (answered 2026-11-27, each card records it): M6-62 a command-line runner, a separate `yaapic-cli` executable, built by M6-65 to M6-74 (ADR 0022 first; Core run sources and `YAAPIC_VAR_` overrides, headless composition, the CLI project, the run command, output and reports, end-to-end tests, packaging, docs); M6-63 monitors while Yaapic is closed, not now; M6-64 mock servers reachable from other devices, not now. How secrets reach a headless run was not decided: the cards use a default (no vault, `YAAPIC_VAR_<name>` environment variables, masked) that M6-62 marks as open to revision.
 
 Sonnet-sized cards: each card is one session; the card text holds every decision (types, signatures, rules, file shapes, strings, test cases), so no card needs a design choice. Shared types: `RunPlan`, `RunResult`, `RunStepExecutor`, `RunVariableState`, `IRunScopeSource` (M6-14 to M6-16), `ScriptRunContext` and `ScriptExecutionControl` (M6-09), `MockHttpRequest`/`MockHttpResponse` (M6-29), `IMockHttpHost` (M6-33), `MonitorRun` and the monitor store ports (M6-36), `ContextProgress<T>` (M6-21), `IDialogService.ConfirmAsync` (M6-26).
 
@@ -683,9 +683,19 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-59](milestone-6-automation/M6-59-end-to-end-monitors.md) | End-to-end tests: monitors | any | M6-42 | done |
 | [M6-60](milestone-6-automation/M6-60-milestone-docs.md) | Milestone 6 docs | any | M6-57, M6-58, M6-59, M6-49, M6-56 | done |
 | [M6-61](milestone-6-automation/M6-61-winui-visual-verification.md) | WinUI visual verification of the milestone 6 views | windows | M6-45, M6-46, M6-47, M6-48, M6-49 | in progress |
-| [M6-62](milestone-6-automation/M6-62-command-line-runner.md) | Command-line runner | any | M6-17, M6-18, M6-19 | blocked |
-| [M6-63](milestone-6-automation/M6-63-monitors-while-closed.md) | Monitors while Yaapic is closed | any | M6-39 | blocked |
-| [M6-64](milestone-6-automation/M6-64-mock-servers-on-the-network.md) | Mock servers reachable from other devices | any | M6-34 | blocked |
+| [M6-62](milestone-6-automation/M6-62-command-line-runner.md) | Command-line runner (decision: separate `yaapic-cli`) | any | M6-17, M6-18, M6-19 | done |
+| [M6-63](milestone-6-automation/M6-63-monitors-while-closed.md) | Monitors while Yaapic is closed (decision: not now) | any | M6-39 | done |
+| [M6-64](milestone-6-automation/M6-64-mock-servers-on-the-network.md) | Mock servers reachable from other devices (decision: not now) | any | M6-34 | done |
+| [M6-65](milestone-6-automation/M6-65-adr-command-line-runner.md) | ADR 0022: command-line runner | any | M6-62 | todo |
+| [M6-66](milestone-6-automation/M6-66-core-read-only-run-sources.md) | Core: read-only run sources and folder lookup | any | M6-65 | todo |
+| [M6-67](milestone-6-automation/M6-67-core-variable-overrides-and-redactor.md) | Core: `YAAPIC_VAR_` variable overrides and a fixed-value redactor | any | M6-65 | todo |
+| [M6-68](milestone-6-automation/M6-68-composition-headless-runner.md) | Composition: headless runner services | any | M6-66, M6-67 | todo |
+| [M6-69](milestone-6-automation/M6-69-cli-project-and-arguments.md) | CLI: `Yaapic.Cli` project and argument parser | any | M6-65 | todo |
+| [M6-70](milestone-6-automation/M6-70-cli-run-command.md) | CLI: the run command | any | M6-68, M6-69 | todo |
+| [M6-71](milestone-6-automation/M6-71-cli-output-reports-and-cancel.md) | CLI: live output, reports and cancellation | any | M6-70 | todo |
+| [M6-72](milestone-6-automation/M6-72-end-to-end-cli.md) | End-to-end tests: command-line runner | any | M6-71 | todo |
+| [M6-73](milestone-6-automation/M6-73-cli-packaging-and-release.md) | CLI: CI smoke test, zip per OS and release upload | any | M6-71 | todo |
+| [M6-74](milestone-6-automation/M6-74-cli-docs.md) | Command-line runner docs | any | M6-72, M6-73 | todo |
 
 ### Milestone 6 summary
 
@@ -704,8 +714,8 @@ bar entries on both front-ends. End-to-end tests: `Milestone6RunnerEndToEndTests
 Deferred: HTML reports, saved runner and load-test configurations, spike and peak load profiles, thresholds, HTTPS mocks, mock matching
 on query, headers or body, operating-system notifications, cron schedules, running unfiled requests, parallel runs.
 
-Open: the blocked cards M6-62 (command-line runner), M6-63 (monitors while Yaapic is closed) and M6-64 (mock servers reachable from
-other devices), each waiting for a product decision; M6-61 (WinUI visual verification) is `in progress`: the screenshots and the runtime checks are done, a design comparison and a human review remain.
+Open: the command-line runner `yaapic-cli` (decided in M6-62, cards M6-65 to M6-74 `todo`); M6-63 (monitors while Yaapic is closed)
+and M6-64 (mock servers reachable from other devices) were answered "not now" and need no work; M6-61 (WinUI visual verification) is `in progress`: the screenshots and the runtime checks are done, a design comparison and a human review remain.
 
 Runtime checks not run: the Avalonia views (M6-50 to M6-56) were never run on macOS or Linux; on Windows only the build, the AOT publish
 and a UI Automation smoke of the Runner window (M6-56) were done. The WinUI views (M6-43 to M6-49) were checked on the Native AOT build by
@@ -724,7 +734,7 @@ answers are not in the request log (documented in [automation.md](../automation.
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above) |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | detailed (81 cards, see above) |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | detailed (68 cards, see above) |
-| M6 | Automation (Runner, load tests, mock servers, monitors) | detailed (64 cards, see above) |
+| M6 | Automation (Runner, load tests, mock servers, monitors, command-line runner) | detailed (74 cards, see above) |
 | M7 | Protocols (WebSocket, SSE, Socket.IO, GraphQL, gRPC, MQTT, SOAP) | planned |
 | M8 | Collaboration (Git, versions, comments, OpenAPI editor and docs) | planned |
 | M9 | Flows, plugins, optional AI assistant | planned |

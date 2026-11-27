@@ -228,6 +228,13 @@ computer**: there is no cloud and no background service, and nothing runs when t
 ## Not delivered in milestone 6
 
 HTML reports, saved runner and load-test configurations, spike and peak load profiles, thresholds, HTTPS mocks, mock matching on
-query, headers or body, operating-system notifications and cron schedules are not implemented. Three features wait for a product
-decision: a command-line runner (task M6-62), monitors while Yaapic is closed (M6-63) and mock servers reachable from other
-devices (M6-64). See the milestone 6 summary in [tasks/README.md](tasks/README.md).
+query, headers or body, operating-system notifications and cron schedules are not implemented.
+
+- **Command-line runner:** decided (`yaapic-cli`, a separate executable for CI, task M6-62) but not built yet (tasks M6-65 to
+  M6-74); until then reports are exported from the Runner window.
+- **Monitors while Yaapic is closed:** not planned for now (M6-63). Monitors run only while the app is open; there is no tray mode and
+  no background service.
+- **Mock servers reachable from other devices:** not planned for now (M6-64). Mocks listen on `127.0.0.1` over HTTP only; to reach one
+  from a phone, a virtual machine or a teammate, forward the port with a tunnel tool of your choice.
+
+See the milestone 6 summary in [tasks/README.md](tasks/README.md).
