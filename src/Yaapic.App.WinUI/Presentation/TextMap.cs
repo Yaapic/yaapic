@@ -1,3 +1,4 @@
+using Yaapic.Core.LoadTesting;
 using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
 using Yaapic.Localization;
@@ -38,6 +39,11 @@ public static class TextMap
     /// <param name="columns">The column count.</param>
     /// <returns>The localized line, or an empty string.</returns>
     public static string RunnerData(string? file, int rows, int columns) => file is null ? "" : Strings.RunnerDataSummary(file, rows, columns);
+
+    /// <summary>Gets the index of a load profile in the Profile picker.</summary>
+    /// <param name="profile">The profile.</param>
+    /// <returns>0 for fixed, 1 for ramp up.</returns>
+    public static int ProfileIndex(LoadProfile profile) => profile == LoadProfile.RampUp ? 1 : 0;
 
     /// <summary>Gets the "detected format" line of an import preview.</summary>
     /// <param name="format">The detected format name, or <see langword="null"/> when none.</param>

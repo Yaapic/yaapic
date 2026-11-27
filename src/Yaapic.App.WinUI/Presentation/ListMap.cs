@@ -4,6 +4,7 @@ using Yaapic.Domain.Http;
 using Yaapic.Domain.Scripting;
 using Yaapic.Localization;
 using Yaapic.ViewModels.Import;
+using Yaapic.ViewModels.LoadTesting;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Runner;
@@ -128,6 +129,29 @@ public static class ListMap
         new(Strings.LoadAverage, average),
         new(Strings.RunnerTileDuration, duration),
     ];
+
+    /// <summary>Builds the load test tiles (see <see cref="Entries"/> for why an observable collection).</summary>
+    /// <param name="requests">The completed request count.</param>
+    /// <param name="throughput">The throughput text.</param>
+    /// <param name="average">The average response time text.</param>
+    /// <param name="p95">The 95th percentile text.</param>
+    /// <param name="errorRate">The error rate text.</param>
+    /// <param name="users">The active virtual user count.</param>
+    /// <returns>One tile per figure, in display order.</returns>
+    public static ObservableCollection<SummaryTile> LoadTiles(long requests, string throughput, string average, string p95, string errorRate, int users) =>
+    [
+        new(Strings.LoadRequests, requests.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.LoadThroughput, throughput),
+        new(Strings.LoadAverage, average),
+        new(Strings.LoadP95, p95),
+        new(Strings.LoadErrorRate, errorRate),
+        new(Strings.LoadActiveUsers, users.ToString(CultureInfo.CurrentCulture)),
+    ];
+
+    /// <summary>Copies the per-request load test rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="rows">The result rows.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<LoadRequestRow> LoadRows(IReadOnlyList<LoadRequestRow> rows) => new(rows);
 
     /// <summary>Copies the data preview rows into an observable collection (see <see cref="Entries"/> for why).</summary>
     /// <param name="rows">The preview rows, each a list of cell texts.</param>

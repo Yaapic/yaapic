@@ -1323,6 +1323,27 @@ public static class Strings
     /// <summary>Virtual users</summary>
     public static string LoadChartUsers => Localizer.Pick("Virtual users", "Utilisateurs virtuels");
 
+    /// <summary>Count</summary>
+    public static string LoadColCount => Localizer.Pick("Count", "Nombre");
+
+    /// <summary>Max</summary>
+    public static string LoadColMax => Localizer.Pick("Max", "Max");
+
+    /// <summary>Method</summary>
+    public static string LoadColMethod => Localizer.Pick("Method", "Méthode");
+
+    /// <summary>p90</summary>
+    public static string LoadColP90 => Localizer.Pick("p90", "p90");
+
+    /// <summary>p95</summary>
+    public static string LoadColP95 => Localizer.Pick("p95", "p95");
+
+    /// <summary>p99</summary>
+    public static string LoadColP99 => Localizer.Pick("p99", "p99");
+
+    /// <summary>Request</summary>
+    public static string LoadColRequest => Localizer.Pick("Request", "Requête");
+
     /// <summary>Start a load test against {0}? Only test servers you are allowed to load.</summary>
     public static string LoadConfirm(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Start a load test against {0}? Only test servers you are allowed to load.", "Lancer un test de charge contre {0} ? Ne testez que des serveurs que vous avez le droit de charger."), a0);

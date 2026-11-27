@@ -34,22 +34,6 @@ public sealed partial class RunnerView : UserControl
     /// <summary>Gets the host the results pane is placed in.</summary>
     public Border Results => ResultsHost;
 
-    private void OnMoveUp(object sender, RoutedEventArgs e)
-    {
-        if (((FrameworkElement)sender).Tag is RunnerItemViewModel item)
-        {
-            ViewModel?.Setup.MoveUpCommand.Execute(item);
-        }
-    }
-
-    private void OnMoveDown(object sender, RoutedEventArgs e)
-    {
-        if (((FrameworkElement)sender).Tag is RunnerItemViewModel item)
-        {
-            ViewModel?.Setup.MoveDownCommand.Execute(item);
-        }
-    }
-
     // An emptied box reads NaN: 0 and -1 are out of range, so the validation line explains it.
     private void OnIterationsChanged(NumberBox sender, NumberBoxValueChangedEventArgs e)
     {

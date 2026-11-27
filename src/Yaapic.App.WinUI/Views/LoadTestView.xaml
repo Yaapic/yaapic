@@ -1,0 +1,215 @@
+<UserControl
+    x:Class="Yaapic.App.WinUI.Views.LoadTestView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:Yaapic.Localization"
+    xmlns:p="using:Yaapic.App.WinUI.Presentation"
+    xmlns:v="using:Yaapic.App.WinUI.Views"
+    xmlns:lt="using:Yaapic.ViewModels.LoadTesting">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="360"/>
+      <ColumnDefinition Width="*"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Configuration -->
+    <Grid Padding="12" RowSpacing="8" BorderThickness="0,0,1,0" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+
+      <v:RunnerRequestListView Setup="{x:Bind ViewModel.Requests, Mode=OneWay}"/>
+
+      <StackPanel Grid.Row="1" Spacing="6">
+        <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.RunnerData}"/>
+        <Grid ColumnSpacing="8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+          </Grid.ColumnDefinitions>
+          <Button Content="{x:Bind loc:Strings.RunnerChooseData}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerChooseData}"
+                  Command="{x:Bind ViewModel.Requests.ChooseDataFileCommand}"/>
+          <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                     Text="{x:Bind p:TextMap.RunnerData(ViewModel.Requests.DataFileName, ViewModel.Requests.DataRowCount, ViewModel.Requests.DataColumns.Count), Mode=OneWay}"/>
+          <Button Grid.Column="2" Content="{x:Bind loc:Strings.RunnerClearData}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerClearData}"
+                  Command="{x:Bind ViewModel.Requests.ClearDataCommand}"
+                  Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.Requests.HasData), Mode=OneWay}"/>
+        </Grid>
+        <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicDangerBrush}"
+                   Text="{x:Bind ViewModel.Requests.DataError, Mode=OneWay}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Requests.DataError), Mode=OneWay}"/>
+      </StackPanel>
+
+      <Grid Grid.Row="2" ColumnSpacing="8" RowSpacing="6">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <NumberBox Header="{x:Bind loc:Strings.LoadUsers}" AutomationProperties.Name="{x:Bind loc:Strings.LoadUsers}"
+                   SpinButtonPlacementMode="Compact" Minimum="0" Maximum="100000"
+                   Value="{x:Bind ViewModel.VirtualUsers, Mode=OneWay}" ValueChanged="OnUsersChanged"/>
+        <NumberBox Grid.Column="1" Header="{x:Bind loc:Strings.LoadDuration}" AutomationProperties.Name="{x:Bind loc:Strings.LoadDuration}"
+                   SpinButtonPlacementMode="Compact" Minimum="0" Maximum="100000" SmallChange="10"
+                   Value="{x:Bind ViewModel.DurationSeconds, Mode=OneWay}" ValueChanged="OnDurationChanged"/>
+        <ComboBox Grid.Row="1" HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.LoadProfile}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.LoadProfile}"
+                  SelectedIndex="{x:Bind p:TextMap.ProfileIndex(ViewModel.Profile), Mode=OneWay}" SelectionChanged="OnProfileChanged">
+          <ComboBoxItem Content="{x:Bind loc:Strings.LoadProfileFixed}"/>
+          <ComboBoxItem Content="{x:Bind loc:Strings.LoadProfileRampUp}"/>
+        </ComboBox>
+        <NumberBox Grid.Row="1" Grid.Column="1" Header="{x:Bind loc:Strings.LoadRampUp}" AutomationProperties.Name="{x:Bind loc:Strings.LoadRampUp}"
+                   SpinButtonPlacementMode="Compact" Minimum="0" Maximum="100000"
+                   Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRampUp), Mode=OneWay}"
+                   Value="{x:Bind ViewModel.RampUpSeconds, Mode=OneWay}" ValueChanged="OnRampUpChanged"/>
+        <NumberBox Grid.Row="2" Header="{x:Bind loc:Strings.LoadThinkTime}" AutomationProperties.Name="{x:Bind loc:Strings.LoadThinkTime}"
+                   SpinButtonPlacementMode="Compact" Minimum="-1" Maximum="1000000" SmallChange="100"
+                   Value="{x:Bind ViewModel.ThinkTimeMs, Mode=OneWay}" ValueChanged="OnThinkChanged"/>
+      </Grid>
+
+      <StackPanel Grid.Row="3" Spacing="8">
+        <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{ThemeResource YaapicDangerBrush}"
+                   Text="{x:Bind ViewModel.ValidationError, Mode=OneWay}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.ValidationError), Mode=OneWay}"/>
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+          <Button MinWidth="96" Content="{x:Bind loc:Strings.LoadStop}" AutomationProperties.Name="{x:Bind loc:Strings.LoadStop}"
+                  Command="{x:Bind ViewModel.StopCommand}"/>
+          <Button MinWidth="96" Style="{StaticResource AccentButtonStyle}" Content="{x:Bind loc:Strings.LoadStart}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.LoadStart}" Command="{x:Bind ViewModel.StartCommand}"/>
+        </StackPanel>
+      </StackPanel>
+    </Grid>
+
+    <!-- Live metrics and results -->
+    <ScrollViewer Grid.Column="1">
+      <StackPanel Padding="12" Spacing="12">
+        <TextBlock Style="{StaticResource YaapicSubtitleTextStyle}" Text="{x:Bind ViewModel.ElapsedText, Mode=OneWay}"/>
+
+        <ItemsControl ItemsSource="{x:Bind p:ListMap.LoadTiles(ViewModel.TotalRequests, ViewModel.Throughput, ViewModel.AverageText, ViewModel.P95Text, ViewModel.ErrorRateText, ViewModel.ActiveUsers), Mode=OneWay}">
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate>
+              <ItemsWrapGrid Orientation="Horizontal"/>
+            </ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="p:SummaryTile">
+              <Border Margin="0,0,8,8" Padding="12,6" MinWidth="110" CornerRadius="6" Background="{ThemeResource YaapicSurfaceSunkenBrush}">
+                <StackPanel>
+                  <TextBlock Style="{StaticResource YaapicSubtitleTextStyle}" Text="{x:Bind Value}"/>
+                  <TextBlock Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                             Text="{x:Bind Label}"/>
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Grid ColumnSpacing="12" RowSpacing="12">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Grid.RowDefinitions>
+            <RowDefinition Height="160"/>
+            <RowDefinition Height="160"/>
+          </Grid.RowDefinitions>
+          <v:LineChart Title="{x:Bind loc:Strings.LoadChartThroughput}" MaxLabel="{x:Bind ViewModel.ThroughputMax, Mode=OneWay}"
+                       Points="{x:Bind ViewModel.ThroughputPoints, Mode=OneWay}"/>
+          <v:LineChart Grid.Column="1" Title="{x:Bind loc:Strings.LoadChartResponseTime}" MaxLabel="{x:Bind ViewModel.ResponseTimeMax, Mode=OneWay}"
+                       Points="{x:Bind ViewModel.ResponseTimePoints, Mode=OneWay}"/>
+          <v:LineChart Grid.Row="1" Title="{x:Bind loc:Strings.LoadChartErrors}" Points="{x:Bind ViewModel.ErrorPoints, Mode=OneWay}"/>
+          <v:LineChart Grid.Row="1" Grid.Column="1" Title="{x:Bind loc:Strings.LoadChartUsers}" Points="{x:Bind ViewModel.UserPoints, Mode=OneWay}"/>
+        </Grid>
+
+        <!-- Per-request table, filled when the test ends -->
+        <StackPanel Spacing="4" Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.RequestRows.Count), Mode=OneWay}">
+          <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="56"/>
+              <ColumnDefinition Width="64"/>
+              <ColumnDefinition Width="56"/>
+              <ColumnDefinition Width="72"/>
+              <ColumnDefinition Width="72"/>
+              <ColumnDefinition Width="72"/>
+              <ColumnDefinition Width="72"/>
+              <ColumnDefinition Width="72"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadColRequest}"/>
+            <TextBlock Grid.Column="1" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadColMethod}"/>
+            <TextBlock Grid.Column="2" TextAlignment="Right" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadColCount}"/>
+            <TextBlock Grid.Column="3" TextAlignment="Right" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadErrors}"/>
+            <TextBlock Grid.Column="4" TextAlignment="Right" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadAverage}"/>
+            <TextBlock Grid.Column="5" TextAlignment="Right" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadColP90}"/>
+            <TextBlock Grid.Column="6" TextAlignment="Right" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadColP95}"/>
+            <TextBlock Grid.Column="7" TextAlignment="Right" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadColP99}"/>
+            <TextBlock Grid.Column="8" TextAlignment="Right" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind loc:Strings.LoadColMax}"/>
+          </Grid>
+          <ItemsControl ItemsSource="{x:Bind p:ListMap.LoadRows(ViewModel.RequestRows), Mode=OneWay}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="lt:LoadRequestRow">
+                <Grid ColumnSpacing="8" Padding="0,3">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="56"/>
+                    <ColumnDefinition Width="64"/>
+                    <ColumnDefinition Width="56"/>
+                    <ColumnDefinition Width="72"/>
+                    <ColumnDefinition Width="72"/>
+                    <ColumnDefinition Width="72"/>
+                    <ColumnDefinition Width="72"/>
+                    <ColumnDefinition Width="72"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock TextTrimming="CharacterEllipsis" Text="{x:Bind Name}"/>
+                  <TextBlock Grid.Column="1" Style="{StaticResource YaapicCaptionTextStyle}" FontWeight="SemiBold"
+                             p:MethodBrush.Method="{x:Bind Method}" Text="{x:Bind Method}"/>
+                  <TextBlock Grid.Column="2" TextAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind Count}"/>
+                  <TextBlock Grid.Column="3" TextAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind Errors}"/>
+                  <TextBlock Grid.Column="4" TextAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind AverageText}"/>
+                  <TextBlock Grid.Column="5" TextAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind P90Text}"/>
+                  <TextBlock Grid.Column="6" TextAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind P95Text}"/>
+                  <TextBlock Grid.Column="7" TextAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind P99Text}"/>
+                  <TextBlock Grid.Column="8" TextAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind MaxText}"/>
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Spacing="4" Visibility="{x:Bind p:VisibilityMap.WhenPositive(ViewModel.ErrorMessages.Count), Mode=OneWay}">
+          <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.LoadErrors}"/>
+          <ItemsControl ItemsSource="{x:Bind p:ListMap.Lines(ViewModel.ErrorMessages), Mode=OneWay}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <TextBlock Text="{x:Bind}" IsTextSelectionEnabled="True" TextWrapping="Wrap" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                           Foreground="{ThemeResource YaapicDangerBrush}"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind ViewModel.Note, Mode=OneWay}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Note), Mode=OneWay}"/>
+
+        <Grid ColumnSpacing="8">
+          <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+          </Grid.ColumnDefinitions>
+          <Button Content="{x:Bind loc:Strings.LoadExport}" AutomationProperties.Name="{x:Bind loc:Strings.LoadExport}"
+                  Command="{x:Bind ViewModel.ExportCommand}"/>
+          <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" AutomationProperties.LiveSetting="Polite"
+                     Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind ViewModel.ExportMessage, Mode=OneWay}"/>
+        </Grid>
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

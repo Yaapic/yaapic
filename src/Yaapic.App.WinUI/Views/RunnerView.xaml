@@ -15,64 +15,15 @@
 
     <Grid Padding="12" RowSpacing="8">
       <Grid.RowDefinitions>
-        <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
         <RowDefinition Height="*"/>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
-      <Grid ColumnSpacing="8">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="*"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" TextTrimming="CharacterEllipsis"
-                   Text="{x:Bind ViewModel.Setup.FolderName, Mode=OneWay}"/>
-        <TextBlock Grid.Column="1" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
-                   Text="{x:Bind p:TextMap.RunnerSelected(ViewModel.Setup.SelectedCount, ViewModel.Setup.Items.Count), Mode=OneWay}"/>
-      </Grid>
+      <v:RunnerRequestListView Setup="{x:Bind ViewModel.Setup, Mode=OneWay}"/>
 
-      <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4">
-        <HyperlinkButton Content="{x:Bind loc:Strings.RunnerSelectAll}" Command="{x:Bind ViewModel.Setup.SelectAllCommand}"/>
-        <HyperlinkButton Content="{x:Bind loc:Strings.RunnerSelectNone}" Command="{x:Bind ViewModel.Setup.SelectNoneCommand}"/>
-      </StackPanel>
-
-      <ListView Grid.Row="2" SelectionMode="None" AutomationProperties.Name="{x:Bind loc:Strings.RunnerRequests}"
-                ItemsSource="{x:Bind p:ListMap.RunnerItems(ViewModel.Setup.Items), Mode=OneWay}">
-        <ListView.ItemTemplate>
-          <DataTemplate x:DataType="r:RunnerItemViewModel">
-            <Grid ColumnSpacing="6">
-              <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-              </Grid.ColumnDefinitions>
-              <CheckBox MinWidth="0" AutomationProperties.Name="{x:Bind Name}" IsChecked="{x:Bind IsSelected, Mode=TwoWay}"/>
-              <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}" FontWeight="SemiBold"
-                         p:MethodBrush.Method="{x:Bind Method}" Text="{x:Bind Method}"/>
-              <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                <TextBlock Text="{x:Bind Name}" TextTrimming="CharacterEllipsis"/>
-                <TextBlock Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
-                           TextTrimming="CharacterEllipsis" Text="{x:Bind Path}"/>
-              </StackPanel>
-              <Button Grid.Column="3" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnMoveUp"
-                      AutomationProperties.Name="{x:Bind loc:Strings.RunnerMoveUp}">
-                <ic:FluentIcon Icon="ArrowUp" IconVariant="Regular" IconSize="Size16"/>
-              </Button>
-              <Button Grid.Column="4" Style="{StaticResource YaapicIconButtonStyle}" Tag="{x:Bind}" Click="OnMoveDown"
-                      AutomationProperties.Name="{x:Bind loc:Strings.RunnerMoveDown}">
-                <ic:FluentIcon Icon="ArrowDown" IconVariant="Regular" IconSize="Size16"/>
-              </Button>
-            </Grid>
-          </DataTemplate>
-        </ListView.ItemTemplate>
-      </ListView>
-
-      <Grid Grid.Row="3" ColumnSpacing="8" RowSpacing="6">
+      <Grid Grid.Row="1" ColumnSpacing="8" RowSpacing="6">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
@@ -94,7 +45,7 @@
                   IsChecked="{x:Bind ViewModel.Setup.PersistVariables, Mode=TwoWay}"/>
       </Grid>
 
-      <StackPanel Grid.Row="4" Spacing="6">
+      <StackPanel Grid.Row="2" Spacing="6">
         <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.RunnerData}"/>
         <Button Content="{x:Bind loc:Strings.RunnerChooseData}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerChooseData}"
                 Command="{x:Bind ViewModel.Setup.ChooseDataFileCommand}"/>
@@ -150,7 +101,7 @@
                    Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Setup.DataError), Mode=OneWay}"/>
       </StackPanel>
 
-      <StackPanel Grid.Row="5" Spacing="8">
+      <StackPanel Grid.Row="3" Spacing="8">
         <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{ThemeResource YaapicDangerBrush}"
                    Text="{x:Bind ViewModel.Setup.ValidationError, Mode=OneWay}"
                    Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Setup.ValidationError), Mode=OneWay}"/>
