@@ -50,7 +50,8 @@ public class MockResponderTests
     public void Matched_route_renders_headers_and_delay_and_skips_disabled()
     {
         var route = Route("/u/:id", "GET", "id={{params.id}}",
-            new KeyValueEntry("X-Id", "{{params.id}}"), new KeyValueEntry("X-Off", "no", false)) with { Status = 201, DelayMs = 50 };
+            new KeyValueEntry("X-Id", "{{params.id}}"), new KeyValueEntry("X-Off", "no", false)) with
+        { Status = 201, DelayMs = 50 };
         var result = MockResponder.Respond(Server(false, route), Req("GET", "/u/9"));
         Assert.Equal("r", result.RouteName);
         Assert.Equal(201, result.Response.Status);
