@@ -25,6 +25,13 @@ public sealed class AvaloniaDialogService : IDialogService
     }
 
     /// <inheritdoc />
+    public async Task<bool> ConfirmAsync(string title, string message) => await ShowAsync(
+        title,
+        message,
+        false,
+        (Strings.CommonContinue, true, "accent"), (Strings.CommonCancel, false, null));
+
+    /// <inheritdoc />
     public Task<UnsavedChoice> ConfirmUnsavedAsync(string itemName) => ShowAsync(
         Strings.DialogSaveChangesTitle(itemName),
         Strings.DialogSaveChangesBody,
@@ -41,7 +48,7 @@ public sealed class AvaloniaDialogService : IDialogService
     /// <inheritdoc />
     public async Task<string?> PromptTextAsync(string title, string label, string initialText)
     {
-        if (_owner() is not { } owner)
+        if (Owner() is not { } owner)
         {
             return null;
         }
@@ -52,7 +59,7 @@ public sealed class AvaloniaDialogService : IDialogService
     /// <inheritdoc />
     public async Task<string?> PickFileAsync(string title)
     {
-        if (_owner() is not { } owner)
+        if (Owner() is not { } owner)
         {
             return null;
         }
@@ -64,7 +71,7 @@ public sealed class AvaloniaDialogService : IDialogService
     /// <inheritdoc />
     public async Task<string?> PickFolderAsync(string title)
     {
-        if (_owner() is not { } owner)
+        if (Owner() is not { } owner)
         {
             return null;
         }
@@ -83,7 +90,7 @@ public sealed class AvaloniaDialogService : IDialogService
     /// <inheritdoc />
     public async Task<bool> SaveFileAsync(string suggestedName, byte[] content)
     {
-        if (_owner() is not { } owner)
+        if (Owner() is not { } owner)
         {
             return false;
         }
@@ -115,15 +122,17 @@ public sealed class AvaloniaDialogService : IDialogService
     /// <inheritdoc />
     public async Task SetClipboardTextAsync(string text)
     {
-        if (_owner()?.Clipboard is { } clipboard)
+        if (Owner()?.Clipboard is { } clipboard)
         {
             await clipboard.SetTextAsync(text);
         }
     }
 
+    private Window? Owner() => ToolWindowHost.ActiveWindow ?? _owner();
+
     private async Task<T> ShowAsync<T>(string title, string body, T dismissed, params (string Text, T Result, string? Class)[] buttons)
     {
-        if (_owner() is not { } owner)
+        if (Owner() is not { } owner)
         {
             return dismissed;
         }

@@ -330,6 +330,7 @@ public sealed partial class MainWindow : Window
             if (await shell.RequestCloseAsync())
             {
                 _closeConfirmed = true;
+                Views.ToolWindowHost.CloseAll();
                 Close();
             }
         }
