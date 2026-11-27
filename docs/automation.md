@@ -28,8 +28,8 @@ runs (runner configurations are not saved).
 **Choosing the folder.** The setup pane starts with a folder selector (every folder of the collections, by path). From the
 rail, the status bar or the palette it shows "Choose a folder to run" and Run stays disabled until you pick one; from a folder's
 context menu the folder is already selected. You can change the folder at any time except while a run is going on. The pane
-beside the results can be resized by dragging the splitter or with the Left and Right arrow keys (WinUI: double click resets it);
-the width is kept while you switch views, not across restarts.
+beside the results can be resized by dragging the splitter or with the Left and Right arrow keys (a double click resets it); the
+width is remembered across restarts, as is the one of the main window sidebar (see [personalization](personalization.md)).
 
 | Option | Range | Default |
 |---|---|---|

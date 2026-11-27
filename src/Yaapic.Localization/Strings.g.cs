@@ -2400,6 +2400,9 @@ public static class Strings
     /// <summary>Create a request, or open a saved one from the list.</summary>
     public static string ShellNoRequestHint => Localizer.Pick("Create a request, or open a saved one from the list.", "Créez une requête ou ouvrez-en une enregistrée depuis la liste.");
 
+    /// <summary>Resize the sidebar</summary>
+    public static string ShellResizeSidebar => Localizer.Pick("Resize the sidebar", "Redimensionner le panneau latéral");
+
     /// <summary>Errors</summary>
     public static string StatusErrors => Localizer.Pick("Errors", "Erreurs");
 

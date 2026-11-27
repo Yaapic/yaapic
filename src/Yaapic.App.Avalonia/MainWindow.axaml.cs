@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Styling;
 using Avalonia.VisualTree;
+using Yaapic.Core.Preferences;
 using Yaapic.Localization;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
@@ -30,6 +31,7 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        Presentation.PaneResizer.Attach(Body, Sidebar, SidebarSplitter, PaneId.Sidebar, ((App)Application.Current!).Panes, 48 + 400); // the rail and a usable editor
         // The system caption buttons overlay the right of the bar on Windows; macOS puts the traffic lights on the left.
         TitleBar.Padding = new Thickness(OperatingSystem.IsMacOS() ? 80 : 12, 0, OperatingSystem.IsWindows() ? 140 : 12, 0);
         var modifier = OperatingSystem.IsMacOS() ? KeyModifiers.Meta : KeyModifiers.Control;

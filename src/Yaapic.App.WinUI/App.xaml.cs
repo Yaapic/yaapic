@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Yaapic.App.WinUI.Services;
 using Yaapic.Composition;
+using Yaapic.Core.Preferences;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
 using Yaapic.Infrastructure.Updates;
@@ -15,6 +16,9 @@ public partial class App : Application
 
     /// <summary>Gets the language and accent settings; their accent choices are applied to the running app as they are made.</summary>
     internal SettingsViewModel Settings { get; private set; } = null!;
+
+    /// <summary>Gets the remembered pane widths.</summary>
+    internal PaneLayoutSettings Panes { get; private set; } = null!;
 
     /// <summary>Starts a new instance of the app with the same arguments and closes this one (the language applies at start-up).</summary>
     internal void Restart()
@@ -71,6 +75,7 @@ public partial class App : Application
 
         // The language must be applied before the window and any view exist: their texts come from Strings.
         var preferences = AppPreferences.LoadAndApplyLanguage(AppPreferences.CreateStore(dataDirectory));
+        Panes = new PaneLayoutSettings(AppPreferences.CreateStore(dataDirectory), preferences.Panes);
         var window = new MainWindow();
         _window = window;
         if (requestedTheme is { } theme)

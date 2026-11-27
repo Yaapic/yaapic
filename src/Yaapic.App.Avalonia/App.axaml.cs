@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Yaapic.App.Avalonia.Services;
 using Yaapic.Composition;
+using Yaapic.Core.Preferences;
 using Yaapic.Core.Secrets;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
@@ -15,6 +16,9 @@ public sealed class App : Application
 {
     /// <summary>Gets the language and accent settings; their accent choices are applied to the running app as they are made.</summary>
     internal SettingsViewModel Settings { get; private set; } = null!;
+
+    /// <summary>Gets the remembered pane widths.</summary>
+    internal PaneLayoutSettings Panes { get; private set; } = null!;
 
     /// <summary>Starts a new instance of the app with the same arguments and closes this one (the language applies at start-up).</summary>
     internal void Restart()
@@ -59,6 +63,7 @@ public sealed class App : Application
             Settings = new SettingsViewModel(AppPreferences.CreateStore(options.DataDirectory));
             Settings.AccentChanged += (_, choice) => AccentApplier.Apply(this, choice);
             _ = Settings.InitializeAsync();
+            Panes = new PaneLayoutSettings(AppPreferences.CreateStore(options.DataDirectory), preferences.Panes);
             var window = new MainWindow();
             var shell = AppComposition.CreateShell(options.Workspace ?? Workspace.DefaultRoot(), new AvaloniaDialogService(() => TopWindow(window)), PlatformProtectors(), options.DataDirectory, options.UpdateDemo);
             window.Title = $"Yaapic {AppComposition.CreateAppInfo().Version}";

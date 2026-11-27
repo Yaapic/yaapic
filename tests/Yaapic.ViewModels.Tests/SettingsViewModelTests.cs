@@ -32,6 +32,19 @@ public sealed class SettingsViewModelTests : IDisposable
     }
 
     [Fact]
+    public async Task Saving_a_setting_keeps_the_pane_widths_saved_since_it_was_loaded()
+    {
+        var vm = Create();
+        await vm.InitializeAsync();
+        _store.Preferences = _store.Preferences with { Panes = PaneWidths.From(400, null, null) };
+
+        await vm.ChooseAccentCommand.ExecuteAsync("purple");
+
+        Assert.Equal(400, _store.Preferences.Panes.Sidebar);
+        Assert.Equal("purple", _store.Preferences.Accent);
+    }
+
+    [Fact]
     public async Task Choosing_a_preset_saves_it_and_tells_the_ui()
     {
         var vm = Create();

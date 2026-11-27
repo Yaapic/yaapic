@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Yaapic.Core.LoadTesting;
+using Yaapic.Core.Preferences;
 using Yaapic.ViewModels.LoadTesting;
 
 namespace Yaapic.App.WinUI.Views;
@@ -17,7 +18,7 @@ public sealed partial class LoadTestView : UserControl
     public LoadTestView()
     {
         InitializeComponent();
-        _ = new ColumnResizer(Root, LeftColumn, Splitter);
+        _ = new ColumnResizer(Root, LeftColumn, Splitter, PaneId.LoadTestList, ((App)Application.Current).Panes);
         PaneLayout.Attach(Pane, Options, Footer);
     }
 

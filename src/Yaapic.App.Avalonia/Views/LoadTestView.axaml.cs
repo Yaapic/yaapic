@@ -1,5 +1,7 @@
 using Avalonia.Controls;
+using Yaapic.App.Avalonia.Presentation;
 using Yaapic.Core.LoadTesting;
+using Yaapic.Core.Preferences;
 using Yaapic.ViewModels.LoadTesting;
 
 namespace Yaapic.App.Avalonia.Views;
@@ -8,7 +10,11 @@ namespace Yaapic.App.Avalonia.Views;
 public sealed partial class LoadTestView : UserControl
 {
     /// <summary>Initializes the view.</summary>
-    public LoadTestView() => InitializeComponent();
+    public LoadTestView()
+    {
+        InitializeComponent();
+        PaneResizer.Attach(Root.ColumnDefinitions[0], ListSplitter, PaneId.LoadTestList, ((App)global::Avalonia.Application.Current!).Panes);
+    }
 
     // An emptied box reads null: the empty value is out of range, so the validation line explains it.
     private static int Read(decimal? value, int empty) => value is { } v ? (int)v : empty;
