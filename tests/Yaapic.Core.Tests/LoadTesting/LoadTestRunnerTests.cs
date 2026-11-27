@@ -222,6 +222,7 @@ public class LoadTestRunnerTests
         await rig.WaitForRequestsAsync(3);
         string[] first = [.. rig.Transport.Urls.Order()];
         await rig.StepAsync();
+        await rig.WaitForRequestsAsync(6);
         string[] all = [.. rig.Transport.Urls];
         await cts.CancelAsync();
         await run.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
