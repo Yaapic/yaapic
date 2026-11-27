@@ -172,7 +172,7 @@ public class MonitorSchedulerTests
         MonitorDefinition second = await rig.AddMonitorAsync("b");
 
         rig.Scheduler.Start();
-        await WaitAsync(() => rig.Scheduler.Running is not null && rig.Scheduler.Queued.Count == 1);
+        await WaitAsync(() => rig.Scheduler.Running is not null && rig.Scheduler.Queued.Count == 1 && rig.Transport.Requests.Count == 1);
         Guid running = rig.Scheduler.Running!.Value;
         Assert.Equal([running == first.Id ? second.Id : first.Id], rig.Scheduler.Queued);
         Assert.Single(rig.Transport.Requests);
