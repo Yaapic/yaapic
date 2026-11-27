@@ -1,5 +1,6 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Yaapic.ViewModels.Monitors;
 using Yaapic.ViewModels.Runner;
 
 namespace Yaapic.App.WinUI.Views;
@@ -20,6 +21,14 @@ public sealed partial class RunnerRequestListView : UserControl
     {
         get => (RunnerSetupViewModel?)GetValue(SetupProperty);
         set => SetValue(SetupProperty, value);
+    }
+
+    private void OnFolderChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.FirstOrDefault() is MonitorFolderChoice choice && Setup is { } setup)
+        {
+            setup.SelectedFolder = choice;
+        }
     }
 
     private void OnMoveUp(object sender, RoutedEventArgs e)

@@ -94,6 +94,8 @@ public sealed partial class ShellViewModel
         runner.PropertyChanged += (_, e) => Forward(e, nameof(RunnerStatusText), nameof(RunnerViewModel.IsRunning), nameof(RunnerViewModel.ProgressText));
         mocks.PropertyChanged += (_, e) => Forward(e, nameof(MocksStatusText), nameof(MockServersViewModel.RunningText));
         monitors.PropertyChanged += (_, e) => Forward(e, nameof(MonitorsStatusText), nameof(MonitorsViewModel.FailingText));
+        Collections.Refreshed += (_, _) => UpdateRunFolders();
+        UpdateRunFolders();
         OnPropertyChanged(nameof(CanAutomate));
         OnPropertyChanged(nameof(RunnerStatusText));
         OnPropertyChanged(nameof(MocksStatusText));
@@ -212,6 +214,12 @@ public sealed partial class ShellViewModel
     /// <returns>The collection node, or null when there is no active tab or its request is unfiled.</returns>
     internal CollectionNode? ActiveCollectionNode() =>
         Tabs.ActiveTab is { } active ? Collections.FindCollectionNode(active.Id) : null;
+
+    private void UpdateRunFolders()
+    {
+        Runner!.Setup.UpdateFolders(Collections.Tree);
+        LoadTest!.Requests.UpdateFolders(Collections.Tree);
+    }
 
     private void Forward(PropertyChangedEventArgs e, string target, params string[] sources)
     {

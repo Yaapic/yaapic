@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Yaapic.ViewModels.Monitors;
 using Yaapic.ViewModels.Runner;
 
 namespace Yaapic.App.Avalonia.Views;
@@ -9,6 +10,14 @@ public sealed partial class RunnerRequestListView : UserControl
 {
     /// <summary>Initializes the view.</summary>
     public RunnerRequestListView() => InitializeComponent();
+
+    private void OnFolderChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (e.AddedItems.Count > 0 && e.AddedItems[0] is MonitorFolderChoice choice && DataContext is RunnerSetupViewModel setup)
+        {
+            setup.SelectedFolder = choice;
+        }
+    }
 
     private void OnMoveUp(object? sender, RoutedEventArgs e)
     {

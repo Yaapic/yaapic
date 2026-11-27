@@ -2026,6 +2026,9 @@ public static class Strings
     /// <summary>Choose a data file</summary>
     public static string RunnerChooseDataTitle => Localizer.Pick("Choose a data file", "Choisir un fichier de données");
 
+    /// <summary>Choose a folder to run</summary>
+    public static string RunnerChooseFolder => Localizer.Pick("Choose a folder to run", "Choisissez un dossier");
+
     /// <summary>Remove</summary>
     public static string RunnerClearData => Localizer.Pick("Remove", "Retirer");
 
@@ -2086,6 +2089,9 @@ public static class Strings
     /// <summary>Skipped</summary>
     public static string RunnerFilterSkipped => Localizer.Pick("Skipped", "Ignorés");
 
+    /// <summary>Folder</summary>
+    public static string RunnerFolder => Localizer.Pick("Folder", "Dossier");
+
     /// <summary>Iteration {0}</summary>
     public static string RunnerIteration(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Iteration {0}", "Itération {0}"), a0);
@@ -2129,6 +2135,9 @@ public static class Strings
 
     /// <summary>Requests</summary>
     public static string RunnerRequests => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Resize the request list</summary>
+    public static string RunnerResizeList => Localizer.Pick("Resize the request list", "Redimensionner la liste des requêtes");
 
     /// <summary>Results</summary>
     public static string RunnerResults => Localizer.Pick("Results", "Résultats");

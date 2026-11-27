@@ -7,7 +7,12 @@
     x:Class="Yaapic.App.Avalonia.Views.RunnerView"
     x:DataType="vm:RunnerViewModel"
     x:CompileBindings="True">
-  <Grid ColumnDefinitions="360,Auto,*">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="360" MinWidth="280" MaxWidth="520" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
     <Grid.Styles>
       <Style Selector="ItemsControl.cells > ContentPresenter"><Setter Property="Width" Value="116" /></Style>
     </Grid.Styles>
@@ -97,7 +102,8 @@
       </StackPanel>
     </Grid>
 
-    <GridSplitter Grid.Column="1" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" />
+    <GridSplitter Grid.Column="1" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent"
+                  AutomationProperties.Name="{x:Static loc:Strings.RunnerResizeList}" />
     <Border x:Name="ResultsHost" Grid.Column="2"><v:RunnerResultsView /></Border>
   </Grid>
 </UserControl>

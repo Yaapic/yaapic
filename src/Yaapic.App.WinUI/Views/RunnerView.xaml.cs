@@ -13,15 +13,12 @@ public sealed partial class RunnerView : UserControl
         nameof(ViewModel), typeof(RunnerViewModel), typeof(RunnerView),
         new PropertyMetadata(null, (d, _) => ((RunnerView)d).Bindings.Update()));
 
-    private const double SplitterStep = 16;
-    private bool _dragging;
-    private double _lastX;
-
     /// <summary>Initializes the view.</summary>
     public RunnerView()
     {
         InitializeComponent();
-        Splitter.SetVertical(true);
+        _ = new ColumnResizer(Root, LeftColumn, Splitter);
+        PaneLayout.Attach(Pane, Options, Footer);
     }
 
     /// <summary>Gets or sets the Runner view model.</summary>
@@ -50,45 +47,4 @@ public sealed partial class RunnerView : UserControl
             vm.Setup.DelayMs = double.IsNaN(e.NewValue) ? -1 : (int)e.NewValue;
         }
     }
-
-    private void OnSplitterPointerPressed(object sender, PointerRoutedEventArgs e)
-    {
-        if (Splitter.CapturePointer(e.Pointer))
-        {
-            _dragging = true;
-            _lastX = e.GetCurrentPoint(null).Position.X;
-            Splitter.Focus(FocusState.Pointer);
-        }
-    }
-
-    private void OnSplitterPointerMoved(object sender, PointerRoutedEventArgs e)
-    {
-        if (_dragging)
-        {
-            var x = e.GetCurrentPoint(null).Position.X;
-            Resize(x - _lastX);
-            _lastX = x;
-        }
-    }
-
-    private void OnSplitterPointerReleased(object sender, PointerRoutedEventArgs e)
-    {
-        _dragging = false;
-        Splitter.ReleasePointerCaptures();
-    }
-
-    private void OnSplitterKeyDown(object sender, KeyRoutedEventArgs e)
-    {
-        switch (e.Key)
-        {
-            case Windows.System.VirtualKey.Left: Resize(-SplitterStep); break;
-            case Windows.System.VirtualKey.Right: Resize(SplitterStep); break;
-            default: return;
-        }
-
-        e.Handled = true;
-    }
-
-    private void Resize(double delta) =>
-        LeftColumn.Width = new GridLength(Math.Clamp(LeftColumn.ActualWidth + delta, LeftColumn.MinWidth, LeftColumn.MaxWidth));
 }

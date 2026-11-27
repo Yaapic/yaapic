@@ -8,7 +8,12 @@
     x:Class="Yaapic.App.Avalonia.Views.LoadTestView"
     x:DataType="lt:LoadTestViewModel"
     x:CompileBindings="True">
-  <Grid ColumnDefinitions="360,*">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="360" MinWidth="280" MaxWidth="520" />
+      <ColumnDefinition Width="Auto" />
+      <ColumnDefinition Width="*" />
+    </Grid.ColumnDefinitions>
     <!-- Configuration -->
     <Grid Margin="12" RowDefinitions="*,Auto,Auto,Auto" RowSpacing="8">
       <v:RunnerRequestListView DataContext="{Binding Requests}" />
@@ -77,8 +82,11 @@
       </StackPanel>
     </Grid>
 
+    <GridSplitter Grid.Column="1" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent"
+                  AutomationProperties.Name="{x:Static loc:Strings.RunnerResizeList}" />
+
     <!-- Live metrics and results -->
-    <ScrollViewer Grid.Column="1">
+    <ScrollViewer Grid.Column="2">
       <StackPanel Margin="12" Spacing="12">
         <TextBlock Classes="subtitle" Text="{Binding ElapsedText}" />
 

@@ -46,3 +46,4 @@ Entry points (M6-49).
   and `LoadTestView`. New strings `load.col*` (table headers), `ListMap.LoadTiles/LoadRows`, `TextMap.ProfileIndex`.
 - Flaky, unrelated: `LoadTestRunnerTests` (`A_snapshot_is_reported_every_second_and_at_the_end`, `Ramp_up_starts_users_at_the_scheduled_offsets`)
   failed intermittently again under load from another build; `JwtDecoderViewModelTests` fails on the French locale.
+- Fix `fix/runner-request-list`: `RunnerRequestListView` now starts with a folder selector (Monitors folder choices) and a "Choose a folder to run" empty state; the setup panes keep a minimum list height (`PaneLayout`) and the Load test pane has a splitter (`ColumnResizer`).
