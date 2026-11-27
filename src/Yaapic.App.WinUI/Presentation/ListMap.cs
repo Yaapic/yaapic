@@ -3,6 +3,7 @@ using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Import;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Runner;
 using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Vault;
 
@@ -88,4 +89,19 @@ public static class ListMap
     /// <param name="items">The environments to offer; the items are observable, so their check boxes bind two-way.</param>
     /// <returns>An observable collection of the choices.</returns>
     public static ObservableCollection<ExportEnvironmentChoice> ExportEnvironmentChoices(IReadOnlyList<ExportEnvironmentChoice> items) => new(items);
+
+    /// <summary>Passes the runner request list through: it is already an observable collection and must stay live while requests move.</summary>
+    /// <param name="items">The setup request list.</param>
+    /// <returns>The same collection.</returns>
+    public static ObservableCollection<RunnerItemViewModel> RunnerItems(ObservableCollection<RunnerItemViewModel> items) => items;
+
+    /// <summary>Copies the data preview rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="rows">The preview rows, each a list of cell texts.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<DataPreviewRow> DataRows(IReadOnlyList<IReadOnlyList<string>> rows) =>
+        [.. rows.Select(static r => new DataPreviewRow(r))];
 }
+
+/// <summary>One row of the data file preview.</summary>
+/// <param name="Cells">The cell texts, in column order.</param>
+public sealed record DataPreviewRow(IReadOnlyList<string> Cells);

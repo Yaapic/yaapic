@@ -26,6 +26,19 @@ public static class TextMap
     /// <returns>The localized counts line.</returns>
     public static string ImportCounts(int folders, int requests, int environments, int globals) => Strings.ImportCounts(folders, requests, environments, globals);
 
+    /// <summary>Gets the "n of m selected" line of the Runner setup.</summary>
+    /// <param name="selected">The selected request count.</param>
+    /// <param name="total">The request count.</param>
+    /// <returns>The localized line.</returns>
+    public static string RunnerSelected(int selected, int total) => Strings.RunnerSelectedCount(selected, total);
+
+    /// <summary>Gets the data file summary line of the Runner setup.</summary>
+    /// <param name="file">The data file name, or <see langword="null"/> when none.</param>
+    /// <param name="rows">The row count.</param>
+    /// <param name="columns">The column count.</param>
+    /// <returns>The localized line, or an empty string.</returns>
+    public static string RunnerData(string? file, int rows, int columns) => file is null ? "" : Strings.RunnerDataSummary(file, rows, columns);
+
     /// <summary>Gets the "detected format" line of an import preview.</summary>
     /// <param name="format">The detected format name, or <see langword="null"/> when none.</param>
     /// <returns>The localized line, or an empty string.</returns>

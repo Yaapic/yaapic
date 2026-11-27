@@ -665,7 +665,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-41](milestone-6-automation/M6-41-viewmodel-shell-entries.md) | ViewModel: palette commands, shell entries and status items for the M6 tools | any | M6-21, M6-26, M6-35, M6-40 | done |
 | [M6-42](milestone-6-automation/M6-42-composition-m6-wiring.md) | Composition: wire the M6 services | any | M6-28, M6-33, M6-37, M6-38, M6-41 | done |
 | [M6-43](milestone-6-automation/M6-43-winui-tool-window-host.md) | WinUI: tool window host and line chart | windows | M6-42 | done |
-| [M6-44](milestone-6-automation/M6-44-winui-runner-setup.md) | WinUI: Runner window, setup pane | windows | M6-43 | todo |
+| [M6-44](milestone-6-automation/M6-44-winui-runner-setup.md) | WinUI: Runner window, setup pane | windows | M6-43 | done |
 | [M6-45](milestone-6-automation/M6-45-winui-runner-results.md) | WinUI: Runner window, results pane | windows | M6-44 | todo |
 | [M6-46](milestone-6-automation/M6-46-winui-load-test-window.md) | WinUI: Load test window | windows | M6-43, M6-44 | todo |
 | [M6-47](milestone-6-automation/M6-47-winui-mock-servers-window.md) | WinUI: Mock servers window | windows | M6-43 | todo |
