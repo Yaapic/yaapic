@@ -11,6 +11,9 @@
       <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="Auto"/>
       <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
+      <ColumnDefinition Width="Auto"/>
     </Grid.ColumnDefinitions>
     <TextBlock Grid.Column="0" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicWarningBrush}"
@@ -68,6 +71,27 @@
                      Foreground="{ThemeResource YaapicDangerBrush}" AutomationProperties.Name="{x:Bind loc:Strings.StatusErrors}"/>
         </Border>
       </StackPanel>
+    </Button>
+    <Button Grid.Column="4" Style="{StaticResource YaapicSubtleButtonStyle}"
+            AutomationProperties.AutomationId="RunnerStatus" AutomationProperties.Name="{x:Bind ViewModel.RunnerStatusText, Mode=OneWay}"
+            MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"
+            Click="OnRunnerClick">
+      <TextBlock Text="{x:Bind ViewModel.RunnerStatusText, Mode=OneWay}" VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}"/>
+    </Button>
+    <Button Grid.Column="5" Style="{StaticResource YaapicSubtleButtonStyle}"
+            AutomationProperties.AutomationId="MocksStatus" AutomationProperties.Name="{x:Bind ViewModel.MocksStatusText, Mode=OneWay}"
+            MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"
+            Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.MocksStatusText), Mode=OneWay}"
+            Click="OnMocksClick">
+      <TextBlock Text="{x:Bind ViewModel.MocksStatusText, Mode=OneWay}" VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}"/>
+    </Button>
+    <Button Grid.Column="6" Style="{StaticResource YaapicSubtleButtonStyle}"
+            AutomationProperties.AutomationId="MonitorsStatus" AutomationProperties.Name="{x:Bind ViewModel.MonitorsStatusText, Mode=OneWay}"
+            MinHeight="0" Height="22" Padding="8,0" VerticalAlignment="Center"
+            Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.MonitorsStatusText), Mode=OneWay}"
+            Click="OnMonitorsClick">
+      <TextBlock Text="{x:Bind ViewModel.MonitorsStatusText, Mode=OneWay}" VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}"
+               Foreground="{ThemeResource YaapicDangerBrush}"/>
     </Button>
   </Grid>
 </UserControl>
