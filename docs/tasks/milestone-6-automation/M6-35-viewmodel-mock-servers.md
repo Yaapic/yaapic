@@ -1,6 +1,6 @@
 # M6-35: ViewModel: mock servers
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-21, M6-31, M6-34
 
@@ -48,11 +48,11 @@ Shell entries (M6-41), windows (M6-47, M6-54).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests/Mocks/` with `InMemoryMockServerStore`, `FakeMockHttpHost`, `FakeDialogService`: load and select;
+- [x] Tests in `Yaapic.ViewModels.Tests/Mocks/` with `InMemoryMockServerStore`, `FakeMockHttpHost`, `FakeDialogService`: load and select;
   new server; edit then save (and the store has it); validation errors shown and nothing saved; revert; unsaved-change prompt on selection
   change; delete with confirmation; start/stop and `RunningText`; port in use sets `Error`; route add/duplicate/delete/move; a request through
   the fake host appears in `Log` with its route name; log detail; clear log; copy URL; generation from a folder.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

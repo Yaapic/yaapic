@@ -1383,16 +1383,123 @@ public static class Strings
     public static string LoadUsersRange(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Virtual users must be between 1 and {0}.", "Les utilisateurs virtuels doivent être entre 1 et {0}."), a0);
 
+    /// <summary>Add route</summary>
+    public static string MockAddRoute => Localizer.Pick("Add route", "Ajouter une route");
+
+    /// <summary>Body</summary>
+    public static string MockBody => Localizer.Pick("Body", "Corps");
+
+    /// <summary>Clear</summary>
+    public static string MockClearLog => Localizer.Pick("Clear", "Effacer");
+
+    /// <summary>Copy URL</summary>
+    public static string MockCopyUrl => Localizer.Pick("Copy URL", "Copier l'URL");
+
+    /// <summary>Allow cross-origin requests (CORS)</summary>
+    public static string MockCors => Localizer.Pick("Allow cross-origin requests (CORS)", "Autoriser les requêtes cross-origin (CORS)");
+
+    /// <summary>Delay (ms)</summary>
+    public static string MockDelay => Localizer.Pick("Delay (ms)", "Délai (ms)");
+
+    /// <summary>Delete</summary>
+    public static string MockDeleteRoute => Localizer.Pick("Delete", "Supprimer");
+
+    /// <summary>Duplicate</summary>
+    public static string MockDuplicateRoute => Localizer.Pick("Duplicate", "Dupliquer");
+
+    /// <summary>Created {0} routes ({1} duplicates skipped).</summary>
+    public static string MockGenerated(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Created {0} routes ({1} duplicates skipped).", "{0} routes créées ({1} doublons ignorés)."), a0, a1);
+
     /// <summary>{0} mock</summary>
     public static string MockGeneratedName(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} mock", "{0} mock"), a0);
 
+    /// <summary>Headers</summary>
+    public static string MockHeaders => Localizer.Pick("Headers", "En-têtes");
+
     /// <summary>This mock server has errors; fix them before starting it.</summary>
     public static string MockInvalid => Localizer.Pick("This mock server has errors; fix them before starting it.", "Ce serveur de mock contient des erreurs ; corrigez-les avant de le démarrer.");
+
+    /// <summary>The server name is empty.</summary>
+    public static string MockIssueNameEmpty => Localizer.Pick("The server name is empty.", "Le nom du serveur est vide.");
+
+    /// <summary>The port must be between 1024 and 65535.</summary>
+    public static string MockIssuePortOutOfRange => Localizer.Pick("The port must be between 1024 and 65535.", "Le port doit être compris entre 1024 et 65535.");
+
+    /// <summary>The route delay must be between 0 and 60000 ms.</summary>
+    public static string MockIssueRouteDelayOutOfRange => Localizer.Pick("The route delay must be between 0 and 60000 ms.", "Le délai de la route doit être compris entre 0 et 60000 ms.");
+
+    /// <summary>A response header name is not valid.</summary>
+    public static string MockIssueRouteHeaderNameInvalid => Localizer.Pick("A response header name is not valid.", "Le nom d'un en-tête de réponse n'est pas valide.");
+
+    /// <summary>The route method is not valid.</summary>
+    public static string MockIssueRouteMethodInvalid => Localizer.Pick("The route method is not valid.", "La méthode de la route n'est pas valide.");
+
+    /// <summary>The route path must start with / and contain no spaces, ? or #; * is allowed only as the last segment.</summary>
+    public static string MockIssueRoutePathInvalid => Localizer.Pick("The route path must start with / and contain no spaces, ? or #; * is allowed only as the last segment.", "Le chemin de la route doit commencer par / et ne contenir ni espace, ni ? ni # ; * n'est permis qu'en dernier segment.");
+
+    /// <summary>The route status must be between 100 and 599.</summary>
+    public static string MockIssueRouteStatusOutOfRange => Localizer.Pick("The route status must be between 100 and 599.", "Le statut de la route doit être compris entre 100 et 599.");
+
+    /// <summary>Requests</summary>
+    public static string MockLog => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Method</summary>
+    public static string MockMethod => Localizer.Pick("Method", "Méthode");
+
+    /// <summary>New mock server</summary>
+    public static string MockNew => Localizer.Pick("New mock server", "Nouveau serveur de mock");
+
+    /// <summary>Mock server</summary>
+    public static string MockNewName => Localizer.Pick("Mock server", "Serveur de mock");
+
+    /// <summary>New route</summary>
+    public static string MockNewRoute => Localizer.Pick("New route", "Nouvelle route");
+
+    /// <summary>no match</summary>
+    public static string MockNoMatch => Localizer.Pick("no match", "aucune correspondance");
+
+    /// <summary>Path</summary>
+    public static string MockPath => Localizer.Pick("Path", "Chemin");
+
+    /// <summary>Use :name or {name} for a path parameter and * for the rest of the path.</summary>
+    public static string MockPathHint => Localizer.Pick("Use :name or {name} for a path parameter and * for the rest of the path.", "Utilisez :nom ou {nom} pour un paramètre de chemin et * pour le reste du chemin.");
+
+    /// <summary>Port</summary>
+    public static string MockPort => Localizer.Pick("Port", "Port");
 
     /// <summary>Port {0} is already in use.</summary>
     public static string MockPortInUse(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Port {0} is already in use.", "Le port {0} est déjà utilisé."), a0);
+
+    /// <summary>Routes</summary>
+    public static string MockRoutes => Localizer.Pick("Routes", "Routes");
+
+    /// <summary>Running</summary>
+    public static string MockRunning => Localizer.Pick("Running", "En marche");
+
+    /// <summary>Start</summary>
+    public static string MockStart => Localizer.Pick("Start", "Démarrer");
+
+    /// <summary>Status</summary>
+    public static string MockStatus => Localizer.Pick("Status", "Statut");
+
+    /// <summary>Mocks: {0} running</summary>
+    public static string MockStatusBar(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Mocks: {0} running", "Mocks : {0} en marche"), a0);
+
+    /// <summary>Stop</summary>
+    public static string MockStop => Localizer.Pick("Stop", "Arrêter");
+
+    /// <summary>Stopped</summary>
+    public static string MockStopped => Localizer.Pick("Stopped", "Arrêté");
+
+    /// <summary>Templates: {{params.id}}, {{query.name}}, {{headers.name}}, {{body}}, {{$guid}}</summary>
+    public static string MockTemplateHint => Localizer.Pick("Templates: {{params.id}}, {{query.name}}, {{headers.name}}, {{body}}, {{$guid}}", "Modèles : {{params.id}}, {{query.name}}, {{headers.name}}, {{body}}, {{$guid}}");
+
+    /// <summary>Mock servers</summary>
+    public static string MockTitle => Localizer.Pick("Mock servers", "Serveurs de mock");
 
     /// <summary>No redirect was received within 3 minutes. Try again.</summary>
     public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
