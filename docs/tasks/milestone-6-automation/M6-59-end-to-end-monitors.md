@@ -1,6 +1,6 @@
 # M6-59: End-to-end tests: monitors
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-42
 
@@ -31,8 +31,8 @@ UI tests.
 
 ## Acceptance criteria
 
-- [ ] The test class passes locally and in the CI configuration (no external network).
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] The test class passes locally and in the CI configuration (no external network).
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 

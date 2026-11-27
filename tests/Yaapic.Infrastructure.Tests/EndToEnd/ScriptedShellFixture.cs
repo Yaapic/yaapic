@@ -43,11 +43,13 @@ internal sealed class ScriptedShellFixture : IDisposable
     /// <summary>Gets a path under the workspace root.</summary>
     public string PathOf(params string[] parts) => Path.Combine([Root, .. parts]);
 
-    /// <summary>Writes a folder file; <paramref name="folderPath"/> is relative to <c>requests</c>.</summary>
-    public void WriteFolder(string folderPath, string name, string? pre = null, string? post = null, string variables = "[]", string preLanguage = "javascript", string postLanguage = "javascript")
+    /// <summary>Writes a folder file and returns its id; <paramref name="folderPath"/> is relative to <c>requests</c>.</summary>
+    public Guid WriteFolder(string folderPath, string name, string? pre = null, string? post = null, string variables = "[]", string preLanguage = "javascript", string postLanguage = "javascript")
     {
-        var yaml = $"version: 1\nid: {Guid.NewGuid():D}\nname: {name}\ndescription: \"\"\nvariables: {variables}\n{ScriptsYaml(pre, post, preLanguage, postLanguage)}";
+        var id = Guid.NewGuid();
+        var yaml = $"version: 1\nid: {id:D}\nname: {name}\ndescription: \"\"\nvariables: {variables}\n{ScriptsYaml(pre, post, preLanguage, postLanguage)}";
         Write(PathOf("requests", folderPath, "folder.yaml"), yaml);
+        return id;
     }
 
     /// <summary>Writes a request file and returns its id.</summary>
@@ -62,20 +64,22 @@ internal sealed class ScriptedShellFixture : IDisposable
         return id;
     }
 
-    /// <summary>Writes an environment file.</summary>
-    public void WriteEnvironment(string name, params (string Key, string Value)[] variables)
+    /// <summary>Writes an environment file and returns its id.</summary>
+    public Guid WriteEnvironment(string name, params (string Key, string Value)[] variables)
     {
+        var id = Guid.NewGuid();
         var rows = variables.Length == 0
             ? "variables: []\n"
             : "variables:\n" + string.Concat(variables.Select(v => $"- key: {Quote(v.Key)}\n  value: {Quote(v.Value)}\n  enabled: true\n"));
-        Write(PathOf("environments", name.ToLowerInvariant() + ".env.yaml"), $"version: 1\nid: {Guid.NewGuid():D}\nname: {name}\n{rows}");
+        Write(PathOf("environments", name.ToLowerInvariant() + ".env.yaml"), $"version: 1\nid: {id:D}\nname: {name}\n{rows}");
+        return id;
     }
 
     /// <summary>Composes a shell with the real QuickJS engine and initializes it.</summary>
-    public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null, bool withLua = false, IKeyProtectorFactory? protectors = null)
+    public async Task<ShellViewModel> NewShellAsync(ScriptLimits? limits = null, bool withLua = false, IKeyProtectorFactory? protectors = null, TimeProvider? time = null)
     {
         IScriptEngine[] engines = withLua ? [new QuickJsEngine(), new LuaEngine()] : [new QuickJsEngine()];
-        var shell = AppComposition.CreateShell(Root, Dialogs, protectors, new TempVaultLocation(_vaults), engines, limits);
+        var shell = AppComposition.CreateShell(Root, Dialogs, protectors, new TempVaultLocation(_vaults), engines, limits, time: time);
         await shell.InitializeAsync();
         var unavailable = shell.ScriptEngineWarnings.FirstOrDefault(w => w.StartsWith("JavaScript", StringComparison.Ordinal) || (withLua && w.StartsWith("Lua", StringComparison.Ordinal)));
         Assert.True(
