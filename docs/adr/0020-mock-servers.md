@@ -107,5 +107,5 @@ running server restarts it.
 
 ### Out of scope
 
-Binding to other interfaces (blocked card M6-64), HTTPS, matching on query, headers or body, response sequences or
+Binding to other interfaces (card M6-64, answered "not now": use a tunnel tool), HTTPS, matching on query, headers or body, response sequences or
 scripts, recording a real API, generating mocks from OpenAPI, WebSocket mocks.
