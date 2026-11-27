@@ -10,14 +10,7 @@ public sealed class TcpLoopbackRedirectReceiverTests
     private const string Html = "<p>Done é</p>";
     private readonly TcpLoopbackRedirectReceiver _receiver = new();
 
-    private static int FreePort()
-    {
-        var probe = new TcpListener(IPAddress.Loopback, 0);
-        probe.Start();
-        var port = ((IPEndPoint)probe.LocalEndpoint).Port;
-        probe.Stop();
-        return port;
-    }
+    private static int FreePort() => TestPorts.Next();
 
     private static async Task<string> SendAsync(int port, string raw)
     {

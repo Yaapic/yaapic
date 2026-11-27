@@ -33,10 +33,7 @@ public sealed partial class AuthStubServer : IDisposable
     public AuthStubServer(DateTimeOffset awsTime)
     {
         _awsTime = awsTime;
-        var probe = new TcpListener(IPAddress.Loopback, 0);
-        probe.Start();
-        BaseUrl = $"http://127.0.0.1:{((IPEndPoint)probe.LocalEndpoint).Port}";
-        probe.Stop();
+        BaseUrl = $"http://127.0.0.1:{TestPorts.Next()}";
         _listener.Prefixes.Add(BaseUrl + "/");
         _listener.Start();
         _ = Task.Run(AcceptLoopAsync);

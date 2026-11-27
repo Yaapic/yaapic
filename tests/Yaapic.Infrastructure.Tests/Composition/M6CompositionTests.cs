@@ -43,14 +43,7 @@ public sealed class M6CompositionTests : IDisposable
         }
     }
 
-    private static int FreePort()
-    {
-        var probe = new TcpListener(IPAddress.Loopback, 0);
-        probe.Start();
-        var port = ((IPEndPoint)probe.LocalEndpoint).Port;
-        probe.Stop();
-        return port;
-    }
+    private static int FreePort() => TestPorts.Next();
 
     private static async Task WaitAsync(Func<bool> condition)
     {
