@@ -756,6 +756,7 @@
   "load.export": "Export JSON",
   "load.truncated": "Percentiles computed on the first {0} samples.",
   "load.scriptsSkipped": "Scripts were not run during this load test.",
+  "mock.invalid": "This mock server has errors; fix them before starting it.",
   "mock.generatedName": "{0} mock",
   "mock.portInUse": "Port {0} is already in use."
 }

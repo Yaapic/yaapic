@@ -1387,6 +1387,9 @@ public static class Strings
     public static string MockGeneratedName(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} mock", "{0} mock"), a0);
 
+    /// <summary>This mock server has errors; fix them before starting it.</summary>
+    public static string MockInvalid => Localizer.Pick("This mock server has errors; fix them before starting it.", "Ce serveur de mock contient des erreurs ; corrigez-les avant de le démarrer.");
+
     /// <summary>Port {0} is already in use.</summary>
     public static string MockPortInUse(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Port {0} is already in use.", "Le port {0} est déjà utilisé."), a0);
