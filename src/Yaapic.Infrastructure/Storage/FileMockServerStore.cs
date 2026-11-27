@@ -9,7 +9,8 @@ public sealed class FileMockServerStore(string workspaceRoot) : IMockServerStore
 {
     private const string Extension = ".mock.yaml";
     private readonly string _directory = Path.Combine(workspaceRoot, "mocks");
-    private readonly Dictionary<Guid, string> _paths = [];
+    // Concurrent: the monitor scheduler lists the stores from a background thread while the view models use them.
+    private readonly System.Collections.Concurrent.ConcurrentDictionary<Guid, string> _paths = [];
 
     /// <summary>Gets the names of the files skipped by the last <see cref="ListAsync"/> call (corrupt or duplicate id).</summary>
     public IReadOnlyList<string> LastListErrors { get; private set; } = [];

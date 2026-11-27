@@ -92,10 +92,18 @@ public sealed class FileMonitorRunStore(string workspaceRoot) : IMonitorRunStore
         }
     }
 
-    private async Task<List<string>> ReadLinesAsync(CancellationToken ct) =>
-        File.Exists(_path)
-            ? [.. (await File.ReadAllTextAsync(_path, Utf8, ct)).Split('\n').Where(l => l.Trim().Length > 0)]
-            : [];
+    // Shares delete access: the atomic replace of an append must not fail on Windows because another reader (a second store, a viewer) has the file open.
+    private async Task<List<string>> ReadLinesAsync(CancellationToken ct)
+    {
+        if (!File.Exists(_path))
+        {
+            return [];
+        }
+
+        await using var stream = new FileStream(_path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite | FileShare.Delete, 4096, useAsync: true);
+        using var reader = new StreamReader(stream, Utf8);
+        return [.. (await reader.ReadToEndAsync(ct)).Split('\n').Where(l => l.Trim().Length > 0)];
+    }
 
     private static Guid? MonitorIdOf(string line) => TryParse(line)?.MonitorId;
 
