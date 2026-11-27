@@ -1,5 +1,6 @@
 using System.Reflection;
 using Yaapic.Core.Auth;
+using Yaapic.Domain.Scripting;
 using Yaapic.Core.Auth.OAuth2;
 using Yaapic.Core.CodeGeneration;
 using Yaapic.Core.Export;
@@ -15,6 +16,10 @@ using Yaapic.Core.Import.Har;
 using Yaapic.Core.Import.Insomnia;
 using Yaapic.Core.Import.OpenApi;
 using Yaapic.Core.Import.Postman;
+using Yaapic.Core.LoadTesting;
+using Yaapic.Core.Mocks;
+using Yaapic.Core.Monitors;
+using Yaapic.Core.Runner;
 using Yaapic.Core.Scripting;
 using Yaapic.Core.Secrets;
 using Yaapic.Core.Storage;
@@ -23,6 +28,7 @@ using Yaapic.Infrastructure.Auth;
 using Yaapic.Infrastructure.Certificates;
 using Yaapic.Infrastructure.Http;
 using Yaapic.Infrastructure.Import;
+using Yaapic.Infrastructure.Mocks;
 using Yaapic.Infrastructure.Secrets;
 using Yaapic.Infrastructure.Storage;
 using Yaapic.Infrastructure.Updates;
@@ -34,8 +40,12 @@ using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Environments;
 using Yaapic.ViewModels.History;
 using Yaapic.ViewModels.Import;
+using Yaapic.ViewModels.LoadTesting;
+using Yaapic.ViewModels.Mocks;
+using Yaapic.ViewModels.Monitors;
 using Yaapic.ViewModels.Palette;
 using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Runner;
 using Yaapic.ViewModels.Settings;
 using Yaapic.ViewModels.Shell;
 using Yaapic.ViewModels.Tabs;
@@ -81,7 +91,8 @@ public static class AppComposition
         IUpdateService? updateService = null,
         IUpdateSettingsStore? updateSettings = null,
         string? userDataDirectory = null,
-        IHttpTransport? transport = null)
+        IHttpTransport? transport = null,
+        TimeProvider? time = null)
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(workspaceRoot);
         ArgumentNullException.ThrowIfNull(dialogs);
@@ -92,7 +103,7 @@ public static class AppComposition
         var protectors = platformProtectors ?? new PassphraseKeyProtectorFactory();
         var vault = new FileSecretVault(workspaceRoot, vaultLocation, protectors);
 
-        var time = TimeProvider.System;
+        time ??= TimeProvider.System;
         var certificateStore = new FileCertificateStore(userDataDirectory);
         var certificates = new ClientCertificateProvider(certificateStore, vault);
         var versionSupport = new QuicHttpVersionSupport();
@@ -118,7 +129,7 @@ public static class AppComposition
             engines.Add(engine);
         }
 
-        var scriptedSender = new ScriptedRequestSender(sender, engines, TimeProvider.System, new SecretRedactor(vault));
+        var scriptedSender = new ScriptedRequestSender(sender, engines, time, new SecretRedactor(vault));
         var console = new ConsoleViewModel(dialogs);
         var environmentStore = new SecretAwareEnvironmentStore(new FileEnvironmentStore(workspaceRoot), vault);
         var globalsStore = new SecretAwareGlobalsStore(new FileGlobalsStore(workspaceRoot), vault);
@@ -148,7 +159,8 @@ public static class AppComposition
         var shell = new ShellViewModel(tabs, requests, collections, history, environments, globals, sessionStore, dialogs, console, vaultViewModel, engines, updates, layout);
         reloader.Target = shell;
         shell.AttachTools(() => new CertificatesViewModel(certificateStore, vault, dialogs), () => new JwtDecoderViewModel(time));
-        AttachImportExport(shell, dialogs, vault, requestStore, collectionStore, environmentStore, globalsStore);
+        var importReader = AttachImportExport(shell, dialogs, vault, requestStore, collectionStore, environmentStore, globalsStore);
+        AttachAutomation(shell, workspaceRoot, dialogs, importReader, scriptedSender, collections, scopes, console, collectionStore, environmentStore, time);
         shell.Own(realTransport);
         shell.Own(certificates);
         shell.AttachPalette(new CommandPaletteViewModel(
@@ -162,7 +174,7 @@ public static class AppComposition
     }
 
     // Importers register in tie-break order of ImporterRegistry.Detect; each dialog opening gets a new view model.
-    private static void AttachImportExport(
+    private static FileImportInputReader AttachImportExport(
         ShellViewModel shell, IDialogService dialogs, ISecretVault vault, IRequestStore requestStore,
         ICollectionStore collectionStore, IEnvironmentStore environmentStore, IGlobalsStore globalsStore)
     {
@@ -183,6 +195,46 @@ public static class AppComposition
         shell.AttachImportExport(
             () => new ImportViewModel(service, importers, inputReader, dialogs, shell.ReloadAsync),
             () => new ExportViewModel(exporters, sourceReader, collectionStore, environmentStore, dialogs));
+        return inputReader;
+    }
+
+    // One clock for every M6 service; nothing listens or runs until the user starts it (the scheduler only ticks over saved monitors).
+    private static void AttachAutomation(
+        ShellViewModel shell, string workspaceRoot, IDialogService dialogs, FileImportInputReader importReader,
+        ScriptedRequestSender scriptedSender, CollectionTreeViewModel collections, VariableScopeProvider scopes, ConsoleViewModel console,
+        ICollectionStore collectionStore, IEnvironmentStore environmentStore, TimeProvider time)
+    {
+        var runSource = new VariableScopeRunSource(scopes);
+        var step = new RunStepExecutor(scriptedSender, new CollectionTreeScriptChainProvider(collections), runSource);
+        var runner = new RunnerViewModel(new RunnerSetupViewModel(importReader, dialogs), new CollectionRunner(step, time), console, dialogs);
+        var load = new LoadTestViewModel(new RunnerSetupViewModel(importReader, dialogs), new LoadTestRunner(step, runSource, time), scopes, dialogs);
+
+        var mockService = new MockServerService(new FileMockServerStore(workspaceRoot), new TcpMockHttpHost(time), time);
+        var mocks = new MockServersViewModel(mockService, dialogs);
+
+        var monitorStore = new FileMonitorStore(workspaceRoot);
+        var runStore = new FileMonitorRunStore(workspaceRoot);
+        var scheduler = new MonitorScheduler(monitorStore, runStore, collectionStore, environmentStore, runSource, step, time);
+        var monitors = new MonitorsViewModel(scheduler, monitorStore, runStore, collectionStore, environmentStore, console, dialogs, time);
+
+        shell.AttachAutomation(runner, load, mocks, monitors);
+        shell.OwnAsync(mockService);
+        shell.OwnAsync(scheduler);
+        _ = LoadAsync(mocks.LoadAsync, console);
+        _ = LoadAsync(monitors.LoadAsync, console);
+        scheduler.Start();
+    }
+
+    private static async Task LoadAsync(Func<Task> load, ConsoleViewModel console)
+    {
+        try
+        {
+            await load();
+        }
+        catch (Exception ex)
+        {
+            console.AppendSystem(ConsoleLevel.Warn, ex.Message);
+        }
     }
 
     // The vault view model needs the reloader before the shell exists.
