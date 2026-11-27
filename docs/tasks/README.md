@@ -682,7 +682,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-58](milestone-6-automation/M6-58-end-to-end-mocks-and-load.md) | End-to-end tests: mock servers and load tests | any | M6-42 | done |
 | [M6-59](milestone-6-automation/M6-59-end-to-end-monitors.md) | End-to-end tests: monitors | any | M6-42 | done |
 | [M6-60](milestone-6-automation/M6-60-milestone-docs.md) | Milestone 6 docs | any | M6-57, M6-58, M6-59, M6-49, M6-56 | done |
-| [M6-61](milestone-6-automation/M6-61-winui-visual-verification.md) | WinUI visual verification of the milestone 6 views | windows | M6-45, M6-46, M6-47, M6-48, M6-49 | todo |
+| [M6-61](milestone-6-automation/M6-61-winui-visual-verification.md) | WinUI visual verification of the milestone 6 views | windows | M6-45, M6-46, M6-47, M6-48, M6-49 | in progress |
 | [M6-62](milestone-6-automation/M6-62-command-line-runner.md) | Command-line runner | any | M6-17, M6-18, M6-19 | blocked |
 | [M6-63](milestone-6-automation/M6-63-monitors-while-closed.md) | Monitors while Yaapic is closed | any | M6-39 | blocked |
 | [M6-64](milestone-6-automation/M6-64-mock-servers-on-the-network.md) | Mock servers reachable from other devices | any | M6-34 | blocked |
@@ -705,13 +705,12 @@ Deferred: HTML reports, saved runner and load-test configurations, spike and pea
 on query, headers or body, operating-system notifications, cron schedules, running unfiled requests, parallel runs.
 
 Open: the blocked cards M6-62 (command-line runner), M6-63 (monitors while Yaapic is closed) and M6-64 (mock servers reachable from
-other devices), each waiting for a product decision; M6-61 (WinUI visual verification) is still `todo`.
+other devices), each waiting for a product decision; M6-61 (WinUI visual verification) is `in progress`: the screenshots and the runtime checks are done, a design comparison and a human review remain.
 
 Runtime checks not run: the Avalonia views (M6-50 to M6-56) were never run on macOS or Linux; on Windows only the build, the AOT publish
-and a UI Automation smoke of the Runner window (M6-56) were done. The WinUI views (M6-43 to M6-49) had only a build, AOT publish and
-start-up check, plus the Runner button and window of M6-49: the manual smoke of the Runner, Load test, Mock servers and Monitors
-windows, the folder menu and palette entries, and the charts' `Points` property under Native AOT are left for M6-61, so there are no
-screenshots yet. Several timing-sensitive tests (`LoadTestRunnerTests`, `LoadTestViewModelTests`, `MonitorSchedulerTests`) flaked under
+and a UI Automation smoke of the Runner window (M6-56) were done. The WinUI views (M6-43 to M6-49) were checked on the Native AOT build by
+M6-61 (16 screenshots in `docs/screenshots/m6/`, with five defects fixed, one of them an AOT crash of the Mock servers window); the French
+locale of the new windows and a human design review are still open. Several timing-sensitive tests (`LoadTestRunnerTests`, `LoadTestViewModelTests`, `MonitorSchedulerTests`) flaked under
 CPU load and passed on rerun.
 
 Known limits: `TcpMockHttpHost` accepts at most 100 open connections per server and answers the rest `503` before the routes run, so those
