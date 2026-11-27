@@ -229,6 +229,19 @@ entries; the file is rewritten when it exceeds 550 lines. It keeps the request a
 is why `.yaapic/` is git-ignored. Requests keep their `{{templates}}`, so the value of a secret variable is never
 stored; an auth value or other field typed literally is stored in clear (see "Secret variables").
 
+## Monitor run history
+
+`.yaapic/monitor-runs.jsonl`: one JSON object per line (`System.Text.Json` source generators), never committed, not
+hand-edited. Decision record: [ADR 0021](adr/0021-monitors.md).
+
+```json
+{"monitorId":"6f1c...","at":"2026-11-02T09:00:00.0000000Z","durationMs":420,"status":"failed","requests":3,"failedRequests":1,"testsPassed":5,"testsFailed":1,"message":null,"failures":[{"request":"Get user","outcome":"TestFailed","status":500,"detail":"expected 200"}]}
+```
+
+`monitorId` is a GUID ("D"), `at` a UTC ISO 8601 round-trip timestamp, `status` one of `passed`, `failed`, `error`.
+Retention: the last 200 runs per monitor; when a monitor exceeds that, the file is rewritten without its oldest lines.
+Corrupt lines are skipped when reading.
+
 ## Environment file
 
 Keys: `version: 1`, `id`, `name`, `collection` (optional), `variables` (same list shape as `params`).

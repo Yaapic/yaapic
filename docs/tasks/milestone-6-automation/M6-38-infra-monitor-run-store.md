@@ -1,6 +1,6 @@
 # M6-38: Infrastructure: monitor run history store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-36
 
@@ -28,9 +28,9 @@ The scheduler (M6-39).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests`: append and list newest first; 201 runs keep 200 for that monitor and do not touch another
+- [x] Tests in `Yaapic.Infrastructure.Tests`: append and list newest first; 201 runs keep 200 for that monitor and do not touch another
   monitor's runs; `LatestAsync`; delete; corrupt line skipped; file is inside `.yaapic/` (git-ignored); parallel appends do not lose lines.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx.
 
 ## Suggested commit message
 
