@@ -1,6 +1,6 @@
 # M6-75: ADR 0023: automation views in the main window
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-49, M6-56
 
@@ -75,9 +75,9 @@ Code (M6-76 to M6-81), user docs (M6-82), screenshots (M6-83).
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0023-automation-views-in-main-window.md` exists with the sections and rules above; the ADR index lists it.
-- [ ] ADRs 0018 to 0021 carry the replacements above and nothing else (`git diff` shows only those lines).
-- [ ] Markdown links resolve (open each relative link target).
+- [x] `docs/adr/0023-automation-views-in-main-window.md` exists with the sections and rules above; the ADR index lists it.
+- [x] ADRs 0018 to 0021 carry the replacements above and nothing else (`git diff` shows only those lines).
+- [x] Markdown links resolve (open each relative link target).
 
 ## Suggested commit message
 

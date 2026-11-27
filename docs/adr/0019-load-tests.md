@@ -93,14 +93,15 @@ error messages, URL templates only (no resolved secrets). Saved through `IDialog
 
 ### UI
 
-A Load test window (non-modal, one at a time) opened from the folder context menu ("Load test...") and the palette:
+A Load test view shown in the main window (ADR 0023), opened from the rail, the folder context menu ("Load test...") and the
+palette:
 configuration (users, duration, profile, ramp, think time, data file, request list), Start/Stop, live tiles (requests,
 throughput, average, p95, error rate, active users), four small line charts, a per-request table, the error messages, Export.
 
 ### Limits and safety
 
 Load tests can hurt servers: the window shows the target host(s) and asks "Start a load test against {hosts}?" before the first
-start of each window session. No distributed load, no cloud agents.
+start after Yaapic starts. No distributed load, no cloud agents.
 
 ### Out of scope
 

@@ -147,7 +147,7 @@ Every run's console lines, network lines and warnings go to the shared console p
 
 ### UI
 
-A Runner window (non-modal, one at a time) opened from the folder context menu ("Run folder..."), the palette ("Run
+A Runner view shown in the main window (ADR 0023), opened from the rail, the folder context menu ("Run folder..."), the palette ("Run
 collection...") and the status bar "Runner" item (which shows the progress `3/20` while a run is going).
 
 - Setup on the left: requests with checkboxes and up/down buttons, options, data file with a preview of the column names
@@ -156,7 +156,7 @@ collection...") and the status bar "Runner" item (which shows the progress `3/20
   of the selected row (status, time, size, tests, console, error).
 - Run/Stop and Export buttons.
 
-Only one run at a time; closing the window does not stop the run.
+Only one run at a time; showing another view does not stop the run.
 
 ### Out of scope for the milestone
 

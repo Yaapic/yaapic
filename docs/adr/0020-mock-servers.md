@@ -98,7 +98,7 @@ duplicates (same method and path) are skipped and counted.
 
 ### UI
 
-A Mock servers window (non-modal, one at a time) opened from the palette ("Mock servers"), the folder context menu
+A Mock servers view shown in the main window (ADR 0023), opened from the rail, the palette ("Mock servers"), the folder context menu
 ("Create a mock server...") and the status bar item "Mocks: {n} running" (hidden when none run): server list
 (start/stop, port, status), route list editor (add, duplicate, delete, move up/down, enable), response editor (status,
 headers, body), the log with a detail pane, Copy URL. Edits are saved with a Save button; a saved change applies to a

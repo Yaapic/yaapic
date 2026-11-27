@@ -23,6 +23,7 @@
 | [0019](0019-load-tests.md) | Load tests | Accepted |
 | [0020](0020-mock-servers.md) | Mock servers | Accepted |
 | [0021](0021-monitors.md) | Monitors | Accepted |
+| [0023](0023-automation-views-in-main-window.md) | Automation views in the main window | Accepted |
 
 Each ADR has a status, the options considered, the Native AOT risks and the decision. A "Proposed" ADR is confirmed by
 the card that first needs it.

@@ -89,11 +89,11 @@ when the shell closes.
 
 A failed or erroneous run adds a console system line "Monitor '{0}' failed: {1}" (warning level) and raises
 `MonitorRunCompleted`. The status bar shows "Monitors: {n} failing" (enabled monitors whose last run is not `Passed`; hidden
-when 0), which opens the Monitors window. Operating-system notifications are out of scope.
+when 0), which shows the Monitors view. Operating-system notifications are out of scope.
 
 ### UI
 
-A Monitors window (non-modal, one at a time) opened from the palette ("Monitors"), the folder context menu ("Monitor
+A Monitors view shown in the main window (ADR 0023), opened from the rail, the palette ("Monitors"), the folder context menu ("Monitor
 folder...") and the status bar item. It shows:
 
 - the monitor list: name, folder, environment, interval, enabled toggle, last status and time, next run;
