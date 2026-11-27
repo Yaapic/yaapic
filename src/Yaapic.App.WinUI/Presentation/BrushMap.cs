@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Media;
 using Yaapic.Core.Import;
 using Yaapic.Core.Runner;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Monitors;
 using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Shell;
@@ -155,6 +156,16 @@ public static class BrushMap
     {
         RunRequestOutcome.Passed => "YaapicSuccessBrush",
         RunRequestOutcome.Failed or RunRequestOutcome.Error => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    });
+
+    /// <summary>Gets the brush of a monitor run status dot or badge.</summary>
+    /// <param name="status">How the run ended, or <see langword="null"/> when the monitor never ran.</param>
+    /// <returns>Success for passed, danger for failed or error, else the secondary text brush.</returns>
+    public static Brush MonitorStatus(MonitorRunStatus? status) => Get(status switch
+    {
+        MonitorRunStatus.Passed => "YaapicSuccessBrush",
+        MonitorRunStatus.Failed or MonitorRunStatus.Error => "YaapicDangerBrush",
         _ => "YaapicTextSecondaryBrush",
     });
 

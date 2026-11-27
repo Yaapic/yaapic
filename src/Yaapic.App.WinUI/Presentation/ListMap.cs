@@ -5,6 +5,7 @@ using Yaapic.Domain.Scripting;
 using Yaapic.Localization;
 using Yaapic.ViewModels.Import;
 using Yaapic.ViewModels.LoadTesting;
+using Yaapic.ViewModels.Monitors;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Runner;
@@ -158,6 +159,21 @@ public static class ListMap
     /// <returns>An observable collection of the rows.</returns>
     public static ObservableCollection<DataPreviewRow> DataRows(IReadOnlyList<IReadOnlyList<string>> rows) =>
         [.. rows.Select(static r => new DataPreviewRow(r))];
+
+    /// <summary>Copies the monitor folder choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The choices.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<MonitorFolderChoice> MonitorFolders(IReadOnlyList<MonitorFolderChoice> items) => new(items);
+
+    /// <summary>Copies the monitor environment choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The choices.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<MonitorEnvironmentChoice> MonitorEnvironments(IReadOnlyList<MonitorEnvironmentChoice> items) => new(items);
+
+    /// <summary>Copies the monitor interval choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The choices.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<MonitorIntervalChoice> MonitorIntervals(IReadOnlyList<MonitorIntervalChoice> items) => new(items);
 }
 
 /// <summary>One row of the data file preview.</summary>

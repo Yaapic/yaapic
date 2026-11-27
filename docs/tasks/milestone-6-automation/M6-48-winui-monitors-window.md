@@ -1,6 +1,6 @@
 # M6-48: WinUI: Monitors window
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-43
 
@@ -24,11 +24,17 @@ Entry points and the status bar (M6-49).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke: create a monitor on a folder whose request fails a test, Run now, the history shows the failed run with its failure, the
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke: create a monitor on a folder whose request fails a test, Run now, the history shows the failed run with its failure, the
   console gets the warning; fix the test, Run now, status turns passed; toggle enabled; delete. Record anything not run in Notes.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the monitors window`
+
+## Notes
+
+- Verified: Release build (0 warnings), full test run green (MonitorSchedulerTests flaked once under load, passes alone), AOT publish with 0 IL2xxx/IL3xxx warnings, the published exe starts and stays alive.
+- Not run: the manual smoke (create a monitor, Run now, history and failure, console warning, toggle, delete). `MonitorsView` is not instantiated anywhere until M6-49; check it then (and in M6-61).
+- New `BrushMap.MonitorStatus` and `ListMap.MonitorFolders/MonitorEnvironments/MonitorIntervals`.

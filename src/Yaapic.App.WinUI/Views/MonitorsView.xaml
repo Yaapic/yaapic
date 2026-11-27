@@ -1,0 +1,167 @@
+<UserControl
+    x:Class="Yaapic.App.WinUI.Views.MonitorsView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:Yaapic.Localization"
+    xmlns:p="using:Yaapic.App.WinUI.Presentation"
+    xmlns:m="using:Yaapic.ViewModels.Monitors">
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="Auto"/>
+      <RowDefinition Height="*"/>
+    </Grid.RowDefinitions>
+    <InfoBar Severity="Informational" IsOpen="True" IsClosable="False" Message="{x:Bind loc:Strings.MonitorLocalNote}"/>
+
+    <Grid Grid.Row="1">
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="260"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+
+      <!-- Monitors -->
+      <Grid Padding="12" RowSpacing="8" BorderThickness="0,0,1,0" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="*"/>
+          <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <ListView x:Name="MonitorList" SelectionMode="Single" AutomationProperties.Name="{x:Bind loc:Strings.MonitorTitle}"
+                  ItemsSource="{x:Bind ViewModel.Monitors, Mode=OneWay}" SelectionChanged="OnMonitorSelectionChanged">
+          <ListView.ItemTemplate>
+            <DataTemplate x:DataType="m:MonitorItemViewModel">
+              <Grid ColumnSpacing="8" Padding="0,4">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Ellipse Width="8" Height="8" VerticalAlignment="Top" Margin="0,6,0,0"
+                         AutomationProperties.Name="{x:Bind LastStatusText, Mode=OneWay}"
+                         Fill="{x:Bind p:BrushMap.MonitorStatus(LastStatus), Mode=OneWay}"/>
+                <StackPanel Grid.Column="1">
+                  <TextBlock TextTrimming="CharacterEllipsis" Text="{x:Bind Name, Mode=OneWay}"/>
+                  <TextBlock TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicCaptionTextStyle}"
+                             Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind FolderName, Mode=OneWay}"/>
+                  <TextBlock TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicCaptionTextStyle}"
+                             Foreground="{ThemeResource YaapicTextSecondaryBrush}">
+                    <Run Text="{x:Bind IntervalText, Mode=OneWay}"/><Run Text=" - "/><Run Text="{x:Bind LastRunText, Mode=OneWay}"/>
+                  </TextBlock>
+                  <TextBlock Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicAccentTextBrush}"
+                             Visibility="{x:Bind p:VisibilityMap.WhenTrue(IsRunning), Mode=OneWay}" Text="{x:Bind RunningText, Mode=OneWay}"/>
+                </StackPanel>
+                <ToggleSwitch Grid.Column="2" MinWidth="0" VerticalAlignment="Top" OnContent="" OffContent=""
+                              AutomationProperties.Name="{x:Bind loc:Strings.MonitorEnabled}" IsOn="{x:Bind Enabled, Mode=TwoWay}"/>
+              </Grid>
+            </DataTemplate>
+          </ListView.ItemTemplate>
+        </ListView>
+        <StackPanel Grid.Row="1" Spacing="8">
+          <Button HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" Content="{x:Bind loc:Strings.MonitorNew}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.MonitorNew}" Command="{x:Bind ViewModel.NewMonitorCommand}"/>
+          <Button HorizontalAlignment="Stretch" Style="{StaticResource YaapicDangerButtonStyle}" Content="{x:Bind loc:Strings.CommonDelete}"
+                  AutomationProperties.Name="{x:Bind loc:Strings.CommonDelete}" Command="{x:Bind ViewModel.DeleteCommand}"/>
+        </StackPanel>
+      </Grid>
+
+      <!-- Selected monitor -->
+      <Grid Grid.Column="1" Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.SelectedMonitor), Mode=OneWay}">
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Padding="16,16,16,0" Spacing="12">
+          <TextBox Header="{x:Bind loc:Strings.CommonName}" AutomationProperties.Name="{x:Bind loc:Strings.CommonName}"
+                   Text="{x:Bind ViewModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+          <Grid ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="2*"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <ComboBox HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MonitorFolder}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.MonitorFolder}"
+                      ItemsSource="{x:Bind p:ListMap.MonitorFolders(ViewModel.FolderChoices), Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.SelectedFolder, Mode=TwoWay}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="m:MonitorFolderChoice">
+                  <TextBlock Text="{x:Bind Path}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MonitorEnvironment}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.MonitorEnvironment}"
+                      ItemsSource="{x:Bind p:ListMap.MonitorEnvironments(ViewModel.EnvironmentChoices), Mode=OneWay}"
+                      SelectedItem="{x:Bind ViewModel.SelectedEnvironment, Mode=TwoWay}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="m:MonitorEnvironmentChoice">
+                  <TextBlock Text="{x:Bind Name}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox Grid.Column="2" HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MonitorInterval}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.MonitorInterval}"
+                      ItemsSource="{x:Bind p:ListMap.MonitorIntervals(ViewModel.IntervalChoices)}"
+                      SelectedItem="{x:Bind ViewModel.SelectedInterval, Mode=TwoWay}">
+              <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="m:MonitorIntervalChoice">
+                  <TextBlock Text="{x:Bind Text}"/>
+                </DataTemplate>
+              </ComboBox.ItemTemplate>
+            </ComboBox>
+          </Grid>
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button MinWidth="96" Style="{StaticResource AccentButtonStyle}" Content="{x:Bind loc:Strings.CommonSave}"
+                    AutomationProperties.Name="{x:Bind loc:Strings.CommonSave}" Command="{x:Bind ViewModel.SaveCommand}"/>
+            <Button MinWidth="96" Content="{x:Bind loc:Strings.MockRevert}" AutomationProperties.Name="{x:Bind loc:Strings.MockRevert}"
+                    Command="{x:Bind ViewModel.RevertCommand}"/>
+            <Button MinWidth="96" Content="{x:Bind loc:Strings.MonitorRunNow}" AutomationProperties.Name="{x:Bind loc:Strings.MonitorRunNow}"
+                    Command="{x:Bind ViewModel.RunNowCommand}"/>
+            <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}"
+                       Foreground="{ThemeResource YaapicTextSecondaryBrush}">
+              <Run Text="{x:Bind loc:Strings.MonitorNextRun}"/><Run Text=": "/><Run Text="{x:Bind ViewModel.SelectedMonitor.NextRunText, Mode=OneWay, FallbackValue=''}"/>
+            </TextBlock>
+          </StackPanel>
+          <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicDangerBrush}" Text="{x:Bind ViewModel.Error, Mode=OneWay}"
+                     Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.Error), Mode=OneWay}"/>
+          <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.MonitorHistory}"/>
+        </StackPanel>
+
+        <!-- History and failures of the selected run -->
+        <Grid Grid.Row="1" Padding="16,8,16,16" RowSpacing="8">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+          <ListView SelectionMode="Single" AutomationProperties.Name="{x:Bind loc:Strings.MonitorHistory}"
+                    ItemsSource="{x:Bind ViewModel.History, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedRun, Mode=TwoWay}">
+            <ListView.ItemTemplate>
+              <DataTemplate x:DataType="m:MonitorRunRowViewModel">
+                <Grid ColumnSpacing="12" Padding="0,2">
+                  <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="70"/>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                  </Grid.ColumnDefinitions>
+                  <TextBlock Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind TimeText}"/>
+                  <TextBlock Grid.Column="1" FontWeight="SemiBold" Foreground="{x:Bind p:BrushMap.MonitorStatus(Status)}" Text="{x:Bind StatusText}"/>
+                  <TextBlock Grid.Column="2" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind DurationText}"/>
+                  <TextBlock Grid.Column="3" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind RequestsText}"/>
+                  <TextBlock Grid.Column="4" TextTrimming="CharacterEllipsis" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind Message}"/>
+                </Grid>
+              </DataTemplate>
+            </ListView.ItemTemplate>
+          </ListView>
+          <ItemsControl Grid.Row="1" MaxHeight="160" ItemsSource="{x:Bind p:ListMap.Lines(ViewModel.SelectedRun.Failures), Mode=OneWay}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                           Foreground="{ThemeResource YaapicDangerBrush}" Text="{x:Bind}"/>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>
