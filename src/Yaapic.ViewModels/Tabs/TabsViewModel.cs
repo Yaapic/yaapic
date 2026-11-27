@@ -52,6 +52,9 @@ public sealed partial class TabsViewModel : ObservableObject
     /// <summary>Raised when tabs are added or removed, or the active tab changes.</summary>
     public event EventHandler? SessionChanged;
 
+    /// <summary>Raised when a tab is opened or brought to the front on the user's request.</summary>
+    public event EventHandler? TabShown;
+
     /// <summary>Gets the open tabs, in display order.</summary>
     public ObservableCollection<RequestEditorViewModel> Tabs { get; } = [];
 
@@ -64,6 +67,7 @@ public sealed partial class TabsViewModel : ObservableObject
         var tab = _createEditor(HttpRequestDefinition.Create(DefaultName), true);
         Tabs.Add(tab);
         ActiveTab = tab;
+        TabShown?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>Opens <paramref name="definition"/> as a new unsaved tab with a fresh identifier and activates it.</summary>
@@ -74,6 +78,7 @@ public sealed partial class TabsViewModel : ObservableObject
         var tab = _createEditor(definition with { Id = Guid.NewGuid() }, true);
         Tabs.Add(tab);
         ActiveTab = tab;
+        TabShown?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>Activates the tab showing <paramref name="definition"/>, opening one when needed.</summary>
@@ -89,6 +94,7 @@ public sealed partial class TabsViewModel : ObservableObject
         }
 
         ActiveTab = tab;
+        TabShown?.Invoke(this, EventArgs.Empty);
     }
 
     /// <summary>Saves <paramref name="tab"/> to the store.</summary>
@@ -196,6 +202,7 @@ public sealed partial class TabsViewModel : ObservableObject
 
         var index = ActiveTab is null ? -1 : Tabs.IndexOf(ActiveTab);
         ActiveTab = Tabs[((index + delta) % Tabs.Count + Tabs.Count) % Tabs.Count];
+        TabShown?.Invoke(this, EventArgs.Empty);
     }
 
     private void Remove(RequestEditorViewModel tab)

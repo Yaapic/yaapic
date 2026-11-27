@@ -1,4 +1,5 @@
 using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Yaapic.Domain.Collections;
 using Yaapic.Localization;
@@ -13,6 +14,37 @@ namespace Yaapic.ViewModels.Shell;
 public sealed partial class ShellViewModel
 {
     private readonly List<IAsyncDisposable> _ownedAsyncResources = [];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsRequestsSection))]
+    [NotifyPropertyChangedFor(nameof(IsRunnerSection))]
+    [NotifyPropertyChangedFor(nameof(IsLoadTestSection))]
+    [NotifyPropertyChangedFor(nameof(IsMockServersSection))]
+    [NotifyPropertyChangedFor(nameof(IsMonitorsSection))]
+    [NotifyPropertyChangedFor(nameof(IsCollectionsSelected))]
+    [NotifyPropertyChangedFor(nameof(IsHistorySelected))]
+    private ShellSection _section = ShellSection.Requests;
+
+    /// <summary>Gets a value indicating whether the main area shows the requests.</summary>
+    public bool IsRequestsSection => Section == ShellSection.Requests;
+
+    /// <summary>Gets a value indicating whether the main area shows the Runner.</summary>
+    public bool IsRunnerSection => Section == ShellSection.Runner;
+
+    /// <summary>Gets a value indicating whether the main area shows the load test tool.</summary>
+    public bool IsLoadTestSection => Section == ShellSection.LoadTest;
+
+    /// <summary>Gets a value indicating whether the main area shows the mock servers.</summary>
+    public bool IsMockServersSection => Section == ShellSection.MockServers;
+
+    /// <summary>Gets a value indicating whether the main area shows the monitors.</summary>
+    public bool IsMonitorsSection => Section == ShellSection.Monitors;
+
+    /// <summary>Gets a value indicating whether the Collections rail entry is the selected one.</summary>
+    public bool IsCollectionsSelected => IsRequestsSection && Mode == SidebarMode.Collections;
+
+    /// <summary>Gets a value indicating whether the History rail entry is the selected one.</summary>
+    public bool IsHistorySelected => IsRequestsSection && Mode == SidebarMode.History;
 
     /// <summary>Gets the Runner view model; null until <see cref="AttachAutomation"/> is called.</summary>
     public RunnerViewModel? Runner { get; private set; }
@@ -82,6 +114,14 @@ public sealed partial class ShellViewModel
         LoadTestFolderCommand.NotifyCanExecuteChanged();
         MockFromFolderCommand.NotifyCanExecuteChanged();
         MonitorFolderCommand.NotifyCanExecuteChanged();
+        ShowRunnerCommand.NotifyCanExecuteChanged();
+        ShowLoadTestCommand.NotifyCanExecuteChanged();
+        ShowMockServersCommand.NotifyCanExecuteChanged();
+        ShowMonitorsCommand.NotifyCanExecuteChanged();
+        OnPropertyChanged(nameof(Runner));
+        OnPropertyChanged(nameof(LoadTest));
+        OnPropertyChanged(nameof(Mocks));
+        OnPropertyChanged(nameof(Monitors));
     }
 
     /// <summary>Asks the views to open the Runner window; does nothing when the tools are not attached.</summary>
@@ -89,6 +129,7 @@ public sealed partial class ShellViewModel
     {
         if (CanAutomate)
         {
+            Section = ShellSection.Runner;
             RunnerRequested?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -98,6 +139,7 @@ public sealed partial class ShellViewModel
     {
         if (CanAutomate)
         {
+            Section = ShellSection.LoadTest;
             LoadTestRequested?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -107,6 +149,7 @@ public sealed partial class ShellViewModel
     {
         if (CanAutomate)
         {
+            Section = ShellSection.MockServers;
             MockServersRequested?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -116,6 +159,7 @@ public sealed partial class ShellViewModel
     {
         if (CanAutomate)
         {
+            Section = ShellSection.Monitors;
             MonitorsRequested?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -157,6 +201,18 @@ public sealed partial class ShellViewModel
         await Monitors!.NewForFolderAsync(node!.Id);
         RequestMonitors();
     }
+
+    [RelayCommand(CanExecute = nameof(CanAutomate))]
+    private void ShowRunner() => RequestRunner();
+
+    [RelayCommand(CanExecute = nameof(CanAutomate))]
+    private void ShowLoadTest() => RequestLoadTest();
+
+    [RelayCommand(CanExecute = nameof(CanAutomate))]
+    private void ShowMockServers() => RequestMockServers();
+
+    [RelayCommand(CanExecute = nameof(CanAutomate))]
+    private void ShowMonitors() => RequestMonitors();
 
     private bool CanAutomateFolder(CollectionNodeViewModel? node) => CanAutomate && node is { IsFolder: true };
 

@@ -1,6 +1,6 @@
 # M6-76: ViewModel: shell sections for the automation views
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-75
 
@@ -50,7 +50,7 @@ The views (M6-77 to M6-80), removing the events (M6-81), saving the section in t
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` (shell built as in `AutomationShellTests`):
+- [x] Tests in `Yaapic.ViewModels.Tests` (shell built as in `AutomationShellTests`):
   - default: `Section == Requests`, `IsRequestsSection` and `IsCollectionsSelected` true, the four tool bools false;
   - not attached: the four `Show*Command`s cannot execute and `Request*` leaves `Section` unchanged;
   - attached: each `Show*Command` sets its section, raises `PropertyChanged` for `Section` and the bools, and still raises its event;
@@ -64,10 +64,10 @@ The views (M6-77 to M6-80), removing the events (M6-81), saving the section in t
     before; a run in progress (hold it open the way the M6-21 tests do) -> `ConfirmAsync` called once with `Strings.ShellCloseRunning`; a
     load test in progress (held open the same way) -> same; answer false -> `RequestCloseAsync` returns false and the owned resources are
     not disposed; answer true -> it proceeds as before.
-- [ ] `TabsViewModelTests`: `TabShown` raised by `NewTab`, `OpenAsNew`, `Open` (new and already open), `NextTabCommand` with two tabs; not
+- [x] `TabsViewModelTests`: `TabShown` raised by `NewTab`, `OpenAsNew`, `Open` (new and already open), `NextTabCommand` with two tabs; not
   raised by `CloseAsync`, `CloseWithoutPrompt`, `NextTabCommand` with one tab.
-- [ ] Localization tests green (keys in both files, `Strings.g.cs` fresh); architecture tests green; 0 warnings, XML docs, all tests green.
-- [ ] Both front-ends still build; nothing visible changes yet.
+- [x] Localization tests green (keys in both files, `Strings.g.cs` fresh); architecture tests green; 0 warnings, XML docs, all tests green.
+- [x] Both front-ends still build; nothing visible changes yet.
 
 ## Suggested commit message
 

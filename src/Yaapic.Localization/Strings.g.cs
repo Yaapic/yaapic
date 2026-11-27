@@ -2375,6 +2375,12 @@ public static class Strings
     /// <summary>Updates</summary>
     public static string SettingsUpdates => Localizer.Pick("Updates", "Mises à jour");
 
+    /// <summary>A collection run or a load test is still in progress. Closing Yaapic stops it and its results are lost.</summary>
+    public static string ShellCloseRunning => Localizer.Pick("A collection run or a load test is still in progress. Closing Yaapic stops it and its results are lost.", "Une exécution de collection ou un test de charge est encore en cours. Fermer Yaapic l'arrête et ses résultats sont perdus.");
+
+    /// <summary>Close Yaapic?</summary>
+    public static string ShellCloseRunningTitle => Localizer.Pick("Close Yaapic?", "Fermer Yaapic ?");
+
     /// <summary>{0} engine unavailable: {1}</summary>
     public static string ShellEngineUnavailable(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} engine unavailable: {1}", "Moteur {0} indisponible : {1}"), a0, a1);

@@ -43,6 +43,8 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
     private Task _drain = Task.CompletedTask;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(IsCollectionsSelected))]
+    [NotifyPropertyChangedFor(nameof(IsHistorySelected))]
     private SidebarMode _mode = SidebarMode.Collections;
 
     [ObservableProperty]
@@ -112,6 +114,7 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
         _engines = engines;
         tabs.SessionChanged += (_, _) => QueueSave();
         tabs.RequestSaved += (_, _) => QueueSave();
+        tabs.TabShown += (_, _) => Section = ShellSection.Requests;
         environments.ActiveEnvironmentChanged += (_, _) => QueueSave();
         tabs.PropertyChanged += (_, e) =>
         {
@@ -360,6 +363,12 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
     /// <returns><see langword="true"/> when the window may close.</returns>
     public async Task<bool> RequestCloseAsync()
     {
+        if ((Runner?.IsRunning == true || LoadTest?.IsRunning == true)
+            && !await _dialogs.ConfirmAsync(Strings.ShellCloseRunningTitle, Strings.ShellCloseRunning))
+        {
+            return false;
+        }
+
         foreach (var tab in Tabs.Tabs.ToList())
         {
             if (!tab.IsDirty || TabsViewModel.IsUntouched(tab))
@@ -435,10 +444,18 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
     private void OpenPalette() => Palette.OpenCommand.Execute(null);
 
     [RelayCommand]
-    private void ShowCollections() => Mode = SidebarMode.Collections;
+    private void ShowCollections()
+    {
+        Mode = SidebarMode.Collections;
+        Section = ShellSection.Requests;
+    }
 
     [RelayCommand]
-    private void ShowHistory() => Mode = SidebarMode.History;
+    private void ShowHistory()
+    {
+        Mode = SidebarMode.History;
+        Section = ShellSection.Requests;
+    }
 
     private void QueueSave()
     {

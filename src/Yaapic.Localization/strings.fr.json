@@ -291,6 +291,8 @@
   "body.noFile": "Aucun fichier sélectionné",
   "palette.noMatch": "Aucune commande correspondante",
   "console.empty": "Aucun message pour le moment. La sortie des scripts et l'activité réseau apparaissent ici.",
+  "shell.closeRunningTitle": "Fermer Yaapic ?",
+  "shell.closeRunning": "Une exécution de collection ou un test de charge est encore en cours. Fermer Yaapic l'arrête et ses résultats sont perdus.",
   "shell.noRequest": "Aucune requête ouverte.",
   "history.empty": "Aucune requête envoyée pour le moment",
   "response.none": "Aucune réponse",

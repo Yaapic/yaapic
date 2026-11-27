@@ -291,6 +291,8 @@
   "body.noFile": "No file selected",
   "palette.noMatch": "No matching commands",
   "console.empty": "No messages yet. Script output and network activity appear here.",
+  "shell.closeRunningTitle": "Close Yaapic?",
+  "shell.closeRunning": "A collection run or a load test is still in progress. Closing Yaapic stops it and its results are lost.",
   "shell.noRequest": "No request open.",
   "history.empty": "No requests sent yet",
   "response.none": "No response",

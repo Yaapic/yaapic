@@ -35,6 +35,32 @@ public sealed class TabsViewModelTests
     private static HttpRequestDefinition Saved(string name) => HttpRequestDefinition.Create(name);
 
     [Fact]
+    public async Task TabShown_is_raised_when_a_tab_is_opened_or_brought_to_the_front()
+    {
+        var tabs = Create();
+        var shown = 0;
+        tabs.TabShown += (_, _) => shown++;
+        var a = Saved("a");
+
+        tabs.NewTab();
+        tabs.OpenAsNew(Saved("n"));
+        tabs.Open(a);
+        tabs.Open(a);
+        tabs.NextTabCommand.Execute(null);
+        tabs.PreviousTabCommand.Execute(null);
+
+        Assert.Equal(6, shown);
+
+        shown = 0;
+        tabs.CloseWithoutPrompt(a.Id);
+        await tabs.CloseAsync(tabs.Tabs[0]);
+        tabs.NextTabCommand.Execute(null);
+        tabs.ActiveTab = tabs.Tabs[0];
+
+        Assert.Equal(0, shown);
+    }
+
+    [Fact]
     public void NewTabIsAppendedAndActivated()
     {
         var tabs = Create();
