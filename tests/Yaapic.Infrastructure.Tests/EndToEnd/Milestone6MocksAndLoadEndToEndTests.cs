@@ -302,7 +302,20 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
             return "";
         }
 
-        var statuses = string.Join(", ", shell.Mocks!.Log.ToArray().GroupBy(l => l.Status).Select(g => $"{g.Key} x{g.Count()}"));
+        // The view model list is not thread-safe and the mock may still log, so copy it until a copy succeeds.
+        var statuses = "?";
+        for (var i = 0; i < 50 && statuses == "?"; i++)
+        {
+            try
+            {
+                statuses = string.Join(", ", shell.Mocks!.Log.ToArray().GroupBy(l => l.Status).Select(g => $"{g.Key} x{g.Count()}"));
+            }
+            catch (Exception e) when (e is ArgumentException or IndexOutOfRangeException or NullReferenceException or InvalidOperationException)
+            {
+                // Modified while copied.
+            }
+        }
+
         return $"{result.Overall.Errors} of {result.Overall.Count} requests failed: {string.Join(" | ", result.ErrorMessages)}; the mock logged {statuses}";
     }
 
