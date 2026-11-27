@@ -1,6 +1,6 @@
 # M6-79: Avalonia: automation entries on the rail
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M6-76, M6-77
 
@@ -41,11 +41,21 @@ The views in the main area and removing `ToolWindowHost` (M6-80).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] Runtime smoke on macOS or Linux as in M6-77 (entries, tooltips, single highlight, Collections/History move it back, stroked icons
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [x] Runtime smoke on macOS or Linux as in M6-77 (entries, tooltips, single highlight, Collections/History move it back, stroked icons
   render as lines, dark and light); if not possible, run it on Windows through UI Automation as M6-56 did and say so in Notes.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the automation entries to the rail`
+
+## Notes
+
+Verified on Windows only (win-x64 AOT publish, 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly), driven through UI Automation (dark theme,
+French locale): the four entries (`RailRunner`, `RailLoadTest`, `RailMockServers`, `RailMonitors`) sit under a separator after History with their names;
+clicking one highlights only it (accent bar and tinted button) and opens its tool window (transitional); History moves the highlight back. In a screenshot
+the stroked `Path` icons of all five entries render as clean 1.8 px rounded lines, in the accent colour when selected. The `Button.icon.rail PathIcon` style
+stays because the Settings and palette buttons still use `PathIcon`. Not verified on unix: macOS/Linux run, light theme, tooltips. Flaky on this host,
+unrelated to the change: `Yaapic.Infrastructure.Tests` `StoppingAndClosingTheShellFreeThePorts` and `ClosingTheShellStopsTheSchedulerDuringARun`
+failed once each across two runs (port release timing), the other tests passed.

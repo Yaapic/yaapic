@@ -137,23 +137,62 @@
           </Button>
           <StackPanel Spacing="4">
             <Grid HorizontalAlignment="Center">
-              <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}"
+              <Button Classes="icon rail" Classes.selected="{Binding IsCollectionsSelected}"
                       Command="{Binding ShowCollectionsCommand}" ToolTip.Tip="{x:Static loc:Strings.CollectionsTitle}" AutomationProperties.Name="{x:Static loc:Strings.CollectionsTitle}">
-                <PathIcon Data="{StaticResource YiCollection}" />
+                <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiCollection}" StrokeThickness="1.8" StrokeJoin="Round" StrokeLineCap="Round" Stroke="{Binding $parent[Button].Foreground}" /></Canvas></Viewbox>
               </Button>
               <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
                       Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
-                      IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsCollections}}" />
+                      IsVisible="{Binding IsCollectionsSelected}" />
             </Grid>
             <Grid HorizontalAlignment="Center">
-              <Button Classes="icon rail" Classes.selected="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}"
+              <Button Classes="icon rail" Classes.selected="{Binding IsHistorySelected}"
                       Command="{Binding ShowHistoryCommand}" ToolTip.Tip="{x:Static loc:Strings.HistoryTitle}" AutomationProperties.Name="{x:Static loc:Strings.HistoryTitle}">
-                <PathIcon Data="{StaticResource YiHistory}" />
+                <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiHistory}" StrokeThickness="1.8" StrokeJoin="Round" StrokeLineCap="Round" Stroke="{Binding $parent[Button].Foreground}" /></Canvas></Viewbox>
               </Button>
               <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
                       Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
-                      IsVisible="{Binding Mode, Converter={x:Static p:SidebarMap.IsHistory}}" />
+                      IsVisible="{Binding IsHistorySelected}" />
             </Grid>
+            <StackPanel Spacing="4" IsVisible="{Binding CanAutomate}">
+              <Border Width="24" Height="1" Margin="0,4" HorizontalAlignment="Center" Background="{DynamicResource YaapicBorderSubtleBrush}" />
+              <Grid HorizontalAlignment="Center">
+                <Button Classes="icon rail" Classes.selected="{Binding IsRunnerSection}"
+                        Command="{Binding ShowRunnerCommand}" ToolTip.Tip="{x:Static loc:Strings.RunnerTitle}" AutomationProperties.Name="{x:Static loc:Strings.RunnerTitle}" AutomationProperties.AutomationId="RailRunner">
+                  <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiRunner}" StrokeThickness="1.8" StrokeJoin="Round" StrokeLineCap="Round" Stroke="{Binding $parent[Button].Foreground}" /></Canvas></Viewbox>
+                </Button>
+                <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                        IsVisible="{Binding IsRunnerSection}" />
+              </Grid>
+              <Grid HorizontalAlignment="Center">
+                <Button Classes="icon rail" Classes.selected="{Binding IsLoadTestSection}"
+                        Command="{Binding ShowLoadTestCommand}" ToolTip.Tip="{x:Static loc:Strings.LoadTitle}" AutomationProperties.Name="{x:Static loc:Strings.LoadTitle}" AutomationProperties.AutomationId="RailLoadTest">
+                  <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiTimeline}" StrokeThickness="1.8" StrokeJoin="Round" StrokeLineCap="Round" Stroke="{Binding $parent[Button].Foreground}" /></Canvas></Viewbox>
+                </Button>
+                <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                        IsVisible="{Binding IsLoadTestSection}" />
+              </Grid>
+              <Grid HorizontalAlignment="Center">
+                <Button Classes="icon rail" Classes.selected="{Binding IsMockServersSection}"
+                        Command="{Binding ShowMockServersCommand}" ToolTip.Tip="{x:Static loc:Strings.MockTitle}" AutomationProperties.Name="{x:Static loc:Strings.MockTitle}" AutomationProperties.AutomationId="RailMockServers">
+                  <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiMock}" StrokeThickness="1.8" StrokeJoin="Round" StrokeLineCap="Round" Stroke="{Binding $parent[Button].Foreground}" /></Canvas></Viewbox>
+                </Button>
+                <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                        IsVisible="{Binding IsMockServersSection}" />
+              </Grid>
+              <Grid HorizontalAlignment="Center">
+                <Button Classes="icon rail" Classes.selected="{Binding IsMonitorsSection}"
+                        Command="{Binding ShowMonitorsCommand}" ToolTip.Tip="{x:Static loc:Strings.MonitorTitle}" AutomationProperties.Name="{x:Static loc:Strings.MonitorTitle}" AutomationProperties.AutomationId="RailMonitors">
+                  <Viewbox Width="20" Height="20"><Canvas Width="24" Height="24"><Path Data="{StaticResource YiMonitor}" StrokeThickness="1.8" StrokeJoin="Round" StrokeLineCap="Round" Stroke="{Binding $parent[Button].Foreground}" /></Canvas></Viewbox>
+                </Button>
+                <Border Width="3" Height="16" CornerRadius="2" HorizontalAlignment="Left" VerticalAlignment="Center"
+                        Margin="-6,0,0,0" Background="{DynamicResource YaapicAccentFillBrush}" IsHitTestVisible="False"
+                        IsVisible="{Binding IsMonitorsSection}" />
+              </Grid>
+            </StackPanel>
             <Button Classes="icon rail" HorizontalAlignment="Center" Command="{Binding OpenPaletteCommand}"
                     ToolTip.Tip="{x:Static loc:Strings.PaletteTitleTip}" AutomationProperties.Name="{x:Static loc:Strings.PaletteTitle}">
               <PathIcon Data="{StaticResource YiSearch}" />
