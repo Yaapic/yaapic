@@ -696,6 +696,15 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-72](milestone-6-automation/M6-72-end-to-end-cli.md) | End-to-end tests: command-line runner | any | M6-71 | todo |
 | [M6-73](milestone-6-automation/M6-73-cli-packaging-and-release.md) | CLI: CI smoke test, zip per OS and release upload | any | M6-71 | todo |
 | [M6-74](milestone-6-automation/M6-74-cli-docs.md) | Command-line runner docs | any | M6-72, M6-73 | todo |
+| [M6-75](milestone-6-automation/M6-75-adr-automation-views-in-main-window.md) | ADR 0023: automation views in the main window | any | M6-49, M6-56 | todo |
+| [M6-76](milestone-6-automation/M6-76-viewmodel-shell-sections.md) | ViewModel: shell sections for the automation views | any | M6-75 | todo |
+| [M6-77](milestone-6-automation/M6-77-winui-rail-automation-entries.md) | WinUI: automation entries on the rail | windows | M6-76 | todo |
+| [M6-78](milestone-6-automation/M6-78-winui-automation-views-in-main-area.md) | WinUI: automation views in the main area, tool windows removed | windows | M6-77 | todo |
+| [M6-79](milestone-6-automation/M6-79-avalonia-rail-automation-entries.md) | Avalonia: automation entries on the rail | unix | M6-76, M6-77 | todo |
+| [M6-80](milestone-6-automation/M6-80-avalonia-automation-views-in-main-area.md) | Avalonia: automation views in the main area, tool windows removed | unix | M6-78, M6-79 | todo |
+| [M6-81](milestone-6-automation/M6-81-viewmodel-remove-tool-window-events.md) | ViewModel: remove the tool window events | any | M6-78, M6-80 | todo |
+| [M6-82](milestone-6-automation/M6-82-automation-views-docs.md) | Docs: automation views in the main window | any | M6-81 | todo |
+| [M6-83](milestone-6-automation/M6-83-winui-visual-verification-main-window.md) | WinUI visual verification of the automation views in the main window | windows | M6-81 | todo |
 
 ### Milestone 6 summary
 
@@ -717,6 +726,16 @@ on query, headers or body, operating-system notifications, cron schedules, runni
 Open: the command-line runner `yaapic-cli` (decided in M6-62, cards M6-65 to M6-74 `todo`); M6-63 (monitors while Yaapic is closed)
 and M6-64 (mock servers reachable from other devices) were answered "not now" and need no work; M6-61 (WinUI visual verification) is `in progress`: the screenshots and the runtime checks are done, a design comparison and a human review remain.
 
+Refactor: automation views in the main window (requested 2026-11-27, cards M6-75 to M6-83 `todo`). The Runner, Load test, Mock servers
+and Monitors leave their tool windows: four entries on the rail (the left menu, under Collections and History) show them in the main
+window in place of the request tabs and the sidebar; the folder menu, palette and status bar lead to the same views; Collections,
+History or opening a request brings the tabs back; the tools keep running while hidden; closing Yaapic asks first while a run, a load
+test or a mock server is running. Decision in ADR 0023 (M6-75). Order: ADR, view model sections (M6-76), WinUI rail then views (M6-77,
+M6-78, which deletes `ToolWindow`), Avalonia rail then views (M6-79, M6-80, which deletes `ToolWindowHost`), removal of the shell's
+window events (M6-81), docs (M6-82), WinUI screenshots (M6-83, replacing those of M6-61). The app builds and works after each card:
+until M6-78/M6-80 the rail entries still open the tool windows. This replaces the window behaviour of the done cards M6-43, M6-49,
+M6-50 and M6-56, which are not edited.
+
 Runtime checks not run: the Avalonia views (M6-50 to M6-56) were never run on macOS or Linux; on Windows only the build, the AOT publish
 and a UI Automation smoke of the Runner window (M6-56) were done. The WinUI views (M6-43 to M6-49) were checked on the Native AOT build by
 M6-61 (16 screenshots in `docs/screenshots/m6/`, with five defects fixed, one of them an AOT crash of the Mock servers window); the French
@@ -734,7 +753,7 @@ answers are not in the request log (documented in [automation.md](../automation.
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above) |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | detailed (81 cards, see above) |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | detailed (68 cards, see above) |
-| M6 | Automation (Runner, load tests, mock servers, monitors, command-line runner) | detailed (74 cards, see above) |
+| M6 | Automation (Runner, load tests, mock servers, monitors, command-line runner) | detailed (83 cards, see above) |
 | M7 | Protocols (WebSocket, SSE, Socket.IO, GraphQL, gRPC, MQTT, SOAP) | planned |
 | M8 | Collaboration (Git, versions, comments, OpenAPI editor and docs) | planned |
 | M9 | Flows, plugins, optional AI assistant | planned |
