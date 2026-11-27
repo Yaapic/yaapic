@@ -681,11 +681,41 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-57](milestone-6-automation/M6-57-end-to-end-runner.md) | End-to-end tests: Runner | any | M6-42 | done |
 | [M6-58](milestone-6-automation/M6-58-end-to-end-mocks-and-load.md) | End-to-end tests: mock servers and load tests | any | M6-42 | done |
 | [M6-59](milestone-6-automation/M6-59-end-to-end-monitors.md) | End-to-end tests: monitors | any | M6-42 | done |
-| [M6-60](milestone-6-automation/M6-60-milestone-docs.md) | Milestone 6 docs | any | M6-57, M6-58, M6-59, M6-49, M6-56 | todo |
+| [M6-60](milestone-6-automation/M6-60-milestone-docs.md) | Milestone 6 docs | any | M6-57, M6-58, M6-59, M6-49, M6-56 | done |
 | [M6-61](milestone-6-automation/M6-61-winui-visual-verification.md) | WinUI visual verification of the milestone 6 views | windows | M6-45, M6-46, M6-47, M6-48, M6-49 | todo |
 | [M6-62](milestone-6-automation/M6-62-command-line-runner.md) | Command-line runner | any | M6-17, M6-18, M6-19 | blocked |
 | [M6-63](milestone-6-automation/M6-63-monitors-while-closed.md) | Monitors while Yaapic is closed | any | M6-39 | blocked |
 | [M6-64](milestone-6-automation/M6-64-mock-servers-on-the-network.md) | Mock servers reachable from other devices | any | M6-34 | blocked |
+
+### Milestone 6 summary
+
+Delivered: the collection Runner (iterations, a data variable layer between local and environment values, CSV and JSON data files,
+`yaapic.iterationData`, `yaapic.info.iteration`, `setNextRequest` and `skipRequest` in JavaScript and Lua, results, JSON and JUnit
+reports); load tests (fixed and ramp-up virtual users, live metrics and four charts, a confirmation naming the target hosts, a JSON
+report; 1 to 100 users over 10 to 3 600 s); local mock servers on `127.0.0.1` (a hand-written HTTP/1.1 host on `TcpListener`, routes in
+`mocks/*.mock.yaml`, templating, CORS, a 500-entry request log, generation from a folder); monitors (scheduled folder runs while the app
+is open, `monitors/*.monitor.yaml`, per-user history in `.yaapic/monitor-runs.jsonl`); the tool windows, folder menu, palette and status
+bar entries on both front-ends. End-to-end tests: `Milestone6RunnerEndToEndTests`, `Milestone6MocksAndLoadEndToEndTests` and
+`Milestone6MonitorsEndToEndTests`. Documentation: [automation.md](../automation.md), [architecture.md](../architecture.md),
+[file-format.md](../file-format.md), [scripting-compatibility.md](../scripting-compatibility.md), ADRs
+[0018](../adr/0018-collection-runner.md), [0019](../adr/0019-load-tests.md), [0020](../adr/0020-mock-servers.md),
+[0021](../adr/0021-monitors.md) and the [load spike](../spikes/m6-load.md). No new dependency (see [dependencies.md](../dependencies.md)).
+
+Deferred: HTML reports, saved runner and load-test configurations, spike and peak load profiles, thresholds, HTTPS mocks, mock matching
+on query, headers or body, operating-system notifications, cron schedules, running unfiled requests, parallel runs.
+
+Open: the blocked cards M6-62 (command-line runner), M6-63 (monitors while Yaapic is closed) and M6-64 (mock servers reachable from
+other devices), each waiting for a product decision; M6-61 (WinUI visual verification) is still `todo`.
+
+Runtime checks not run: the Avalonia views (M6-50 to M6-56) were never run on macOS or Linux; on Windows only the build, the AOT publish
+and a UI Automation smoke of the Runner window (M6-56) were done. The WinUI views (M6-43 to M6-49) had only a build, AOT publish and
+start-up check, plus the Runner button and window of M6-49: the manual smoke of the Runner, Load test, Mock servers and Monitors
+windows, the folder menu and palette entries, and the charts' `Points` property under Native AOT are left for M6-61, so there are no
+screenshots yet. Several timing-sensitive tests (`LoadTestRunnerTests`, `LoadTestViewModelTests`, `MonitorSchedulerTests`) flaked under
+CPU load and passed on rerun.
+
+Known limits: `TcpMockHttpHost` accepts at most 100 open connections per server and answers the rest `503` before the routes run, so those
+answers are not in the request log (documented in [automation.md](../automation.md)).
 
 ## Milestones 2 to 10
 

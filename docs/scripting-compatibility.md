@@ -17,7 +17,7 @@ what is supported and what differs from Postman. It is kept in step with the con
 | `yaapic.request.auth` | unsupported | Use a header in a pre-request script. |
 | `yaapic.variables`, `yaapic.environment`, `yaapic.collectionVariables`, `yaapic.globals` | supported | `get`, `set`, `unset`, `has`, `clear`, `toObject`; `replaceIn` on `yaapic.variables` (dynamic variables such as `{{$guid}}`, `{{$timestamp}}`, `{{$randomInt}}` work). |
 | `yaapic.environment.name` | unsupported | |
-| `yaapic.info` | partial | `eventName`, `requestName`, `requestId`; `iteration` is always `0` and `iterationCount` `1`. |
+| `yaapic.info` | partial | `eventName`, `requestName`, `requestId`; `iteration` (0-based) and `iterationCount` follow the Runner run; outside a run they are `0` and `1`. |
 | `yaapic.sendRequest` | supported | String and options forms; callback and promise (`await`) styles; raw and urlencoded bodies. Limited to 20 calls per run. |
 | `yaapic.cookies` | partial | Read-only view of the `Set-Cookie` headers of the current response. `yaapic.cookies.jar()` throws `The cookie jar is not available in Yaapic yet`. |
 | `console.*` | supported | Objects are printed as JSON. |
@@ -29,6 +29,12 @@ what is supported and what differs from Postman. It is kept in step with the con
 | `yaapic.visualizer` | unsupported | |
 | `yaapic.require` | unsupported | |
 | `require('crypto-js')`, `CryptoJS` | unsupported | `require` and `CryptoJS` exist as stubs that throw `... is not supported in Yaapic`. |
+
+### Runner
+
+`yaapic.iterationData`, `yaapic.execution.setNextRequest` (alias `postman.setNextRequest`), `yaapic.execution.skipRequest` and
+`yaapic.info.iteration` work in Runner runs; in Lua they are `yaapic.iteration_data` and the same `execution` calls. Load tests
+ignore `setNextRequest` and honour `skipRequest`. Details, data file formats and examples: [automation.md](automation.md).
 
 Unsupported members throw an `Error` whose message is `<member> is not supported in Yaapic`, so a collection imported from
 Postman never fails silently.

@@ -1,6 +1,6 @@
 # M6-60: Milestone 6 docs
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-57, M6-58, M6-59, M6-49, M6-56
 
@@ -37,10 +37,10 @@ Screenshots (M6-61).
 
 ## Acceptance criteria
 
-- [ ] The documents above are updated and their relative links work (open each).
-- [ ] The summary lists the blocked cards still open (M6-62, M6-63, M6-64) and what is deferred (HTML reports, saved runner configurations,
+- [x] The documents above are updated and their relative links work (open each).
+- [x] The summary lists the blocked cards still open (M6-62, M6-63, M6-64) and what is deferred (HTML reports, saved runner configurations,
   spike/peak load profiles, thresholds, HTTPS mocks, mock matching on query/headers/body, OS notifications, cron schedules).
-- [ ] No code changed; the build still has 0 warnings.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

@@ -212,7 +212,10 @@ vault. See [ADR 0014](adr/0014-transport-certificates-timings.md). The per-reque
 
 ## Variable precedence
 
-Highest first: active environment, collection variables, globals, dynamic variables.
+Highest first: script-local values (set by a script for the current send), iteration data (the current row of a Runner data
+file; empty outside a Runner run, read-only), active environment, collection variables, globals, dynamic variables. The data
+layer is never stored: it exists only while a run is going (see [automation.md](automation.md)). A monitor run uses the
+environment stored in the monitor instead of the active one.
 
 ## History file
 
