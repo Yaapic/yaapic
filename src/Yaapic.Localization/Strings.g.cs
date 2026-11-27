@@ -1501,6 +1501,12 @@ public static class Strings
     /// <summary>Mock servers</summary>
     public static string MockTitle => Localizer.Pick("Mock servers", "Serveurs de mock");
 
+    /// <summary>The environment of this monitor no longer exists.</summary>
+    public static string MonitorEnvironmentMissing => Localizer.Pick("The environment of this monitor no longer exists.", "L'environnement de ce monitor n'existe plus.");
+
+    /// <summary>The folder of this monitor no longer exists.</summary>
+    public static string MonitorFolderMissing => Localizer.Pick("The folder of this monitor no longer exists.", "Le dossier de ce monitor n'existe plus.");
+
     /// <summary>No redirect was received within 3 minutes. Try again.</summary>
     public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
 

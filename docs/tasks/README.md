@@ -660,7 +660,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-36](milestone-6-automation/M6-36-domain-core-monitor-model.md) | Domain and Core: monitor model and store ports | any | M6-05, M6-14 | done |
 | [M6-37](milestone-6-automation/M6-37-infra-monitor-store.md) | Infrastructure: monitor file store | any | M6-28, M6-36 | done |
 | [M6-38](milestone-6-automation/M6-38-infra-monitor-run-store.md) | Infrastructure: monitor run history store | any | M6-36 | done |
-| [M6-39](milestone-6-automation/M6-39-core-monitor-scheduler.md) | Core: monitor scheduler | any | M6-16, M6-36 | todo |
+| [M6-39](milestone-6-automation/M6-39-core-monitor-scheduler.md) | Core: monitor scheduler | any | M6-16, M6-36 | done |
 | [M6-40](milestone-6-automation/M6-40-viewmodel-monitors.md) | ViewModel: monitors | any | M6-21, M6-39 | todo |
 | [M6-41](milestone-6-automation/M6-41-viewmodel-shell-entries.md) | ViewModel: palette commands, shell entries and status items for the M6 tools | any | M6-21, M6-26, M6-35, M6-40 | todo |
 | [M6-42](milestone-6-automation/M6-42-composition-m6-wiring.md) | Composition: wire the M6 services | any | M6-28, M6-33, M6-37, M6-38, M6-41 | todo |

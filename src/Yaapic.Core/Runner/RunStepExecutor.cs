@@ -22,6 +22,11 @@ public sealed record RunStepResult(RunRequestResult Result, ScriptedSendReport R
 /// <param name="scopes">The variable scope source and persistence port.</param>
 public sealed class RunStepExecutor(ScriptedRequestSender sender, IScriptChainProvider chains, IRunScopeSource scopes)
 {
+    /// <summary>Creates an executor that shares the sender and the chains but reads and persists variables through another source.</summary>
+    /// <param name="other">The scope source to use.</param>
+    /// <returns>The new executor.</returns>
+    public RunStepExecutor WithScopes(IRunScopeSource other) => new(sender, chains, other);
+
     /// <summary>Sends one request of a run.</summary>
     /// <param name="item">The request to send.</param>
     /// <param name="state">The in-memory variable state of the run; receives the changes of the scripts.</param>

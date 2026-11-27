@@ -759,6 +759,8 @@
   "mock.invalid": "This mock server has errors; fix them before starting it.",
   "mock.generatedName": "{0} mock",
   "mock.portInUse": "Port {0} is already in use.",
+  "monitor.folderMissing": "The folder of this monitor no longer exists.",
+  "monitor.environmentMissing": "The environment of this monitor no longer exists.",
   "mock.title": "Mock servers",
   "mock.new": "New mock server",
   "mock.newName": "Mock server",
