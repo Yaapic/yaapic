@@ -676,7 +676,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-52](milestone-6-automation/M6-52-avalonia-runner-results.md) | Avalonia: Runner window, results pane | unix | M6-51, M6-45 | done |
 | [M6-53](milestone-6-automation/M6-53-avalonia-load-test-window.md) | Avalonia: Load test window | unix | M6-51, M6-46 | done |
 | [M6-54](milestone-6-automation/M6-54-avalonia-mock-servers-window.md) | Avalonia: Mock servers window | unix | M6-50, M6-47 | done |
-| [M6-55](milestone-6-automation/M6-55-avalonia-monitors-window.md) | Avalonia: Monitors window | unix | M6-50, M6-48 | todo |
+| [M6-55](milestone-6-automation/M6-55-avalonia-monitors-window.md) | Avalonia: Monitors window | unix | M6-50, M6-48 | done |
 | [M6-56](milestone-6-automation/M6-56-avalonia-automation-entry-points.md) | Avalonia: automation entry points and status bar items | unix | M6-49, M6-52, M6-53, M6-54, M6-55 | todo |
 | [M6-57](milestone-6-automation/M6-57-end-to-end-runner.md) | End-to-end tests: Runner | any | M6-42 | done |
 | [M6-58](milestone-6-automation/M6-58-end-to-end-mocks-and-load.md) | End-to-end tests: mock servers and load tests | any | M6-42 | done |
