@@ -654,7 +654,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-30](milestone-6-automation/M6-30-core-mock-responder.md) | Core: mock responder and templating | any | M6-29 | done |
 | [M6-31](milestone-6-automation/M6-31-core-mock-from-collection.md) | Core: generate a mock server from a folder | any | M6-14, M6-27 | done |
 | [M6-32](milestone-6-automation/M6-32-infra-http11-reader-writer.md) | Infrastructure: HTTP/1.1 request reader and response writer | any | M6-29 | done |
-| [M6-33](milestone-6-automation/M6-33-infra-loopback-mock-host.md) | Infrastructure: loopback HTTP host for mock servers | any | M6-32 | todo |
+| [M6-33](milestone-6-automation/M6-33-infra-loopback-mock-host.md) | Infrastructure: loopback HTTP host for mock servers | any | M6-32 | done |
 | [M6-34](milestone-6-automation/M6-34-core-mock-server-service.md) | Core: mock server service | any | M6-28, M6-30, M6-33 | todo |
 | [M6-35](milestone-6-automation/M6-35-viewmodel-mock-servers.md) | ViewModel: mock servers | any | M6-21, M6-31, M6-34 | todo |
 | [M6-36](milestone-6-automation/M6-36-domain-core-monitor-model.md) | Domain and Core: monitor model and store ports | any | M6-05, M6-14 | todo |

@@ -1387,6 +1387,10 @@ public static class Strings
     public static string MockGeneratedName(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} mock", "{0} mock"), a0);
 
+    /// <summary>Port {0} is already in use.</summary>
+    public static string MockPortInUse(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Port {0} is already in use.", "Le port {0} est déjà utilisé."), a0);
+
     /// <summary>No redirect was received within 3 minutes. Try again.</summary>
     public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
 
