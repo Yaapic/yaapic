@@ -1,6 +1,7 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
 using Avalonia.Media;
+using Yaapic.Core.LoadTesting;
 using Yaapic.Core.Runner;
 using Yaapic.Domain.Scripting;
 using Yaapic.Localization;
@@ -31,6 +32,23 @@ public static class RunnerMap
                 new(Strings.RunnerTileDuration, duration),
             ]
             : []);
+
+    /// <summary>Builds the load test tiles from requests, throughput, average, p95, error rate and active users.</summary>
+    public static FuncMultiValueConverter<object?, IReadOnlyList<SummaryTile>> LoadTiles { get; } = new(values =>
+        values.ToArray() is [long requests, string throughput, string average, string p95, string errorRate, int users]
+            ?
+            [
+                new(Strings.LoadRequests, requests.ToString(CultureInfo.CurrentCulture)),
+                new(Strings.LoadThroughput, throughput),
+                new(Strings.LoadAverage, average),
+                new(Strings.LoadP95, p95),
+                new(Strings.LoadErrorRate, errorRate),
+                new(Strings.LoadActiveUsers, users.ToString(CultureInfo.CurrentCulture)),
+            ]
+            : []);
+
+    /// <summary>Converts a load profile to the index of its option in the profile box.</summary>
+    public static FuncValueConverter<LoadProfile, int> ProfileIndex { get; } = new(p => p == LoadProfile.RampUp ? 1 : 0);
 
     /// <summary>Wraps the tests of the selected row in display view models.</summary>
     public static FuncValueConverter<IReadOnlyList<TestResult>?, IReadOnlyList<TestResultItemViewModel>> Tests { get; } =
