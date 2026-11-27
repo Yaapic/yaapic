@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Yaapic.Core.Preferences;
 using Yaapic.ViewModels.Runner;
 
 namespace Yaapic.App.WinUI.Views;
@@ -17,7 +18,7 @@ public sealed partial class RunnerView : UserControl
     public RunnerView()
     {
         InitializeComponent();
-        _ = new ColumnResizer(Root, LeftColumn, Splitter);
+        _ = new ColumnResizer(Root, LeftColumn, Splitter, PaneId.RunnerList, ((App)Application.Current).Panes);
         PaneLayout.Attach(Pane, Options, Footer);
     }
 

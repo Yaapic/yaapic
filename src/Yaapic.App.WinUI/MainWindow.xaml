@@ -113,7 +113,7 @@
                IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.Palette.LastError), Mode=OneWay}"
                Message="{x:Bind ViewModel.Palette.LastError, Mode=OneWay}"/>
     </StackPanel>
-    <Grid Grid.Row="2">
+    <Grid x:Name="Body" Grid.Row="2">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="48"/>
         <ColumnDefinition Width="Auto"/>
@@ -258,7 +258,7 @@
           </Button>
         </Grid>
       </Border>
-      <Grid Grid.Column="1" Width="272" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
+      <Grid x:Name="Sidebar" Grid.Column="1" Width="272" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
             BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,1,0"
             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRequestsSection), Mode=OneWay}">
         <Grid.RowDefinitions>
@@ -344,6 +344,14 @@
                      Style="{StaticResource YaapicBodySmallTextStyle}"/>
           <Button Content="{x:Bind loc:Strings.PaletteNewRequest}" HorizontalAlignment="Center" Click="OnAddTab"/>
         </StackPanel>
+        <v:SplitterHandle x:Name="SidebarSplitter" Grid.RowSpan="3" Width="5" HorizontalAlignment="Right" Background="Transparent"
+                          IsTabStop="True" UseSystemFocusVisuals="True" AutomationProperties.Name="{x:Bind loc:Strings.ShellResizeSidebar}">
+          <v:SplitterHandle.Template>
+            <ControlTemplate TargetType="Control">
+              <Border Background="Transparent"/>
+            </ControlTemplate>
+          </v:SplitterHandle.Template>
+        </v:SplitterHandle>
       </Grid>
       <Grid Grid.Column="2">
       <Grid Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRequestsSection), Mode=OneWay}">

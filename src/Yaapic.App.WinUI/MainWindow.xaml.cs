@@ -4,6 +4,7 @@ using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Windows.System;
+using Yaapic.Core.Preferences;
 using Yaapic.Localization;
 using Yaapic.ViewModels.Collections;
 using Yaapic.ViewModels.Requests;
@@ -29,6 +30,7 @@ public sealed partial class MainWindow : Window
     public MainWindow()
     {
         InitializeComponent();
+        _ = new Views.ColumnResizer(Body, Sidebar, SidebarSplitter, PaneId.Sidebar, ((App)Application.Current).Panes, 48 + 400); // the rail and a usable editor
         // Mica is applied to the title bar only: the content grid paints an opaque surface.
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(TitleBar);

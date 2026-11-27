@@ -49,10 +49,14 @@ public static class AccentChoice
 /// <param name="Language">The interface language.</param>
 /// <param name="Accent">The accent choice (see <see cref="AccentChoice"/>).</param>
 /// <param name="CodegenTarget">The id of the last code generation target.</param>
+/// <remarks>The pane widths are in <see cref="Panes"/>.</remarks>
 public sealed record UserPreferences(AppLanguage Language = AppLanguage.System, string Accent = AccentChoice.Default, string CodegenTarget = "curl")
 {
     /// <summary>Gets the preferences of a user who never changed anything.</summary>
     public static UserPreferences Default { get; } = new();
+
+    /// <summary>Gets the remembered widths of the resizable panes.</summary>
+    public PaneWidths Panes { get; init; } = PaneWidths.Default;
 }
 
 /// <summary>Persists <see cref="UserPreferences"/>.</summary>

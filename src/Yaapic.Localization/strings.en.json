@@ -701,6 +701,7 @@
   "runner.requests": "Requests",
   "runner.folder": "Folder",
   "runner.resizeList": "Resize the request list",
+  "shell.resizeSidebar": "Resize the sidebar",
   "runner.chooseFolder": "Choose a folder to run",
   "runner.selectAll": "Select all",
   "runner.selectNone": "Select none",

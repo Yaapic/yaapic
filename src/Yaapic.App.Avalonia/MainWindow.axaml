@@ -118,7 +118,7 @@
     </Border>
 
     <!-- Column widths are literals: a GridLength cannot come from the x:Double resources. 48 = YaapicRailWidth, the sidebar column is Auto and the sidebar Border carries the 272 = YaapicSidebarWidth. -->
-    <Grid Grid.Row="2" ColumnDefinitions="48,Auto,*">
+    <Grid x:Name="Body" Grid.Row="2" ColumnDefinitions="48,Auto,*">
       <Border Grid.Column="0" Background="{DynamicResource YaapicSurfaceAppBrush}"
               BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}">
         <DockPanel Margin="0,8">
@@ -201,7 +201,7 @@
         </DockPanel>
       </Border>
 
-      <Border Grid.Column="1" Width="272" Background="{DynamicResource YaapicSurfaceSidebarBrush}"
+      <Border x:Name="Sidebar" Grid.Column="1" Width="272" Background="{DynamicResource YaapicSurfaceSidebarBrush}"
               BorderThickness="0,0,1,0" BorderBrush="{DynamicResource YaapicBorderSubtleBrush}"
               IsVisible="{Binding IsRequestsSection}">
         <Grid RowDefinitions="40,Auto,*">
@@ -289,6 +289,9 @@
                        Foreground="{DynamicResource YaapicTextSecondaryBrush}" />
             <Button Content="{x:Static loc:Strings.PaletteNewRequest}" HorizontalAlignment="Center" Command="{Binding Requests.NewRequestCommand}" />
           </StackPanel>
+          <Border x:Name="SidebarSplitter" Grid.RowSpan="3" Width="5" HorizontalAlignment="Right" Classes="paneHandle" Background="Transparent"
+                  Cursor="SizeWestEast" AutomationProperties.AccessibilityView="Content" AutomationProperties.ControlTypeOverride="Thumb"
+                  AutomationProperties.Name="{x:Static loc:Strings.ShellResizeSidebar}" />
         </Grid>
       </Border>
 

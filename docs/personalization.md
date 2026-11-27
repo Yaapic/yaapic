@@ -1,7 +1,7 @@
-# Personalization: language and accent colour
+# Personalization: language, accent colour and layout
 
-Both are per-user settings (`preferences.json` next to `updates.json` in the per-user data directory, never in a workspace),
-chosen in **Settings** (menu, or the command palette: "Settings", "Change language", "Change accent colour").
+These are per-user settings (`preferences.json` next to `updates.json` in the per-user data directory, never in a workspace);
+language and accent are chosen in **Settings** (menu, or the command palette: "Settings", "Change language", "Change accent colour").
 Decisions and alternatives: [ADR 0012](adr/0012-localization-and-accent.md).
 
 ## Language
@@ -50,6 +50,25 @@ At start-up and on every change, each front-end rewrites the accent entries of i
 (`AccentApplier`); the list of entries comes from `AccentResourceKeys`, generated from the token file by `TokenGenerator`, so a
 new accent alias in the tokens is picked up after regenerating (`YAAPIC_UPDATE_SNAPSHOTS=1` on the Design.Tokens tests).
 WinUI edits the existing brushes in place; Avalonia replaces the entries.
+
+## Layout: pane widths
+
+The widths of three resizable panes are remembered per user in the same `preferences.json` (`sidebarWidth`, `runnerListWidth`,
+`loadTestListWidth`, device-independent units, plain numbers):
+
+| Pane | Default | Min | Max |
+|---|---|---|---|
+| Main window sidebar (requests, collections, history) | 272 | 200 | 440 |
+| Runner request list | 360 | 280 | 520 |
+| Load test request list | 360 | 280 | 520 |
+
+Drag the splitter on the pane edge, or focus it and press Left and Right (16 units a step on WinUI and for the sidebar, 10 on the
+Avalonia list splitters); a double click resets the default. The width is saved when a drag ends (or after a key press or the reset),
+never on every pixel. `PaneLimits` and `PaneWidths` (Core) clamp every value, so a missing, NaN, negative or huge value in the file
+falls back to the default or to the nearest limit; a width saved on a big window is also capped at run time to leave the editor
+(or results) room on a small one, and comes back when the window grows. `PaneLayoutSettings` serves the loaded widths and saves a
+change by merging it into the stored preferences (language, accent and code generation target are kept).
+The accessible names are "Resize the sidebar" and "Resize the request list".
 
 ## Screenshots
 

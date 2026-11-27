@@ -125,7 +125,9 @@ public sealed partial class SettingsViewModel : ObservableObject
         ErrorMessage = null;
         try
         {
-            await _store.SaveAsync(preferences, CancellationToken.None);
+            // Merge into what is stored: the code generation target and the pane widths are saved by others meanwhile.
+            var stored = await _store.LoadAsync(CancellationToken.None);
+            await _store.SaveAsync(stored with { Language = preferences.Language, Accent = preferences.Accent }, CancellationToken.None);
         }
         catch (StorageException ex)
         {

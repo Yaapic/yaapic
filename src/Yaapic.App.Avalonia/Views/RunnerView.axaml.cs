@@ -1,4 +1,6 @@
 using Avalonia.Controls;
+using Yaapic.App.Avalonia.Presentation;
+using Yaapic.Core.Preferences;
 using Yaapic.ViewModels.Runner;
 
 namespace Yaapic.App.Avalonia.Views;
@@ -7,7 +9,11 @@ namespace Yaapic.App.Avalonia.Views;
 public sealed partial class RunnerView : UserControl
 {
     /// <summary>Initializes the view.</summary>
-    public RunnerView() => InitializeComponent();
+    public RunnerView()
+    {
+        InitializeComponent();
+        PaneResizer.Attach(Root.ColumnDefinitions[0], ListSplitter, PaneId.RunnerList, ((App)global::Avalonia.Application.Current!).Panes);
+    }
 
     /// <summary>Gets the host the results pane is placed in.</summary>
     public Border Results => ResultsHost;

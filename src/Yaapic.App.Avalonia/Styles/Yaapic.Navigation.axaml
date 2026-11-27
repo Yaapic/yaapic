@@ -322,6 +322,9 @@
   <Style Selector="GridSplitter.columns:pointerover">
     <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
   </Style>
+  <Style Selector="Border.paneHandle:focus-visible, Border.paneHandle:pointerover">
+    <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
+  </Style>
   <Style Selector="GridSplitter.rows:pointerover">
     <Setter Property="Background" Value="{DynamicResource YaapicOverlayHoverBrush}" />
   </Style>

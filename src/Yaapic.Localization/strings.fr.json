@@ -701,6 +701,7 @@
   "runner.requests": "Requêtes",
   "runner.folder": "Dossier",
   "runner.resizeList": "Redimensionner la liste des requêtes",
+  "shell.resizeSidebar": "Redimensionner le panneau latéral",
   "runner.chooseFolder": "Choisissez un dossier",
   "runner.selectAll": "Tout sélectionner",
   "runner.selectNone": "Tout désélectionner",
