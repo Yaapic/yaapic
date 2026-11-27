@@ -1501,11 +1501,81 @@ public static class Strings
     /// <summary>Mock servers</summary>
     public static string MockTitle => Localizer.Pick("Mock servers", "Serveurs de mock");
 
+    /// <summary>Enabled</summary>
+    public static string MonitorEnabled => Localizer.Pick("Enabled", "Activé");
+
+    /// <summary>Environment</summary>
+    public static string MonitorEnvironment => Localizer.Pick("Environment", "Environnement");
+
     /// <summary>The environment of this monitor no longer exists.</summary>
     public static string MonitorEnvironmentMissing => Localizer.Pick("The environment of this monitor no longer exists.", "L'environnement de ce monitor n'existe plus.");
 
+    /// <summary>Every {0}</summary>
+    public static string MonitorEvery(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Every {0}", "Toutes les {0}"), a0);
+
+    /// <summary>Monitor '{0}' failed: {1}</summary>
+    public static string MonitorFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Monitor '{0}' failed: {1}", "Le monitor « {0} » a échoué : {1}"), a0, a1);
+
+    /// <summary>Folder</summary>
+    public static string MonitorFolder => Localizer.Pick("Folder", "Dossier");
+
     /// <summary>The folder of this monitor no longer exists.</summary>
     public static string MonitorFolderMissing => Localizer.Pick("The folder of this monitor no longer exists.", "Le dossier de ce monitor n'existe plus.");
+
+    /// <summary>History</summary>
+    public static string MonitorHistory => Localizer.Pick("History", "Historique");
+
+    /// <summary>Run every</summary>
+    public static string MonitorInterval => Localizer.Pick("Run every", "Exécuter toutes les");
+
+    /// <summary>Last run</summary>
+    public static string MonitorLastRun => Localizer.Pick("Last run", "Dernière exécution");
+
+    /// <summary>Monitors run only while Yaapic is open on this computer.</summary>
+    public static string MonitorLocalNote => Localizer.Pick("Monitors run only while Yaapic is open on this computer.", "Les monitors ne s'exécutent que lorsque Yaapic est ouvert sur cet ordinateur.");
+
+    /// <summary>Never</summary>
+    public static string MonitorNever => Localizer.Pick("Never", "Jamais");
+
+    /// <summary>New monitor</summary>
+    public static string MonitorNew => Localizer.Pick("New monitor", "Nouveau monitor");
+
+    /// <summary>Monitor</summary>
+    public static string MonitorNewName => Localizer.Pick("Monitor", "Monitor");
+
+    /// <summary>Next run</summary>
+    public static string MonitorNextRun => Localizer.Pick("Next run", "Prochaine exécution");
+
+    /// <summary>No environment</summary>
+    public static string MonitorNoEnvironment => Localizer.Pick("No environment", "Aucun environnement");
+
+    /// <summary>{0}/{1} failed</summary>
+    public static string MonitorRequestsFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}/{1} failed", "{0}/{1} en échec"), a0, a1);
+
+    /// <summary>Run now</summary>
+    public static string MonitorRunNow => Localizer.Pick("Run now", "Exécuter maintenant");
+
+    /// <summary>Running...</summary>
+    public static string MonitorRunning => Localizer.Pick("Running...", "En cours...");
+
+    /// <summary>Monitors: {0} failing</summary>
+    public static string MonitorStatusBar(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Monitors: {0} failing", "Monitors : {0} en échec"), a0);
+
+    /// <summary>Error</summary>
+    public static string MonitorStatusError => Localizer.Pick("Error", "Erreur");
+
+    /// <summary>Failed</summary>
+    public static string MonitorStatusFailed => Localizer.Pick("Failed", "Échoué");
+
+    /// <summary>Passed</summary>
+    public static string MonitorStatusPassed => Localizer.Pick("Passed", "Réussi");
+
+    /// <summary>Monitors</summary>
+    public static string MonitorTitle => Localizer.Pick("Monitors", "Monitors");
 
     /// <summary>No redirect was received within 3 minutes. Try again.</summary>
     public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
