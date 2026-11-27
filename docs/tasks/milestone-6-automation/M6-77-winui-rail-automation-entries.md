@@ -1,6 +1,6 @@
 # M6-77: WinUI: automation entries on the rail
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-76
 
@@ -40,13 +40,20 @@ Showing the views in the main area and removing the tool windows (M6-78); Avalon
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke on the published exe (UI Automation or by hand), dark and light: the four entries appear under a separator after
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke on the published exe (UI Automation or by hand), dark and light: the four entries appear under a separator after
   History with their tooltips; clicking one highlights it (and only it) and opens/activates its tool window (transitional); clicking
   Collections or History moves the highlight back; the folder context menu and the status bar items also move the highlight. Record
   what was not run in Notes.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the automation entries to the rail`
+
+## Notes
+
+Verified on the published exe through UI Automation (dark theme, French locale): the four entries (AutomationIds `RailRunner`, `RailLoadTest`,
+`RailMockServers`, `RailMonitors`) appear under a separator after History with their tooltips; clicking each opens its tool window and
+highlights only that entry; Collections and History move the highlight back. Not run: light theme, the folder context menu and status bar
+items moving the highlight (covered by the M6-76 view model tests).

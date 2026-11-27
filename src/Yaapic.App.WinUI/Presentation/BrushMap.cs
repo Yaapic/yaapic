@@ -169,15 +169,10 @@ public static class BrushMap
         _ => "YaapicTextSecondaryBrush",
     });
 
-    /// <summary>Gets the icon brush of the collections rail entry.</summary>
-    /// <param name="mode">The sidebar mode.</param>
+    /// <summary>Gets the icon brush of a rail entry.</summary>
+    /// <param name="selected">Whether the entry is selected.</param>
     /// <returns>The on-accent brush when selected, else the secondary text brush.</returns>
-    public static Brush CollectionsRail(SidebarMode mode) => Rail(mode == SidebarMode.Collections);
-
-    /// <summary>Gets the icon brush of the history rail entry.</summary>
-    /// <param name="mode">The sidebar mode.</param>
-    /// <returns>The on-accent brush when selected, else the secondary text brush.</returns>
-    public static Brush HistoryRail(SidebarMode mode) => Rail(mode == SidebarMode.History);
+    public static Brush RailSelected(bool selected) => Rail(selected);
 
     private static Brush Rail(bool selected) => Get(selected ? "YaapicAccentOnBrush" : "YaapicTextSecondaryBrush");
 

@@ -131,16 +131,16 @@
             <Grid>
               <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
                          VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
-                         Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+                         Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsCollectionsSelected), Mode=OneWay}"/>
               <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
-                      Visibility="{x:Bind p:VisibilityMap.WhenCollections(ViewModel.Mode), Mode=OneWay}"/>
+                      Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsCollectionsSelected), Mode=OneWay}"/>
               <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
                       AutomationProperties.Name="{x:Bind loc:Strings.CollectionsTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.CollectionsTitle}"
                       Command="{x:Bind ViewModel.ShowCollectionsCommand, Mode=OneWay}">
                 <Viewbox Width="20" Height="20">
                   <Canvas Width="24" Height="24">
                     <Path Data="{StaticResource YiCollection}" StrokeThickness="1.8" StrokeLineJoin="Round"
-                          Stroke="{x:Bind p:BrushMap.CollectionsRail(ViewModel.Mode), Mode=OneWay}"/>
+                          Stroke="{x:Bind p:BrushMap.RailSelected(ViewModel.IsCollectionsSelected), Mode=OneWay}"/>
                   </Canvas>
                 </Viewbox>
               </Button>
@@ -148,9 +148,9 @@
             <Grid>
               <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
                          VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
-                         Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+                         Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsHistorySelected), Mode=OneWay}"/>
               <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
-                      Visibility="{x:Bind p:VisibilityMap.WhenHistory(ViewModel.Mode), Mode=OneWay}"/>
+                      Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsHistorySelected), Mode=OneWay}"/>
               <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
                       AutomationProperties.Name="{x:Bind loc:Strings.HistoryTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.HistoryTitle}"
                       Command="{x:Bind ViewModel.ShowHistoryCommand, Mode=OneWay}">
@@ -158,11 +158,90 @@
                   <Canvas Width="24" Height="24">
                     <Path Data="{StaticResource YiHistory}" StrokeThickness="1.8" StrokeLineJoin="Round"
                           StrokeStartLineCap="Round" StrokeEndLineCap="Round"
-                          Stroke="{x:Bind p:BrushMap.HistoryRail(ViewModel.Mode), Mode=OneWay}"/>
+                          Stroke="{x:Bind p:BrushMap.RailSelected(ViewModel.IsHistorySelected), Mode=OneWay}"/>
                   </Canvas>
                 </Viewbox>
               </Button>
             </Grid>
+            <StackPanel Spacing="4" Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.CanAutomate), Mode=OneWay}">
+              <Rectangle Width="24" Height="1" Margin="0,4" Fill="{ThemeResource YaapicBorderSubtleBrush}"/>
+              <Grid>
+                <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
+                           VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                           Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRunnerSection), Mode=OneWay}"/>
+                <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
+                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRunnerSection), Mode=OneWay}"/>
+                <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                        AutomationProperties.AutomationId="RailRunner"
+                        AutomationProperties.Name="{x:Bind loc:Strings.RunnerTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.RunnerTitle}"
+                        Command="{x:Bind ViewModel.ShowRunnerCommand, Mode=OneWay}">
+                  <Viewbox Width="20" Height="20">
+                    <Canvas Width="24" Height="24">
+                      <Path Data="{StaticResource YiRunner}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                            Stroke="{x:Bind p:BrushMap.RailSelected(ViewModel.IsRunnerSection), Mode=OneWay}"/>
+                    </Canvas>
+                  </Viewbox>
+                </Button>
+              </Grid>
+              <Grid>
+                <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
+                           VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                           Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsLoadTestSection), Mode=OneWay}"/>
+                <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
+                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsLoadTestSection), Mode=OneWay}"/>
+                <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                        AutomationProperties.AutomationId="RailLoadTest"
+                        AutomationProperties.Name="{x:Bind loc:Strings.LoadTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.LoadTitle}"
+                        Command="{x:Bind ViewModel.ShowLoadTestCommand, Mode=OneWay}">
+                  <Viewbox Width="20" Height="20">
+                    <Canvas Width="24" Height="24">
+                      <Path Data="{StaticResource YiTimeline}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                            Stroke="{x:Bind p:BrushMap.RailSelected(ViewModel.IsLoadTestSection), Mode=OneWay}"/>
+                    </Canvas>
+                  </Viewbox>
+                </Button>
+              </Grid>
+              <Grid>
+                <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
+                           VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                           Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsMockServersSection), Mode=OneWay}"/>
+                <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
+                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsMockServersSection), Mode=OneWay}"/>
+                <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                        AutomationProperties.AutomationId="RailMockServers"
+                        AutomationProperties.Name="{x:Bind loc:Strings.MockTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.MockTitle}"
+                        Command="{x:Bind ViewModel.ShowMockServersCommand, Mode=OneWay}">
+                  <Viewbox Width="20" Height="20">
+                    <Canvas Width="24" Height="24">
+                      <Path Data="{StaticResource YiMock}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                            Stroke="{x:Bind p:BrushMap.RailSelected(ViewModel.IsMockServersSection), Mode=OneWay}"/>
+                    </Canvas>
+                  </Viewbox>
+                </Button>
+              </Grid>
+              <Grid>
+                <Rectangle Width="3" Height="16" RadiusX="2" RadiusY="2" HorizontalAlignment="Left"
+                           VerticalAlignment="Center" Fill="{ThemeResource YaapicAccentFillBrush}"
+                           Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsMonitorsSection), Mode=OneWay}"/>
+                <Border Width="36" Height="36" CornerRadius="6" Background="{ThemeResource YaapicAccentFillBrush}"
+                        Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsMonitorsSection), Mode=OneWay}"/>
+                <Button Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
+                        AutomationProperties.AutomationId="RailMonitors"
+                        AutomationProperties.Name="{x:Bind loc:Strings.MonitorTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.MonitorTitle}"
+                        Command="{x:Bind ViewModel.ShowMonitorsCommand, Mode=OneWay}">
+                  <Viewbox Width="20" Height="20">
+                    <Canvas Width="24" Height="24">
+                      <Path Data="{StaticResource YiMonitor}" StrokeThickness="1.8" StrokeLineJoin="Round"
+                            StrokeStartLineCap="Round" StrokeEndLineCap="Round"
+                            Stroke="{x:Bind p:BrushMap.RailSelected(ViewModel.IsMonitorsSection), Mode=OneWay}"/>
+                    </Canvas>
+                  </Viewbox>
+                </Button>
+              </Grid>
+            </StackPanel>
           </StackPanel>
           <Button Grid.Row="2" Style="{StaticResource YaapicRailButtonStyle}" HorizontalAlignment="Center"
                   AutomationProperties.Name="{x:Bind loc:Strings.SettingsTitle}" ToolTipService.ToolTip="{x:Bind loc:Strings.SettingsTitle}">
