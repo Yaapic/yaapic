@@ -172,9 +172,13 @@ public sealed partial class CollectionTreeViewModel : ObservableObject
     /// <summary>Gets the collection (top-level folder) that contains a request.</summary>
     /// <param name="requestId">The request identifier.</param>
     /// <returns>The saved collection in the loaded tree; <see langword="null"/> for an unfiled or unknown request.</returns>
-    public FolderDefinition? FindCollection(Guid requestId) =>
-        _tree.FirstOrDefault(root => root.Kind == CollectionNodeKind.Folder && root.Descendants().Any(n => n.Id == requestId && n.Kind == CollectionNodeKind.Request))
-            ?.Folder;
+    public FolderDefinition? FindCollection(Guid requestId) => FindCollectionNode(requestId)?.Folder;
+
+    /// <summary>Gets the collection node (top-level folder with its children) that contains a request.</summary>
+    /// <param name="requestId">The request identifier.</param>
+    /// <returns>The node in the loaded tree; <see langword="null"/> for an unfiled or unknown request.</returns>
+    public CollectionNode? FindCollectionNode(Guid requestId) =>
+        _tree.FirstOrDefault(root => root.Kind == CollectionNodeKind.Folder && root.Descendants().Any(n => n.Id == requestId && n.Kind == CollectionNodeKind.Request));
 
     /// <summary>Gets the folders that contain a request, outermost (the collection) first.</summary>
     /// <param name="requestId">The request identifier.</param>

@@ -392,6 +392,11 @@ public sealed partial class ShellViewModel : ObservableObject, IVaultReloader
             resource.Dispose();
         }
 
+        foreach (var resource in _ownedAsyncResources)
+        {
+            await resource.DisposeAsync();
+        }
+
         return true;
     }
 

@@ -245,6 +245,9 @@ public static class Strings
     /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
     public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");
 
+    /// <summary>Create a mock server...</summary>
+    public static string CollectionsCreateMock => Localizer.Pick("Create a mock server...", "Créer un serveur de mock...");
+
     /// <summary>What is this collection for?</summary>
     public static string CollectionsDescriptionPlaceholder => Localizer.Pick("What is this collection for?", "À quoi sert cette collection ?");
 
@@ -263,6 +266,12 @@ public static class Strings
 
     /// <summary>Import...</summary>
     public static string CollectionsImport => Localizer.Pick("Import...", "Importer...");
+
+    /// <summary>Load test...</summary>
+    public static string CollectionsLoadTest => Localizer.Pick("Load test...", "Test de charge...");
+
+    /// <summary>Monitor folder...</summary>
+    public static string CollectionsMonitorFolder => Localizer.Pick("Monitor folder...", "Surveiller le dossier...");
 
     /// <summary>Move to</summary>
     public static string CollectionsMoveTo => Localizer.Pick("Move to", "Déplacer vers");
@@ -291,6 +300,9 @@ public static class Strings
 
     /// <summary>Requests</summary>
     public static string CollectionsRequests => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Run folder...</summary>
+    public static string CollectionsRunFolder => Localizer.Pick("Run folder...", "Lancer le dossier...");
 
     /// <summary>Collections</summary>
     public static string CollectionsTitle => Localizer.Pick("Collections", "Collections");
@@ -1762,8 +1774,17 @@ public static class Strings
     /// <summary>Import a collection or request...</summary>
     public static string PaletteImport => Localizer.Pick("Import a collection or request...", "Importer une collection ou une requête...");
 
+    /// <summary>Load test...</summary>
+    public static string PaletteLoadTest => Localizer.Pick("Load test...", "Test de charge...");
+
     /// <summary>Manage environments</summary>
     public static string PaletteManageEnvironments => Localizer.Pick("Manage environments", "Gérer les environnements");
+
+    /// <summary>Mock servers</summary>
+    public static string PaletteMockServers => Localizer.Pick("Mock servers", "Serveurs de mock");
+
+    /// <summary>Monitors</summary>
+    public static string PaletteMonitors => Localizer.Pick("Monitors", "Moniteurs");
 
     /// <summary>New collection</summary>
     public static string PaletteNewCollection => Localizer.Pick("New collection", "Nouvelle collection");
@@ -1791,6 +1812,9 @@ public static class Strings
 
     /// <summary>Restart to update</summary>
     public static string PaletteRestartToUpdate => Localizer.Pick("Restart to update", "Redémarrer pour mettre à jour");
+
+    /// <summary>Run collection...</summary>
+    public static string PaletteRunCollection => Localizer.Pick("Run collection...", "Lancer la collection...");
 
     /// <summary>Save request</summary>
     public static string PaletteSaveRequest => Localizer.Pick("Save request", "Enregistrer la requête");
@@ -2098,6 +2122,9 @@ public static class Strings
     /// <summary>{0} of {1} selected</summary>
     public static string RunnerSelectedCount(object? a0, object? a1) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} of {1} selected", "{0} sur {1} sélectionnées"), a0, a1);
+
+    /// <summary>Runner</summary>
+    public static string RunnerStatusBar => Localizer.Pick("Runner", "Runner");
 
     /// <summary>Run canceled</summary>
     public static string RunnerStatusCanceled => Localizer.Pick("Run canceled", "Exécution annulée");

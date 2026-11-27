@@ -1,6 +1,6 @@
 # M6-41: ViewModel: palette commands, shell entries and status items for the M6 tools
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-21, M6-26, M6-35, M6-40
 
@@ -45,11 +45,11 @@ Composition (M6-42), windows and menus (WinUI and Avalonia cards).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests` (tool view models built over fakes as in M6-21, M6-26, M6-35, M6-40): attach twice throws; not
+- [x] Tests in `Yaapic.ViewModels.Tests` (tool view models built over fakes as in M6-21, M6-26, M6-35, M6-40): attach twice throws; not
   attached: commands disabled, events not raised, palette entries absent; each folder command opens/creates and raises its event, and is
   disabled for a request node; palette entries listed and run (with and without an active collection request); status texts follow the
   tool view models; `OwnAsync` resources disposed on close after the `IDisposable` ones.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 
