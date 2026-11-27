@@ -76,7 +76,30 @@ public class LoadTestRunnerTests
         public async Task StepAsync()
         {
             Time.Advance(TimeSpan.FromSeconds(1));
-            await Task.Delay(40, TestContext.Current.CancellationToken);
+            await SettleAsync();
+        }
+
+        /// <summary>Waits until the request count has not moved for 50 ms; a fixed delay is too short on a loaded machine.</summary>
+        public async Task SettleAsync()
+        {
+            int last = -1;
+            int stable = 0;
+            for (int i = 0; i < 500 && stable < 5; i++)
+            {
+                await Task.Delay(10, TestContext.Current.CancellationToken);
+                int now = Transport.Urls.Count;
+                stable = now == last ? stable + 1 : 0;
+                last = now;
+            }
+        }
+
+        /// <summary>Waits until the transport has seen <paramref name="count"/> requests; a fixed delay is too short on a loaded machine.</summary>
+        public async Task WaitForRequestsAsync(int count)
+        {
+            for (int i = 0; i < 500 && Transport.Urls.Count < count; i++)
+            {
+                await Task.Delay(10, TestContext.Current.CancellationToken);
+            }
         }
 
         public async Task<LoadTestResult> FinishAsync(Task<LoadTestResult> run)
@@ -105,7 +128,7 @@ public class LoadTestRunnerTests
     {
         var rig = new Rig();
         var run = rig.Runner.RunAsync(Plan([Item()], users: 3), null, CancellationToken.None);
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        await rig.WaitForRequestsAsync(3);
 
         Assert.Equal(3, rig.Transport.Urls.Count);
 
@@ -123,7 +146,7 @@ public class LoadTestRunnerTests
         var rig = new Rig();
         using var cts = new CancellationTokenSource();
         var run = rig.Runner.RunAsync(Plan([Item()], users: 4, profile: LoadProfile.RampUp, ramp: 4), null, cts.Token);
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        await rig.SettleAsync();
         int[] counts = [rig.Transport.Urls.Count];
         await rig.StepAsync();
         counts = [.. counts, rig.Transport.Urls.Count];
@@ -142,7 +165,7 @@ public class LoadTestRunnerTests
         var rig = new Rig();
         using var cts = new CancellationTokenSource();
         var run = rig.Runner.RunAsync(Plan([Item()], think: 2000), null, cts.Token);
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        await rig.SettleAsync();
         int[] counts = [];
         for (int i = 0; i < 3; i++)
         {
@@ -196,7 +219,7 @@ public class LoadTestRunnerTests
         IterationDataRow[] rows = [new([new("id", "1")]), new([new("id", "2")]), new([new("id", "3")])];
         using var cts = new CancellationTokenSource();
         var run = rig.Runner.RunAsync(Plan([Item("http://h/{{id}}")], users: 3, data: rows), null, cts.Token);
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        await rig.WaitForRequestsAsync(3);
         string[] first = [.. rig.Transport.Urls.Order()];
         await rig.StepAsync();
         string[] all = [.. rig.Transport.Urls];
@@ -213,7 +236,7 @@ public class LoadTestRunnerTests
         var rig = new Rig();
         using var cts = new CancellationTokenSource();
         var run = rig.Runner.RunAsync(Plan([Item()], users: 2), null, cts.Token);
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        await rig.SettleAsync();
         await rig.StepAsync();
         await rig.StepAsync();
         await cts.CancelAsync();
