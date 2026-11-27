@@ -72,6 +72,16 @@ public sealed class RunnerViewModelTests
         CollectionNode.ForFolder(FolderDefinition.Create(name), children);
 
     [Fact]
+    public async Task Rows_carry_the_iteration_number_only_when_the_run_has_several_iterations()
+    {
+        _vm.Setup.Iterations = 2;
+
+        await _vm.RunCommand.ExecuteAsync(null);
+
+        Assert.Equal(["#1", "#1", "#1", "#1", "#2", "#2", "#2", "#2"], _vm.Rows.Select(r => r.IterationText));
+    }
+
+    [Fact]
     public async Task A_run_fills_the_rows_the_summary_the_status_and_the_console()
     {
         List<RunResult> completed = [];
@@ -86,6 +96,7 @@ public sealed class RunnerViewModelTests
         Assert.False(_vm.IsRunning);
         Assert.Equal(["aok", "bbad", "cskp", "derr"], _vm.Rows.Select(r => r.Name));
         Assert.Equal([1, 1, 1, 1], _vm.Rows.Select(r => r.Iteration));
+        Assert.All(_vm.Rows, r => Assert.Equal("", r.IterationText));
         Assert.Equal(["Passed", "Failed", "Skipped", "Error"], _vm.Rows.Select(r => r.OutcomeText));
         Assert.Equal(["200", "200", "-", "-"], _vm.Rows.Select(r => r.StatusText));
         Assert.Equal(["1/1", "0/1", "", ""], _vm.Rows.Select(r => r.TestsText));

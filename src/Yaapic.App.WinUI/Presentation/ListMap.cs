@@ -1,5 +1,8 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Import;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
@@ -95,6 +98,37 @@ public static class ListMap
     /// <returns>The same collection.</returns>
     public static ObservableCollection<RunnerItemViewModel> RunnerItems(ObservableCollection<RunnerItemViewModel> items) => items;
 
+    /// <summary>Passes the visible Runner result rows through: the collection is observable and grows during a run.</summary>
+    /// <param name="rows">The rows that match the filter.</param>
+    /// <returns>The same collection.</returns>
+    public static ObservableCollection<RunnerResultRowViewModel> RunnerRows(ObservableCollection<RunnerResultRowViewModel> rows) => rows;
+
+    /// <summary>Wraps the tests of the selected Runner row in display view models (see <see cref="Entries"/> for why a copy).</summary>
+    /// <param name="tests">The test results of the selected row.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<TestResultItemViewModel> RunnerTests(IReadOnlyList<TestResult> tests) =>
+        [.. tests.Select(static t => new TestResultItemViewModel(t))];
+
+    /// <summary>Builds the Runner summary tiles (see <see cref="Entries"/> for why an observable collection).</summary>
+    /// <param name="sent">Requests that got a response.</param>
+    /// <param name="errors">Requests that ended in error.</param>
+    /// <param name="failed">Requests with a failed test.</param>
+    /// <param name="skipped">Skipped requests.</param>
+    /// <param name="tests">The "passed/total" tests text.</param>
+    /// <param name="average">The average response time text.</param>
+    /// <param name="duration">The total duration text.</param>
+    /// <returns>One tile per figure, in display order.</returns>
+    public static ObservableCollection<SummaryTile> RunnerTiles(int sent, int errors, int failed, int skipped, string tests, string average, string duration) =>
+    [
+        new(Strings.RunnerTileSent, sent.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerTileErrors, errors.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerFilterFailed, failed.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerFilterSkipped, skipped.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerTileTests, tests),
+        new(Strings.LoadAverage, average),
+        new(Strings.RunnerTileDuration, duration),
+    ];
+
     /// <summary>Copies the data preview rows into an observable collection (see <see cref="Entries"/> for why).</summary>
     /// <param name="rows">The preview rows, each a list of cell texts.</param>
     /// <returns>An observable collection of the rows.</returns>
@@ -105,3 +139,8 @@ public static class ListMap
 /// <summary>One row of the data file preview.</summary>
 /// <param name="Cells">The cell texts, in column order.</param>
 public sealed record DataPreviewRow(IReadOnlyList<string> Cells);
+
+/// <summary>One figure of the Runner summary.</summary>
+/// <param name="Label">The caption.</param>
+/// <param name="Value">The figure text.</param>
+public sealed record SummaryTile(string Label, string Value);

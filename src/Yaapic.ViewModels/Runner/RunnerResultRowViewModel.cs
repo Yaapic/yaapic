@@ -13,14 +13,19 @@ public sealed class RunnerResultRowViewModel
     /// <summary>Initializes a new instance of the <see cref="RunnerResultRowViewModel"/> class.</summary>
     /// <param name="iteration">The zero-based iteration index.</param>
     /// <param name="result">The request result.</param>
-    public RunnerResultRowViewModel(int iteration, RunRequestResult result)
+    /// <param name="showIteration">Whether <see cref="IterationText"/> carries the iteration number (a run of several iterations).</param>
+    public RunnerResultRowViewModel(int iteration, RunRequestResult result, bool showIteration = false)
     {
         Iteration = iteration + 1;
         Result = result;
+        IterationText = showIteration ? string.Create(CultureInfo.InvariantCulture, $"#{Iteration}") : "";
     }
 
     /// <summary>Gets the one-based iteration number.</summary>
     public int Iteration { get; }
+
+    /// <summary>Gets "#n" when the run has several iterations, else an empty text.</summary>
+    public string IterationText { get; }
 
     /// <summary>Gets the request result.</summary>
     public RunRequestResult Result { get; }

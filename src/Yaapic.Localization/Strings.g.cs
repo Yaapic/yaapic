@@ -2155,6 +2155,18 @@ public static class Strings
     public static string RunnerSummary(object? a0, object? a1, object? a2, object? a3) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} sent, {1} errors, {2} failed, {3} skipped", "{0} envoyées, {1} erreurs, {2} échouées, {3} ignorées"), a0, a1, a2, a3);
 
+    /// <summary>Duration</summary>
+    public static string RunnerTileDuration => Localizer.Pick("Duration", "Durée");
+
+    /// <summary>Errors</summary>
+    public static string RunnerTileErrors => Localizer.Pick("Errors", "Erreurs");
+
+    /// <summary>Sent</summary>
+    public static string RunnerTileSent => Localizer.Pick("Sent", "Envoyées");
+
+    /// <summary>Tests</summary>
+    public static string RunnerTileTests => Localizer.Pick("Tests", "Tests");
+
     /// <summary>Runner</summary>
     public static string RunnerTitle => Localizer.Pick("Runner", "Runner");
 

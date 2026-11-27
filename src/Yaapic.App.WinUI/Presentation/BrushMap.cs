@@ -1,6 +1,7 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using Yaapic.Core.Import;
+using Yaapic.Core.Runner;
 using Yaapic.Domain.Http;
 using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Responses;
@@ -129,6 +130,16 @@ public static class BrushMap
     /// <param name="passed">Whether the tests passed.</param>
     /// <returns>The success brush when passed, else the danger brush.</returns>
     public static Brush TestOutcome(bool passed) => Get(passed ? "YaapicSuccessBrush" : "YaapicDangerBrush");
+
+    /// <summary>Gets the brush of a Runner outcome badge.</summary>
+    /// <param name="outcome">How the request ended.</param>
+    /// <returns>Success for passed, danger for failed or error, else the secondary text brush.</returns>
+    public static Brush RunOutcome(RunRequestOutcome outcome) => Get(outcome switch
+    {
+        RunRequestOutcome.Passed => "YaapicSuccessBrush",
+        RunRequestOutcome.Failed or RunRequestOutcome.Error => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    });
 
     /// <summary>Gets the icon brush of the collections rail entry.</summary>
     /// <param name="mode">The sidebar mode.</param>

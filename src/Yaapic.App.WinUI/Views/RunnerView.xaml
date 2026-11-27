@@ -177,6 +177,8 @@
       </v:SplitterHandle>
     </Grid>
 
-    <Border x:Name="ResultsHost" Grid.Column="2"/>
+    <Border x:Name="ResultsHost" Grid.Column="2">
+      <v:RunnerResultsView ViewModel="{x:Bind ViewModel, Mode=OneWay}"/>
+    </Border>
   </Grid>
 </UserControl>

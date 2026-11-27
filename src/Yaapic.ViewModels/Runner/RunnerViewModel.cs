@@ -20,6 +20,7 @@ public sealed partial class RunnerViewModel : ObservableObject
     private readonly ConsoleViewModel _console;
     private readonly IDialogService _dialogs;
     private CancellationTokenSource? _cts;
+    private bool _showIteration;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(RunCommand))]
@@ -139,6 +140,7 @@ public sealed partial class RunnerViewModel : ObservableObject
     private async Task RunAsync()
     {
         RunPlan plan = Setup.BuildPlan();
+        _showIteration = plan.Options.Iterations > 1;
         ClearResults();
         IsRunning = true;
         using CancellationTokenSource cts = new();
@@ -202,7 +204,7 @@ public sealed partial class RunnerViewModel : ObservableObject
 
         if (p.Last is { } last)
         {
-            var row = new RunnerResultRowViewModel(p.Iteration, last);
+            var row = new RunnerResultRowViewModel(p.Iteration, last, _showIteration);
             Rows.Add(row);
             if (row.Matches(Filter))
             {
