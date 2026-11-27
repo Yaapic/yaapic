@@ -1509,6 +1509,9 @@ public static class Strings
     public static string MockPortInUse(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Port {0} is already in use.", "Le port {0} est déjà utilisé."), a0);
 
+    /// <summary>Revert</summary>
+    public static string MockRevert => Localizer.Pick("Revert", "Rétablir");
+
     /// <summary>Routes</summary>
     public static string MockRoutes => Localizer.Pick("Routes", "Routes");
 

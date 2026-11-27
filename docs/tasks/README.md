@@ -668,7 +668,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-44](milestone-6-automation/M6-44-winui-runner-setup.md) | WinUI: Runner window, setup pane | windows | M6-43 | done |
 | [M6-45](milestone-6-automation/M6-45-winui-runner-results.md) | WinUI: Runner window, results pane | windows | M6-44 | done |
 | [M6-46](milestone-6-automation/M6-46-winui-load-test-window.md) | WinUI: Load test window | windows | M6-43, M6-44 | done |
-| [M6-47](milestone-6-automation/M6-47-winui-mock-servers-window.md) | WinUI: Mock servers window | windows | M6-43 | todo |
+| [M6-47](milestone-6-automation/M6-47-winui-mock-servers-window.md) | WinUI: Mock servers window | windows | M6-43 | done |
 | [M6-48](milestone-6-automation/M6-48-winui-monitors-window.md) | WinUI: Monitors window | windows | M6-43 | todo |
 | [M6-49](milestone-6-automation/M6-49-winui-automation-entry-points.md) | WinUI: automation entry points and status bar items | windows | M6-45, M6-46, M6-47, M6-48 | todo |
 | [M6-50](milestone-6-automation/M6-50-avalonia-tool-windows-and-chart.md) | Avalonia: tool windows, line chart and confirmation dialog | unix | M6-42, M6-43 | todo |

@@ -838,5 +838,6 @@
   "mock.issueRouteStatusOutOfRange": "Le statut de la route doit être compris entre 100 et 599.",
   "mock.issueRouteDelayOutOfRange": "Le délai de la route doit être compris entre 0 et 60000 ms.",
   "mock.issueRouteHeaderNameInvalid": "Le nom d'un en-tête de réponse n'est pas valide.",
-  "mock.newRoute": "Nouvelle route"
+  "mock.newRoute": "Nouvelle route",
+  "mock.revert": "Rétablir"
 }

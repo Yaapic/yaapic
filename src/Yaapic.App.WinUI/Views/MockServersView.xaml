@@ -1,0 +1,290 @@
+<UserControl
+    x:Class="Yaapic.App.WinUI.Views.MockServersView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:Yaapic.Localization"
+    xmlns:p="using:Yaapic.App.WinUI.Presentation"
+    xmlns:v="using:Yaapic.App.WinUI.Views"
+    xmlns:ic="using:FluentIcons.WinUI"
+    xmlns:m="using:Yaapic.ViewModels.Mocks">
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="240"/>
+      <ColumnDefinition Width="*"/>
+      <ColumnDefinition Width="320"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Servers -->
+    <Grid Padding="12" RowSpacing="8" BorderThickness="0,0,1,0" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <ListView x:Name="ServerList" SelectionMode="Single" AutomationProperties.Name="{x:Bind loc:Strings.MockTitle}"
+                ItemsSource="{x:Bind ViewModel.Servers, Mode=OneWay}" SelectionChanged="OnServerSelectionChanged">
+        <ListView.ItemTemplate>
+          <DataTemplate x:DataType="m:MockServerItemViewModel">
+            <Grid ColumnSpacing="8">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <Ellipse Width="8" Height="8" VerticalAlignment="Center" AutomationProperties.Name="{x:Bind StatusText, Mode=OneWay}"
+                       Fill="{x:Bind p:BrushMap.RunningDot(IsRunning), Mode=OneWay}"/>
+              <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{x:Bind Name, Mode=OneWay}"/>
+              <TextBlock Grid.Column="2" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                         Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind Port, Mode=OneWay}"/>
+            </Grid>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+      <StackPanel Grid.Row="1" Spacing="8">
+        <Button HorizontalAlignment="Stretch" Style="{StaticResource AccentButtonStyle}" Content="{x:Bind loc:Strings.MockNew}"
+                AutomationProperties.Name="{x:Bind loc:Strings.MockNew}" Command="{x:Bind ViewModel.NewServerCommand}"/>
+        <Button HorizontalAlignment="Stretch" Style="{StaticResource YaapicDangerButtonStyle}" Content="{x:Bind loc:Strings.CommonDelete}"
+                AutomationProperties.Name="{x:Bind loc:Strings.CommonDelete}" Command="{x:Bind ViewModel.DeleteServerCommand}"/>
+      </StackPanel>
+    </Grid>
+
+    <!-- Selected server -->
+    <Grid Grid.Column="1">
+      <ScrollViewer Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.SelectedServer), Mode=OneWay}">
+        <Grid Padding="16,16,16,48" RowSpacing="12">
+          <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+          </Grid.RowDefinitions>
+
+          <InfoBar Severity="Informational" IsClosable="False"
+                   IsOpen="{x:Bind p:VisibilityMap.HasText(ViewModel.GenerationMessage), Mode=OneWay}"
+                   Message="{x:Bind ViewModel.GenerationMessage, Mode=OneWay}"/>
+
+          <Grid Grid.Row="1" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="140"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Header="{x:Bind loc:Strings.CommonName}" AutomationProperties.Name="{x:Bind loc:Strings.CommonName}"
+                     Text="{x:Bind ViewModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <NumberBox Grid.Column="1" Header="{x:Bind loc:Strings.MockPort}" AutomationProperties.Name="{x:Bind loc:Strings.MockPort}"
+                       SpinButtonPlacementMode="Compact" Minimum="0" Maximum="100000"
+                       Value="{x:Bind ViewModel.Port, Mode=OneWay}" ValueChanged="OnPortChanged"/>
+            <StackPanel Grid.Column="2" VerticalAlignment="Bottom" Orientation="Horizontal" Spacing="8">
+              <Button MinWidth="96" Style="{StaticResource AccentButtonStyle}" Content="{x:Bind loc:Strings.MockStart}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.MockStart}" Command="{x:Bind ViewModel.StartCommand}"
+                      Visibility="{x:Bind p:VisibilityMap.WhenFalse(ViewModel.SelectedIsRunning), Mode=OneWay}"/>
+              <Button MinWidth="96" Content="{x:Bind loc:Strings.MockStop}" AutomationProperties.Name="{x:Bind loc:Strings.MockStop}"
+                      Command="{x:Bind ViewModel.StopCommand}"
+                      Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.SelectedIsRunning), Mode=OneWay}"/>
+            </StackPanel>
+          </Grid>
+
+          <Grid Grid.Row="2" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+              <ColumnDefinition Width="Auto"/>
+              <ColumnDefinition Width="*"/>
+              <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <CheckBox MinWidth="0" Content="{x:Bind loc:Strings.MockCors}" IsChecked="{x:Bind ViewModel.Cors, Mode=TwoWay}"/>
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" IsTextSelectionEnabled="True"
+                       Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="{x:Bind ViewModel.SelectedServer.BaseUrl, Mode=OneWay, FallbackValue=''}"/>
+            <Button Grid.Column="2" Content="{x:Bind loc:Strings.MockCopyUrl}" AutomationProperties.Name="{x:Bind loc:Strings.MockCopyUrl}"
+                    Command="{x:Bind ViewModel.CopyUrlCommand}"/>
+          </Grid>
+
+          <!-- Routes -->
+          <StackPanel Grid.Row="3" Spacing="6">
+            <Grid ColumnSpacing="4">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+              </Grid.ColumnDefinitions>
+              <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.MockRoutes}"/>
+              <Button Grid.Column="1" Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.AddRouteCommand}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.MockAddRoute}" ToolTipService.ToolTip="{x:Bind loc:Strings.MockAddRoute}">
+                <ic:FluentIcon Icon="Add" IconVariant="Regular" IconSize="Size16"/>
+              </Button>
+              <Button Grid.Column="2" Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.DuplicateRouteCommand}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.MockDuplicateRoute}" ToolTipService.ToolTip="{x:Bind loc:Strings.MockDuplicateRoute}">
+                <ic:FluentIcon Icon="Copy" IconVariant="Regular" IconSize="Size16"/>
+              </Button>
+              <Button Grid.Column="3" Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.DeleteRouteCommand}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.MockDeleteRoute}" ToolTipService.ToolTip="{x:Bind loc:Strings.MockDeleteRoute}">
+                <ic:FluentIcon Icon="Delete" IconVariant="Regular" IconSize="Size16"/>
+              </Button>
+              <Button Grid.Column="4" Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.MoveRouteUpCommand}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.RunnerMoveUp}" ToolTipService.ToolTip="{x:Bind loc:Strings.RunnerMoveUp}">
+                <ic:FluentIcon Icon="ArrowUp" IconVariant="Regular" IconSize="Size16"/>
+              </Button>
+              <Button Grid.Column="5" Style="{StaticResource YaapicIconButtonStyle}" Command="{x:Bind ViewModel.MoveRouteDownCommand}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.RunnerMoveDown}" ToolTipService.ToolTip="{x:Bind loc:Strings.RunnerMoveDown}">
+                <ic:FluentIcon Icon="ArrowDown" IconVariant="Regular" IconSize="Size16"/>
+              </Button>
+            </Grid>
+            <ListView MaxHeight="200" SelectionMode="Single" AutomationProperties.Name="{x:Bind loc:Strings.MockRoutes}"
+                      ItemsSource="{x:Bind ViewModel.Routes, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedRoute, Mode=TwoWay}">
+              <ListView.ItemTemplate>
+                <DataTemplate x:DataType="m:MockRouteViewModel">
+                  <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                      <ColumnDefinition Width="Auto"/>
+                      <ColumnDefinition Width="56"/>
+                      <ColumnDefinition Width="*"/>
+                      <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <CheckBox MinWidth="0" AutomationProperties.Name="{x:Bind Name, Mode=OneWay}" IsChecked="{x:Bind Enabled, Mode=TwoWay}"/>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}" FontWeight="SemiBold"
+                               p:MethodBrush.Method="{x:Bind Method, Mode=OneWay}" Text="{x:Bind Method, Mode=OneWay}"/>
+                    <TextBlock Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+                               Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind Path, Mode=OneWay}"/>
+                    <TextBlock Grid.Column="3" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                               Foreground="{x:Bind p:BrushMap.StatusCode(Status), Mode=OneWay}" Text="{x:Bind Status, Mode=OneWay}"/>
+                  </Grid>
+                </DataTemplate>
+              </ListView.ItemTemplate>
+            </ListView>
+          </StackPanel>
+
+          <!-- Selected route -->
+          <StackPanel Grid.Row="4" Spacing="8" Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.SelectedRoute), Mode=OneWay}">
+            <TextBox Header="{x:Bind loc:Strings.CommonName}" AutomationProperties.Name="{x:Bind loc:Strings.CommonName}"
+                     Text="{x:Bind ViewModel.SelectedRoute.Name, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
+            <Grid ColumnSpacing="8">
+              <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="110"/>
+                <ColumnDefinition Width="130"/>
+              </Grid.ColumnDefinitions>
+              <ComboBox HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MockMethod}" AutomationProperties.Name="{x:Bind loc:Strings.MockMethod}"
+                        ItemsSource="{x:Bind ViewModel.SelectedRoute.Methods, Mode=OneWay}"
+                        SelectedItem="{x:Bind ViewModel.SelectedRoute.Method, Mode=TwoWay}"/>
+              <TextBox Grid.Column="1" Header="{x:Bind loc:Strings.MockPath}" AutomationProperties.Name="{x:Bind loc:Strings.MockPath}"
+                       Text="{x:Bind ViewModel.SelectedRoute.Path, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
+              <NumberBox Grid.Column="2" Header="{x:Bind loc:Strings.MockStatus}" AutomationProperties.Name="{x:Bind loc:Strings.MockStatus}"
+                         SpinButtonPlacementMode="Compact" Minimum="0" Maximum="1000"
+                         Value="{x:Bind ViewModel.SelectedRoute.Status, Mode=OneWay}" ValueChanged="OnStatusChanged"/>
+              <NumberBox Grid.Column="3" Header="{x:Bind loc:Strings.MockDelay}" AutomationProperties.Name="{x:Bind loc:Strings.MockDelay}"
+                         SpinButtonPlacementMode="Compact" Minimum="-1" Maximum="1000000" SmallChange="100"
+                         Value="{x:Bind ViewModel.SelectedRoute.DelayMs, Mode=OneWay}" ValueChanged="OnDelayChanged"/>
+            </Grid>
+            <TextBlock TextWrapping="Wrap" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="{x:Bind loc:Strings.MockPathHint}"/>
+
+            <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.MockHeaders}"/>
+            <v:KeyValueEditorView x:Name="RouteHeaders" Height="160" ViewModel="{x:Bind ViewModel.SelectedRoute.Headers, Mode=OneWay}"/>
+
+            <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.MockBody}"/>
+            <Border Height="200" Background="{ThemeResource YaapicSurfaceSunkenBrush}">
+              <v:CodeEditorView x:Name="BodyEditor" AutomationProperties.Name="{x:Bind loc:Strings.MockBody}"
+                                Text="{x:Bind ViewModel.SelectedRoute.Body, Mode=TwoWay, FallbackValue=''}"/>
+            </Border>
+            <TextBlock TextWrapping="Wrap" Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                       Text="{x:Bind loc:Strings.MockTemplateHint}"/>
+            <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicDangerBrush}"
+                       Text="{x:Bind ViewModel.SelectedRoute.IssueText, Mode=OneWay, FallbackValue=''}"
+                       Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.SelectedRoute.IssueText), Mode=OneWay}"/>
+          </StackPanel>
+
+          <!-- Save, revert, errors -->
+          <StackPanel Grid.Row="5" Spacing="8">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Button MinWidth="96" Style="{StaticResource AccentButtonStyle}" Content="{x:Bind loc:Strings.CommonSave}"
+                      AutomationProperties.Name="{x:Bind loc:Strings.CommonSave}" Command="{x:Bind ViewModel.SaveCommand}"/>
+              <Button MinWidth="96" Content="{x:Bind loc:Strings.MockRevert}" AutomationProperties.Name="{x:Bind loc:Strings.MockRevert}"
+                      Command="{x:Bind ViewModel.RevertCommand}"/>
+            </StackPanel>
+            <ItemsControl ItemsSource="{x:Bind p:ListMap.Lines(ViewModel.ValidationErrors), Mode=OneWay}" AutomationProperties.LiveSetting="Polite">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                  <TextBlock TextWrapping="Wrap" Foreground="{ThemeResource YaapicDangerBrush}" Text="{x:Bind}"/>
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+
+        </Grid>
+      </ScrollViewer>
+      <TextBlock Margin="16" VerticalAlignment="Bottom" TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite"
+                 Foreground="{ThemeResource YaapicDangerBrush}" Text="{x:Bind ViewModel.Error, Mode=OneWay}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Error), Mode=OneWay}"/>
+    </Grid>
+
+    <!-- Log -->
+    <Grid Grid.Column="2" Padding="12" RowSpacing="8" BorderThickness="1,0,0,0" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <Grid ColumnSpacing="8">
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="*"/>
+          <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.MockLog}"/>
+        <Button Grid.Column="1" Content="{x:Bind loc:Strings.MockClearLog}" AutomationProperties.Name="{x:Bind loc:Strings.MockClearLog}"
+                Command="{x:Bind ViewModel.ClearLogCommand}"/>
+      </Grid>
+      <ListView Grid.Row="1" SelectionMode="Single" AutomationProperties.Name="{x:Bind loc:Strings.MockLog}"
+                ItemsSource="{x:Bind ViewModel.Log, Mode=OneWay}" SelectedItem="{x:Bind ViewModel.SelectedLog, Mode=TwoWay}">
+        <ListView.ItemTemplate>
+          <DataTemplate x:DataType="m:MockLogRowViewModel">
+            <StackPanel Padding="0,2">
+              <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="48"/>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Style="{StaticResource YaapicCodeSmallTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind Time}"/>
+                <TextBlock Grid.Column="1" Style="{StaticResource YaapicCaptionTextStyle}" FontWeight="SemiBold"
+                           p:MethodBrush.Method="{x:Bind Method}" Text="{x:Bind Method}"/>
+                <TextBlock Grid.Column="2" TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind Target}"/>
+                <TextBlock Grid.Column="3" Style="{StaticResource YaapicCodeSmallTextStyle}" FontWeight="SemiBold"
+                           Foreground="{x:Bind p:BrushMap.StatusCode(Status)}" Text="{x:Bind Status}"/>
+              </Grid>
+              <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicCaptionTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind Route}"/>
+                <TextBlock Grid.Column="1" Style="{StaticResource YaapicCaptionTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind DurationText}"/>
+              </Grid>
+            </StackPanel>
+          </DataTemplate>
+        </ListView.ItemTemplate>
+      </ListView>
+      <!-- The selected entry: request headers and body preview. -->
+      <StackPanel Grid.Row="2" Spacing="4" MaxHeight="220"
+                  Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.SelectedLog), Mode=OneWay}">
+        <ItemsControl ItemsSource="{x:Bind p:ListMap.Entries(ViewModel.SelectedLogHeaders), Mode=OneWay}">
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="d:KeyValueEntry" xmlns:d="using:Yaapic.Domain.Http">
+              <TextBlock TextTrimming="CharacterEllipsis" Style="{StaticResource YaapicCodeSmallTextStyle}">
+                <Run Text="{x:Bind Key}" FontWeight="SemiBold"/><Run Text=": "/><Run Text="{x:Bind Value}"/>
+              </TextBlock>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                   Text="{x:Bind ViewModel.SelectedLogBody, Mode=OneWay}"/>
+      </StackPanel>
+    </Grid>
+  </Grid>
+</UserControl>

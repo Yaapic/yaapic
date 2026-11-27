@@ -77,6 +77,23 @@ public static class BrushMap
         _ => "YaapicTextSecondaryBrush",
     });
 
+    /// <summary>Gets the text brush of an HTTP status code, by its class.</summary>
+    /// <param name="status">The status code.</param>
+    /// <returns>The brush from the application resources.</returns>
+    public static Brush StatusCode(int status) => StatusForeground((status / 100) switch
+    {
+        2 => StatusCategory.Success,
+        3 => StatusCategory.Redirect,
+        4 => StatusCategory.ClientError,
+        5 => StatusCategory.ServerError,
+        _ => StatusCategory.Informational,
+    });
+
+    /// <summary>Gets the brush of the running dot of a mock server.</summary>
+    /// <param name="isRunning">Whether the server runs.</param>
+    /// <returns>The success brush when it runs, else a muted one.</returns>
+    public static Brush RunningDot(bool isRunning) => Get(isRunning ? "YaapicSuccessBrush" : "YaapicTextDisabledBrush");
+
     /// <summary>Gets the background brush of the status chip; informational statuses have none.</summary>
     /// <param name="category">The class of the status code.</param>
     /// <returns>The brush from the application resources, or a transparent brush.</returns>

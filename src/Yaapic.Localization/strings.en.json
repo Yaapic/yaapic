@@ -838,5 +838,6 @@
   "mock.issueRouteStatusOutOfRange": "The route status must be between 100 and 599.",
   "mock.issueRouteDelayOutOfRange": "The route delay must be between 0 and 60000 ms.",
   "mock.issueRouteHeaderNameInvalid": "A response header name is not valid.",
-  "mock.newRoute": "New route"
+  "mock.newRoute": "New route",
+  "mock.revert": "Revert"
 }
