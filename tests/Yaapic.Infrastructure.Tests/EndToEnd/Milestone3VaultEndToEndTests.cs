@@ -145,7 +145,9 @@ public sealed class Milestone3VaultEndToEndTests : IClassFixture<LoopbackServer>
         await SeedAsync(shell, inner);
 
         var vaultFile = _fx.VaultFile;
-        var files = Directory.EnumerateFiles(_fx.Root, "*", SearchOption.AllDirectories).Append(vaultFile).ToList();
+
+        // The session store writes "<name>.tmp" and renames it; a save queued by the seeding may be in flight, and its temporary file is not a stored file.
+        var files = Directory.EnumerateFiles(_fx.Root, "*", SearchOption.AllDirectories).Where(f => !f.EndsWith(".tmp", StringComparison.Ordinal)).Append(vaultFile).ToList();
         Assert.Contains(files, f => f.EndsWith("globals.yaml", StringComparison.Ordinal));
         foreach (var secret in new[] { ApiKey, GlobalSecret, CollectionSecret })
         {
