@@ -128,7 +128,7 @@ public sealed class AvaloniaDialogService : IDialogService
         }
     }
 
-    private Window? Owner() => ToolWindowHost.ActiveWindow ?? _owner();
+    private Window? Owner() => _owner();
 
     private async Task<T> ShowAsync<T>(string title, string body, T dismissed, params (string Text, T Result, string? Class)[] buttons)
     {

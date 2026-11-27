@@ -24,10 +24,6 @@ public sealed partial class MainWindow : Window
     private bool _jwtOpen;
     private bool _certificatesOpen;
     private bool _importExportOpen;
-    private Window? _runnerWindow;
-    private Window? _loadTestWindow;
-    private Window? _mocksWindow;
-    private Window? _monitorsWindow;
     private const double ConsoleReservedHeight = 300;
 
     /// <summary>Creates the window and registers the keyboard shortcuts.</summary>
@@ -42,8 +38,8 @@ public sealed partial class MainWindow : Window
         // The console never takes the whole window: the request area keeps at least 300 dips (title bar, tabs and status bar included).
         SizeChanged += (_, e) => ConsolePanel.MaxHeight = Math.Max(ShellViewModel.MinConsoleHeight, e.NewSize.Height - ConsoleReservedHeight);
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.T, modifier), Command = new Relay(() => Shell?.Tabs.NewTab()) });
-        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => Shell?.Tabs.CloseActiveCommand.Execute(null)) });
-        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => Shell?.Tabs.SaveActiveCommand.Execute(null)) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => { if (Shell is { IsRequestsSection: true }) Shell.Tabs.CloseActiveCommand.Execute(null); }) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => { if (Shell is { IsRequestsSection: true }) Shell.Tabs.SaveActiveCommand.Execute(null); }) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.E, modifier | KeyModifiers.Shift), Command = new Relay(() => _ = ManageEnvironmentsAsync()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.F, modifier | KeyModifiers.Shift), Command = new Relay(() => FilterBox.Focus()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.P, modifier), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
@@ -168,10 +164,6 @@ public sealed partial class MainWindow : Window
             _shellSubscribed.CertificatesRequested -= OnCertificatesRequested;
             _shellSubscribed.ImportRequested -= OnImportRequested;
             _shellSubscribed.ExportRequested -= OnExportRequested;
-            _shellSubscribed.RunnerRequested -= OnRunnerRequested;
-            _shellSubscribed.LoadTestRequested -= OnLoadTestRequested;
-            _shellSubscribed.MockServersRequested -= OnMockServersRequested;
-            _shellSubscribed.MonitorsRequested -= OnMonitorsRequested;
             _shellSubscribed.Vault.SetupRequested -= OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested -= OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested -= OnUpdatesRequested;
@@ -190,10 +182,6 @@ public sealed partial class MainWindow : Window
             _shellSubscribed.CertificatesRequested += OnCertificatesRequested;
             _shellSubscribed.ImportRequested += OnImportRequested;
             _shellSubscribed.ExportRequested += OnExportRequested;
-            _shellSubscribed.RunnerRequested += OnRunnerRequested;
-            _shellSubscribed.LoadTestRequested += OnLoadTestRequested;
-            _shellSubscribed.MockServersRequested += OnMockServersRequested;
-            _shellSubscribed.MonitorsRequested += OnMonitorsRequested;
             _shellSubscribed.Vault.SetupRequested += OnVaultRequested;
             _shellSubscribed.Vault.UnlockRequested += OnVaultRequested;
             _shellSubscribed.Updates.SettingsRequested += OnUpdatesRequested;
@@ -319,27 +307,6 @@ public sealed partial class MainWindow : Window
         }
     }
 
-    private void OnRunnerRequested(object? sender, EventArgs e) =>
-        Open(ref _runnerWindow, Strings.RunnerTitle, Shell?.Runner, vm => new Views.RunnerView { DataContext = vm });
-
-    private void OnLoadTestRequested(object? sender, EventArgs e) =>
-        Open(ref _loadTestWindow, Strings.LoadTitle, Shell?.LoadTest, vm => new Views.LoadTestView { DataContext = vm });
-
-    private void OnMockServersRequested(object? sender, EventArgs e) =>
-        Open(ref _mocksWindow, Strings.MockTitle, Shell?.Mocks, vm => new Views.MockServersView { DataContext = vm });
-
-    private void OnMonitorsRequested(object? sender, EventArgs e) =>
-        Open(ref _monitorsWindow, Strings.MonitorTitle, Shell?.Monitors, vm => new Views.MonitorsView { DataContext = vm });
-
-    private void Open<T>(ref Window? slot, string title, T? vm, Func<T, Control> create)
-        where T : class
-    {
-        if (vm is not null)
-        {
-            Views.ToolWindowHost.ShowOrActivate(ref slot, title, () => create(vm), this);
-        }
-    }
-
     private void OnEnvironmentsRequested(object? sender, EventArgs e) => _ = ManageEnvironmentsAsync();
 
     /// <inheritdoc />
@@ -363,7 +330,6 @@ public sealed partial class MainWindow : Window
             if (await shell.RequestCloseAsync())
             {
                 _closeConfirmed = true;
-                Views.ToolWindowHost.CloseAll();
                 Close();
             }
         }
