@@ -70,6 +70,29 @@ public sealed partial class MockServersView : UserControl
         }
 
         OnRouteChanged(null, EventArgs.Empty);
+        DispatcherQueue.TryEnqueue(SyncMethod);
+    }
+
+    // The method list is a fresh collection per route, which clears the combo box selection: select the route's method again.
+    private void SyncMethod()
+    {
+        _syncing = true;
+        try
+        {
+            MethodCombo.SelectedItem = _route?.Method;
+        }
+        finally
+        {
+            _syncing = false;
+        }
+    }
+
+    private void OnMethodChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (!_syncing && _route is not null && MethodCombo.SelectedItem is string method)
+        {
+            _route.Method = method;
+        }
     }
 
     private void OnRouteChanged(object? sender, EventArgs e) =>

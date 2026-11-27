@@ -167,9 +167,11 @@
                 <ColumnDefinition Width="110"/>
                 <ColumnDefinition Width="130"/>
               </Grid.ColumnDefinitions>
-              <ComboBox HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MockMethod}" AutomationProperties.Name="{x:Bind loc:Strings.MockMethod}"
-                        ItemsSource="{x:Bind ViewModel.SelectedRoute.Methods, Mode=OneWay}"
-                        SelectedItem="{x:Bind ViewModel.SelectedRoute.Method, Mode=TwoWay}"/>
+              <!-- The methods are copied into an ObservableCollection (a bare IReadOnlyList kills the process under Native AOT), which
+                   clears the selection, so the selected method is applied and read back in the code-behind. -->
+              <ComboBox x:Name="MethodCombo" HorizontalAlignment="Stretch" Header="{x:Bind loc:Strings.MockMethod}" AutomationProperties.Name="{x:Bind loc:Strings.MockMethod}"
+                        ItemsSource="{x:Bind p:ListMap.Lines(ViewModel.SelectedRoute.Methods), Mode=OneWay}"
+                        SelectionChanged="OnMethodChanged"/>
               <TextBox Grid.Column="1" Header="{x:Bind loc:Strings.MockPath}" AutomationProperties.Name="{x:Bind loc:Strings.MockPath}"
                        Text="{x:Bind ViewModel.SelectedRoute.Path, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
               <NumberBox Grid.Column="2" Header="{x:Bind loc:Strings.MockStatus}" AutomationProperties.Name="{x:Bind loc:Strings.MockStatus}"
