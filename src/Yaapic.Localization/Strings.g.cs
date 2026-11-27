@@ -1383,6 +1383,10 @@ public static class Strings
     public static string LoadUsersRange(object? a0) =>
         string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Virtual users must be between 1 and {0}.", "Les utilisateurs virtuels doivent être entre 1 et {0}."), a0);
 
+    /// <summary>{0} mock</summary>
+    public static string MockGeneratedName(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} mock", "{0} mock"), a0);
+
     /// <summary>No redirect was received within 3 minutes. Try again.</summary>
     public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
 

@@ -755,5 +755,6 @@
   "load.errors": "Errors",
   "load.export": "Export JSON",
   "load.truncated": "Percentiles computed on the first {0} samples.",
-  "load.scriptsSkipped": "Scripts were not run during this load test."
+  "load.scriptsSkipped": "Scripts were not run during this load test.",
+  "mock.generatedName": "{0} mock"
 }
