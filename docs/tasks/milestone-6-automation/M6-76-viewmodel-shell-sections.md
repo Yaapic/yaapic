@@ -32,16 +32,17 @@ behaves as before after this card (the tool windows still open).
     (`[RelayCommand(CanExecute = nameof(CanAutomate))]`, each calls the matching `Request*` method). `AttachAutomation` calls
     `NotifyCanExecuteChanged` on them and also raises `PropertyChanged` for `Runner`, `LoadTest`, `Mocks` and `Monitors`.
   - Back to the requests: subscribe in the constructor to the new `Tabs.TabShown` and set `Section = ShellSection.Requests`.
-  - Close: at the very start of `RequestCloseAsync`, when `Runner?.IsRunning == true || LoadTest?.IsRunning == true || (Mocks?.RunningCount ?? 0) > 0`,
+  - Close: at the very start of `RequestCloseAsync`, when `Runner?.IsRunning == true || LoadTest?.IsRunning == true`,
     `await _dialogs.ConfirmAsync(Strings.ShellCloseRunningTitle, Strings.ShellCloseRunning)`; false returns `false` at once (nothing saved,
-    nothing disposed). Otherwise continue with the unsaved-tab prompts unchanged. Monitors do not count (ADR 0023).
+    nothing disposed). Otherwise continue with the unsaved-tab prompts unchanged. Running mock servers and monitors do not count: closing
+    stops the mock servers silently, as today (ADR 0023).
 - `TabsViewModel`: `public event EventHandler? TabShown;` ("Raised when a tab is opened or brought to the front on the user's request."),
   raised at the end of `NewTab`, `OpenAsNew`, `Open` (also when the tab was already open and active) and `Step` when it changed the
   active tab. Not raised by `CloseAsync`, `CloseWithoutPrompt` or setting `ActiveTab` directly.
 - Strings (EN and FR, then regenerate `Strings.g.cs` as in `docs/personalization.md`):
   `shell.closeRunningTitle` = "Close Yaapic?" / "Fermer Yaapic ?";
-  `shell.closeRunning` = "A collection run, a load test or a mock server is still running. Closing Yaapic stops it." /
-  "Une exécution de collection, un test de charge ou un serveur de mock est encore en cours. Fermer Yaapic l'arrête.".
+  `shell.closeRunning` = "A collection run or a load test is still in progress. Closing Yaapic stops it and its results are lost." /
+  "Une exécution de collection ou un test de charge est encore en cours. Fermer Yaapic l'arrête et ses résultats sont perdus.".
 
 ## Out of scope
 
@@ -59,9 +60,10 @@ The views (M6-77 to M6-80), removing the events (M6-81), saving the section in t
   - from `Runner`: `ShowCollectionsCommand` gives `Requests` + `IsCollectionsSelected`; `ShowHistoryCommand` gives `Requests` +
     `IsHistorySelected`; `Tabs.NewTab()`, `Tabs.Open(...)` of the already active request, `Tabs.OpenAsNew(...)` and `NextTabCommand`
     (two tabs) give `Requests` and keep the right active tab; `Tabs.CloseWithoutPrompt(...)` leaves `Runner`;
-  - close: nothing running -> no `ConfirmAsync` call; a run in progress (hold it open the way the M6-21 tests do) or a started mock
-    server -> `ConfirmAsync` called once with `Strings.ShellCloseRunning`; answer false -> `RequestCloseAsync` returns false and the owned
-    resources are not disposed; answer true -> it proceeds as before.
+  - close: nothing running -> no `ConfirmAsync` call; only a started mock server -> no `ConfirmAsync` call and the close proceeds as
+    before; a run in progress (hold it open the way the M6-21 tests do) -> `ConfirmAsync` called once with `Strings.ShellCloseRunning`; a
+    load test in progress (held open the same way) -> same; answer false -> `RequestCloseAsync` returns false and the owned resources are
+    not disposed; answer true -> it proceeds as before.
 - [ ] `TabsViewModelTests`: `TabShown` raised by `NewTab`, `OpenAsNew`, `Open` (new and already open), `NextTabCommand` with two tabs; not
   raised by `CloseAsync`, `CloseWithoutPrompt`, `NextTabCommand` with one tab.
 - [ ] Localization tests green (keys in both files, `Strings.g.cs` fresh); architecture tests green; 0 warnings, XML docs, all tests green.

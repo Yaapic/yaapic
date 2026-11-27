@@ -729,8 +729,8 @@ and M6-64 (mock servers reachable from other devices) were answered "not now" an
 Refactor: automation views in the main window (requested 2026-11-27, cards M6-75 to M6-83 `todo`). The Runner, Load test, Mock servers
 and Monitors leave their tool windows: four entries on the rail (the left menu, under Collections and History) show them in the main
 window in place of the request tabs and the sidebar; the folder menu, palette and status bar lead to the same views; Collections,
-History or opening a request brings the tabs back; the tools keep running while hidden; closing Yaapic asks first while a run, a load
-test or a mock server is running. Decision in ADR 0023 (M6-75). Order: ADR, view model sections (M6-76), WinUI rail then views (M6-77,
+History or opening a request brings the tabs back; the tools keep running while hidden; closing Yaapic asks first while a Runner run or
+a load test is in progress (running mock servers stop silently, as before). Decision in ADR 0023 (M6-75). Order: ADR, view model sections (M6-76), WinUI rail then views (M6-77,
 M6-78, which deletes `ToolWindow`), Avalonia rail then views (M6-79, M6-80, which deletes `ToolWindowHost`), removal of the shell's
 window events (M6-81), docs (M6-82), WinUI screenshots (M6-83, replacing those of M6-61). The app builds and works after each card:
 until M6-78/M6-80 the rail entries still open the tool windows. This replaces the window behaviour of the done cards M6-43, M6-49,

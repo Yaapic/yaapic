@@ -40,7 +40,8 @@ Removing the shell events (M6-81), docs (M6-82).
 - [ ] `rtk grep -rn "ToolWindowHost\|ActiveWindow" src/Yaapic.App.Avalonia --include=*.cs --include=*.axaml` finds nothing (outside `obj/`).
 - [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
 - [ ] Runtime smoke on macOS or Linux with the M6-78 list; if not possible, run what UI Automation reaches on Windows (rail entries, status
-  bar items, palette, single top-level window, close confirmation) and list the rest as not run in Notes.
+  bar items, palette, single top-level window, close confirmation during a run or a load test and none with only a mock server running)
+  and list the rest as not run in Notes.
 - [ ] 0 warnings, all tests green.
 
 ## Suggested commit message

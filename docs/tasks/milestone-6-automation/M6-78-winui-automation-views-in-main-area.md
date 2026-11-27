@@ -59,8 +59,9 @@ Avalonia (M6-79, M6-80); removing the shell events (M6-81); docs and screenshots
     shown;
   - the load-test confirmation and the Runner CSV picker open over the main window;
   - from a tool, Ctrl+T shows the requests with a new tab; Ctrl+W and Ctrl+S do nothing;
-  - closing with a running mock server asks "Close Yaapic?": Cancel keeps Yaapic open, Continue exits and the port stops answering;
-    closing with nothing running asks nothing;
+  - closing during a Runner run (with a delay) or a load test asks "Close Yaapic?": Cancel keeps Yaapic open and the run goes on,
+    Continue exits; closing with only a running mock server asks nothing, exits and the port stops answering; closing with nothing
+    running asks nothing;
   - at 900 x 600 every view is usable (nothing clipped without a scroll bar); dark and light look right.
 - [ ] 0 warnings, all tests green.
 

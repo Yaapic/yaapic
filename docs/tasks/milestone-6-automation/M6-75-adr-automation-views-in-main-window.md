@@ -47,8 +47,9 @@ point the UI sections of ADRs 0018 to 0021 at it.
       for it). They never open a window.
     - State: one view model per tool for the shell's lifetime (M6-41) and one view per tool created once and only hidden when another
       section is shown: a run, a load test or a mock server keeps going, and selections, splitters and scroll positions are kept.
-    - Closing Yaapic while a collection run, a load test or a mock server is running asks first (`IDialogService.ConfirmAsync`, "Close
-      Yaapic?"); Cancel keeps Yaapic open. A scheduled monitor does not count. Then the unsaved-tab prompts run as before.
+    - Closing Yaapic while a collection run or a load test is in progress asks first (`IDialogService.ConfirmAsync`, "Close
+      Yaapic?"), because their results would be lost; Cancel keeps Yaapic open. Running mock servers do not count: closing stops them
+      silently, as before (ADR 0020). A scheduled monitor does not count either. Then the unsaved-tab prompts run as before.
     - Dialogs and file pickers are owned by the main window. `ToolWindow` (WinUI), `ToolWindowHost` (Avalonia), the dialog services'
       active-window override and the shell's `RunnerRequested`/`LoadTestRequested`/`MockServersRequested`/`MonitorsRequested` events are
       removed. `LineChart` stays.

@@ -25,15 +25,15 @@ The user and contributor docs describe the tools as views of the main window rea
     "The Runner shows the reader's message"; "exported from the Runner window" -> "exported from the Runner". Leave the CLI wording
     around M6-74 otherwise unchanged.
   - Load test confirmation: "The first start in each window session asks" -> "The first start after Yaapic starts asks".
-  - Add one sentence where closing is described (mock servers: "...stop when the app closes"): "Closing Yaapic while a run, a load test or
-    a mock server is running asks first."
+  - Add one sentence where closing is described (mock servers: "...stop when the app closes"): "Closing Yaapic while a Runner run or a
+    load test is in progress asks first, since its results would be lost; running mock servers stop without a question."
 - `docs/architecture.md`: replace "The shell opens the four tools through `ToolWindowHost` (one window of each kind, `ShowOrActivate`): the
   folder context menu, the palette (...) and the status bar items (...)." with "`ShellViewModel.Section` (`ShellSection`: `Requests`,
   `Runner`, `LoadTest`, `MockServers`, `Monitors`) says what the main area shows; the rail commands (`ShowRunnerCommand`...), the folder
   context menu, the palette (`palette.runCollection`, `palette.loadTest`, `palette.mockServers`, `palette.monitors`) and the status bar
   items (Runner progress, "Mocks: {n} running", "Monitors: {n} failing") set it, and `TabsViewModel.TabShown` sets it back to `Requests`
-  (ADR 0023)."; "closing the main window stops the mock servers" becomes "closing the main window asks first while a run, a load test or
-  a mock server is running, then stops the mock servers". Keep the rest of the paragraph.
+  (ADR 0023)."; "closing the main window stops the mock servers" becomes "closing the main window asks first while a Runner run or a load
+  test is in progress (not for mock servers), then stops the mock servers". Keep the rest of the paragraph.
 - `docs/tasks/README.md`, Milestone 6 summary: in "Delivered", "the tool windows, folder menu, palette and status bar entries on both
   front-ends" becomes "the four views in the main window with rail entries, folder menu, palette and status bar entries on both front-ends
   (ADR 0023, refactor M6-75 to M6-83)"; add ADR [0023](../adr/0023-automation-views-in-main-window.md) to the documentation list.

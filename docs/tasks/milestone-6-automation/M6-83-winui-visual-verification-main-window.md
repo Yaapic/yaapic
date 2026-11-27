@@ -21,7 +21,9 @@ M6-61 are replaced; M6-61 itself is not edited (its remaining human review appli
   menu as before (it shows the view in place); to go back to the tree in a multi-step flow (`monitors`, `status-bar`) invoke
   `Collections` (the Collections rail entry; its name is `Strings.CollectionsTitle`) instead of `front:`. Use the rail AutomationIds
   where a flow only needs to show a tool (the status bar item named "Runner" has the same name as the rail entry: never invoke by
-  that name). Keep the retries.
+  that name). Keep the retries. Closing Yaapic now asks "Close Yaapic?" while a Runner run or a load test is in progress (ADR 0023;
+  a running mock server does not ask): after `load-test-running`, let the load test finish (or stop it) before the script closes the
+  app, or the confirmation blocks the exit.
 - Add one screen `rail` (`-Crop` of the rail and sidebar edge, Runner selected, both themes): compare with `MainWindow.dc.html` (rail).
   Eighteen PNGs in total, each under 500 KB.
 - `docs/screenshots/m6/README.md`: describe the captures as views of the main window; remove the text about tool window sizes and
