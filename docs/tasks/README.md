@@ -679,7 +679,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-55](milestone-6-automation/M6-55-avalonia-monitors-window.md) | Avalonia: Monitors window | unix | M6-50, M6-48 | todo |
 | [M6-56](milestone-6-automation/M6-56-avalonia-automation-entry-points.md) | Avalonia: automation entry points and status bar items | unix | M6-49, M6-52, M6-53, M6-54, M6-55 | todo |
 | [M6-57](milestone-6-automation/M6-57-end-to-end-runner.md) | End-to-end tests: Runner | any | M6-42 | done |
-| [M6-58](milestone-6-automation/M6-58-end-to-end-mocks-and-load.md) | End-to-end tests: mock servers and load tests | any | M6-42 | todo |
+| [M6-58](milestone-6-automation/M6-58-end-to-end-mocks-and-load.md) | End-to-end tests: mock servers and load tests | any | M6-42 | done |
 | [M6-59](milestone-6-automation/M6-59-end-to-end-monitors.md) | End-to-end tests: monitors | any | M6-42 | todo |
 | [M6-60](milestone-6-automation/M6-60-milestone-docs.md) | Milestone 6 docs | any | M6-57, M6-58, M6-59, M6-49, M6-56 | todo |
 | [M6-61](milestone-6-automation/M6-61-winui-visual-verification.md) | WinUI visual verification of the milestone 6 views | windows | M6-45, M6-46, M6-47, M6-48, M6-49 | todo |
