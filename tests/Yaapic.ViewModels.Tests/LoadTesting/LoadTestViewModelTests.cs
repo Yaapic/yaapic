@@ -26,8 +26,13 @@ public sealed class LoadTestViewModelTests
 
     private sealed class LatencyTransport(TimeProvider time) : IHttpTransport
     {
+        private int _sent;
+
+        public int Sent => Volatile.Read(ref _sent);
+
         public async Task<SendResult> SendAsync(ResolvedRequest request, CancellationToken ct)
         {
+            Interlocked.Increment(ref _sent);
             await Task.Delay(TimeSpan.FromSeconds(1), time, ct);
             int status = request.Url.Contains("/bad", StringComparison.Ordinal) ? 500 : 200;
             return SendResult.Success(new HttpResponseData(status, "x", [], [1], TimeSpan.FromMilliseconds(1000), request.Url));
@@ -43,6 +48,7 @@ public sealed class LoadTestViewModelTests
 
     private readonly FakeDialogService _dialogs = new();
     private readonly ManualTimeProvider _time = new(DateTimeOffset.UnixEpoch);
+    private readonly LatencyTransport _transport;
     private readonly LoadTestViewModel _vm;
 
     public LoadTestViewModelTests()
@@ -52,7 +58,7 @@ public sealed class LoadTestViewModelTests
         var provider = new FakeVariableScopeProvider();
         var scopes = new VariableScopeRunSource(provider);
         var runner = new LoadTestRunner(
-            new RunStepExecutor(new ScriptedRequestSender(new RequestSender(new LatencyTransport(_time)), registry, _time), new FakeScriptChainProvider(), scopes),
+            new RunStepExecutor(new ScriptedRequestSender(new RequestSender(_transport = new LatencyTransport(_time)), registry, _time), new FakeScriptChainProvider(), scopes),
             scopes,
             _time);
         _vm = new LoadTestViewModel(new RunnerSetupViewModel(new NoReader(), _dialogs), runner, provider, _dialogs);
@@ -69,7 +75,17 @@ public sealed class LoadTestViewModelTests
     private async Task StepAsync()
     {
         _time.Advance(TimeSpan.FromSeconds(1));
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+
+        // Wait until the request count has not moved for 50 ms; a fixed delay is too short on a loaded machine.
+        int last = -1;
+        int stable = 0;
+        for (int i = 0; i < 500 && stable < 5; i++)
+        {
+            await Task.Delay(10, TestContext.Current.CancellationToken);
+            int now = _transport.Sent;
+            stable = now == last ? stable + 1 : 0;
+            last = now;
+        }
     }
 
     private async Task FinishAsync(Task run)
