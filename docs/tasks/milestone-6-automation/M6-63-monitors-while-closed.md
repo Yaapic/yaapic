@@ -1,6 +1,6 @@
 # M6-63: Monitors while Yaapic is closed
 
-Status: blocked
+Status: done
 Platform: any
 Depends on: M6-39
 
@@ -8,22 +8,29 @@ Depends on: M6-39
 
 Let monitors run on schedule when the Yaapic window is closed (ADR 0021 runs them only while the app is open).
 
-## Open question (product decision, answer before picking this card)
+## Decision (product owner, 2026-11-27)
 
-1. **Keep running in the tray / menu bar**: closing the window hides it while a monitor or a mock server is active; a tray icon offers
-   Open and Quit. Simple, but a tray icon needs per-OS code (WinUI has no tray API: Win32 `Shell_NotifyIcon`; Avalonia has `TrayIcon`), and
-   "close does not quit" surprises people unless it is an explicit setting.
-2. **OS scheduler**: register a Windows Task Scheduler task / a systemd user timer / a launchd agent that starts the command-line runner
-   (depends on M6-62) for each enabled monitor. Runs even after a reboot, but secrets (the vault needs the user's protector) and notifications
-   are harder, and uninstalling must remove the tasks.
-3. **A background service** (Windows service / daemon): heavyweight, needs elevation to install. Not recommended.
-4. **Not now**: document that monitors run only while Yaapic is open (the current behaviour).
+**Not now** (option 4). Monitors run only while Yaapic is open on this computer, as ADR 0021 already says. Rejected for now: keeping the
+app alive in the tray or menu bar, registering operating-system scheduled tasks, a background service.
 
-Until answered, no other card depends on this one.
+What it means for users:
+
+- A monitor runs only while the app is open; a monitor that became due while the app was closed runs once at the next start (no
+  catch-up), as today.
+- Closing the window quits the app and stops every monitor; there is no tray icon and no background process.
+- To run a folder on a schedule without the app, use the command-line runner `yaapic-cli` once it ships (M6-62, cards M6-65 to M6-74)
+  from a CI pipeline or an operating-system scheduler set up by the user (cron, Task Scheduler). Yaapic does not register such a task.
+
+Not delivered: tray or menu-bar mode, OS scheduled tasks created by Yaapic, a background service, catch-up of missed runs.
+
+Revisit when: users ask for monitors that survive closing the window, or, with `yaapic-cli` shipped, a "schedule this monitor with the
+OS" helper becomes cheap (it would also need an answer for secrets, see the M6-62 default).
+
+No code and no new card. Docs: `docs/automation.md` ("Monitors" already says it; "Not delivered" updated), ADR 0021 points here.
 
 ## Acceptance criteria
 
-- [ ] Rewritten after the answer; nothing to implement as is.
+- [x] Rewritten after the answer; nothing to implement.
 
 ## Suggested commit message
 

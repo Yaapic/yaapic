@@ -18,8 +18,8 @@ same whatever the user has selected at that moment.
      no installer step, no extra process, AOT-safe, works the same on every OS.
    - An operating-system scheduled task. Rejected: one mechanism per OS, needs elevated or installer-time setup, and the task
      would need a headless entry point that does not exist (see blocked card M6-62).
-   - A background service. Rejected: needs a second process, its own update path and a vault unlock channel; it is the blocked
-     card M6-63.
+   - A background service. Rejected: needs a second process, its own update path and a vault unlock channel; it was card M6-63,
+     answered "not now" in 2026-11.
 2. **Environment of a run.**
    - *A fixed environment stored in the monitor (chosen).* The monitor behaves the same whatever the user selects.
    - The active environment. Rejected: switching environments would silently change what every monitor tests.
@@ -37,7 +37,7 @@ None new: no reflection, no package. The definition uses VYaml `[YamlObject]` DT
 ### What a monitor is
 
 A scheduled run of a folder (ADR 0018) **inside Yaapic, while the app is open on this machine**. There is no cloud and no
-background service (running while the app is closed is the blocked card M6-63).
+background service (running while the app is closed was card M6-63, answered "not now").
 
 ### Definition
 
