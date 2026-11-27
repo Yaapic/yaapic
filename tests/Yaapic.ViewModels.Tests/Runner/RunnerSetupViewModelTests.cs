@@ -108,7 +108,7 @@ public sealed class RunnerSetupViewModelTests
     [Fact]
     public async Task Choosing_a_data_file_loads_columns_preview_and_iterations()
     {
-        await ChooseAsync(@"C:\d\users.csv", "name,age\na,1\nb,2\nc,3\nd,4\ne,5\nf,6\n");
+        await ChooseAsync(Path.Combine(Path.GetTempPath(), "d", "users.csv"), "name,age\na,1\nb,2\nc,3\nd,4\ne,5\nf,6\n");
 
         Assert.True(_vm.HasData);
         Assert.Equal("users.csv", _vm.DataFileName);
