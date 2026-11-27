@@ -686,6 +686,15 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-62](milestone-6-automation/M6-62-command-line-runner.md) | Command-line runner (decision: separate `yaapic-cli`) | any | M6-17, M6-18, M6-19 | done |
 | [M6-63](milestone-6-automation/M6-63-monitors-while-closed.md) | Monitors while Yaapic is closed (decision: not now) | any | M6-39 | done |
 | [M6-64](milestone-6-automation/M6-64-mock-servers-on-the-network.md) | Mock servers reachable from other devices (decision: not now) | any | M6-34 | done |
+| [M6-75](milestone-6-automation/M6-75-adr-automation-views-in-main-window.md) | ADR 0023: automation views in the main window | any | M6-49, M6-56 | todo |
+| [M6-76](milestone-6-automation/M6-76-viewmodel-shell-sections.md) | ViewModel: shell sections for the automation views | any | M6-75 | todo |
+| [M6-77](milestone-6-automation/M6-77-winui-rail-automation-entries.md) | WinUI: automation entries on the rail | windows | M6-76 | todo |
+| [M6-78](milestone-6-automation/M6-78-winui-automation-views-in-main-area.md) | WinUI: automation views in the main area, tool windows removed | windows | M6-77 | todo |
+| [M6-79](milestone-6-automation/M6-79-avalonia-rail-automation-entries.md) | Avalonia: automation entries on the rail | unix | M6-76, M6-77 | todo |
+| [M6-80](milestone-6-automation/M6-80-avalonia-automation-views-in-main-area.md) | Avalonia: automation views in the main area, tool windows removed | unix | M6-78, M6-79 | todo |
+| [M6-81](milestone-6-automation/M6-81-viewmodel-remove-tool-window-events.md) | ViewModel: remove the tool window events | any | M6-78, M6-80 | todo |
+| [M6-82](milestone-6-automation/M6-82-automation-views-docs.md) | Docs: automation views in the main window | any | M6-81 | todo |
+| [M6-83](milestone-6-automation/M6-83-winui-visual-verification-main-window.md) | WinUI visual verification of the automation views in the main window | windows | M6-81 | todo |
 | [M6-65](milestone-6-automation/M6-65-adr-command-line-runner.md) | ADR 0022: command-line runner | any | M6-62 | todo |
 | [M6-66](milestone-6-automation/M6-66-core-read-only-run-sources.md) | Core: read-only run sources and folder lookup | any | M6-65 | todo |
 | [M6-67](milestone-6-automation/M6-67-core-variable-overrides-and-redactor.md) | Core: `YAAPIC_VAR_` variable overrides and a fixed-value redactor | any | M6-65 | todo |
@@ -696,15 +705,6 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-72](milestone-6-automation/M6-72-end-to-end-cli.md) | End-to-end tests: command-line runner | any | M6-71 | todo |
 | [M6-73](milestone-6-automation/M6-73-cli-packaging-and-release.md) | CLI: CI smoke test, zip per OS and release upload | any | M6-71 | todo |
 | [M6-74](milestone-6-automation/M6-74-cli-docs.md) | Command-line runner docs | any | M6-72, M6-73 | todo |
-| [M6-75](milestone-6-automation/M6-75-adr-automation-views-in-main-window.md) | ADR 0023: automation views in the main window | any | M6-49, M6-56 | todo |
-| [M6-76](milestone-6-automation/M6-76-viewmodel-shell-sections.md) | ViewModel: shell sections for the automation views | any | M6-75 | todo |
-| [M6-77](milestone-6-automation/M6-77-winui-rail-automation-entries.md) | WinUI: automation entries on the rail | windows | M6-76 | todo |
-| [M6-78](milestone-6-automation/M6-78-winui-automation-views-in-main-area.md) | WinUI: automation views in the main area, tool windows removed | windows | M6-77 | todo |
-| [M6-79](milestone-6-automation/M6-79-avalonia-rail-automation-entries.md) | Avalonia: automation entries on the rail | unix | M6-76, M6-77 | todo |
-| [M6-80](milestone-6-automation/M6-80-avalonia-automation-views-in-main-area.md) | Avalonia: automation views in the main area, tool windows removed | unix | M6-78, M6-79 | todo |
-| [M6-81](milestone-6-automation/M6-81-viewmodel-remove-tool-window-events.md) | ViewModel: remove the tool window events | any | M6-78, M6-80 | todo |
-| [M6-82](milestone-6-automation/M6-82-automation-views-docs.md) | Docs: automation views in the main window | any | M6-81 | todo |
-| [M6-83](milestone-6-automation/M6-83-winui-visual-verification-main-window.md) | WinUI visual verification of the automation views in the main window | windows | M6-81 | todo |
 
 ### Milestone 6 summary
 
