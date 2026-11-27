@@ -23,7 +23,7 @@
       <v:RunnerRequestListView Setup="{x:Bind ViewModel.Setup, Mode=OneWay}"/>
 
       <!-- The options and the data preview scroll when the window is short, so the request list never collapses. -->
-      <ScrollViewer Grid.Row="1" MaxHeight="260" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <ScrollViewer Grid.Row="1" MaxHeight="340" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
       <StackPanel Spacing="8">
       <Grid ColumnSpacing="8" RowSpacing="6">
         <Grid.ColumnDefinitions>

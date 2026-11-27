@@ -237,7 +237,7 @@ public sealed class LoadTestViewModelTests
     }
 
     [Fact]
-    public async Task Requests_with_scripts_add_a_note()
+    public async Task Requests_with_scripts_add_no_note_because_scripts_run()
     {
         _vm.Open(Folder("S", CollectionNode.ForRequest(HttpRequestDefinition.Create("s") with
         {
@@ -250,7 +250,7 @@ public sealed class LoadTestViewModelTests
         Task run = _vm.StartCommand.ExecuteAsync(null);
         await FinishAsync(run);
 
-        Assert.Equal(Strings.LoadScriptsSkipped, _vm.Note);
+        Assert.Equal("", _vm.Note);
     }
 
     [Fact]

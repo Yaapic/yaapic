@@ -277,11 +277,6 @@ public sealed partial class LoadTestViewModel : ObservableObject
             notes.Add(Strings.LoadTruncated(StoredSamples));
         }
 
-        if (r.Plan.Items.Any(static i => !i.Request.Scripts.IsEmpty))
-        {
-            notes.Add(Strings.LoadScriptsSkipped);
-        }
-
         Note = string.Join(' ', notes);
         Result = r;
     }
