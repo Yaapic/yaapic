@@ -19,4 +19,12 @@ public static class TextMap
 
     /// <summary>Gets the "saved" line shown after an export, empty when nothing was saved.</summary>
     public static FuncValueConverter<string?, string> ExportSaved { get; } = new(n => n is null ? "" : Strings.ExportSaved(n));
+
+    /// <summary>Gets the "n of m selected" line of the Runner setup from the selected and total counts.</summary>
+    public static FuncMultiValueConverter<object?, string> RunnerSelected { get; } =
+        new(v => v.ToArray() is [int selected, int total] ? Strings.RunnerSelectedCount(selected, total) : "");
+
+    /// <summary>Gets the data file summary line of the Runner setup from the file name, row count and column count; empty without a file.</summary>
+    public static FuncMultiValueConverter<object?, string> RunnerData { get; } =
+        new(v => v.ToArray() is [string file, int rows, int columns] ? Strings.RunnerDataSummary(file, rows, columns) : "");
 }
