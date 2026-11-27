@@ -36,14 +36,27 @@ public sealed class Milestone2EndToEndTests : IClassFixture<LoopbackServer>, IDi
 
     private static string EchoHeader(JsonElement echo, string name) => echo.GetProperty("headers").GetProperty(name).GetString()!;
 
+    // The conditions enumerate view model lists that the history recorder updates from a worker thread; a pass that races it is retried.
+    private static bool Holds(Func<bool> condition)
+    {
+        try
+        {
+            return condition();
+        }
+        catch (InvalidOperationException)
+        {
+            return false;
+        }
+    }
+
     private static async Task WaitUntilAsync(Func<bool> condition)
     {
-        for (var i = 0; i < 100 && !condition(); i++)
+        for (var i = 0; i < 100 && !Holds(condition); i++)
         {
             await Task.Delay(20, TestContext.Current.CancellationToken);
         }
 
-        Assert.True(condition());
+        Assert.True(Holds(condition));
     }
 
     private static CollectionNodeViewModel Find(ShellViewModel shell, string name)
