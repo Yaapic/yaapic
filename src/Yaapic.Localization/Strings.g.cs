@@ -328,6 +328,9 @@ public static class Strings
     /// <summary>Close</summary>
     public static string CommonClose => Localizer.Pick("Close", "Fermer");
 
+    /// <summary>Continue</summary>
+    public static string CommonContinue => Localizer.Pick("Continue", "Continuer");
+
     /// <summary>Copy</summary>
     public static string CommonCopy => Localizer.Pick("Copy", "Copier");
 

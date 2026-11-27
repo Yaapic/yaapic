@@ -221,6 +221,7 @@
   "request.tabBody": "Body",
   "common.browse": "Browse",
   "common.cancel": "Cancel",
+  "common.continue": "Continue",
   "settings.checkAutomatically": "Check for updates automatically",
   "settings.checkNow": "Check now",
   "common.clear": "Clear",

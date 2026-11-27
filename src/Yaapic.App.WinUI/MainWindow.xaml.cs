@@ -42,6 +42,7 @@ public sealed partial class MainWindow : Window
         }
 
         AppWindow.Closing += OnClosing;
+        Closed += (_, _) => Views.ToolWindow.CloseAll();
         Root.ActualThemeChanged += (_, _) => ApplyCaptionButtonColors();
         ApplyCaptionButtonColors();
         // Ctrl+` (the OEM 3 key, 0xC0 on a US layout) has no named VirtualKey and no KeyboardAccelerator match: handle the key.
@@ -58,15 +59,7 @@ public sealed partial class MainWindow : Window
         Presentation.BrushMap.IsLight = light;
         Presentation.MethodBrush.RefreshAll();
         Bindings?.Update(); // the rail brushes come from BrushMap and are bound once
-        var titleBar = AppWindow.TitleBar;
-        var foreground = light ? Windows.UI.Color.FromArgb(0xFF, 0x4A, 0x51, 0x5B) : Windows.UI.Color.FromArgb(0xFF, 0xA3, 0xAA, 0xB4);
-        var hoverForeground = light ? Windows.UI.Color.FromArgb(0xFF, 0x16, 0x19, 0x1D) : Windows.UI.Color.FromArgb(0xFF, 0xEC, 0xEE, 0xF1);
-        var hover = light ? Windows.UI.Color.FromArgb(0x0D, 0x14, 0x18, 0x1E) : Windows.UI.Color.FromArgb(0x0F, 0xFF, 0xFF, 0xFF);
-        titleBar.ButtonForegroundColor = foreground;
-        titleBar.ButtonInactiveForegroundColor = foreground;
-        titleBar.ButtonHoverForegroundColor = hoverForeground;
-        titleBar.ButtonPressedForegroundColor = hoverForeground;
-        titleBar.ButtonHoverBackgroundColor = hover;
+        Presentation.CaptionColors.Apply(AppWindow.TitleBar, light);
     }
 
     /// <summary>Gets or sets the shell the window displays; setting it refreshes every binding.</summary>
@@ -546,4 +539,7 @@ public sealed partial class MainWindow : Window
     /// <summary>Applies a theme, shared by the Settings menu and the <c>--theme</c> command-line option.</summary>
     /// <param name="theme">The element theme to apply.</param>
     internal void SetTheme(ElementTheme theme) => Root.RequestedTheme = theme;
+
+    /// <summary>Gets the root element whose theme the tool windows copy.</summary>
+    internal FrameworkElement ThemeRoot => Root;
 }

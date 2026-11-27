@@ -221,6 +221,7 @@
   "request.tabBody": "Corps",
   "common.browse": "Parcourir",
   "common.cancel": "Annuler",
+  "common.continue": "Continuer",
   "settings.checkAutomatically": "Rechercher les mises à jour automatiquement",
   "settings.checkNow": "Rechercher maintenant",
   "common.clear": "Effacer",

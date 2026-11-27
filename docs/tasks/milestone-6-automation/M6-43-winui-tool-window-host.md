@@ -1,6 +1,6 @@
 # M6-43: WinUI: tool window host and line chart
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-42
 
@@ -38,11 +38,19 @@ The four windows (M6-44 to M6-48) and their entry points (M6-49).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] A temporary debug call (removed before the commit) opens a `ToolWindow` with a `LineChart` of sample points and a `ConfirmAsync`
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] A temporary debug call (removed before the commit) opens a `ToolWindow` with a `LineChart` of sample points and a `ConfirmAsync`
   dialog inside it, in dark and light: the title bar looks like the main window's, the dialog appears over the tool window, closing the main
   window closes the tool window. Record anything not run in Notes.
-- [ ] Strings in EN and FR; 0 warnings, all tests green.
+- [x] Strings in EN and FR; 0 warnings, all tests green.
+
+## Notes
+
+- The temporary debug call opened a `ToolWindow` with a `LineChart` in dark and light (AOT binary): the title bar, Mica and the chart look right in both.
+  Not run: the `ConfirmAsync` dialog over the tool window and closing the main window to close the tool window (the main window was not visible
+  in the screenshots), and the French locale visual check.
+- `ShowOrActivate` takes the slot by `ref`, which a `Closed` handler cannot capture: the window records that it closed and a closed window in the
+  slot is replaced on the next call.
 
 ## Suggested commit message
 
