@@ -50,6 +50,7 @@ public sealed class LoadTestViewModelTests
     private readonly ManualTimeProvider _time = new(DateTimeOffset.UnixEpoch);
     private readonly LatencyTransport _transport;
     private readonly LoadTestViewModel _vm;
+    private DateTimeOffset _runStart;
 
     public LoadTestViewModelTests()
     {
@@ -72,30 +73,38 @@ public sealed class LoadTestViewModelTests
     private static CollectionNode Folder(string name, params CollectionNode[] children) =>
         CollectionNode.ForFolder(FolderDefinition.Create(name), children);
 
-    private async Task StepAsync()
+    // Idle means every virtual user waits on the clock again (one timer each), plus the end of the duration and the snapshot timer.
+    private Task StartAsync()
     {
-        _time.Advance(TimeSpan.FromSeconds(1));
-
-        // Wait until the request count has not moved for 50 ms; a fixed delay is too short on a loaded machine.
-        int last = -1;
-        int stable = 0;
-        for (int i = 0; i < 500 && stable < 5; i++)
-        {
-            await Task.Delay(10, TestContext.Current.CancellationToken);
-            int now = _transport.Sent;
-            stable = now == last ? stable + 1 : 0;
-            last = now;
-        }
+        _runStart = _time.GetUtcNow();
+        return _vm.StartCommand.ExecuteAsync(null);
     }
 
+    private Task SettleAsync() => _time.WaitForPendingTimersAsync(2 + _vm.VirtualUsers, TestContext.Current.CancellationToken);
+
+    private async Task StepAsync()
+    {
+        await SettleAsync();
+        _time.Advance(TimeSpan.FromSeconds(1));
+        await SettleAsync();
+    }
+
+    // Whole seconds while every user waits on the clock, then the last second; users between two waits are caught by the next advance.
     private async Task FinishAsync(Task run)
     {
-        for (int i = 0; i < 40 && !run.IsCompleted; i++)
+        while (_time.GetUtcNow() - _runStart < TimeSpan.FromSeconds(_vm.DurationSeconds - 1))
         {
             await StepAsync();
         }
 
-        await run.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
+        await SettleAsync();
+        while (!run.IsCompleted)
+        {
+            _time.Advance(TimeSpan.FromSeconds(1));
+            await ManualTimeProvider.WaitUntilAsync(() => run.IsCompleted || _time.PendingTimers >= 2, "the run to end or wait on the clock", TestContext.Current.CancellationToken);
+        }
+
+        await run;
     }
 
     [Fact]
@@ -157,9 +166,9 @@ public sealed class LoadTestViewModelTests
         Assert.Null(_vm.Result);
 
         _dialogs.ConfirmAnswer = true;
-        Task run = _vm.StartCommand.ExecuteAsync(null);
+        Task run = StartAsync();
         await FinishAsync(run);
-        Task second = _vm.StartCommand.ExecuteAsync(null);
+        Task second = StartAsync();
         await FinishAsync(second);
 
         Assert.Equal(2, _dialogs.ConfirmMessages.Count);
@@ -169,8 +178,8 @@ public sealed class LoadTestViewModelTests
     [Fact]
     public async Task Snapshots_update_the_tiles_and_normalized_charts_and_the_final_result_fills_the_tables()
     {
-        Task run = _vm.StartCommand.ExecuteAsync(null);
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        Task run = StartAsync();
+        await SettleAsync();
         Assert.True(_vm.IsRunning);
         for (int i = 0; i < 4; i++)
         {
@@ -207,8 +216,8 @@ public sealed class LoadTestViewModelTests
     [Fact]
     public async Task Stop_cancels_the_test_and_keeps_the_partial_result()
     {
-        Task run = _vm.StartCommand.ExecuteAsync(null);
-        await Task.Delay(40, TestContext.Current.CancellationToken);
+        Task run = StartAsync();
+        await SettleAsync();
         await StepAsync();
 
         Assert.True(_vm.StopCommand.CanExecute(null));
@@ -224,7 +233,7 @@ public sealed class LoadTestViewModelTests
     public async Task Export_saves_the_json_report_under_its_suggested_name()
     {
         _dialogs.SaveFileAnswer = true;
-        Task run = _vm.StartCommand.ExecuteAsync(null);
+        Task run = StartAsync();
         await FinishAsync(run);
 
         await _vm.ExportCommand.ExecuteAsync(null);
@@ -247,7 +256,7 @@ public sealed class LoadTestViewModelTests
         _vm.VirtualUsers = 1;
         _vm.DurationSeconds = 10;
 
-        Task run = _vm.StartCommand.ExecuteAsync(null);
+        Task run = StartAsync();
         await FinishAsync(run);
 
         Assert.Equal("", _vm.Note);

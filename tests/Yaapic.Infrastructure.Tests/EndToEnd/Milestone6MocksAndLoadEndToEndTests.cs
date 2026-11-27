@@ -33,14 +33,7 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
 
     private static CancellationToken Ct => TestContext.Current.CancellationToken;
 
-    private static int FreePort()
-    {
-        var listener = new TcpListener(IPAddress.Loopback, 0);
-        listener.Start();
-        var port = ((IPEndPoint)listener.LocalEndpoint).Port;
-        listener.Stop();
-        return port;
-    }
+    private static int FreePort() => TestPorts.Next();
 
     private static bool PortIsFree(int port)
     {
@@ -301,6 +294,31 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
         await WaitUntilAsync(() => shell.Mocks!.Log.Count == 2);
     }
 
+    // Only built when requests failed, once the test is over: the mock keeps logging from its own threads until then.
+    private static string ErrorDetail(ShellViewModel shell, LoadTestResult result)
+    {
+        if (result.Overall.Errors == 0)
+        {
+            return "";
+        }
+
+        // The view model list is not thread-safe and the mock may still log, so copy it until a copy succeeds.
+        var statuses = "?";
+        for (var i = 0; i < 50 && statuses == "?"; i++)
+        {
+            try
+            {
+                statuses = string.Join(", ", shell.Mocks!.Log.ToArray().GroupBy(l => l.Status).Select(g => $"{g.Key} x{g.Count()}"));
+            }
+            catch (Exception e) when (e is ArgumentException or IndexOutOfRangeException or NullReferenceException or InvalidOperationException)
+            {
+                // Modified while copied.
+            }
+        }
+
+        return $"{result.Overall.Errors} of {result.Overall.Count} requests failed: {string.Join(" | ", result.ErrorMessages)}; the mock logged {statuses}";
+    }
+
     private static LoadTestResult ResultOf(ShellViewModel shell) => shell.LoadTest!.Result!;
 
     [Fact]
@@ -323,7 +341,7 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
         Assert.Contains("127.0.0.1", _fx.Dialogs.ConfirmMessages[0], StringComparison.Ordinal);
         Assert.False(result.Canceled);
         Assert.True(result.Overall.Count > 0);
-        Assert.Equal(0, result.Overall.Errors);
+        Assert.True(result.Overall.Errors == 0, ErrorDetail(shell, result));
         Assert.Equal(0, result.Overall.ErrorRate);
         Assert.True(result.Buckets.Count >= 5, "Expected per-second buckets.");
         Assert.True(result.Buckets.Sum(b => b.Requests) > 0);
@@ -355,7 +373,7 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
 
         var result = ResultOf(shell);
         Assert.True(result.Overall.Count > 0);
-        Assert.Equal(0, result.Overall.Errors);
+        Assert.True(result.Overall.Errors == 0, ErrorDetail(shell, result));
         var users = result.Buckets.Select(b => b.ActiveUsers).ToArray();
         Assert.True(users[0] < users.Max(), "Active users should rise during the ramp.");
         Assert.Equal(10, users.Max());

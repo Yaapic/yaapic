@@ -197,6 +197,77 @@ public sealed class AutomationShellTests : IAsyncDisposable
     }
 
     [Fact]
+    public async Task Without_a_folder_the_tools_offer_the_collection_folders_and_cannot_run()
+    {
+        Attach();
+        _shell.ShowRunnerCommand.Execute(null);
+        var (top, _, _) = await TreeAsync(); // the tree refresh reaches the already attached tools
+
+        foreach (var setup in new[] { _runner.Setup, _load.Requests })
+        {
+            Assert.False(setup.HasFolder);
+            Assert.Empty(setup.Items);
+            Assert.False(setup.CanRun);
+            Assert.Null(setup.SelectedFolder);
+            Assert.Equal(["Top", "Top/Nested"], setup.FolderChoices.Select(c => c.Path));
+        }
+
+        Assert.False(_runner.RunCommand.CanExecute(null));
+        Assert.False(_load.StartCommand.CanExecute(null));
+        Assert.Equal(top.Id, _runner.Setup.FolderChoices[0].Id);
+    }
+
+    [Fact]
+    public async Task Choosing_a_folder_loads_its_requests_and_changing_it_reloads()
+    {
+        Attach();
+        var (top, root, _) = await TreeAsync();
+        var nested = root.Children.Single(c => c.IsFolder);
+
+        foreach (var setup in new[] { _runner.Setup, _load.Requests })
+        {
+            setup.SelectedFolder = setup.FolderChoices[0];
+            Assert.True(setup.HasFolder);
+            Assert.Equal(top.Id, setup.FolderId);
+            Assert.Single(setup.Items);
+
+            setup.SelectedFolder = setup.FolderChoices[1];
+            Assert.Equal(nested.Id, setup.FolderId);
+            Assert.Empty(setup.Items);
+        }
+
+        _shell.RunFolderCommand.Execute(root); // a context menu pre-selects the folder in the selector
+        Assert.Equal(top.Id, _runner.Setup.SelectedFolder?.Id);
+        Assert.Single(_runner.Setup.Items);
+        _shell.LoadTestFolderCommand.Execute(nested);
+        Assert.Equal(nested.Id, _load.Requests.SelectedFolder?.Id);
+    }
+
+    [Fact]
+    public async Task The_folder_cannot_change_while_a_run_or_a_load_test_is_going_on()
+    {
+        Attach();
+        var (top, _, _) = await TreeAsync();
+        _runner.Setup.SelectedFolder = _runner.Setup.FolderChoices[0];
+        _load.Requests.SelectedFolder = _load.Requests.FolderChoices[0];
+
+        _runner.IsRunning = true;
+        _load.IsRunning = true;
+        _runner.Setup.SelectedFolder = _runner.Setup.FolderChoices[1];
+        _load.Requests.SelectedFolder = _load.Requests.FolderChoices[1];
+
+        Assert.Equal(top.Id, _runner.Setup.FolderId);
+        Assert.Equal(top.Id, _runner.Setup.SelectedFolder?.Id);
+        Assert.Single(_runner.Setup.Items);
+        Assert.Equal(top.Id, _load.Requests.FolderId);
+        Assert.Equal(top.Id, _load.Requests.SelectedFolder?.Id);
+
+        _runner.IsRunning = false;
+        _runner.Setup.SelectedFolder = _runner.Setup.FolderChoices[1];
+        Assert.NotEqual(top.Id, _runner.Setup.FolderId);
+    }
+
+    [Fact]
     public async Task The_palette_lists_the_tools_and_opens_them_with_and_without_an_active_collection_request()
     {
         Attach();

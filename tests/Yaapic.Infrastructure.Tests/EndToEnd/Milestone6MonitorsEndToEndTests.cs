@@ -275,11 +275,7 @@ public sealed class Milestone6MonitorsEndToEndTests : IDisposable
 
         public GateServer()
         {
-            var probe = new TcpListener(IPAddress.Loopback, 0);
-            probe.Start();
-            var port = ((IPEndPoint)probe.LocalEndpoint).Port;
-            probe.Stop();
-            BaseUrl = $"http://127.0.0.1:{port}";
+            BaseUrl = $"http://127.0.0.1:{TestPorts.Next()}";
             _listener.Prefixes.Add(BaseUrl + "/");
             _listener.Start();
             _ = Task.Run(AcceptAsync);

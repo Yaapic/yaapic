@@ -144,6 +144,8 @@ public sealed partial class LoadTestViewModel : ObservableObject
         }
     }
 
+    partial void OnIsRunningChanged(bool value) => Requests.IsFolderLocked = value;
+
     partial void OnVirtualUsersChanged(int value) => Revalidate();
 
     partial void OnDurationSecondsChanged(int value) => Revalidate();

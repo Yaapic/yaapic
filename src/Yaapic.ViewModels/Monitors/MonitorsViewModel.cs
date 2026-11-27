@@ -389,7 +389,7 @@ public sealed partial class MonitorsViewModel : ObservableObject
         EnvironmentChoices.FirstOrDefault(c => c.Id is not null && c.Id == definition.EnvironmentId)?.Name;
 
     // Top-level folders first, then deeper ones, each level by path.
-    private static IEnumerable<MonitorFolderChoice> FolderPaths(IReadOnlyList<CollectionNode> tree)
+    internal static IEnumerable<MonitorFolderChoice> FolderPaths(IReadOnlyList<CollectionNode> tree)
     {
         var all = new List<(int Depth, MonitorFolderChoice Choice)>();
         Walk(tree, "", 0);

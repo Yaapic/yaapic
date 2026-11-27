@@ -5,7 +5,8 @@
     xmlns:loc="using:Yaapic.Localization"
     xmlns:p="using:Yaapic.App.WinUI.Presentation"
     xmlns:ic="using:FluentIcons.WinUI"
-    xmlns:r="using:Yaapic.ViewModels.Runner">
+    xmlns:r="using:Yaapic.ViewModels.Runner"
+    xmlns:m="using:Yaapic.ViewModels.Monitors">
   <Grid RowSpacing="8">
     <Grid.RowDefinitions>
       <RowDefinition Height="Auto"/>
@@ -18,18 +19,32 @@
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="Auto"/>
         </Grid.ColumnDefinitions>
-        <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" TextTrimming="CharacterEllipsis"
-                   Text="{x:Bind Setup.FolderName, Mode=OneWay}"/>
-        <TextBlock Grid.Column="1" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
-                   Text="{x:Bind p:TextMap.RunnerSelected(Setup.SelectedCount, Setup.Items.Count), Mode=OneWay}"/>
+        <ComboBox HorizontalAlignment="Stretch"
+                  AutomationProperties.Name="{x:Bind loc:Strings.RunnerFolder}" PlaceholderText="{x:Bind loc:Strings.RunnerChooseFolder}"
+                  IsEnabled="{x:Bind Setup.CanChooseFolder, Mode=OneWay}"
+                  ItemsSource="{x:Bind p:ListMap.MonitorFolders(Setup.FolderChoices), Mode=OneWay}"
+                  SelectedItem="{x:Bind Setup.SelectedFolder, Mode=OneWay}" SelectionChanged="OnFolderChanged">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="m:MonitorFolderChoice">
+              <TextBlock Text="{x:Bind Path}"/>
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+        <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                   Text="{x:Bind p:TextMap.RunnerSelected(Setup.SelectedCount, Setup.Items.Count), Mode=OneWay}"
+                   Visibility="{x:Bind p:VisibilityMap.WhenTrue(Setup.HasFolder), Mode=OneWay}"/>
       </Grid>
 
-      <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4">
+      <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4" Visibility="{x:Bind p:VisibilityMap.WhenTrue(Setup.HasFolder), Mode=OneWay}">
         <HyperlinkButton Content="{x:Bind loc:Strings.RunnerSelectAll}" Command="{x:Bind Setup.SelectAllCommand}"/>
         <HyperlinkButton Content="{x:Bind loc:Strings.RunnerSelectNone}" Command="{x:Bind Setup.SelectNoneCommand}"/>
       </StackPanel>
 
-      <ListView Grid.Row="2" SelectionMode="None" AutomationProperties.Name="{x:Bind loc:Strings.RunnerRequests}"
+      <TextBlock Grid.Row="2" TextWrapping="Wrap" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
+                 Text="{x:Bind loc:Strings.RunnerChooseFolder}"
+                 Visibility="{x:Bind p:VisibilityMap.WhenFalse(Setup.HasFolder), Mode=OneWay}"/>
+
+      <ListView Grid.Row="2" SelectionMode="None" Visibility="{x:Bind p:VisibilityMap.WhenTrue(Setup.HasFolder), Mode=OneWay}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerRequests}"
                 ItemsSource="{x:Bind p:ListMap.RunnerItems(Setup.Items), Mode=OneWay}">
         <ListView.ItemTemplate>
           <DataTemplate x:DataType="r:RunnerItemViewModel">

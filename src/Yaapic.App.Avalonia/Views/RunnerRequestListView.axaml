@@ -3,13 +3,25 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:p="using:Yaapic.App.Avalonia.Presentation"
     xmlns:r="using:Yaapic.ViewModels.Runner"
+    xmlns:m="using:Yaapic.ViewModels.Monitors"
     x:Class="Yaapic.App.Avalonia.Views.RunnerRequestListView"
     x:DataType="r:RunnerSetupViewModel"
     x:CompileBindings="True">
   <Grid RowDefinitions="Auto,Auto,*" RowSpacing="8">
     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
-      <TextBlock Classes="bodyStrong" TextTrimming="CharacterEllipsis" Text="{Binding FolderName}" />
-      <TextBlock Grid.Column="1" Foreground="{DynamicResource YaapicTextSecondaryBrush}">
+      <StackPanel Spacing="2">
+        <TextBlock Text="{x:Static loc:Strings.RunnerFolder}" />
+        <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.RunnerFolder}"
+                  PlaceholderText="{x:Static loc:Strings.RunnerChooseFolder}" IsEnabled="{Binding CanChooseFolder}"
+                  ItemsSource="{Binding FolderChoices}" SelectedItem="{Binding SelectedFolder, Mode=OneWay}" SelectionChanged="OnFolderChanged">
+          <ComboBox.ItemTemplate>
+            <DataTemplate x:DataType="m:MonitorFolderChoice">
+              <TextBlock Text="{Binding Path}" />
+            </DataTemplate>
+          </ComboBox.ItemTemplate>
+        </ComboBox>
+      </StackPanel>
+      <TextBlock Grid.Column="1" VerticalAlignment="Bottom" IsVisible="{Binding HasFolder}" Foreground="{DynamicResource YaapicTextSecondaryBrush}">
         <TextBlock.Text>
           <MultiBinding Converter="{x:Static p:TextMap.RunnerSelected}">
             <Binding Path="SelectedCount" />
@@ -19,12 +31,15 @@
       </TextBlock>
     </Grid>
 
-    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4">
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4" IsVisible="{Binding HasFolder}">
       <Button Content="{x:Static loc:Strings.RunnerSelectAll}" Command="{Binding SelectAllCommand}" />
       <Button Content="{x:Static loc:Strings.RunnerSelectNone}" Command="{Binding SelectNoneCommand}" />
     </StackPanel>
 
-    <ListBox Grid.Row="2" SelectionMode="Toggle" AutomationProperties.Name="{x:Static loc:Strings.RunnerRequests}"
+    <TextBlock Grid.Row="2" TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+               Text="{x:Static loc:Strings.RunnerChooseFolder}" IsVisible="{Binding !HasFolder}" />
+
+    <ListBox Grid.Row="2" SelectionMode="Toggle" IsVisible="{Binding HasFolder}" AutomationProperties.Name="{x:Static loc:Strings.RunnerRequests}"
              ItemsSource="{Binding Items}">
       <ListBox.ItemTemplate>
         <DataTemplate x:DataType="r:RunnerItemViewModel">

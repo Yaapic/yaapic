@@ -6,24 +6,27 @@
     xmlns:p="using:Yaapic.App.WinUI.Presentation"
     xmlns:v="using:Yaapic.App.WinUI.Views"
     xmlns:lt="using:Yaapic.ViewModels.LoadTesting">
-  <Grid>
+  <Grid x:Name="Root">
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="360"/>
+      <ColumnDefinition x:Name="LeftColumn" Width="360" MinWidth="280" MaxWidth="640"/>
+      <ColumnDefinition Width="4"/>
       <ColumnDefinition Width="*"/>
     </Grid.ColumnDefinitions>
 
     <!-- Configuration -->
-    <Grid Padding="12" RowSpacing="8" BorderThickness="0,0,1,0" BorderBrush="{ThemeResource YaapicBorderDefaultBrush}">
+    <Grid x:Name="Pane" Padding="12" RowSpacing="8">
       <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
-        <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
       <v:RunnerRequestListView Setup="{x:Bind ViewModel.Requests, Mode=OneWay}"/>
 
-      <StackPanel Grid.Row="1" Spacing="6">
+      <!-- The data file and the options scroll when the window is short, so the request list keeps a minimum height. -->
+      <ScrollViewer x:Name="Options" Grid.Row="1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="8">
+      <StackPanel Spacing="6">
         <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.RunnerData}"/>
         <Grid ColumnSpacing="8">
           <Grid.ColumnDefinitions>
@@ -44,7 +47,7 @@
                    Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Requests.DataError), Mode=OneWay}"/>
       </StackPanel>
 
-      <Grid Grid.Row="2" ColumnSpacing="8" RowSpacing="6">
+      <Grid ColumnSpacing="8" RowSpacing="6">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
@@ -74,8 +77,10 @@
                    SpinButtonPlacementMode="Compact" Minimum="-1" Maximum="1000000" SmallChange="100"
                    Value="{x:Bind ViewModel.ThinkTimeMs, Mode=OneWay}" ValueChanged="OnThinkChanged"/>
       </Grid>
+      </StackPanel>
+      </ScrollViewer>
 
-      <StackPanel Grid.Row="3" Spacing="8">
+      <StackPanel x:Name="Footer" Grid.Row="2" Spacing="8">
         <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{ThemeResource YaapicDangerBrush}"
                    Text="{x:Bind ViewModel.ValidationError, Mode=OneWay}"
                    Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.ValidationError), Mode=OneWay}"/>
@@ -88,8 +93,20 @@
       </StackPanel>
     </Grid>
 
+    <Grid Grid.Column="1">
+      <Rectangle Width="1" HorizontalAlignment="Center" IsHitTestVisible="False" Fill="{ThemeResource YaapicBorderDefaultBrush}"/>
+      <v:SplitterHandle x:Name="Splitter" Background="Transparent" IsTabStop="True" UseSystemFocusVisuals="True"
+                        AutomationProperties.Name="{x:Bind loc:Strings.RunnerResizeList}">
+        <v:SplitterHandle.Template>
+          <ControlTemplate TargetType="Control">
+            <Border Background="Transparent"/>
+          </ControlTemplate>
+        </v:SplitterHandle.Template>
+      </v:SplitterHandle>
+    </Grid>
+
     <!-- Live metrics and results -->
-    <ScrollViewer Grid.Column="1">
+    <ScrollViewer Grid.Column="2">
       <StackPanel Padding="12" Spacing="12">
         <TextBlock Style="{StaticResource YaapicSubtitleTextStyle}" Text="{x:Bind ViewModel.ElapsedText, Mode=OneWay}"/>
 

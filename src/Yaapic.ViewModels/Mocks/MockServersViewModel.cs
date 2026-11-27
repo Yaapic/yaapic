@@ -19,6 +19,7 @@ public sealed partial class MockServersViewModel : ObservableObject
     private readonly MockServerService _service;
     private readonly IDialogService _dialogs;
     private readonly SynchronizationContext? _context = SynchronizationContext.Current;
+    private readonly object _inline = new();
     private MockServerDefinition? _saved;
     private MockServerItemViewModel? _selectedServer;
     private bool _loading;
@@ -489,12 +490,17 @@ public sealed partial class MockServersViewModel : ObservableObject
         }
     }
 
-    // The service raises its events from worker threads; the UI frameworks need them on their own context (inline in tests).
+    // The service raises its events from worker threads; the UI frameworks need them on their own context. Without one (tests, headless
+    // hosts) they run inline, one at a time: concurrent connections would otherwise corrupt the log list, and the exception would turn
+    // the answer of the mock into a 500.
     private void Post(Action action)
     {
         if (_context is null)
         {
-            action();
+            lock (_inline)
+            {
+                action();
+            }
         }
         else
         {

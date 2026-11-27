@@ -25,6 +25,12 @@ recorded in the history.
 requests cannot be run. In the setup you can untick requests and move them up and down; that order is kept while Yaapic
 runs (runner configurations are not saved).
 
+**Choosing the folder.** The setup pane starts with a folder selector (every folder of the collections, by path). From the
+rail, the status bar or the palette it shows "Choose a folder to run" and Run stays disabled until you pick one; from a folder's
+context menu the folder is already selected. You can change the folder at any time except while a run is going on. The pane
+beside the results can be resized by dragging the splitter or with the Left and Right arrow keys (WinUI: double click resets it);
+the width is kept while you switch views, not across restarts.
+
 | Option | Range | Default |
 |---|---|---|
 | Iterations | 1 to 10 000 | 1 (the row count when a data file is chosen) |
@@ -118,7 +124,7 @@ per second whatever the number of users ([spike](spikes/m6-load.md)).
 | Think time | 0 to 10 000 ms between two requests of a user (default 0) |
 | Data file | optional, same files as the Runner; rows are handed out round-robin, one per user iteration |
 
-The request list, selection and order work as in the Runner setup. Variable changes made by scripts are never saved, and
+The folder selector, request list, selection and order work as in the Runner setup (no folder is chosen from the rail until you pick one; the folder cannot change during a test). Variable changes made by scripts are never saved, and
 nothing goes to the history or the console. `setNextRequest` is ignored; `skipRequest` skips.
 
 **Confirmation.** The first start after Yaapic starts asks "Start a load test against {hosts}?" and shows the target hosts.

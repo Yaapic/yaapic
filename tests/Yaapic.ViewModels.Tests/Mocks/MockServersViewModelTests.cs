@@ -268,6 +268,29 @@ public sealed class MockServersViewModelTests
     }
 
     [Fact]
+    public async Task Requests_from_concurrent_connections_all_get_an_answer_and_a_log_row()
+    {
+        await LoadedWithAsync(Server("a", 4000) with { Routes = [MockRoute.Create("hello") with { Method = "ANY", Path = "/hello" }] });
+        await _vm.StartCommand.ExecuteAsync(null);
+
+        // The host calls the handler from one thread per connection; with no UI context the log is updated on those threads.
+        var answers = await Task.WhenAll(Enumerable.Range(0, 8).Select(_ => Task.Run(async () =>
+        {
+            var statuses = new List<int>();
+            for (var i = 0; i < 100; i++)
+            {
+                statuses.Add((await _host.SendAsync(4000, Post("/hello", ""))).Status);
+            }
+
+            return statuses;
+        }, TestContext.Current.CancellationToken)));
+
+        Assert.All(answers.SelectMany(a => a), status => Assert.Equal(200, status));
+        Assert.Equal(500, _vm.Log.Count);
+        Assert.All(_vm.Log, row => Assert.NotNull(row));
+    }
+
+    [Fact]
     public async Task ClearLog_empties_the_log()
     {
         await LoadedWithAsync(Server("a", 4000));

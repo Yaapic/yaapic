@@ -121,6 +121,8 @@ public sealed partial class RunnerViewModel : ObservableObject
         }
     }
 
+    partial void OnIsRunningChanged(bool value) => Setup.IsFolderLocked = value;
+
     partial void OnFilterChanged(RunnerFilter value) => RefreshVisible();
 
     partial void OnSelectedRowChanged(RunnerResultRowViewModel? value)

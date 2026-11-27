@@ -7,6 +7,7 @@ using Yaapic.Core.Runner;
 using Yaapic.Domain.Collections;
 using Yaapic.Localization;
 using Yaapic.UI.Abstractions;
+using Yaapic.ViewModels.Monitors;
 
 namespace Yaapic.ViewModels.Runner;
 
@@ -18,9 +19,22 @@ public sealed partial class RunnerSetupViewModel : ObservableObject
     private readonly IImportInputReader _reader;
     private readonly IDialogService _dialogs;
     private IReadOnlyList<IterationDataRow> _rows = [];
+    private IReadOnlyList<CollectionNode> _tree = [];
+    private bool _syncingFolder;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasFolder))]
     private Guid _folderId;
+
+    [ObservableProperty]
+    private IReadOnlyList<MonitorFolderChoice> _folderChoices = [];
+
+    [ObservableProperty]
+    private MonitorFolderChoice? _selectedFolder;
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(CanChooseFolder))]
+    private bool _isFolderLocked;
 
     [ObservableProperty]
     private string _folderName = "";
@@ -73,6 +87,12 @@ public sealed partial class RunnerSetupViewModel : ObservableObject
     /// <summary>Gets the requests, in run order.</summary>
     public ObservableCollection<RunnerItemViewModel> Items { get; } = [];
 
+    /// <summary>Gets a value indicating whether a folder is loaded; the view shows a "choose a folder" hint otherwise.</summary>
+    public bool HasFolder => FolderId != Guid.Empty;
+
+    /// <summary>Gets a value indicating whether the folder selector is usable (not while a run or a load test is going on).</summary>
+    public bool CanChooseFolder => !IsFolderLocked;
+
     /// <summary>Gets the number of selected requests.</summary>
     public int SelectedCount => Items.Count(static i => i.IsSelected);
 
@@ -88,6 +108,39 @@ public sealed partial class RunnerSetupViewModel : ObservableObject
 
     /// <summary>Gets a value indicating whether the run can start.</summary>
     public bool CanRun => ValidationError is null && !IsLoadingData;
+
+    /// <summary>Hands the setup the collection tree, which feeds the folder selector; call it whenever the tree is reloaded.</summary>
+    /// <param name="tree">The top-level nodes of the collection tree.</param>
+    public void UpdateFolders(IReadOnlyList<CollectionNode> tree)
+    {
+        ArgumentNullException.ThrowIfNull(tree);
+        _tree = tree;
+        FolderChoices = [.. MonitorsViewModel.FolderPaths(tree)];
+        SyncSelectedFolder();
+    }
+
+    partial void OnSelectedFolderChanged(MonitorFolderChoice? value)
+    {
+        if (_syncingFolder || value is null || value.Id == FolderId)
+        {
+            return;
+        }
+
+        if (IsFolderLocked || CollectionNode.Flatten(_tree).FirstOrDefault(n => n.Id == value.Id && n.Kind == CollectionNodeKind.Folder) is not { } node)
+        {
+            SyncSelectedFolder();
+            return;
+        }
+
+        Load(node);
+    }
+
+    private void SyncSelectedFolder()
+    {
+        _syncingFolder = true;
+        SelectedFolder = FolderChoices.FirstOrDefault(c => c.Id == FolderId);
+        _syncingFolder = false;
+    }
 
     /// <summary>Loads the requests of a folder and resets the options and the data file.</summary>
     /// <param name="folder">The run folder.</param>
@@ -109,6 +162,7 @@ public sealed partial class RunnerSetupViewModel : ObservableObject
 
         FolderId = folder.Id;
         FolderName = folder.Name;
+        SyncSelectedFolder();
         Iterations = 1;
         DelayMs = 0;
         StopOnFailure = false;

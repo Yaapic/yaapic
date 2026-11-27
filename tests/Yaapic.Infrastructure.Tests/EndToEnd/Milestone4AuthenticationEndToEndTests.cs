@@ -188,14 +188,7 @@ public sealed class Milestone4AuthenticationEndToEndTests : IDisposable
         Assert.Empty(_server.Grants);
     }
 
-    private static int FreePort()
-    {
-        var probe = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, 0);
-        probe.Start();
-        var port = ((System.Net.IPEndPoint)probe.LocalEndpoint).Port;
-        probe.Stop();
-        return port;
-    }
+    private static int FreePort() => TestPorts.Next();
 
     private static Yaapic.Core.Variables.VariableScopes Scopes() => new(null, [], []);
 

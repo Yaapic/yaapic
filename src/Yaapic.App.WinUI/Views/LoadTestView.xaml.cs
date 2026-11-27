@@ -14,7 +14,12 @@ public sealed partial class LoadTestView : UserControl
         new PropertyMetadata(null, (d, _) => ((LoadTestView)d).Bindings.Update()));
 
     /// <summary>Initializes the view.</summary>
-    public LoadTestView() => InitializeComponent();
+    public LoadTestView()
+    {
+        InitializeComponent();
+        _ = new ColumnResizer(Root, LeftColumn, Splitter);
+        PaneLayout.Attach(Pane, Options, Footer);
+    }
 
     /// <summary>Gets or sets the Load test view model.</summary>
     public LoadTestViewModel? ViewModel
