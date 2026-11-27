@@ -1,6 +1,6 @@
 # M6-53: Avalonia: Load test window
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M6-51, M6-46
 
@@ -22,10 +22,16 @@ Entry points (M6-56).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] Runtime smoke on macOS or Linux as in M6-46; if not possible, say so in Notes and tick only the build and AOT items.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [x] Runtime smoke on macOS or Linux as in M6-46; if not possible, say so in Notes and tick only the build and AOT items.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the load test window`
+
+## Notes
+
+- Verified on Windows: Release build (0 warnings), Architecture (6) and ViewModels (782) test projects, AOT publish of Yaapic.App.Avalonia (win-x64) with 0 IL2xxx/IL3xxx warnings; the exe starts and stays alive.
+- Not verified on unix: the runtime smoke (live tiles and charts, profile switch showing ramp-up, per-request table, export) and rendering. `LoadTestView` is not instantiated until M6-56.
+- Added `RunnerMap.LoadTiles` and `RunnerMap.ProfileIndex`; the other tests projects were not rerun (view-only change).

@@ -159,4 +159,43 @@ public class ScriptVariableOverlayTests
         Assert.True(scopes.CreateSource().TryGet("a", out v));
         Assert.Equal("loc", v);
     }
+
+    static ScriptVariableOverlay WithData() => new(
+        new VariableScopes(
+            EnvironmentDefinition.Create("e") with { Variables = [new("a", "env")] },
+            [new("b", "col")],
+            [],
+            null,
+            [new("a", "data"), new("b", "data"), new("d", "data")]),
+        true,
+        true);
+
+    [Fact]
+    public void Layered_get_and_list_place_data_between_local_and_environment()
+    {
+        var o = WithData();
+        Assert.True(o.TryGet(ScriptScope.Layered, "a", out var v));
+        Assert.Equal("data", v);
+        Assert.True(o.TryGet(ScriptScope.Layered, "d", out v));
+        Assert.Equal("data", v);
+        Assert.False(o.TryGet(ScriptScope.Environment, "d", out _));
+        Assert.Equal("data", o.List(ScriptScope.Layered)["b"]);
+        o.Set(ScriptScope.Layered, "a", "loc");
+        Assert.Equal("loc", o.List(ScriptScope.Layered)["a"]);
+        Assert.Equal("data", o.List(ScriptScope.Layered)["d"]);
+    }
+
+    [Fact]
+    public void Writes_go_to_local_and_data_is_carried_by_ToScopes()
+    {
+        var o = WithData();
+        o.Set(ScriptScope.Layered, "d", "mine");
+        o.Unset(ScriptScope.Layered, "d");
+        o.Set(ScriptScope.Layered, "a", "loc");
+        var scopes = o.ToScopes();
+        Assert.Equal(["a", "b", "d"], scopes.Data!.Select(r => r.Key));
+        Assert.All(scopes.Data!, r => Assert.Equal("data", r.Value));
+        Assert.True(scopes.TryResolve("d", out var v, out var k));
+        Assert.Equal(("data", VariableScopeKind.Data), (v, k));
+    }
 }

@@ -1,0 +1,50 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:r="using:Yaapic.ViewModels.Runner"
+    x:Class="Yaapic.App.Avalonia.Views.RunnerRequestListView"
+    x:DataType="r:RunnerSetupViewModel"
+    x:CompileBindings="True">
+  <Grid RowDefinitions="Auto,Auto,*" RowSpacing="8">
+    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+      <TextBlock Classes="bodyStrong" TextTrimming="CharacterEllipsis" Text="{Binding FolderName}" />
+      <TextBlock Grid.Column="1" Foreground="{DynamicResource YaapicTextSecondaryBrush}">
+        <TextBlock.Text>
+          <MultiBinding Converter="{x:Static p:TextMap.RunnerSelected}">
+            <Binding Path="SelectedCount" />
+            <Binding Path="Items.Count" />
+          </MultiBinding>
+        </TextBlock.Text>
+      </TextBlock>
+    </Grid>
+
+    <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="4">
+      <Button Content="{x:Static loc:Strings.RunnerSelectAll}" Command="{Binding SelectAllCommand}" />
+      <Button Content="{x:Static loc:Strings.RunnerSelectNone}" Command="{Binding SelectNoneCommand}" />
+    </StackPanel>
+
+    <ListBox Grid.Row="2" SelectionMode="Toggle" AutomationProperties.Name="{x:Static loc:Strings.RunnerRequests}"
+             ItemsSource="{Binding Items}">
+      <ListBox.ItemTemplate>
+        <DataTemplate x:DataType="r:RunnerItemViewModel">
+          <Grid ColumnDefinitions="Auto,48,*,Auto,Auto" ColumnSpacing="6">
+            <CheckBox MinWidth="0" AutomationProperties.Name="{Binding Name}" IsChecked="{Binding IsSelected, Mode=TwoWay}" />
+            <TextBlock Grid.Column="1" VerticalAlignment="Center" FontWeight="SemiBold" Text="{Binding Method}"
+                       Foreground="{Binding Item.Request.Method, Converter={x:Static p:BrushMap.MethodBrush}}" />
+            <StackPanel Grid.Column="2" VerticalAlignment="Center">
+              <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+              <TextBlock Foreground="{DynamicResource YaapicTextSecondaryBrush}" TextTrimming="CharacterEllipsis" Text="{Binding Path}" />
+            </StackPanel>
+            <Button Grid.Column="3" Classes="icon" Click="OnMoveUp" AutomationProperties.Name="{x:Static loc:Strings.RunnerMoveUp}">
+              <PathIcon Data="{StaticResource YaapicGlyphArrowUp}" />
+            </Button>
+            <Button Grid.Column="4" Classes="icon" Click="OnMoveDown" AutomationProperties.Name="{x:Static loc:Strings.RunnerMoveDown}">
+              <PathIcon Data="{StaticResource YaapicGlyphArrowDown}" />
+            </Button>
+          </Grid>
+        </DataTemplate>
+      </ListBox.ItemTemplate>
+    </ListBox>
+  </Grid>
+</UserControl>

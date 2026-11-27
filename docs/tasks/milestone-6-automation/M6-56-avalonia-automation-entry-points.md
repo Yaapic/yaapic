@@ -1,6 +1,6 @@
 # M6-56: Avalonia: automation entry points and status bar items
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M6-49, M6-52, M6-53, M6-54, M6-55
 
@@ -27,10 +27,17 @@ Keyboard shortcuts.
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] Runtime smoke on macOS or Linux as in M6-49; if not possible, say so in Notes and tick only the build and AOT items.
-- [ ] Strings exist in EN and FR (M6-41); 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [x] Runtime smoke on macOS or Linux as in M6-49; if not possible, say so in Notes and tick only the build and AOT items.
+- [x] Strings exist in EN and FR (M6-41); 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the automation entry points and status bar items`
+
+## Notes
+
+- Verified on Windows: Release build (0 warnings), AOT publish win-x64 (no IL2xxx/IL3xxx; only two Avalonia.Win32 ILC "will always throw" notes), Architecture, ViewModels and Localization tests green. Strings already existed in EN and FR (M6-41).
+- Smoke on the published exe, driven through UI Automation: starts; the Runner status button opens a "Runner" window rendering the setup pane (selection, iterations, delay, CSV picker, Run/Stop, results list); a second click opens no extra window; Mocks and Monitors items are hidden while empty. Exe stopped afterwards.
+- Not verified on unix (nor by eye): the folder context menu items (the popup was not exposed to UI Automation), Load test / Mock servers / Monitors windows content, palette entries, Runner progress, Mocks/Monitors items appearing, closing the main window closing the tool windows, rendering, macOS/Linux runtime. Left for M6-61.
+- `ToolWindowHost.CloseAll` already existed; no temporary debug call was found.

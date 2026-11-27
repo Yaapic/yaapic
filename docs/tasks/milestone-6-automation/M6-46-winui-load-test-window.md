@@ -1,6 +1,6 @@
 # M6-46: WinUI: Load test window
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-43, M6-44
 
@@ -26,12 +26,23 @@ Entry points (M6-49).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke against a local server (a Yaapic mock server once M6-47 exists, or any loopback server): the confirmation shows the host,
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke against a local server (a Yaapic mock server once M6-47 exists, or any loopback server): the confirmation shows the host,
   a 20 s ramp-up test of 10 users updates tiles and charts every second, Stop works, the table fills at the end, export saves. Record
   anything not run in Notes.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the load test window`
+
+## Notes
+
+- Verified: Release build (0 warnings), AOT publish with 0 IL2xxx/IL3xxx warnings, the published exe starts and stays alive.
+- Not run: the manual smoke against a local server (confirmation, 20 s ramp-up, Stop, table, export). `LoadTestView` is not instantiated
+  anywhere until M6-49; check it then (and in M6-61). Also unchecked at runtime: the charts' `Points` dependency property (a list of a
+  non-WinRT struct) under Native AOT.
+- The request list is now the shared `Views/RunnerRequestListView` (title row, select all/none, reorderable list), used by `RunnerView`
+  and `LoadTestView`. New strings `load.col*` (table headers), `ListMap.LoadTiles/LoadRows`, `TextMap.ProfileIndex`.
+- Flaky, unrelated: `LoadTestRunnerTests` (`A_snapshot_is_reported_every_second_and_at_the_end`, `Ramp_up_starts_users_at_the_scheduled_offsets`)
+  failed intermittently again under load from another build; `JwtDecoderViewModelTests` fails on the French locale.

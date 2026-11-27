@@ -8,6 +8,9 @@ public interface IScriptHost
     /// <summary>Gets the data behind <c>yaapic.info</c>.</summary>
     ScriptInfo Info { get; }
 
+    /// <summary>Gets the data row of the current iteration; empty outside a data-driven run.</summary>
+    IReadOnlyList<KeyValueEntry> IterationData { get; }
+
     /// <summary>Gets the request being sent.</summary>
     ScriptRequest Request { get; }
 
@@ -49,6 +52,14 @@ public interface IScriptHost
     /// <param name="template">The text to resolve.</param>
     /// <returns>The resolved text.</returns>
     string ReplaceIn(string template);
+
+    /// <summary>Chooses the next request of a Runner run (<c>yaapic.execution.setNextRequest</c>).</summary>
+    /// <param name="nameOrId">The name or id of the next request, or <see langword="null"/> to end the run.</param>
+    void SetNextRequest(string? nameOrId);
+
+    /// <summary>Skips the request being sent (<c>yaapic.execution.skipRequest</c>).</summary>
+    /// <exception cref="InvalidOperationException">Called from a post-response script.</exception>
+    void SkipRequest();
 
     /// <summary>Sends a request and blocks until it completes (<c>yaapic.sendRequest</c>).</summary>
     /// <param name="request">The request to send.</param>

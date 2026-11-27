@@ -24,8 +24,9 @@ No library references an App project.
 ```
 RequestEditorViewModel.SendCommand
   -> RequestSender            (Core: use case)
-     -> RequestResolver       (Core: {{variables}} resolved by scope, highest first: active environment, collection
-                               variables, globals, dynamic variables; the scopes come from IVariableScopeProvider;
+     -> RequestResolver       (Core: {{variables}} resolved by scope, highest first: script-local values, the Runner
+                               iteration data row (empty outside a run), active environment, collection variables,
+                               globals, dynamic variables; the scopes come from IVariableScopeProvider;
                                unresolved names are reported, they never block the send)
      -> IHttpTransport        (Core port, implemented by HttpClientTransport in Infrastructure)
   -> SendReport               (result + unresolved variables)
@@ -163,6 +164,55 @@ menu of a top-level folder and the palette (`RequestImport`, `RequestExport`). B
 Avalonia import and export windows). Importers and exporters are pure Core code: no file access, no network, no reflection.
 `IDialogService` gains `PickFolderAsync` for Bruno folders.
 
+## Automation (milestone 6)
+
+Decisions: [ADR 0018](adr/0018-collection-runner.md), [ADR 0019](adr/0019-load-tests.md), [ADR 0020](adr/0020-mock-servers.md),
+[ADR 0021](adr/0021-monitors.md), the [load spike](spikes/m6-load.md); user level: [automation.md](automation.md). No new package.
+
+```
+Runner:
+RunnerViewModel (setup, run, results, exports)
+  -> CollectionRunner                  (Core.Runner: iterations, delay, stop, cancel, setNextRequest, loop guard)
+     -> RunStepExecutor                one request: scripts, send, outcome, RunRequestResult
+        -> ScriptedRequestSender       the scripted flow above (same pipeline as the editor)
+     |-- RunVariableState              the run's own copy of script changes, re-applied on top of the scopes
+     |-- IRunScopeSource               GetScopes before each request (VariableScopeRunSource in ViewModels, over the stores)
+     `-- IterationDataReader           CSV and JSON rows (IImportInputReader reads the file) -> the data variable layer
+  -> RunResult -> RunReportJson ("yaapic-run/1"), RunReportJUnit (XmlWriter) -> IDialogService.SaveFileAsync
+
+Load test:
+LoadTestViewModel -> LoadTestRunner    (Core.LoadTesting: one task per virtual user)
+  |-- VirtualUserSchedule              fixed and ramp-up user counts over time (pure)
+  |-- RunStepExecutor + RunVariableState (one state per user, changes never persisted)
+  `-- LoadMetrics                      thread-safe: samples, percentiles, per-second buckets, snapshots every second
+  -> LoadTestReportJson ("yaapic-loadtest/1")
+
+Mock servers:
+MockServersViewModel -> MockServerService          (Core.Mocks: start, stop, log of 500, reads the definition per request)
+  |-- IMockServerStore                  FileMockServerStore: mocks/<slug>.mock.yaml (VYaml DTOs)
+  |-- MockRouteMatcher -> MockResponder (first enabled match, MockTemplate, CORS, 404)
+  |-- MockGenerator                     one route per request of a folder
+  `-- IMockHttpHost                     TcpMockHttpHost (Infrastructure): TcpListener on 127.0.0.1,
+                                        Http11RequestReader / Http11ResponseWriter
+
+Monitors:
+MonitorsViewModel -> MonitorScheduler  (Core.Monitors: TimeProvider + PeriodicTimer, 30 s tick, one run at a time)
+  |-- CollectionRunner                  one iteration, nothing persisted, not recorded in the history
+  |-- IMonitorStore                     FileMonitorStore: monitors/<slug>.monitor.yaml
+  `-- IMonitorRunStore                  FileMonitorRunStore: .yaapic/monitor-runs.jsonl (200 runs per monitor)
+```
+
+The data layer is the new `VariableScopeKind.Data` (fifth optional parameter of `VariableScopes`): local, data, environment,
+collection, globals, dynamic; scripts read it through `yaapic.iterationData` and never write it. `ShellViewModel.Section` (`ShellSection`: `Requests`,
+`Runner`, `LoadTest`, `MockServers`, `Monitors`) says what the main area shows; the rail commands (`ShowRunnerCommand`...), the folder
+context menu, the palette (`palette.runCollection`, `palette.loadTest`, `palette.mockServers`, `palette.monitors`) and the status bar
+items (Runner progress, "Mocks: {n} running", "Monitors: {n} failing") set it, and `TabsViewModel.TabShown` sets it back to `Requests`
+(ADR 0023). `AppComposition.CreateShell` wires the stores, the host, the scheduler (which starts with the shell and
+stops when it closes) and the services; closing the main window asks first while a Runner run or a load
+test is in progress (not for mock servers), then stops the mock servers. `IDialogService.ConfirmAsync` backs the
+load-test confirmation and `ContextProgress<T>` reports progress to the UI context. WinUI and Avalonia only render the view
+models (`RunnerView`, `LoadTestView`, `MockServersView`, `MonitorsView`, a shared line chart for the load charts).
+
 ## Search and command palette
 
 `Core.Search.FuzzyMatcher` ranks and highlights matches. `CommandPaletteViewModel` aggregates `IPaletteSource`s
@@ -178,3 +228,5 @@ Milestone 2 scenarios (verbs, bodies, auth, redirects, collections, variable sco
 (Lua and mixed-language chains) and `Milestone3VaultEndToEndTests` (secret vault), which build the shell with the real
 engines and vault on a temporary workspace through `ScriptedShellFixture`; they need the native libraries
 (`pwsh native/Build-Natives.ps1`, run automatically by the first build of `Yaapic.Scripting`).
+Milestone 6 adds `Milestone6RunnerEndToEndTests`, `Milestone6MocksAndLoadEndToEndTests` (mock servers, the Runner and load tests
+against a mock) and `Milestone6MonitorsEndToEndTests` (a manual `TimeProvider` drives the scheduler).

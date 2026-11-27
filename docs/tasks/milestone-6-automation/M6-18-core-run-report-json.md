@@ -1,6 +1,6 @@
 # M6-18: Core: run report, JSON
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-14
 
@@ -39,9 +39,9 @@ JUnit (M6-19), saving (view model).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Runner/RunReportJsonTests.cs`: a hand-built result serializes to an exact expected string (raw string
+- [x] Tests in `Yaapic.Core.Tests/Runner/RunReportJsonTests.cs`: a hand-built result serializes to an exact expected string (raw string
   literal, `\n` line ends); null fields; every enum spelling; the output parses back with `DataNodeJson.Parse`; no BOM; the file name.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

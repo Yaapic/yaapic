@@ -242,7 +242,7 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
         State = UpdateState.Downloading;
         try
         {
-            await _service.DownloadAsync(update, new InlineProgress(p => DownloadPercent = p), source.Token);
+            await _service.DownloadAsync(update, new ContextProgress<int>(p => DownloadPercent = p), source.Token);
             _service.ApplyOnRestart();
             State = UpdateState.ReadyToRestart;
         }
@@ -398,25 +398,6 @@ public sealed partial class UpdateViewModel : ObservableObject, IDisposable
         catch (Yaapic.Core.Storage.StorageException ex)
         {
             _console?.AppendSystem(ConsoleLevel.Warn, ex.Message);
-        }
-    }
-
-    // The service reports from a worker thread and the UI frameworks reject property changes from it (WinUI: 0x8001010E),
-    // so reports are posted back to the context the download started on; without one (tests) they run inline.
-    private sealed class InlineProgress(Action<int> report) : IProgress<int>
-    {
-        private readonly SynchronizationContext? _context = SynchronizationContext.Current;
-
-        public void Report(int value)
-        {
-            if (_context is null)
-            {
-                report(value);
-            }
-            else
-            {
-                _context.Post(_ => report(value), null);
-            }
         }
     }
 }

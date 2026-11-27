@@ -1,6 +1,6 @@
 # M6-07: Core: CSV iteration data parser
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-01
 
@@ -38,10 +38,10 @@ JSON (M6-08), reading the file, the runner.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Runner/CsvIterationDataTests.cs`: simple file; quoted commas, quotes and multi-line fields; CRLF,
+- [x] Tests in `Yaapic.Core.Tests/Runner/CsvIterationDataTests.cs`: simple file; quoted commas, quotes and multi-line fields; CRLF,
   LF and CR; trailing newline; blank middle lines; short and long records; unclosed quote with its line number; empty and duplicate
   header names; header only; 1001 columns refused; 100001 rows refused; Unicode text kept.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

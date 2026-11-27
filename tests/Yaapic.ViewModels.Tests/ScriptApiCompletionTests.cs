@@ -49,6 +49,17 @@ public sealed class ScriptApiCompletionTests
     }
 
     [Fact]
+    public void Runner_apis_are_completed_in_both_languages()
+    {
+        Assert.Contains("iterationData", Names("yaapic."));
+        Assert.Contains("execution", Names("yaapic."));
+        Assert.Contains("iteration", Names("yaapic.info."));
+        Assert.Contains("iteration_data", Names("yaapic.", lua: true));
+        Assert.Contains("set_next_request", Names("yaapic.execution.", lua: true));
+        Assert.Contains("iteration_count", Names("yaapic.info.", lua: true));
+    }
+
+    [Fact]
     public void An_unknown_object_offers_nothing()
     {
         Assert.Empty(Names("foo."));

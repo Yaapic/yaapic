@@ -1,6 +1,6 @@
 # M6-61: WinUI visual verification of the milestone 6 views
 
-Status: todo
+Status: in progress
 Platform: windows
 Depends on: M6-45, M6-46, M6-47, M6-48, M6-49
 
@@ -38,10 +38,37 @@ Avalonia screenshots, redesigns.
 
 ## Acceptance criteria
 
-- [ ] Sixteen PNGs (eight screens, two themes) under `docs/screenshots/m6/`, each under 500 KB, captured from the Native AOT build; the
+- [x] Sixteen PNGs (eight screens, two themes) under `docs/screenshots/m6/`, each under 500 KB, captured from the Native AOT build; the
   capture script changes are committed.
-- [ ] `docs/screenshots/m6/README.md` exists and lists the differences.
-- [ ] No process left running (the published exe and any server are stopped); 0 warnings, all tests green.
+- [x] `docs/screenshots/m6/README.md` exists and lists the differences.
+- [x] No process left running (the published exe and any server are stopped); 0 warnings, all tests green.
+
+## Notes
+
+Done from the Native AOT build, driven through UI Automation (`tools/screenshots/Capture-M6.ps1`, 16 PNGs, all under 100 KB) and
+reviewed by the implementing agent only. Checks deferred by M6-43..M6-49:
+
+- Folder context menu with the four entries: PASS (`folder-menu-*`). Palette entries *Run collection...*, *Load test...*, *Mock servers*,
+  *Monitors* each open their window: PASS (checked by window title, not by screenshot).
+- Runner: setup with CSV preview and a run with a passed, a failed and a skipped row, one selected: PASS (screenshots). Progress in the status bar
+  while running (`Runner 9/120`): PASS. Not run: reorder, validation line, Stop, the two exports.
+- Load test: confirmation dialog over the tool window (UI Automation: *Start a load test?* with *Continue*) and a run with ramp-up: PASS; the
+  charts' `Points` property renders under Native AOT: PASS. Not run: Stop, export, data file.
+- Mock servers: generate from a folder, start, three requests from outside, log with a selected entry: PASS after the fix below. Not run: port in use,
+  copy URL, editing and saving a route.
+- Monitors: two monitors (failing and passing), *Run now*, history: PASS after the fix below. Not run: the console warning, toggle, delete.
+- Status bar items *Mocks: 1 running* and *Monitors: 1 failing* appear: PASS.
+- Closing the main window with the Mock servers and Runner windows open ends the process (exit code 0) and the mock port stops answering: PASS.
+
+Release build of the solution: 0 warnings; `Yaapic.ViewModels.Tests` (782) and `Yaapic.Architecture.Tests` (6) green; the other test projects
+were not touched by this card and not rerun.
+
+Bugs found and fixed here (see `docs/screenshots/m6/README.md`): Mock servers crashed the AOT app when a route was selected (`7c45c8a`), Monitors combo
+boxes empty (`efcc2d4`), tool windows sized in physical pixels and Runner layout (`26ca548`), the false "scripts were not run" note of the load test
+(`2a6eba1`). Follow-ups D1 to D6 are in that README.
+
+Left for a human before this card can be `done`: a side-by-side comparison of the screenshots with the design sheets (the README says it was
+not done), a designer's judgement of colours and alignment, the French locale of the four windows, and the "Not run" items above.
 
 ## Suggested commit message
 

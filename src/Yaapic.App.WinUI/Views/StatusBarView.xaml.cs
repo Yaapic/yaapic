@@ -23,6 +23,12 @@ public sealed partial class StatusBarView : UserControl
         set => SetValue(ViewModelProperty, value);
     }
 
+    private void OnRunnerClick(object sender, RoutedEventArgs e) => ViewModel?.RequestRunner();
+
+    private void OnMocksClick(object sender, RoutedEventArgs e) => ViewModel?.RequestMockServers();
+
+    private void OnMonitorsClick(object sender, RoutedEventArgs e) => ViewModel?.RequestMonitors();
+
     // Unlocked: a flyout offers Lock; otherwise the click opens the matching dialog.
     private void OnVaultClick(object sender, RoutedEventArgs e)
     {

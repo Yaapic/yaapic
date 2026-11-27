@@ -199,6 +199,20 @@ public static class ScriptApiCatalogue
             P("eventName", "prerequest or test."),
             P("requestName", "The name of the request."),
             P("requestId", "The identifier of the request."),
+            P("iteration", "The current iteration (0-based)."),
+            P("iterationCount", "The number of iterations of the run.", "iteration_count"),
+        ]),
+        P("iterationData", "The current row of the Runner data file.", "iteration_data", members:
+        [
+            F("get", "Gets a value of the current row.", "(name)"),
+            F("has", "Tells whether the current row has a column.", "(name)"),
+            F("toObject", "Gets the current row as an object.", "()", "to_object"),
+            F("toJSON", "Gets the current row as an object.", "()", "to_json"),
+        ]),
+        P("execution", "Controls the Runner run.", members:
+        [
+            F("setNextRequest", "Choose the next request of the Runner run; null stops the run.", "(nameOrId)", "set_next_request"),
+            F("skipRequest", "Skip this request (pre-request scripts only).", "()", "skip_request"),
         ]),
         F("sendRequest", "Sends another request (a callback in JavaScript, two results in Lua).", "(url, callback)", "send_request"),
         P("cookies", "Read-only view of the Set-Cookie headers of the response.", members:

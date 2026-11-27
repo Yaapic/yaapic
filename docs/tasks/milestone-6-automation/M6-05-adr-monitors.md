@@ -1,6 +1,6 @@
 # M6-05: ADR 0021: monitors
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-01
 
@@ -48,10 +48,10 @@ Code, UI.
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0021-monitors.md` contains every decision above (status Accepted; options considered: an OS scheduler task or
+- [x] `docs/adr/0021-monitors.md` contains every decision above (status Accepted; options considered: an OS scheduler task or
   a background service versus in-app scheduling, the active environment versus a fixed one, storing full run results versus
   summaries); `docs/adr/README.md` lists it.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

@@ -114,6 +114,12 @@ public sealed class JavaScriptConformanceTests
         new("object-entries") { Post = "console.log(Object.entries({ a: 1, b: 2 }).map(([k, v]) => k + v).join());", Console = ["a1,b2"] },
         // Idiom: Number.prototype.toFixed instead of Intl.
         new("to-fixed") { Post = "console.log((3.14159).toFixed(2));", Console = ["3.14"] },
+        // Idiom: yaapic.iterationData.get in a data-driven run.
+        new("iteration-data-get") { Pre = "console.log(yaapic.iterationData.get('user'), yaapic.iterationData.has('x'));", RunContext = new(1, 3, [new("user", "ann")], true), Console = ["ann false"] },
+        // Idiom: yaapic.execution.setNextRequest in a run.
+        new("set-next-request") { Post = "yaapic.execution.setNextRequest('Login');", RunContext = new(0, 1, [], true) },
+        // Idiom: postman.setNextRequest(null) in a run.
+        new("postman-set-next-request") { Post = "postman.setNextRequest(null);", RunContext = new(0, 1, [], true) },
         // Idiom: yaapic.info.requestName.
         new("info-request-name") { Post = "console.log(yaapic.info.requestName);", Console = ["Users API"] },
         // Idiom: yaapic.request.method and yaapic.request.url.toString() in a test.
@@ -136,10 +142,12 @@ public sealed class JavaScriptConformanceTests
     /// <summary>Gets the unsupported idioms and the message they must fail with.</summary>
     public static TheoryData<string, string> Unsupported => new()
     {
-        // Idiom: yaapic.execution.setNextRequest.
-        { "yaapic.execution.setNextRequest('x')", "yaapic.execution.setNextRequest is not supported in Yaapic" },
-        // Idiom: yaapic.iterationData.get.
-        { "yaapic.iterationData.get('a')", "yaapic.iterationData.get is not supported in Yaapic" },
+        // Idiom: yaapic.execution.location.
+        { "yaapic.execution.location", "yaapic.execution.location is not supported in Yaapic" },
+        // Idiom: yaapic.execution.runRequest.
+        { "yaapic.execution.runRequest('x')", "yaapic.execution.runRequest is not supported in Yaapic" },
+        // Idiom: yaapic.vault.set.
+        { "yaapic.vault.set('secret', 'x')", "yaapic.vault.set is not supported in Yaapic" },
         // Idiom: yaapic.vault.get.
         { "yaapic.vault.get('secret')", "yaapic.vault.get is not supported in Yaapic" },
         // Idiom: yaapic.visualizer.set.
@@ -156,8 +164,6 @@ public sealed class JavaScriptConformanceTests
         { "require('crypto-js')", "require is not supported in Yaapic" },
         // Idiom: CryptoJS global.
         { "CryptoJS.MD5('a')", "CryptoJS.MD5 is not supported in Yaapic" },
-        // Idiom: postman.setNextRequest.
-        { "postman.setNextRequest('x')", "postman.setNextRequest is not supported in Yaapic" },
     };
 
     /// <summary>Runs the supported case with the given name and checks every expectation it declares.</summary>

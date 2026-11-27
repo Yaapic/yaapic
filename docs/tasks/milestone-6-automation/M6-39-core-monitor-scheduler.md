@@ -1,6 +1,6 @@
 # M6-39: Core: monitor scheduler
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-16, M6-36
 
@@ -40,12 +40,12 @@ Notifications in the console and the status bar (view model M6-40), the window.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Monitors/` with in-memory stores, `FakeHttpTransport`, `FakeScriptEngine`, `ManualTimeProvider`:
+- [x] Tests in `Yaapic.Core.Tests/Monitors/` with in-memory stores, `FakeHttpTransport`, `FakeScriptEngine`, `ManualTimeProvider`:
   a never-run enabled monitor runs at start; it runs again only after its interval (advance the clock past ticks); a disabled one does
   not, unless `RunNow`; two due monitors run one after the other, never in parallel (gate the transport); the monitor's environment is
   used, not the active one; variable changes are not persisted; missing folder and missing environment record `Error` runs; `StopAsync`
   cancels the current run; `RunCompleted` raised with the recorded run; `NextRun`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -1,6 +1,6 @@
 # M6-27: Domain: mock server model and validation
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-04
 
@@ -33,9 +33,9 @@ Storage (M6-28), matching (M6-29).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Domain.Tests/Mocks/`: `Create` defaults; each issue, with the route id; a valid definition has no issue; `*` in the
+- [x] Tests in `Yaapic.Domain.Tests/Mocks/`: `Create` defaults; each issue, with the route id; a valid definition has no issue; `*` in the
   middle of a path is invalid, `/*` and `/files/*` are valid; `:id` and `{id}` segments are valid; `IsEquivalentTo`.
-- [ ] Architecture tests green (Domain depends on nothing), 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green (Domain depends on nothing), 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

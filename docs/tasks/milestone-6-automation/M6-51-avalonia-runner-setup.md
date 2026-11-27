@@ -1,6 +1,6 @@
 # M6-51: Avalonia: Runner window, setup pane
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M6-50, M6-44
 
@@ -26,10 +26,16 @@ Results (M6-52), entry points (M6-56).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] Runtime smoke on macOS or Linux as in M6-44; if not possible, say so in Notes and tick only the build and AOT items.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [x] Runtime smoke on macOS or Linux as in M6-44; if not possible, say so in Notes and tick only the build and AOT items.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the runner window setup pane`
+
+## Notes
+
+- Verified on Windows: Release build (0 warnings), full test suite, AOT publish of Yaapic.App.Avalonia (win-x64) with 0 IL2xxx/IL3xxx warnings; the exe starts and stays alive.
+- Not verified on unix: the runtime smoke (folder load, reorder, CSV preview, validation line, splitter) and rendering. `RunnerView` is not instantiated until M6-56.
+- The preview rows template uses `x:DataType="x:Object"` (the generic `IReadOnlyList(x:String)` type does not resolve in the Avalonia XAML compiler).

@@ -17,6 +17,8 @@ Decision records: [ADR 0005](adr/0005-storage-format.md), [ADR 0008](adr/0008-co
     <slug>.request.yaml           request in the folder
     <sub-slug>/folder.yaml        nested folder
   environments/<slug>.env.yaml    one environment per file
+  mocks/<slug>.mock.yaml          one mock server per file
+  monitors/<slug>.monitor.yaml    one monitor per file
 ```
 
 A directory under `requests/` without `folder.yaml` is ignored and reported as a listing error. Siblings are sorted
@@ -210,7 +212,10 @@ vault. See [ADR 0014](adr/0014-transport-certificates-timings.md). The per-reque
 
 ## Variable precedence
 
-Highest first: active environment, collection variables, globals, dynamic variables.
+Highest first: script-local values (set by a script for the current send), iteration data (the current row of a Runner data
+file; empty outside a Runner run, read-only), active environment, collection variables, globals, dynamic variables. The data
+layer is never stored: it exists only while a run is going (see [automation.md](automation.md)). A monitor run uses the
+environment stored in the monitor instead of the active one.
 
 ## History file
 
@@ -227,6 +232,19 @@ entries; the file is rewritten when it exceeds 550 lines. It keeps the request a
 is why `.yaapic/` is git-ignored. Requests keep their `{{templates}}`, so the value of a secret variable is never
 stored; an auth value or other field typed literally is stored in clear (see "Secret variables").
 
+## Monitor run history
+
+`.yaapic/monitor-runs.jsonl`: one JSON object per line (`System.Text.Json` source generators), never committed, not
+hand-edited. Decision record: [ADR 0021](adr/0021-monitors.md).
+
+```json
+{"monitorId":"6f1c...","at":"2026-11-02T09:00:00.0000000Z","durationMs":420,"status":"failed","requests":3,"failedRequests":1,"testsPassed":5,"testsFailed":1,"message":null,"failures":[{"request":"Get user","outcome":"TestFailed","status":500,"detail":"expected 200"}]}
+```
+
+`monitorId` is a GUID ("D"), `at` a UTC ISO 8601 round-trip timestamp, `status` one of `passed`, `failed`, `error`.
+Retention: the last 200 runs per monitor; when a monitor exceeds that, the file is rewritten without its oldest lines.
+Corrupt lines are skipped when reading.
+
 ## Environment file
 
 Keys: `version: 1`, `id`, `name`, `collection` (optional), `variables` (same list shape as `params`).
@@ -234,6 +252,54 @@ Keys: `version: 1`, `id`, `name`, `collection` (optional), `variables` (same lis
 `collection` is the id of a collection (top-level folder). An environment with a `collection` is offered only on requests
 of that collection; without it (the key is omitted) it is offered everywhere. A collection that no longer exists is ignored.
 A request outside any collection is offered the environments without a `collection`.
+
+## Mock server file
+
+Decision record: [ADR 0020](adr/0020-mock-servers.md). Keys: `version: 1`, `id`, `name`, `port` (1024 to 65535, default 3000),
+`cors` (default true), `routes`. Each route: `id`, `name`, `enabled` (default true), `method` (`GET`, `POST`, `PUT`, `PATCH`,
+`DELETE`, `HEAD`, `OPTIONS` or `ANY`), `path` (starts with `/`), `status` (100 to 599), `headers` (`key`, `value`, `enabled`),
+`body` (literal block), `delayMs` (0 to 60 000). No secrets in mock files. Slugs fall back to `mock-server`.
+
+```yaml
+version: 1
+id: 11111111-1111-1111-1111-111111111111
+name: Users API
+port: 4000
+cors: false
+routes:
+- id: 22222222-2222-2222-2222-222222222222
+  name: List
+  enabled: true
+  method: GET
+  path: /users
+  status: 200
+  headers:
+  - key: Content-Type
+    value: application/json
+    enabled: true
+  body: |
+    {"users": []}
+  delayMs: 0
+```
+
+
+## Monitor file
+
+Decision record: [ADR 0021](adr/0021-monitors.md). Keys: `version: 1`, `id`, `name`, `folderId` (the collection folder to run),
+`environmentId` (omitted when the monitor runs without environment), `intervalMinutes` (5, 10, 15, 30, 60, 180, 360, 720 or 1440;
+any other value loads as the nearest allowed value above it, 1440 at most, and is reported as a listing warning), `enabled`
+(default true). Slugs fall back to `monitor`. Monitor files are committed with the workspace, so enabled monitors run for everyone
+who opens it.
+
+```yaml
+version: 1
+id: 11111111-1111-1111-1111-111111111111
+name: Nightly checks
+folderId: 22222222-2222-2222-2222-222222222222
+environmentId: 33333333-3333-3333-3333-333333333333
+intervalMinutes: 15
+enabled: false
+```
 
 ## Session file
 

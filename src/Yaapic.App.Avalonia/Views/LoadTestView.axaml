@@ -1,0 +1,174 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:c="using:Yaapic.App.Avalonia.Controls"
+    xmlns:v="using:Yaapic.App.Avalonia.Views"
+    xmlns:lt="using:Yaapic.ViewModels.LoadTesting"
+    x:Class="Yaapic.App.Avalonia.Views.LoadTestView"
+    x:DataType="lt:LoadTestViewModel"
+    x:CompileBindings="True">
+  <Grid ColumnDefinitions="360,*">
+    <!-- Configuration -->
+    <Grid Margin="12" RowDefinitions="*,Auto,Auto,Auto" RowSpacing="8">
+      <v:RunnerRequestListView DataContext="{Binding Requests}" />
+
+      <StackPanel Grid.Row="1" Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.RunnerData}" />
+        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+          <Button Content="{x:Static loc:Strings.RunnerChooseData}" AutomationProperties.Name="{x:Static loc:Strings.RunnerChooseData}"
+                  Command="{Binding Requests.ChooseDataFileCommand}" />
+          <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+            <TextBlock.Text>
+              <MultiBinding Converter="{x:Static p:TextMap.RunnerData}">
+                <Binding Path="Requests.DataFileName" />
+                <Binding Path="Requests.DataRowCount" />
+                <Binding Path="Requests.DataColumns.Count" />
+              </MultiBinding>
+            </TextBlock.Text>
+          </TextBlock>
+          <Button Grid.Column="2" Content="{x:Static loc:Strings.RunnerClearData}" AutomationProperties.Name="{x:Static loc:Strings.RunnerClearData}"
+                  Command="{Binding Requests.ClearDataCommand}" IsVisible="{Binding Requests.HasData}" />
+        </Grid>
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding Requests.DataError}"
+                   IsVisible="{Binding Requests.DataError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+      </StackPanel>
+
+      <Grid Grid.Row="2" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="6">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{x:Static loc:Strings.LoadUsers}" />
+          <NumericUpDown Minimum="0" Maximum="100000" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.LoadUsers}"
+                         Value="{Binding VirtualUsers, Mode=OneWay}" ValueChanged="OnUsersChanged" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Spacing="2">
+          <TextBlock Text="{x:Static loc:Strings.LoadDuration}" />
+          <NumericUpDown Minimum="0" Maximum="100000" Increment="10" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.LoadDuration}"
+                         Value="{Binding DurationSeconds, Mode=OneWay}" ValueChanged="OnDurationChanged" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Spacing="2">
+          <TextBlock Text="{x:Static loc:Strings.LoadProfile}" />
+          <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.LoadProfile}"
+                    SelectedIndex="{Binding Profile, Converter={x:Static p:RunnerMap.ProfileIndex}, Mode=OneWay}" SelectionChanged="OnProfileChanged">
+            <ComboBoxItem Content="{x:Static loc:Strings.LoadProfileFixed}" />
+            <ComboBoxItem Content="{x:Static loc:Strings.LoadProfileRampUp}" />
+          </ComboBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1" Spacing="2" IsVisible="{Binding IsRampUp}">
+          <TextBlock Text="{x:Static loc:Strings.LoadRampUp}" />
+          <NumericUpDown Minimum="0" Maximum="100000" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.LoadRampUp}"
+                         Value="{Binding RampUpSeconds, Mode=OneWay}" ValueChanged="OnRampUpChanged" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Spacing="2">
+          <TextBlock Text="{x:Static loc:Strings.LoadThinkTime}" />
+          <NumericUpDown Minimum="-1" Maximum="1000000" Increment="100" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.LoadThinkTime}"
+                         Value="{Binding ThinkTimeMs, Mode=OneWay}" ValueChanged="OnThinkChanged" />
+        </StackPanel>
+      </Grid>
+
+      <StackPanel Grid.Row="3" Spacing="8">
+        <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{DynamicResource YaapicDangerBrush}"
+                   Text="{Binding ValidationError}" IsVisible="{Binding ValidationError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+          <Button MinWidth="96" Content="{x:Static loc:Strings.LoadStop}" AutomationProperties.Name="{x:Static loc:Strings.LoadStop}"
+                  Command="{Binding StopCommand}" />
+          <Button MinWidth="96" Classes="accent" Content="{x:Static loc:Strings.LoadStart}" AutomationProperties.Name="{x:Static loc:Strings.LoadStart}"
+                  Command="{Binding StartCommand}" />
+        </StackPanel>
+      </StackPanel>
+    </Grid>
+
+    <!-- Live metrics and results -->
+    <ScrollViewer Grid.Column="1">
+      <StackPanel Margin="12" Spacing="12">
+        <TextBlock Classes="subtitle" Text="{Binding ElapsedText}" />
+
+        <ItemsControl>
+          <ItemsControl.ItemsSource>
+            <MultiBinding Converter="{x:Static p:RunnerMap.LoadTiles}">
+              <Binding Path="TotalRequests" />
+              <Binding Path="Throughput" />
+              <Binding Path="AverageText" />
+              <Binding Path="P95Text" />
+              <Binding Path="ErrorRateText" />
+              <Binding Path="ActiveUsers" />
+            </MultiBinding>
+          </ItemsControl.ItemsSource>
+          <ItemsControl.ItemsPanel>
+            <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+          </ItemsControl.ItemsPanel>
+          <ItemsControl.ItemTemplate>
+            <DataTemplate x:DataType="p:SummaryTile">
+              <Border Margin="0,0,8,8" Padding="12,6" MinWidth="110" CornerRadius="6" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
+                <StackPanel>
+                  <TextBlock Classes="subtitle" Text="{Binding Value}" />
+                  <TextBlock Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding Label}" />
+                </StackPanel>
+              </Border>
+            </DataTemplate>
+          </ItemsControl.ItemTemplate>
+        </ItemsControl>
+
+        <Grid ColumnDefinitions="*,*" RowDefinitions="160,160" ColumnSpacing="12" RowSpacing="12">
+          <c:LineChart Title="{x:Static loc:Strings.LoadChartThroughput}" MaxLabel="{Binding ThroughputMax}" Points="{Binding ThroughputPoints}" />
+          <c:LineChart Grid.Column="1" Title="{x:Static loc:Strings.LoadChartResponseTime}" MaxLabel="{Binding ResponseTimeMax}" Points="{Binding ResponseTimePoints}" />
+          <c:LineChart Grid.Row="1" Title="{x:Static loc:Strings.LoadChartErrors}" Points="{Binding ErrorPoints}" />
+          <c:LineChart Grid.Row="1" Grid.Column="1" Title="{x:Static loc:Strings.LoadChartUsers}" Points="{Binding UserPoints}" />
+        </Grid>
+
+        <!-- Per-request table, filled when the test ends -->
+        <StackPanel Spacing="4" IsVisible="{Binding RequestRows.Count, Converter={x:Static p:ConsoleMap.IsPositive}}">
+          <Grid ColumnDefinitions="*,56,64,56,72,72,72,72,72" ColumnSpacing="8">
+            <TextBlock Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadColRequest}" />
+            <TextBlock Grid.Column="1" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadColMethod}" />
+            <TextBlock Grid.Column="2" TextAlignment="Right" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadColCount}" />
+            <TextBlock Grid.Column="3" TextAlignment="Right" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadErrors}" />
+            <TextBlock Grid.Column="4" TextAlignment="Right" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadAverage}" />
+            <TextBlock Grid.Column="5" TextAlignment="Right" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadColP90}" />
+            <TextBlock Grid.Column="6" TextAlignment="Right" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadColP95}" />
+            <TextBlock Grid.Column="7" TextAlignment="Right" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadColP99}" />
+            <TextBlock Grid.Column="8" TextAlignment="Right" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{x:Static loc:Strings.LoadColMax}" />
+          </Grid>
+          <ItemsControl ItemsSource="{Binding RequestRows}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="lt:LoadRequestRow">
+                <Grid ColumnDefinitions="*,56,64,56,72,72,72,72,72" ColumnSpacing="8" Margin="0,3">
+                  <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Name}" />
+                  <TextBlock Grid.Column="1" Classes="caption" FontWeight="SemiBold"
+                             Foreground="{Binding Method, Converter={x:Static p:ConsoleMap.VerbBrush}}" Text="{Binding Method}" />
+                  <TextBlock Grid.Column="2" TextAlignment="Right" Classes="codeSmall" Text="{Binding Count}" />
+                  <TextBlock Grid.Column="3" TextAlignment="Right" Classes="codeSmall" Text="{Binding Errors}" />
+                  <TextBlock Grid.Column="4" TextAlignment="Right" Classes="codeSmall" Text="{Binding AverageText}" />
+                  <TextBlock Grid.Column="5" TextAlignment="Right" Classes="codeSmall" Text="{Binding P90Text}" />
+                  <TextBlock Grid.Column="6" TextAlignment="Right" Classes="codeSmall" Text="{Binding P95Text}" />
+                  <TextBlock Grid.Column="7" TextAlignment="Right" Classes="codeSmall" Text="{Binding P99Text}" />
+                  <TextBlock Grid.Column="8" TextAlignment="Right" Classes="codeSmall" Text="{Binding MaxText}" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <StackPanel Spacing="4" IsVisible="{Binding ErrorMessages.Count, Converter={x:Static p:ConsoleMap.IsPositive}}">
+          <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.LoadErrors}" />
+          <ItemsControl ItemsSource="{Binding ErrorMessages}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <SelectableTextBlock Text="{Binding}" TextWrapping="Wrap" Classes="codeSmall" Foreground="{DynamicResource YaapicDangerBrush}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding Note}"
+                   IsVisible="{Binding Note, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+
+        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
+          <Button Content="{x:Static loc:Strings.LoadExport}" AutomationProperties.Name="{x:Static loc:Strings.LoadExport}"
+                  Command="{Binding ExportCommand}" />
+          <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" AutomationProperties.LiveSetting="Polite"
+                     Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding ExportMessage}" />
+        </Grid>
+      </StackPanel>
+    </ScrollViewer>
+  </Grid>
+</UserControl>

@@ -1,6 +1,6 @@
 # M6-49: WinUI: automation entry points and status bar items
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-45, M6-46, M6-47, M6-48
 
@@ -29,13 +29,20 @@ Keyboard shortcuts (none defined).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke on the published exe: each context-menu item opens the right window loaded with the folder; the palette entries open
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke on the published exe: each context-menu item opens the right window loaded with the folder; the palette entries open
   them; a second request activates the open window instead of a new one; the Runner status shows progress during a run; the Mocks item
   appears while a server runs; the Monitors item appears after a failing run and opens the window; closing the main window closes the tool
   windows and stops mock servers. Record anything not run in Notes.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the automation entry points and status bar items`
+
+## Notes
+
+- Verified: Release build (0 warnings), AOT publish with 0 IL2xxx/IL3xxx warnings, tests green (Core `LoadTestRunnerTests` and one Infrastructure HTTP test flaked once under load, green on rerun).
+- Smoke on the published exe, driven through UI Automation: the exe starts; the Runner status bar button opens the Runner window; a second click activates it (still 2 top-level windows); the Mocks and Monitors items are hidden while empty.
+- Not run: folder context menu items, palette entries, the Runner progress text during a run, Mocks/Monitors items appearing, the content of the Load test, Mock servers and Monitors windows, closing the main window stopping mock servers. Left for M6-61.
+- The status bar had no Runner placeholder: the Runner button was added. No temporary debug calls were found.

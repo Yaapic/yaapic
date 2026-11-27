@@ -245,6 +245,9 @@ public static class Strings
     /// <summary>Runs for every request in this collection, before the folder and request scripts.</summary>
     public static string CollectionsCollectionScriptsHint => Localizer.Pick("Runs for every request in this collection, before the folder and request scripts.", "S'exécute pour chaque requête de cette collection, avant les scripts du dossier et de la requête.");
 
+    /// <summary>Create a mock server...</summary>
+    public static string CollectionsCreateMock => Localizer.Pick("Create a mock server...", "Créer un serveur de mock...");
+
     /// <summary>What is this collection for?</summary>
     public static string CollectionsDescriptionPlaceholder => Localizer.Pick("What is this collection for?", "À quoi sert cette collection ?");
 
@@ -263,6 +266,12 @@ public static class Strings
 
     /// <summary>Import...</summary>
     public static string CollectionsImport => Localizer.Pick("Import...", "Importer...");
+
+    /// <summary>Load test...</summary>
+    public static string CollectionsLoadTest => Localizer.Pick("Load test...", "Test de charge...");
+
+    /// <summary>Monitor folder...</summary>
+    public static string CollectionsMonitorFolder => Localizer.Pick("Monitor folder...", "Surveiller le dossier...");
 
     /// <summary>Move to</summary>
     public static string CollectionsMoveTo => Localizer.Pick("Move to", "Déplacer vers");
@@ -292,6 +301,9 @@ public static class Strings
     /// <summary>Requests</summary>
     public static string CollectionsRequests => Localizer.Pick("Requests", "Requêtes");
 
+    /// <summary>Run folder...</summary>
+    public static string CollectionsRunFolder => Localizer.Pick("Run folder...", "Lancer le dossier...");
+
     /// <summary>Collections</summary>
     public static string CollectionsTitle => Localizer.Pick("Collections", "Collections");
 
@@ -315,6 +327,9 @@ public static class Strings
 
     /// <summary>Close</summary>
     public static string CommonClose => Localizer.Pick("Close", "Fermer");
+
+    /// <summary>Continue</summary>
+    public static string CommonContinue => Localizer.Pick("Continue", "Continuer");
 
     /// <summary>Copy</summary>
     public static string CommonCopy => Localizer.Pick("Copy", "Copier");
@@ -1290,6 +1305,317 @@ public static class Strings
     /// <summary>Show the response beside or below the request</summary>
     public static string LayoutToggleTip => Localizer.Pick("Show the response beside or below the request", "Afficher la réponse à côté de la requête ou en dessous");
 
+    /// <summary>Active users</summary>
+    public static string LoadActiveUsers => Localizer.Pick("Active users", "Utilisateurs actifs");
+
+    /// <summary>Average</summary>
+    public static string LoadAverage => Localizer.Pick("Average", "Moyenne");
+
+    /// <summary>Errors per second</summary>
+    public static string LoadChartErrors => Localizer.Pick("Errors per second", "Erreurs par seconde");
+
+    /// <summary>Average response time</summary>
+    public static string LoadChartResponseTime => Localizer.Pick("Average response time", "Temps de réponse moyen");
+
+    /// <summary>Requests per second</summary>
+    public static string LoadChartThroughput => Localizer.Pick("Requests per second", "Requêtes par seconde");
+
+    /// <summary>Virtual users</summary>
+    public static string LoadChartUsers => Localizer.Pick("Virtual users", "Utilisateurs virtuels");
+
+    /// <summary>Count</summary>
+    public static string LoadColCount => Localizer.Pick("Count", "Nombre");
+
+    /// <summary>Max</summary>
+    public static string LoadColMax => Localizer.Pick("Max", "Max");
+
+    /// <summary>Method</summary>
+    public static string LoadColMethod => Localizer.Pick("Method", "Méthode");
+
+    /// <summary>p90</summary>
+    public static string LoadColP90 => Localizer.Pick("p90", "p90");
+
+    /// <summary>p95</summary>
+    public static string LoadColP95 => Localizer.Pick("p95", "p95");
+
+    /// <summary>p99</summary>
+    public static string LoadColP99 => Localizer.Pick("p99", "p99");
+
+    /// <summary>Request</summary>
+    public static string LoadColRequest => Localizer.Pick("Request", "Requête");
+
+    /// <summary>Start a load test against {0}? Only test servers you are allowed to load.</summary>
+    public static string LoadConfirm(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Start a load test against {0}? Only test servers you are allowed to load.", "Lancer un test de charge contre {0} ? Ne testez que des serveurs que vous avez le droit de charger."), a0);
+
+    /// <summary>Start a load test?</summary>
+    public static string LoadConfirmTitle => Localizer.Pick("Start a load test?", "Lancer un test de charge ?");
+
+    /// <summary>Duration (s)</summary>
+    public static string LoadDuration => Localizer.Pick("Duration (s)", "Durée (s)");
+
+    /// <summary>The duration must be between 10 and 3600 seconds.</summary>
+    public static string LoadDurationRange => Localizer.Pick("The duration must be between 10 and 3600 seconds.", "La durée doit être comprise entre 10 et 3600 secondes.");
+
+    /// <summary>Error rate</summary>
+    public static string LoadErrorRate => Localizer.Pick("Error rate", "Taux d'erreur");
+
+    /// <summary>Errors</summary>
+    public static string LoadErrors => Localizer.Pick("Errors", "Erreurs");
+
+    /// <summary>Export JSON</summary>
+    public static string LoadExport => Localizer.Pick("Export JSON", "Exporter en JSON");
+
+    /// <summary>95th percentile</summary>
+    public static string LoadP95 => Localizer.Pick("95th percentile", "95e centile");
+
+    /// <summary>Profile</summary>
+    public static string LoadProfile => Localizer.Pick("Profile", "Profil");
+
+    /// <summary>Fixed</summary>
+    public static string LoadProfileFixed => Localizer.Pick("Fixed", "Fixe");
+
+    /// <summary>Ramp up</summary>
+    public static string LoadProfileRampUp => Localizer.Pick("Ramp up", "Montée en charge");
+
+    /// <summary>The ramp-up must be between 1 second and the duration.</summary>
+    public static string LoadRampRange => Localizer.Pick("The ramp-up must be between 1 second and the duration.", "La montée en charge doit être comprise entre 1 seconde et la durée.");
+
+    /// <summary>Ramp-up (s)</summary>
+    public static string LoadRampUp => Localizer.Pick("Ramp-up (s)", "Montée (s)");
+
+    /// <summary>Requests</summary>
+    public static string LoadRequests => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Scripts were not run during this load test.</summary>
+    public static string LoadScriptsSkipped => Localizer.Pick("Scripts were not run during this load test.", "Les scripts n'ont pas été exécutés pendant ce test de charge.");
+
+    /// <summary>Start</summary>
+    public static string LoadStart => Localizer.Pick("Start", "Démarrer");
+
+    /// <summary>Stop</summary>
+    public static string LoadStop => Localizer.Pick("Stop", "Arrêter");
+
+    /// <summary>The think time must be between 0 and 10000 ms.</summary>
+    public static string LoadThinkRange => Localizer.Pick("The think time must be between 0 and 10000 ms.", "Le temps de réflexion doit être compris entre 0 et 10000 ms.");
+
+    /// <summary>Think time (ms)</summary>
+    public static string LoadThinkTime => Localizer.Pick("Think time (ms)", "Temps de réflexion (ms)");
+
+    /// <summary>Throughput</summary>
+    public static string LoadThroughput => Localizer.Pick("Throughput", "Débit");
+
+    /// <summary>Load test</summary>
+    public static string LoadTitle => Localizer.Pick("Load test", "Test de charge");
+
+    /// <summary>Percentiles computed on the first {0} samples.</summary>
+    public static string LoadTruncated(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Percentiles computed on the first {0} samples.", "Centiles calculés sur les {0} premiers échantillons."), a0);
+
+    /// <summary>Virtual users</summary>
+    public static string LoadUsers => Localizer.Pick("Virtual users", "Utilisateurs virtuels");
+
+    /// <summary>Virtual users must be between 1 and {0}.</summary>
+    public static string LoadUsersRange(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Virtual users must be between 1 and {0}.", "Les utilisateurs virtuels doivent être entre 1 et {0}."), a0);
+
+    /// <summary>Add route</summary>
+    public static string MockAddRoute => Localizer.Pick("Add route", "Ajouter une route");
+
+    /// <summary>Body</summary>
+    public static string MockBody => Localizer.Pick("Body", "Corps");
+
+    /// <summary>Clear</summary>
+    public static string MockClearLog => Localizer.Pick("Clear", "Effacer");
+
+    /// <summary>Copy URL</summary>
+    public static string MockCopyUrl => Localizer.Pick("Copy URL", "Copier l'URL");
+
+    /// <summary>Allow cross-origin requests (CORS)</summary>
+    public static string MockCors => Localizer.Pick("Allow cross-origin requests (CORS)", "Autoriser les requêtes cross-origin (CORS)");
+
+    /// <summary>Delay (ms)</summary>
+    public static string MockDelay => Localizer.Pick("Delay (ms)", "Délai (ms)");
+
+    /// <summary>Delete</summary>
+    public static string MockDeleteRoute => Localizer.Pick("Delete", "Supprimer");
+
+    /// <summary>Duplicate</summary>
+    public static string MockDuplicateRoute => Localizer.Pick("Duplicate", "Dupliquer");
+
+    /// <summary>Created {0} routes ({1} duplicates skipped).</summary>
+    public static string MockGenerated(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Created {0} routes ({1} duplicates skipped).", "{0} routes créées ({1} doublons ignorés)."), a0, a1);
+
+    /// <summary>{0} mock</summary>
+    public static string MockGeneratedName(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} mock", "{0} mock"), a0);
+
+    /// <summary>Headers</summary>
+    public static string MockHeaders => Localizer.Pick("Headers", "En-têtes");
+
+    /// <summary>This mock server has errors; fix them before starting it.</summary>
+    public static string MockInvalid => Localizer.Pick("This mock server has errors; fix them before starting it.", "Ce serveur de mock contient des erreurs ; corrigez-les avant de le démarrer.");
+
+    /// <summary>The server name is empty.</summary>
+    public static string MockIssueNameEmpty => Localizer.Pick("The server name is empty.", "Le nom du serveur est vide.");
+
+    /// <summary>The port must be between 1024 and 65535.</summary>
+    public static string MockIssuePortOutOfRange => Localizer.Pick("The port must be between 1024 and 65535.", "Le port doit être compris entre 1024 et 65535.");
+
+    /// <summary>The route delay must be between 0 and 60000 ms.</summary>
+    public static string MockIssueRouteDelayOutOfRange => Localizer.Pick("The route delay must be between 0 and 60000 ms.", "Le délai de la route doit être compris entre 0 et 60000 ms.");
+
+    /// <summary>A response header name is not valid.</summary>
+    public static string MockIssueRouteHeaderNameInvalid => Localizer.Pick("A response header name is not valid.", "Le nom d'un en-tête de réponse n'est pas valide.");
+
+    /// <summary>The route method is not valid.</summary>
+    public static string MockIssueRouteMethodInvalid => Localizer.Pick("The route method is not valid.", "La méthode de la route n'est pas valide.");
+
+    /// <summary>The route path must start with / and contain no spaces, ? or #; * is allowed only as the last segment.</summary>
+    public static string MockIssueRoutePathInvalid => Localizer.Pick("The route path must start with / and contain no spaces, ? or #; * is allowed only as the last segment.", "Le chemin de la route doit commencer par / et ne contenir ni espace, ni ? ni # ; * n'est permis qu'en dernier segment.");
+
+    /// <summary>The route status must be between 100 and 599.</summary>
+    public static string MockIssueRouteStatusOutOfRange => Localizer.Pick("The route status must be between 100 and 599.", "Le statut de la route doit être compris entre 100 et 599.");
+
+    /// <summary>Requests</summary>
+    public static string MockLog => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Method</summary>
+    public static string MockMethod => Localizer.Pick("Method", "Méthode");
+
+    /// <summary>New mock server</summary>
+    public static string MockNew => Localizer.Pick("New mock server", "Nouveau serveur de mock");
+
+    /// <summary>Mock server</summary>
+    public static string MockNewName => Localizer.Pick("Mock server", "Serveur de mock");
+
+    /// <summary>New route</summary>
+    public static string MockNewRoute => Localizer.Pick("New route", "Nouvelle route");
+
+    /// <summary>no match</summary>
+    public static string MockNoMatch => Localizer.Pick("no match", "aucune correspondance");
+
+    /// <summary>Path</summary>
+    public static string MockPath => Localizer.Pick("Path", "Chemin");
+
+    /// <summary>Use :name or {name} for a path parameter and * for the rest of the path.</summary>
+    public static string MockPathHint => Localizer.Pick("Use :name or {name} for a path parameter and * for the rest of the path.", "Utilisez :nom ou {nom} pour un paramètre de chemin et * pour le reste du chemin.");
+
+    /// <summary>Port</summary>
+    public static string MockPort => Localizer.Pick("Port", "Port");
+
+    /// <summary>Port {0} is already in use.</summary>
+    public static string MockPortInUse(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Port {0} is already in use.", "Le port {0} est déjà utilisé."), a0);
+
+    /// <summary>Revert</summary>
+    public static string MockRevert => Localizer.Pick("Revert", "Rétablir");
+
+    /// <summary>Routes</summary>
+    public static string MockRoutes => Localizer.Pick("Routes", "Routes");
+
+    /// <summary>Running</summary>
+    public static string MockRunning => Localizer.Pick("Running", "En marche");
+
+    /// <summary>Start</summary>
+    public static string MockStart => Localizer.Pick("Start", "Démarrer");
+
+    /// <summary>Status</summary>
+    public static string MockStatus => Localizer.Pick("Status", "Statut");
+
+    /// <summary>Mocks: {0} running</summary>
+    public static string MockStatusBar(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Mocks: {0} running", "Mocks : {0} en marche"), a0);
+
+    /// <summary>Stop</summary>
+    public static string MockStop => Localizer.Pick("Stop", "Arrêter");
+
+    /// <summary>Stopped</summary>
+    public static string MockStopped => Localizer.Pick("Stopped", "Arrêté");
+
+    /// <summary>Templates: {{params.id}}, {{query.name}}, {{headers.name}}, {{body}}, {{$guid}}</summary>
+    public static string MockTemplateHint => Localizer.Pick("Templates: {{params.id}}, {{query.name}}, {{headers.name}}, {{body}}, {{$guid}}", "Modèles : {{params.id}}, {{query.name}}, {{headers.name}}, {{body}}, {{$guid}}");
+
+    /// <summary>Mock servers</summary>
+    public static string MockTitle => Localizer.Pick("Mock servers", "Serveurs de mock");
+
+    /// <summary>Enabled</summary>
+    public static string MonitorEnabled => Localizer.Pick("Enabled", "Activé");
+
+    /// <summary>Environment</summary>
+    public static string MonitorEnvironment => Localizer.Pick("Environment", "Environnement");
+
+    /// <summary>The environment of this monitor no longer exists.</summary>
+    public static string MonitorEnvironmentMissing => Localizer.Pick("The environment of this monitor no longer exists.", "L'environnement de ce monitor n'existe plus.");
+
+    /// <summary>Every {0}</summary>
+    public static string MonitorEvery(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Every {0}", "Toutes les {0}"), a0);
+
+    /// <summary>Monitor '{0}' failed: {1}</summary>
+    public static string MonitorFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Monitor '{0}' failed: {1}", "Le monitor « {0} » a échoué : {1}"), a0, a1);
+
+    /// <summary>Folder</summary>
+    public static string MonitorFolder => Localizer.Pick("Folder", "Dossier");
+
+    /// <summary>The folder of this monitor no longer exists.</summary>
+    public static string MonitorFolderMissing => Localizer.Pick("The folder of this monitor no longer exists.", "Le dossier de ce monitor n'existe plus.");
+
+    /// <summary>History</summary>
+    public static string MonitorHistory => Localizer.Pick("History", "Historique");
+
+    /// <summary>Run every</summary>
+    public static string MonitorInterval => Localizer.Pick("Run every", "Exécuter toutes les");
+
+    /// <summary>Last run</summary>
+    public static string MonitorLastRun => Localizer.Pick("Last run", "Dernière exécution");
+
+    /// <summary>Monitors run only while Yaapic is open on this computer.</summary>
+    public static string MonitorLocalNote => Localizer.Pick("Monitors run only while Yaapic is open on this computer.", "Les monitors ne s'exécutent que lorsque Yaapic est ouvert sur cet ordinateur.");
+
+    /// <summary>Never</summary>
+    public static string MonitorNever => Localizer.Pick("Never", "Jamais");
+
+    /// <summary>New monitor</summary>
+    public static string MonitorNew => Localizer.Pick("New monitor", "Nouveau monitor");
+
+    /// <summary>Monitor</summary>
+    public static string MonitorNewName => Localizer.Pick("Monitor", "Monitor");
+
+    /// <summary>Next run</summary>
+    public static string MonitorNextRun => Localizer.Pick("Next run", "Prochaine exécution");
+
+    /// <summary>No environment</summary>
+    public static string MonitorNoEnvironment => Localizer.Pick("No environment", "Aucun environnement");
+
+    /// <summary>{0}/{1} failed</summary>
+    public static string MonitorRequestsFailed(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}/{1} failed", "{0}/{1} en échec"), a0, a1);
+
+    /// <summary>Run now</summary>
+    public static string MonitorRunNow => Localizer.Pick("Run now", "Exécuter maintenant");
+
+    /// <summary>Running...</summary>
+    public static string MonitorRunning => Localizer.Pick("Running...", "En cours...");
+
+    /// <summary>Monitors: {0} failing</summary>
+    public static string MonitorStatusBar(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Monitors: {0} failing", "Monitors : {0} en échec"), a0);
+
+    /// <summary>Error</summary>
+    public static string MonitorStatusError => Localizer.Pick("Error", "Erreur");
+
+    /// <summary>Failed</summary>
+    public static string MonitorStatusFailed => Localizer.Pick("Failed", "Échoué");
+
+    /// <summary>Passed</summary>
+    public static string MonitorStatusPassed => Localizer.Pick("Passed", "Réussi");
+
+    /// <summary>Monitors</summary>
+    public static string MonitorTitle => Localizer.Pick("Monitors", "Monitors");
+
     /// <summary>No redirect was received within 3 minutes. Try again.</summary>
     public static string Oauth2AuthorizationTimeout => Localizer.Pick("No redirect was received within 3 minutes. Try again.", "Aucune redirection reçue en 3 minutes. Réessayez.");
 
@@ -1475,8 +1801,17 @@ public static class Strings
     /// <summary>Import a collection or request...</summary>
     public static string PaletteImport => Localizer.Pick("Import a collection or request...", "Importer une collection ou une requête...");
 
+    /// <summary>Load test...</summary>
+    public static string PaletteLoadTest => Localizer.Pick("Load test...", "Test de charge...");
+
     /// <summary>Manage environments</summary>
     public static string PaletteManageEnvironments => Localizer.Pick("Manage environments", "Gérer les environnements");
+
+    /// <summary>Mock servers</summary>
+    public static string PaletteMockServers => Localizer.Pick("Mock servers", "Serveurs de mock");
+
+    /// <summary>Monitors</summary>
+    public static string PaletteMonitors => Localizer.Pick("Monitors", "Moniteurs");
 
     /// <summary>New collection</summary>
     public static string PaletteNewCollection => Localizer.Pick("New collection", "Nouvelle collection");
@@ -1504,6 +1839,9 @@ public static class Strings
 
     /// <summary>Restart to update</summary>
     public static string PaletteRestartToUpdate => Localizer.Pick("Restart to update", "Redémarrer pour mettre à jour");
+
+    /// <summary>Run collection...</summary>
+    public static string PaletteRunCollection => Localizer.Pick("Run collection...", "Lancer la collection...");
 
     /// <summary>Save request</summary>
     public static string PaletteSaveRequest => Localizer.Pick("Save request", "Enregistrer la requête");
@@ -1667,6 +2005,9 @@ public static class Strings
     /// <summary>Sending</summary>
     public static string ResponseSending => Localizer.Pick("Sending", "Envoi en cours");
 
+    /// <summary>Request skipped by a script: nothing was sent.</summary>
+    public static string ResponseSkippedByScript => Localizer.Pick("Request skipped by a script: nothing was sent.", "Requête ignorée par un script : rien n'a été envoyé.");
+
     /// <summary>Diff</summary>
     public static string ResponseTabDiff => Localizer.Pick("Diff", "Différences");
 
@@ -1678,6 +2019,180 @@ public static class Strings
 
     /// <summary>to send</summary>
     public static string ResponseToSend => Localizer.Pick("to send", "pour envoyer");
+
+    /// <summary>Choose a CSV or JSON file...</summary>
+    public static string RunnerChooseData => Localizer.Pick("Choose a CSV or JSON file...", "Choisir un fichier CSV ou JSON...");
+
+    /// <summary>Choose a data file</summary>
+    public static string RunnerChooseDataTitle => Localizer.Pick("Choose a data file", "Choisir un fichier de données");
+
+    /// <summary>Remove</summary>
+    public static string RunnerClearData => Localizer.Pick("Remove", "Retirer");
+
+    /// <summary>Data file</summary>
+    public static string RunnerData => Localizer.Pick("Data file", "Fichier de données");
+
+    /// <summary>Invalid JSON: {0}</summary>
+    public static string RunnerDataInvalidJson(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Invalid JSON: {0}", "JSON invalide : {0}"), a0);
+
+    /// <summary>A JSON data file must contain an array of objects.</summary>
+    public static string RunnerDataJsonNotArray => Localizer.Pick("A JSON data file must contain an array of objects.", "Un fichier de données JSON doit contenir un tableau d'objets.");
+
+    /// <summary>Item {0} of the data file is not an object.</summary>
+    public static string RunnerDataJsonNotObject(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Item {0} of the data file is not an object.", "L'élément {0} du fichier de données n'est pas un objet."), a0);
+
+    /// <summary>{0}: {1} rows, {2} columns</summary>
+    public static string RunnerDataSummary(object? a0, object? a1, object? a2) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0}: {1} rows, {2} columns", "{0} : {1} lignes, {2} colonnes"), a0, a1, a2);
+
+    /// <summary>The data file is too large (10 MiB, 100000 rows and 1000 columns at most).</summary>
+    public static string RunnerDataTooLarge => Localizer.Pick("The data file is too large (10 MiB, 100000 rows and 1000 columns at most).", "Le fichier de données est trop volumineux (10 Mio, 100000 lignes et 1000 colonnes au maximum).");
+
+    /// <summary>Line {0} has more fields than the header.</summary>
+    public static string RunnerDataTooManyFields(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Line {0} has more fields than the header.", "La ligne {0} contient plus de champs que l'en-tête."), a0);
+
+    /// <summary>Line {0} has a quote that is never closed.</summary>
+    public static string RunnerDataUnclosedQuote(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Line {0} has a quote that is never closed.", "La ligne {0} contient un guillemet jamais fermé."), a0);
+
+    /// <summary>Delay (ms)</summary>
+    public static string RunnerDelay => Localizer.Pick("Delay (ms)", "Délai (ms)");
+
+    /// <summary>The delay must be between 0 and 60000 ms.</summary>
+    public static string RunnerDelayRange => Localizer.Pick("The delay must be between 0 and 60000 ms.", "Le délai doit être compris entre 0 et 60000 ms.");
+
+    /// <summary>Export JUnit XML</summary>
+    public static string RunnerExportJUnit => Localizer.Pick("Export JUnit XML", "Exporter en JUnit XML");
+
+    /// <summary>Export JSON</summary>
+    public static string RunnerExportJson => Localizer.Pick("Export JSON", "Exporter en JSON");
+
+    /// <summary>Saved {0}</summary>
+    public static string RunnerExported(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Saved {0}", "{0} enregistré"), a0);
+
+    /// <summary>All</summary>
+    public static string RunnerFilterAll => Localizer.Pick("All", "Tous");
+
+    /// <summary>Failed</summary>
+    public static string RunnerFilterFailed => Localizer.Pick("Failed", "Échoués");
+
+    /// <summary>Passed</summary>
+    public static string RunnerFilterPassed => Localizer.Pick("Passed", "Réussis");
+
+    /// <summary>Skipped</summary>
+    public static string RunnerFilterSkipped => Localizer.Pick("Skipped", "Ignorés");
+
+    /// <summary>Iteration {0}</summary>
+    public static string RunnerIteration(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Iteration {0}", "Itération {0}"), a0);
+
+    /// <summary>Iterations</summary>
+    public static string RunnerIterations => Localizer.Pick("Iterations", "Itérations");
+
+    /// <summary>Iterations must be between 1 and 10000.</summary>
+    public static string RunnerIterationsRange => Localizer.Pick("Iterations must be between 1 and 10000.", "Le nombre d'itérations doit être compris entre 1 et 10000.");
+
+    /// <summary>The run was stopped: more than 1000 requests in one iteration (setNextRequest loop?)</summary>
+    public static string RunnerLoopGuard => Localizer.Pick("The run was stopped: more than 1000 requests in one iteration (setNextRequest loop?)", "Le run a été arrêté : plus de 1000 requêtes dans une itération (boucle setNextRequest ?)");
+
+    /// <summary>Move down</summary>
+    public static string RunnerMoveDown => Localizer.Pick("Move down", "Descendre");
+
+    /// <summary>Move up</summary>
+    public static string RunnerMoveUp => Localizer.Pick("Move up", "Monter");
+
+    /// <summary>setNextRequest: no request named '{0}' in this run</summary>
+    public static string RunnerNextRequestNotFound(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("setNextRequest: no request named '{0}' in this run", "setNextRequest : aucune requête nommée '{0}' dans ce run"), a0);
+
+    /// <summary>Select at least one request.</summary>
+    public static string RunnerNothingSelected => Localizer.Pick("Select at least one request.", "Sélectionnez au moins une requête.");
+
+    /// <summary>Error</summary>
+    public static string RunnerOutcomeError => Localizer.Pick("Error", "Erreur");
+
+    /// <summary>Failed</summary>
+    public static string RunnerOutcomeFailed => Localizer.Pick("Failed", "Échoué");
+
+    /// <summary>Passed</summary>
+    public static string RunnerOutcomePassed => Localizer.Pick("Passed", "Réussi");
+
+    /// <summary>Skipped</summary>
+    public static string RunnerOutcomeSkipped => Localizer.Pick("Skipped", "Ignoré");
+
+    /// <summary>Keep variable values</summary>
+    public static string RunnerPersistVariables => Localizer.Pick("Keep variable values", "Conserver les valeurs des variables");
+
+    /// <summary>Requests</summary>
+    public static string RunnerRequests => Localizer.Pick("Requests", "Requêtes");
+
+    /// <summary>Results</summary>
+    public static string RunnerResults => Localizer.Pick("Results", "Résultats");
+
+    /// <summary>Run</summary>
+    public static string RunnerRun => Localizer.Pick("Run", "Exécuter");
+
+    /// <summary>Running {0}/{1}</summary>
+    public static string RunnerRunning(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Running {0}/{1}", "Exécution {0}/{1}"), a0, a1);
+
+    /// <summary>Select all</summary>
+    public static string RunnerSelectAll => Localizer.Pick("Select all", "Tout sélectionner");
+
+    /// <summary>Select none</summary>
+    public static string RunnerSelectNone => Localizer.Pick("Select none", "Tout désélectionner");
+
+    /// <summary>{0} of {1} selected</summary>
+    public static string RunnerSelectedCount(object? a0, object? a1) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} of {1} selected", "{0} sur {1} sélectionnées"), a0, a1);
+
+    /// <summary>Runner</summary>
+    public static string RunnerStatusBar => Localizer.Pick("Runner", "Runner");
+
+    /// <summary>Run canceled</summary>
+    public static string RunnerStatusCanceled => Localizer.Pick("Run canceled", "Exécution annulée");
+
+    /// <summary>Run completed</summary>
+    public static string RunnerStatusCompleted => Localizer.Pick("Run completed", "Exécution terminée");
+
+    /// <summary>Run failed: {0}</summary>
+    public static string RunnerStatusFailed(object? a0) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("Run failed: {0}", "Échec de l'exécution : {0}"), a0);
+
+    /// <summary>Run stopped by a script</summary>
+    public static string RunnerStatusStopped => Localizer.Pick("Run stopped by a script", "Exécution arrêtée par un script");
+
+    /// <summary>Run stopped on the first failure</summary>
+    public static string RunnerStatusStoppedOnFailure => Localizer.Pick("Run stopped on the first failure", "Exécution arrêtée au premier échec");
+
+    /// <summary>Stop</summary>
+    public static string RunnerStop => Localizer.Pick("Stop", "Arrêter");
+
+    /// <summary>Stop on failure</summary>
+    public static string RunnerStopOnFailure => Localizer.Pick("Stop on failure", "Arrêter en cas d'échec");
+
+    /// <summary>{0} sent, {1} errors, {2} failed, {3} skipped</summary>
+    public static string RunnerSummary(object? a0, object? a1, object? a2, object? a3) =>
+        string.Format(CultureInfo.CurrentCulture, Localizer.Pick("{0} sent, {1} errors, {2} failed, {3} skipped", "{0} envoyées, {1} erreurs, {2} échouées, {3} ignorées"), a0, a1, a2, a3);
+
+    /// <summary>Duration</summary>
+    public static string RunnerTileDuration => Localizer.Pick("Duration", "Durée");
+
+    /// <summary>Errors</summary>
+    public static string RunnerTileErrors => Localizer.Pick("Errors", "Erreurs");
+
+    /// <summary>Sent</summary>
+    public static string RunnerTileSent => Localizer.Pick("Sent", "Envoyées");
+
+    /// <summary>Tests</summary>
+    public static string RunnerTileTests => Localizer.Pick("Tests", "Tests");
+
+    /// <summary>Runner</summary>
+    public static string RunnerTitle => Localizer.Pick("Runner", "Runner");
 
     /// <summary>Paste Postman/Bruno...</summary>
     public static string ScriptConvert => Localizer.Pick("Paste Postman/Bruno...", "Coller Postman/Bruno...");
@@ -1729,6 +2244,12 @@ public static class Strings
 
     /// <summary>Script phase</summary>
     public static string ScriptPhase => Localizer.Pick("Script phase", "Phase du script");
+
+    /// <summary>yaapic.execution.setNextRequest has no effect outside the Runner</summary>
+    public static string ScriptSetNextRequestOutsideRunner => Localizer.Pick("yaapic.execution.setNextRequest has no effect outside the Runner", "yaapic.execution.setNextRequest n'a aucun effet en dehors du Runner");
+
+    /// <summary>yaapic.execution.skipRequest can only be called in a pre-request script</summary>
+    public static string ScriptSkipRequestPostResponse => Localizer.Pick("yaapic.execution.skipRequest can only be called in a pre-request script", "yaapic.execution.skipRequest ne peut être appelé que dans un script de pré-requête");
 
     /// <summary>Snippets</summary>
     public static string ScriptSnippets => Localizer.Pick("Snippets", "Extraits");
@@ -1853,6 +2374,12 @@ public static class Strings
 
     /// <summary>Updates</summary>
     public static string SettingsUpdates => Localizer.Pick("Updates", "Mises à jour");
+
+    /// <summary>A collection run or a load test is still in progress. Closing Yaapic stops it and its results are lost.</summary>
+    public static string ShellCloseRunning => Localizer.Pick("A collection run or a load test is still in progress. Closing Yaapic stops it and its results are lost.", "Une exécution de collection ou un test de charge est encore en cours. Fermer Yaapic l'arrête et ses résultats sont perdus.");
+
+    /// <summary>Close Yaapic?</summary>
+    public static string ShellCloseRunningTitle => Localizer.Pick("Close Yaapic?", "Fermer Yaapic ?");
 
     /// <summary>{0} engine unavailable: {1}</summary>
     public static string ShellEngineUnavailable(object? a0, object? a1) =>
@@ -2026,6 +2553,9 @@ public static class Strings
 
     /// <summary>Collection</summary>
     public static string VariablesScopeCollection => Localizer.Pick("Collection", "Collection");
+
+    /// <summary>Iteration data</summary>
+    public static string VariablesScopeData => Localizer.Pick("Iteration data", "Données d'itération");
 
     /// <summary>Dynamic</summary>
     public static string VariablesScopeDynamic => Localizer.Pick("Dynamic", "Dynamique");

@@ -27,6 +27,19 @@ public sealed class WinUIDialogService : IDialogService
     }
 
     /// <inheritdoc/>
+    public async Task<bool> ConfirmAsync(string title, string message) =>
+        await ShowAsync(new ContentDialog
+        {
+            Title = title,
+            Content = Body(message),
+            PrimaryButtonText = Strings.CommonContinue,
+            PrimaryButtonStyle = (Style)Application.Current.Resources["YaapicPrimaryButtonStyle"],
+            CloseButtonText = Strings.CommonCancel,
+            CloseButtonStyle = DialogButtonStyle,
+            DefaultButton = ContentDialogButton.Close,
+        }) == ContentDialogResult.Primary;
+
+    /// <inheritdoc/>
     public async Task<UnsavedChoice> ConfirmUnsavedAsync(string itemName)
     {
         var result = await ShowAsync(new ContentDialog

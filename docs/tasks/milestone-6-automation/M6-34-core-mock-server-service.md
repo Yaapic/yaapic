@@ -1,6 +1,6 @@
 # M6-34: Core: mock server service
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-28, M6-30, M6-33
 
@@ -39,11 +39,11 @@ The view model (M6-35), composition (M6-42).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Mocks/MockServerServiceTests.cs` with `InMemoryMockServerStore`, `FakeMockHttpHost` and `ManualTimeProvider`:
+- [x] Tests in `Yaapic.Core.Tests/Mocks/MockServerServiceTests.cs` with `InMemoryMockServerStore`, `FakeMockHttpHost` and `ManualTimeProvider`:
   load; save with issues returns them and stores nothing; save of a running server is used by the next request; port change restarts;
   start/stop/IsRunning/RunningCount and events; start of an invalid server throws; port in use passes through; delete stops and removes;
   log keeps 500 newest-first entries and records the route name or null; `StopAllAsync`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

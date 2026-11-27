@@ -20,6 +20,10 @@ public sealed class LuaConformanceTests
         Lua("status-code") with { Post = "yaapic.test('Status code is 200', function() yaapic.response.to.have.status(200) end)", Tests = ["Status code is 200|P"] },
         // Idiom: equality on the status code.
         Lua("response-code-equal") with { Post = "yaapic.test('code', function() yaapic.expect(yaapic.response.code).to.equal(200) end)", Tests = ["code|P"] },
+        // Idiom: yaapic.iteration_data.get in a data-driven run.
+        Lua("iteration-data-get") with { Pre = "console.log(yaapic.iteration_data.get('user'), yaapic.iterationData.has('x'))", RunContext = new(1, 3, [new("user", "ann")], true), Console = ["ann false"] },
+        // Idiom: yaapic.execution.set_next_request in a run.
+        Lua("set-next-request") with { Post = "yaapic.execution.set_next_request('Login')", RunContext = new(0, 1, [], true) },
         // Idiom: status text.
         Lua("status-by-name") with { Status = 201, Reason = "Created", Post = "yaapic.test('created', function() yaapic.response.to.have.status('Created') end)", Tests = ["created|P"] },
         // Idiom: response time budget.
@@ -108,8 +112,8 @@ public sealed class LuaConformanceTests
     /// <summary>Gets the unsupported idioms and the message they must fail with.</summary>
     public static TheoryData<string, string> Unsupported => new()
     {
-        { "yaapic.execution.set_next_request('x')", "yaapic.execution.set_next_request is not supported in Yaapic" },
-        { "yaapic.iterationData.get('a')", "yaapic.iterationData.get is not supported in Yaapic" },
+        { "local _ = yaapic.execution.location", "yaapic.execution.location is not supported in Yaapic" },
+        { "local _ = yaapic.execution.runRequest", "yaapic.execution.runRequest is not supported in Yaapic" },
         { "yaapic.vault.get('secret')", "yaapic.vault.get is not supported in Yaapic" },
         { "yaapic.visualizer.set('<p></p>')", "yaapic.visualizer.set is not supported in Yaapic" },
         { "yaapic.require('npm:lodash')", "yaapic.require is not supported in Yaapic" },

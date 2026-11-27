@@ -15,6 +15,10 @@ public partial class LocalizationRulesTests
         "Digest authentication must be computed by the caller (RFC 7616).",
         "AWS Signature v4 must be computed by the caller.",
         "Base Environment", // the fixed name Insomnia gives to the base environment of an export
+        "No Content", "Moved Permanently", "Not Modified", "Bad Request", "Not Found", "Method Not Allowed", // HTTP reason phrases
+        "Unsupported Media Type", "Unprocessable Entity", "Too Many Requests", "Internal Server Error", // sent on the wire
+        "No mock route matches", // body of the mock server 404 (ADR 0020), sent on the wire
+        "Not Implemented", "Bad Gateway", "Service Unavailable", "Gateway Timeout", // (ReasonPhrases), never shown as UI text
     ];
 
     [GeneratedRegex("""\$?"[A-Z][a-z]+ [A-Za-z.'{}]+""")]

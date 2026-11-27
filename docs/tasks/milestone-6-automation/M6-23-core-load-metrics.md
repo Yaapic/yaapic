@@ -1,6 +1,6 @@
 # M6-23: Core: load metrics aggregator
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-03, M6-22
 
@@ -35,10 +35,10 @@ Producing samples (M6-24), JSON (M6-25).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/LoadTesting/LoadMetricsTests.cs`: exact stats for a known set (percentiles by nearest rank,
+- [x] Tests in `Yaapic.Core.Tests/LoadTesting/LoadMetricsTests.cs`: exact stats for a known set (percentiles by nearest rank,
   including n = 1 and n = 100); error rate; per-request stats; buckets with a gap; active users per bucket; truncation at a small cap
   keeps counts exact; 20 distinct error messages kept; 8 threads adding 10 000 samples each give exact counts.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

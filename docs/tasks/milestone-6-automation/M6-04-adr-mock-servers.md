@@ -1,6 +1,6 @@
 # M6-04: ADR 0020: mock servers
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -60,10 +60,10 @@ Code, UI.
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0020-mock-servers.md` contains every decision above (status Accepted; options considered: `HttpListener`,
+- [x] `docs/adr/0020-mock-servers.md` contains every decision above (status Accepted; options considered: `HttpListener`,
   Kestrel and a `TcpListener` server; workspace files versus per-user storage; first match versus most specific match);
   `docs/adr/README.md` lists it.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

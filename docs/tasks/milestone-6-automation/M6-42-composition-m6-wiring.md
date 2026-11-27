@@ -1,6 +1,6 @@
 # M6-42: Composition: wire the M6 services
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-28, M6-33, M6-37, M6-38, M6-41
 
@@ -39,13 +39,13 @@ Views, docs (M6-59).
 
 ## Acceptance criteria
 
-- [ ] A test in `Yaapic.Infrastructure.Tests` (where M5-54 tested the composition) on a temporary workspace with a loopback server:
+- [x] A test in `Yaapic.Infrastructure.Tests` (where M5-54 tested the composition) on a temporary workspace with a loopback server:
   the shell has the four tool view models; the Runner runs a two-request folder against the loopback server and the results show both;
   a mock server created through `Mocks` starts on a free port and answers a request made with `HttpClient`; a monitor created through
   `Monitors` and `RunNow` records a run in `.yaapic/monitor-runs.jsonl`; closing the shell stops the mock server (port free again) and the
   scheduler; the palette lists the four entries.
-- [ ] AOT publish of `Yaapic.App.WinUI` (the host-RID app used by M5-54): 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] AOT publish of `Yaapic.App.WinUI` (the host-RID app used by M5-54): 0 IL2xxx/IL3xxx warnings; the exe starts (kill it afterwards).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

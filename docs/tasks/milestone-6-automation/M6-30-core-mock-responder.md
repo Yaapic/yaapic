@@ -1,6 +1,6 @@
 # M6-30: Core: mock responder and templating
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-29
 
@@ -38,11 +38,11 @@ The socket server (M6-32, M6-33), lifecycle and log storage (M6-34).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Mocks/`: every template token, missing names, unknown token kept, `$guid` differs per occurrence;
+- [x] Tests in `Yaapic.Core.Tests/Mocks/`: every template token, missing names, unknown token kept, `$guid` differs per occurrence;
   matched response with headers and delay; disabled header skipped; HEAD omits the body; 404 body exact (with a path needing JSON
   escaping); preflight answered and not answered when an `OPTIONS` route exists or CORS is off; `Access-Control-Allow-Origin` added once;
   `MockLogEntry.From` truncates the preview.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

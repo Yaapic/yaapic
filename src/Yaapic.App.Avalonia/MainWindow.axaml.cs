@@ -38,8 +38,8 @@ public sealed partial class MainWindow : Window
         // The console never takes the whole window: the request area keeps at least 300 dips (title bar, tabs and status bar included).
         SizeChanged += (_, e) => ConsolePanel.MaxHeight = Math.Max(ShellViewModel.MinConsoleHeight, e.NewSize.Height - ConsoleReservedHeight);
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.T, modifier), Command = new Relay(() => Shell?.Tabs.NewTab()) });
-        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => Shell?.Tabs.CloseActiveCommand.Execute(null)) });
-        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => Shell?.Tabs.SaveActiveCommand.Execute(null)) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.W, modifier), Command = new Relay(() => { if (Shell is { IsRequestsSection: true }) Shell.Tabs.CloseActiveCommand.Execute(null); }) });
+        KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.S, modifier), Command = new Relay(() => { if (Shell is { IsRequestsSection: true }) Shell.Tabs.SaveActiveCommand.Execute(null); }) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.E, modifier | KeyModifiers.Shift), Command = new Relay(() => _ = ManageEnvironmentsAsync()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.F, modifier | KeyModifiers.Shift), Command = new Relay(() => FilterBox.Focus()) });
         KeyBindings.Add(new KeyBinding { Gesture = new KeyGesture(Key.P, modifier), Command = new Relay(() => Shell?.OpenPaletteCommand.Execute(null)) });
@@ -388,6 +388,12 @@ public sealed partial class MainWindow : Window
             {
                 AddItem(menu.Items, Strings.CollectionsExport, shell.ExportCollectionCommand, node);
             }
+
+            menu.Items.Add(new Separator());
+            AddItem(menu.Items, Strings.CollectionsRunFolder, shell.RunFolderCommand, node);
+            AddItem(menu.Items, Strings.CollectionsLoadTest, shell.LoadTestFolderCommand, node);
+            AddItem(menu.Items, Strings.CollectionsCreateMock, shell.MockFromFolderCommand, node);
+            AddItem(menu.Items, Strings.CollectionsMonitorFolder, shell.MonitorFolderCommand, node);
         }
         else
         {

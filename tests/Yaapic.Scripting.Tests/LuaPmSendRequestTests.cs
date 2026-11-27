@@ -327,6 +327,16 @@ public sealed class LuaPmSendRequestTests
 
         public string ReplaceIn(string template) => template;
 
+        public IReadOnlyList<KeyValueEntry> IterationData => [];
+
+        public void SetNextRequest(string? nameOrId)
+        {
+        }
+
+        public void SkipRequest()
+        {
+        }
+
         public ScriptSendResult Send(ScriptRequest request)
         {
             Sent.Add(new(request.Method, request.Url, [.. request.Headers], request.BodyMode, request.BodyText, request.BodyContentType, [.. request.UrlEncoded]));

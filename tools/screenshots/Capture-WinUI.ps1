@@ -25,6 +25,8 @@ param(
     [switch]$NoTabs,
     [switch]$NoStub,
     [string]$Crop = '',
+    [string]$Window = '',
+    [string[]]$Seed = @(),
     [ValidateSet('', 'available', 'downloading', 'ready', 'uptodate', 'failed')][string]$UpdateDemo = '',
     [string]$Accent = '',
     [ValidateSet('', 'english', 'french')][string]$Language = ''
@@ -80,6 +82,24 @@ try {
     $jwtFile = Join-Path $temp 'requests\jwt.request.yaml'
     $pem = ([Security.Cryptography.RSA]::Create(2048)).ExportPkcs8PrivateKeyPem() -split "`r?`n" | Where-Object { $_ }
     [IO.File]::WriteAllText($jwtFile, ([IO.File]::ReadAllText($jwtFile) -replace '__JWT_PEM__', ($pem -join "`n      ")), [Text.UTF8Encoding]::new($false))
+    if ($Seed -contains 'm6') {
+        # Milestone 6 demo folder "Demo API" (runner, load test, mock server, monitor) and a CSV data file; all values are fake.
+        $demo = Join-Path $temp 'requests\demo-api'; New-Item -ItemType Directory $demo | Out-Null
+        [IO.File]::WriteAllText((Join-Path $demo 'folder.yaml'), "version: 1`nid: 44444444-0000-0000-0000-000000000001`nname: Demo API`ndescription: Folder used by the milestone 6 captures.`nvariables: []`n", [Text.UTF8Encoding]::new($false))
+        function New-Demo($n, $name, $method, $path, $pairs, $body, $dir = $demo, $pre = '') {
+            $yaml = "version: 1`nid: 44444444-0000-0000-0001-0000000000$n`nname: $name`nmethod: $method`nurl: `"{{baseUrl}}$path`"`nparams: []`nheaders: []`nbody:`n  type: $(if ($body) { 'raw' } else { 'none' })`n  contentType: json`n  text: '$body'`n"
+            if ($pre -or $pairs) { $yaml += "scripts:`n" }
+            if ($pre) { $yaml += "  preRequest:`n    language: javascript`n    source: |`n      $pre`n" }
+            if ($pairs) { $yaml += "  postResponse:`n    language: javascript`n    source: |`n" + (($pairs | ForEach-Object { "      yaapic.test(`"$($_[0])`", () => $($_[1]));" }) -join "`n") + "`n" }
+            [IO.File]::WriteAllText("$dir\$(($name.ToLower()) -replace ' ','-').request.yaml", $yaml, [Text.UTF8Encoding]::new($false)) }
+        New-Demo '01' 'Optional report' 'GET' '/users' @(,@('Status is 200', 'yaapic.response.to.have.status(200)')) '' $demo 'yaapic.execution.skipRequest();'
+        New-Demo '02' 'Create user' 'POST' '/users' @(,@('Created', 'yaapic.response.to.have.status(201)')) '{"name":"{{name}}"}'
+        New-Demo '03' 'Find missing user' 'GET' '/status/404' @(@('Status is 200', 'yaapic.response.to.have.status(200)'), @('Responds with JSON', 'yaapic.response.to.be.json')) ''
+        $health = Join-Path $temp 'requests\health-checks'; New-Item -ItemType Directory $health | Out-Null
+        [IO.File]::WriteAllText((Join-Path $health 'folder.yaml'), "version: 1`nid: 44444444-0000-0000-0000-000000000002`nname: Health checks`nvariables: []`n", [Text.UTF8Encoding]::new($false))
+        New-Demo '04' 'Ping' 'GET' '/users' @(,@('Status is 200', 'yaapic.response.to.have.status(200)')) '' $health
+        [IO.File]::WriteAllText((Join-Path $temp 'users.csv'), "name,team`nAda,platform`nGrace,compilers`nLinus,kernel`n", [Text.UTF8Encoding]::new($false))
+    }
     $session = Join-Path $temp '.yaapic\session.yaml'
     $open = if ($NoTabs) { 'openRequests: []' } else { "openRequests:`n  - $($ids[$Request])" }
     [IO.File]::WriteAllText($session, "version: 1`n$open`nactiveRequest: $($ids[$Request])`nactiveEnvironment: 22222222-0000-0000-0000-000000000001`n", [Text.UTF8Encoding]::new($false))
@@ -186,14 +206,70 @@ try {
         if (-not $focused) { throw "Could not bring the Yaapic window to the foreground (foreground=$([Win32]::GetForegroundWindow()), ours=$h); keys not sent." }
         [Windows.Forms.SendKeys]::SendWait($Keys); Start-Sleep -Milliseconds 500
     }
+    $focusH = $h
     foreach ($step in ($Steps -split '\|')) { # '|' also separates steps, so they survive `pwsh -File`
         # Steps: invoke:<AutomationId or name>, toggle:<name>, focus:<name>, keys:<SendKeys>, vk:ctrl+<hex virtual key>, type:<text>, wait:<ms>.
+        $guard = { if ([Win32]::GetForegroundWindow() -ne $focusH -and -not [Win32]::Focus($focusH)) { throw "Step '$step': Yaapic is not the foreground window; input not sent." } }
+        $step = $step.Replace('{TEMP}', $temp) # {TEMP}: the throw-away workspace folder (e.g. the seeded users.csv)
         $kind, $arg = $step -split ':', 2
-        $root = [Windows.Automation.AutomationElement]::FromHandle($h)
-        $byName = { param($n) $root.FindFirst([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::NameProperty, $n))) }
-        $byId = { param($n) $root.FindFirst([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::AutomationIdProperty, $n))) }
+        # Elements are searched in every top-level window of the app (the main window first, then tool windows and dialogs).
+        $roots = @(try { [Windows.Automation.AutomationElement]::FromHandle($h) } catch { }) + @([Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children,
+            (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ProcessIdProperty, $proc.Id))) | Where-Object { $_.Current.NativeWindowHandle -ne [int]$h })
+        $roots = @($roots | Sort-Object { if ($_.Current.NativeWindowHandle -eq [int]$focusH) { 0 } else { 1 } }) # the window brought to the front by front: is searched first
+        $findAny = { param($prop, $n) foreach ($r in $roots) { $e = $r.FindFirst([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.PropertyCondition($prop, $n))); if ($e) { return $e } } }
+        $byName = { param($n) & $findAny ([Windows.Automation.AutomationElement]::NameProperty) $n }
+        $byId = { param($n) & $findAny ([Windows.Automation.AutomationElement]::AutomationIdProperty) $n }
         switch ($kind) {
             'wait' { Start-Sleep -Milliseconds ([int]$arg) }
+            'openpath' { # openpath:<file>: types a path into the system Open dialog (it owns the foreground and its file name box has the focus) and presses Enter.
+                if ([Win32]::GetForegroundWindow() -eq $focusH) { throw "Step '$step': the Open dialog is not in front; input not sent." }
+                [Windows.Forms.SendKeys]::SendWait('^a' + [regex]::Replace($arg, '[+^%~(){}\[\]]', '{$0}')); Start-Sleep -Milliseconds 300
+                [Windows.Forms.SendKeys]::SendWait('{ENTER}'); Start-Sleep -Milliseconds 1500
+            }
+            'clickitem' { # clickitem:<name part>:<index>: clicks the centre of the nth element whose name contains the text (rows of a list).
+                $part, $idx = $arg -split ':', 2
+                $all = @(); foreach ($r in $roots) { $all += @($r.FindAll([Windows.Automation.TreeScope]::Descendants, [Windows.Automation.Condition]::TrueCondition) | Where-Object { $_.Current.Name -like "*$part*" }) }
+                if ($all.Count -le [int]$idx) { throw "Step '$step': only $($all.Count) element(s)." }
+                $br = $all[[int]$idx].Current.BoundingRectangle
+                & $guard; [void][Win32]::SetCursorPos([int]($br.X + $br.Width / 2) - 6, [int]($br.Y + $br.Height / 2)); Start-Sleep -Milliseconds 200
+                [Win32]::mouse_event(1, 6, 0, 0, [UIntPtr]::Zero); Start-Sleep -Milliseconds 200; [Win32]::mouse_event(2, 0, 0, 0, [UIntPtr]::Zero); [Win32]::mouse_event(4, 0, 0, 0, [UIntPtr]::Zero); Start-Sleep -Milliseconds 700
+            }
+            'setvalue' { # setvalue:<edit name part>=<text>: types a number into a NumberBox (its edit is named "<header> Minimal... Maximal...") and tabs out.
+                $part, $text = $arg -split '=', 2
+                $all = @(); foreach ($r in $roots) { $all += @($r.FindAll([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ControlTypeProperty, [Windows.Automation.ControlType]::Edit))) | Where-Object { $_.Current.Name -like "*$part*" }) }
+                if (-not $all) { throw "Step '$step': edit not found." }
+                & $guard; $all[0].SetFocus(); Start-Sleep -Milliseconds 200
+                [Windows.Forms.SendKeys]::SendWait('^a' + $text + '{TAB}'); Start-Sleep -Milliseconds 400
+            }
+            'http' { # http:<url>: a GET sent by the script itself (e.g. to the mock server), errors ignored.
+                try { [void](Invoke-WebRequest $arg -UseBasicParsing -TimeoutSec 5 -ErrorAction Stop) } catch { }
+            }
+            'pickcombo' { # pickcombo:<combo name>=<item text>: opens a combo box and selects the item (the popup is a window of its own).
+                $cname, $iname = $arg -split '=', 2
+                $combo = $null; foreach ($r in $roots) { $combo = $r.FindFirst([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.AndCondition((New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ControlTypeProperty, [Windows.Automation.ControlType]::ComboBox)), (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::NameProperty, $cname))))); if ($combo) { break } }
+                if (-not $combo) { throw "Step '$step': combo box not found." }
+                $combo.GetCurrentPattern([Windows.Automation.ExpandCollapsePattern]::Pattern).Expand(); Start-Sleep -Milliseconds 700
+                $item = $null
+                foreach ($r in @([Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ProcessIdProperty, $proc.Id))))) {
+                    $item = $r.FindFirst([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.AndCondition((New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ControlTypeProperty, [Windows.Automation.ControlType]::ListItem)), (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::NameProperty, $iname))))); if ($item) { break } }
+                if (-not $item) { throw "Step '$step': item not found." }
+                $item.GetCurrentPattern([Windows.Automation.SelectionItemPattern]::Pattern).Select(); Start-Sleep -Milliseconds 600
+            }
+            'probe' { # probe:<url>: prints whether the URL answers (e.g. a mock server) and whether the app process is still alive.
+                $ok = try { (Invoke-WebRequest $arg -UseBasicParsing -TimeoutSec 3 -ErrorAction Stop).StatusCode } catch { if ($_.Exception.Response) { [int]$_.Exception.Response.StatusCode } else { 'no answer' } }
+                $proc.Refresh(); Write-Host "PROBE $arg -> $ok; app process exited: $($proc.HasExited); top-level windows: $(@([Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ProcessIdProperty, $proc.Id)))).Count)"
+            }
+            'front' { # front:<title part>: later keys/clicks go to that tool window (front: alone returns to the main window).
+                $focusH = $h
+                if ($arg) { $w = $roots | Where-Object { $_.Current.Name -like "*$arg*" } | Select-Object -First 1; if (-not $w) { throw "Step '$step': window not found." }; $focusH = [IntPtr]$w.Current.NativeWindowHandle }
+            }
+            'tops' { # tops: prints every top-level window of the desktop (finds system pickers).
+                foreach ($e in [Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children, [Windows.Automation.Condition]::TrueCondition)) { if ($e.Current.Name -or $e.Current.ProcessId -in @(Get-Process PickerHost -ErrorAction SilentlyContinue | ForEach-Object Id)) { Write-Host ("  {0} | pid {1} | {2}" -f $e.Current.Name, $e.Current.ProcessId, $e.Current.ClassName) } }
+            }
+            'dump' { # dump:<name filter>: prints the control type and name of every element in every app window (debug aid).
+                foreach ($r in $roots) { Write-Host "== $($r.Current.Name)"; foreach ($e in $r.FindAll([Windows.Automation.TreeScope]::Descendants, [Windows.Automation.Condition]::TrueCondition)) {
+                    if (-not $arg -or $e.Current.Name -like "*$arg*" -or $e.Current.AutomationId -like "*$arg*") { Write-Host ("  {0} | {1} | {2}" -f $e.Current.ControlType.ProgrammaticName, $e.Current.Name, $e.Current.AutomationId) } } }
+            }
             'savepath' {
                 # savepath:<file>: fills the system Save dialog (file name edit, AutomationId 1001) of the picker process, then Enter.
                 # The system picker runs in a PickerHost process of its own, never in the app process.
@@ -207,7 +283,14 @@ try {
                 [Windows.Forms.SendKeys]::SendWait('{ENTER}'); Start-Sleep -Milliseconds 1500
             }
             { $_ -in 'invoke', 'toggle', 'focus', 'select' } {
-                $el = & $byId $arg; if (-not $el) { $el = & $byName $arg }; if (-not $el) { throw "Step '$step': element not found." }
+                $el = $null
+                for ($try = 0; $try -lt 8 -and -not $el; $try++) { # a menu or window may still be opening
+                    $roots = @(try { [Windows.Automation.AutomationElement]::FromHandle($h) } catch { }) + @([Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children,
+                        (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ProcessIdProperty, $proc.Id))) | Where-Object { $_.Current.NativeWindowHandle -ne [int]$h })
+        $roots = @($roots | Sort-Object { if ($_.Current.NativeWindowHandle -eq [int]$focusH) { 0 } else { 1 } }) # the window brought to the front by front: is searched first
+                    $el = & $byId $arg; if (-not $el) { $el = & $byName $arg }; if (-not $el) { Start-Sleep -Milliseconds 400 }
+                }
+                if (-not $el) { throw "Step '$step': element not found." }
                 $pat = $null
                 if ($kind -eq 'focus') { $el.SetFocus() }
                 elseif ($kind -eq 'select' -and $el.TryGetCurrentPattern([Windows.Automation.SelectionItemPattern]::Pattern, [ref]$pat)) { $pat.Select() }
@@ -221,10 +304,15 @@ try {
             }
             { $_ -in 'keys', 'type', 'click', 'rclick', 'hover', 'vk', 'wheel' } {
                 $focused = $false
-                for ($i = 0; $i -lt 10 -and -not $focused; $i++) { $focused = [Win32]::Focus($h); Start-Sleep -Milliseconds 300 }
+                if (-not $focusH) { $focusH = $h }
+                for ($i = 0; $i -lt 10 -and -not $focused; $i++) { $focused = [Win32]::Focus($focusH); Start-Sleep -Milliseconds 300 }
                 if (-not $focused) { throw "Step '$step': could not bring the Yaapic window to the foreground." }
                 if ($kind -in 'click', 'rclick', 'hover') {
                     # Window-relative pixel position "x,y" (the window sits at 0,0).
+                    if ($arg -notmatch '^\d+,\d+$') { # an element name or AutomationId: use the centre of its bounding rectangle
+                        $el = & $byId $arg; if (-not $el) { $el = & $byName $arg }; if (-not $el) { throw "Step '$step': element not found." }
+                        $br = $el.Current.BoundingRectangle; $arg = "$([int]($br.X + $br.Width / 2)),$([int]($br.Y + $br.Height / 2))"
+                    }
                     $xy = $arg -split ','; [void][Win32]::SetCursorPos([int]$xy[0] - 12, [int]$xy[1]); Start-Sleep -Milliseconds 200
                     foreach ($dx in 4, 4, 4) { [Win32]::mouse_event(1, [uint32]$dx, 0, 0, [UIntPtr]::Zero); Start-Sleep -Milliseconds 80 } # real move events: hover popups ignore SetCursorPos alone
                     [void][Win32]::SetCursorPos([int]$xy[0], [int]$xy[1]); [Win32]::mouse_event(1, 1, 0, 0, [UIntPtr]::Zero); Start-Sleep -Milliseconds 400
@@ -274,6 +362,12 @@ try {
         Start-Sleep -Milliseconds 700
     }
 
+    if ($Window) { # -Window <title part>: capture that tool window of the app instead of the main window (at its default size)
+        $w = [Windows.Automation.AutomationElement]::RootElement.FindAll([Windows.Automation.TreeScope]::Children,
+            (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ProcessIdProperty, $proc.Id))) | Where-Object { $_.Current.Name -like "*$Window*" -and $_.Current.NativeWindowHandle -ne [int]$h } | Select-Object -First 1
+        if (-not $w) { throw "Window '$Window' not found." }
+        $h = [IntPtr]$w.Current.NativeWindowHandle; [void][Win32]::Focus($h); Start-Sleep -Milliseconds 400
+    }
     $proc.Refresh()
     if ($proc.HasExited) { throw "Yaapic exited with code $($proc.ExitCode) before the capture." }
     $r = New-Object Win32+RECT; [void][Win32]::GetWindowRect($h, [ref]$r)

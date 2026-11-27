@@ -1,6 +1,6 @@
 # M6-50: Avalonia: tool windows, line chart and confirmation dialog
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M6-42, M6-43
 
@@ -32,11 +32,19 @@ The four windows (M6-51 to M6-55), entry points (M6-56).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly (kill it afterwards).
 - [ ] Runtime smoke on macOS or Linux through a temporary debug call (removed before the commit): a tool window with a chart and a
   confirmation over it, dark and light; if not possible, say so in Notes and tick only the build and AOT items.
-- [ ] Strings exist in EN and FR; 0 warnings, all tests green.
+- [x] Strings exist in EN and FR; 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add tool windows, the line chart and the confirmation dialog`
+
+## Notes
+
+- Not verified on unix: the runtime smoke (tool window, chart, confirmation, dark and light) was not run; there is no Avalonia UI test project.
+  Only the build, the Windows AOT publish (no IL2xxx/IL3xxx; the exe starts and was killed) and the test suite were run.
+- `ShowOrActivate` cannot clear a `ref` slot from the `Closed` handler (a ref cannot be captured), so a closed window is detected
+  through the host's list of open windows and replaced on the next call.
+- The `Strings.CommonContinue`/`CommonCancel` strings already existed in EN and FR.

@@ -1,7 +1,9 @@
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Media;
 using Yaapic.Core.Import;
+using Yaapic.Core.Runner;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Monitors;
 using Yaapic.ViewModels.Console;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Shell;
@@ -76,6 +78,23 @@ public static class BrushMap
         _ => "YaapicTextSecondaryBrush",
     });
 
+    /// <summary>Gets the text brush of an HTTP status code, by its class.</summary>
+    /// <param name="status">The status code.</param>
+    /// <returns>The brush from the application resources.</returns>
+    public static Brush StatusCode(int status) => StatusForeground((status / 100) switch
+    {
+        2 => StatusCategory.Success,
+        3 => StatusCategory.Redirect,
+        4 => StatusCategory.ClientError,
+        5 => StatusCategory.ServerError,
+        _ => StatusCategory.Informational,
+    });
+
+    /// <summary>Gets the brush of the running dot of a mock server.</summary>
+    /// <param name="isRunning">Whether the server runs.</param>
+    /// <returns>The success brush when it runs, else a muted one.</returns>
+    public static Brush RunningDot(bool isRunning) => Get(isRunning ? "YaapicSuccessBrush" : "YaapicTextDisabledBrush");
+
     /// <summary>Gets the background brush of the status chip; informational statuses have none.</summary>
     /// <param name="category">The class of the status code.</param>
     /// <returns>The brush from the application resources, or a transparent brush.</returns>
@@ -130,15 +149,30 @@ public static class BrushMap
     /// <returns>The success brush when passed, else the danger brush.</returns>
     public static Brush TestOutcome(bool passed) => Get(passed ? "YaapicSuccessBrush" : "YaapicDangerBrush");
 
-    /// <summary>Gets the icon brush of the collections rail entry.</summary>
-    /// <param name="mode">The sidebar mode.</param>
-    /// <returns>The on-accent brush when selected, else the secondary text brush.</returns>
-    public static Brush CollectionsRail(SidebarMode mode) => Rail(mode == SidebarMode.Collections);
+    /// <summary>Gets the brush of a Runner outcome badge.</summary>
+    /// <param name="outcome">How the request ended.</param>
+    /// <returns>Success for passed, danger for failed or error, else the secondary text brush.</returns>
+    public static Brush RunOutcome(RunRequestOutcome outcome) => Get(outcome switch
+    {
+        RunRequestOutcome.Passed => "YaapicSuccessBrush",
+        RunRequestOutcome.Failed or RunRequestOutcome.Error => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    });
 
-    /// <summary>Gets the icon brush of the history rail entry.</summary>
-    /// <param name="mode">The sidebar mode.</param>
+    /// <summary>Gets the brush of a monitor run status dot or badge.</summary>
+    /// <param name="status">How the run ended, or <see langword="null"/> when the monitor never ran.</param>
+    /// <returns>Success for passed, danger for failed or error, else the secondary text brush.</returns>
+    public static Brush MonitorStatus(MonitorRunStatus? status) => Get(status switch
+    {
+        MonitorRunStatus.Passed => "YaapicSuccessBrush",
+        MonitorRunStatus.Failed or MonitorRunStatus.Error => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    });
+
+    /// <summary>Gets the icon brush of a rail entry.</summary>
+    /// <param name="selected">Whether the entry is selected.</param>
     /// <returns>The on-accent brush when selected, else the secondary text brush.</returns>
-    public static Brush HistoryRail(SidebarMode mode) => Rail(mode == SidebarMode.History);
+    public static Brush RailSelected(bool selected) => Rail(selected);
 
     private static Brush Rail(bool selected) => Get(selected ? "YaapicAccentOnBrush" : "YaapicTextSecondaryBrush");
 

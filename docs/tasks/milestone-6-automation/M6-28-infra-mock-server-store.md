@@ -1,6 +1,6 @@
 # M6-28: Infrastructure: mock server file store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-27
 
@@ -32,11 +32,11 @@ Running mocks.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` on a temporary workspace: save, list, round trip of every field (multi-line body, headers,
+- [x] Tests in `Yaapic.Infrastructure.Tests` on a temporary workspace: save, list, round trip of every field (multi-line body, headers,
   disabled route), rename moves the file, delete, two servers with the same name get distinct files, a corrupt file is skipped, the YAML
   text of a sample matches an expected literal.
-- [ ] `InMemoryMockServerStore` tests (or shared contract tests if the project has them).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx in the build.
+- [x] `InMemoryMockServerStore` tests (or shared contract tests if the project has them).
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx in the build.
 
 ## Suggested commit message
 

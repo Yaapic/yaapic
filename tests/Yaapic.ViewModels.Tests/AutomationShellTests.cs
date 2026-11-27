@@ -1,0 +1,459 @@
+using Yaapic.Core.Http;
+using Yaapic.Core.Import;
+using Yaapic.Core.LoadTesting;
+using Yaapic.Core.Mocks;
+using Yaapic.Core.Monitors;
+using Yaapic.Core.Runner;
+using Yaapic.Core.Scripting;
+using Yaapic.Core.Variables;
+using Yaapic.Domain.Collections;
+using Yaapic.Domain.Http;
+using Yaapic.Domain.Mocks;
+using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
+using Yaapic.TestDoubles;
+using Yaapic.ViewModels.Collections;
+using Yaapic.ViewModels.Console;
+using Yaapic.ViewModels.Environments;
+using Yaapic.ViewModels.History;
+using Yaapic.ViewModels.LoadTesting;
+using Yaapic.ViewModels.Mocks;
+using Yaapic.ViewModels.Monitors;
+using Yaapic.ViewModels.Palette;
+using Yaapic.ViewModels.Requests;
+using Yaapic.ViewModels.Runner;
+using Yaapic.ViewModels.Shell;
+using Yaapic.ViewModels.Tabs;
+
+namespace Yaapic.ViewModels.Tests;
+
+public sealed class AutomationShellTests : IAsyncDisposable
+{
+    private sealed class NoReader : IImportInputReader
+    {
+        public Task<ImportInput> ReadFileAsync(string path, CancellationToken ct) => throw new NotSupportedException();
+
+        public Task<ImportInput> ReadFolderAsync(string path, CancellationToken ct) => throw new NotSupportedException();
+    }
+
+    private sealed class FakeScopes : IRunScopeSource
+    {
+        public VariableScopes GetScopes(Guid requestId) => new(null, [], []);
+
+        public IReadOnlyList<VariableScopeKind> GetWritableScopes(Guid requestId) => [];
+
+        public Task<IReadOnlyList<string>> PersistAsync(Guid requestId, IReadOnlyList<VariableChange> changes, CancellationToken ct) =>
+            Task.FromResult<IReadOnlyList<string>>([]);
+    }
+
+    private sealed class Recorder(List<string> log, string name) : IDisposable, IAsyncDisposable
+    {
+        public void Dispose() => log.Add(name + ":sync");
+
+        public ValueTask DisposeAsync()
+        {
+            log.Add(name + ":async");
+            return ValueTask.CompletedTask;
+        }
+    }
+
+    private static CancellationToken Ct => TestContext.Current.CancellationToken;
+
+    private readonly TaskCompletionSource _gate = new(TaskCreationOptions.RunContinuationsAsynchronously);
+    private bool _hold;
+    private readonly InMemoryRequestStore _requests = new();
+    private readonly InMemoryCollectionStore _collections;
+    private readonly InMemoryMockServerStore _mockStore = new();
+    private readonly InMemoryEnvironmentStore _environments = new();
+    private readonly InMemoryMonitorStore _monitorStore = new();
+    private readonly FakeDialogService _dialogs = new();
+    private readonly ShellParts _parts = new();
+    private readonly MonitorScheduler _scheduler;
+    private readonly RunnerViewModel _runner;
+    private readonly LoadTestViewModel _load;
+    private readonly MockServersViewModel _mocks;
+    private readonly MonitorsViewModel _monitors;
+    private readonly ShellViewModel _shell;
+
+    public AutomationShellTests()
+    {
+        _collections = new InMemoryCollectionStore(_requests);
+        var time = new ManualTimeProvider(DateTimeOffset.UnixEpoch);
+        var transport = new FakeHttpTransport(async (_, ct) =>
+        {
+            if (_hold)
+            {
+                await _gate.Task.WaitAsync(ct);
+            }
+
+            return SendResult.Success(new HttpResponseData(200, "OK", [], [], TimeSpan.Zero, "http://a/"));
+        });
+        ScriptEngineRegistry registry = new();
+        registry.Add(new FakeScriptEngine(i => ScriptRunResult.Skipped(i.Phase, i.Origin, i.Block.Language)));
+        var provider = new FakeVariableScopeProvider();
+        var scopes = new VariableScopeRunSource(provider);
+        var executor = new RunStepExecutor(new ScriptedRequestSender(new RequestSender(transport), registry, time), new FakeScriptChainProvider(), scopes);
+        _runner = new RunnerViewModel(new RunnerSetupViewModel(new NoReader(), _dialogs), new CollectionRunner(executor, time), new ConsoleViewModel(), _dialogs);
+        _load = new LoadTestViewModel(new RunnerSetupViewModel(new NoReader(), _dialogs), new LoadTestRunner(executor, scopes, time), provider, _dialogs);
+        _mocks = new MockServersViewModel(new MockServerService(_mockStore, new FakeMockHttpHost(), time), _dialogs);
+        var fake = new FakeScopes();
+        _scheduler = new MonitorScheduler(_monitorStore, new InMemoryMonitorRunStore(), _collections, _environments, fake,
+            new RunStepExecutor(new ScriptedRequestSender(new RequestSender(transport), registry, time), new FakeScriptChainProvider(), fake), time);
+        _monitors = new MonitorsViewModel(_scheduler, _monitorStore, new InMemoryMonitorRunStore(), _collections, _environments, new ConsoleViewModel(), _dialogs, time);
+        var sender = new RequestSender(transport);
+        var tabs = new TabsViewModel(
+            _requests,
+            _dialogs,
+            (definition, isNew) => RequestEditorViewModel.FromDefinition(definition, sender, new FakeVariableScopeProvider(), isNew));
+        _shell = new ShellViewModel(
+            tabs,
+            new RequestListViewModel(_requests, tabs, _dialogs),
+            new CollectionTreeViewModel(_collections, _requests, tabs, _dialogs),
+            new HistoryViewModel(new InMemoryHistoryStore(), TimeProvider.System, tabs, _dialogs),
+            new EnvironmentsViewModel(_environments, _dialogs),
+            new GlobalsViewModel(new InMemoryGlobalsStore()),
+            new InMemorySessionStore(),
+            _dialogs,
+            _parts.Console, _parts.VaultViewModel, _parts.Engines, _parts.Updates);
+    }
+
+    public ValueTask DisposeAsync() => _scheduler.DisposeAsync();
+
+    private void Attach() => _shell.AttachAutomation(_runner, _load, _mocks, _monitors);
+
+    private string[] Slugs() => [.. new CommandsPaletteSource(_shell).GetItems().Select(i => i.Id)];
+
+    private async Task<(FolderDefinition Top, CollectionNodeViewModel Root, HttpRequestDefinition Request)> TreeAsync()
+    {
+        var top = FolderDefinition.Create("Top");
+        await _collections.SaveFolderAsync(top, null, Ct);
+        await _collections.SaveFolderAsync(FolderDefinition.Create("Nested"), top.Id, Ct);
+        var request = HttpRequestDefinition.Create("R") with { Url = "http://h/r" };
+        await _requests.SaveAsync(request, Ct);
+        await _collections.MoveAsync(request.Id, top.Id, Ct);
+        await _shell.Collections.RefreshAsync();
+        var root = _shell.Collections.Roots.Single();
+        root.IsExpanded = true;
+        return (top, root, request);
+    }
+
+    [Fact]
+    public void Attaching_twice_throws()
+    {
+        Attach();
+
+        Assert.Throws<InvalidOperationException>(Attach);
+        Assert.Same(_runner, _shell.Runner);
+        Assert.Same(_load, _shell.LoadTest);
+        Assert.Same(_mocks, _shell.Mocks);
+        Assert.Same(_monitors, _shell.Monitors);
+    }
+
+    [Fact]
+    public async Task Without_the_tools_commands_are_disabled_section_unchanged_and_palette_entries_absent()
+    {
+        var (_, root, _) = await TreeAsync();
+
+        _shell.RequestRunner();
+        _shell.RequestLoadTest();
+        _shell.RequestMockServers();
+        _shell.RequestMonitors();
+
+        Assert.False(_shell.CanAutomate);
+        Assert.Equal(ShellSection.Requests, _shell.Section);
+        Assert.False(_shell.RunFolderCommand.CanExecute(root));
+        Assert.False(_shell.LoadTestFolderCommand.CanExecute(root));
+        Assert.False(_shell.MockFromFolderCommand.CanExecute(root));
+        Assert.False(_shell.MonitorFolderCommand.CanExecute(root));
+        Assert.DoesNotContain("command:run-collection", Slugs());
+        Assert.DoesNotContain("command:mock-servers", Slugs());
+        Assert.Equal("", _shell.MocksStatusText);
+        Assert.Equal("", _shell.MonitorsStatusText);
+    }
+
+    [Fact]
+    public async Task Folder_commands_open_or_create_and_show_their_section_and_skip_requests()
+    {
+        Attach();
+        var (top, root, _) = await TreeAsync();
+        var nested = root.Children.Single(c => c.IsFolder);
+        var request = root.Children.Single(c => !c.IsFolder);
+
+        _shell.RunFolderCommand.Execute(nested);
+        Assert.Equal(ShellSection.Runner, _shell.Section);
+        _shell.LoadTestFolderCommand.Execute(root);
+        Assert.Equal(ShellSection.LoadTest, _shell.Section);
+        await _shell.MockFromFolderCommand.ExecuteAsync(root);
+        Assert.Equal(ShellSection.MockServers, _shell.Section);
+        await _shell.MonitorFolderCommand.ExecuteAsync(root);
+        Assert.Equal(ShellSection.Monitors, _shell.Section);
+        Assert.Single(await _mockStore.ListAsync(Ct));
+        Assert.Equal(top.Id, (await _monitorStore.ListAsync(Ct)).Single().FolderId);
+        Assert.False(_shell.RunFolderCommand.CanExecute(request));
+        Assert.False(_shell.LoadTestFolderCommand.CanExecute(request));
+        Assert.False(_shell.MockFromFolderCommand.CanExecute(request));
+        Assert.False(_shell.MonitorFolderCommand.CanExecute(request));
+        Assert.True(_shell.RunFolderCommand.CanExecute(nested));
+    }
+
+    [Fact]
+    public async Task The_palette_lists_the_tools_and_opens_them_with_and_without_an_active_collection_request()
+    {
+        Attach();
+        var (_, _, request) = await TreeAsync();
+
+        await RunAllAsync();
+        Assert.Empty(_runner.Setup.Items);
+
+        _shell.Tabs.Open(request);
+        await RunAllAsync();
+
+        Assert.Single(_runner.Setup.Items);
+        Assert.Single(_load.Requests.Items);
+        Assert.Equal(
+            [Strings.PaletteRunCollection, Strings.PaletteLoadTest, Strings.PaletteMockServers, Strings.PaletteMonitors],
+            new CommandsPaletteSource(_shell).GetItems().Where(i => i.Id is "command:run-collection" or "command:load-test" or "command:mock-servers" or "command:monitors").Select(i => i.Title));
+        return;
+
+        async Task RunAllAsync()
+        {
+            var items = new CommandsPaletteSource(_shell).GetItems();
+            foreach (var slug in new[] { "run-collection", "load-test", "mock-servers", "monitors" })
+            {
+                await items.Single(i => i.Id == "command:" + slug).Execute();
+                Assert.Equal(slug switch { "run-collection" => ShellSection.Runner, "load-test" => ShellSection.LoadTest, "mock-servers" => ShellSection.MockServers, _ => ShellSection.Monitors }, _shell.Section);
+            }
+        }
+    }
+
+    [Fact]
+    public async Task Status_texts_follow_the_tool_view_models()
+    {
+        Attach();
+        var changed = new List<string?>();
+        _shell.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+        Assert.Equal(Strings.RunnerStatusBar, _shell.RunnerStatusText);
+        Assert.Equal("", _shell.MocksStatusText);
+
+        await _mocks.LoadAsync();
+        await _mocks.NewServerCommand.ExecuteAsync(null);
+        await _mocks.StartCommand.ExecuteAsync(null);
+
+        Assert.Equal(_mocks.RunningText, _shell.MocksStatusText);
+        Assert.NotEqual("", _shell.MocksStatusText);
+        Assert.Contains(nameof(ShellViewModel.MocksStatusText), changed);
+    }
+
+    [Fact]
+    public void Default_section_is_requests_and_tools_are_not_selected()
+    {
+        Assert.Equal(ShellSection.Requests, _shell.Section);
+        Assert.True(_shell.IsRequestsSection);
+        Assert.True(_shell.IsCollectionsSelected);
+        Assert.False(_shell.IsHistorySelected);
+        Assert.False(_shell.IsRunnerSection || _shell.IsLoadTestSection || _shell.IsMockServersSection || _shell.IsMonitorsSection);
+    }
+
+    [Fact]
+    public void Not_attached_the_show_commands_are_disabled_and_the_section_stays()
+    {
+        _shell.RequestRunner();
+        _shell.RequestMonitors();
+
+        Assert.Equal(ShellSection.Requests, _shell.Section);
+        Assert.False(_shell.ShowRunnerCommand.CanExecute(null));
+        Assert.False(_shell.ShowLoadTestCommand.CanExecute(null));
+        Assert.False(_shell.ShowMockServersCommand.CanExecute(null));
+        Assert.False(_shell.ShowMonitorsCommand.CanExecute(null));
+    }
+
+    [Fact]
+    public void Show_commands_set_the_section_and_raise_the_change()
+    {
+        Attach();
+        var changed = new List<string?>();
+        _shell.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
+
+        (System.Windows.Input.ICommand Command, ShellSection Section, Func<bool> Flag)[] cases =
+        [
+            (_shell.ShowRunnerCommand, ShellSection.Runner, () => _shell.IsRunnerSection),
+            (_shell.ShowLoadTestCommand, ShellSection.LoadTest, () => _shell.IsLoadTestSection),
+            (_shell.ShowMockServersCommand, ShellSection.MockServers, () => _shell.IsMockServersSection),
+            (_shell.ShowMonitorsCommand, ShellSection.Monitors, () => _shell.IsMonitorsSection),
+        ];
+        foreach (var (command, section, flag) in cases)
+        {
+            Assert.True(command.CanExecute(null));
+            command.Execute(null);
+
+            Assert.Equal(section, _shell.Section);
+            Assert.True(flag());
+            Assert.False(_shell.IsRequestsSection);
+            Assert.False(_shell.IsCollectionsSelected);
+        }
+
+        Assert.Contains(nameof(ShellViewModel.Section), changed);
+        Assert.Contains(nameof(ShellViewModel.IsRunnerSection), changed);
+        Assert.Contains(nameof(ShellViewModel.IsRequestsSection), changed);
+        Assert.Contains(nameof(ShellViewModel.IsCollectionsSelected), changed);
+    }
+
+    [Fact]
+    public async Task Folder_commands_and_palette_entries_set_their_section()
+    {
+        Attach();
+        var (top, root, _) = await TreeAsync();
+
+        _shell.RunFolderCommand.Execute(root);
+        Assert.Equal(ShellSection.Runner, _shell.Section);
+        Assert.NotEmpty(_runner.Setup.Items);
+        _shell.LoadTestFolderCommand.Execute(root);
+        Assert.Equal(ShellSection.LoadTest, _shell.Section);
+        Assert.NotEmpty(_load.Requests.Items);
+        await _shell.MockFromFolderCommand.ExecuteAsync(root);
+        Assert.Equal(ShellSection.MockServers, _shell.Section);
+        Assert.Single(await _mockStore.ListAsync(Ct));
+        await _shell.MonitorFolderCommand.ExecuteAsync(root);
+        Assert.Equal(ShellSection.Monitors, _shell.Section);
+        Assert.Equal(top.Id, (await _monitorStore.ListAsync(Ct)).Single().FolderId);
+
+        var items = new CommandsPaletteSource(_shell).GetItems();
+        foreach (var (slug, section) in new[]
+        {
+            ("run-collection", ShellSection.Runner), ("load-test", ShellSection.LoadTest),
+            ("mock-servers", ShellSection.MockServers), ("monitors", ShellSection.Monitors),
+        })
+        {
+            _shell.ShowCollectionsCommand.Execute(null);
+            await items.Single(i => i.Id == "command:" + slug).Execute();
+            Assert.Equal(section, _shell.Section);
+        }
+    }
+
+    [Fact]
+    public void Collections_history_and_tab_actions_bring_the_requests_back()
+    {
+        Attach();
+        var a = HttpRequestDefinition.Create("a");
+        var b = HttpRequestDefinition.Create("b");
+        _shell.Tabs.Open(a);
+        _shell.Tabs.Open(b);
+
+        _shell.ShowRunnerCommand.Execute(null);
+        _shell.ShowCollectionsCommand.Execute(null);
+        Assert.Equal((ShellSection.Requests, true, false), (_shell.Section, _shell.IsCollectionsSelected, _shell.IsHistorySelected));
+
+        _shell.ShowRunnerCommand.Execute(null);
+        _shell.ShowHistoryCommand.Execute(null);
+        Assert.Equal((ShellSection.Requests, false, true), (_shell.Section, _shell.IsCollectionsSelected, _shell.IsHistorySelected));
+
+        _shell.ShowMonitorsCommand.Execute(null);
+        _shell.Tabs.NewTab();
+        Assert.Equal(ShellSection.Requests, _shell.Section);
+        Assert.True(_shell.Tabs.ActiveTab!.IsNew);
+
+        _shell.ShowRunnerCommand.Execute(null);
+        _shell.Tabs.Open(a);
+        Assert.Equal(ShellSection.Requests, _shell.Section);
+        Assert.Equal(a.Id, _shell.Tabs.ActiveTab!.Id);
+
+        _shell.ShowRunnerCommand.Execute(null);
+        _shell.Tabs.OpenAsNew(b);
+        Assert.Equal(ShellSection.Requests, _shell.Section);
+        Assert.NotEqual(b.Id, _shell.Tabs.ActiveTab!.Id);
+
+        _shell.Tabs.ActiveTab = _shell.Tabs.Tabs.Single(t => t.Id == a.Id);
+        _shell.ShowRunnerCommand.Execute(null);
+        _shell.Tabs.NextTabCommand.Execute(null);
+        Assert.Equal(ShellSection.Requests, _shell.Section);
+        Assert.NotEqual(a.Id, _shell.Tabs.ActiveTab!.Id);
+
+        _shell.ShowRunnerCommand.Execute(null);
+        _shell.Tabs.CloseWithoutPrompt(a.Id);
+        Assert.Equal(ShellSection.Runner, _shell.Section);
+    }
+
+    [Fact]
+    public async Task Close_does_not_ask_when_idle_or_with_only_a_mock_server_running()
+    {
+        Attach();
+        await _mocks.LoadAsync();
+        await _mocks.NewServerCommand.ExecuteAsync(null);
+        await _mocks.StartCommand.ExecuteAsync(null);
+
+        Assert.True(await _shell.RequestCloseAsync());
+        Assert.Empty(_dialogs.ConfirmMessages);
+    }
+
+    [Fact]
+    public async Task Close_asks_while_a_run_is_in_progress()
+    {
+        Attach();
+        var (_, root, _) = await TreeAsync();
+
+        _hold = true;
+        _runner.Open(root.Node);
+        var run = _runner.RunCommand.ExecuteAsync(null);
+        await WaitAsync(() => _runner.IsRunning);
+        _dialogs.ConfirmAnswer = false;
+        List<string> log = [];
+        _shell.Own(new Recorder(log, "s"));
+
+        Assert.False(await _shell.RequestCloseAsync());
+        Assert.Equal([Strings.ShellCloseRunning], _dialogs.ConfirmMessages.Where(m => m == Strings.ShellCloseRunning));
+        Assert.Empty(log);
+
+        _dialogs.ConfirmAnswer = true;
+        Assert.True(await _shell.RequestCloseAsync());
+        Assert.Equal(["s:sync"], log);
+
+        _runner.StopCommand.Execute(null);
+        _gate.TrySetResult();
+        await run;
+    }
+
+    [Fact]
+    public async Task Close_asks_while_a_load_test_is_in_progress()
+    {
+        Attach();
+        var (_, root, _) = await TreeAsync();
+        _hold = true;
+        _load.Open(root.Node);
+        _load.VirtualUsers = 1;
+        _load.DurationSeconds = 60;
+        _dialogs.ConfirmAnswer = true;
+        var run = _load.StartCommand.ExecuteAsync(null);
+        await WaitAsync(() => _load.IsRunning);
+        _dialogs.ConfirmMessages.Clear();
+        _dialogs.ConfirmAnswer = false;
+
+        Assert.False(await _shell.RequestCloseAsync());
+        Assert.Equal([Strings.ShellCloseRunning], _dialogs.ConfirmMessages);
+
+        _load.StopCommand.Execute(null);
+        _gate.TrySetResult();
+        await run;
+    }
+
+    private static async Task WaitAsync(Func<bool> condition)
+    {
+        for (var i = 0; i < 200 && !condition(); i++)
+        {
+            await Task.Delay(10, Ct);
+        }
+
+        Assert.True(condition());
+    }
+
+    [Fact]
+    public async Task Owned_async_resources_are_disposed_on_close_after_the_sync_ones()
+    {
+        List<string> log = [];
+        _shell.OwnAsync(new Recorder(log, "a"));
+        _shell.Own(new Recorder(log, "s"));
+
+        Assert.True(await _shell.RequestCloseAsync());
+
+        Assert.Equal(["s:sync", "a:async"], log);
+    }
+}

@@ -42,7 +42,10 @@ internal sealed record ResponseDto(
     List<CookieDto> Cookies);
 
 /// <summary>The data behind <c>yaapic.info</c>.</summary>
-internal sealed record InfoDto(string EventName, string RequestName, string RequestId, string Origin);
+internal sealed record InfoDto(string EventName, string RequestName, string RequestId, string Origin, int Iteration, int IterationCount);
+
+/// <summary>Arguments of the <c>exec.next</c> op; a null <c>value</c> stops the run.</summary>
+internal sealed record NextArgs(string? Value);
 
 /// <summary>Arguments of the <c>console</c> op; <c>level</c> is <c>log|info|warn|error|debug</c>.</summary>
 internal sealed record ConsoleArgs(string Level, string Text);
@@ -59,6 +62,7 @@ internal sealed record SendResultDto(ResponseDto? Response, string? Error);
 [JsonSerializable(typeof(RequestDto))]
 [JsonSerializable(typeof(ResponseDto))]
 [JsonSerializable(typeof(InfoDto))]
+[JsonSerializable(typeof(NextArgs))]
 [JsonSerializable(typeof(ConsoleArgs))]
 [JsonSerializable(typeof(TestArgs))]
 [JsonSerializable(typeof(SendResultDto))]

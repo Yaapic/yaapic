@@ -1,0 +1,228 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:v="using:Yaapic.App.Avalonia.Views"
+    xmlns:m="using:Yaapic.ViewModels.Mocks"
+    xmlns:d="using:Yaapic.Domain.Http"
+    x:Class="Yaapic.App.Avalonia.Views.MockServersView"
+    x:DataType="m:MockServersViewModel"
+    x:CompileBindings="True">
+  <Grid ColumnDefinitions="240,*,320">
+    <!-- Servers -->
+    <Grid Margin="12" RowDefinitions="*,Auto" RowSpacing="8" Background="{DynamicResource YaapicSurfaceSidebarBrush}">
+      <ListBox x:Name="ServerList" Background="Transparent" AutomationProperties.Name="{x:Static loc:Strings.MockTitle}"
+               ItemsSource="{Binding Servers}" SelectionChanged="OnServerSelectionChanged">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="m:MockServerItemViewModel">
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+              <Ellipse Width="8" Height="8" VerticalAlignment="Center" AutomationProperties.Name="{Binding StatusText}"
+                       Fill="{Binding IsRunning, Converter={x:Static p:BrushMap.RunningDot}}" />
+              <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding Name}" />
+              <TextBlock Grid.Column="2" VerticalAlignment="Center" Classes="codeSmall"
+                         Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding Port}" />
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <StackPanel Grid.Row="1" Spacing="8">
+        <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Classes="accent" Content="{x:Static loc:Strings.MockNew}"
+                AutomationProperties.Name="{x:Static loc:Strings.MockNew}" Command="{Binding NewServerCommand}" />
+        <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Classes="danger" Content="{x:Static loc:Strings.CommonDelete}"
+                AutomationProperties.Name="{x:Static loc:Strings.CommonDelete}" Command="{Binding DeleteServerCommand}" />
+      </StackPanel>
+    </Grid>
+
+    <!-- Selected server -->
+    <Grid Grid.Column="1" Background="{DynamicResource YaapicSurfaceBaseBrush}">
+      <ScrollViewer IsVisible="{Binding SelectedServer, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Margin="16,16,16,48" Spacing="12">
+          <Border Classes="infobar info" IsVisible="{Binding GenerationMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+            <TextBlock TextWrapping="Wrap" Text="{Binding GenerationMessage}" />
+          </Border>
+
+          <Grid ColumnDefinitions="*,140,Auto" ColumnSpacing="12">
+            <StackPanel Spacing="2">
+              <TextBlock Text="{x:Static loc:Strings.CommonName}" />
+              <TextBox AutomationProperties.Name="{x:Static loc:Strings.CommonName}" Text="{Binding Name, Mode=TwoWay}" />
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="2">
+              <TextBlock Text="{x:Static loc:Strings.MockPort}" />
+              <NumericUpDown Minimum="0" Maximum="100000" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.MockPort}"
+                             Value="{Binding Port, Mode=OneWay}" ValueChanged="OnPortChanged" />
+            </StackPanel>
+            <StackPanel Grid.Column="2" VerticalAlignment="Bottom" Orientation="Horizontal" Spacing="8">
+              <Button MinWidth="96" HorizontalContentAlignment="Center" Classes="accent" Content="{x:Static loc:Strings.MockStart}"
+                      AutomationProperties.Name="{x:Static loc:Strings.MockStart}" Command="{Binding StartCommand}"
+                      IsVisible="{Binding !SelectedIsRunning}" />
+              <Button MinWidth="96" HorizontalContentAlignment="Center" Content="{x:Static loc:Strings.MockStop}"
+                      AutomationProperties.Name="{x:Static loc:Strings.MockStop}" Command="{Binding StopCommand}"
+                      IsVisible="{Binding SelectedIsRunning}" />
+            </StackPanel>
+          </Grid>
+
+          <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="12">
+            <CheckBox Content="{x:Static loc:Strings.MockCors}" IsChecked="{Binding Cors, Mode=TwoWay}" />
+            <SelectableTextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Classes="codeSmall"
+                                 Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding SelectedServer.BaseUrl}" />
+            <Button Grid.Column="2" Content="{x:Static loc:Strings.MockCopyUrl}" AutomationProperties.Name="{x:Static loc:Strings.MockCopyUrl}"
+                    Command="{Binding CopyUrlCommand}" />
+          </Grid>
+
+          <!-- Routes -->
+          <StackPanel Spacing="6">
+            <Grid ColumnDefinitions="*,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="4">
+              <TextBlock VerticalAlignment="Center" Classes="bodyStrong" Text="{x:Static loc:Strings.MockRoutes}" />
+              <Button Grid.Column="1" Classes="icon" Command="{Binding AddRouteCommand}"
+                      AutomationProperties.Name="{x:Static loc:Strings.MockAddRoute}" ToolTip.Tip="{x:Static loc:Strings.MockAddRoute}">
+                <PathIcon Data="{StaticResource YaapicGlyphAdd}" />
+              </Button>
+              <Button Grid.Column="2" Classes="icon" Command="{Binding DuplicateRouteCommand}"
+                      AutomationProperties.Name="{x:Static loc:Strings.MockDuplicateRoute}" ToolTip.Tip="{x:Static loc:Strings.MockDuplicateRoute}">
+                <PathIcon Data="{StaticResource YaapicGlyphCopy}" />
+              </Button>
+              <Button Grid.Column="3" Classes="icon" Command="{Binding DeleteRouteCommand}"
+                      AutomationProperties.Name="{x:Static loc:Strings.MockDeleteRoute}" ToolTip.Tip="{x:Static loc:Strings.MockDeleteRoute}">
+                <PathIcon Data="{StaticResource YaapicGlyphDelete}" />
+              </Button>
+              <Button Grid.Column="4" Classes="icon" Command="{Binding MoveRouteUpCommand}"
+                      AutomationProperties.Name="{x:Static loc:Strings.RunnerMoveUp}" ToolTip.Tip="{x:Static loc:Strings.RunnerMoveUp}">
+                <PathIcon Data="{StaticResource YaapicGlyphArrowUp}" />
+              </Button>
+              <Button Grid.Column="5" Classes="icon" Command="{Binding MoveRouteDownCommand}"
+                      AutomationProperties.Name="{x:Static loc:Strings.RunnerMoveDown}" ToolTip.Tip="{x:Static loc:Strings.RunnerMoveDown}">
+                <PathIcon Data="{StaticResource YaapicGlyphArrowDown}" />
+              </Button>
+            </Grid>
+            <ListBox MaxHeight="200" AutomationProperties.Name="{x:Static loc:Strings.MockRoutes}"
+                     ItemsSource="{Binding Routes}" SelectedItem="{Binding SelectedRoute, Mode=TwoWay}">
+              <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="m:MockRouteViewModel">
+                  <Grid ColumnDefinitions="Auto,56,*,Auto" ColumnSpacing="8">
+                    <CheckBox AutomationProperties.Name="{Binding Name}" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Classes="caption" FontWeight="SemiBold"
+                               Foreground="{Binding Method, Converter={x:Static p:ConsoleMap.VerbBrush}}" Text="{Binding Method}" />
+                    <TextBlock Grid.Column="2" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" Classes="codeSmall" Text="{Binding Path}" />
+                    <TextBlock Grid.Column="3" VerticalAlignment="Center" Classes="codeSmall"
+                               Foreground="{Binding Status, Converter={x:Static p:BrushMap.StatusCode}}" Text="{Binding Status}" />
+                  </Grid>
+                </DataTemplate>
+              </ListBox.ItemTemplate>
+            </ListBox>
+          </StackPanel>
+
+          <!-- Selected route -->
+          <StackPanel Spacing="8" DataContext="{Binding SelectedRoute}" x:DataType="m:MockRouteViewModel"
+                      IsVisible="{Binding $self.DataContext, Converter={x:Static ObjectConverters.IsNotNull}}">
+            <StackPanel Spacing="2">
+              <TextBlock Text="{x:Static loc:Strings.CommonName}" />
+              <TextBox AutomationProperties.Name="{x:Static loc:Strings.CommonName}" Text="{Binding Name, Mode=TwoWay}" />
+            </StackPanel>
+            <Grid ColumnDefinitions="120,*,110,130" ColumnSpacing="8">
+              <StackPanel Spacing="2">
+                <TextBlock Text="{x:Static loc:Strings.MockMethod}" />
+                <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.MockMethod}"
+                          ItemsSource="{Binding Methods}" SelectedItem="{Binding Method, Mode=TwoWay}" />
+              </StackPanel>
+              <StackPanel Grid.Column="1" Spacing="2">
+                <TextBlock Text="{x:Static loc:Strings.MockPath}" />
+                <TextBox AutomationProperties.Name="{x:Static loc:Strings.MockPath}" Text="{Binding Path, Mode=TwoWay}" />
+              </StackPanel>
+              <StackPanel Grid.Column="2" Spacing="2">
+                <TextBlock Text="{x:Static loc:Strings.MockStatus}" />
+                <NumericUpDown Minimum="0" Maximum="1000" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.MockStatus}"
+                               Value="{Binding Status, Mode=OneWay}" ValueChanged="OnStatusChanged" />
+              </StackPanel>
+              <StackPanel Grid.Column="3" Spacing="2">
+                <TextBlock Text="{x:Static loc:Strings.MockDelay}" />
+                <NumericUpDown Minimum="-1" Maximum="1000000" Increment="100" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.MockDelay}"
+                               Value="{Binding DelayMs, Mode=OneWay}" ValueChanged="OnDelayChanged" />
+              </StackPanel>
+            </Grid>
+            <TextBlock TextWrapping="Wrap" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                       Text="{x:Static loc:Strings.MockPathHint}" />
+
+            <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.MockHeaders}" />
+            <v:KeyValueEditorView Height="160" DataContext="{Binding Headers}" />
+
+            <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.MockBody}" />
+            <Border Height="200" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
+              <v:CodeEditorView x:Name="BodyEditor" AutomationProperties.Name="{x:Static loc:Strings.MockBody}" Text="{Binding Body, Mode=TwoWay}" />
+            </Border>
+            <TextBlock TextWrapping="Wrap" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                       Text="{x:Static loc:Strings.MockTemplateHint}" />
+            <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding IssueText}"
+                       IsVisible="{Binding IssueText, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          </StackPanel>
+
+          <!-- Save, revert, errors -->
+          <StackPanel Spacing="8">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+              <Button MinWidth="96" HorizontalContentAlignment="Center" Classes="accent" Content="{x:Static loc:Strings.CommonSave}"
+                      AutomationProperties.Name="{x:Static loc:Strings.CommonSave}" Command="{Binding SaveCommand}" />
+              <Button MinWidth="96" HorizontalContentAlignment="Center" Content="{x:Static loc:Strings.MockRevert}"
+                      AutomationProperties.Name="{x:Static loc:Strings.MockRevert}" Command="{Binding RevertCommand}" />
+            </StackPanel>
+            <ItemsControl ItemsSource="{Binding ValidationErrors}">
+              <ItemsControl.ItemTemplate>
+                <DataTemplate x:DataType="x:String">
+                  <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding}" />
+                </DataTemplate>
+              </ItemsControl.ItemTemplate>
+            </ItemsControl>
+          </StackPanel>
+        </StackPanel>
+      </ScrollViewer>
+      <TextBlock Margin="16" VerticalAlignment="Bottom" TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}"
+                 Text="{Binding Error}" IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+    </Grid>
+
+    <!-- Log -->
+    <Grid Grid.Column="2" Margin="12" RowDefinitions="Auto,*,Auto" RowSpacing="8"
+          Background="{DynamicResource YaapicSurfaceBaseBrush}">
+      <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+        <TextBlock VerticalAlignment="Center" Classes="bodyStrong" Text="{x:Static loc:Strings.MockLog}" />
+        <Button Grid.Column="1" Content="{x:Static loc:Strings.MockClearLog}" AutomationProperties.Name="{x:Static loc:Strings.MockClearLog}"
+                Command="{Binding ClearLogCommand}" />
+      </Grid>
+      <ListBox Grid.Row="1" AutomationProperties.Name="{x:Static loc:Strings.MockLog}"
+               ItemsSource="{Binding Log}" SelectedItem="{Binding SelectedLog, Mode=TwoWay}">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="m:MockLogRowViewModel">
+            <StackPanel Margin="0,2">
+              <Grid ColumnDefinitions="Auto,48,*,Auto" ColumnSpacing="8">
+                <TextBlock Classes="codeSmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding Time}" />
+                <TextBlock Grid.Column="1" Classes="caption" FontWeight="SemiBold"
+                           Foreground="{Binding Method, Converter={x:Static p:ConsoleMap.VerbBrush}}" Text="{Binding Method}" />
+                <TextBlock Grid.Column="2" TextTrimming="CharacterEllipsis" Classes="codeSmall" Text="{Binding Target}" />
+                <TextBlock Grid.Column="3" Classes="codeSmall" FontWeight="SemiBold"
+                           Foreground="{Binding Status, Converter={x:Static p:BrushMap.StatusCode}}" Text="{Binding Status}" />
+              </Grid>
+              <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+                <TextBlock TextTrimming="CharacterEllipsis" Classes="caption"
+                           Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding Route}" />
+                <TextBlock Grid.Column="1" Classes="caption"
+                           Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding DurationText}" />
+              </Grid>
+            </StackPanel>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+      <!-- The selected entry: request headers and body preview. -->
+      <ScrollViewer Grid.Row="2" MaxHeight="220" IsVisible="{Binding SelectedLog, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Spacing="4">
+          <ItemsControl ItemsSource="{Binding SelectedLogHeaders}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="d:KeyValueEntry">
+                <TextBlock TextTrimming="CharacterEllipsis" Classes="codeSmall">
+                  <Run Text="{Binding Key}" FontWeight="SemiBold" /><Run Text=": " /><Run Text="{Binding Value}" />
+                </TextBlock>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <SelectableTextBlock TextWrapping="Wrap" Classes="codeSmall" Text="{Binding SelectedLogBody}" />
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+  </Grid>
+</UserControl>

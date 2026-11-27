@@ -78,9 +78,17 @@ internal sealed class HostBridge(IScriptHost host, RunCollector collector)
             case HostOps.InfoGet:
                 {
                     var i = host.Info;
-                    return Json(new InfoDto(i.EventName, i.RequestName, i.RequestId.ToString(), i.Origin), HostJsonContext.Default.InfoDto);
+                    return Json(new InfoDto(i.EventName, i.RequestName, i.RequestId.ToString(), i.Origin, i.Iteration, i.IterationCount), HostJsonContext.Default.InfoDto);
                 }
 
+            case HostOps.IterGet:
+                return Json(Map(host.IterationData), HostJsonContext.Default.ListKeyValueDto);
+            case HostOps.ExecNext:
+                host.SetNextRequest(Args(argsJson, HostJsonContext.Default.NextArgs).Value);
+                return "null";
+            case HostOps.ExecSkip:
+                host.SkipRequest();
+                return "null";
             case HostOps.Console:
                 {
                     var c = Args(argsJson, HostJsonContext.Default.ConsoleArgs);

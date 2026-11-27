@@ -1,6 +1,6 @@
 # M6-31: Core: generate a mock server from a folder
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-14, M6-27
 
@@ -32,10 +32,10 @@ The UI command (M6-35).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Mocks/MockGeneratorTests.cs`: `PathOf` for `https://api.test/users/{{id}}?x=1`, `{{baseUrl}}/users`,
+- [x] Tests in `Yaapic.Core.Tests/Mocks/MockGeneratorTests.cs`: `PathOf` for `https://api.test/users/{{id}}?x=1`, `{{baseUrl}}/users`,
   `{{baseUrl}}`, `api.test/v1/items`, `/plain`, `http://host:8080`, `{{baseUrl}}/files/{{name}}.json`, empty; a nested folder gives routes in
   run order; duplicates skipped and counted; generated definition passes `MockServerValidator`.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

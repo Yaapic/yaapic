@@ -616,76 +616,134 @@ Scope: the collection Runner (iterations, CSV and JSON data files, a data variab
 
 Slices: M6-01 to M6-05 the ADRs and the spike; M6-06 to M6-13 the data layer, data files and the script API (host, JavaScript, Lua, converter and completion); M6-14 to M6-21 the Runner (model, variable state, runner, flow control, reports, view models); M6-22 to M6-26 load tests; M6-27 to M6-35 mock servers (model, store, matcher, responder, generator, HTTP/1.1 server, service, view model); M6-36 to M6-40 monitors (model, stores, scheduler, view model); M6-41 the shell entries; M6-42 the composition; M6-43 to M6-49 WinUI; M6-50 to M6-56 Avalonia; M6-57 to M6-59 end-to-end tests; M6-60 docs; M6-61 the WinUI visual check.
 
-Blocked (product decisions, each card states the question): M6-62 a command-line runner, M6-63 monitors while Yaapic is closed, M6-64 mock servers reachable from other devices. No other card depends on them. Cards added after an answer are numbered after M6-64.
+Product decisions (answered 2026-11-27, each card records it): M6-62 a command-line runner, a separate `yaapic-cli` executable, built by M6-65 to M6-74 (ADR 0022 first; Core run sources and `YAAPIC_VAR_` overrides, headless composition, the CLI project, the run command, output and reports, end-to-end tests, packaging, docs); M6-63 monitors while Yaapic is closed, not now; M6-64 mock servers reachable from other devices, not now. How secrets reach a headless run was not decided: the cards use a default (no vault, `YAAPIC_VAR_<name>` environment variables, masked) that M6-62 marks as open to revision.
 
 Sonnet-sized cards: each card is one session; the card text holds every decision (types, signatures, rules, file shapes, strings, test cases), so no card needs a design choice. Shared types: `RunPlan`, `RunResult`, `RunStepExecutor`, `RunVariableState`, `IRunScopeSource` (M6-14 to M6-16), `ScriptRunContext` and `ScriptExecutionControl` (M6-09), `MockHttpRequest`/`MockHttpResponse` (M6-29), `IMockHttpHost` (M6-33), `MonitorRun` and the monitor store ports (M6-36), `ContextProgress<T>` (M6-21), `IDialogService.ConfirmAsync` (M6-26).
 
 | Card | Title | Platform | Depends on | Status |
 |---|---|---|---|---|
-| [M6-01](milestone-6-automation/M6-01-adr-collection-runner.md) | ADR 0018: collection runner, iteration data and run reports | any | none | todo |
-| [M6-02](milestone-6-automation/M6-02-spike-concurrent-scripted-sends.md) | Spike: concurrent scripted sends under load | any | none | todo |
-| [M6-03](milestone-6-automation/M6-03-adr-load-tests.md) | ADR 0019: load tests | any | M6-01, M6-02 | todo |
-| [M6-04](milestone-6-automation/M6-04-adr-mock-servers.md) | ADR 0020: mock servers | any | none | todo |
-| [M6-05](milestone-6-automation/M6-05-adr-monitors.md) | ADR 0021: monitors | any | M6-01 | todo |
-| [M6-06](milestone-6-automation/M6-06-core-data-variable-layer.md) | Core: data variable layer | any | M6-01 | todo |
-| [M6-07](milestone-6-automation/M6-07-core-csv-iteration-data.md) | Core: CSV iteration data parser | any | M6-01 | todo |
-| [M6-08](milestone-6-automation/M6-08-core-json-iteration-data-and-reader.md) | Core: JSON iteration data and the data file reader | any | M6-07 | todo |
-| [M6-09](milestone-6-automation/M6-09-core-script-run-context.md) | Core: run context for scripts (iteration, data, execution control) | any | M6-06 | todo |
-| [M6-10](milestone-6-automation/M6-10-scripting-host-ops-run-context.md) | Scripting: host operations for iteration data and execution control | any | M6-09 | todo |
-| [M6-11](milestone-6-automation/M6-11-js-iteration-data-and-execution.md) | JavaScript: `yaapic.iterationData` and `yaapic.execution` | any | M6-10 | todo |
-| [M6-12](milestone-6-automation/M6-12-lua-iteration-data-and-execution.md) | Lua: `yaapic.iteration_data` and `yaapic.execution` | any | M6-10 | todo |
-| [M6-13](milestone-6-automation/M6-13-converter-autocompletion-runner-apis.md) | Converter, autocompletion and snippets for the runner APIs | any | M6-11, M6-12 | todo |
-| [M6-14](milestone-6-automation/M6-14-core-run-plan-and-results.md) | Core: run plan and result model | any | M6-07, M6-09 | todo |
-| [M6-15](milestone-6-automation/M6-15-core-run-variable-state.md) | Core: run variable state and scope source port | any | M6-06, M6-14 | todo |
-| [M6-16](milestone-6-automation/M6-16-core-collection-runner.md) | Core: collection runner (step executor, iterations, delay, stop and cancel) | any | M6-09, M6-15 | todo |
-| [M6-17](milestone-6-automation/M6-17-core-runner-flow-control.md) | Core: runner flow control (setNextRequest, skipRequest, loop guard) | any | M6-16 | todo |
-| [M6-18](milestone-6-automation/M6-18-core-run-report-json.md) | Core: run report, JSON | any | M6-14 | todo |
-| [M6-19](milestone-6-automation/M6-19-core-run-report-junit.md) | Core: run report, JUnit XML | any | M6-14 | todo |
-| [M6-20](milestone-6-automation/M6-20-viewmodel-runner-setup.md) | ViewModel: runner setup | any | M6-08, M6-14 | todo |
-| [M6-21](milestone-6-automation/M6-21-viewmodel-runner-run-and-results.md) | ViewModel: runner run and results | any | M6-17, M6-18, M6-19, M6-20 | todo |
-| [M6-22](milestone-6-automation/M6-22-core-load-profile-schedule.md) | Core: load-test plan and virtual-user schedule | any | M6-03, M6-14 | todo |
-| [M6-23](milestone-6-automation/M6-23-core-load-metrics.md) | Core: load metrics aggregator | any | M6-03, M6-22 | todo |
-| [M6-24](milestone-6-automation/M6-24-core-load-test-runner.md) | Core: load-test runner | any | M6-16, M6-22, M6-23 | todo |
-| [M6-25](milestone-6-automation/M6-25-core-load-test-report-json.md) | Core: load-test report, JSON | any | M6-24 | todo |
-| [M6-26](milestone-6-automation/M6-26-viewmodel-load-test.md) | ViewModel: load test | any | M6-20, M6-21, M6-25 | todo |
-| [M6-27](milestone-6-automation/M6-27-domain-mock-server-model.md) | Domain: mock server model and validation | any | M6-04 | todo |
-| [M6-28](milestone-6-automation/M6-28-infra-mock-server-store.md) | Infrastructure: mock server file store | any | M6-27 | todo |
-| [M6-29](milestone-6-automation/M6-29-core-mock-route-matcher.md) | Core: mock HTTP types and route matcher | any | M6-27 | todo |
-| [M6-30](milestone-6-automation/M6-30-core-mock-responder.md) | Core: mock responder and templating | any | M6-29 | todo |
-| [M6-31](milestone-6-automation/M6-31-core-mock-from-collection.md) | Core: generate a mock server from a folder | any | M6-14, M6-27 | todo |
-| [M6-32](milestone-6-automation/M6-32-infra-http11-reader-writer.md) | Infrastructure: HTTP/1.1 request reader and response writer | any | M6-29 | todo |
-| [M6-33](milestone-6-automation/M6-33-infra-loopback-mock-host.md) | Infrastructure: loopback HTTP host for mock servers | any | M6-32 | todo |
-| [M6-34](milestone-6-automation/M6-34-core-mock-server-service.md) | Core: mock server service | any | M6-28, M6-30, M6-33 | todo |
-| [M6-35](milestone-6-automation/M6-35-viewmodel-mock-servers.md) | ViewModel: mock servers | any | M6-21, M6-31, M6-34 | todo |
-| [M6-36](milestone-6-automation/M6-36-domain-core-monitor-model.md) | Domain and Core: monitor model and store ports | any | M6-05, M6-14 | todo |
-| [M6-37](milestone-6-automation/M6-37-infra-monitor-store.md) | Infrastructure: monitor file store | any | M6-28, M6-36 | todo |
-| [M6-38](milestone-6-automation/M6-38-infra-monitor-run-store.md) | Infrastructure: monitor run history store | any | M6-36 | todo |
-| [M6-39](milestone-6-automation/M6-39-core-monitor-scheduler.md) | Core: monitor scheduler | any | M6-16, M6-36 | todo |
-| [M6-40](milestone-6-automation/M6-40-viewmodel-monitors.md) | ViewModel: monitors | any | M6-21, M6-39 | todo |
-| [M6-41](milestone-6-automation/M6-41-viewmodel-shell-entries.md) | ViewModel: palette commands, shell entries and status items for the M6 tools | any | M6-21, M6-26, M6-35, M6-40 | todo |
-| [M6-42](milestone-6-automation/M6-42-composition-m6-wiring.md) | Composition: wire the M6 services | any | M6-28, M6-33, M6-37, M6-38, M6-41 | todo |
-| [M6-43](milestone-6-automation/M6-43-winui-tool-window-host.md) | WinUI: tool window host and line chart | windows | M6-42 | todo |
-| [M6-44](milestone-6-automation/M6-44-winui-runner-setup.md) | WinUI: Runner window, setup pane | windows | M6-43 | todo |
-| [M6-45](milestone-6-automation/M6-45-winui-runner-results.md) | WinUI: Runner window, results pane | windows | M6-44 | todo |
-| [M6-46](milestone-6-automation/M6-46-winui-load-test-window.md) | WinUI: Load test window | windows | M6-43, M6-44 | todo |
-| [M6-47](milestone-6-automation/M6-47-winui-mock-servers-window.md) | WinUI: Mock servers window | windows | M6-43 | todo |
-| [M6-48](milestone-6-automation/M6-48-winui-monitors-window.md) | WinUI: Monitors window | windows | M6-43 | todo |
-| [M6-49](milestone-6-automation/M6-49-winui-automation-entry-points.md) | WinUI: automation entry points and status bar items | windows | M6-45, M6-46, M6-47, M6-48 | todo |
-| [M6-50](milestone-6-automation/M6-50-avalonia-tool-windows-and-chart.md) | Avalonia: tool windows, line chart and confirmation dialog | unix | M6-42, M6-43 | todo |
-| [M6-51](milestone-6-automation/M6-51-avalonia-runner-setup.md) | Avalonia: Runner window, setup pane | unix | M6-50, M6-44 | todo |
-| [M6-52](milestone-6-automation/M6-52-avalonia-runner-results.md) | Avalonia: Runner window, results pane | unix | M6-51, M6-45 | todo |
-| [M6-53](milestone-6-automation/M6-53-avalonia-load-test-window.md) | Avalonia: Load test window | unix | M6-51, M6-46 | todo |
-| [M6-54](milestone-6-automation/M6-54-avalonia-mock-servers-window.md) | Avalonia: Mock servers window | unix | M6-50, M6-47 | todo |
-| [M6-55](milestone-6-automation/M6-55-avalonia-monitors-window.md) | Avalonia: Monitors window | unix | M6-50, M6-48 | todo |
-| [M6-56](milestone-6-automation/M6-56-avalonia-automation-entry-points.md) | Avalonia: automation entry points and status bar items | unix | M6-49, M6-52, M6-53, M6-54, M6-55 | todo |
-| [M6-57](milestone-6-automation/M6-57-end-to-end-runner.md) | End-to-end tests: Runner | any | M6-42 | todo |
-| [M6-58](milestone-6-automation/M6-58-end-to-end-mocks-and-load.md) | End-to-end tests: mock servers and load tests | any | M6-42 | todo |
-| [M6-59](milestone-6-automation/M6-59-end-to-end-monitors.md) | End-to-end tests: monitors | any | M6-42 | todo |
-| [M6-60](milestone-6-automation/M6-60-milestone-docs.md) | Milestone 6 docs | any | M6-57, M6-58, M6-59, M6-49, M6-56 | todo |
-| [M6-61](milestone-6-automation/M6-61-winui-visual-verification.md) | WinUI visual verification of the milestone 6 views | windows | M6-45, M6-46, M6-47, M6-48, M6-49 | todo |
-| [M6-62](milestone-6-automation/M6-62-command-line-runner.md) | Command-line runner | any | M6-17, M6-18, M6-19 | blocked |
-| [M6-63](milestone-6-automation/M6-63-monitors-while-closed.md) | Monitors while Yaapic is closed | any | M6-39 | blocked |
-| [M6-64](milestone-6-automation/M6-64-mock-servers-on-the-network.md) | Mock servers reachable from other devices | any | M6-34 | blocked |
+| [M6-01](milestone-6-automation/M6-01-adr-collection-runner.md) | ADR 0018: collection runner, iteration data and run reports | any | none | done |
+| [M6-02](milestone-6-automation/M6-02-spike-concurrent-scripted-sends.md) | Spike: concurrent scripted sends under load | any | none | done |
+| [M6-03](milestone-6-automation/M6-03-adr-load-tests.md) | ADR 0019: load tests | any | M6-01, M6-02 | done |
+| [M6-04](milestone-6-automation/M6-04-adr-mock-servers.md) | ADR 0020: mock servers | any | none | done |
+| [M6-05](milestone-6-automation/M6-05-adr-monitors.md) | ADR 0021: monitors | any | M6-01 | done |
+| [M6-06](milestone-6-automation/M6-06-core-data-variable-layer.md) | Core: data variable layer | any | M6-01 | done |
+| [M6-07](milestone-6-automation/M6-07-core-csv-iteration-data.md) | Core: CSV iteration data parser | any | M6-01 | done |
+| [M6-08](milestone-6-automation/M6-08-core-json-iteration-data-and-reader.md) | Core: JSON iteration data and the data file reader | any | M6-07 | done |
+| [M6-09](milestone-6-automation/M6-09-core-script-run-context.md) | Core: run context for scripts (iteration, data, execution control) | any | M6-06 | done |
+| [M6-10](milestone-6-automation/M6-10-scripting-host-ops-run-context.md) | Scripting: host operations for iteration data and execution control | any | M6-09 | done |
+| [M6-11](milestone-6-automation/M6-11-js-iteration-data-and-execution.md) | JavaScript: `yaapic.iterationData` and `yaapic.execution` | any | M6-10 | done |
+| [M6-12](milestone-6-automation/M6-12-lua-iteration-data-and-execution.md) | Lua: `yaapic.iteration_data` and `yaapic.execution` | any | M6-10 | done |
+| [M6-13](milestone-6-automation/M6-13-converter-autocompletion-runner-apis.md) | Converter, autocompletion and snippets for the runner APIs | any | M6-11, M6-12 | done |
+| [M6-14](milestone-6-automation/M6-14-core-run-plan-and-results.md) | Core: run plan and result model | any | M6-07, M6-09 | done |
+| [M6-15](milestone-6-automation/M6-15-core-run-variable-state.md) | Core: run variable state and scope source port | any | M6-06, M6-14 | done |
+| [M6-16](milestone-6-automation/M6-16-core-collection-runner.md) | Core: collection runner (step executor, iterations, delay, stop and cancel) | any | M6-09, M6-15 | done |
+| [M6-17](milestone-6-automation/M6-17-core-runner-flow-control.md) | Core: runner flow control (setNextRequest, skipRequest, loop guard) | any | M6-16 | done |
+| [M6-18](milestone-6-automation/M6-18-core-run-report-json.md) | Core: run report, JSON | any | M6-14 | done |
+| [M6-19](milestone-6-automation/M6-19-core-run-report-junit.md) | Core: run report, JUnit XML | any | M6-14 | done |
+| [M6-20](milestone-6-automation/M6-20-viewmodel-runner-setup.md) | ViewModel: runner setup | any | M6-08, M6-14 | done |
+| [M6-21](milestone-6-automation/M6-21-viewmodel-runner-run-and-results.md) | ViewModel: runner run and results | any | M6-17, M6-18, M6-19, M6-20 | done |
+| [M6-22](milestone-6-automation/M6-22-core-load-profile-schedule.md) | Core: load-test plan and virtual-user schedule | any | M6-03, M6-14 | done |
+| [M6-23](milestone-6-automation/M6-23-core-load-metrics.md) | Core: load metrics aggregator | any | M6-03, M6-22 | done |
+| [M6-24](milestone-6-automation/M6-24-core-load-test-runner.md) | Core: load-test runner | any | M6-16, M6-22, M6-23 | done |
+| [M6-25](milestone-6-automation/M6-25-core-load-test-report-json.md) | Core: load-test report, JSON | any | M6-24 | done |
+| [M6-26](milestone-6-automation/M6-26-viewmodel-load-test.md) | ViewModel: load test | any | M6-20, M6-21, M6-25 | done |
+| [M6-27](milestone-6-automation/M6-27-domain-mock-server-model.md) | Domain: mock server model and validation | any | M6-04 | done |
+| [M6-28](milestone-6-automation/M6-28-infra-mock-server-store.md) | Infrastructure: mock server file store | any | M6-27 | done |
+| [M6-29](milestone-6-automation/M6-29-core-mock-route-matcher.md) | Core: mock HTTP types and route matcher | any | M6-27 | done |
+| [M6-30](milestone-6-automation/M6-30-core-mock-responder.md) | Core: mock responder and templating | any | M6-29 | done |
+| [M6-31](milestone-6-automation/M6-31-core-mock-from-collection.md) | Core: generate a mock server from a folder | any | M6-14, M6-27 | done |
+| [M6-32](milestone-6-automation/M6-32-infra-http11-reader-writer.md) | Infrastructure: HTTP/1.1 request reader and response writer | any | M6-29 | done |
+| [M6-33](milestone-6-automation/M6-33-infra-loopback-mock-host.md) | Infrastructure: loopback HTTP host for mock servers | any | M6-32 | done |
+| [M6-34](milestone-6-automation/M6-34-core-mock-server-service.md) | Core: mock server service | any | M6-28, M6-30, M6-33 | done |
+| [M6-35](milestone-6-automation/M6-35-viewmodel-mock-servers.md) | ViewModel: mock servers | any | M6-21, M6-31, M6-34 | done |
+| [M6-36](milestone-6-automation/M6-36-domain-core-monitor-model.md) | Domain and Core: monitor model and store ports | any | M6-05, M6-14 | done |
+| [M6-37](milestone-6-automation/M6-37-infra-monitor-store.md) | Infrastructure: monitor file store | any | M6-28, M6-36 | done |
+| [M6-38](milestone-6-automation/M6-38-infra-monitor-run-store.md) | Infrastructure: monitor run history store | any | M6-36 | done |
+| [M6-39](milestone-6-automation/M6-39-core-monitor-scheduler.md) | Core: monitor scheduler | any | M6-16, M6-36 | done |
+| [M6-40](milestone-6-automation/M6-40-viewmodel-monitors.md) | ViewModel: monitors | any | M6-21, M6-39 | done |
+| [M6-41](milestone-6-automation/M6-41-viewmodel-shell-entries.md) | ViewModel: palette commands, shell entries and status items for the M6 tools | any | M6-21, M6-26, M6-35, M6-40 | done |
+| [M6-42](milestone-6-automation/M6-42-composition-m6-wiring.md) | Composition: wire the M6 services | any | M6-28, M6-33, M6-37, M6-38, M6-41 | done |
+| [M6-43](milestone-6-automation/M6-43-winui-tool-window-host.md) | WinUI: tool window host and line chart | windows | M6-42 | done |
+| [M6-44](milestone-6-automation/M6-44-winui-runner-setup.md) | WinUI: Runner window, setup pane | windows | M6-43 | done |
+| [M6-45](milestone-6-automation/M6-45-winui-runner-results.md) | WinUI: Runner window, results pane | windows | M6-44 | done |
+| [M6-46](milestone-6-automation/M6-46-winui-load-test-window.md) | WinUI: Load test window | windows | M6-43, M6-44 | done |
+| [M6-47](milestone-6-automation/M6-47-winui-mock-servers-window.md) | WinUI: Mock servers window | windows | M6-43 | done |
+| [M6-48](milestone-6-automation/M6-48-winui-monitors-window.md) | WinUI: Monitors window | windows | M6-43 | done |
+| [M6-49](milestone-6-automation/M6-49-winui-automation-entry-points.md) | WinUI: automation entry points and status bar items | windows | M6-45, M6-46, M6-47, M6-48 | done |
+| [M6-50](milestone-6-automation/M6-50-avalonia-tool-windows-and-chart.md) | Avalonia: tool windows, line chart and confirmation dialog | unix | M6-42, M6-43 | done |
+| [M6-51](milestone-6-automation/M6-51-avalonia-runner-setup.md) | Avalonia: Runner window, setup pane | unix | M6-50, M6-44 | done |
+| [M6-52](milestone-6-automation/M6-52-avalonia-runner-results.md) | Avalonia: Runner window, results pane | unix | M6-51, M6-45 | done |
+| [M6-53](milestone-6-automation/M6-53-avalonia-load-test-window.md) | Avalonia: Load test window | unix | M6-51, M6-46 | done |
+| [M6-54](milestone-6-automation/M6-54-avalonia-mock-servers-window.md) | Avalonia: Mock servers window | unix | M6-50, M6-47 | done |
+| [M6-55](milestone-6-automation/M6-55-avalonia-monitors-window.md) | Avalonia: Monitors window | unix | M6-50, M6-48 | done |
+| [M6-56](milestone-6-automation/M6-56-avalonia-automation-entry-points.md) | Avalonia: automation entry points and status bar items | unix | M6-49, M6-52, M6-53, M6-54, M6-55 | done |
+| [M6-57](milestone-6-automation/M6-57-end-to-end-runner.md) | End-to-end tests: Runner | any | M6-42 | done |
+| [M6-58](milestone-6-automation/M6-58-end-to-end-mocks-and-load.md) | End-to-end tests: mock servers and load tests | any | M6-42 | done |
+| [M6-59](milestone-6-automation/M6-59-end-to-end-monitors.md) | End-to-end tests: monitors | any | M6-42 | done |
+| [M6-60](milestone-6-automation/M6-60-milestone-docs.md) | Milestone 6 docs | any | M6-57, M6-58, M6-59, M6-49, M6-56 | done |
+| [M6-61](milestone-6-automation/M6-61-winui-visual-verification.md) | WinUI visual verification of the milestone 6 views | windows | M6-45, M6-46, M6-47, M6-48, M6-49 | in progress |
+| [M6-62](milestone-6-automation/M6-62-command-line-runner.md) | Command-line runner (decision: separate `yaapic-cli`) | any | M6-17, M6-18, M6-19 | done |
+| [M6-63](milestone-6-automation/M6-63-monitors-while-closed.md) | Monitors while Yaapic is closed (decision: not now) | any | M6-39 | done |
+| [M6-64](milestone-6-automation/M6-64-mock-servers-on-the-network.md) | Mock servers reachable from other devices (decision: not now) | any | M6-34 | done |
+| [M6-75](milestone-6-automation/M6-75-adr-automation-views-in-main-window.md) | ADR 0023: automation views in the main window | any | M6-49, M6-56 | done |
+| [M6-76](milestone-6-automation/M6-76-viewmodel-shell-sections.md) | ViewModel: shell sections for the automation views | any | M6-75 | done |
+| [M6-77](milestone-6-automation/M6-77-winui-rail-automation-entries.md) | WinUI: automation entries on the rail | windows | M6-76 | done |
+| [M6-78](milestone-6-automation/M6-78-winui-automation-views-in-main-area.md) | WinUI: automation views in the main area, tool windows removed | windows | M6-77 | done |
+| [M6-79](milestone-6-automation/M6-79-avalonia-rail-automation-entries.md) | Avalonia: automation entries on the rail | unix | M6-76, M6-77 | done |
+| [M6-80](milestone-6-automation/M6-80-avalonia-automation-views-in-main-area.md) | Avalonia: automation views in the main area, tool windows removed | unix | M6-78, M6-79 | done |
+| [M6-81](milestone-6-automation/M6-81-viewmodel-remove-tool-window-events.md) | ViewModel: remove the tool window events | any | M6-78, M6-80 | done |
+| [M6-82](milestone-6-automation/M6-82-automation-views-docs.md) | Docs: automation views in the main window | any | M6-81 | done |
+| [M6-83](milestone-6-automation/M6-83-winui-visual-verification-main-window.md) | WinUI visual verification of the automation views in the main window | windows | M6-81 | done |
+| [M6-65](milestone-6-automation/M6-65-adr-command-line-runner.md) | ADR 0022: command-line runner | any | M6-62 | todo |
+| [M6-66](milestone-6-automation/M6-66-core-read-only-run-sources.md) | Core: read-only run sources and folder lookup | any | M6-65 | todo |
+| [M6-67](milestone-6-automation/M6-67-core-variable-overrides-and-redactor.md) | Core: `YAAPIC_VAR_` variable overrides and a fixed-value redactor | any | M6-65 | todo |
+| [M6-68](milestone-6-automation/M6-68-composition-headless-runner.md) | Composition: headless runner services | any | M6-66, M6-67 | todo |
+| [M6-69](milestone-6-automation/M6-69-cli-project-and-arguments.md) | CLI: `Yaapic.Cli` project and argument parser | any | M6-65 | todo |
+| [M6-70](milestone-6-automation/M6-70-cli-run-command.md) | CLI: the run command | any | M6-68, M6-69 | todo |
+| [M6-71](milestone-6-automation/M6-71-cli-output-reports-and-cancel.md) | CLI: live output, reports and cancellation | any | M6-70 | todo |
+| [M6-72](milestone-6-automation/M6-72-end-to-end-cli.md) | End-to-end tests: command-line runner | any | M6-71 | todo |
+| [M6-73](milestone-6-automation/M6-73-cli-packaging-and-release.md) | CLI: CI smoke test, zip per OS and release upload | any | M6-71 | todo |
+| [M6-74](milestone-6-automation/M6-74-cli-docs.md) | Command-line runner docs | any | M6-72, M6-73 | todo |
+
+### Milestone 6 summary
+
+Delivered: the collection Runner (iterations, a data variable layer between local and environment values, CSV and JSON data files,
+`yaapic.iterationData`, `yaapic.info.iteration`, `setNextRequest` and `skipRequest` in JavaScript and Lua, results, JSON and JUnit
+reports); load tests (fixed and ramp-up virtual users, live metrics and four charts, a confirmation naming the target hosts, a JSON
+report; 1 to 100 users over 10 to 3 600 s); local mock servers on `127.0.0.1` (a hand-written HTTP/1.1 host on `TcpListener`, routes in
+`mocks/*.mock.yaml`, templating, CORS, a 500-entry request log, generation from a folder); monitors (scheduled folder runs while the app
+is open, `monitors/*.monitor.yaml`, per-user history in `.yaapic/monitor-runs.jsonl`); the four views in the main window with rail entries, folder menu, palette and status
+bar entries on both front-ends (ADR 0023, refactor M6-75 to M6-83). End-to-end tests: `Milestone6RunnerEndToEndTests`, `Milestone6MocksAndLoadEndToEndTests` and
+`Milestone6MonitorsEndToEndTests`. Documentation: [automation.md](../automation.md), [architecture.md](../architecture.md),
+[file-format.md](../file-format.md), [scripting-compatibility.md](../scripting-compatibility.md), ADRs
+[0018](../adr/0018-collection-runner.md), [0019](../adr/0019-load-tests.md), [0020](../adr/0020-mock-servers.md),
+[0021](../adr/0021-monitors.md), [0023](../adr/0023-automation-views-in-main-window.md) and the [load spike](../spikes/m6-load.md). No new dependency (see [dependencies.md](../dependencies.md)).
+
+Deferred: HTML reports, saved runner and load-test configurations, spike and peak load profiles, thresholds, HTTPS mocks, mock matching
+on query, headers or body, operating-system notifications, cron schedules, running unfiled requests, parallel runs.
+
+Open: the command-line runner `yaapic-cli` (decided in M6-62, cards M6-65 to M6-74 `todo`); M6-63 (monitors while Yaapic is closed)
+and M6-64 (mock servers reachable from other devices) were answered "not now" and need no work; M6-61 (WinUI visual verification) is `in progress`: the screenshots and the runtime checks are done, a design comparison and a human review remain.
+
+Refactor: automation views in the main window (requested 2026-11-27, cards M6-75 to M6-83 `todo`). The Runner, Load test, Mock servers
+and Monitors leave their tool windows: four entries on the rail (the left menu, under Collections and History) show them in the main
+window in place of the request tabs and the sidebar; the folder menu, palette and status bar lead to the same views; Collections,
+History or opening a request brings the tabs back; the tools keep running while hidden; closing Yaapic asks first while a Runner run or
+a load test is in progress (running mock servers stop silently, as before). Decision in ADR 0023 (M6-75). Order: ADR, view model sections (M6-76), WinUI rail then views (M6-77,
+M6-78, which deletes `ToolWindow`), Avalonia rail then views (M6-79, M6-80, which deletes `ToolWindowHost`), removal of the shell's
+window events (M6-81), docs (M6-82), WinUI screenshots (M6-83, replacing those of M6-61). The app builds and works after each card:
+until M6-78/M6-80 the rail entries still open the tool windows. This replaces the window behaviour of the done cards M6-43, M6-49,
+M6-50 and M6-56, which are not edited.
+
+Runtime checks not run: the Avalonia views (M6-50 to M6-56) were never run on macOS or Linux; on Windows only the build, the AOT publish
+and a UI Automation smoke of the Runner window (M6-56) were done. The WinUI views (M6-43 to M6-49) were checked on the Native AOT build by
+M6-61 (16 screenshots in `docs/screenshots/m6/`, with five defects fixed, one of them an AOT crash of the Mock servers window); the French
+locale of the new windows and a human design review are still open. Several timing-sensitive tests (`LoadTestRunnerTests`, `LoadTestViewModelTests`, `MonitorSchedulerTests`) flaked under
+CPU load and passed on rerun.
+
+Known limits: `TcpMockHttpHost` accepts at most 100 open connections per server and answers the rest `503` before the routes run, so those
+answers are not in the request log (documented in [automation.md](../automation.md)).
 
 ## Milestones 2 to 10
 
@@ -695,7 +753,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | M3 | Scripting (JS + Lua), pm.*, console, test results, secret vault | detailed (68 cards, see above) |
 | M4 | Advanced auth and response (OAuth 2.0, JWT, mTLS, timings, diff, code generation) | detailed (81 cards, see above) |
 | M5 | Import/export (Postman, OpenAPI, cURL, HAR, Insomnia, Bruno) | detailed (68 cards, see above) |
-| M6 | Automation (Runner, load tests, mock servers, monitors) | detailed (64 cards, see above) |
+| M6 | Automation (Runner, load tests, mock servers, monitors, command-line runner) | detailed (83 cards, see above) |
 | M7 | Protocols (WebSocket, SSE, Socket.IO, GraphQL, gRPC, MQTT, SOAP) | planned |
 | M8 | Collaboration (Git, versions, comments, OpenAPI editor and docs) | planned |
 | M9 | Flows, plugins, optional AI assistant | planned |

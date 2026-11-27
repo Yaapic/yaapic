@@ -1,6 +1,6 @@
 # M6-10: Scripting: host operations for iteration data and execution control
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-09
 
@@ -26,11 +26,11 @@ The JavaScript and Lua prelude changes (M6-11, M6-12).
 
 ## Acceptance criteria
 
-- [ ] `HostBridgeTests`: `iter.get` returns the row in order and `[]` outside a run; `exec.next` with a name and with `null`
+- [x] `HostBridgeTests`: `iter.get` returns the row in order and `[]` outside a run; `exec.next` with a name and with `null`
   reaches the host; `exec.skip` in pre-request sets the flag and in post-response returns the error envelope with the M6-09 message;
   `info.get` contains `iteration` and `iterationCount`.
-- [ ] The AOT smoke check of `Yaapic.Scripting` used by M3 (see `docs/dependencies.md` / M3-16 notes) still passes; 0 IL2xxx/IL3xxx.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] The AOT smoke check of `Yaapic.Scripting` used by M3 (see `docs/dependencies.md` / M3-16 notes) still passes; 0 IL2xxx/IL3xxx.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

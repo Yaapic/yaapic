@@ -1,6 +1,6 @@
 # M6-25: Core: load-test report, JSON
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-24
 
@@ -28,9 +28,9 @@ The view model (M6-26).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/LoadTesting/LoadTestReportJsonTests.cs`: exact expected string for a hand-built result (raw string
+- [x] Tests in `Yaapic.Core.Tests/LoadTesting/LoadTestReportJsonTests.cs`: exact expected string for a hand-built result (raw string
   literal); truncation note; canceled flag; parses back with `DataNodeJson.Parse`; file name.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

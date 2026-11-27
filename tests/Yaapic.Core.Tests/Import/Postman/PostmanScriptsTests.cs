@@ -67,11 +67,11 @@ public class PostmanScriptsTests
     [Fact]
     public void Postman_calls_are_converted_and_unsupported_members_warn_with_line()
     {
-        var bundle = Run(Coll($"[{Event("prerequest", "[\"pm.environment.set('a', 1);\", \"pm.execution.skipRequest();\"]")}]"), out var context);
+        var bundle = Run(Coll($"[{Event("prerequest", "[\"pm.environment.set('a', 1);\", \"pm.execution.location;\"]")}]"), out var context);
 
         Assert.Contains("yaapic.environment.set(", bundle.Collection!.Folder.Scripts.PreRequest.Source, StringComparison.Ordinal);
         var warnings = context.Report.Entries.Where(e => e.Severity == ImportSeverity.Warning).ToList();
-        Assert.Contains(warnings, e => e.Message.Contains("skipRequest", StringComparison.Ordinal) && e.Message.Contains("line 2", StringComparison.OrdinalIgnoreCase));
+        Assert.Contains(warnings, e => e.Message.Contains("location", StringComparison.Ordinal) && e.Message.Contains("line 2", StringComparison.OrdinalIgnoreCase));
     }
 
     [Fact]

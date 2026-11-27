@@ -1,6 +1,6 @@
 # M6-36: Domain and Core: monitor model and store ports
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-05, M6-14
 
@@ -40,10 +40,10 @@ File stores (M6-37, M6-38), the scheduler (M6-39).
 
 ## Acceptance criteria
 
-- [ ] Tests: `MonitorDefinition.Create`/`IsValid` (Domain tests); `MonitorRuns.From` for a passing run, a failed test, an error request, a
+- [x] Tests: `MonitorDefinition.Create`/`IsValid` (Domain tests); `MonitorRuns.From` for a passing run, a failed test, an error request, a
   skipped-only run, a `Failed` run status (setNextRequest loop), 25 failures capped at 20, detail formatting (Core tests); in-memory
   run store keeps 200 per monitor and lists newest first.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

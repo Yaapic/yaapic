@@ -19,6 +19,7 @@ public sealed class ScriptVariableOverlay(VariableScopes initial, bool hasEnviro
 
     private readonly List<KeyValueEntry> _collection = [.. initial.Collection];
     private readonly List<KeyValueEntry> _globals = [.. initial.Globals];
+    private readonly List<KeyValueEntry> _data = [.. initial.Data ?? []];
     private readonly Dictionary<string, string> _local = new(StringComparer.Ordinal);
     private readonly List<VariableChange> _changes = [];
     private readonly List<string> _warnings = [];
@@ -49,6 +50,7 @@ public sealed class ScriptVariableOverlay(VariableScopes initial, bool hasEnviro
                 return TryFind(_globals, name, out value);
             default:
                 return TryGetLocal(name, out value)
+                    || TryFind(_data, name, out value)
                     || TryFind(_environment, name, out value)
                     || TryFind(_collection, name, out value)
                     || TryFind(_globals, name, out value)
@@ -162,6 +164,7 @@ public sealed class ScriptVariableOverlay(VariableScopes initial, bool hasEnviro
                 AddAll(result, _globals);
                 AddAll(result, _collection);
                 AddAll(result, _environment);
+                AddAll(result, _data);
                 AddAll(result, ToEntries());
                 break;
         }
@@ -180,7 +183,8 @@ public sealed class ScriptVariableOverlay(VariableScopes initial, bool hasEnviro
         hasEnvironment && initial.Environment is { } env ? env with { Variables = [.. _environment] } : null,
         [.. _collection],
         [.. _globals],
-        ToEntries());
+        ToEntries(),
+        [.. _data]);
 
     private static void AddAll(Dictionary<string, string> target, IReadOnlyList<KeyValueEntry> rows)
     {

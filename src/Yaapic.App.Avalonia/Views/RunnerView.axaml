@@ -1,0 +1,103 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:v="using:Yaapic.App.Avalonia.Views"
+    xmlns:vm="using:Yaapic.ViewModels.Runner"
+    x:Class="Yaapic.App.Avalonia.Views.RunnerView"
+    x:DataType="vm:RunnerViewModel"
+    x:CompileBindings="True">
+  <Grid ColumnDefinitions="360,Auto,*">
+    <Grid.Styles>
+      <Style Selector="ItemsControl.cells > ContentPresenter"><Setter Property="Width" Value="116" /></Style>
+    </Grid.Styles>
+    <Grid Margin="12" RowDefinitions="*,Auto,Auto,Auto" RowSpacing="8">
+      <v:RunnerRequestListView DataContext="{Binding Setup}" />
+
+      <Grid Grid.Row="1" ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="6">
+        <StackPanel Spacing="2">
+          <TextBlock Text="{x:Static loc:Strings.RunnerIterations}" />
+          <NumericUpDown Minimum="0" Maximum="100000" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.RunnerIterations}"
+                         Value="{Binding Setup.Iterations, Mode=OneWay}" ValueChanged="OnIterationsChanged" />
+        </StackPanel>
+        <StackPanel Grid.Column="1" Spacing="2">
+          <TextBlock Text="{x:Static loc:Strings.RunnerDelay}" />
+          <NumericUpDown Minimum="-1" Maximum="1000000" Increment="100" FormatString="0" AutomationProperties.Name="{x:Static loc:Strings.RunnerDelay}"
+                         Value="{Binding Setup.DelayMs, Mode=OneWay}" ValueChanged="OnDelayChanged" />
+        </StackPanel>
+        <CheckBox Grid.Row="1" Content="{x:Static loc:Strings.RunnerStopOnFailure}" AutomationProperties.Name="{x:Static loc:Strings.RunnerStopOnFailure}"
+                  IsChecked="{Binding Setup.StopOnFailure, Mode=TwoWay}" />
+        <CheckBox Grid.Row="1" Grid.Column="1" Content="{x:Static loc:Strings.RunnerPersistVariables}"
+                  AutomationProperties.Name="{x:Static loc:Strings.RunnerPersistVariables}" IsChecked="{Binding Setup.PersistVariables, Mode=TwoWay}" />
+      </Grid>
+
+      <StackPanel Grid.Row="2" Spacing="6">
+        <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.RunnerData}" />
+        <Button Content="{x:Static loc:Strings.RunnerChooseData}" AutomationProperties.Name="{x:Static loc:Strings.RunnerChooseData}"
+                Command="{Binding Setup.ChooseDataFileCommand}" />
+        <StackPanel Spacing="6" IsVisible="{Binding Setup.HasData}">
+          <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+            <TextBlock VerticalAlignment="Center" TextTrimming="CharacterEllipsis">
+              <TextBlock.Text>
+                <MultiBinding Converter="{x:Static p:TextMap.RunnerData}">
+                  <Binding Path="Setup.DataFileName" />
+                  <Binding Path="Setup.DataRowCount" />
+                  <Binding Path="Setup.DataColumns.Count" />
+                </MultiBinding>
+              </TextBlock.Text>
+            </TextBlock>
+            <Button Grid.Column="1" Content="{x:Static loc:Strings.RunnerClearData}" AutomationProperties.Name="{x:Static loc:Strings.RunnerClearData}"
+                    Command="{Binding Setup.ClearDataCommand}" />
+          </Grid>
+          <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" MaxHeight="150">
+            <StackPanel>
+              <ItemsControl Classes="cells" ItemsSource="{Binding Setup.DataColumns}">
+                <ItemsControl.ItemsPanel>
+                  <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="x:String">
+                    <TextBlock Classes="bodyStrong" TextTrimming="CharacterEllipsis" Text="{Binding}" />
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+              <ItemsControl ItemsSource="{Binding Setup.DataPreview}">
+                <ItemsControl.ItemTemplate>
+                  <DataTemplate x:DataType="x:Object">
+                    <ItemsControl Classes="cells" ItemsSource="{Binding}">
+                      <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate><StackPanel Orientation="Horizontal" /></ItemsPanelTemplate>
+                      </ItemsControl.ItemsPanel>
+                      <ItemsControl.ItemTemplate>
+                        <DataTemplate x:DataType="x:String">
+                          <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding}" />
+                        </DataTemplate>
+                      </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                  </DataTemplate>
+                </ItemsControl.ItemTemplate>
+              </ItemsControl>
+            </StackPanel>
+          </ScrollViewer>
+        </StackPanel>
+        <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding Setup.DataError}"
+                   IsVisible="{Binding Setup.DataError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+      </StackPanel>
+
+      <StackPanel Grid.Row="3" Spacing="8">
+        <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{DynamicResource YaapicDangerBrush}"
+                   Text="{Binding Setup.ValidationError}"
+                   IsVisible="{Binding Setup.ValidationError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+        <StackPanel Orientation="Horizontal" Spacing="8" HorizontalAlignment="Right">
+          <Button MinWidth="96" Content="{x:Static loc:Strings.RunnerStop}" AutomationProperties.Name="{x:Static loc:Strings.RunnerStop}"
+                  Command="{Binding StopCommand}" />
+          <Button MinWidth="96" Classes="accent" Content="{x:Static loc:Strings.RunnerRun}" AutomationProperties.Name="{x:Static loc:Strings.RunnerRun}"
+                  Command="{Binding RunCommand}" />
+        </StackPanel>
+      </StackPanel>
+    </Grid>
+
+    <GridSplitter Grid.Column="1" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" />
+    <Border x:Name="ResultsHost" Grid.Column="2"><v:RunnerResultsView /></Border>
+  </Grid>
+</UserControl>

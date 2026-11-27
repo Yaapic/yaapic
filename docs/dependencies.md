@@ -35,6 +35,13 @@ generation, all from the framework. VYaml (already referenced) reads YAML into t
 the OpenAPI export is our own code (see [ADR 0016](adr/0016-import-export-architecture.md) and the
 [YAML spike](spikes/m5-yaml-tree.md)).
 
+Milestone 6 (automation): **no new package**. The mock server uses `System.Net.Sockets` (`TcpListener` on the loopback address),
+the JUnit report uses `XmlWriter`, the JSON reports use `Utf8JsonWriter`, the monitor history uses `System.Text.Json` source
+generators and the scheduler uses `TimeProvider` and `PeriodicTimer`, all from the framework. VYaml (already referenced) reads and
+writes the mock and monitor files. The load charts are polylines drawn by the views, with no chart library (see
+[ADR 0018](adr/0018-collection-runner.md), [ADR 0019](adr/0019-load-tests.md), [ADR 0020](adr/0020-mock-servers.md) and
+[ADR 0021](adr/0021-monitors.md)).
+
 ## Native libraries (M3-15)
 
 `native/versions.json` pins, for QuickJS-NG and Lua, the source URL, the tag, the SHA-256 of the source archive and the

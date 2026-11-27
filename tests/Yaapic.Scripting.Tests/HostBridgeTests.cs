@@ -15,7 +15,7 @@ public class HostBridgeTests
 
         public List<string> Calls { get; } = [];
 
-        public ScriptInfo Info { get; } = new("test", "Users", Guid.Parse("11111111-1111-1111-1111-111111111111"), "post-response · Users");
+        public ScriptInfo Info { get; } = new("test", "Users", Guid.Parse("11111111-1111-1111-1111-111111111111"), "post-response · Users", 2, 5);
 
         public ScriptRequest Request { get; set; } = new();
 
@@ -47,6 +47,22 @@ public class HostBridgeTests
             [.. Vars.Where(p => p.Key.Item1 == scope).Select(p => new KeyValueEntry(p.Key.Item2, p.Value))];
 
         public string ReplaceIn(string template) => template.Replace("{{a}}", "1", StringComparison.Ordinal);
+
+        public IReadOnlyList<KeyValueEntry> IterationData { get; set; } = [];
+
+        public bool PostResponse { get; set; }
+
+        public void SetNextRequest(string? nameOrId) => Calls.Add($"next:{nameOrId ?? "<null>"}");
+
+        public void SkipRequest()
+        {
+            if (PostResponse)
+            {
+                throw new InvalidOperationException("yaapic.execution.skipRequest can only be called in a pre-request script");
+            }
+
+            Calls.Add("skip");
+        }
 
         public ScriptSendResult Send(ScriptRequest request)
         {
@@ -183,6 +199,44 @@ public class HostBridgeTests
         Assert.Equal("Users", info.GetProperty("requestName").GetString());
         Assert.Equal("11111111-1111-1111-1111-111111111111", info.GetProperty("requestId").GetString());
         Assert.Equal("post-response · Users", info.GetProperty("origin").GetString());
+        Assert.Equal(2, info.GetProperty("iteration").GetInt32());
+        Assert.Equal(5, info.GetProperty("iterationCount").GetInt32());
+    }
+
+    [Fact]
+    public void Iter_get_returns_the_row_in_order_and_empty_outside_a_run()
+    {
+        var (bridge, host, _) = Create();
+        Assert.Equal(0, Ok(bridge.Invoke(HostOps.IterGet, "{}")).GetArrayLength());
+
+        host.IterationData = [new("b", "2"), new("a", "1")];
+        var rows = Ok(bridge.Invoke(HostOps.IterGet, "{}"));
+
+        Assert.Equal("b", rows[0].GetProperty("key").GetString());
+        Assert.Equal("1", rows[1].GetProperty("value").GetString());
+    }
+
+    [Fact]
+    public void Exec_next_reaches_the_host_with_a_name_or_null()
+    {
+        var (bridge, host, _) = Create();
+        bridge.Invoke(HostOps.ExecNext, """{"value":"Login"}""");
+        bridge.Invoke(HostOps.ExecNext, """{"value":null}""");
+
+        Assert.Equal(["next:Login", "next:<null>"], host.Calls);
+    }
+
+    [Fact]
+    public void Exec_skip_sets_the_flag_before_the_response_and_errors_after_it()
+    {
+        var (bridge, host, _) = Create();
+        Assert.Equal("""{"ok":null}""", bridge.Invoke(HostOps.ExecSkip, "{}"));
+        Assert.Equal(["skip"], host.Calls);
+
+        host.PostResponse = true;
+        Assert.Equal(
+            """{"err":"yaapic.execution.skipRequest can only be called in a pre-request script"}""",
+            bridge.Invoke(HostOps.ExecSkip, "{}"));
     }
 
     [Fact]

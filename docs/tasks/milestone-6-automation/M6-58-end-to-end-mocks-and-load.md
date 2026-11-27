@@ -1,6 +1,6 @@
 # M6-58: End-to-end tests: mock servers and load tests
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-42
 
@@ -31,8 +31,8 @@ UI tests, monitors (M6-59).
 
 ## Acceptance criteria
 
-- [ ] The test class passes locally and in the CI configuration (loopback only, no external network); no port left open afterwards.
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] The test class passes locally and in the CI configuration (loopback only, no external network); no port left open afterwards.
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 

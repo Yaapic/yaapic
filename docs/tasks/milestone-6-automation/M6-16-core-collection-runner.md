@@ -45,13 +45,13 @@ persistence and cancellation of ADR 0018. Flow control (`setNextRequest`, `skipR
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Runner/` with `FakeHttpTransport` (or a recording transport), `FakeScriptEngine`, `FakeScriptChainProvider`,
+- [x] Tests in `Yaapic.Core.Tests/Runner/` with `FakeHttpTransport` (or a recording transport), `FakeScriptEngine`, `FakeScriptChainProvider`,
   a fake `IRunScopeSource` and `ManualTimeProvider`: three items x two iterations in order; data row per iteration reaches
   `{{column}}` in the URL and `IterationData` in the host; a variable set by a post-response script of item 1 is used by item 2 with
   persist off (and `PersistAsync` not called) and with persist on (called once per changed request); a persist error becomes a
   console warning; delay waits between sends only (advance the manual clock); stop on failure after a failed test; cancellation
   mid-run returns `Canceled` with the completed results; progress reports count and `LastReport`; `RunSummary` of a run.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

@@ -206,13 +206,12 @@ public sealed class PmVariablesTests
     }
 
     [Theory]
-    [InlineData("yaapic.execution.setNextRequest", "yaapic.execution.setNextRequest")]
-    [InlineData("yaapic.iterationData.get", "yaapic.iterationData.get")]
+    [InlineData("yaapic.execution.location", "yaapic.execution.location")]
+    [InlineData("yaapic.execution.runRequest('x')", "yaapic.execution.runRequest")]
     [InlineData("yaapic.vault.get", "yaapic.vault.get")]
     [InlineData("yaapic.visualizer.set", "yaapic.visualizer.set")]
     [InlineData("yaapic.require('x')", "yaapic.require")]
     [InlineData("yaapic.environment.name", "yaapic.environment.name")]
-    [InlineData("postman.setNextRequest('x')", "postman.setNextRequest")]
     [InlineData("postman.visualizer.set", "postman.visualizer.set")]
     public async Task Unsupported_members_throw_the_exact_message(string access, string path)
     {
@@ -285,6 +284,16 @@ public sealed class PmVariablesTests
             [.. overlay.List(scope).Select(p => new KeyValueEntry(p.Key, p.Value))];
 
         public string ReplaceIn(string template) => overlay.ReplaceIn(template);
+
+        public IReadOnlyList<KeyValueEntry> IterationData => [];
+
+        public void SetNextRequest(string? nameOrId)
+        {
+        }
+
+        public void SkipRequest()
+        {
+        }
 
         public ScriptSendResult Send(ScriptRequest request) => new(null, "not supported");
     }

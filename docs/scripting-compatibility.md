@@ -17,17 +17,24 @@ what is supported and what differs from Postman. It is kept in step with the con
 | `yaapic.request.auth` | unsupported | Use a header in a pre-request script. |
 | `yaapic.variables`, `yaapic.environment`, `yaapic.collectionVariables`, `yaapic.globals` | supported | `get`, `set`, `unset`, `has`, `clear`, `toObject`; `replaceIn` on `yaapic.variables` (dynamic variables such as `{{$guid}}`, `{{$timestamp}}`, `{{$randomInt}}` work). |
 | `yaapic.environment.name` | unsupported | |
-| `yaapic.info` | partial | `eventName`, `requestName`, `requestId`; `iteration` is always `0` and `iterationCount` `1`. |
+| `yaapic.info` | partial | `eventName`, `requestName`, `requestId`; `iteration` (0-based) and `iterationCount` follow the Runner run; outside a run they are `0` and `1`. |
 | `yaapic.sendRequest` | supported | String and options forms; callback and promise (`await`) styles; raw and urlencoded bodies. Limited to 20 calls per run. |
 | `yaapic.cookies` | partial | Read-only view of the `Set-Cookie` headers of the current response. `yaapic.cookies.jar()` throws `The cookie jar is not available in Yaapic yet`. |
 | `console.*` | supported | Objects are printed as JSON. |
 | `postman.setEnvironmentVariable`, `getEnvironmentVariable`, `clearEnvironmentVariable`, and the global equivalents | supported | Aliases of the `yaapic` calls. |
-| `postman.setNextRequest`, `yaapic.execution` | unsupported | Needs the Runner (milestone 6). |
-| `yaapic.iterationData` | unsupported | Needs the Runner (milestone 6). |
+| `postman.setNextRequest`, `yaapic.execution.setNextRequest`, `yaapic.execution.skipRequest` | supported (Runner) | `setNextRequest(name)` jumps to that request after the current one, `null` stops the run, `skipRequest()` skips the request from a pre-request script (ADR 0018); outside the Runner they do nothing and log a warning. |
+| `yaapic.iterationData` | supported (Runner) | `get`, `has`, `toObject` and `toJSON` read the current row of the Runner data file (ADR 0018); empty outside the Runner. |
+| `yaapic.execution.location`, `yaapic.execution.runRequest` | unsupported | |
 | `yaapic.vault` | unsupported | |
 | `yaapic.visualizer` | unsupported | |
 | `yaapic.require` | unsupported | |
 | `require('crypto-js')`, `CryptoJS` | unsupported | `require` and `CryptoJS` exist as stubs that throw `... is not supported in Yaapic`. |
+
+### Runner
+
+`yaapic.iterationData`, `yaapic.execution.setNextRequest` (alias `postman.setNextRequest`), `yaapic.execution.skipRequest` and
+`yaapic.info.iteration` work in Runner runs; in Lua they are `yaapic.iteration_data` and the same `execution` calls. Load tests
+ignore `setNextRequest` and honour `skipRequest`. Details, data file formats and examples: [automation.md](automation.md).
 
 Unsupported members throw an `Error` whose message is `<member> is not supported in Yaapic`, so a collection imported from
 Postman never fails silently.
@@ -68,7 +75,7 @@ scripts, JavaScript request test) and shows that variables and the response are 
 - **Reduced standard library.** Only `base` (without `dofile`, `loadfile`, `require`, `print`, `warn`), `string`, `table`,
   `math` and `utf8` are loaded; `collectgarbage` accepts only `"count"` and chunks load in text mode only. Use `console.*`
   for output.
-- **Unsupported.** `yaapic.execution`, `yaapic.iterationData`, `yaapic.vault`, `yaapic.visualizer`, `yaapic.require`, `yaapic.request.auth`,
+- **Unsupported.** `yaapic.execution.location`, `yaapic.execution.runRequest`, `yaapic.vault`, `yaapic.visualizer`, `yaapic.require`, `yaapic.request.auth`,
   `yaapic.response.to.have.json_schema`, `yaapic.cookies.jar()` and `instance_of` raise `... is not supported in Yaapic`; `require`, `os`
   and `io` are not available (indexing them fails with a standard Lua `nil` error).
 
@@ -160,7 +167,7 @@ and the exports rewrite `yaapic.` to `pm.` for Postman only (see [import-export.
 
 - **Postman.** `pm.` becomes `yaapic.`; `postman.setEnvironmentVariable`, `getEnvironmentVariable`, `clearEnvironmentVariable` and the
   global equivalents map to `yaapic.environment.*` / `yaapic.globals.*`. Members from the tables above marked unsupported
-  (`pm.execution`, `pm.vault`, `pm.iterationData`, `pm.visualizer`, `pm.require`, `pm.request.auth`, `pm.response.to.have.jsonSchema`, ...) are renamed
+  (`pm.execution.location`, `pm.vault`, `pm.visualizer`, `pm.require`, `pm.request.auth`, `pm.response.to.have.jsonSchema`, ...) are renamed
   and reported, so they fail at run time with Yaapic's own message; other `postman.*` calls are left unchanged and reported.
 - **Bruno.** An explicit table maps `bru.getEnvVar`/`setEnvVar`, `getVar`/`setVar`/`hasVar`/`deleteVar`, `getGlobalEnvVar`/`setGlobalEnvVar`,
   `getCollectionVar`, `interpolate`, `req.getHeader`/`setHeader`/`deleteHeader`, `getMethod`/`setMethod`, `getUrl`/`setUrl`, `getBody`/`setBody`,

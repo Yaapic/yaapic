@@ -17,4 +17,7 @@ public enum VariableScopeKind
 
     /// <summary>The variables local to one send, set by scripts; consulted before every other scope.</summary>
     Local,
+
+    /// <summary>The iteration data of a Runner run (CSV or JSON row); read-only; consulted after the local variables.</summary>
+    Data,
 }

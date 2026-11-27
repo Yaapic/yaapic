@@ -1,6 +1,6 @@
 # M6-29: Core: mock HTTP types and route matcher
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-27
 
@@ -34,10 +34,10 @@ Templating and responses (M6-30), the server (M6-32, M6-33).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/Mocks/`: `Parse` (query split, decoding, `+`, absolute-form, invalid `%`); `Match` with literals,
+- [x] Tests in `Yaapic.Core.Tests/Mocks/`: `Parse` (query split, decoding, `+`, absolute-form, invalid `%`); `Match` with literals,
   `:id`, `{id}`, `*` at the root and after a prefix, trailing slashes, method `ANY`, `HEAD` on a `GET` route, disabled routes skipped,
   first match wins over a later more specific route, no match returns null, case-sensitive literals.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

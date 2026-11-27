@@ -1,6 +1,6 @@
 # M6-17: Core: runner flow control (setNextRequest, skipRequest, loop guard)
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-16
 
@@ -32,12 +32,12 @@ Engine preludes (done in M6-11, M6-12), view models.
 
 ## Acceptance criteria
 
-- [ ] Tests (same doubles as M6-16, scripts simulated by `FakeScriptEngine` replies calling `host.SetNextRequest`/`SkipRequest`):
+- [x] Tests (same doubles as M6-16, scripts simulated by `FakeScriptEngine` replies calling `host.SetNextRequest`/`SkipRequest`):
   jump forward (skips the items in between), jump back once (with a counter in a variable) then continue; jump by id (any case);
   `null` stops the run with `Stopped` and no next iteration; unknown name gives `Failed` with the message; an infinite loop stops at
   1001 steps with the guard message; a skipped request is recorded and the next one runs; a skip plus `setNextRequest` in the same
   pre-request jumps; stop on failure does not stop on a skip.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

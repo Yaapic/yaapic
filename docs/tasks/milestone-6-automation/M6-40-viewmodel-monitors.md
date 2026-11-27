@@ -1,6 +1,6 @@
 # M6-40: ViewModel: monitors
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-21, M6-39
 
@@ -43,11 +43,11 @@ Shell entries (M6-41), composition (M6-42), windows.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.ViewModels.Tests/Monitors/` with in-memory stores, a real `MonitorScheduler` over fake transport and engine, and a
+- [x] Tests in `Yaapic.ViewModels.Tests/Monitors/` with in-memory stores, a real `MonitorScheduler` over fake transport and engine, and a
   `ManualTimeProvider`: load lists monitors with folder and environment names; create, edit, save, revert, unsaved prompt; enabled toggle saves;
   delete removes history; run now records a run that appears in history; a failing run writes the console warning and updates
   `FailingCount`/`FailingText`; a passing run afterwards clears it; interval texts; next/last run texts.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

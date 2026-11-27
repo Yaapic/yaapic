@@ -5,6 +5,7 @@ using Avalonia.Data.Converters;
 using Avalonia.Media;
 using Yaapic.Core.Import;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Monitors;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
 using Yaapic.ViewModels.Tools;
@@ -41,6 +42,27 @@ public static class BrushMap
         ImportSeverity.Skipped => Get("YaapicDangerBackgroundBrush"),
         _ => null,
     });
+
+    /// <summary>Converts an HTTP status code to the text brush of its class.</summary>
+    public static FuncValueConverter<int, IBrush?> StatusCode { get; } = new(status => Get((status / 100) switch
+    {
+        2 => "YaapicSuccessBrush",
+        3 => "YaapicInfoBrush",
+        4 => "YaapicWarningBrush",
+        5 => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    }));
+
+    /// <summary>Converts the running flag of a mock server to the brush of its dot.</summary>
+    public static FuncValueConverter<bool, IBrush?> RunningDot { get; } = new(running => Get(running ? "YaapicSuccessBrush" : "YaapicTextDisabledBrush"));
+
+    /// <summary>Converts the last run status of a monitor to the brush of its dot or badge.</summary>
+    public static FuncValueConverter<MonitorRunStatus?, IBrush?> MonitorStatus { get; } = new(status => Get(status switch
+    {
+        MonitorRunStatus.Passed => "YaapicSuccessBrush",
+        MonitorRunStatus.Failed or MonitorRunStatus.Error => "YaapicDangerBrush",
+        _ => "YaapicTextSecondaryBrush",
+    }));
 
     /// <summary>Converts a history row's status category and failure flag to the brush of its status text.</summary>
     public static FuncMultiValueConverter<object?, IBrush?> HistoryStatus { get; } = new(values =>

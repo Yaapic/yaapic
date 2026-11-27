@@ -1,6 +1,6 @@
 # M6-24: Core: load-test runner
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-16, M6-22, M6-23
 
@@ -40,12 +40,12 @@ JSON report (M6-25), view model (M6-26).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Core.Tests/LoadTesting/` with a fake transport (fixed latency through `Task.Delay` on the `ManualTimeProvider`
+- [x] Tests in `Yaapic.Core.Tests/LoadTesting/` with a fake transport (fixed latency through `Task.Delay` on the `ManualTimeProvider`
   or real time with short durations; keep each test under 3 s of wall time): Fixed 3 users x 10 s on the manual clock produce samples
   from 3 users; RampUp starts users at the scheduled offsets; think time; errors counted for a 500 status and for a failed test; a
   skipped request is not a sample; data rows taken round-robin across users; cancellation returns `Canceled` with metrics; snapshots
   reported every second; variable changes never persisted (`PersistAsync` never called).
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

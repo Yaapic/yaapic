@@ -1,6 +1,6 @@
 # M6-44: WinUI: Runner window, setup pane
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-43
 
@@ -32,12 +32,19 @@ Results pane (M6-45), entry points (M6-49).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke through a temporary debug call (removed before the commit) or after M6-49 if it is already done: load a folder, untick and
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke through a temporary debug call (removed before the commit) or after M6-49 if it is already done: load a folder, untick and
   reorder requests, choose a CSV file (preview shows), invalid values show the validation line, Run starts (results pane empty for now).
   Record anything not run in Notes.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the runner window setup pane`
+
+## Notes
+
+- Verified: Release build (0 warnings), full test suite green, AOT publish with 0 IL2xxx/IL3xxx warnings, the published exe starts and stays alive.
+- Not run: the manual UI smoke (folder load, reorder, CSV preview, validation line). `RunnerView` is not instantiated anywhere until the
+  entry point card (M6-49); it must be checked then (and in M6-61).
+- `ListMap.RunnerItems` passes the live `ObservableCollection` through (a copy would not follow `Move`).

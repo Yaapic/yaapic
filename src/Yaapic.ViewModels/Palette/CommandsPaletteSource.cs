@@ -87,6 +87,31 @@ public sealed class CommandsPaletteSource : IPaletteSource
             }
         }
 
+        if (_shell.CanAutomate)
+        {
+            var node = _shell.ActiveCollectionNode();
+            items.Add(Item("run-collection", Strings.PaletteRunCollection, null, () =>
+            {
+                if (node is not null)
+                {
+                    _shell.Runner!.Open(node);
+                }
+
+                _shell.RequestRunner();
+            }));
+            items.Add(Item("load-test", Strings.PaletteLoadTest, null, () =>
+            {
+                if (node is not null)
+                {
+                    _shell.LoadTest!.Open(node);
+                }
+
+                _shell.RequestLoadTest();
+            }));
+            items.Add(Item("mock-servers", Strings.PaletteMockServers, null, () => _shell.RequestMockServers()));
+            items.Add(Item("monitors", Strings.PaletteMonitors, null, () => _shell.RequestMonitors()));
+        }
+
         if (_oauth2Tokens is not null)
         {
             items.Add(Item("clear-oauth-tokens", Strings.PaletteClearOAuthTokens, null, () => _oauth2Tokens.ClearAllTokens()));

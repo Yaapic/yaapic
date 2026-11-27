@@ -101,6 +101,7 @@ public sealed partial class VariablePopupViewModel : ObservableObject
         VariableScopeKind.Globals => Strings.VariablesScopeGlobals,
         VariableScopeKind.Dynamic => Strings.VariablesScopeDynamic,
         VariableScopeKind.Local => Strings.VariablesScopeLocal,
+        VariableScopeKind.Data => Strings.VariablesScopeData,
         _ => "",
     };
 

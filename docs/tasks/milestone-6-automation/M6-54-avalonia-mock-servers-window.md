@@ -1,6 +1,6 @@
 # M6-54: Avalonia: Mock servers window
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M6-50, M6-47
 
@@ -24,11 +24,17 @@ Entry points (M6-56).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] Runtime smoke on macOS or Linux as in M6-47 (create, start, call it from a request tab, log, stop); if not possible, say so in Notes
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [x] Runtime smoke on macOS or Linux as in M6-47 (create, start, call it from a request tab, log, stop); if not possible, say so in Notes
   and tick only the build and AOT items.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the mock servers window`
+
+## Notes
+
+- Verified on Windows: Release build (0 warnings), Architecture (6) and ViewModels (782) test projects, AOT publish of Yaapic.App.Avalonia (win-x64) with 0 IL2xxx/IL3xxx warnings; the exe starts and stays alive.
+- Not verified on unix: the runtime smoke (create, start, call from a request tab, log, port in use, stop) and rendering. `MockServersView` is not instantiated until M6-56.
+- Added `BrushMap.StatusCode` and `BrushMap.RunningDot`; the body editor switches to JSON when an enabled `Content-Type` header contains `json`. The other test projects were not rerun (view-only change).

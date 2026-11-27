@@ -109,6 +109,7 @@ public sealed class VariableContext
         }
 
         Add(scopes.Local, VariableScopeKind.Local, Strings.VariablesScopeLocal, true);
+        Add(scopes.Data, VariableScopeKind.Data, Strings.VariablesScopeData, true);
         Add(scopes.Environment?.Variables, VariableScopeKind.Environment, scopes.Environment?.Name ?? "", true);
         Add(scopes.Collection, VariableScopeKind.Collection, Strings.VariablesScopeCollection, true);
         Add(scopes.Globals, VariableScopeKind.Globals, Strings.VariablesScopeGlobals, true);

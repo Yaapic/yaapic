@@ -107,8 +107,8 @@ internal static class LuaPmVariablesPrelude
             event_name = info.eventName, eventName = info.eventName,
             request_name = info.requestName, requestName = info.requestName,
             request_id = info.requestId, requestId = info.requestId,
-            iteration = 0,
-            iteration_count = 1, iterationCount = 1,
+            iteration = info.iteration,
+            iteration_count = info.iterationCount, iterationCount = info.iterationCount,
           }
           target.variables = newScope('layered', 'local', true)
           local environment = newScope('environment', 'environment', false)
@@ -123,10 +123,72 @@ internal static class LuaPmVariablesPrelude
           target.collectionVariables = newScope('collection', 'collection', false)
           target.collection_variables = target.collectionVariables
           target.globals = newScope('globals', 'globals', false)
-          for _, name in ipairs({ 'execution', 'iterationData', 'vault', 'visualizer', 'require' }) do
+          for _, name in ipairs({ 'vault', 'visualizer', 'require' }) do
             target[name] = unsupported('yaapic.' .. name)
           end
+
+          local function readOnly(members, path)
+            return setmetatable({}, {
+              __index = function(_, member)
+                local value = members[member]
+                if value == nil and (member == 'location' or member == 'runRequest') then
+                  error(path .. '.' .. member .. ' is not supported in Yaapic', 2)
+                end
+                return value
+              end,
+              __newindex = function() error(path .. ' is read-only', 2) end,
+              __pairs = function() return next, members end,
+            })
+          end
+
+          -- The data row is read once per script run and cached. Key order of toObject() is unspecified (Lua tables are unordered).
+          local row
+          local function dataRow()
+            if row == nil then
+              row = {}
+              for _, entry in ipairs(hostCall('iter.get')) do
+                row[entry.key] = entry.value
+              end
+            end
+            return row
+          end
+          local function checkName(name, method)
+            if type(name) ~= 'string' then
+              error('yaapic.iterationData.' .. method .. ': name must be a string', 3)
+            end
+          end
+          local iterationData = {}
+          function iterationData.get(name)
+            checkName(name, 'get')
+            return dataRow()[name]
+          end
+          function iterationData.has(name)
+            checkName(name, 'has')
+            return dataRow()[name] ~= nil
+          end
+          function iterationData.to_object()
+            local out = {}
+            for key, value in next, dataRow() do
+              out[key] = value
+            end
+            return out
+          end
+          iterationData.toObject, iterationData.toJSON, iterationData.to_json = iterationData.to_object, iterationData.to_object, iterationData.to_object
+          target.iterationData = readOnly(iterationData, 'yaapic.iterationData')
           target.iteration_data = target.iterationData
+
+          local execution = {}
+          function execution.set_next_request(nameOrId)
+            if nameOrId ~= nil and rawequal(nameOrId, NULL) == false and type(nameOrId) ~= 'string' then
+              error('yaapic.execution.setNextRequest: expected a request name, id or null', 2)
+            end
+            hostCall('exec.next', { value = (type(nameOrId) == 'string') and nameOrId or nil })
+          end
+          function execution.skip_request()
+            hostCall('exec.skip')
+          end
+          execution.setNextRequest, execution.skipRequest = execution.set_next_request, execution.skip_request
+          target.execution = readOnly(execution, 'yaapic.execution')
 
           -- yaapic is a read-only proxy; a script that rawsets _G.yaapic only hurts itself.
           yaapic = setmetatable({}, {

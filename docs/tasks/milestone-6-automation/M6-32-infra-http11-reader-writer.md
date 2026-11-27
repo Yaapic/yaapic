@@ -1,6 +1,6 @@
 # M6-32: Infrastructure: HTTP/1.1 request reader and response writer
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-29
 
@@ -37,12 +37,12 @@ Sockets and connection management (M6-33), TLS, HTTP/2.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests/Mocks/` over `MemoryStream`/a pipe: simple GET; POST with `Content-Length`; chunked body with
+- [x] Tests in `Yaapic.Infrastructure.Tests/Mocks/` over `MemoryStream`/a pipe: simple GET; POST with `Content-Length`; chunked body with
   extensions and trailers; `Expect: 100-continue` writes the interim response; two pipelined requests read in order; bare LF; each error
   status (malformed line, two different `Content-Length`, 101 headers, 70 KiB of headers, 11 MiB body, `HTTP/2.0`, `gzip` coding); keep-alive
   rules for 1.0 and 1.1; writer output exact for a JSON response, a HEAD response (`Content-Length` without body) and a 204; route headers
   `Content-Length`/`Connection` ignored; CR/LF in a header value neutralised.
-- [ ] Architecture tests green, 0 warnings, XML docs (internal types documented too if the project requires it), all tests green.
+- [x] Architecture tests green, 0 warnings, XML docs (internal types documented too if the project requires it), all tests green.
 
 ## Suggested commit message
 

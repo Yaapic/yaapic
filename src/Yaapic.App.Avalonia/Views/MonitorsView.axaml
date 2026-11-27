@@ -1,0 +1,136 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:m="using:Yaapic.ViewModels.Monitors"
+    x:Class="Yaapic.App.Avalonia.Views.MonitorsView"
+    x:DataType="m:MonitorsViewModel"
+    x:CompileBindings="True">
+  <Grid RowDefinitions="Auto,*">
+    <Border Classes="infobar info">
+      <TextBlock TextWrapping="Wrap" Text="{x:Static loc:Strings.MonitorLocalNote}" />
+    </Border>
+
+    <Grid Grid.Row="1" ColumnDefinitions="260,*">
+      <!-- Monitors -->
+      <Grid Margin="12" RowDefinitions="*,Auto" RowSpacing="8" Background="{DynamicResource YaapicSurfaceSidebarBrush}">
+        <ListBox x:Name="MonitorList" Background="Transparent" AutomationProperties.Name="{x:Static loc:Strings.MonitorTitle}"
+                 ItemsSource="{Binding Monitors}" SelectionChanged="OnMonitorSelectionChanged">
+          <ListBox.ItemTemplate>
+            <DataTemplate x:DataType="m:MonitorItemViewModel">
+              <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                <Ellipse Width="8" Height="8" VerticalAlignment="Top" Margin="0,6,0,0" AutomationProperties.Name="{Binding LastStatusText}"
+                         Fill="{Binding LastStatus, Converter={x:Static p:BrushMap.MonitorStatus}}" />
+                <StackPanel Grid.Column="1">
+                  <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding Name}" />
+                  <TextBlock TextTrimming="CharacterEllipsis" Classes="caption"
+                             Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding FolderName}" />
+                  <TextBlock TextTrimming="CharacterEllipsis" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}">
+                    <Run Text="{Binding IntervalText}" /><Run Text=" - " /><Run Text="{Binding LastRunText}" />
+                  </TextBlock>
+                  <TextBlock Classes="caption" Foreground="{DynamicResource YaapicAccentTextBrush}"
+                             IsVisible="{Binding IsRunning}" Text="{Binding RunningText}" />
+                </StackPanel>
+                <ToggleSwitch Grid.Column="2" MinWidth="0" VerticalAlignment="Top" OnContent="" OffContent=""
+                              AutomationProperties.Name="{x:Static loc:Strings.MonitorEnabled}" IsChecked="{Binding Enabled, Mode=TwoWay}" />
+              </Grid>
+            </DataTemplate>
+          </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Row="1" Spacing="8">
+          <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Classes="accent" Content="{x:Static loc:Strings.MonitorNew}"
+                  AutomationProperties.Name="{x:Static loc:Strings.MonitorNew}" Command="{Binding NewMonitorCommand}" />
+          <Button HorizontalAlignment="Stretch" HorizontalContentAlignment="Center" Classes="danger" Content="{x:Static loc:Strings.CommonDelete}"
+                  AutomationProperties.Name="{x:Static loc:Strings.CommonDelete}" Command="{Binding DeleteCommand}" />
+        </StackPanel>
+      </Grid>
+
+      <!-- Selected monitor -->
+      <Grid Grid.Column="1" RowDefinitions="Auto,*" Background="{DynamicResource YaapicSurfaceBaseBrush}"
+            IsVisible="{Binding SelectedMonitor, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Margin="16,16,16,0" Spacing="12">
+          <StackPanel Spacing="2">
+            <TextBlock Text="{x:Static loc:Strings.CommonName}" />
+            <TextBox AutomationProperties.Name="{x:Static loc:Strings.CommonName}" Text="{Binding Name, Mode=TwoWay}" />
+          </StackPanel>
+          <Grid ColumnDefinitions="2*,*,*" ColumnSpacing="12">
+            <StackPanel Spacing="2">
+              <TextBlock Text="{x:Static loc:Strings.MonitorFolder}" />
+              <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.MonitorFolder}"
+                        ItemsSource="{Binding FolderChoices}" SelectedItem="{Binding SelectedFolder, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate x:DataType="m:MonitorFolderChoice">
+                    <TextBlock Text="{Binding Path}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Spacing="2">
+              <TextBlock Text="{x:Static loc:Strings.MonitorEnvironment}" />
+              <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.MonitorEnvironment}"
+                        ItemsSource="{Binding EnvironmentChoices}" SelectedItem="{Binding SelectedEnvironment, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate x:DataType="m:MonitorEnvironmentChoice">
+                    <TextBlock Text="{Binding Name}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Column="2" Spacing="2">
+              <TextBlock Text="{x:Static loc:Strings.MonitorInterval}" />
+              <ComboBox HorizontalAlignment="Stretch" AutomationProperties.Name="{x:Static loc:Strings.MonitorInterval}"
+                        ItemsSource="{Binding IntervalChoices}" SelectedItem="{Binding SelectedInterval, Mode=TwoWay}">
+                <ComboBox.ItemTemplate>
+                  <DataTemplate x:DataType="m:MonitorIntervalChoice">
+                    <TextBlock Text="{Binding Text}" />
+                  </DataTemplate>
+                </ComboBox.ItemTemplate>
+              </ComboBox>
+            </StackPanel>
+          </Grid>
+          <StackPanel Orientation="Horizontal" Spacing="8">
+            <Button MinWidth="96" HorizontalContentAlignment="Center" Classes="accent" Content="{x:Static loc:Strings.CommonSave}"
+                    AutomationProperties.Name="{x:Static loc:Strings.CommonSave}" Command="{Binding SaveCommand}" />
+            <Button MinWidth="96" HorizontalContentAlignment="Center" Content="{x:Static loc:Strings.MockRevert}"
+                    AutomationProperties.Name="{x:Static loc:Strings.MockRevert}" Command="{Binding RevertCommand}" />
+            <Button MinWidth="96" HorizontalContentAlignment="Center" Content="{x:Static loc:Strings.MonitorRunNow}"
+                    AutomationProperties.Name="{x:Static loc:Strings.MonitorRunNow}" Command="{Binding RunNowCommand}" />
+            <TextBlock VerticalAlignment="Center" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}">
+              <Run Text="{x:Static loc:Strings.MonitorNextRun}" /><Run Text=": " /><Run Text="{Binding SelectedMonitor.NextRunText}" />
+            </TextBlock>
+          </StackPanel>
+          <TextBlock TextWrapping="Wrap" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding Error}"
+                     IsVisible="{Binding Error, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.MonitorHistory}" />
+        </StackPanel>
+
+        <!-- History and failures of the selected run -->
+        <Grid Grid.Row="1" Margin="16,8,16,16" RowDefinitions="*,Auto" RowSpacing="8">
+          <ListBox AutomationProperties.Name="{x:Static loc:Strings.MonitorHistory}"
+                   ItemsSource="{Binding History}" SelectedItem="{Binding SelectedRun, Mode=TwoWay}">
+            <ListBox.ItemTemplate>
+              <DataTemplate x:DataType="m:MonitorRunRowViewModel">
+                <Grid ColumnDefinitions="130,70,70,90,*" ColumnSpacing="12">
+                  <TextBlock Classes="codeSmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding TimeText}" />
+                  <TextBlock Grid.Column="1" FontWeight="SemiBold" Foreground="{Binding Status, Converter={x:Static p:BrushMap.MonitorStatus}}"
+                             Text="{Binding StatusText}" />
+                  <TextBlock Grid.Column="2" Classes="codeSmall" Text="{Binding DurationText}" />
+                  <TextBlock Grid.Column="3" Classes="codeSmall" Text="{Binding RequestsText}" />
+                  <TextBlock Grid.Column="4" TextTrimming="CharacterEllipsis" Foreground="{DynamicResource YaapicTextSecondaryBrush}"
+                             Text="{Binding Message}" />
+                </Grid>
+              </DataTemplate>
+            </ListBox.ItemTemplate>
+          </ListBox>
+          <ItemsControl Grid.Row="1" MaxHeight="160" ItemsSource="{Binding SelectedRun.Failures}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <SelectableTextBlock TextWrapping="Wrap" Classes="codeSmall" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding}" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </Grid>
+      </Grid>
+    </Grid>
+  </Grid>
+</UserControl>

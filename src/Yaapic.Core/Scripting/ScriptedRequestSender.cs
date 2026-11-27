@@ -47,6 +47,8 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
         var request = ScriptRequest.FromDefinition(input.Request, readOnly: false);
         List<ScriptRunResult> runs = [];
         ScriptSendService sends = new(sender, overlay, limits.MaxSendRequests, _time);
+        var context = input.Run ?? ScriptRunContext.Single;
+        ScriptExecutionControl control = new();
 
         var preSteps = input.Chain.Steps.Where(s => !s.Scripts.PreRequest.IsEmpty).ToList();
         foreach (var step in preSteps)
@@ -60,13 +62,23 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
                         block,
                         ScriptPhase.PreRequest,
                         origin,
-                        new ScriptHost(overlay, request, null, new ScriptInfo("prerequest", input.Request.Name, input.Request.Id, origin), sends.Send) { CancellationToken = ct },
+                        new ScriptHost(overlay, request, null, new ScriptInfo("prerequest", input.Request.Name, input.Request.Id, origin), context, control, sends.Send) { CancellationToken = ct },
                         limits),
                     ct).ConfigureAwait(false);
             runs.Add(run);
             if (!run.Succeeded)
             {
-                return Aborted(runs, overlay, run, sends);
+                return Aborted(runs, overlay, run, sends, control);
+            }
+
+            if (control.SkipRequested)
+            {
+                return new ScriptedSendReport(null, runs, overlay.Changes, [.. overlay.Warnings, .. control.Warnings], null, null, [.. sends.NetworkLog])
+                {
+                    Skipped = true,
+                    NextRequestSet = control.NextRequestSet,
+                    NextRequest = control.NextRequest,
+                };
             }
         }
 
@@ -82,7 +94,7 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
                 var last = preSteps[^1];
                 var failed = Failure(ScriptPhase.PreRequest, Strings.ScriptOriginPreRequest(last.Origin), last.Scripts.PreRequest.Language, ScriptRunStatus.Failed, ex.Message);
                 runs.Add(failed);
-                return Aborted(runs, overlay, failed, sends);
+                return Aborted(runs, overlay, failed, sends, control);
             }
         }
 
@@ -91,10 +103,14 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
 
         if (report.Result.IsSuccess)
         {
-            await RunPostResponseAsync(input, definition, report.Result.Response!, overlay, limits, sends, runs, networkLog, ct).ConfigureAwait(false);
+            await RunPostResponseAsync(input, definition, report.Result.Response!, overlay, limits, sends, context, control, runs, networkLog, ct).ConfigureAwait(false);
         }
 
-        return new(report, runs, overlay.Changes, overlay.Warnings, null, definition, networkLog);
+        return new(report, runs, overlay.Changes, [.. overlay.Warnings, .. control.Warnings], null, definition, networkLog)
+        {
+            NextRequestSet = control.NextRequestSet,
+            NextRequest = control.NextRequest,
+        };
     }
 
     /// <summary>
@@ -108,6 +124,8 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
         ScriptVariableOverlay overlay,
         ScriptLimits limits,
         ScriptSendService sends,
+        ScriptRunContext context,
+        ScriptExecutionControl control,
         List<ScriptRunResult> runs,
         List<ConsoleEntry> networkLog,
         CancellationToken ct)
@@ -128,6 +146,8 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
                 ScriptRequest.FromDefinition(definition, readOnly: true),
                 scriptResponse,
                 new ScriptInfo("test", input.Request.Name, input.Request.Id, origin),
+                context,
+                control,
                 sends.Send)
             { CancellationToken = ct };
             var logged = sends.NetworkLog.Count;
@@ -159,8 +179,12 @@ public sealed class ScriptedRequestSender(RequestSender sender, ScriptEngineRegi
         return log;
     }
 
-    private static ScriptedSendReport Aborted(List<ScriptRunResult> runs, ScriptVariableOverlay overlay, ScriptRunResult by, ScriptSendService sends) =>
-        new(null, runs, [], overlay.Warnings, by, null, [.. sends.NetworkLog]);
+    private static ScriptedSendReport Aborted(List<ScriptRunResult> runs, ScriptVariableOverlay overlay, ScriptRunResult by, ScriptSendService sends, ScriptExecutionControl control) =>
+        new(null, runs, [], [.. overlay.Warnings, .. control.Warnings], by, null, [.. sends.NetworkLog])
+        {
+            NextRequestSet = control.NextRequestSet,
+            NextRequest = control.NextRequest,
+        };
 
     private static ScriptRunResult Failure(ScriptPhase phase, string origin, ScriptLanguage language, ScriptRunStatus status, string message) =>
         new(phase, origin, language, status, new ScriptError(message), [], [], TimeSpan.Zero);

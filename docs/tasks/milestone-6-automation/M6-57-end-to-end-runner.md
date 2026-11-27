@@ -1,6 +1,6 @@
 # M6-57: End-to-end tests: Runner
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-42
 
@@ -36,8 +36,8 @@ UI tests, load tests and mocks (M6-58), monitors (M6-59).
 
 ## Acceptance criteria
 
-- [ ] The test class with the scenarios above passes locally and in the CI configuration (no external network).
-- [ ] Architecture tests green, 0 warnings, all tests green.
+- [x] The test class with the scenarios above passes locally and in the CI configuration (no external network).
+- [x] Architecture tests green, 0 warnings, all tests green.
 
 ## Suggested commit message
 

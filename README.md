@@ -69,7 +69,7 @@ failure.
 | `tests/` | One test project per library, plus `Yaapic.Architecture.Tests` |
 | `native/` | Build script and pinned sources for the native script engines |
 | `design/`, `tools/` | Design assets and tokens; screenshot tooling |
-| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [authentication](docs/authentication.md), [response tools](docs/response-tools.md), [import and export](docs/import-export.md), [task cards](docs/tasks/README.md) |
+| `docs/` | [Architecture](docs/architecture.md), [ADRs](docs/adr), [dependencies](docs/dependencies.md), [file format](docs/file-format.md), [authentication](docs/authentication.md), [response tools](docs/response-tools.md), [import and export](docs/import-export.md), [automation](docs/automation.md), [task cards](docs/tasks/README.md) |
 
 ## Scripts and secrets
 
@@ -103,6 +103,15 @@ can choose per request (HTTP/3 is experimental). A **Diff** tab compares the res
 commands, HAR files, Insomnia v4 exports and Bruno collection folders; a preview lists what was converted, skipped or lost
 before anything is written. **Export** to Postman v2.1, OpenAPI 3.0 (inferred), Insomnia v4 and Bruno (zip); secret values are
 never exported. See [docs/import-export.md](docs/import-export.md).
+
+## Automation
+
+The **Runner** sends every request of a folder in order, for several iterations, optionally driven by a CSV or JSON data file
+(`{{column}}` variables, `yaapic.iterationData`, `setNextRequest`, `skipRequest`), and exports JSON or JUnit reports. **Load tests**
+run virtual users (fixed or ramp-up) against a folder with live metrics, charts and a JSON report. **Mock servers** answer with
+canned, templated responses on `127.0.0.1` (routes kept in `mocks/*.mock.yaml`, CORS, request log, generation from a folder).
+**Monitors** run a folder on a schedule while Yaapic is open and keep a per-user history. See
+[docs/automation.md](docs/automation.md).
 
 ## Language and accent colour
 

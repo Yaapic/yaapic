@@ -1,6 +1,6 @@
 # M6-11: JavaScript: `yaapic.iterationData` and `yaapic.execution`
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-10
 
@@ -33,14 +33,14 @@ Lua (M6-12), the converter and autocompletion (M6-13).
 
 ## Acceptance criteria
 
-- [ ] `Yaapic.Scripting.Tests` (real QuickJS, real `ScriptHost`): `iterationData` get/has/toObject/toJSON with a row and with
+- [x] `Yaapic.Scripting.Tests` (real QuickJS, real `ScriptHost`): `iterationData` get/has/toObject/toJSON with a row and with
   the empty row; argument errors; `setNextRequest` with a name, a GUID, `null` and no argument, and outside a run (warning in the
   report); `skipRequest` in pre-request (report `Skipped`) and in post-response (script error with the M6-09 message);
   `postman.setNextRequest` and `pm.execution` aliases; `info.iteration`/`iterationCount` inside and outside a run;
   `execution.location` throws the unsupported message.
-- [ ] The conformance suite: the rows for `pm.iterationData`, `pm.execution.setNextRequest`, `pm.execution.skipRequest` and
+- [x] The conformance suite: the rows for `pm.iterationData`, `pm.execution.setNextRequest`, `pm.execution.skipRequest` and
   `postman.setNextRequest` move from "unsupported" to supported cases; still all green.
-- [ ] 0 warnings, all tests green; the AOT smoke check still passes.
+- [x] 0 warnings, all tests green; the AOT smoke check still passes.
 
 ## Suggested commit message
 

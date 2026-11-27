@@ -58,15 +58,7 @@ public sealed partial class MainWindow : Window
         Presentation.BrushMap.IsLight = light;
         Presentation.MethodBrush.RefreshAll();
         Bindings?.Update(); // the rail brushes come from BrushMap and are bound once
-        var titleBar = AppWindow.TitleBar;
-        var foreground = light ? Windows.UI.Color.FromArgb(0xFF, 0x4A, 0x51, 0x5B) : Windows.UI.Color.FromArgb(0xFF, 0xA3, 0xAA, 0xB4);
-        var hoverForeground = light ? Windows.UI.Color.FromArgb(0xFF, 0x16, 0x19, 0x1D) : Windows.UI.Color.FromArgb(0xFF, 0xEC, 0xEE, 0xF1);
-        var hover = light ? Windows.UI.Color.FromArgb(0x0D, 0x14, 0x18, 0x1E) : Windows.UI.Color.FromArgb(0x0F, 0xFF, 0xFF, 0xFF);
-        titleBar.ButtonForegroundColor = foreground;
-        titleBar.ButtonInactiveForegroundColor = foreground;
-        titleBar.ButtonHoverForegroundColor = hoverForeground;
-        titleBar.ButtonPressedForegroundColor = hoverForeground;
-        titleBar.ButtonHoverBackgroundColor = hover;
+        Presentation.CaptionColors.Apply(AppWindow.TitleBar, light);
     }
 
     /// <summary>Gets or sets the shell the window displays; setting it refreshes every binding.</summary>
@@ -153,13 +145,21 @@ public sealed partial class MainWindow : Window
 
     private void OnCloseTab(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
-        _viewModel?.Tabs.CloseActiveCommand.Execute(null);
+        if (_viewModel is { IsRequestsSection: true })
+        {
+            _viewModel.Tabs.CloseActiveCommand.Execute(null);
+        }
+
         args.Handled = true;
     }
 
     private void OnSaveTab(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
-        _viewModel?.Tabs.SaveActiveCommand.Execute(null);
+        if (_viewModel is { IsRequestsSection: true })
+        {
+            _viewModel.Tabs.SaveActiveCommand.Execute(null);
+        }
+
         args.Handled = true;
     }
 
@@ -203,6 +203,12 @@ public sealed partial class MainWindow : Window
             {
                 AddItem(menu, Strings.CollectionsExport, _viewModel.ExportCollectionCommand, node);
             }
+
+            menu.Items.Add(new MenuFlyoutSeparator());
+            AddItem(menu, Strings.CollectionsRunFolder, _viewModel.RunFolderCommand, node);
+            AddItem(menu, Strings.CollectionsLoadTest, _viewModel.LoadTestFolderCommand, node);
+            AddItem(menu, Strings.CollectionsCreateMock, _viewModel.MockFromFolderCommand, node);
+            AddItem(menu, Strings.CollectionsMonitorFolder, _viewModel.MonitorFolderCommand, node);
         }
         else
         {

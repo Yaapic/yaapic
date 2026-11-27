@@ -1,6 +1,6 @@
 # M6-01: ADR 0018: collection runner, iteration data and run reports
 
-Status: todo
+Status: done
 Platform: any
 Depends on: none
 
@@ -80,10 +80,10 @@ Code, UI.
 
 ## Acceptance criteria
 
-- [ ] `docs/adr/0018-collection-runner.md` contains every decision above (status Accepted, options considered: running in
+- [x] `docs/adr/0018-collection-runner.md` contains every decision above (status Accepted, options considered: running in
   Core through `ScriptedRequestSender` versus a separate pipeline, persisting runner configurations versus in-memory setup,
   data layer below versus above the environment); `docs/adr/README.md` lists it.
-- [ ] No code changed; the build still has 0 warnings.
+- [x] No code changed; the build still has 0 warnings.
 
 ## Suggested commit message
 

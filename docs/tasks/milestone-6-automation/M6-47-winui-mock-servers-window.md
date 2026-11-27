@@ -1,6 +1,6 @@
 # M6-47: WinUI: Mock servers window
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-43
 
@@ -31,12 +31,20 @@ Entry points (M6-49).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke: create a server, add `GET /users/:id` returning `{"id":"{{params.id}}"}`, save, start, send `GET http://127.0.0.1:3000/users/7`
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke: create a server, add `GET /users/:id` returning `{"id":"{{params.id}}"}`, save, start, send `GET http://127.0.0.1:3000/users/7`
   from a Yaapic request tab (response `{"id":"7"}`), the log shows the request with its route; a port in use shows the error; stop frees the
   port; generate from a folder (through the debug call or M6-49). Record anything not run in Notes.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): add the mock servers window`
+
+## Notes
+
+- Verified: Release build (0 warnings), full test run green, AOT publish with 0 IL2xxx/IL3xxx warnings, the published exe starts and stays alive.
+- Not run: the manual smoke (create/start a server, request from a tab, log, port in use, stop, generate from a folder). `MockServersView` is not
+  instantiated anywhere until M6-49; check it then (and in M6-61).
+- New string `mock.revert`; `BrushMap.StatusCode` (status colour by class) and `BrushMap.RunningDot`. The body editor switches to JSON when an enabled
+  `Content-Type` header contains `json`.

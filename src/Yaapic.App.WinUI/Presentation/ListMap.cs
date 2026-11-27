@@ -1,8 +1,14 @@
 using System.Collections.ObjectModel;
+using System.Globalization;
 using Yaapic.Domain.Http;
+using Yaapic.Domain.Scripting;
+using Yaapic.Localization;
 using Yaapic.ViewModels.Import;
+using Yaapic.ViewModels.LoadTesting;
+using Yaapic.ViewModels.Monitors;
 using Yaapic.ViewModels.Requests;
 using Yaapic.ViewModels.Responses;
+using Yaapic.ViewModels.Runner;
 using Yaapic.ViewModels.Tools;
 using Yaapic.ViewModels.Vault;
 
@@ -88,4 +94,93 @@ public static class ListMap
     /// <param name="items">The environments to offer; the items are observable, so their check boxes bind two-way.</param>
     /// <returns>An observable collection of the choices.</returns>
     public static ObservableCollection<ExportEnvironmentChoice> ExportEnvironmentChoices(IReadOnlyList<ExportEnvironmentChoice> items) => new(items);
+
+    /// <summary>Passes the runner request list through: it is already an observable collection and must stay live while requests move.</summary>
+    /// <param name="items">The setup request list.</param>
+    /// <returns>The same collection.</returns>
+    public static ObservableCollection<RunnerItemViewModel> RunnerItems(ObservableCollection<RunnerItemViewModel> items) => items;
+
+    /// <summary>Passes the visible Runner result rows through: the collection is observable and grows during a run.</summary>
+    /// <param name="rows">The rows that match the filter.</param>
+    /// <returns>The same collection.</returns>
+    public static ObservableCollection<RunnerResultRowViewModel> RunnerRows(ObservableCollection<RunnerResultRowViewModel> rows) => rows;
+
+    /// <summary>Wraps the tests of the selected Runner row in display view models (see <see cref="Entries"/> for why a copy).</summary>
+    /// <param name="tests">The test results of the selected row.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<TestResultItemViewModel> RunnerTests(IReadOnlyList<TestResult> tests) =>
+        [.. tests.Select(static t => new TestResultItemViewModel(t))];
+
+    /// <summary>Builds the Runner summary tiles (see <see cref="Entries"/> for why an observable collection).</summary>
+    /// <param name="sent">Requests that got a response.</param>
+    /// <param name="errors">Requests that ended in error.</param>
+    /// <param name="failed">Requests with a failed test.</param>
+    /// <param name="skipped">Skipped requests.</param>
+    /// <param name="tests">The "passed/total" tests text.</param>
+    /// <param name="average">The average response time text.</param>
+    /// <param name="duration">The total duration text.</param>
+    /// <returns>One tile per figure, in display order.</returns>
+    public static ObservableCollection<SummaryTile> RunnerTiles(int sent, int errors, int failed, int skipped, string tests, string average, string duration) =>
+    [
+        new(Strings.RunnerTileSent, sent.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerTileErrors, errors.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerFilterFailed, failed.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerFilterSkipped, skipped.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.RunnerTileTests, tests),
+        new(Strings.LoadAverage, average),
+        new(Strings.RunnerTileDuration, duration),
+    ];
+
+    /// <summary>Builds the load test tiles (see <see cref="Entries"/> for why an observable collection).</summary>
+    /// <param name="requests">The completed request count.</param>
+    /// <param name="throughput">The throughput text.</param>
+    /// <param name="average">The average response time text.</param>
+    /// <param name="p95">The 95th percentile text.</param>
+    /// <param name="errorRate">The error rate text.</param>
+    /// <param name="users">The active virtual user count.</param>
+    /// <returns>One tile per figure, in display order.</returns>
+    public static ObservableCollection<SummaryTile> LoadTiles(long requests, string throughput, string average, string p95, string errorRate, int users) =>
+    [
+        new(Strings.LoadRequests, requests.ToString(CultureInfo.CurrentCulture)),
+        new(Strings.LoadThroughput, throughput),
+        new(Strings.LoadAverage, average),
+        new(Strings.LoadP95, p95),
+        new(Strings.LoadErrorRate, errorRate),
+        new(Strings.LoadActiveUsers, users.ToString(CultureInfo.CurrentCulture)),
+    ];
+
+    /// <summary>Copies the per-request load test rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="rows">The result rows.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<LoadRequestRow> LoadRows(IReadOnlyList<LoadRequestRow> rows) => new(rows);
+
+    /// <summary>Copies the data preview rows into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="rows">The preview rows, each a list of cell texts.</param>
+    /// <returns>An observable collection of the rows.</returns>
+    public static ObservableCollection<DataPreviewRow> DataRows(IReadOnlyList<IReadOnlyList<string>> rows) =>
+        [.. rows.Select(static r => new DataPreviewRow(r))];
+
+    /// <summary>Copies the monitor folder choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The choices.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<MonitorFolderChoice> MonitorFolders(IReadOnlyList<MonitorFolderChoice> items) => new(items);
+
+    /// <summary>Copies the monitor environment choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The choices.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<MonitorEnvironmentChoice> MonitorEnvironments(IReadOnlyList<MonitorEnvironmentChoice> items) => new(items);
+
+    /// <summary>Copies the monitor interval choices into an observable collection (see <see cref="Entries"/> for why).</summary>
+    /// <param name="items">The choices.</param>
+    /// <returns>An observable collection of the choices.</returns>
+    public static ObservableCollection<MonitorIntervalChoice> MonitorIntervals(IReadOnlyList<MonitorIntervalChoice> items) => new(items);
 }
+
+/// <summary>One row of the data file preview.</summary>
+/// <param name="Cells">The cell texts, in column order.</param>
+public sealed record DataPreviewRow(IReadOnlyList<string> Cells);
+
+/// <summary>One figure of the Runner summary.</summary>
+/// <param name="Label">The caption.</param>
+/// <param name="Value">The figure text.</param>
+public sealed record SummaryTile(string Label, string Value);

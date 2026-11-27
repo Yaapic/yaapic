@@ -21,6 +21,15 @@ public sealed record ScriptedSendReport(
     HttpRequestDefinition? SentDefinition,
     IReadOnlyList<ConsoleEntry> NetworkLog)
 {
+    /// <summary>Gets a value indicating whether a pre-request script skipped the request: nothing was sent.</summary>
+    public bool Skipped { get; init; }
+
+    /// <summary>Gets a value indicating whether a script chose the next request (Runner only).</summary>
+    public bool NextRequestSet { get; init; }
+
+    /// <summary>Gets the next request chosen by a script; <see langword="null"/> with <see cref="NextRequestSet"/> ends the run.</summary>
+    public string? NextRequest { get; init; }
+
     /// <summary>Gets the console entries of every run, in order.</summary>
     public IReadOnlyList<ConsoleEntry> Console => [.. Runs.SelectMany(r => r.Console)];
 

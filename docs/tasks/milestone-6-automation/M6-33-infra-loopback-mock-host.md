@@ -1,6 +1,6 @@
 # M6-33: Infrastructure: loopback HTTP host for mock servers
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-32
 
@@ -38,14 +38,14 @@ Which definition answers (M6-34), the log.
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests/Mocks/TcpMockHttpHostTests.cs` with a real `HttpClient` against a free port (bind port 0 is not
+- [x] Tests in `Yaapic.Infrastructure.Tests/Mocks/TcpMockHttpHostTests.cs` with a real `HttpClient` against a free port (bind port 0 is not
   allowed by the contract: pick a free port with a temporary `TcpListener(IPAddress.Loopback, 0)` then release it): GET and POST reach the
   handler with headers and body; keep-alive reuses one connection for two requests (count accepted connections through an internal hook);
   delay applied (short); port in use throws `MockPortInUseException`; dispose stops answering and frees the port; a handler exception gives
   500; 101 concurrent idle connections: the last one gets 503.
-- [ ] The server is reachable at `http://127.0.0.1:{port}` and not on another interface (connect to the machine's non-loopback address,
+- [x] The server is reachable at `http://127.0.0.1:{port}` and not on another interface (connect to the machine's non-loopback address,
   if any, is refused; skip that assertion when the machine has none).
-- [ ] No process or socket left open after the tests; architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx.
+- [x] No process or socket left open after the tests; architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx.
 
 ## Suggested commit message
 

@@ -39,7 +39,10 @@ public class HttpVersionMappingTests
     public async Task Plain_http_server_reports_http11(HttpVersionPreference pref)
     {
         using var listener = new HttpListener();
-        var port = Random.Shared.Next(20000, 60000);
+        var probe = new System.Net.Sockets.TcpListener(System.Net.IPAddress.Loopback, 0);
+        probe.Start();
+        var port = ((System.Net.IPEndPoint)probe.LocalEndpoint).Port;
+        probe.Stop();
         listener.Prefixes.Add($"http://127.0.0.1:{port}/");
         listener.Start();
         var serve = Task.Run(async () =>
