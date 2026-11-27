@@ -694,7 +694,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-80](milestone-6-automation/M6-80-avalonia-automation-views-in-main-area.md) | Avalonia: automation views in the main area, tool windows removed | unix | M6-78, M6-79 | done |
 | [M6-81](milestone-6-automation/M6-81-viewmodel-remove-tool-window-events.md) | ViewModel: remove the tool window events | any | M6-78, M6-80 | done |
 | [M6-82](milestone-6-automation/M6-82-automation-views-docs.md) | Docs: automation views in the main window | any | M6-81 | done |
-| [M6-83](milestone-6-automation/M6-83-winui-visual-verification-main-window.md) | WinUI visual verification of the automation views in the main window | windows | M6-81 | todo |
+| [M6-83](milestone-6-automation/M6-83-winui-visual-verification-main-window.md) | WinUI visual verification of the automation views in the main window | windows | M6-81 | done |
 | [M6-65](milestone-6-automation/M6-65-adr-command-line-runner.md) | ADR 0022: command-line runner | any | M6-62 | todo |
 | [M6-66](milestone-6-automation/M6-66-core-read-only-run-sources.md) | Core: read-only run sources and folder lookup | any | M6-65 | todo |
 | [M6-67](milestone-6-automation/M6-67-core-variable-overrides-and-redactor.md) | Core: `YAAPIC_VAR_` variable overrides and a fixed-value redactor | any | M6-65 | todo |

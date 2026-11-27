@@ -1,6 +1,6 @@
 # M6-83: WinUI visual verification of the automation views in the main window
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-81
 
@@ -38,10 +38,19 @@ Avalonia screenshots; redesigns; a dedicated load-test icon.
 
 ## Acceptance criteria
 
-- [ ] Eighteen PNGs under `docs/screenshots/m6/` from the Native AOT build, each under 500 KB; the capture script changes are committed.
-- [ ] `docs/screenshots/m6/README.md` matches the new layout and lists the differences and the D1 to D6 status.
-- [ ] No process left running (the published exe, the loopback stub and any mock server are stopped); 0 warnings, all tests green.
+- [x] Eighteen PNGs under `docs/screenshots/m6/` from the Native AOT build, each under 500 KB; the capture script changes are committed.
+- [x] `docs/screenshots/m6/README.md` matches the new layout and lists the differences and the D1 to D6 status.
+- [x] No process left running (the published exe, the loopback stub and any mock server are stopped); 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `docs: recapture the milestone 6 WinUI views in the main window`
+
+## Notes
+
+Recaptured with `Capture-M6.ps1` (18 PNGs, all under 100 KB, Native AOT build). Script changes: no `-Window`/`front:`, `Collections` to go back
+to the tree, new `rail` screen, and `Capture-WinUI.ps1` now refuses to send raw keys/mouse unless the Yaapic window is the foreground window.
+All interactive checks, including those marked NOT RUN by M6-77/M6-78 (palette, status bar, Ctrl+W/Ctrl+S, close prompts with Cancel and
+Continue, load-test close prompt, light theme), were run and are listed in `docs/screenshots/m6/README.md`. Real findings left as follow-ups
+(not fixed here): D9, the 900 x 600 minimum is in pixels so at 150 % scale it is 600 x 400 dip and every view clips (FAIL at the true
+minimum); D7, truncated mock server fields at 900 x 600 dip. Design fidelity (colours, alignment against mockups) still needs a human eye.

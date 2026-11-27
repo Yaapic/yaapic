@@ -209,6 +209,7 @@ try {
     $focusH = $h
     foreach ($step in ($Steps -split '\|')) { # '|' also separates steps, so they survive `pwsh -File`
         # Steps: invoke:<AutomationId or name>, toggle:<name>, focus:<name>, keys:<SendKeys>, vk:ctrl+<hex virtual key>, type:<text>, wait:<ms>.
+        $guard = { if ([Win32]::GetForegroundWindow() -ne $focusH -and -not [Win32]::Focus($focusH)) { throw "Step '$step': Yaapic is not the foreground window; input not sent." } }
         $step = $step.Replace('{TEMP}', $temp) # {TEMP}: the throw-away workspace folder (e.g. the seeded users.csv)
         $kind, $arg = $step -split ':', 2
         # Elements are searched in every top-level window of the app (the main window first, then tool windows and dialogs).
@@ -221,6 +222,7 @@ try {
         switch ($kind) {
             'wait' { Start-Sleep -Milliseconds ([int]$arg) }
             'openpath' { # openpath:<file>: types a path into the system Open dialog (it owns the foreground and its file name box has the focus) and presses Enter.
+                if ([Win32]::GetForegroundWindow() -eq $focusH) { throw "Step '$step': the Open dialog is not in front; input not sent." }
                 [Windows.Forms.SendKeys]::SendWait('^a' + [regex]::Replace($arg, '[+^%~(){}\[\]]', '{$0}')); Start-Sleep -Milliseconds 300
                 [Windows.Forms.SendKeys]::SendWait('{ENTER}'); Start-Sleep -Milliseconds 1500
             }
@@ -229,14 +231,14 @@ try {
                 $all = @(); foreach ($r in $roots) { $all += @($r.FindAll([Windows.Automation.TreeScope]::Descendants, [Windows.Automation.Condition]::TrueCondition) | Where-Object { $_.Current.Name -like "*$part*" }) }
                 if ($all.Count -le [int]$idx) { throw "Step '$step': only $($all.Count) element(s)." }
                 $br = $all[[int]$idx].Current.BoundingRectangle
-                [void][Win32]::Focus($focusH); [void][Win32]::SetCursorPos([int]($br.X + $br.Width / 2) - 6, [int]($br.Y + $br.Height / 2)); Start-Sleep -Milliseconds 200
+                & $guard; [void][Win32]::SetCursorPos([int]($br.X + $br.Width / 2) - 6, [int]($br.Y + $br.Height / 2)); Start-Sleep -Milliseconds 200
                 [Win32]::mouse_event(1, 6, 0, 0, [UIntPtr]::Zero); Start-Sleep -Milliseconds 200; [Win32]::mouse_event(2, 0, 0, 0, [UIntPtr]::Zero); [Win32]::mouse_event(4, 0, 0, 0, [UIntPtr]::Zero); Start-Sleep -Milliseconds 700
             }
             'setvalue' { # setvalue:<edit name part>=<text>: types a number into a NumberBox (its edit is named "<header> Minimal... Maximal...") and tabs out.
                 $part, $text = $arg -split '=', 2
                 $all = @(); foreach ($r in $roots) { $all += @($r.FindAll([Windows.Automation.TreeScope]::Descendants, (New-Object Windows.Automation.PropertyCondition([Windows.Automation.AutomationElement]::ControlTypeProperty, [Windows.Automation.ControlType]::Edit))) | Where-Object { $_.Current.Name -like "*$part*" }) }
                 if (-not $all) { throw "Step '$step': edit not found." }
-                [void][Win32]::Focus($focusH); $all[0].SetFocus(); Start-Sleep -Milliseconds 200
+                & $guard; $all[0].SetFocus(); Start-Sleep -Milliseconds 200
                 [Windows.Forms.SendKeys]::SendWait('^a' + $text + '{TAB}'); Start-Sleep -Milliseconds 400
             }
             'http' { # http:<url>: a GET sent by the script itself (e.g. to the mock server), errors ignored.
