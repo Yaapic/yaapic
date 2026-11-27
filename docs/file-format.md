@@ -18,6 +18,7 @@ Decision records: [ADR 0005](adr/0005-storage-format.md), [ADR 0008](adr/0008-co
     <sub-slug>/folder.yaml        nested folder
   environments/<slug>.env.yaml    one environment per file
   mocks/<slug>.mock.yaml          one mock server per file
+  monitors/<slug>.monitor.yaml    one monitor per file
 ```
 
 A directory under `requests/` without `folder.yaml` is ignored and reported as a listing error. Siblings are sorted
@@ -263,6 +264,25 @@ routes:
   body: |
     {"users": []}
   delayMs: 0
+```
+
+
+## Monitor file
+
+Decision record: [ADR 0021](adr/0021-monitors.md). Keys: `version: 1`, `id`, `name`, `folderId` (the collection folder to run),
+`environmentId` (omitted when the monitor runs without environment), `intervalMinutes` (5, 10, 15, 30, 60, 180, 360, 720 or 1440;
+any other value loads as the nearest allowed value above it, 1440 at most, and is reported as a listing warning), `enabled`
+(default true). Slugs fall back to `monitor`. Monitor files are committed with the workspace, so enabled monitors run for everyone
+who opens it.
+
+```yaml
+version: 1
+id: 11111111-1111-1111-1111-111111111111
+name: Nightly checks
+folderId: 22222222-2222-2222-2222-222222222222
+environmentId: 33333333-3333-3333-3333-333333333333
+intervalMinutes: 15
+enabled: false
 ```
 
 ## Session file

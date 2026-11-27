@@ -1,6 +1,6 @@
 # M6-37: Infrastructure: monitor file store
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-28, M6-36
 
@@ -24,9 +24,9 @@ Run history (M6-38).
 
 ## Acceptance criteria
 
-- [ ] Tests in `Yaapic.Infrastructure.Tests` on a temporary workspace: round trip, no environment, rename moves the file, delete, slug
+- [x] Tests in `Yaapic.Infrastructure.Tests` on a temporary workspace: round trip, no environment, rename moves the file, delete, slug
   collision, corrupt file skipped, invalid interval normalised, expected YAML text of a sample.
-- [ ] Architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx.
+- [x] Architecture tests green, 0 warnings, XML docs, all tests green; no IL2xxx/IL3xxx.
 
 ## Suggested commit message
 
