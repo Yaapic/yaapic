@@ -18,12 +18,14 @@
         <RowDefinition Height="*"/>
         <RowDefinition Height="Auto"/>
         <RowDefinition Height="Auto"/>
-        <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
 
       <v:RunnerRequestListView Setup="{x:Bind ViewModel.Setup, Mode=OneWay}"/>
 
-      <Grid Grid.Row="1" ColumnSpacing="8" RowSpacing="6">
+      <!-- The options and the data preview scroll when the window is short, so the request list never collapses. -->
+      <ScrollViewer Grid.Row="1" MaxHeight="260" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+      <StackPanel Spacing="8">
+      <Grid ColumnSpacing="8" RowSpacing="6">
         <Grid.ColumnDefinitions>
           <ColumnDefinition Width="*"/>
           <ColumnDefinition Width="*"/>
@@ -45,7 +47,7 @@
                   IsChecked="{x:Bind ViewModel.Setup.PersistVariables, Mode=TwoWay}"/>
       </Grid>
 
-      <StackPanel Grid.Row="2" Spacing="6">
+      <StackPanel Spacing="6">
         <TextBlock Style="{StaticResource YaapicBodyStrongTextStyle}" Text="{x:Bind loc:Strings.RunnerData}"/>
         <Button Content="{x:Bind loc:Strings.RunnerChooseData}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerChooseData}"
                 Command="{x:Bind ViewModel.Setup.ChooseDataFileCommand}"/>
@@ -100,8 +102,10 @@
                    Text="{x:Bind ViewModel.Setup.DataError, Mode=OneWay}"
                    Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Setup.DataError), Mode=OneWay}"/>
       </StackPanel>
+      </StackPanel>
+      </ScrollViewer>
 
-      <StackPanel Grid.Row="3" Spacing="8">
+      <StackPanel Grid.Row="2" Spacing="8">
         <TextBlock TextWrapping="Wrap" AutomationProperties.LiveSetting="Polite" Foreground="{ThemeResource YaapicDangerBrush}"
                    Text="{x:Bind ViewModel.Setup.ValidationError, Mode=OneWay}"
                    Visibility="{x:Bind p:VisibilityMap.WhenText(ViewModel.Setup.ValidationError), Mode=OneWay}"/>

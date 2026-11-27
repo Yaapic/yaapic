@@ -10,6 +10,7 @@ namespace Yaapic.App.WinUI.Views;
 /// <summary>A non-modal secondary window that hosts one view and copies the look of the main window.</summary>
 public sealed partial class ToolWindow : Window
 {
+    // Sizes in device-independent pixels: the window is scaled by the display scale of the main window (and kept inside its work area).
     private const int DefaultWidth = 1100;
     private const int DefaultHeight = 720;
     private const int MinWidth = 800;
@@ -49,14 +50,18 @@ public sealed partial class ToolWindow : Window
         ExtendsContentIntoTitleBar = true;
         SetTitleBar(_titleBar);
         AppWindow.TitleBar.PreferredHeightOption = TitleBarHeightOption.Tall;
-        AppWindow.Resize(new Windows.Graphics.SizeInt32(DefaultWidth, DefaultHeight));
+        var scale = _owner.XamlRoot?.RasterizationScale ?? 1.0;
+        var area = DisplayArea.GetFromWindowId(owner.AppWindow.Id, DisplayAreaFallback.Nearest).WorkArea;
+        var width = Math.Min((int)(DefaultWidth * scale), area.Width);
+        var height = Math.Min((int)(DefaultHeight * scale), area.Height);
+        AppWindow.Resize(new Windows.Graphics.SizeInt32(width, height));
         if (AppWindow.Presenter is OverlappedPresenter presenter)
         {
-            presenter.PreferredMinimumWidth = MinWidth;
-            presenter.PreferredMinimumHeight = MinHeight;
+            presenter.PreferredMinimumWidth = Math.Min((int)(MinWidth * scale), width);
+            presenter.PreferredMinimumHeight = Math.Min((int)(MinHeight * scale), height);
         }
 
-        Center(owner.AppWindow);
+        Center(owner.AppWindow, width, height, area);
         ApplyTheme();
         _owner.ActualThemeChanged += OnOwnerThemeChanged;
         Activated += OnActivated;
@@ -107,11 +112,13 @@ public sealed partial class ToolWindow : Window
         CaptionColors.Apply(AppWindow.TitleBar, light);
     }
 
-    private void Center(AppWindow ownerWindow)
+    private void Center(AppWindow ownerWindow, int width, int height, Windows.Graphics.RectInt32 area)
     {
-        var x = ownerWindow.Position.X + ((ownerWindow.Size.Width - DefaultWidth) / 2);
-        var y = ownerWindow.Position.Y + ((ownerWindow.Size.Height - DefaultHeight) / 2);
-        AppWindow.Move(new Windows.Graphics.PointInt32(Math.Max(0, x), Math.Max(0, y)));
+        var x = ownerWindow.Position.X + ((ownerWindow.Size.Width - width) / 2);
+        var y = ownerWindow.Position.Y + ((ownerWindow.Size.Height - height) / 2);
+        AppWindow.Move(new Windows.Graphics.PointInt32(
+            Math.Clamp(x, area.X, Math.Max(area.X, area.X + area.Width - width)),
+            Math.Clamp(y, area.Y, Math.Max(area.Y, area.Y + area.Height - height))));
     }
 
     private void OnActivated(object sender, WindowActivatedEventArgs args)

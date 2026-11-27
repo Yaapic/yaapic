@@ -40,7 +40,7 @@
       </ItemsControl.ItemsPanel>
       <ItemsControl.ItemTemplate>
         <DataTemplate x:DataType="p:SummaryTile">
-          <Border Margin="0,0,8,8" Padding="12,6" MinWidth="88" CornerRadius="6" Background="{ThemeResource YaapicSurfaceSunkenBrush}">
+          <Border Margin="0,0,6,6" Padding="10,4" MinWidth="72" CornerRadius="6" Background="{ThemeResource YaapicSurfaceSunkenBrush}">
             <StackPanel>
               <TextBlock Style="{StaticResource YaapicSubtitleTextStyle}" Text="{x:Bind Value}"/>
               <TextBlock Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
@@ -52,23 +52,26 @@
     </ItemsControl>
 
     <!-- Filter and export -->
-    <Grid Grid.Row="2" ColumnSpacing="8">
+    <Grid Grid.Row="2" ColumnSpacing="8" RowSpacing="8">
       <Grid.ColumnDefinitions>
-        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
         <ColumnDefinition Width="Auto"/>
       </Grid.ColumnDefinitions>
-      <ListView x:Name="FilterChips" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+      </Grid.RowDefinitions>
+      <ListView x:Name="FilterChips" Grid.ColumnSpan="2" HorizontalAlignment="Left" Style="{StaticResource YaapicSegmentedStyle}" VerticalAlignment="Center"
                 AutomationProperties.Name="{x:Bind loc:Strings.RunnerResults}" SelectionChanged="OnFilterChanged">
         <ListViewItem Content="{x:Bind loc:Strings.RunnerFilterAll}"/>
         <ListViewItem Content="{x:Bind loc:Strings.RunnerFilterPassed}"/>
         <ListViewItem Content="{x:Bind loc:Strings.RunnerFilterFailed}"/>
         <ListViewItem Content="{x:Bind loc:Strings.RunnerFilterSkipped}"/>
       </ListView>
-      <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
+      <TextBlock Grid.Row="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"
                  Foreground="{ThemeResource YaapicTextSecondaryBrush}" AutomationProperties.LiveSetting="Polite"
                  Text="{x:Bind ViewModel.ExportMessage, Mode=OneWay}"/>
-      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+      <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="8">
         <Button Content="{x:Bind loc:Strings.RunnerExportJson}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerExportJson}"
                 Command="{x:Bind ViewModel.ExportJsonCommand}"/>
         <Button Content="{x:Bind loc:Strings.RunnerExportJUnit}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerExportJUnit}"
@@ -89,13 +92,14 @@
               <Setter Target="Details.(Grid.Row)" Value="0"/>
               <Setter Target="Details.(Grid.Column)" Value="1"/>
               <Setter Target="RowsList.(Grid.RowSpan)" Value="2"/>
+              <Setter Target="Details.MaxHeight" Value="Infinity"/>
             </VisualState.Setters>
           </VisualState>
         </VisualStateGroup>
       </VisualStateManager.VisualStateGroups>
       <Grid.RowDefinitions>
         <RowDefinition Height="*"/>
-        <RowDefinition Height="*"/>
+        <RowDefinition Height="Auto"/>
       </Grid.RowDefinitions>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="*"/>
@@ -109,13 +113,10 @@
           <DataTemplate x:DataType="r:RunnerResultRowViewModel">
             <Grid ColumnSpacing="8">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="64"/>
-                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="28"/>
+                <ColumnDefinition Width="52"/>
+                <ColumnDefinition Width="44"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
               </Grid.ColumnDefinitions>
               <TextBlock VerticalAlignment="Center" Style="{StaticResource YaapicCaptionTextStyle}"
@@ -129,18 +130,29 @@
                 <TextBlock Style="{StaticResource YaapicCaptionTextStyle}" Foreground="{ThemeResource YaapicTextSecondaryBrush}"
                            TextTrimming="CharacterEllipsis" Text="{x:Bind Path}"/>
               </StackPanel>
-              <TextBlock Grid.Column="4" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind StatusText}"/>
-              <TextBlock Grid.Column="5" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}"
-                         Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind DurationText}"/>
-              <TextBlock Grid.Column="6" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}"
-                         Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind SizeText}"/>
-              <TextBlock Grid.Column="7" VerticalAlignment="Center" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind TestsText}"/>
+              <!-- Two lines (status and tests, then duration and size) so the name keeps room in a narrow pane -->
+              <Grid Grid.Column="4" VerticalAlignment="Center" ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="Auto"/>
+                  <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                  <RowDefinition Height="Auto"/>
+                  <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind StatusText}"/>
+                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}" Text="{x:Bind TestsText}"/>
+                <TextBlock Grid.Row="1" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind DurationText}"/>
+                <TextBlock Grid.Row="1" Grid.Column="1" HorizontalAlignment="Right" Style="{StaticResource YaapicCodeSmallTextStyle}"
+                           Foreground="{ThemeResource YaapicTextSecondaryBrush}" Text="{x:Bind SizeText}"/>
+              </Grid>
             </Grid>
           </DataTemplate>
         </ListView.ItemTemplate>
       </ListView>
 
-      <ScrollViewer x:Name="Details" Grid.Row="1" MinWidth="320" MaxWidth="560"
+      <ScrollViewer x:Name="Details" Grid.Row="1" MinWidth="320" MaxWidth="560" MaxHeight="220"
                     Visibility="{x:Bind p:VisibilityMap.WhenNotNull(ViewModel.SelectedRow), Mode=OneWay}">
         <StackPanel Spacing="8">
           <TextBlock TextWrapping="Wrap" IsTextSelectionEnabled="True" Style="{StaticResource YaapicCodeSmallTextStyle}"
