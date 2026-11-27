@@ -52,6 +52,9 @@ public class LoadTestRunnerTests
 
     private sealed class Rig
     {
+        private int _idleTimers;
+        private DateTimeOffset _start;
+
         public Rig(Func<ScriptInvocation, ScriptRunResult>? reply = null)
         {
             Time = new ManualTimeProvider(DateTimeOffset.UnixEpoch);
@@ -73,43 +76,51 @@ public class LoadTestRunnerTests
 
         public LoadTestRunner Runner { get; }
 
+        /// <summary>Starts a run and remembers how many clock waiters it has when idle: the end of the duration, the snapshot timer and one per user.</summary>
+        public Task<LoadTestResult> Run(LoadTestPlan plan, IProgress<LoadSnapshot>? progress, CancellationToken ct)
+        {
+            _idleTimers = 2 + plan.VirtualUsers;
+            _start = Time.GetUtcNow();
+            return Runner.RunAsync(plan, progress, ct);
+        }
+
+        /// <summary>Waits until every user is blocked on the clock again (a start offset, a request or a think time); no real time is involved.</summary>
+        public Task SettleAsync() => Time.WaitForPendingTimersAsync(_idleTimers, TestContext.Current.CancellationToken);
+
         public async Task StepAsync()
         {
+            await SettleAsync();
             Time.Advance(TimeSpan.FromSeconds(1));
             await SettleAsync();
         }
 
-        /// <summary>Waits until the request count has not moved for 50 ms; a fixed delay is too short on a loaded machine.</summary>
-        public async Task SettleAsync()
-        {
-            int last = -1;
-            int stable = 0;
-            for (int i = 0; i < 500 && stable < 5; i++)
-            {
-                await Task.Delay(10, TestContext.Current.CancellationToken);
-                int now = Transport.Urls.Count;
-                stable = now == last ? stable + 1 : 0;
-                last = now;
-            }
-        }
+        /// <summary>Waits until the transport has seen <paramref name="count"/> requests.</summary>
+        public Task WaitForRequestsAsync(int count) =>
+            ManualTimeProvider.WaitUntilAsync(() => Transport.Urls.Count >= count, $"{count} requests", TestContext.Current.CancellationToken);
 
-        /// <summary>Waits until the transport has seen <paramref name="count"/> requests; a fixed delay is too short on a loaded machine.</summary>
-        public async Task WaitForRequestsAsync(int count)
+        /// <summary>
+        /// Runs the plan to its end: whole seconds while every user waits on the clock, so each user completes exactly one request per second,
+        /// then the last second, after which users that are between two waits are caught by the next advance.
+        /// </summary>
+        public async Task<LoadTestResult> FinishAsync(Task<LoadTestResult> run, Func<int, Task>? afterStep = null)
         {
-            for (int i = 0; i < 500 && Transport.Urls.Count < count; i++)
-            {
-                await Task.Delay(10, TestContext.Current.CancellationToken);
-            }
-        }
-
-        public async Task<LoadTestResult> FinishAsync(Task<LoadTestResult> run)
-        {
-            for (int i = 0; i < 40 && !run.IsCompleted; i++)
+            while (Time.GetUtcNow() - _start < TimeSpan.FromSeconds(9))
             {
                 await StepAsync();
+                if (afterStep is not null)
+                {
+                    await afterStep((int)(Time.GetUtcNow() - _start).TotalSeconds);
+                }
             }
 
-            return await run.WaitAsync(TimeSpan.FromSeconds(5), TestContext.Current.CancellationToken);
+            await SettleAsync();
+            while (!run.IsCompleted)
+            {
+                Time.Advance(TimeSpan.FromSeconds(1));
+                await ManualTimeProvider.WaitUntilAsync(() => run.IsCompleted || Time.PendingTimers >= 2, "the run to end or wait on the clock", TestContext.Current.CancellationToken);
+            }
+
+            return await run;
         }
     }
 
@@ -127,7 +138,7 @@ public class LoadTestRunnerTests
     public async Task Fixed_users_all_start_at_once_and_each_completes_one_request_per_second()
     {
         var rig = new Rig();
-        var run = rig.Runner.RunAsync(Plan([Item()], users: 3), null, CancellationToken.None);
+        var run = rig.Run(Plan([Item()], users: 3), null, CancellationToken.None);
         await rig.WaitForRequestsAsync(3);
 
         Assert.Equal(3, rig.Transport.Urls.Count);
@@ -145,7 +156,7 @@ public class LoadTestRunnerTests
     {
         var rig = new Rig();
         using var cts = new CancellationTokenSource();
-        var run = rig.Runner.RunAsync(Plan([Item()], users: 4, profile: LoadProfile.RampUp, ramp: 4), null, cts.Token);
+        var run = rig.Run(Plan([Item()], users: 4, profile: LoadProfile.RampUp, ramp: 4), null, cts.Token);
         await rig.SettleAsync();
         int[] counts = [rig.Transport.Urls.Count];
         await rig.StepAsync();
@@ -164,7 +175,7 @@ public class LoadTestRunnerTests
     {
         var rig = new Rig();
         using var cts = new CancellationTokenSource();
-        var run = rig.Runner.RunAsync(Plan([Item()], think: 2000), null, cts.Token);
+        var run = rig.Run(Plan([Item()], think: 2000), null, cts.Token);
         await rig.SettleAsync();
         int[] counts = [];
         for (int i = 0; i < 3; i++)
@@ -185,7 +196,7 @@ public class LoadTestRunnerTests
         var rig = new Rig(i => new ScriptRunResult(i.Phase, i.Origin, i.Block.Language, ScriptRunStatus.Succeeded, null, [], [new Yaapic.Domain.Scripting.TestResult("t", false, null, TimeSpan.Zero, i.Origin)], TimeSpan.Zero));
         RunItem[] items = [Item("http://h/ok"), Item("http://h/500"), Item("http://h/ok2", Post())];
 
-        var result = await rig.FinishAsync(rig.Runner.RunAsync(Plan(items), null, CancellationToken.None));
+        var result = await rig.FinishAsync(rig.Run(Plan(items), null, CancellationToken.None));
 
         Assert.Equal(0, result.PerRequest[0].Errors);
         Assert.True(result.PerRequest[1].Count > 0);
@@ -205,7 +216,7 @@ public class LoadTestRunnerTests
         });
         RunItem[] items = [Item("http://h/skipped", Pre()), Item("http://h/b")];
 
-        var result = await rig.FinishAsync(rig.Runner.RunAsync(Plan(items), null, CancellationToken.None));
+        var result = await rig.FinishAsync(rig.Run(Plan(items), null, CancellationToken.None));
 
         Assert.Equal(0, result.PerRequest[0].Count);
         Assert.True(result.PerRequest[1].Count > 0);
@@ -218,7 +229,7 @@ public class LoadTestRunnerTests
         var rig = new Rig();
         IterationDataRow[] rows = [new([new("id", "1")]), new([new("id", "2")]), new([new("id", "3")])];
         using var cts = new CancellationTokenSource();
-        var run = rig.Runner.RunAsync(Plan([Item("http://h/{{id}}")], users: 3, data: rows), null, cts.Token);
+        var run = rig.Run(Plan([Item("http://h/{{id}}")], users: 3, data: rows), null, cts.Token);
         await rig.WaitForRequestsAsync(3);
         string[] first = [.. rig.Transport.Urls.Order()];
         await rig.StepAsync();
@@ -236,7 +247,7 @@ public class LoadTestRunnerTests
     {
         var rig = new Rig();
         using var cts = new CancellationTokenSource();
-        var run = rig.Runner.RunAsync(Plan([Item()], users: 2), null, cts.Token);
+        var run = rig.Run(Plan([Item()], users: 2), null, cts.Token);
         await rig.SettleAsync();
         await rig.StepAsync();
         await rig.StepAsync();
@@ -253,12 +264,19 @@ public class LoadTestRunnerTests
     {
         var rig = new Rig();
         var progress = new Collector();
+        var run = rig.Run(Plan([Item()], users: 3), progress, CancellationToken.None);
+        await rig.WaitForRequestsAsync(3);
 
-        var result = await rig.FinishAsync(rig.Runner.RunAsync(Plan([Item()], users: 3), progress, CancellationToken.None));
+        // The timer coalesces ticks that arrive before the reporter has run, so wait for each one.
+        var result = await rig.FinishAsync(run, second =>
+            ManualTimeProvider.WaitUntilAsync(() => progress.Snapshots.Count >= second, $"the snapshot of second {second}", TestContext.Current.CancellationToken));
 
-        Assert.True(progress.Snapshots.Count >= 10, $"{progress.Snapshots.Count} snapshots");
-        Assert.Contains(progress.Snapshots, s => s.ActiveUsers == 3);
-        Assert.Equal(result.Overall.Count, progress.Snapshots.Last().Overall.Count);
+        LoadSnapshot[] snapshots = [.. progress.Snapshots];
+        Assert.Equal(Enumerable.Range(1, 9).Select(s => TimeSpan.FromSeconds(s)), snapshots[..9].Select(s => s.Elapsed));
+        Assert.Contains(snapshots, s => s.ActiveUsers == 3);
+        Assert.Equal(result.Overall.Count, snapshots[^1].Overall.Count);
+        Assert.Equal(0, snapshots[^1].ActiveUsers);
+        Assert.True(snapshots.Length >= 10, $"{snapshots.Length} snapshots");
     }
 
     [Fact]
@@ -270,7 +288,7 @@ public class LoadTestRunnerTests
             return ScriptRunResult.Skipped(i.Phase, i.Origin, i.Block.Language);
         });
 
-        var result = await rig.FinishAsync(rig.Runner.RunAsync(Plan([Item(scripts: Post())]), null, CancellationToken.None));
+        var result = await rig.FinishAsync(rig.Run(Plan([Item(scripts: Post())]), null, CancellationToken.None));
 
         Assert.True(result.Overall.Count > 0);
         Assert.Equal(0, rig.Scopes.PersistCalls);
