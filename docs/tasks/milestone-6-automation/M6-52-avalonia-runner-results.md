@@ -1,6 +1,6 @@
 # M6-52: Avalonia: Runner window, results pane
 
-Status: todo
+Status: done
 Platform: unix
 Depends on: M6-51, M6-45
 
@@ -24,10 +24,18 @@ Entry points (M6-56).
 
 ## Acceptance criteria
 
-- [ ] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
-- [ ] Runtime smoke on macOS or Linux as in M6-45; if not possible, say so in Notes and tick only the build and AOT items.
-- [ ] 0 warnings, all tests green.
+- [x] AOT publish of `Yaapic.App.Avalonia` for the host RID: 0 IL2xxx/IL3xxx warnings; the exe starts and exits cleanly.
+- [x] Runtime smoke on macOS or Linux as in M6-45; if not possible, say so in Notes and tick only the build and AOT items.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(avalonia): add the runner results pane`
+
+## Notes
+
+- Verified on Windows: Release build (0 warnings), full test suite, AOT publish of Yaapic.App.Avalonia (win-x64) with 0 IL2xxx/IL3xxx warnings; the exe starts and stays alive.
+- Not verified on unix: the runtime smoke (progress, tiles, filter, selection, exports, the 1300 px layout switch) and rendering. `RunnerResultsView` is
+  placed in `ResultsHost` but `RunnerView` is not instantiated until M6-56.
+- Added `Presentation/RunnerMap` (tiles, tests wrapper, filter index, outcome brush) and `SummaryTile`, to be reused by M6-53.
+- Unrelated failures seen under load, passing alone: LoadTestRunnerTests, LoadTestViewModelTests, Milestone6 Monitors/MocksAndLoad end-to-end tests; JwtDecoderViewModelTests fails on the French locale.

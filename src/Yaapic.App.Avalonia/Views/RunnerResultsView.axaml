@@ -1,0 +1,124 @@
+<UserControl
+    xmlns:loc="using:Yaapic.Localization" xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:p="using:Yaapic.App.Avalonia.Presentation"
+    xmlns:vm="using:Yaapic.ViewModels.Runner"
+    xmlns:rsp="using:Yaapic.ViewModels.Responses"
+    x:Class="Yaapic.App.Avalonia.Views.RunnerResultsView"
+    x:DataType="vm:RunnerViewModel"
+    x:CompileBindings="True">
+  <Grid Margin="12" RowDefinitions="Auto,Auto,Auto,*" RowSpacing="8">
+    <!-- Progress while running, status when done -->
+    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="8">
+      <ProgressBar VerticalAlignment="Center" Minimum="0" Maximum="1" Value="{Binding Progress}" IsVisible="{Binding IsRunning}"
+                   AutomationProperties.Name="{x:Static loc:Strings.RunnerResults}" />
+      <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding ProgressText}" />
+      <TextBlock TextWrapping="Wrap" Classes="bodyStrong" AutomationProperties.LiveSetting="Polite" Text="{Binding StatusText}"
+                 IsVisible="{Binding !IsRunning}" />
+    </Grid>
+
+    <!-- Summary tiles -->
+    <ItemsControl Grid.Row="1" IsVisible="{Binding Result, Converter={x:Static ObjectConverters.IsNotNull}}">
+      <ItemsControl.ItemsSource>
+        <MultiBinding Converter="{x:Static p:RunnerMap.Tiles}">
+          <Binding Path="SummarySent" />
+          <Binding Path="SummaryErrors" />
+          <Binding Path="SummaryFailed" />
+          <Binding Path="SummarySkipped" />
+          <Binding Path="SummaryTests" />
+          <Binding Path="SummaryAverage" />
+          <Binding Path="SummaryDuration" />
+        </MultiBinding>
+      </ItemsControl.ItemsSource>
+      <ItemsControl.ItemsPanel>
+        <ItemsPanelTemplate><WrapPanel /></ItemsPanelTemplate>
+      </ItemsControl.ItemsPanel>
+      <ItemsControl.ItemTemplate>
+        <DataTemplate x:DataType="p:SummaryTile">
+          <Border Margin="0,0,8,8" Padding="12,6" MinWidth="88" CornerRadius="6" Background="{DynamicResource YaapicSurfaceSunkenBrush}">
+            <StackPanel>
+              <TextBlock Classes="subtitle" Text="{Binding Value}" />
+              <TextBlock Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding Label}" />
+            </StackPanel>
+          </Border>
+        </DataTemplate>
+      </ItemsControl.ItemTemplate>
+    </ItemsControl>
+
+    <!-- Filter and export -->
+    <Grid Grid.Row="2" ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+      <ListBox Classes="segmented" VerticalAlignment="Center" AutomationProperties.Name="{x:Static loc:Strings.RunnerResults}"
+               SelectedIndex="{Binding Filter, Converter={x:Static p:RunnerMap.FilterIndex}, Mode=OneWay}"
+               SelectionChanged="OnFilterChanged">
+        <ListBoxItem Content="{x:Static loc:Strings.RunnerFilterAll}" />
+        <ListBoxItem Content="{x:Static loc:Strings.RunnerFilterPassed}" />
+        <ListBoxItem Content="{x:Static loc:Strings.RunnerFilterFailed}" />
+        <ListBoxItem Content="{x:Static loc:Strings.RunnerFilterSkipped}" />
+      </ListBox>
+      <TextBlock Grid.Column="1" VerticalAlignment="Center" TextTrimming="CharacterEllipsis" AutomationProperties.LiveSetting="Polite"
+                 Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding ExportMessage}" />
+      <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8">
+        <Button Content="{x:Static loc:Strings.RunnerExportJson}" AutomationProperties.Name="{x:Static loc:Strings.RunnerExportJson}"
+                Command="{Binding ExportJsonCommand}" />
+        <Button Content="{x:Static loc:Strings.RunnerExportJUnit}" AutomationProperties.Name="{x:Static loc:Strings.RunnerExportJUnit}"
+                Command="{Binding ExportJUnitCommand}" />
+      </StackPanel>
+    </Grid>
+
+    <!-- Rows and details: stacked, side by side from 1300 px (OnSizeChanged) -->
+    <Grid Grid.Row="3" RowDefinitions="*,*" ColumnDefinitions="*,Auto" RowSpacing="8" ColumnSpacing="8">
+      <ListBox x:Name="RowsList" AutomationProperties.Name="{x:Static loc:Strings.RunnerResults}" ItemsSource="{Binding VisibleRows}"
+               SelectedItem="{Binding SelectedRow, Mode=OneWay}" SelectionChanged="OnRowSelected">
+        <ListBox.ItemTemplate>
+          <DataTemplate x:DataType="vm:RunnerResultRowViewModel">
+            <Grid ColumnDefinitions="Auto,64,48,*,Auto,Auto,Auto,Auto" ColumnSpacing="8">
+              <TextBlock VerticalAlignment="Center" Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding IterationText}" />
+              <TextBlock Grid.Column="1" VerticalAlignment="Center" Classes="caption" FontWeight="SemiBold"
+                         Foreground="{Binding Outcome, Converter={x:Static p:RunnerMap.OutcomeBrush}}" Text="{Binding OutcomeText}" />
+              <TextBlock Grid.Column="2" VerticalAlignment="Center" Classes="caption" FontWeight="SemiBold"
+                         Foreground="{Binding Method, Converter={x:Static p:ConsoleMap.VerbBrush}}" Text="{Binding Method}" />
+              <StackPanel Grid.Column="3" VerticalAlignment="Center">
+                <TextBlock Text="{Binding Name}" TextTrimming="CharacterEllipsis" />
+                <TextBlock Classes="caption" Foreground="{DynamicResource YaapicTextSecondaryBrush}" TextTrimming="CharacterEllipsis" Text="{Binding Path}" />
+              </StackPanel>
+              <TextBlock Grid.Column="4" VerticalAlignment="Center" Classes="codeSmall" Text="{Binding StatusText}" />
+              <TextBlock Grid.Column="5" VerticalAlignment="Center" Classes="codeSmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding DurationText}" />
+              <TextBlock Grid.Column="6" VerticalAlignment="Center" Classes="codeSmall" Foreground="{DynamicResource YaapicTextSecondaryBrush}" Text="{Binding SizeText}" />
+              <TextBlock Grid.Column="7" VerticalAlignment="Center" Classes="codeSmall" Text="{Binding TestsText}" />
+            </Grid>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+
+      <ScrollViewer x:Name="Details" Grid.Row="1" IsVisible="{Binding SelectedRow, Converter={x:Static ObjectConverters.IsNotNull}}">
+        <StackPanel Spacing="8">
+          <SelectableTextBlock TextWrapping="Wrap" Classes="codeSmall" Foreground="{DynamicResource YaapicDangerBrush}" Text="{Binding SelectedError}"
+                               IsVisible="{Binding SelectedError, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+          <ItemsControl ItemsSource="{Binding SelectedTests, Converter={x:Static p:RunnerMap.Tests}}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="rsp:TestResultItemViewModel">
+                <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto" ColumnSpacing="8" RowSpacing="2" Margin="0,0,0,4">
+                  <TextBlock Text="{Binding Symbol}" Classes="bodyStrong" AutomationProperties.Name="{Binding StatusText}"
+                             Foreground="{Binding Passed, Converter={x:Static p:ResponseMap.TestOutcome}}" />
+                  <TextBlock Grid.Column="1" Text="{Binding Name}" TextWrapping="Wrap" />
+                  <SelectableTextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Message}" TextWrapping="Wrap" Classes="codeSmall"
+                                       Foreground="{DynamicResource YaapicDangerBrush}"
+                                       IsVisible="{Binding Message, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                </Grid>
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+          <TextBlock Classes="bodyStrong" Text="{x:Static loc:Strings.ConsoleTitle}"
+                     IsVisible="{Binding SelectedConsole.Count, Converter={x:Static p:ConsoleMap.IsPositive}}" />
+          <ItemsControl ItemsSource="{Binding SelectedConsole}">
+            <ItemsControl.ItemTemplate>
+              <DataTemplate x:DataType="x:String">
+                <SelectableTextBlock Text="{Binding}" TextWrapping="Wrap" Classes="codeSmall" />
+              </DataTemplate>
+            </ItemsControl.ItemTemplate>
+          </ItemsControl>
+        </StackPanel>
+      </ScrollViewer>
+    </Grid>
+  </Grid>
+</UserControl>

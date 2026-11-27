@@ -98,6 +98,6 @@
     </Grid>
 
     <GridSplitter Grid.Column="1" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" />
-    <Border x:Name="ResultsHost" Grid.Column="2" />
+    <Border x:Name="ResultsHost" Grid.Column="2"><v:RunnerResultsView /></Border>
   </Grid>
 </UserControl>
