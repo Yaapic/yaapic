@@ -294,6 +294,9 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
         await WaitUntilAsync(() => shell.Mocks!.Log.Count == 2);
     }
 
+    private static string Statuses(ShellViewModel shell) =>
+        string.Join(", ", shell.Mocks!.Log.GroupBy(l => l.Status).Select(g => $"{g.Key} x{g.Count()}"));
+
     private static LoadTestResult ResultOf(ShellViewModel shell) => shell.LoadTest!.Result!;
 
     [Fact]
@@ -316,7 +319,7 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
         Assert.Contains("127.0.0.1", _fx.Dialogs.ConfirmMessages[0], StringComparison.Ordinal);
         Assert.False(result.Canceled);
         Assert.True(result.Overall.Count > 0);
-        Assert.True(result.Overall.Errors == 0, $"{result.Overall.Errors} of {result.Overall.Count} requests failed: {string.Join(" | ", result.ErrorMessages)}");
+        Assert.True(result.Overall.Errors == 0, $"{result.Overall.Errors} of {result.Overall.Count} requests failed: {string.Join(" | ", result.ErrorMessages)}; the mock logged {Statuses(shell)}");
         Assert.Equal(0, result.Overall.ErrorRate);
         Assert.True(result.Buckets.Count >= 5, "Expected per-second buckets.");
         Assert.True(result.Buckets.Sum(b => b.Requests) > 0);
@@ -348,7 +351,7 @@ public sealed class Milestone6MocksAndLoadEndToEndTests : IDisposable
 
         var result = ResultOf(shell);
         Assert.True(result.Overall.Count > 0);
-        Assert.True(result.Overall.Errors == 0, $"{result.Overall.Errors} of {result.Overall.Count} requests failed: {string.Join(" | ", result.ErrorMessages)}");
+        Assert.True(result.Overall.Errors == 0, $"{result.Overall.Errors} of {result.Overall.Count} requests failed: {string.Join(" | ", result.ErrorMessages)}; the mock logged {Statuses(shell)}");
         var users = result.Buckets.Select(b => b.ActiveUsers).ToArray();
         Assert.True(users[0] < users.Max(), "Active users should rise during the ramp.");
         Assert.Equal(10, users.Max());
