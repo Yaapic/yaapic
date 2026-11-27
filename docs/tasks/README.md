@@ -693,7 +693,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-79](milestone-6-automation/M6-79-avalonia-rail-automation-entries.md) | Avalonia: automation entries on the rail | unix | M6-76, M6-77 | done |
 | [M6-80](milestone-6-automation/M6-80-avalonia-automation-views-in-main-area.md) | Avalonia: automation views in the main area, tool windows removed | unix | M6-78, M6-79 | done |
 | [M6-81](milestone-6-automation/M6-81-viewmodel-remove-tool-window-events.md) | ViewModel: remove the tool window events | any | M6-78, M6-80 | done |
-| [M6-82](milestone-6-automation/M6-82-automation-views-docs.md) | Docs: automation views in the main window | any | M6-81 | todo |
+| [M6-82](milestone-6-automation/M6-82-automation-views-docs.md) | Docs: automation views in the main window | any | M6-81 | done |
 | [M6-83](milestone-6-automation/M6-83-winui-visual-verification-main-window.md) | WinUI visual verification of the automation views in the main window | windows | M6-81 | todo |
 | [M6-65](milestone-6-automation/M6-65-adr-command-line-runner.md) | ADR 0022: command-line runner | any | M6-62 | todo |
 | [M6-66](milestone-6-automation/M6-66-core-read-only-run-sources.md) | Core: read-only run sources and folder lookup | any | M6-65 | todo |
@@ -713,12 +713,12 @@ Delivered: the collection Runner (iterations, a data variable layer between loca
 reports); load tests (fixed and ramp-up virtual users, live metrics and four charts, a confirmation naming the target hosts, a JSON
 report; 1 to 100 users over 10 to 3 600 s); local mock servers on `127.0.0.1` (a hand-written HTTP/1.1 host on `TcpListener`, routes in
 `mocks/*.mock.yaml`, templating, CORS, a 500-entry request log, generation from a folder); monitors (scheduled folder runs while the app
-is open, `monitors/*.monitor.yaml`, per-user history in `.yaapic/monitor-runs.jsonl`); the tool windows, folder menu, palette and status
-bar entries on both front-ends. End-to-end tests: `Milestone6RunnerEndToEndTests`, `Milestone6MocksAndLoadEndToEndTests` and
+is open, `monitors/*.monitor.yaml`, per-user history in `.yaapic/monitor-runs.jsonl`); the four views in the main window with rail entries, folder menu, palette and status
+bar entries on both front-ends (ADR 0023, refactor M6-75 to M6-83). End-to-end tests: `Milestone6RunnerEndToEndTests`, `Milestone6MocksAndLoadEndToEndTests` and
 `Milestone6MonitorsEndToEndTests`. Documentation: [automation.md](../automation.md), [architecture.md](../architecture.md),
 [file-format.md](../file-format.md), [scripting-compatibility.md](../scripting-compatibility.md), ADRs
 [0018](../adr/0018-collection-runner.md), [0019](../adr/0019-load-tests.md), [0020](../adr/0020-mock-servers.md),
-[0021](../adr/0021-monitors.md) and the [load spike](../spikes/m6-load.md). No new dependency (see [dependencies.md](../dependencies.md)).
+[0021](../adr/0021-monitors.md), [0023](../adr/0023-automation-views-in-main-window.md) and the [load spike](../spikes/m6-load.md). No new dependency (see [dependencies.md](../dependencies.md)).
 
 Deferred: HTML reports, saved runner and load-test configurations, spike and peak load profiles, thresholds, HTTPS mocks, mock matching
 on query, headers or body, operating-system notifications, cron schedules, running unfiled requests, parallel runs.

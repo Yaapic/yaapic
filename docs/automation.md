@@ -1,17 +1,19 @@
 # Automation: Runner, load tests, mock servers and monitors
 
-Milestone 6 adds four tools that work on the requests you already have. They open as separate, non-modal windows (one of
-each at a time) from the folder context menu, the command palette and the status bar. Design decisions:
+Milestone 6 adds four tools that work on the requests you already have. Each one has an entry on the left rail (under
+Collections and History) and opens in the main window, in place of the request tabs; the folder context menu, the command palette
+and the status bar lead to the same views. Collections or History, or opening a request, brings the request tabs back as you left
+them. A tool keeps working while another view is shown. Design decisions:
 [ADR 0018](adr/0018-collection-runner.md) (Runner), [ADR 0019](adr/0019-load-tests.md) (load tests),
 [ADR 0020](adr/0020-mock-servers.md) (mock servers) and [ADR 0021](adr/0021-monitors.md) (monitors); internals in
-[architecture.md](architecture.md).
+[architecture.md](architecture.md) and [ADR 0023](adr/0023-automation-views-in-main-window.md) (views in the main window).
 
-| Tool | Folder context menu | Palette | Status bar |
-|---|---|---|---|
-| Runner | Run folder... | Run collection... | Runner (shows `3/20` during a run) |
-| Load test | Load test... | Load test... | none |
-| Mock servers | Create a mock server... | Mock servers | Mocks: {n} running (hidden when none) |
-| Monitors | Monitor folder... | Monitors | Monitors: {n} failing (hidden when 0) |
+| Tool | Rail | Folder context menu | Palette | Status bar |
+|---|---|---|---|---|
+| Runner | Runner icon, tooltip "Runner" | Run folder... | Run collection... | Runner (shows `3/20` during a run) |
+| Load test | Load test icon, tooltip "Load test" | Load test... | Load test... | none |
+| Mock servers | Mock servers icon, tooltip "Mock servers" | Create a mock server... | Mock servers | Mocks: {n} running (hidden when none) |
+| Monitors | Monitors icon, tooltip "Monitors" | Monitor folder... | Monitors | Monitors: {n} failing (hidden when 0) |
 
 ## Runner
 
@@ -20,8 +22,8 @@ exactly like the request editor: authentication, client certificates, scripts, r
 recorded in the history.
 
 **What runs.** The requests of the folder, depth first in tree order (sub-folders first, then requests, each by name). Unfiled
-requests cannot be run. In the setup you can untick requests and move them up and down; that order exists only in the open
-window (runner configurations are not saved).
+requests cannot be run. In the setup you can untick requests and move them up and down; that order is kept while Yaapic
+runs (runner configurations are not saved).
 
 | Option | Range | Default |
 |---|---|---|
@@ -41,7 +43,7 @@ ends as `Completed`, `Stopped` (a script called `setNextRequest(null)`), `Stoppe
 
 ### Data files
 
-Pick a CSV or JSON file to run one iteration per row. The window previews the column names and the first five rows. Iteration
+Pick a CSV or JSON file to run one iteration per row. The Runner previews the column names and the first five rows. Iteration
 `i` (starting at 0) uses row `i`; past the end it keeps using the last row. The format comes from the extension, else from the
 first character (`[` means JSON). Limits: 10 MiB, 100 000 rows, 1 000 columns.
 
@@ -90,7 +92,7 @@ In Lua the same calls exist as `yaapic.iteration_data.get('user')` (`nil` when m
 
 The results pane shows the summary tiles (sent, skipped, errors, failures, tests passed and failed, average time, total time),
 the iterations and one row per request, a filter (All, Passed, Failed, Skipped) and the details of the selected row (status,
-time, size, tests, console, error). The console lines also go to the console panel. Only one run at a time; closing the window
+time, size, tests, console, error). The console lines also go to the console panel. Only one run at a time; showing another view
 does not stop it.
 
 Reports list the URL **template** of each request, never the resolved URL, and console lines and test messages are redacted, so
@@ -100,7 +102,7 @@ secret values do not reach a report.
 - **JUnit XML**: one `<testsuite>` per request per iteration, named `Iteration {n} / {path}/{name}`, one `<testcase>` per test.
   A request in `Error` is a `<testcase name="request">` with an `<error>`. Most CI systems read it directly, for example
   GitHub Actions with a test-report action, Jenkins with the JUnit plugin, GitLab with `artifacts:reports:junit`. Yaapic has
-  no command-line runner yet, so the file is exported by hand from the window (see "Not delivered").
+  no command-line runner yet, so the file is exported by hand from the Runner (see "Not delivered").
 
 ## Load tests
 
@@ -119,14 +121,14 @@ per second whatever the number of users ([spike](spikes/m6-load.md)).
 The request list, selection and order work as in the Runner setup. Variable changes made by scripts are never saved, and
 nothing goes to the history or the console. `setNextRequest` is ignored; `skipRequest` skips.
 
-**Confirmation.** The first start in each window session asks "Start a load test against {hosts}?" and shows the target hosts.
+**Confirmation.** The first start after Yaapic starts asks "Start a load test against {hosts}?" and shows the target hosts.
 Only load servers you are allowed to load.
 
 **What counts as an error.** A sample (one request) is an error when the send failed, a pre-request script aborted it, a test
 failed, or the status is 400 or more (unlike the Runner, HTTP errors count). Skipped requests are not samples.
 
 **Metrics.** Overall and per request: count, errors, error rate, min, average, max, p50, p90, p95, p99 (nearest rank), and
-throughput (count divided by elapsed seconds). The window shows live tiles (requests, throughput, average, p95, error rate,
+throughput (count divided by elapsed seconds). The view shows live tiles (requests, throughput, average, p95, error rate,
 active users) and four charts (requests per second, average response time, errors per second, active users). At the end of the
 duration no new request starts and in-flight ones finish; Stop cancels them at once.
 
@@ -140,7 +142,8 @@ report says "percentiles computed on the first 2000000 samples". No ramp-down, n
 
 A mock server is a small local HTTP server that answers with canned responses. It runs inside Yaapic, on `127.0.0.1` only (so
 nothing else on your network can reach it), only while the app is open, and is never started at launch. All servers stop when
-the app closes. The base URL shown and copied is `http://127.0.0.1:{port}`.
+the app closes. Closing Yaapic while a Runner run or a load test is in progress asks first, since its results would be lost;
+running mock servers stop without a question. The base URL shown and copied is `http://127.0.0.1:{port}`.
 
 **Definition.** One file per server in the workspace, `mocks/<slug>.mock.yaml`, shared through Git (format and an example:
 [file-format.md](file-format.md#mock-server-file)). A server has a name, a port (1024 to 65535, default 3000), a CORS switch (on
@@ -202,7 +205,7 @@ computer**: there is no cloud and no background service, and nothing runs when t
   start, such as a deleted folder or environment, or the run itself failed, such as a `setNextRequest` loop).
 - **History:** per user, never committed, in `.yaapic/monitor-runs.jsonl` ([format](file-format.md#monitor-run-history)). Each
   line holds counts, the status, a message and at most 20 failures (request name, outcome, status, first failed test or error);
-  never bodies or headers. The last 200 runs per monitor are kept, and deleting a monitor deletes its history. The window shows the
+  never bodies or headers. The last 200 runs per monitor are kept, and deleting a monitor deletes its history. The Monitors view shows the
   last 50 runs and the failures of the selected one.
 - **Failures:** a failed run adds the console warning "Monitor '{name}' failed: {reason}", and the status bar shows
   "Monitors: {n} failing" (enabled monitors whose last run is not `Passed`). There are no operating-system, e-mail or webhook
@@ -212,7 +215,7 @@ computer**: there is no cloud and no background service, and nothing runs when t
 
 - **"Port {n} is already in use" when starting a mock server.** Another program (or another mock server) holds the port. Pick
   another port in the editor, or stop the other server.
-- **A data file is refused.** The window shows the reader's message. Check the limits (10 MiB, 100 000 rows, 1 000 columns),
+- **A data file is refused.** The Runner shows the reader's message. Check the limits (10 MiB, 100 000 rows, 1 000 columns),
   that a CSV starts with a header row, and that a JSON file is valid and is an array of objects. Fix the file and choose it
   again.
 - **A run stops with "no request named '...'".** `setNextRequest` takes the name (or id) of a request that is **in this run**:
@@ -231,7 +234,7 @@ HTML reports, saved runner and load-test configurations, spike and peak load pro
 query, headers or body, operating-system notifications and cron schedules are not implemented.
 
 - **Command-line runner:** decided (`yaapic-cli`, a separate executable for CI, task M6-62) but not built yet (tasks M6-65 to
-  M6-74); until then reports are exported from the Runner window.
+  M6-74); until then reports are exported from the Runner.
 - **Monitors while Yaapic is closed:** not planned for now (M6-63). Monitors run only while the app is open; there is no tray mode and
   no background service.
 - **Mock servers reachable from other devices:** not planned for now (M6-64). Mocks listen on `127.0.0.1` over HTTP only; to reach one

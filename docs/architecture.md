@@ -203,11 +203,13 @@ MonitorsViewModel -> MonitorScheduler  (Core.Monitors: TimeProvider + PeriodicTi
 ```
 
 The data layer is the new `VariableScopeKind.Data` (fifth optional parameter of `VariableScopes`): local, data, environment,
-collection, globals, dynamic; scripts read it through `yaapic.iterationData` and never write it. The shell opens the four tools
-through `ToolWindowHost` (one window of each kind, `ShowOrActivate`): the folder context menu, the palette (`palette.runCollection`,
-`palette.loadTest`, `palette.mockServers`, `palette.monitors`) and the status bar items (Runner progress, "Mocks: {n} running",
-"Monitors: {n} failing"). `AppComposition.CreateShell` wires the stores, the host, the scheduler (which starts with the shell and
-stops when it closes) and the services; closing the main window stops the mock servers. `IDialogService.ConfirmAsync` backs the
+collection, globals, dynamic; scripts read it through `yaapic.iterationData` and never write it. `ShellViewModel.Section` (`ShellSection`: `Requests`,
+`Runner`, `LoadTest`, `MockServers`, `Monitors`) says what the main area shows; the rail commands (`ShowRunnerCommand`...), the folder
+context menu, the palette (`palette.runCollection`, `palette.loadTest`, `palette.mockServers`, `palette.monitors`) and the status bar
+items (Runner progress, "Mocks: {n} running", "Monitors: {n} failing") set it, and `TabsViewModel.TabShown` sets it back to `Requests`
+(ADR 0023). `AppComposition.CreateShell` wires the stores, the host, the scheduler (which starts with the shell and
+stops when it closes) and the services; closing the main window asks first while a Runner run or a load
+test is in progress (not for mock servers), then stops the mock servers. `IDialogService.ConfirmAsync` backs the
 load-test confirmation and `ContextProgress<T>` reports progress to the UI context. WinUI and Avalonia only render the view
 models (`RunnerView`, `LoadTestView`, `MockServersView`, `MonitorsView`, a shared line chart for the load charts).
 

@@ -1,6 +1,6 @@
 # M6-82: Docs: automation views in the main window
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-81
 
@@ -45,9 +45,21 @@ Screenshots (M6-83); ADR text (M6-75).
 
 ## Acceptance criteria
 
-- [ ] `rtk grep -n -i "window" docs/automation.md` shows no tool described as a window (the main window and OS wording may stay).
-- [ ] `docs/architecture.md` has no `ToolWindowHost`; the README summary is updated; Markdown links resolve.
+- [x] `rtk grep -n -i "window" docs/automation.md` shows no tool described as a window (the main window and OS wording may stay).
+- [x] `docs/architecture.md` has no `ToolWindowHost`; the README summary is updated; Markdown links resolve.
 
 ## Suggested commit message
 
 `docs: describe the automation views in the main window`
+
+## Notes
+
+Docs only, nothing built or run. `rtk grep -n -i "window" docs/automation.md` now finds only the main window and the ADR link;
+`ToolWindowHost` remains only in ADR 0023 and the refactor description of the README (history). The end-to-end tests
+(`Milestone6*EndToEndTests`) use no windows or shell events: no change. The docs describe what M6-77 to M6-81 delivered, whose checks
+were partial. Not run: the Avalonia views on macOS or Linux (Windows only), the light theme on the rail (WinUI Runner and Mock views
+only, Avalonia not), a true 900 x 600 window, the load-test close prompt, Cancel and Continue on the "Close Yaapic?" confirmation,
+the palette and status bar entry points on WinUI (covered by view model tests), the Avalonia folder menu items Load test, Mock server
+and Monitor, a Runner run continuing while another section is shown on Avalonia, and file pickers and the load-test confirmation over
+the main window. The WinUI screenshots are M6-83.
+
