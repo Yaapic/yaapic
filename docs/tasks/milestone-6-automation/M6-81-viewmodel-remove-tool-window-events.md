@@ -1,6 +1,6 @@
 # M6-81: ViewModel: remove the tool window events
 
-Status: todo
+Status: done
 Platform: any
 Depends on: M6-78, M6-80
 
@@ -25,8 +25,8 @@ Renaming the `Request*` methods; view changes.
 
 ## Acceptance criteria
 
-- [ ] `rtk grep -rn "RunnerRequested\|LoadTestRequested\|MockServersRequested\|MonitorsRequested" src tests` finds nothing (outside `obj/`).
-- [ ] Both front-ends build; architecture tests green; 0 warnings, XML docs, all tests green.
+- [x] `rtk grep -rn "RunnerRequested\|LoadTestRequested\|MockServersRequested\|MonitorsRequested" src tests` finds nothing (outside `obj/`).
+- [x] Both front-ends build; architecture tests green; 0 warnings, XML docs, all tests green.
 
 ## Suggested commit message
 

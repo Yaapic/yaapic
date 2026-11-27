@@ -70,18 +70,6 @@ public sealed partial class ShellViewModel
     /// <summary>Gets the status bar text of the monitors; empty hides the item.</summary>
     public string MonitorsStatusText => Monitors?.FailingText ?? "";
 
-    /// <summary>Raised when the user asks for the Runner; the views open or activate its window.</summary>
-    public event EventHandler? RunnerRequested;
-
-    /// <summary>Raised when the user asks for the load test tool; the views open or activate its window.</summary>
-    public event EventHandler? LoadTestRequested;
-
-    /// <summary>Raised when the user asks for the mock servers; the views open or activate their window.</summary>
-    public event EventHandler? MockServersRequested;
-
-    /// <summary>Raised when the user asks for the monitors; the views open or activate their window.</summary>
-    public event EventHandler? MonitorsRequested;
-
     /// <summary>Hands the shell the tool view models, which live as long as the shell; the composition root calls it once.</summary>
     /// <param name="runner">The Runner.</param>
     /// <param name="load">The load test tool.</param>
@@ -124,43 +112,39 @@ public sealed partial class ShellViewModel
         OnPropertyChanged(nameof(Monitors));
     }
 
-    /// <summary>Asks the views to open the Runner window; does nothing when the tools are not attached.</summary>
+    /// <summary>Shows the Runner in the main area; does nothing when the tools are not attached.</summary>
     public void RequestRunner()
     {
         if (CanAutomate)
         {
             Section = ShellSection.Runner;
-            RunnerRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    /// <summary>Asks the views to open the load test window; does nothing when the tools are not attached.</summary>
+    /// <summary>Shows the load test tool in the main area; does nothing when the tools are not attached.</summary>
     public void RequestLoadTest()
     {
         if (CanAutomate)
         {
             Section = ShellSection.LoadTest;
-            LoadTestRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    /// <summary>Asks the views to open the mock servers window; does nothing when the tools are not attached.</summary>
+    /// <summary>Shows the mock servers in the main area; does nothing when the tools are not attached.</summary>
     public void RequestMockServers()
     {
         if (CanAutomate)
         {
             Section = ShellSection.MockServers;
-            MockServersRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 
-    /// <summary>Asks the views to open the monitors window; does nothing when the tools are not attached.</summary>
+    /// <summary>Shows the monitors in the main area; does nothing when the tools are not attached.</summary>
     public void RequestMonitors()
     {
         if (CanAutomate)
         {
             Section = ShellSection.Monitors;
-            MonitorsRequested?.Invoke(this, EventArgs.Empty);
         }
     }
 

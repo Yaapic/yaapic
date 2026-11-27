@@ -150,14 +150,9 @@ public sealed class AutomationShellTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task Without_the_tools_commands_are_disabled_events_silent_and_palette_entries_absent()
+    public async Task Without_the_tools_commands_are_disabled_section_unchanged_and_palette_entries_absent()
     {
         var (_, root, _) = await TreeAsync();
-        var raised = 0;
-        _shell.RunnerRequested += (_, _) => raised++;
-        _shell.LoadTestRequested += (_, _) => raised++;
-        _shell.MockServersRequested += (_, _) => raised++;
-        _shell.MonitorsRequested += (_, _) => raised++;
 
         _shell.RequestRunner();
         _shell.RequestLoadTest();
@@ -165,7 +160,7 @@ public sealed class AutomationShellTests : IAsyncDisposable
         _shell.RequestMonitors();
 
         Assert.False(_shell.CanAutomate);
-        Assert.Equal(0, raised);
+        Assert.Equal(ShellSection.Requests, _shell.Section);
         Assert.False(_shell.RunFolderCommand.CanExecute(root));
         Assert.False(_shell.LoadTestFolderCommand.CanExecute(root));
         Assert.False(_shell.MockFromFolderCommand.CanExecute(root));
@@ -177,24 +172,21 @@ public sealed class AutomationShellTests : IAsyncDisposable
     }
 
     [Fact]
-    public async Task Folder_commands_open_or_create_and_raise_their_event_and_skip_requests()
+    public async Task Folder_commands_open_or_create_and_show_their_section_and_skip_requests()
     {
         Attach();
         var (top, root, _) = await TreeAsync();
         var nested = root.Children.Single(c => c.IsFolder);
         var request = root.Children.Single(c => !c.IsFolder);
-        var raised = new List<string>();
-        _shell.RunnerRequested += (_, _) => raised.Add("runner");
-        _shell.LoadTestRequested += (_, _) => raised.Add("load");
-        _shell.MockServersRequested += (_, _) => raised.Add("mocks");
-        _shell.MonitorsRequested += (_, _) => raised.Add("monitors");
 
         _shell.RunFolderCommand.Execute(nested);
+        Assert.Equal(ShellSection.Runner, _shell.Section);
         _shell.LoadTestFolderCommand.Execute(root);
+        Assert.Equal(ShellSection.LoadTest, _shell.Section);
         await _shell.MockFromFolderCommand.ExecuteAsync(root);
+        Assert.Equal(ShellSection.MockServers, _shell.Section);
         await _shell.MonitorFolderCommand.ExecuteAsync(root);
-
-        Assert.Equal(["runner", "load", "mocks", "monitors"], raised);
+        Assert.Equal(ShellSection.Monitors, _shell.Section);
         Assert.Single(await _mockStore.ListAsync(Ct));
         Assert.Equal(top.Id, (await _monitorStore.ListAsync(Ct)).Single().FolderId);
         Assert.False(_shell.RunFolderCommand.CanExecute(request));
@@ -209,11 +201,6 @@ public sealed class AutomationShellTests : IAsyncDisposable
     {
         Attach();
         var (_, _, request) = await TreeAsync();
-        var raised = new List<string>();
-        _shell.RunnerRequested += (_, _) => raised.Add("runner");
-        _shell.LoadTestRequested += (_, _) => raised.Add("load");
-        _shell.MockServersRequested += (_, _) => raised.Add("mocks");
-        _shell.MonitorsRequested += (_, _) => raised.Add("monitors");
 
         await RunAllAsync();
         Assert.Empty(_runner.Setup.Items);
@@ -221,7 +208,6 @@ public sealed class AutomationShellTests : IAsyncDisposable
         _shell.Tabs.Open(request);
         await RunAllAsync();
 
-        Assert.Equal(["runner", "load", "mocks", "monitors", "runner", "load", "mocks", "monitors"], raised);
         Assert.Single(_runner.Setup.Items);
         Assert.Single(_load.Requests.Items);
         Assert.Equal(
@@ -235,6 +221,7 @@ public sealed class AutomationShellTests : IAsyncDisposable
             foreach (var slug in new[] { "run-collection", "load-test", "mock-servers", "monitors" })
             {
                 await items.Single(i => i.Id == "command:" + slug).Execute();
+                Assert.Equal(slug switch { "run-collection" => ShellSection.Runner, "load-test" => ShellSection.LoadTest, "mock-servers" => ShellSection.MockServers, _ => ShellSection.Monitors }, _shell.Section);
             }
         }
     }
@@ -281,14 +268,9 @@ public sealed class AutomationShellTests : IAsyncDisposable
     }
 
     [Fact]
-    public void Show_commands_set_the_section_raise_the_change_and_the_event()
+    public void Show_commands_set_the_section_and_raise_the_change()
     {
         Attach();
-        var raised = new List<string>();
-        _shell.RunnerRequested += (_, _) => raised.Add("runner");
-        _shell.LoadTestRequested += (_, _) => raised.Add("load");
-        _shell.MockServersRequested += (_, _) => raised.Add("mocks");
-        _shell.MonitorsRequested += (_, _) => raised.Add("monitors");
         var changed = new List<string?>();
         _shell.PropertyChanged += (_, e) => changed.Add(e.PropertyName);
 
@@ -310,7 +292,6 @@ public sealed class AutomationShellTests : IAsyncDisposable
             Assert.False(_shell.IsCollectionsSelected);
         }
 
-        Assert.Equal(["runner", "load", "mocks", "monitors"], raised);
         Assert.Contains(nameof(ShellViewModel.Section), changed);
         Assert.Contains(nameof(ShellViewModel.IsRunnerSection), changed);
         Assert.Contains(nameof(ShellViewModel.IsRequestsSection), changed);
