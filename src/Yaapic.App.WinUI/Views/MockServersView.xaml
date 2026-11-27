@@ -9,9 +9,9 @@
     xmlns:m="using:Yaapic.ViewModels.Mocks">
   <Grid>
     <Grid.ColumnDefinitions>
-      <ColumnDefinition Width="240"/>
+      <ColumnDefinition Width="200"/>
       <ColumnDefinition Width="*"/>
-      <ColumnDefinition Width="320"/>
+      <ColumnDefinition Width="240"/>
     </Grid.ColumnDefinitions>
 
     <!-- Servers -->
@@ -162,10 +162,10 @@
                      Text="{x:Bind ViewModel.SelectedRoute.Name, Mode=TwoWay, FallbackValue='', UpdateSourceTrigger=PropertyChanged}"/>
             <Grid ColumnSpacing="8">
               <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="120"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="96"/>
                 <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="130"/>
               </Grid.ColumnDefinitions>
               <!-- The methods are copied into an ObservableCollection (a bare IReadOnlyList kills the process under Native AOT), which
                    clears the selection, so the selected method is applied and read back in the code-behind. -->

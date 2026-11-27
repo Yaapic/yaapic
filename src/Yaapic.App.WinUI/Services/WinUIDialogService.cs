@@ -26,9 +26,6 @@ public sealed class WinUIDialogService : IDialogService
         _xamlRoot = xamlRoot;
     }
 
-    /// <summary>Gets or sets the tool window that currently has the focus; while set, dialogs and pickers belong to it.</summary>
-    internal static Window? ActiveWindow { get; set; }
-
     /// <inheritdoc/>
     public async Task<bool> ConfirmAsync(string title, string message) =>
         await ShowAsync(new ContentDialog
@@ -103,7 +100,7 @@ public sealed class WinUIDialogService : IDialogService
     {
         var picker = new FileOpenPicker { CommitButtonText = title };
         picker.FileTypeFilter.Add("*");
-        InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(ActiveWindow ?? _window));
+        InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(_window));
         return (await picker.PickSingleFileAsync())?.Path;
     }
 
@@ -114,7 +111,7 @@ public sealed class WinUIDialogService : IDialogService
         {
             var picker = new FolderPicker { CommitButtonText = title, SuggestedStartLocation = PickerLocationId.DocumentsLibrary };
             picker.FileTypeFilter.Add("*");
-            InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(ActiveWindow ?? _window));
+            InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(_window));
             return (await picker.PickSingleFolderAsync())?.Path;
         }
         catch (Exception e) when (e is COMException or InvalidOperationException or ArgumentException)
@@ -134,7 +131,7 @@ public sealed class WinUIDialogService : IDialogService
         }
 
         picker.FileTypeChoices.Add(Strings.FilesAll, ["."]);
-        InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(ActiveWindow ?? _window));
+        InitializeWithWindow.Initialize(picker, WindowNative.GetWindowHandle(_window));
         if (await picker.PickSaveFileAsync() is not { } file)
         {
             return false;
@@ -171,7 +168,7 @@ public sealed class WinUIDialogService : IDialogService
 
     private async Task<ContentDialogResult> ShowAsync(ContentDialog dialog)
     {
-        if ((ActiveWindow?.Content?.XamlRoot ?? _xamlRoot()) is not { } root)
+        if (_xamlRoot() is not { } root)
         {
             return ContentDialogResult.None;
         }

@@ -1,6 +1,6 @@
 # M6-78: WinUI: automation views in the main area, tool windows removed
 
-Status: todo
+Status: done
 Platform: windows
 Depends on: M6-77
 
@@ -45,9 +45,9 @@ Avalonia (M6-79, M6-80); removing the shell events (M6-81); docs and screenshots
 
 ## Acceptance criteria
 
-- [ ] `rtk grep -rn "ToolWindow\|ActiveWindow" src/Yaapic.App.WinUI --include=*.cs --include=*.xaml` finds nothing (outside `obj/`).
-- [ ] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
-- [ ] Manual smoke on the published exe (UI Automation or by hand; record each item PASS / not run in Notes):
+- [x] `rtk grep -rn "ToolWindow\|ActiveWindow" src/Yaapic.App.WinUI --include=*.cs --include=*.xaml` finds nothing (outside `obj/`).
+- [x] AOT publish of `Yaapic.App.WinUI`: 0 IL2xxx/IL3xxx warnings; the exe starts.
+- [x] Manual smoke on the published exe (UI Automation or by hand; record each item PASS / not run in Notes):
   - each rail entry shows its view in the main area, hides the sidebar and the request area, highlights the entry; there is never a
     second top-level window;
   - Collections and History bring back the sidebar and the request area with the same active tab;
@@ -63,8 +63,23 @@ Avalonia (M6-79, M6-80); removing the shell events (M6-81); docs and screenshots
     Continue exits; closing with only a running mock server asks nothing, exits and the port stops answering; closing with nothing
     running asks nothing;
   - at 900 x 600 every view is usable (nothing clipped without a scroll bar); dark and light look right.
-- [ ] 0 warnings, all tests green.
+- [x] 0 warnings, all tests green.
 
 ## Suggested commit message
 
 `feat(winui): show the automation views in the main window`
+
+## Notes
+
+Verified on the published Native AOT exe through `tools/screenshots/Capture-WinUI.ps1` steps (m6 seed, English; screenshots viewed).
+PASS: the four views show in the main area with the rail entry highlighted, sidebar and request area hidden (Runner, Load test, Mock
+servers, Monitors, dark); the folder context-menu items show Runner (3 requests listed, run completed with results), Load test, Mock
+server (generated and started, `GET /users` answered and logged while shown), Monitor (created and selected); Collections brings the
+sidebar and tabs back; a Runner run (Iterations 40, Delay 400) went on while on Collections and Ctrl+T there created a tab, and the
+run and results were still there on return; Ctrl+T from Monitors shows the requests with a new tab; closing during a run shows "Close
+Yaapic?" (Cancel is the default button); closing with only a running mock server exits without a prompt; the Runner view and the
+Mock view in light theme. NOT RUN: palette and status-bar entry points (covered by the view model tests, the status bar shows the
+Runner item), Ctrl+W/Ctrl+S being ignored from a tool, Cancel and Continue buttons, load-test close prompt, curl on the mock port
+(the capture script's own GET was used), a true 900 x 600 window (captures are 1440 x 900 px, about 960 x 600 dip at this display scale).
+Layout fix: `MockServersView` columns 240/*/320 became 200/*/240 and the route editor columns 120/*/110/130 became 100/*/96/110 so the
+Name, Port, Copy URL and Path fields are not clipped. At this height the Load test request list shows 2.5 rows (it scrolls).

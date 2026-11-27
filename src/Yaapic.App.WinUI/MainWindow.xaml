@@ -116,7 +116,7 @@
     <Grid Grid.Row="2">
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="48"/>
-        <ColumnDefinition Width="272"/>
+        <ColumnDefinition Width="Auto"/>
         <ColumnDefinition Width="*"/>
       </Grid.ColumnDefinitions>
       <Border Background="{ThemeResource YaapicSurfaceAppBrush}" BorderBrush="{ThemeResource YaapicBorderSubtleBrush}"
@@ -258,8 +258,9 @@
           </Button>
         </Grid>
       </Border>
-      <Grid Grid.Column="1" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
-            BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,1,0">
+      <Grid Grid.Column="1" Width="272" Background="{ThemeResource YaapicSurfaceSidebarBrush}"
+            BorderBrush="{ThemeResource YaapicBorderSubtleBrush}" BorderThickness="0,0,1,0"
+            Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRequestsSection), Mode=OneWay}">
         <Grid.RowDefinitions>
           <RowDefinition Height="40"/>
           <RowDefinition Height="Auto"/>
@@ -345,6 +346,7 @@
         </StackPanel>
       </Grid>
       <Grid Grid.Column="2">
+      <Grid Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRequestsSection), Mode=OneWay}">
         <TabView IsAddTabButtonVisible="False" VerticalAlignment="Stretch" VerticalContentAlignment="Stretch"
                  TabItemsSource="{x:Bind ViewModel.Tabs.Tabs, Mode=OneWay}"
                  SelectedItem="{x:Bind ViewModel.Tabs.ActiveTab, Mode=TwoWay}"
@@ -410,6 +412,15 @@
             </Border>
           </StackPanel>
         </StackPanel>
+      </Grid>
+      <v:RunnerView ViewModel="{x:Bind ViewModel.Runner, Mode=OneWay}" AutomationProperties.Name="{x:Bind loc:Strings.RunnerTitle}"
+             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsRunnerSection), Mode=OneWay}"/>
+      <v:LoadTestView ViewModel="{x:Bind ViewModel.LoadTest, Mode=OneWay}" AutomationProperties.Name="{x:Bind loc:Strings.LoadTitle}"
+             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsLoadTestSection), Mode=OneWay}"/>
+      <v:MockServersView ViewModel="{x:Bind ViewModel.Mocks, Mode=OneWay}" AutomationProperties.Name="{x:Bind loc:Strings.MockTitle}"
+             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsMockServersSection), Mode=OneWay}"/>
+      <v:MonitorsView ViewModel="{x:Bind ViewModel.Monitors, Mode=OneWay}" AutomationProperties.Name="{x:Bind loc:Strings.MonitorTitle}"
+             Visibility="{x:Bind p:VisibilityMap.WhenTrue(ViewModel.IsMonitorsSection), Mode=OneWay}"/>
       </Grid>
     </Grid>
     <v:ConsolePanelView x:Name="ConsolePanel" Grid.Row="3" Shell="{x:Bind ViewModel, Mode=OneWay}"/>

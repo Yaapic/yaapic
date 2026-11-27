@@ -689,7 +689,7 @@ Sonnet-sized cards: each card is one session; the card text holds every decision
 | [M6-75](milestone-6-automation/M6-75-adr-automation-views-in-main-window.md) | ADR 0023: automation views in the main window | any | M6-49, M6-56 | done |
 | [M6-76](milestone-6-automation/M6-76-viewmodel-shell-sections.md) | ViewModel: shell sections for the automation views | any | M6-75 | done |
 | [M6-77](milestone-6-automation/M6-77-winui-rail-automation-entries.md) | WinUI: automation entries on the rail | windows | M6-76 | done |
-| [M6-78](milestone-6-automation/M6-78-winui-automation-views-in-main-area.md) | WinUI: automation views in the main area, tool windows removed | windows | M6-77 | todo |
+| [M6-78](milestone-6-automation/M6-78-winui-automation-views-in-main-area.md) | WinUI: automation views in the main area, tool windows removed | windows | M6-77 | done |
 | [M6-79](milestone-6-automation/M6-79-avalonia-rail-automation-entries.md) | Avalonia: automation entries on the rail | unix | M6-76, M6-77 | todo |
 | [M6-80](milestone-6-automation/M6-80-avalonia-automation-views-in-main-area.md) | Avalonia: automation views in the main area, tool windows removed | unix | M6-78, M6-79 | todo |
 | [M6-81](milestone-6-automation/M6-81-viewmodel-remove-tool-window-events.md) | ViewModel: remove the tool window events | any | M6-78, M6-80 | todo |

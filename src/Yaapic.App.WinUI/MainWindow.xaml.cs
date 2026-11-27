@@ -42,7 +42,6 @@ public sealed partial class MainWindow : Window
         }
 
         AppWindow.Closing += OnClosing;
-        Closed += (_, _) => Views.ToolWindow.CloseAll();
         Root.ActualThemeChanged += (_, _) => ApplyCaptionButtonColors();
         ApplyCaptionButtonColors();
         // Ctrl+` (the OEM 3 key, 0xC0 on a US layout) has no named VirtualKey and no KeyboardAccelerator match: handle the key.
@@ -76,10 +75,6 @@ public sealed partial class MainWindow : Window
                 _viewModel.JwtDecoderRequested -= OnJwtDecoderRequested;
                 _viewModel.ImportRequested -= OnImportRequested;
                 _viewModel.ExportRequested -= OnExportRequested;
-                _viewModel.RunnerRequested -= OnRunnerRequested;
-                _viewModel.LoadTestRequested -= OnLoadTestRequested;
-                _viewModel.MockServersRequested -= OnMockServersRequested;
-                _viewModel.MonitorsRequested -= OnMonitorsRequested;
                 _viewModel.Vault.SetupRequested -= OnVaultRequested;
                 _viewModel.Vault.UnlockRequested -= OnVaultRequested;
                 _viewModel.Updates.SettingsRequested -= OnUpdatesRequested;
@@ -95,10 +90,6 @@ public sealed partial class MainWindow : Window
                 _viewModel.JwtDecoderRequested += OnJwtDecoderRequested;
                 _viewModel.ImportRequested += OnImportRequested;
                 _viewModel.ExportRequested += OnExportRequested;
-                _viewModel.RunnerRequested += OnRunnerRequested;
-                _viewModel.LoadTestRequested += OnLoadTestRequested;
-                _viewModel.MockServersRequested += OnMockServersRequested;
-                _viewModel.MonitorsRequested += OnMonitorsRequested;
                 _viewModel.Vault.SetupRequested += OnVaultRequested;
                 _viewModel.Vault.UnlockRequested += OnVaultRequested;
                 _viewModel.Updates.SettingsRequested += OnUpdatesRequested;
@@ -154,13 +145,21 @@ public sealed partial class MainWindow : Window
 
     private void OnCloseTab(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
-        _viewModel?.Tabs.CloseActiveCommand.Execute(null);
+        if (_viewModel is { IsRequestsSection: true })
+        {
+            _viewModel.Tabs.CloseActiveCommand.Execute(null);
+        }
+
         args.Handled = true;
     }
 
     private void OnSaveTab(KeyboardAccelerator sender, KeyboardAcceleratorInvokedEventArgs args)
     {
-        _viewModel?.Tabs.SaveActiveCommand.Execute(null);
+        if (_viewModel is { IsRequestsSection: true })
+        {
+            _viewModel.Tabs.SaveActiveCommand.Execute(null);
+        }
+
         args.Handled = true;
     }
 
@@ -343,43 +342,6 @@ public sealed partial class MainWindow : Window
     {
         _viewModel?.Tabs.PreviousTabCommand.Execute(null);
         args.Handled = true;
-    }
-
-    private Views.ToolWindow? _runnerWindow;
-    private Views.ToolWindow? _loadTestWindow;
-    private Views.ToolWindow? _mocksWindow;
-    private Views.ToolWindow? _monitorsWindow;
-
-    private void OnRunnerRequested(object? sender, EventArgs e)
-    {
-        if (_viewModel?.Runner is { } vm)
-        {
-            Views.ToolWindow.ShowOrActivate(ref _runnerWindow, Strings.RunnerTitle, () => new Views.RunnerView { ViewModel = vm }, this);
-        }
-    }
-
-    private void OnLoadTestRequested(object? sender, EventArgs e)
-    {
-        if (_viewModel?.LoadTest is { } vm)
-        {
-            Views.ToolWindow.ShowOrActivate(ref _loadTestWindow, Strings.LoadTitle, () => new Views.LoadTestView { ViewModel = vm }, this);
-        }
-    }
-
-    private void OnMockServersRequested(object? sender, EventArgs e)
-    {
-        if (_viewModel?.Mocks is { } vm)
-        {
-            Views.ToolWindow.ShowOrActivate(ref _mocksWindow, Strings.MockTitle, () => new Views.MockServersView { ViewModel = vm }, this);
-        }
-    }
-
-    private void OnMonitorsRequested(object? sender, EventArgs e)
-    {
-        if (_viewModel?.Monitors is { } vm)
-        {
-            Views.ToolWindow.ShowOrActivate(ref _monitorsWindow, Strings.MonitorTitle, () => new Views.MonitorsView { ViewModel = vm }, this);
-        }
     }
 
     private void OnEnvironmentsRequested(object? sender, EventArgs e) => OnManageEnvironments(this, new RoutedEventArgs());
@@ -590,7 +552,4 @@ public sealed partial class MainWindow : Window
     /// <summary>Applies a theme, shared by the Settings menu and the <c>--theme</c> command-line option.</summary>
     /// <param name="theme">The element theme to apply.</param>
     internal void SetTheme(ElementTheme theme) => Root.RequestedTheme = theme;
-
-    /// <summary>Gets the root element whose theme the tool windows copy.</summary>
-    internal FrameworkElement ThemeRoot => Root;
 }
