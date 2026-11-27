@@ -30,6 +30,7 @@ public sealed partial class MonitorsViewModel : ObservableObject
     private MonitorDefinition? _saved;
     private MonitorItemViewModel? _selectedMonitor;
     private IReadOnlyList<CollectionNode> _topFolders = [];
+    private readonly SemaphoreSlim _refreshing = new(1, 1);
     private bool _loading;
 
     [ObservableProperty]
@@ -326,6 +327,20 @@ public sealed partial class MonitorsViewModel : ObservableObject
     // Reloads monitors, folders and environments from the stores and rebuilds the list, keeping the selection when it still exists.
     private async Task RefreshAsync()
     {
+        // Serialized: the startup load and a user action can overlap, and two interleaved rebuilds would duplicate the items.
+        await _refreshing.WaitAsync();
+        try
+        {
+            await RefreshCoreAsync();
+        }
+        finally
+        {
+            _refreshing.Release();
+        }
+    }
+
+    private async Task RefreshCoreAsync()
+    {
         var definitions = await _monitors.ListAsync(CancellationToken.None);
         var tree = await _collections.LoadTreeAsync(CancellationToken.None);
         var environments = await _environments.ListAsync(CancellationToken.None);
@@ -464,6 +479,14 @@ public sealed partial class MonitorsViewModel : ObservableObject
         }
 
         item.Update(definition, FolderPath(definition.FolderId), EnvironmentName(definition), run, MonitorScheduler.NextRun(definition, run, _time.GetUtcNow()));
+        if (run.Status != MonitorRunStatus.Passed)
+        {
+            _console.AppendSystem(ConsoleLevel.Warn, Strings.MonitorFailed(definition.Name, run.Message ?? MonitorItemViewModel.StatusText(run.Status)));
+        }
+
+        NotifyFailing();
+
+        // The history row is the last effect, so it signals that the console line and the failing count are already visible.
         if (_selectedMonitor?.Id == run.MonitorId)
         {
             History.Insert(0, new MonitorRunRowViewModel(run));
@@ -472,13 +495,6 @@ public sealed partial class MonitorsViewModel : ObservableObject
                 History.RemoveAt(History.Count - 1);
             }
         }
-
-        if (run.Status != MonitorRunStatus.Passed)
-        {
-            _console.AppendSystem(ConsoleLevel.Warn, Strings.MonitorFailed(definition.Name, run.Message ?? MonitorItemViewModel.StatusText(run.Status)));
-        }
-
-        NotifyFailing();
     }
 
     private void RefreshRunning()
